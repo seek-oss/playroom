@@ -1,0 +1,57 @@
+@import (reference) "../Playroom.less";
+
+.root {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: @sandbox-padding 0;
+}
+
+.frameContainer {
+  display: inline-block;
+  position: relative;
+  height: 95%;
+  margin-right: @sandbox-padding;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  transition: all .3s ease;
+  &:first-child {
+    margin-left: @sandbox-padding;
+  }
+  &:hover {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.275);
+  }
+}
+
+.frameName {
+  position: absolute;
+  height: 50px;
+  bottom: -50px;
+  line-height: 50px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: helvetica;
+  font-size: 16px;
+  opacity: 0.2;
+  transition: all .2s ease;
+  .frameContainer:hover & {
+    opacity: 1;
+  }
+}
+
+.strong {
+  font-weight: bold;
+}
+
+.frame {
+  height: 100%;
+  border: 0;
+  background: @sandbox-preview-background;
+}
+
+.frameContents {
+  background: @sandbox-preview-background;
+}

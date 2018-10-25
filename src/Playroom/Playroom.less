@@ -1,0 +1,83 @@
+@row-height: 6px;
+@gutter-width: 30px;
+@sandbox-background: white;
+@sandbox-preview-background: white;
+@sandbox-line-height: (@row-height * 5);
+@sandbox-marker-size: (@gutter-width / 2);
+@sandbox-marker-color: #0700d8;
+@sandbox-editor-height: 25vh;
+@sandbox-padding: 44px;
+
+.previewContainer {
+  position: fixed;
+  top: 0;
+  bottom: @sandbox-editor-height;
+  left: 0;
+  right: 0;
+  background: @sandbox-background;
+}
+
+.editorContainer {
+  position: fixed;
+  height: @sandbox-editor-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.gutter {
+  width: @sandbox-marker-size * 1.5;
+}
+
+.marker {
+  width: @sandbox-marker-size;
+  height: @sandbox-marker-size;
+  border-radius: (@sandbox-marker-size / 2);
+  background-color: @sandbox-marker-color;
+  position: relative;
+  top: (@sandbox-line-height - @sandbox-marker-size) / 2;
+}
+
+:global {
+  .ReactCodeMirror {
+    height: 100%;
+  }
+
+  .CodeMirror {
+    &, & :global(*) {
+      box-sizing: border-box;
+    }
+    height: 100%;
+    padding: 20px;
+    font-family:
+      Source Code Pro,
+      Firacode,
+      Hasklig,
+      Menlo,
+      monospace;
+  }
+
+  .CodeMirror pre,
+  .CodeMirror-linenumber {
+    @padding: 2px;
+    font-size: 18px;
+    padding: @padding 0;
+    line-height: @sandbox-line-height - (@padding * 2);
+  }
+
+  .CodeMirror-linenumber {
+    padding-right: (@gutter-width * 2);
+  }
+
+  .cm-s-neo {
+    &.CodeMirror { background-color: #f5f6ff; }
+    .CodeMirror-cursor { background: black; width: 2px; }
+    .CodeMirror-linenumber { color: white; }
+    .cm-tag { color: #0700d8; }
+    .cm-attribute { color: #006eff; }
+    .cm-string { color: #00439c; }
+    .cm-atom { color: #00439c; }
+    .cm-variable { color: #827eff; }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "name": "playroom",
+  "version": "0.0.0-development",
+  "description": "Design with code, powered by your own component library",
+  "main": "index.js",
+  "bin": {
+    "playroom": "bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seek-oss/playroom.git"
+  },
+  "author": "SEEK",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seek-oss/playroom/issues"
+  },
+  "homepage": "https://github.com/seek-oss/playroom#readme",
+  "dependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "acorn-jsx": "^4.1.1",
+    "babel-loader": "^8.0.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "base64-url": "^2.2.0",
+    "buble": "^0.19.3",
+    "codemirror": "^5.40.2",
+    "command-line-args": "^5.0.2",
+    "command-line-usage": "^5.0.5",
+    "css-loader": "^1.0.0",
+    "dedent": "^0.7.0",
+    "find-up": "^3.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
+    "localforage": "^1.7.2",
+    "lodash": "^4.17.11",
+    "mini-css-extract-plugin": "^0.4.3",
+    "opn": "^5.4.0",
+    "prop-types": "^15.6.2",
+    "query-string": "^6.1.0",
+    "react": "^16.5.2",
+    "react-codemirror": "^1.0.0",
+    "react-dom": "^16.5.2",
+    "react-frame-component": "^4.0.1",
+    "scope-eval": "^1.0.0",
+    "style-loader": "^0.23.0",
+    "url-join": "^4.0.0",
+    "webpack": "^4.19.1",
+    "webpack-dev-server": "^3.1.8",
+    "webpack-merge": "^4.1.4"
+  },
+  "devDependencies": {
+    "@material-ui/core": "^3.3.1",
+    "jss": "^9.8.7",
+    "react-jss": "^8.6.1",
+    "reakit": "^0.15.10",
+    "reakit-theme-default": "^0.1.11",
+    "styled-components": "^3"
+  }
+}
