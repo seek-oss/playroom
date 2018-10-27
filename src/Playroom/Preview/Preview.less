@@ -13,32 +13,31 @@
 .frameContainer {
   display: inline-block;
   position: relative;
-  height: 95%;
+  height: 97%;
   margin-right: @sandbox-padding;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: all .3s ease;
   &:first-child {
     margin-left: @sandbox-padding;
   }
   &:hover {
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.275);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 }
 
 .frameName {
   position: absolute;
-  height: 50px;
-  bottom: -50px;
-  line-height: 50px;
+  height: 30px;
+  bottom: -30px;
+  line-height: 30px;
   left: 0;
   right: 0;
-  text-align: center;
   font-family: helvetica;
-  font-size: 16px;
+  font-size: 14px;
   opacity: 0.2;
   transition: all .2s ease;
   .frameContainer:hover & {
-    opacity: 1;
+    opacity: 0.8;
   }
 }
 

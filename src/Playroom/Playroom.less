@@ -1,12 +1,12 @@
 @row-height: 6px;
-@gutter-width: 30px;
-@sandbox-background: white;
+@gutter-width: 40px;
+@sandbox-background: #F2F2F2;
 @sandbox-preview-background: white;
 @sandbox-line-height: (@row-height * 5);
-@sandbox-marker-size: (@gutter-width / 2);
-@sandbox-marker-color: #0700d8;
+@sandbox-marker-size: 12px;
+@sandbox-marker-color: blue;
 @sandbox-editor-height: 25vh;
-@sandbox-padding: 44px;
+@sandbox-padding: 40px;
 
 .previewContainer {
   position: fixed;
@@ -37,6 +37,7 @@
   background-color: @sandbox-marker-color;
   position: relative;
   top: (@sandbox-line-height - @sandbox-marker-size) / 2;
+  left: -20px;
 }
 
 :global {
@@ -49,13 +50,17 @@
       box-sizing: border-box;
     }
     height: 100%;
-    padding: 20px;
+    padding: 0 16px;
     font-family:
       Source Code Pro,
       Firacode,
       Hasklig,
       Menlo,
       monospace;
+  }
+
+  .CodeMirror-gutters {
+    display: none;
   }
 
   .CodeMirror pre,
@@ -66,16 +71,20 @@
     line-height: @sandbox-line-height - (@padding * 2);
   }
 
+  .CodeMirror-lines {
+    padding: 16px 20px;
+  }
+
   .CodeMirror-linenumber {
     padding-right: (@gutter-width * 2);
   }
 
   .cm-s-neo {
-    &.CodeMirror { background-color: #f5f6ff; }
+    &.CodeMirror { background-color: #fff; }
     .CodeMirror-cursor { background: black; width: 2px; }
     .CodeMirror-linenumber { color: white; }
-    .cm-tag { color: #0700d8; }
-    .cm-attribute { color: #006eff; }
+    .cm-tag { color: #040080; }
+    .cm-attribute { color: #005ad2; }
     .cm-string { color: #00439c; }
     .cm-atom { color: #00439c; }
     .cm-variable { color: #827eff; }
