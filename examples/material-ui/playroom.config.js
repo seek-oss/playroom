@@ -5,8 +5,7 @@ module.exports = {
   frameComponent: './playroom/FrameComponent.js',
   widths: [320, 375, 768, 1024],
   exampleCode: `
-    {/* For some reason, the styles only work in the first iframe. */}
-    {/* We'll need to look into this further... */}
+    <br />
     <Badge badgeContent="2" color="primary">
       <Button color="primary">Hello</Button>
     </Badge>
