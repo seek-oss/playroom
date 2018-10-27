@@ -51,7 +51,7 @@ export default class Preview extends Component {
                         {collectedStyles}
                         {collectedStyles && (
                           <FadeIn delay={(frameIndex + 1) * 50}>
-                            <CatchErrors>
+                            <CatchErrors key={code}>
                               <FrameComponent
                                 theme={themes[frame.theme]}
                                 themeName={frame.theme}
