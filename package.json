@@ -1,6 +1,6 @@
 {
   "name": "playroom",
-  "version": "0.0.0-development",
+  "version": "0.0.0",
   "description": "Design with code, powered by your own component library",
   "main": "index.js",
   "bin": {
