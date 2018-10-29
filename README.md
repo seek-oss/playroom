@@ -1,10 +1,10 @@
-# Playroom
+<img src="logo.png?raw=true" alt="Playroom" title="Playroom" width="292" height="50" />
 
 Simultaneously design across a variety of themes and screen sizes, powered by JSX and your own component library.
 
-Playroom allows you to create a zero-install code-oriented design environment, built into a standalone HTML + JS bundle which can be deployed alongside your existing design system documentation.
+Playroom allows you to create a zero-install code-oriented design environment, built into a standalone bundle that can be deployed alongside your existing design system documentation.
 
-- Iterate on your designs within the final medium, not an illustation tool.
+- Iterate on your designs in the final medium.
 - Create quick mock-ups and interactive prototypes with real code.
 - Exercise and evaluate the flexibility of your design system.
 - Share your work with others by simply copying the URL.
