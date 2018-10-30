@@ -1,17 +1,12 @@
 {
-  "name": "basic-css",
-  "version": "1.0.0",
+  "name": "reakit-playroom-example",
+  "version": "0.0.1",
   "description": "Playroom example for reakit",
   "scripts": {
     "build": "node ./../../bin/cli build",
     "start": "node ./../../bin/cli start"
   },
-  "author": "SEEK",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/seek-oss/playroom/issues"
-  },
-  "homepage": "https://github.com/seek-oss/playroom#readme",
   "dependencies": {
     "react": "^16.6.0",
     "reakit": "^0.15.10",
