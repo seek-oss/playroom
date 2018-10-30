@@ -66,7 +66,6 @@ export default class Playroom extends Component {
         `<div>${code}</div>`
       );
       const ast = parser.parse();
-      console.log(ast);
 
       this.setState({ renderCode: code });
     } catch (err) {
