@@ -57,7 +57,7 @@ const showUsage = () => {
 
   if (!configPath) {
     console.error('Please add a playroom.config.js to the root of your project.')
-    process.exit()
+    process.exit(1);
   }
 
   const config = require(configPath);
