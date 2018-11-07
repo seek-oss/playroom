@@ -1,6 +1,6 @@
 {
   "name": "playroom",
-  "version": "0.1.1",
+  "version": "0.0.0-semantically-released",
   "description": "Design with code, powered by your own component library",
   "main": "index.js",
   "bin": {
@@ -8,13 +8,26 @@
   },
   "scripts": {
     "commit": "git-cz",
+    "lint": "eslint .",
+    "format": "prettier --config ./.prettierrc --write '**/*.{js,md,less}'",
     "semantic-release": "semantic-release",
     "test": "echo \"Error: no test specified\""
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint --edit --extends seek"
+      "commit-msg": "commitlint --edit --extends seek",
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "**/*.{js}": [
+      "npm run lint",
+      "git add"
+    ],
+    "**/*.{js,md,less}": [
+      "npm run format",
+      "git add"
+    ]
   },
   "config": {
     "commitizen": {
@@ -77,10 +90,14 @@
     "commitlint-config-seek": "^1.0.0",
     "css-in-js-loader": "^0.1.2",
     "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^5.8.0",
+    "eslint-config-seek": "^3.2.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "husky": "^1.1.3",
     "jss": "^9.8.7",
+    "lint-staged": "^8.0.4",
     "postcss-js": "^2.0.0",
+    "prettier": "^1.15.1",
     "react-helmet": "^5.2.0",
     "react-jss": "^8.6.1",
     "reakit": "^0.15.10",

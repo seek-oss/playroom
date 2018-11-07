@@ -27,10 +27,6 @@ export default class Fade extends Component {
       opacity: visible ? 1 : 0
     };
 
-    return (
-      <div style={style}>
-        {children}
-      </div>
-    );
+    return <div style={style}>{children}</div>;
   }
 }
