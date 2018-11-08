@@ -52,9 +52,11 @@ export default class Playroom extends Component {
   componentDidMount() {
     Promise.all([this.props.getCode(), store.getItem('editorSize')]).then(
       ([code, height]) => {
-        this.setState({
-          height
-        });
+        if (height) {
+          this.setState({
+            height
+          });
+        }
         this.initialiseCode(code);
         this.validateCode(code);
       }
@@ -206,7 +208,8 @@ export default class Playroom extends Component {
         <Resizable
           className={styles.editorContainer}
           defaultSize={{
-            height
+            height: `${height}`, // issue in ff & safari when not a string
+            width: '100vw'
           }}
           style={{
             position: 'fixed'
