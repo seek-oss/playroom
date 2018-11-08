@@ -1,5 +1,4 @@
 const path = require('path');
-const { decorateClientConfig } = require('seek-style-guide-webpack');
 
 const braidDir = path.dirname(
   require.resolve('braid-design-system/package.json')
