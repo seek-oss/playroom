@@ -11,7 +11,6 @@
 .previewContainer {
   position: fixed;
   top: 0;
-  bottom: @sandbox-editor-height;
   left: 0;
   right: 0;
   background: @sandbox-background;
@@ -19,11 +18,11 @@
 
 .editorContainer {
   position: fixed;
-  height: @sandbox-editor-height;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 1;
+  max-height: 95vh;
 }
 
 .gutter {

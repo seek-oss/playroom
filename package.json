@@ -71,6 +71,7 @@
     "opn": "^5.4.0",
     "prop-types": "^15.6.2",
     "query-string": "^6.1.0",
+    "re-resizable": "^4.9.3",
     "react": "^16.5.2",
     "react-codemirror": "^1.0.0",
     "react-dom": "^16.5.2",
