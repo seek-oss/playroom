@@ -1,6 +1,6 @@
 @row-height: 6px;
 @gutter-width: 40px;
-@sandbox-background: #F2F2F2;
+@sandbox-background: #f2f2f2;
 @sandbox-preview-background: white;
 @sandbox-line-height: (@row-height * 5);
 @sandbox-marker-size: 12px;
@@ -47,7 +47,8 @@
   }
 
   .CodeMirror {
-    &, & :global(*) {
+    &,
+    & :global(*) {
       box-sizing: border-box;
     }
     height: 100%;
@@ -107,13 +108,30 @@
   }
 
   .cm-s-neo {
-    &.CodeMirror { background-color: #fff; }
-    .CodeMirror-cursor { background: black; width: 2px; }
-    .CodeMirror-linenumber { color: white; }
-    .cm-tag { color: #040080; }
-    .cm-attribute { color: #005ad2; }
-    .cm-string { color: #00439c; }
-    .cm-atom { color: #00439c; }
-    .cm-variable { color: #827eff; }
+    &.CodeMirror {
+      background-color: #fff;
+    }
+    .CodeMirror-cursor {
+      background: black;
+      width: 2px;
+    }
+    .CodeMirror-linenumber {
+      color: white;
+    }
+    .cm-tag {
+      color: #040080;
+    }
+    .cm-attribute {
+      color: #005ad2;
+    }
+    .cm-string {
+      color: #00439c;
+    }
+    .cm-atom {
+      color: #00439c;
+    }
+    .cm-variable {
+      color: #827eff;
+    }
   }
 }

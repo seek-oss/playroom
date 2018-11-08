@@ -6,12 +6,22 @@ import FadeIn from '../FadeIn/FadeIn';
 import CatchErrors from '../CatchErrors/CatchErrors';
 import RenderJsx from '../RenderJsx/RenderJsx';
 import styles from './Preview.less';
-import flatten from 'lodash/flatten';
 
 export default class Preview extends Component {
   static propTypes = {
-    code: PropTypes.string.isRequired
+    code: PropTypes.string.isRequired,
+    components: PropTypes.node.isRequired,
+    themes: PropTypes.object,
+    frames: PropTypes.arrayOf(
+      PropTypes.shape({
+        theme: PropTypes.string.isRequired,
+        width: PropTypes.string.isRequired
+      })
+    ),
+    frameComponent: PropTypes.node.isRequired
   };
+
+  static defaultProps = { themes: [], frames: [] };
 
   render() {
     const {

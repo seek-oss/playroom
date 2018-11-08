@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import parsePropTypes from 'parse-prop-types';
-import flatten from 'lodash/flatten';
 import flatMap from 'lodash/flatMap';
 import debounce from 'lodash/debounce';
 import omit from 'lodash/omit';
@@ -106,11 +105,8 @@ export default class Playroom extends Component {
     cm.clearGutter(styles.gutter);
 
     try {
-      const parser = new Parser(
-        { plugins: { jsx: true } },
-        `<div>${code}</div>`
-      );
-      const ast = parser.parse();
+      // validate code is parsable
+      new Parser({ plugins: { jsx: true } }, `<div>${code}</div>`).parse();
 
       this.setState({ renderCode: code });
     } catch (err) {
