@@ -7,6 +7,10 @@
 @sandbox-marker-color: blue;
 @sandbox-editor-height: 30vh;
 @sandbox-padding: 40px;
+@sandbox-icon-width: 24px;
+@sandbox-icon-height: 24px;
+@sandbox-icon-color: #333;
+@sandbox-icon-hover-color: #000;
 
 .previewContainer {
   position: fixed;
@@ -32,9 +36,21 @@
 
 .editorHeader {
   background-color: #fff;
-  padding: @row-height / 2;
+  padding: @row-height;
   display: flex;
   justify-content: flex-end;
+}
+
+.editorIcon {
+  width: @sandbox-icon-width;
+  height: @sandbox-icon-height;
+  cursor: pointer;
+  * {
+    fill: @sandbox-icon-color;
+  }
+  &:hover * {
+    fill: @sandbox-icon-hover-color;
+  }
 }
 
 .gutter {

@@ -11,6 +11,7 @@ import createHistory from 'history/createBrowserHistory';
 
 import { store } from '../index';
 import WindowPortal from './WindowPortal';
+import UndockSvg from '../assets/noun_New Window_539930.svg';
 
 const history = createHistory();
 
@@ -218,7 +219,10 @@ export default class Playroom extends Component {
           enable={resizableConfig}
         >
           <div className={styles.editorHeader}>
-            <button onClick={this.handleUndockEditor}>Undock</button>
+            <UndockSvg
+              className={styles.editorIcon}
+              onClick={this.handleUndockEditor}
+            />
           </div>
           <CodeMirror
             ref={this.storeCodeMirrorRef}
