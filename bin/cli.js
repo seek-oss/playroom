@@ -56,7 +56,9 @@ const showUsage = () => {
     : await findUp('playroom.config.js', { cwd });
 
   if (!configPath) {
-    console.error('Please add a playroom.config.js to the root of your project.');
+    console.error(
+      'Please add a playroom.config.js to the root of your project.'
+    );
     process.exit(1);
   }
 

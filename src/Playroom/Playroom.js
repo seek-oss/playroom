@@ -7,13 +7,10 @@ import 'codemirror/theme/neo.css';
 import Resizable from 're-resizable';
 import Preview from './Preview/Preview';
 import styles from './Playroom.less';
-import createHistory from 'history/createBrowserHistory';
 
 import { store } from '../index';
 import WindowPortal from './WindowPortal';
 import UndockSvg from '../assets/noun_New Window_539930.svg';
-
-const history = createHistory();
 
 // CodeMirror blows up in a Node context, so only execute it in the browser
 const CodeMirror =
@@ -62,15 +59,6 @@ export default class Playroom extends Component {
         this.validateCode(code);
       }
     );
-    this.setEditorUndocked(location.pathname === '/editor');
-
-    this.unlisten = history.listen(location => {
-      this.setEditorUndocked(location.pathname === '/editor');
-    });
-  }
-
-  componentWillUnmount() {
-    this.unlisten();
   }
 
   storeCodeMirrorRef = cmRef => {
@@ -140,11 +128,11 @@ export default class Playroom extends Component {
   handleResize = debounce(this.updateHeight, 200);
 
   handleUndockEditor = () => {
-    history.push('/editor');
+    this.setEditorUndocked(true);
   };
 
   handleRedockEditor = () => {
-    history.push('/');
+    this.setEditorUndocked(false);
   };
 
   render() {
@@ -193,7 +181,7 @@ export default class Playroom extends Component {
     }
 
     return !codeReady ? null : (
-      <div>
+      <div className={styles.root}>
         <div
           className={styles.previewContainer}
           style={{ bottom: this.state.height }}
@@ -218,9 +206,10 @@ export default class Playroom extends Component {
           onResize={this.handleResize}
           enable={resizableConfig}
         >
-          <div className={styles.editorHeader}>
+          <div className={styles.toolbar}>
             <UndockSvg
-              className={styles.editorIcon}
+              title="Undock editor"
+              className={styles.toolbarIcon}
               onClick={this.handleUndockEditor}
             />
           </div>
