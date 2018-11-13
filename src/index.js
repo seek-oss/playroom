@@ -19,7 +19,7 @@ const widths = playroomConfig.widths || [320, 375, 768, 1024];
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);
 
-const store = localforage.createInstance({
+export const store = localforage.createInstance({
   name: 'playroom',
   version: 1
 });

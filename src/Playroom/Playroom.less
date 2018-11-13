@@ -7,24 +7,65 @@
 @sandbox-marker-color: blue;
 @sandbox-editor-height: 30vh;
 @sandbox-padding: 40px;
+@sandbox-icon-width: 24px;
+@sandbox-icon-height: 24px;
+@sandbox-icon-color: #555;
+@sandbox-icon-hover-color: #000;
+
+:global(body) {
+  margin: 0;
+}
+
+.root {
+  background: @sandbox-background;
+  height: 100vh;
+}
 @editor-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
 
 .previewContainer {
   position: fixed;
   top: 0;
-  bottom: @sandbox-editor-height;
   left: 0;
   right: 0;
+  bottom: 0;
   background: @sandbox-background;
 }
 
 .editorContainer {
   position: fixed;
-  height: @sandbox-editor-height;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 1;
+  max-height: 95vh;
+}
+
+.undockedEditorContainer {
+  height: 100vh;
+}
+
+.toolbar {
+  background-color: rgba(100%, 100%, 100%, 0.8);
+  box-shadow: 0 0 10px rgba(100%, 100%, 100%, 0.8);
+  padding: @row-height * 2;
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.toolbarIcon {
+  width: @sandbox-icon-width;
+  height: @sandbox-icon-height;
+  cursor: pointer;
+  * {
+    fill: @sandbox-icon-color;
+  }
+  &:hover * {
+    fill: @sandbox-icon-hover-color;
+  }
 }
 
 .gutter {
