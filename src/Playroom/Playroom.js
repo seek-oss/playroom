@@ -13,7 +13,7 @@ import styles from './Playroom.less';
 
 import { store } from '../index';
 import WindowPortal from './WindowPortal';
-import UndockSvg from '../assets/noun_New Window_539930.svg';
+import UndockSvg from '../assets/icons/NewWindowSvg';
 
 // CodeMirror blows up in a Node context, so only execute it in the browser
 const ReactCodeMirror =
