@@ -7,6 +7,7 @@
 @sandbox-marker-color: blue;
 @sandbox-editor-height: 30vh;
 @sandbox-padding: 40px;
+@editor-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
 
 .previewContainer {
   position: fixed;
@@ -52,7 +53,7 @@
     }
     height: 100%;
     padding: 0 16px;
-    font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
+    font-family: @editor-font-family;
   }
 
   .CodeMirror-gutters {
@@ -73,6 +74,37 @@
 
   .CodeMirror-linenumber {
     padding-right: (@gutter-width * 2);
+  }
+
+  .CodeMirror-hints {
+    position: absolute;
+    z-index: 10;
+    overflow: hidden;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    background: white;
+    font-size: 90%;
+    line-height: 150%;
+    font-family: @editor-font-family;
+    max-height: 20em;
+    overflow-y: auto;
+  }
+
+  .CodeMirror-hint {
+    margin: 0;
+    padding: 4px 8px;
+    border-radius: 2px;
+    white-space: pre;
+    color: black;
+    cursor: pointer;
+  }
+
+  li.CodeMirror-hint-active {
+    background: #08f;
+    color: white;
   }
 
   .cm-s-neo {
