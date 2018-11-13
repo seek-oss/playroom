@@ -24,7 +24,7 @@ const ReactCodeMirror =
         require('codemirror/mode/jsx/jsx');
         require('codemirror/addon/edit/closetag');
         require('codemirror/addon/edit/closebrackets');
-        require('codemirror/addon/hint/show-hint');
+        require('./codemirror/show-hint'); // Local copy of https://github.com/codemirror/CodeMirror/pull/5663
         require('codemirror/addon/hint/xml-hint');
 
         return lib;
