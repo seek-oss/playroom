@@ -238,7 +238,7 @@ export default class Playroom extends Component {
             />
           </div>
           <WindowPortal
-            height={height}
+            height={window.outerHeight}
             width={window.outerWidth}
             onClose={this.handleRedockEditor}
           >
