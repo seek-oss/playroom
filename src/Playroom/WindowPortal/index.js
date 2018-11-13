@@ -57,7 +57,7 @@ export default class WindowPortal extends React.PureComponent {
       `width=${this.props.width},height=${this.props.height},left=200,top=200`
     );
 
-    externalWindow.document.title = 'Playroom editor';
+    externalWindow.document.title = 'Playroom Editor';
     externalWindow.document.body.appendChild(containerDiv);
     externalWindow.addEventListener('beforeunload', this.props.onClose);
 
