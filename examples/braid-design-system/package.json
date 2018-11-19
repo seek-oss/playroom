@@ -1,0 +1,21 @@
+{
+  "name": "braid-design-system",
+  "version": "0.0.1",
+  "description": "Playroom example for Braid design system",
+  "scripts": {
+    "build": "node ./../../bin/cli build",
+    "start": "node ./../../bin/cli start"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.6.0",
+    "braid-design-system": "^0.0.6",
+    "css-in-js-loader": "^0.1.2",
+    "babel-loader": "^8.0.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "css-loader": "^1.0.0",
+    "style-loader": "^0.23.0"
+  }
+}

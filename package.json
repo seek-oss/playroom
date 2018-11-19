@@ -86,10 +86,8 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^7.2.1",
-    "braid-design-system": "^0.0.6",
     "commitizen": "^3.0.4",
     "commitlint-config-seek": "^1.0.0",
-    "css-in-js-loader": "^0.1.2",
     "cz-conventional-changelog": "^2.1.0",
     "eslint": "^5.8.0",
     "eslint-config-seek": "^3.2.1",
