@@ -7,9 +7,11 @@ import dedent from 'dedent';
 import Playroom from './Playroom/Playroom';
 
 const playroomConfig = __PLAYROOM_GLOBAL__CONFIG__;
+/* eslint-disable import/no-unresolved */
 const themes = require('__PLAYROOM_ALIAS__THEMES__');
 const components = require('__PLAYROOM_ALIAS__COMPONENTS__');
 let frameComponent = require('__PLAYROOM_ALIAS__FRAME_COMPONENT__');
+/* eslint-enable import/no-unresolved */
 frameComponent = frameComponent.default || frameComponent;
 
 const widths = playroomConfig.widths || [320, 375, 768, 1024];
@@ -17,7 +19,7 @@ const widths = playroomConfig.widths || [320, 375, 768, 1024];
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);
 
-const store = localforage.createInstance({
+export const store = localforage.createInstance({
   name: 'playroom',
   version: 1
 });

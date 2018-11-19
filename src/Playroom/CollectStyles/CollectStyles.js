@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import urlJoin from 'url-join';
 
 const collectStyleContent = () => {
   const styleNodes = document.querySelectorAll('style, link[rel="stylesheet"]');

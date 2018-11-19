@@ -1,0 +1,10 @@
+{
+  "extends": "seek",
+  "globals": {
+    "__PLAYROOM_GLOBAL__CONFIG__": true
+  },
+  "rules": {
+    "no-console": 0,
+    "no-process-exit": 0
+  }
+}

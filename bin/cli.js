@@ -2,7 +2,6 @@
 const path = require('path');
 const commandLineArgs = require('command-line-args');
 const commandLineUsage = require('command-line-usage');
-const webpack = require('webpack');
 const findUp = require('find-up');
 const lib = require('../lib');
 
@@ -39,6 +38,7 @@ const showUsage = () => {
   );
 };
 
+/* eslint-disable consistent-return */
 (async () => {
   const args = commandLineArgs([
     { name: 'command', defaultOption: true, defaultValue: 'start' },
@@ -54,6 +54,13 @@ const showUsage = () => {
   const configPath = args.config
     ? path.resolve(cwd, args.config)
     : await findUp('playroom.config.js', { cwd });
+
+  if (!configPath) {
+    console.error(
+      'Please add a playroom.config.js to the root of your project.'
+    );
+    process.exit(1);
+  }
 
   const config = require(configPath);
 

@@ -1,0 +1,3 @@
+# See https://www.pullapprove.com/docs/config/extends/
+version: 3
+extends: https://raw.githubusercontent.com/seek-oss/pullapprove-config-seek/master/.pullapprove.yml
