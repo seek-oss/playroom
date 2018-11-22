@@ -2995,10 +2995,15 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codemirror@^5.18.2, codemirror@^5.40.2:
+codemirror@^5.18.2:
   version "5.40.2"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.40.2.tgz#f4a41fee2d84e679543591b3680af259d903330b"
   integrity sha512-yoWuvEiD3v5vTwdoMc/wu/Ld6dh9K/yEiEBTKOPGM+/pN0gTAqFNtrLHv1IJ1UJvzFpNRvMi92XCi3+8/iIaEw==
+
+codemirror@^5.42.0:
+  version "5.42.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.42.0.tgz#2d5b640ed009e89dee9ed8a2a778e2a25b65f9eb"
+  integrity sha512-pbApC8zDzItP3HRphD6kQVwS976qB5Qi0hU3MZMixLk+AyugOW1RF+8XJEjeyl5yWsHNe88tDUxzeRh5AOxPRw==
 
 collection-visit@^1.0.0:
   version "1.0.0"
