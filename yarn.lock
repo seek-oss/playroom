@@ -2061,14 +2061,6 @@ braces@^2.3.0, braces@^2.3.1:
     split-string "^3.0.2"
     to-regex "^3.0.1"
 
-braid-design-system@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/braid-design-system/-/braid-design-system-0.0.6.tgz#e43f82f4f3a929b4abe6a66f66a47606904c75c8"
-  dependencies:
-    basekick "^3.0.0"
-    classnames "^2.2.6"
-    prop-types "^15.6.2"
-
 brorand@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
@@ -2462,7 +2454,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.5, classnames@^2.2.6:
+classnames@^2.2.5:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
 
