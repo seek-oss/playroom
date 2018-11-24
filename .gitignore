@@ -1,6 +1,5 @@
 node_modules/
 package-lock.json
-examples/**/yarn.lock
 *.log
 .DS_Store
 .vscode/
