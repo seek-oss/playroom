@@ -1,17 +1,21 @@
-# Material ui playroom example
+# Material UI Playroom Example
 
-## install playroom
+First, install Playroom's dependencies by running `yarn` from this repository's root directory.
 
-first install playroom by running `yarn` from the playroom root directory
+Then, run `yarn` within this example directory.
 
-## install material ui example dependencies
+To start a local server:
 
-run the same command as above from the root of the material ui example
+```bash
+$ yarn start
+```
 
-## start material ui example
+To build for production:
 
-`yarn start`
+```bash
+$ yarn build
+```
 
-## build material ui example
+## License
 
-`yarn build`
+MIT.

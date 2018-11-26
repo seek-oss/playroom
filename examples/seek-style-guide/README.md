@@ -1,4 +1,4 @@
-# Braid Design System Playroom Example
+# SEEK Style Guide Playroom Example
 
 First, install Playroom's dependencies by running `yarn` from this repository's root directory.
 

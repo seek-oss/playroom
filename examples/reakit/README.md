@@ -1,17 +1,21 @@
-# Reakit playroom example
+# Reakit Playroom Example
 
-## install playroom
+First, install Playroom's dependencies by running `yarn` from this repository's root directory.
 
-first install playroom by running `yarn` from the playroom root directory
+Then, run `yarn` within this example directory.
 
-## install reakit example dependencies
+To start a local server:
 
-run the same command as above from the root of the reakit example
+```bash
+$ yarn start
+```
 
-## start reakit example
+To build for production:
 
-`yarn start`
+```bash
+$ yarn build
+```
 
-## build reakit example
+## License
 
-`yarn build`
+MIT.
