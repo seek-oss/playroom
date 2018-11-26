@@ -29,5 +29,22 @@ module.exports = {
 
     <Footer />
   `,
-  webpackConfig: () => decorateClientConfig({ module: { rules: [] } })
+  webpackConfig: () =>
+    decorateClientConfig({
+      module: {
+        rules: [
+          {
+            test: /\.js$/,
+            include: __dirname,
+            exclude: /node_modules/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env', '@babel/preset-react']
+              }
+            }
+          }
+        ]
+      }
+    })
 };
