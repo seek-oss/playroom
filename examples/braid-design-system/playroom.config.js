@@ -34,6 +34,17 @@ module.exports = {
     module: {
       rules: [
         {
+          test: /\.js$/,
+          include: __dirname,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env', '@babel/preset-react']
+            }
+          }
+        },
+        {
           test: /(?!\.css)\.js$/,
           include: braidDir,
           use: {

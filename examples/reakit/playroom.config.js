@@ -9,5 +9,22 @@ module.exports = {
       <Button maxWidth="20vmin">Up</Button>
       <Button maxWidth="20vmin">Down</Button>
     </Group>
-  `
+  `,
+  webpackConfig: () => ({
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          include: __dirname,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env', '@babel/preset-react']
+            }
+          }
+        }
+      ]
+    }
+  })
 };
