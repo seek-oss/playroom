@@ -9,22 +9,5 @@ module.exports = {
     <Badge badgeContent="2" color="primary">
       <Button color="primary">Hello</Button>
     </Badge>
-  `,
-  webpackConfig: () => ({
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          include: __dirname,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env', '@babel/preset-react']
-            }
-          }
-        }
-      ]
-    }
-  })
+  `
 };
