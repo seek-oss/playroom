@@ -15,20 +15,13 @@ import { store } from '../index';
 import WindowPortal from './WindowPortal';
 import UndockSvg from '../assets/icons/NewWindowSvg';
 
-// CodeMirror blows up in a Node context, so only execute it in the browser
-const ReactCodeMirror =
-  typeof window === 'undefined'
-    ? null
-    : (() => {
-        const lib = require('react-codemirror');
-        require('codemirror/mode/jsx/jsx');
-        require('codemirror/addon/edit/closetag');
-        require('codemirror/addon/edit/closebrackets');
-        require('codemirror/addon/hint/show-hint');
-        require('codemirror/addon/hint/xml-hint');
-
-        return lib;
-      })();
+import codeMirror from 'codemirror';
+import ReactCodeMirror from 'react-codemirror';
+import 'codemirror/mode/jsx/jsx';
+import 'codemirror/addon/edit/closetag';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/hint/show-hint';
+import 'codemirror/addon/hint/xml-hint';
 
 const resizableConfig = {
   top: true,
@@ -244,6 +237,7 @@ export default class Playroom extends Component {
           >
             <div className={styles.undockedEditorContainer}>
               <ReactCodeMirror
+                codeMirrorInstance={codeMirror}
                 ref={this.storeCodeMirrorRef}
                 value={code}
                 onChange={this.handleChange}
@@ -307,6 +301,7 @@ export default class Playroom extends Component {
             />
           </div>
           <ReactCodeMirror
+            codeMirrorInstance={codeMirror}
             ref={this.storeCodeMirrorRef}
             value={code}
             onChange={this.handleChange}
