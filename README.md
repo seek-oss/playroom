@@ -36,9 +36,11 @@ Add a `playroom.config.js` file to the root of your project:
 
 ```js
 module.exports = {
-  title: 'Playroom',
-  outputPath: './dist/playroom',
   components: './src/components',
+  outputPath: './dist/playroom',
+
+  // Optional:
+  title: 'My Awesome Library',
   themes: './src/themes',
   frameComponent: './playroom/FrameComponent.js',
   widths: [320, 375, 768, 1024],
