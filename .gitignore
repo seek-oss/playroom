@@ -1,3 +1,8 @@
+dist/
+cypress/videos/
+cypress/screenshots/
+cypress/plugins/
+cypress/fixtures/
 node_modules/
 package-lock.json
 *.log
