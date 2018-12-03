@@ -7,15 +7,15 @@
     "playroom": "bin/cli.js"
   },
   "scripts": {
-    "test": "npm run cypress",
+    "test": "npm run lint && npm run cypress",
     "cypress": "start-server-and-test cypress:prepare http://localhost:9000 cypress:run",
     "cypress:dev": "start-server-and-test cypress:prepare http://localhost:9000 cypress:open",
     "cypress:prepare": "./bin/cli.js start --config cypress/projects/basic/playroom.config.js",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "commit": "git-cz",
-    "lint": "eslint .",
-    "format": "prettier --config ./.prettierrc --write '**/*.{js,md,less}'",
+    "lint": "eslint . && prettier --list-different '**/*.{js,md,less}'",
+    "format": "prettier --write '**/*.{js,md,less}'",
     "semantic-release": "semantic-release"
   },
   "husky": {

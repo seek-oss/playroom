@@ -10,15 +10,15 @@ import styles from './Preview.less';
 export default class Preview extends Component {
   static propTypes = {
     code: PropTypes.string.isRequired,
-    components: PropTypes.node.isRequired,
+    components: PropTypes.object.isRequired,
     themes: PropTypes.object,
     frames: PropTypes.arrayOf(
       PropTypes.shape({
         theme: PropTypes.string.isRequired,
-        width: PropTypes.string.isRequired
+        width: PropTypes.number.isRequired
       })
     ),
-    frameComponent: PropTypes.node.isRequired
+    frameComponent: PropTypes.func.isRequired
   };
 
   static defaultProps = { themes: [], frames: [] };
