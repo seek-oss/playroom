@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import parsePropTypes from 'parse-prop-types';
 import flatMap from 'lodash/flatMap';
 import debounce from 'lodash/debounce';
@@ -36,13 +35,13 @@ const resizableConfig = {
 
 const completeAfter = (cm, predicate) => {
   const CodeMirror = cm.constructor;
-  const cur = cm.getCursor();
-  if (!predicate || predicate())
+  if (!predicate || predicate()) {
     setTimeout(() => {
       if (!cm.state.completionActive) {
         cm.showHint({ completeSingle: false });
       }
     }, 100);
+  }
 
   return CodeMirror.Pass;
 };
@@ -52,6 +51,7 @@ const completeIfAfterLt = cm => {
 
   return completeAfter(cm, () => {
     const cur = cm.getCursor();
+    // eslint-disable-next-line new-cap
     return cm.getRange(CodeMirror.Pos(cur.line, cur.ch - 1), cur) === '<';
   });
 };
@@ -62,9 +62,9 @@ const completeIfInTag = cm => {
   return completeAfter(cm, () => {
     const tok = cm.getTokenAt(cm.getCursor());
     if (
-      tok.type == 'string' &&
+      tok.type === 'string' &&
       (!/['"]/.test(tok.string.charAt(tok.string.length - 1)) ||
-        tok.string.length == 1)
+        tok.string.length === 1)
     ) {
       return false;
     }
@@ -189,7 +189,6 @@ export default class Playroom extends Component {
     const tags = Object.assign(
       {},
       ...componentNames.map(componentName => {
-        const { propTypes = {} } = components[componentName];
         const parsedPropTypes = parsePropTypes(components[componentName]);
         const filteredPropTypes = omit(
           parsedPropTypes,
