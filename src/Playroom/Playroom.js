@@ -217,6 +217,38 @@ export default class Playroom extends Component {
       })
     );
 
+    const codeMirrorEl = (
+      <ReactCodeMirror
+        codeMirrorInstance={codeMirror}
+        ref={this.storeCodeMirrorRef}
+        value={code}
+        onChange={this.handleChange}
+        options={{
+          mode: 'jsx',
+          autoCloseTags: true,
+          autoCloseBrackets: true,
+          theme: 'neo',
+          gutters: [styles.gutter],
+          hintOptions: { schemaInfo: tags },
+          extraKeys: {
+            Tab: cm => {
+              if (cm.somethingSelected()) {
+                cm.indentSelection('add');
+              } else {
+                const indent = cm.getOption('indentUnit');
+                const spaces = Array(indent + 1).join(' ');
+                cm.replaceSelection(spaces);
+              }
+            },
+            "'<'": completeAfter,
+            "'/'": completeIfAfterLt,
+            "' '": completeIfInTag,
+            "'='": completeIfInTag
+          }
+        }}
+      />
+    );
+
     if (editorUndocked && codeReady) {
       return (
         <div>
@@ -234,33 +266,7 @@ export default class Playroom extends Component {
             width={window.outerWidth}
             onClose={this.handleRedockEditor}
           >
-            <div className={styles.undockedEditorContainer}>
-              <ReactCodeMirror
-                codeMirrorInstance={codeMirror}
-                ref={this.storeCodeMirrorRef}
-                value={code}
-                onChange={this.handleChange}
-                options={{
-                  mode: 'jsx',
-                  autoCloseTags: true,
-                  autoCloseBrackets: true,
-                  theme: 'neo',
-                  gutters: [styles.gutter],
-                  hintOptions: { schemaInfo: tags },
-                  extraKeys: {
-                    Tab: cm => {
-                      const indent = cm.getOption('indentUnit');
-                      const spaces = Array(indent + 1).join(' ');
-                      cm.replaceSelection(spaces);
-                    },
-                    "'<'": completeAfter,
-                    "'/'": completeIfAfterLt,
-                    "' '": completeIfInTag,
-                    "'='": completeIfInTag
-                  }
-                }}
-              />
-            </div>
+            <div className={styles.undockedEditorContainer}>{codeMirrorEl}</div>
           </WindowPortal>
         </div>
       );
@@ -299,31 +305,7 @@ export default class Playroom extends Component {
               onClick={this.handleUndockEditor}
             />
           </div>
-          <ReactCodeMirror
-            codeMirrorInstance={codeMirror}
-            ref={this.storeCodeMirrorRef}
-            value={code}
-            onChange={this.handleChange}
-            options={{
-              mode: 'jsx',
-              autoCloseTags: true,
-              autoCloseBrackets: true,
-              theme: 'neo',
-              gutters: [styles.gutter],
-              hintOptions: { schemaInfo: tags },
-              extraKeys: {
-                Tab: cm => {
-                  const indent = cm.getOption('indentUnit');
-                  const spaces = Array(indent + 1).join(' ');
-                  cm.replaceSelection(spaces);
-                },
-                "'<'": completeAfter,
-                "'/'": completeIfAfterLt,
-                "' '": completeIfInTag,
-                "'='": completeIfInTag
-              }
-            }}
-          />
+          {codeMirrorEl}
         </Resizable>
       </div>
     );
