@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "components/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
