@@ -13,6 +13,7 @@ import styles from './Playroom.less';
 import { store } from '../index';
 import WindowPortal from './WindowPortal';
 import UndockSvg from '../assets/icons/NewWindowSvg';
+import { formatCode } from '../utils/formatting';
 
 import codeMirror from 'codemirror';
 import ReactCodeMirror from 'react-codemirror';
@@ -82,7 +83,8 @@ export default class Playroom extends Component {
       code: null,
       renderCode: null,
       height: 200,
-      editorUndocked: false
+      editorUndocked: false,
+      key: 0
     };
   }
 
@@ -98,6 +100,11 @@ export default class Playroom extends Component {
         this.validateCode(code);
       }
     );
+    window.addEventListener('keydown', this.handleKeyPress);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyPress);
   }
 
   storeCodeMirrorRef = cmRef => {
@@ -155,6 +162,36 @@ export default class Playroom extends Component {
     }
   };
 
+  handleKeyPress = e => {
+    if (
+      e.keyCode === 83 &&
+      (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey)
+    ) {
+      e.preventDefault();
+
+      const { code } = this.state;
+
+      const { formattedCode, line, ch } = formatCode({
+        code,
+        cursor: this.cmRef.codeMirror.getCursor()
+      });
+
+      this.setState(
+        {
+          code: formattedCode,
+          key: Math.random()
+        },
+        () => {
+          this.cmRef.codeMirror.focus();
+          this.cmRef.codeMirror.setCursor({
+            line,
+            ch
+          });
+        }
+      );
+    }
+  };
+
   updateHeight = (event, direction, ref) => {
     this.setState({
       height: ref.offsetHeight
@@ -176,7 +213,14 @@ export default class Playroom extends Component {
 
   render() {
     const { components, themes, widths, frameComponent } = this.props;
-    const { codeReady, code, renderCode, height, editorUndocked } = this.state;
+    const {
+      codeReady,
+      code,
+      renderCode,
+      height,
+      editorUndocked,
+      key
+    } = this.state;
 
     const themeNames = Object.keys(themes);
     const frames = flatMap(widths, width =>
@@ -219,6 +263,7 @@ export default class Playroom extends Component {
 
     const codeMirrorEl = (
       <ReactCodeMirror
+        key={key}
         codeMirrorInstance={codeMirror}
         ref={this.storeCodeMirrorRef}
         value={code}
