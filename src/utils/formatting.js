@@ -7,10 +7,10 @@ export const runPrettier = ({ code, cursorOffset }) => {
       cursorOffset,
       parser: 'babylon',
       plugins: [babylon]
-      // semi: false
     });
   } catch (e) {
     // Just a formatting error so we pass
+    return null;
   }
 };
 
@@ -39,7 +39,7 @@ export const cursorOffsetToPosition = (code, cursorOffset) => {
 export const wrapJsx = code => `<>\n${code}\n</>`;
 
 // Removes `<>\n`  and `\n</>` and unindents the two spaces due to the wrapping
-export const unwrapJsx = code => code.replace(/\n  /g, '\n').slice(3, -5);
+export const unwrapJsx = code => code.replace(/\n {2}/g, '\n').slice(3, -5);
 
 // Handles running prettier, ensuring multiple root level JSX values are valid
 // by wrapping the code in <>{code}</> then finally removing the layer of indentation
