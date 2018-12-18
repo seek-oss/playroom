@@ -23,7 +23,7 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 Send us a PR if you'd like to be in this list!
 
-## Setup
+## Getting Started
 
 ```bash
 $ npm install --save-dev playroom
@@ -63,7 +63,7 @@ module.exports = {
 };
 ```
 
-Your `components` and `themes` files are expected to export a single object or a series of named exports. For example, your components file might look like this:
+Your `components` file is expected to export a single object or a series of named exports. For example:
 
 ```js
 module.exports = {
@@ -73,17 +73,21 @@ module.exports = {
 };
 ```
 
-When providing themes, your themes file might look something like this:
+Now that your project is configured, you can start a local development server:
 
-```js
-module.exports = {
-  themeA: require('./themeA'),
-  themeB: require('./themeB')
-  // etc...
-};
+```bash
+$ npm run playroom:start
 ```
 
-If your components need to be nested within custom provider components, you can provide a custom React component file via the `frameComponent` option, which is a path to a file that might look something like this:
+To build your assets for production:
+
+```bash
+$ npm run playroom:build
+```
+
+## Custom Frame Component
+
+If your components need to be nested within custom provider components, you can provide a custom React component file via the `frameComponent` option, which is a path to a file that exports a component. For example, if your component library has multiple themes:
 
 ```js
 import React from 'react';
@@ -93,6 +97,22 @@ export default ({ theme, children }) => (
   <ThemeProvider theme={theme}>{children}</ThemeProvider>
 );
 ```
+
+## Theme Support
+
+If your component library has multiple themes, you can customise Playroom to render every theme simultaneously via the `themes` configuration option.
+
+Similar to your `components` file, your `themes` file is expected to export a single object or a series of named exports. For example:
+
+```js
+module.exports = {
+  themeA: require('./themeA'),
+  themeB: require('./themeB')
+  // etc...
+};
+```
+
+## CSS-in-JS Support
 
 If you're using a CSS-in-JS library that generates styles dynamically, you might need to configure it to insert them into the iframe. For example, when using [styled-components](https://www.styled-components.com):
 
@@ -108,16 +128,22 @@ export default ({ theme, children, frameWindow }) => (
 );
 ```
 
-Now that your project is configured, you can start a local development server:
+## TypeScript Support
 
-```bash
-$ npm run playroom:start
-```
+If a `tsconfig.json` file is present in your project, static prop types are parsed using [react-docgen-typescript](https://github.com/styleguidist/react-docgen-typescript) to provide better autocompletion in the Playroom editor.
 
-To build your assets for production:
+**By default, all `.ts` and `.tsx` files in the current working directory are included, excluding `node_modules`.**
 
-```bash
-$ npm run playroom:build
+If you need to customise this behaviour, you can provide a `typeScriptFiles` option in `playroom.config.js`, which is an array of globs.
+
+```js
+module.exports = {
+  ...,
+  typeScriptFiles: [
+    'src/components/**/*.{ts,tsx}',
+    '!**/node_modules'
+  ]
+};
 ```
 
 ## License
