@@ -212,7 +212,13 @@ export default class Playroom extends Component {
   };
 
   render() {
-    const { components, themes, widths, frameComponent } = this.props;
+    const {
+      components,
+      staticTypes,
+      themes,
+      widths,
+      frameComponent
+    } = this.props;
     const {
       codeReady,
       code,
@@ -233,6 +239,18 @@ export default class Playroom extends Component {
     const tags = Object.assign(
       {},
       ...componentNames.map(componentName => {
+        const staticTypesForComponent = staticTypes[componentName];
+        if (
+          staticTypesForComponent &&
+          Object.keys(staticTypesForComponent).length > 0
+        ) {
+          return {
+            [componentName]: {
+              attrs: staticTypesForComponent
+            }
+          };
+        }
+
         const parsedPropTypes = parsePropTypes(components[componentName]);
         const filteredPropTypes = omit(
           parsedPropTypes,

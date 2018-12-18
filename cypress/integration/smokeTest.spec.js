@@ -1,4 +1,8 @@
-import { typeCode, assertFrameContains } from '../support/utils';
+import {
+  typeCode,
+  assertFrameContains,
+  assertTextareaContains
+} from '../support/utils';
 
 describe('Smoke test', () => {
   it('works', () => {
@@ -7,5 +11,11 @@ describe('Smoke test', () => {
 
     typeCode('<Bar />');
     assertFrameContains('Bar');
+  });
+
+  it('autocompletes', () => {
+    typeCode('<F{enter} c{enter}={downarrow}{enter} />');
+    assertFrameContains('Foo');
+    assertTextareaContains('<Foo color="blue" />');
   });
 });

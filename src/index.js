@@ -7,6 +7,7 @@ import dedent from 'dedent';
 import Playroom from './Playroom/Playroom';
 
 const playroomConfig = __PLAYROOM_GLOBAL__CONFIG__;
+const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
 /* eslint-disable import/no-unresolved */
 const themes = require('__PLAYROOM_ALIAS__THEMES__');
 const components = require('__PLAYROOM_ALIAS__COMPONENTS__');
@@ -47,6 +48,7 @@ render(
   <Playroom
     themes={themes}
     components={components}
+    staticTypes={staticTypes}
     widths={widths}
     defaultFrames={playroomConfig.defaultFrames}
     frameComponent={frameComponent}
