@@ -52,6 +52,8 @@ module.exports = {
   themes: './src/themes',
   frameComponent: './playroom/FrameComponent.js',
   widths: [320, 375, 768, 1024],
+  port: 9000,
+  openBrowser: true,
   exampleCode: `
     <Button>
       Hello World!
@@ -62,6 +64,8 @@ module.exports = {
   })
 };
 ```
+
+_Note: `port` and `openBrowser` options will be set to `9000` and `true` (respectively) by default whenever they are omitted from the config above._
 
 Your `components` file is expected to export a single object or a series of named exports. For example:
 
