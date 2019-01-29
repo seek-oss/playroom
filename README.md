@@ -64,6 +64,7 @@ module.exports = {
   })
 };
 ```
+
 _Note: `port` and `openBrowser` options will be set to `9000` and `true` (respectively) by default whenever they are omitted from the config above._
 
 Your `components` file is expected to export a single object or a series of named exports. For example:
