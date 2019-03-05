@@ -1,36 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { transform } from 'buble';
 import scopeEval from 'scope-eval';
 
-export default class RenderJsx extends Component {
-  static displayName = 'RenderJsx';
+const RenderJsx = ({ jsx, scope, initialState }) => {
+  const fragment = `<React.Fragment>${jsx.trim() ||
+    '<React.Fragment />'}</React.Fragment>`;
+  const { code } = transform(fragment);
+  const el = scopeEval(code, { ...scope, React, initialState });
+  console.log(el);
 
-  static propTypes = {
-    jsx: PropTypes.string.isRequired,
-    scope: PropTypes.object,
-    initialState: PropTypes.object
-  };
+  return <React.Fragment>{el}</React.Fragment>;
+};
 
-  static defaultProps = {
-    scope: {},
-    initialState: {}
-  };
+RenderJsx.displayName = 'RenderJsx';
 
-  constructor(props) {
-    super(props);
+RenderJsx.propTypes = {
+  jsx: PropTypes.string.isRequired,
+  scope: PropTypes.object,
+  initialState: PropTypes.object
+};
 
-    this.state = this.props.initialState;
-  }
+RenderJsx.defaultProps = {
+  scope: {},
+  initialState: {}
+};
 
-  render() {
-    const { jsx, scope } = this.props;
-
-    const fragment = `<React.Fragment>${jsx.trim() ||
-      '<React.Fragment />'}</React.Fragment>`;
-    const { code } = transform(fragment);
-    const el = scopeEval(code, { ...scope, React, this: this });
-
-    return el;
-  }
-}
+export default RenderJsx;
