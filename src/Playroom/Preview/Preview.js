@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import CollectStyles from '../CollectStyles/CollectStyles';
