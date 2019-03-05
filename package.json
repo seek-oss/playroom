@@ -97,6 +97,7 @@
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
     "@commitlint/cli": "^7.2.1",
     "babel-core": "^7.0.0-bridge",
     "babel-jest": "^23.6.0",
