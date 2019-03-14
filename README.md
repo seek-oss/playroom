@@ -21,6 +21,8 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 [Braid Design System](https://seek-oss.github.io/braid-design-system/playroom/#?code=PEFsZXJ0IHRvbmU9ImluZm8iPldlbGNvbWUgdG8gUGxheXJvb20hPC9BbGVydD4) (Themed)
 
+[Fannypack](https://fannypack.style/playroom/)
+
 Send us a PR if you'd like to be in this list!
 
 ## Getting Started
