@@ -14,6 +14,7 @@ import { store } from '../index';
 import WindowPortal from './WindowPortal';
 import UndockSvg from '../assets/icons/NewWindowSvg';
 import { formatCode } from '../utils/formatting';
+import getHints from './CodeMirror-JSX';
 
 import codeMirror from 'codemirror';
 import ReactCodeMirror from 'react-codemirror';
@@ -39,7 +40,7 @@ const completeAfter = (cm, predicate) => {
   if (!predicate || predicate()) {
     setTimeout(() => {
       if (!cm.state.completionActive) {
-        cm.showHint({ completeSingle: false });
+        cm.showHint({ completeSingle: false, hint: getHints });
       }
     }, 100);
   }
