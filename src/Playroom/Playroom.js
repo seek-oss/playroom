@@ -23,6 +23,10 @@ import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/xml-hint';
 
+const themes = require('./themes');
+const components = require('./components');
+const frameComponent = require('./frameComponent');
+
 const resizableConfig = {
   top: true,
   right: false,
@@ -79,6 +83,9 @@ export default class Playroom extends Component {
     super(props);
 
     this.state = {
+      themes,
+      components,
+      frameComponent,
       codeReady: false,
       code: null,
       renderCode: null,
@@ -88,7 +95,21 @@ export default class Playroom extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
+    if (module.hot) {
+      module.hot.accept('./themes', () => {
+        this.setState({ themes: require('./themes') });
+      });
+
+      module.hot.accept('./components', () => {
+        this.setState({ components: require('./components') });
+      });
+
+      module.hot.accept('./frameComponent', () => {
+        this.setState({ frameComponent: require('./frameComponent') });
+      });
+    }
+
     Promise.all([this.props.getCode(), store.getItem('editorSize')]).then(
       ([code, height]) => {
         if (height) {
@@ -101,7 +122,7 @@ export default class Playroom extends Component {
       }
     );
     window.addEventListener('keydown', this.handleKeyPress);
-  }
+  };
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.handleKeyPress);
@@ -212,14 +233,11 @@ export default class Playroom extends Component {
   };
 
   render() {
+    const { staticTypes, widths } = this.props;
     const {
-      components,
-      staticTypes,
       themes,
-      widths,
-      frameComponent
-    } = this.props;
-    const {
+      components,
+      frameComponent,
       codeReady,
       code,
       renderCode,
