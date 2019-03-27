@@ -23,9 +23,9 @@ import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/xml-hint';
 
-const themes = require('./themes');
-const components = require('./components');
-const frameComponent = require('./frameComponent');
+const themesImport = require('./themes');
+const componentsImport = require('./components');
+const frameComponentImport = require('./frameComponent');
 
 const resizableConfig = {
   top: true,
@@ -83,9 +83,9 @@ export default class Playroom extends Component {
     super(props);
 
     this.state = {
-      themes,
-      components,
-      frameComponent,
+      themes: themesImport,
+      components: componentsImport,
+      frameComponent: frameComponentImport,
       codeReady: false,
       code: null,
       renderCode: null,
