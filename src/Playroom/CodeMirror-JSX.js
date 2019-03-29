@@ -21,8 +21,17 @@ function elt(tagname, cls /*, ... elts*/) {
   return e;
 }
 
-function makeTooltip(x, y, content) {
-  var node = elt('div', styles['description-tooltip'], content);
+function makeTooltip(x, y, data) {
+  const content = [
+    elt('span', styles['description-tooltip-text'], data.description)
+  ];
+
+  if (data.required) {
+    content.unshift(elt('span', styles['description-tooltip-required'], 'ⓘ'));
+  }
+
+  const node = elt('div', styles['description-tooltip'], ...content);
+
   node.style.left = x + 'px';
   node.style.top = y + 'px';
 
@@ -36,7 +45,6 @@ function remove(node) {
 }
 
 export default function getHints(cm, options) {
-  debugger;
   const CodeMirror = cm.constructor;
 
   var tags = options && options.schemaInfo;
@@ -85,6 +93,7 @@ export default function getHints(cm, options) {
         if (!prefix || matches(childList[i], prefix, matchInMiddle))
           result.push('<' + childList[i]);
     } else if (tagType != 'close') {
+      // Component Identifier names
       for (var name in tags)
         if (
           tags.hasOwnProperty(name) &&
@@ -170,6 +179,7 @@ export default function getHints(cm, options) {
       for (var attr in attrs)
         if (
           attrs.hasOwnProperty(attr) &&
+          attr !== 'component_description' &&
           (!prefix || matches(attr, prefix, matchInMiddle))
         )
           result.push({ text: attr, ...attrs[attr] });
@@ -195,7 +205,7 @@ export default function getHints(cm, options) {
       tooltip = makeTooltip(
         node.parentNode.getBoundingClientRect().right + window.pageXOffset,
         node.getBoundingClientRect().top + window.pageYOffset,
-        cur.description
+        cur
       );
       tooltip.className += ' hint-doc';
     }
