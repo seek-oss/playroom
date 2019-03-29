@@ -2,14 +2,6 @@
 
 import styles from './CodeMirror-JSX.less';
 
-function matches(hint, typed, matchInMiddle) {
-  if (matchInMiddle) {
-    return hint.indexOf(typed) >= 0;
-  }
-
-  return hint.lastIndexOf(typed, 0) === 0;
-}
-
 function elt(tagname, cls) {
   const e = document.createElement(tagname);
 
@@ -37,7 +29,7 @@ function makeTooltip(x, y, data) {
     content.unshift(elt('span', styles.required, 'ⓘ'));
   }
 
-  if (data.default !== null) {
+  if (data.default !== null && typeof data.default !== 'undefined') {
     const value = elt('span', null, data.default);
 
     if (data.type === 'boolean') {
@@ -62,7 +54,7 @@ function makeTooltip(x, y, data) {
     );
   }
 
-  if (data.type !== null) {
+  if (data.type !== null && typeof data.type !== 'undefined') {
     content.push(
       elt(
         'div',
@@ -90,217 +82,69 @@ function remove(node) {
   }
 }
 
+function prepareSchema(tags) {
+  return Object.keys(tags).reduce((all, tag) => {
+    all[tag] = {
+      ...tags[tag],
+      attrs: Object.keys(tags[tag].attrs).reduce((allAttrs, attr) => {
+        allAttrs[attr] = tags[tag].attrs[attr].values;
+        return allAttrs;
+      }, {})
+    };
+
+    return all;
+  }, {});
+}
+
 export default function getHints(cm, options) {
   const CodeMirror = cm.constructor;
-
   const tags = options && options.schemaInfo;
-  const matchInMiddle = options && options.matchInMiddle;
-  let quote = (options && options.quoteChar) || '"';
-
-  if (!tags) {
-    return;
-  }
-
-  const cur = cm.getCursor(),
-    token = cm.getTokenAt(cur);
-
-  if (token.end > cur.ch) {
-    token.end = cur.ch;
-    token.string = token.string.slice(0, cur.ch - token.start);
-  }
-
-  const inner = CodeMirror.innerMode(cm.getMode(), token.state);
-
-  if (inner.mode.name !== 'xml') {
-    return;
-  }
-
-  const result = [];
-  const tag = /\btag\b/.test(token.type) && !/>$/.test(token.string);
-  const tagName = tag && /^\w/.test(token.string);
-
-  let tagStart,
-    tagType,
-    replaceToken = false,
-    prefix;
-
-  if (tagName) {
-    const before = cm
-      .getLine(cur.line)
-      .slice(Math.max(0, token.start - 2), token.start);
-    tagType =
-      (/<\/$/.test(before) && 'close') || (/<$/.test(before) && 'open') || null;
-
-    if (tagType) {
-      tagStart = token.start - (tagType === 'close' ? 2 : 1);
-    }
-  } else if (tag && token.string === '<') {
-    tagType = 'open';
-  } else if (tag && token.string === '</') {
-    tagType = 'close';
-  }
-
-  if ((!tag && !inner.state.tagName) || tagType) {
-    if (tagName) {
-      prefix = token.string;
-    }
-    replaceToken = tagType;
-    const cx = inner.state.context;
-    const curTag = cx && tags[cx.tagName];
-    const childList = cx ? curTag && curTag.children : tags['!top'];
-
-    if (childList && tagType !== 'close') {
-      for (let i = 0; i < childList.length; ++i) {
-        if (!prefix || matches(childList[i], prefix, matchInMiddle)) {
-          result.push(`<${childList[i]}`);
-        }
-      }
-    } else if (tagType !== 'close') {
-      // Component Identifier names
-      for (const name in tags) {
-        if (
-          tags.hasOwnProperty(name) &&
-          name !== '!top' &&
-          name !== '!attrs' &&
-          (!prefix || matches(name, prefix, matchInMiddle))
-        ) {
-          result.push({
-            text: `<${name}`,
-            description: tags[name].attrs.component_description
-          });
-        }
-      }
-    }
-    if (
-      cx &&
-      (!prefix ||
-        (tagType === 'close' && matches(cx.tagName, prefix, matchInMiddle)))
-    ) {
-      result.push(`</${cx.tagName}>`);
-    }
-  } else {
-    // Attribute completion
-    const curTag = tags[inner.state.tagName];
-    let attrs = curTag && curTag.attrs;
-    const globalAttrs = tags['!attrs'];
-    if (!attrs && !globalAttrs) {
-      return;
-    }
-    if (!attrs) {
-      attrs = globalAttrs;
-    } else if (globalAttrs) {
-      // Combine tag-local and global attributes
-      const set = {};
-      for (const nm in globalAttrs) {
-        if (globalAttrs.hasOwnProperty(nm)) {
-          set[nm] = globalAttrs[nm];
-        }
-      }
-      for (const nm in attrs) {
-        if (attrs.hasOwnProperty(nm)) {
-          set[nm] = attrs[nm];
-        }
-      }
-      attrs = set;
-    }
-    if (token.type === 'string' || token.string === '=') {
-      // A value
-      const before = cm.getRange(
-        CodeMirror.Pos(cur.line, Math.max(0, cur.ch - 60)),
-        CodeMirror.Pos(
-          cur.line,
-          token.type === 'string' ? token.start : token.end
-        )
-      );
-      const atName = before.match(/([^\s\u00a0=<>\"\']+)=$/);
-      let atValues;
-      if (
-        !atName ||
-        !attrs.hasOwnProperty(atName[1]) ||
-        !(atValues = Array.isArray(attrs[atName[1]])
-          ? attrs[atName[1]]
-          : attrs[atName[1]].values)
-      ) {
-        return;
-      }
-      if (typeof atValues === 'function') {
-        atValues = atValues.call(this, cm);
-      } // Functions can be used to supply values for autocomplete widget
-      if (token.type === 'string') {
-        prefix = token.string;
-        let n = 0;
-        if (/['"]/.test(token.string.charAt(0))) {
-          quote = token.string.charAt(0);
-          prefix = token.string.slice(1);
-          n++;
-        }
-        const len = token.string.length;
-        if (/['"]/.test(token.string.charAt(len - 1))) {
-          quote = token.string.charAt(len - 1);
-          prefix = token.string.substr(n, len - 2);
-        }
-        if (n) {
-          // an opening quote
-          const line = cm.getLine(cur.line);
-          if (line.length > token.end && line.charAt(token.end) === quote) {
-            token.end++;
-          } // include a closing quote
-        }
-        replaceToken = true;
-      }
-      for (let i = 0; i < atValues.length; ++i) {
-        if (!prefix || matches(atValues[i], prefix, matchInMiddle)) {
-          result.push(quote + atValues[i] + quote);
-        }
-      }
-    } else {
-      // An attribute name
-      if (token.type === 'attribute') {
-        prefix = token.string;
-        replaceToken = true;
-      }
-      for (const attr in attrs) {
-        if (
-          attrs.hasOwnProperty(attr) &&
-          attr !== 'component_description' &&
-          (!prefix || matches(attr, prefix, matchInMiddle))
-        ) {
-          result.push({ text: attr, ...attrs[attr] });
-        }
-      }
-    }
-  }
-
-  const obj = {
-    list: result,
-    from: replaceToken
-      ? CodeMirror.Pos(
-          cur.line,
-          tagStart === null || typeof tagStart === 'undefined'
-            ? token.start
-            : tagStart
-        )
-      : cur,
-    to: replaceToken ? CodeMirror.Pos(cur.line, token.end) : cur
-  };
+  const hint = CodeMirror.hint.xml(
+    cm,
+    Object.assign({}, options, {
+      schemaInfo: prepareSchema(tags)
+    })
+  );
 
   let tooltip = null;
 
-  CodeMirror.on(obj, 'close', () => remove(tooltip));
-  CodeMirror.on(obj, 'update', () => remove(tooltip));
-  CodeMirror.on(obj, 'select', (data, node) => {
+  CodeMirror.on(hint, 'close', () => remove(tooltip));
+  CodeMirror.on(hint, 'update', () => remove(tooltip));
+  CodeMirror.on(hint, 'select', (data, node) => {
+    const cur = cm.getCursor();
+    const token = cm.getTokenAt(cur);
+
+    if (token.end > cur.ch) {
+      token.end = cur.ch;
+      token.string = token.string.slice(0, cur.ch - token.start);
+    }
+
+    const inner = CodeMirror.innerMode(cm.getMode(), token.state);
+    let attr;
+
+    // Attribute
+    if (tags[inner.state.tagName]) {
+      attr = tags[inner.state.tagName].attrs[data];
+    }
+
+    // Tag
+    if (data.match(/<\S+/)) {
+      attr = {
+        description: tags[data.slice(1)].attrs.component_description
+      };
+    }
+
     remove(tooltip);
 
-    if (data && data.description) {
+    if (attr && attr.description) {
       tooltip = makeTooltip(
         node.parentNode.getBoundingClientRect().right + window.pageXOffset,
         node.getBoundingClientRect().top + window.pageYOffset,
-        data
+        attr
       );
       tooltip.className += ' hint-doc';
     }
   });
 
-  // eslint-disable-next-line consistent-return
-  return obj;
+  return hint;
 }
