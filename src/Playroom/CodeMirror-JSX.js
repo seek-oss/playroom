@@ -1,4 +1,5 @@
 /* eslint-disable new-cap */
+
 import styles from './CodeMirror-JSX.less';
 
 function matches(hint, typed, matchInMiddle) {
@@ -9,15 +10,15 @@ function matches(hint, typed, matchInMiddle) {
   return hint.lastIndexOf(typed, 0) === 0;
 }
 
-function elt(tagname, cls, ...elts) {
+function elt(tagname, cls) {
   const e = document.createElement(tagname);
 
   if (cls) {
     e.className = cls;
   }
 
-  for (let i = 2; i < elts.length; ++i) {
-    let element = elts[i];
+  for (let i = 2; i < arguments.length; ++i) {
+    let element = arguments[i];
 
     if (typeof element === 'string') {
       element = document.createTextNode(element);
@@ -216,7 +217,9 @@ export default function getHints(cm, options) {
       if (
         !atName ||
         !attrs.hasOwnProperty(atName[1]) ||
-        !(atValues = attrs[atName[1]].values)
+        !(atValues = Array.isArray(attrs[atName[1]])
+          ? attrs[atName[1]]
+          : attrs[atName[1]].values)
       ) {
         return;
       }
@@ -271,7 +274,12 @@ export default function getHints(cm, options) {
   const obj = {
     list: result,
     from: replaceToken
-      ? CodeMirror.Pos(cur.line, tagStart === null ? token.start : tagStart)
+      ? CodeMirror.Pos(
+          cur.line,
+          tagStart === null || typeof tagStart === 'undefined'
+            ? token.start
+            : tagStart
+        )
       : cur,
     to: replaceToken ? CodeMirror.Pos(cur.line, token.end) : cur
   };
