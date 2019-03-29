@@ -21,32 +21,53 @@ function elt(tagname, cls /*, ... elts*/) {
   return e;
 }
 
-function makeLabeledSection(label, value) {
-  return elt(
-    'div',
-    styles['description-tooltip-default'],
-    elt('span', styles['description-tooltip-default-label'], label),
-    elt('span', styles['description-tooltip-default-value'], value)
-  );
-}
-
 function makeTooltip(x, y, data) {
   const content = [
     elt('span', styles['description-tooltip-text'], data.description)
   ];
-
-  console.log(data);
 
   if (data.required) {
     content.unshift(elt('span', styles['description-tooltip-required'], 'ⓘ'));
   }
 
   if (data.default !== null) {
-    content.push(makeLabeledSection('Default:', data.default));
+    const value = elt(
+      'span',
+      styles['description-tooltip-default-value'],
+      data.default
+    );
+
+    if (data.type === 'boolean') {
+      value.style.color = 'rebeccapurple';
+    }
+
+    if (data.type === 'string' || data.values.length > 0) {
+      value.style.color = 'darkred';
+    }
+
+    if (data.type === 'number') {
+      value.style.color = 'steelblue';
+    }
+
+    content.push(
+      elt(
+        'div',
+        styles['description-tooltip-default'],
+        elt('span', styles['description-tooltip-default-label'], 'Default:'),
+        value
+      )
+    );
   }
 
   if (data.type !== null) {
-    content.push(makeLabeledSection('Type:', data.type));
+    content.push(
+      elt(
+        'div',
+        styles['description-tooltip-default'],
+        elt('span', styles['description-tooltip-default-label'], 'Type:'),
+        elt('span', styles['description-tooltip-default-value'], data.type)
+      )
+    );
   }
 
   const node = elt('div', styles['description-tooltip'], ...content);
