@@ -79,9 +79,7 @@ function getAttribute(cm, tags, data) {
 
   // Tag
   if (data.match(/<\S+/)) {
-    attr = {
-      description: tags[data.slice(1)].attrs.component_description
-    };
+    attr = tags[data.slice(1)].attrs.component_description;
   }
 
   return attr;
