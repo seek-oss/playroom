@@ -21,13 +21,32 @@ function elt(tagname, cls /*, ... elts*/) {
   return e;
 }
 
+function makeLabeledSection(label, value) {
+  return elt(
+    'div',
+    styles['description-tooltip-default'],
+    elt('span', styles['description-tooltip-default-label'], label),
+    elt('span', styles['description-tooltip-default-value'], value)
+  );
+}
+
 function makeTooltip(x, y, data) {
   const content = [
     elt('span', styles['description-tooltip-text'], data.description)
   ];
 
+  console.log(data);
+
   if (data.required) {
     content.unshift(elt('span', styles['description-tooltip-required'], 'ⓘ'));
+  }
+
+  if (data.default !== null) {
+    content.push(makeLabeledSection('Default:', data.default));
+  }
+
+  if (data.type !== null) {
+    content.push(makeLabeledSection('Type:', data.type));
   }
 
   const node = elt('div', styles['description-tooltip'], ...content);
