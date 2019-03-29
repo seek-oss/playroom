@@ -1,56 +1,8 @@
-/* eslint-disable new-cap */
-
+import React from 'react';
+import ReactDom from 'react-dom';
 import styles from './CodeMirror-JSX.less';
-import { html, render } from 'lit-html';
 
-function getTypeColor(data) {
-  if (data.type === 'boolean') {
-    return 'rebeccapurple';
-  }
-
-  if (data.type === 'string' || data.values.length > 0) {
-    return 'darkred';
-  }
-
-  if (data.type === 'number') {
-    return 'steelblue';
-  }
-
-  return null;
-}
-
-function makeTooltip(data) {
-  const required = data.required
-    ? html`
-        <span class=${styles.required}>ⓘ</span>
-      `
-    : '';
-  const defaultValue =
-    data.default !== null && typeof data.default !== 'undefined'
-      ? html`
-          <div class=${styles.default}>
-            <span class=${styles.defaultLabel}>Default:</span>
-            <span style="color:${getTypeColor(data)}">${data.default}</span>
-          </div>
-        `
-      : '';
-  const type =
-    data.type !== null && typeof data.type !== 'undefined'
-      ? html`
-          <div class=${styles.default}>
-            <span class=${styles.defaultLabel}>Type:</span>
-            <span>${data.type}</span>
-          </div>
-        `
-      : '';
-
-  return html`
-    <div>
-      ${required} <span>${data.description}</span> ${defaultValue} ${type}
-    </div>
-  `;
-}
-
+// Convert attribute values to arrays that addon-xml can handle
 function prepareSchema(tags) {
   return Object.keys(tags).reduce((all, key) => {
     const tag = tags[key];
@@ -72,6 +24,69 @@ function prepareSchema(tags) {
   }, {});
 }
 
+function getTypeColor(data) {
+  if (data.type === 'boolean') {
+    return 'rebeccapurple';
+  }
+
+  if (data.type === 'string' || data.values.length > 0) {
+    return 'darkred';
+  }
+
+  if (data.type === 'number') {
+    return 'steelblue';
+  }
+
+  return null;
+}
+
+const Tooltip = ({ data }) => (
+  <div className={styles.tooltip}>
+    {data.required && <span className={styles.required}>ⓘ</span>}
+    <span>{data.description}</span>
+    {data.default !== null && typeof data.default !== 'undefined' && (
+      <div className={styles.default}>
+        <span className={styles.defaultLabel}>Default:</span>
+        <span style={{ color: getTypeColor(data) }}>{data.default}</span>
+      </div>
+    )}
+    {data.type !== null && typeof data.type !== 'undefined' && (
+      <div className={styles.default}>
+        <span className={styles.defaultLabel}>Type:</span>
+        <span>{data.type}</span>
+      </div>
+    )}
+  </div>
+);
+
+function getAttribute(cm, tags, data) {
+  const CodeMirror = cm.constructor;
+  const cur = cm.getCursor();
+  const token = cm.getTokenAt(cur);
+
+  if (token.end > cur.ch) {
+    token.end = cur.ch;
+    token.string = token.string.slice(0, cur.ch - token.start);
+  }
+
+  const inner = CodeMirror.innerMode(cm.getMode(), token.state);
+  let attr;
+
+  // Attribute
+  if (tags[inner.state.tagName]) {
+    attr = tags[inner.state.tagName].attrs[data];
+  }
+
+  // Tag
+  if (data.match(/<\S+/)) {
+    attr = {
+      description: tags[data.slice(1)].attrs.component_description
+    };
+  }
+
+  return attr;
+}
+
 export default function getHints(cm, options) {
   const CodeMirror = cm.constructor;
   const tags = options && options.schemaInfo;
@@ -83,48 +98,24 @@ export default function getHints(cm, options) {
   );
 
   const container = document.createElement('div');
-  document.body.appendChild(container);
 
   CodeMirror.on(hint, 'close', () => container.remove());
   CodeMirror.on(hint, 'update', () => container.remove());
   CodeMirror.on(hint, 'select', (data, node) => {
-    const cur = cm.getCursor();
-    const token = cm.getTokenAt(cur);
-
-    if (token.end > cur.ch) {
-      token.end = cur.ch;
-      token.string = token.string.slice(0, cur.ch - token.start);
-    }
-
-    const inner = CodeMirror.innerMode(cm.getMode(), token.state);
-    let attr;
-
-    // Attribute
-    if (tags[inner.state.tagName]) {
-      attr = tags[inner.state.tagName].attrs[data];
-    }
-
-    // Tag
-    if (data.match(/<\S+/)) {
-      attr = {
-        description: tags[data.slice(1)].attrs.component_description
-      };
-    }
-
+    const attr = getAttribute(cm, tags, data);
     container.remove();
 
     if (attr && attr.description) {
-      const tooltip = makeTooltip(attr);
       const x =
         node.parentNode.getBoundingClientRect().right + window.pageXOffset;
       const y = node.getBoundingClientRect().top + window.pageYOffset;
 
       container.style.left = `${x}px`;
       container.style.top = `${y}px`;
-      container.className = styles.tooltip;
-      document.body.appendChild(container);
+      container.className = styles.container;
 
-      render(tooltip, container);
+      ReactDom.render(<Tooltip data={attr} />, container);
+      document.body.appendChild(container);
     }
   });
 
