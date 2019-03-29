@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 interface Props {
   /** The color of the Bar component's text */
   color: 'red' | 'blue';
-  /** 
-   * The count of schmeckles 
+  /**
+   * The count of schmeckles
    * @default 42
    */
   count?: number;

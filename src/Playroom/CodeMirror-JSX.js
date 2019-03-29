@@ -15,6 +15,8 @@ function getTypeColor(data) {
   if (data.type === 'number') {
     return 'steelblue';
   }
+
+  return null;
 }
 
 function makeTooltip(data) {
@@ -50,15 +52,18 @@ function makeTooltip(data) {
 }
 
 function prepareSchema(tags) {
-  return Object.keys(tags).reduce((all, tag) => {
-    all[tag] = {
-      ...tags[tag],
-      attrs: Object.keys(tags[tag].attrs).reduce((allAttrs, attr) => {
-        if (attr === 'component_description') {
+  return Object.keys(tags).reduce((all, key) => {
+    const tag = tags[key];
+
+    all[key] = {
+      ...tag,
+      attrs: Object.keys(tag.attrs).reduce((allAttrs, name) => {
+        if (name === 'component_description') {
           return allAttrs;
         }
 
-        allAttrs[attr] = tags[tag].attrs[attr].values;
+        const attr = tag.attrs[name];
+        allAttrs[name] = Array.isArray(attr) ? attr : attr.values;
         return allAttrs;
       }, {})
     };
