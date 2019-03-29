@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
 
 interface Props {
-  color: 'red' | 'blue';
+  /** 
+   * The color of the Foo components text 
+   * @default 'red' 
+   */
+  color?: 'red' | 'blue';
+  /** 
+   * Do something special
+   * @default false 
+   */
+  active?: boolean
 }
 
+/** A basic component */
 export default class Foo extends Component<Props> {
+
   render() {
     const { color } = this.props;
 

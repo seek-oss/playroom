@@ -35,7 +35,7 @@ function makeTooltip(data) {
   const type =
     data.type !== null && typeof data.type !== 'undefined'
       ? html`
-          <div class=${styles.type}>
+          <div class=${styles.default}>
             <span class=${styles.defaultLabel}>Type:</span>
             <span>${data.type}</span>
           </div>
