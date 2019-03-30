@@ -1,6 +1,7 @@
 module.exports = {
   components: './components/index.ts',
   outputPath: './dist',
+
   webpackConfig: () => ({
     module: {
       rules: [

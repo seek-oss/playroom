@@ -61,6 +61,15 @@ module.exports = {
       Hello World!
     </Button>
   `,
+  // Press Ctrl+Space or Cmd+Space to choose from predefined snippets
+  snippets: {
+    Link: '<Link to="">Go Somewhere</Link>',
+    Button: `
+      <Button>
+        Hello World!
+      </Button>
+    `
+  },
   webpackConfig: () => ({
     // Custom webpack config goes here...
   })

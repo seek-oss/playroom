@@ -18,4 +18,11 @@ describe('Smoke test', () => {
     assertFrameContains('Foo');
     assertTextareaContains('<Foo color="blue" />');
   });
+
+  it('snippets', () => {
+    typeCode('{ctrl} ');
+    typeCode('{downarrow}{enter}');
+    assertFrameContains('Bar');
+    assertTextareaContains('<div>Bar</div>');
+  });
 });

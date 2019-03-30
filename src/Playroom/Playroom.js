@@ -21,9 +21,11 @@ import 'codemirror/mode/jsx/jsx';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/hint/show-hint';
+import 'codemirror/addon/runmode/colorize';
 
 import 'codemirror/addon/hint/xml-hint';
-import getHints from './CodeMirror-JSX';
+import getHints from './CodeMirror/prop-descriptions';
+import showSnippets from './CodeMirror/snippets';
 
 const themesImport = require('./themes');
 const componentsImport = require('./components');
@@ -235,7 +237,7 @@ export default class Playroom extends Component {
   };
 
   render() {
-    const { staticTypes, widths } = this.props;
+    const { staticTypes, widths, snippets } = this.props;
     const {
       themes,
       components,
@@ -326,7 +328,9 @@ export default class Playroom extends Component {
             "'<'": completeAfter,
             "'/'": completeIfAfterLt,
             "' '": completeIfInTag,
-            "'='": completeIfInTag
+            "'='": completeIfInTag,
+            'Cmd-Space': showSnippets(snippets),
+            'Ctrl-Space': showSnippets(snippets)
           }
         }}
       />

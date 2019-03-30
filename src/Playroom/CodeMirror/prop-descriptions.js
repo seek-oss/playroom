@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDom from 'react-dom';
-import styles from './CodeMirror-JSX.less';
+import styles from './prop-descriptions.less';
+import extraTooltip from './extra-tooltip';
 
 // Convert attribute values to arrays that addon-xml can handle
 function prepareSchema(tags) {
@@ -41,7 +41,7 @@ function getTypeColor(data) {
 }
 
 const Tooltip = ({ data }) => (
-  <div className={styles.tooltip}>
+  <div>
     {data.required && <span className={styles.required}>ⓘ</span>}
     <span>{data.description}</span>
     {data.default !== null && typeof data.default !== 'undefined' && (
@@ -95,27 +95,7 @@ export default function getHints(cm, options) {
     })
   );
 
-  const container = document.createElement('div');
-
-  CodeMirror.on(hint, 'close', () => container.remove());
-  CodeMirror.on(hint, 'update', () => container.remove());
-  CodeMirror.on(hint, 'select', (data, node) => {
-    const attr = getAttribute(cm, tags, data);
-    container.remove();
-
-    if (attr && attr.description) {
-      const x =
-        node.parentNode.getBoundingClientRect().right + window.pageXOffset;
-      const y = node.getBoundingClientRect().top + window.pageYOffset;
-
-      container.style.left = `${x}px`;
-      container.style.top = `${y}px`;
-      container.className = styles.container;
-
-      ReactDom.render(<Tooltip data={attr} />, container);
-      document.body.appendChild(container);
-    }
-  });
-
-  return hint;
+  return extraTooltip(cm, hint, Tooltip, token =>
+    getAttribute(cm, tags, token)
+  );
 }

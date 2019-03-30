@@ -45,6 +45,7 @@ render(
     defaultFrames={playroomConfig.defaultFrames}
     getCode={getCode}
     updateCode={updateCode}
+    snippets={playroomConfig.snippets}
   />,
   outlet
 );
