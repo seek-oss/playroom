@@ -95,7 +95,9 @@ export default function getHints(cm, options) {
     })
   );
 
-  return extraTooltip(cm, hint, Tooltip, token =>
-    getAttribute(cm, tags, token)
-  );
+  return extraTooltip(cm, hint, Tooltip, token => {
+    const data = getAttribute(cm, tags, token);
+
+    return Array.isArray(data) ? null : data;
+  });
 }
