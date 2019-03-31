@@ -44,7 +44,7 @@ const resizableConfig = {
 
 const completeAfter = (cm, predicate) => {
   const CodeMirror = cm.constructor;
-  if (!predicate || predicate()) {
+  if (!predicate || predicate(cm)) {
     setTimeout(() => {
       if (!cm.state.completionActive) {
         cm.showHint({ completeSingle: false, hint: getHints });
@@ -55,32 +55,29 @@ const completeAfter = (cm, predicate) => {
   return CodeMirror.Pass;
 };
 
-const completeIfAfterLt = cm => {
-  const CodeMirror = cm.constructor;
-
-  return completeAfter(cm, () => {
-    const cur = cm.getCursor();
-    // eslint-disable-next-line new-cap
-    return cm.getRange(CodeMirror.Pos(cur.line, cur.ch - 1), cur) === '<';
-  });
+const ifAfterLt = cm => {
+  const pos = cm.constructor.Pos;
+  const cur = cm.getCursor();
+  return cm.getRange(pos(cur.line, cur.ch - 1), cur) === '<';
 };
 
-const completeIfInTag = cm => {
+const ifInTag = cm => {
   const CodeMirror = cm.constructor;
+  const tok = cm.getTokenAt(cm.getCursor());
 
-  return completeAfter(cm, () => {
-    const tok = cm.getTokenAt(cm.getCursor());
-    if (
-      tok.type === 'string' &&
-      (!/['"]/.test(tok.string.charAt(tok.string.length - 1)) ||
-        tok.string.length === 1)
-    ) {
-      return false;
-    }
-    const inner = CodeMirror.innerMode(cm.getMode(), tok.state).state;
-    return inner.tagName;
-  });
+  if (
+    tok.type === 'string' &&
+    (!/['"]/.test(tok.string.charAt(tok.string.length - 1)) ||
+      tok.string.length === 1)
+  ) {
+    return false;
+  }
+
+  const inner = CodeMirror.innerMode(cm.getMode(), tok.state).state;
+  return inner.tagName;
 };
+
+const complete = test => cm => completeAfter(cm, test);
 
 export default class Playroom extends Component {
   constructor(props) {
@@ -236,8 +233,18 @@ export default class Playroom extends Component {
     this.setEditorUndocked(false);
   };
 
+  showHints = cm => {
+    if (cm.state.completionActive) {
+      cm.state.completionActive.close();
+    } else if (ifInTag(cm) || ifAfterLt(cm)) {
+      completeAfter(cm);
+    } else if (!ifInTag(cm)) {
+      showSnippets(cm, this.props.snippets);
+    }
+  };
+
   render() {
-    const { staticTypes, widths, snippets } = this.props;
+    const { staticTypes, widths } = this.props;
     const {
       themes,
       components,
@@ -326,11 +333,11 @@ export default class Playroom extends Component {
               }
             },
             "'<'": completeAfter,
-            "'/'": completeIfAfterLt,
-            "' '": completeIfInTag,
-            "'='": completeIfInTag,
-            'Cmd-Space': showSnippets(snippets),
-            'Ctrl-Space': showSnippets(snippets)
+            "'/'": complete(ifAfterLt),
+            "' '": complete(ifInTag),
+            "'='": complete(ifInTag),
+            'Cmd-Space': this.showHints,
+            'Ctrl-Space': this.showHints
           }
         }}
       />
