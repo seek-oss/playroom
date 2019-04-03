@@ -6,14 +6,8 @@ import base64url from 'base64-url';
 import dedent from 'dedent';
 import Playroom from './Playroom/Playroom';
 
-const playroomConfig = __PLAYROOM_GLOBAL__CONFIG__;
+const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
-/* eslint-disable import/no-unresolved */
-const themes = require('__PLAYROOM_ALIAS__THEMES__');
-const components = require('__PLAYROOM_ALIAS__COMPONENTS__');
-let frameComponent = require('__PLAYROOM_ALIAS__FRAME_COMPONENT__');
-/* eslint-enable import/no-unresolved */
-frameComponent = frameComponent.default || frameComponent;
 
 const widths = playroomConfig.widths || [320, 375, 768, 1024];
 
@@ -21,7 +15,7 @@ const outlet = document.createElement('div');
 document.body.appendChild(outlet);
 
 export const store = localforage.createInstance({
-  name: 'playroom',
+  name: playroomConfig.storageKey,
   version: 1
 });
 
@@ -46,12 +40,9 @@ const updateCode = code => {
 
 render(
   <Playroom
-    themes={themes}
-    components={components}
     staticTypes={staticTypes}
     widths={widths}
     defaultFrames={playroomConfig.defaultFrames}
-    frameComponent={frameComponent}
     getCode={getCode}
     updateCode={updateCode}
   />,
