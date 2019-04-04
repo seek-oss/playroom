@@ -90,8 +90,7 @@ export default class Playroom extends Component {
       code: null,
       renderCode: null,
       height: 200,
-      editorUndocked: false,
-      key: 0
+      editorUndocked: false
     };
   }
 
@@ -121,6 +120,7 @@ export default class Playroom extends Component {
         this.validateCode(code);
       }
     );
+
     window.addEventListener('keydown', this.handleKeyPress);
   };
 
@@ -147,7 +147,6 @@ export default class Playroom extends Component {
   };
 
   updateCode = code => {
-    this.setState({ code });
     this.props.updateCode(code);
     this.validateCode(code);
   };
@@ -197,19 +196,14 @@ export default class Playroom extends Component {
         cursor: this.cmRef.codeMirror.getCursor()
       });
 
-      this.setState(
-        {
-          code: formattedCode,
-          key: Math.random()
-        },
-        () => {
-          this.cmRef.codeMirror.focus();
-          this.cmRef.codeMirror.setCursor({
-            line,
-            ch
-          });
-        }
-      );
+      this.setState({ code: formattedCode });
+      this.updateCode(formattedCode);
+      this.cmRef.codeMirror.setValue(formattedCode);
+      this.cmRef.codeMirror.focus();
+      this.cmRef.codeMirror.setCursor({
+        line,
+        ch
+      });
     }
   };
 
@@ -220,7 +214,11 @@ export default class Playroom extends Component {
     store.setItem('editorSize', ref.offsetHeight);
   };
 
-  handleChange = debounce(this.updateCode, 200);
+  updateCodeDebounced = debounce(this.updateCode, 200);
+  handleChange = code => {
+    this.setState({ code });
+    this.updateCodeDebounced(code);
+  };
 
   handleResize = debounce(this.updateHeight, 200);
 
@@ -242,8 +240,7 @@ export default class Playroom extends Component {
       code,
       renderCode,
       height,
-      editorUndocked,
-      key
+      editorUndocked
     } = this.state;
 
     const themeNames = Object.keys(themes);
@@ -299,7 +296,6 @@ export default class Playroom extends Component {
 
     const codeMirrorEl = (
       <ReactCodeMirror
-        key={key}
         codeMirrorInstance={codeMirror}
         ref={this.storeCodeMirrorRef}
         value={code}
@@ -346,6 +342,7 @@ export default class Playroom extends Component {
             height={window.outerHeight}
             width={window.outerWidth}
             onClose={this.handleRedockEditor}
+            onKeyDown={this.handleKeyPress}
           >
             <div className={styles.undockedEditorContainer}>{codeMirrorEl}</div>
           </WindowPortal>

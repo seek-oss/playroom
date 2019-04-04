@@ -28,6 +28,7 @@ export default class WindowPortal extends React.PureComponent {
   static propTypes = {
     height: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
+    onKeyDown: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     children: PropTypes.node.isRequired
   };
@@ -60,6 +61,7 @@ export default class WindowPortal extends React.PureComponent {
     externalWindow.document.title = 'Playroom Editor';
     externalWindow.document.body.appendChild(containerDiv);
     externalWindow.addEventListener('beforeunload', this.props.onClose);
+    externalWindow.addEventListener('keydown', this.props.onKeyDown);
 
     copyStyles(document, externalWindow.document);
     this.setState({ externalWindow, containerDiv });
