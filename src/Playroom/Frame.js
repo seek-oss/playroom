@@ -8,10 +8,12 @@ const componentsImport = require('./components');
 const frameComponentImport = require('./frameComponent');
 
 const getQueryParams = (url = window.location.href) => {
-  const hash = url.split('#')[1];
-  const query = queryString.parse(hash);
-
-  return query;
+  try {
+    const hash = url.split('#')[1] || '';
+    return queryString.parse(hash);
+  } catch (err) {
+    return {};
+  }
 };
 
 export default class Frame extends Component {
@@ -32,7 +34,10 @@ export default class Frame extends Component {
   componentDidMount() {
     window.addEventListener('hashchange', ({ newURL }) => {
       const { themeName, code } = getQueryParams(newURL);
-      this.setState({ themeName, code });
+
+      if (themeName && code) {
+        this.setState({ themeName, code });
+      }
     });
 
     if (module.hot) {
