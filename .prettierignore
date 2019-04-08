@@ -1,0 +1,3 @@
+cypress/plugins/
+cypress/fixtures/
+dist
