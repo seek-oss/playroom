@@ -9,8 +9,6 @@ export default class Iframe extends Component {
     };
   }
 
-  componentDidMount() {}
-
   handleLoad = () => {
     this.setState({ loaded: true });
   };

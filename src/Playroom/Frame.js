@@ -7,9 +7,9 @@ const themesImport = require('./themes');
 const componentsImport = require('./components');
 const frameComponentImport = require('./frameComponent');
 
-const getQueryParams = (url = window.location.href) => {
+const getQueryParams = () => {
   try {
-    const hash = url.split('#')[1] || '';
+    const hash = window.location.hash.replace(/^#/, '');
     return queryString.parse(hash);
   } catch (err) {
     return {};
@@ -32,8 +32,8 @@ export default class Frame extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('hashchange', ({ newURL }) => {
-      const { themeName, code } = getQueryParams(newURL);
+    window.addEventListener('hashchange', () => {
+      const { themeName, code } = getQueryParams();
 
       if (themeName && code) {
         this.setState({ themeName, code });

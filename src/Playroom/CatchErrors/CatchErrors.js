@@ -10,20 +10,20 @@ export default class CatchErrors extends Component {
 
   state = {
     error: null,
-    erroneousCode: null,
+    invalidCode: null,
     info: null
   };
 
   componentDidCatch(error, info) {
     const { code } = this.props;
-    this.setState({ erroneousCode: code, error, info });
+    this.setState({ invalidCode: code, error, info });
   }
 
   render() {
-    const { erroneousCode, error, info } = this.state;
+    const { invalidCode, error, info } = this.state;
     const { code, children } = this.props;
 
-    if (code !== erroneousCode) {
+    if (code !== invalidCode) {
       return children;
     }
 
