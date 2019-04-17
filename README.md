@@ -118,22 +118,6 @@ module.exports = {
 };
 ```
 
-## CSS-in-JS Support
-
-If you're using a CSS-in-JS library that generates styles dynamically, you might need to configure it to insert them into the iframe. For example, when using [styled-components](https://www.styled-components.com):
-
-```js
-import React from 'react';
-import { StyleSheetManager } from 'styled-components';
-import ThemeProvider from '../path/to/ThemeProvider';
-
-export default ({ theme, children }) => (
-  <StyleSheetManager target={window.document.head}>
-    <ThemeProvider theme={theme}>{children}</ThemeProvider>
-  </StyleSheetManager>
-);
-```
-
 ## TypeScript Support
 
 If a `tsconfig.json` file is present in your project, static prop types are parsed using [react-docgen-typescript](https://github.com/styleguidist/react-docgen-typescript) to provide better autocompletion in the Playroom editor.
