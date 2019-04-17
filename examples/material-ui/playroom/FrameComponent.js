@@ -11,7 +11,7 @@ export default class FrameComponent extends React.Component {
     this.generateClassName = createGenerateClassName();
     this.jss = create({
       ...jssPreset(),
-      insertionPoint: props.frameWindow.document.head
+      insertionPoint: window.document.head
     });
   }
 

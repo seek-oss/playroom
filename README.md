@@ -127,8 +127,8 @@ import React from 'react';
 import { StyleSheetManager } from 'styled-components';
 import ThemeProvider from '../path/to/ThemeProvider';
 
-export default ({ theme, children, frameWindow }) => (
-  <StyleSheetManager target={frameWindow.document.head}>
+export default ({ theme, children }) => (
+  <StyleSheetManager target={window.document.head}>
     <ThemeProvider theme={theme}>{children}</ThemeProvider>
   </StyleSheetManager>
 );
