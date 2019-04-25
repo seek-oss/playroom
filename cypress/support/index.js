@@ -1,4 +1,7 @@
-beforeEach(() => {
+beforeEach(async () => {
   cy.visit('http://localhost:9000');
-  indexedDB.deleteDatabase('playroom');
+
+  const win = await cy.window();
+  const { storageKey } = win.__playroomConfig__;
+  indexedDB.deleteDatabase(storageKey);
 });

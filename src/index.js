@@ -6,7 +6,7 @@ import base64url from 'base64-url';
 import dedent from 'dedent';
 import Playroom from './Playroom/Playroom';
 
-const playroomConfig = __PLAYROOM_GLOBAL__CONFIG__;
+const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
 
 const widths = playroomConfig.widths || [320, 375, 768, 1024];
@@ -15,7 +15,7 @@ const outlet = document.createElement('div');
 document.body.appendChild(outlet);
 
 export const store = localforage.createInstance({
-  name: 'playroom',
+  name: playroomConfig.storageKey,
   version: 1
 });
 

@@ -3,7 +3,7 @@ import parsePropTypes from 'parse-prop-types';
 import flatMap from 'lodash/flatMap';
 import debounce from 'lodash/debounce';
 import omit from 'lodash/omit';
-import { Parser } from 'acorn-jsx';
+import { transform } from 'buble';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 import Resizable from 're-resizable';
@@ -29,7 +29,9 @@ import showSnippets from './CodeMirror/snippets';
 
 const themesImport = require('./themes');
 const componentsImport = require('./components');
-const frameComponentImport = require('./frameComponent');
+
+const compileJsx = code =>
+  transform(`<React.Fragment>${code.trim() || ''}</React.Fragment>`).code;
 
 const resizableConfig = {
   top: true,
@@ -86,13 +88,11 @@ export default class Playroom extends Component {
     this.state = {
       themes: themesImport,
       components: componentsImport,
-      frameComponent: frameComponentImport,
       codeReady: false,
       code: null,
       renderCode: null,
       height: 200,
-      editorUndocked: false,
-      key: 0
+      editorUndocked: false
     };
   }
 
@@ -104,10 +104,6 @@ export default class Playroom extends Component {
 
       module.hot.accept('./components', () => {
         this.setState({ components: require('./components') });
-      });
-
-      module.hot.accept('./frameComponent', () => {
-        this.setState({ frameComponent: require('./frameComponent') });
       });
     }
 
@@ -122,6 +118,7 @@ export default class Playroom extends Component {
         this.validateCode(code);
       }
     );
+
     window.addEventListener('keydown', this.handleKeyPress);
   };
 
@@ -140,15 +137,22 @@ export default class Playroom extends Component {
   };
 
   initialiseCode = code => {
+    let renderCode;
+
+    try {
+      renderCode = compileJsx(code);
+    } catch (err) {
+      renderCode = '';
+    }
+
     this.setState({
       codeReady: true,
       code,
-      renderCode: code
+      renderCode
     });
   };
 
   updateCode = code => {
-    this.setState({ code });
     this.props.updateCode(code);
     this.validateCode(code);
   };
@@ -158,10 +162,7 @@ export default class Playroom extends Component {
     cm.clearGutter(styles.gutter);
 
     try {
-      // validate code is parsable
-      new Parser({ plugins: { jsx: true } }, `<div>${code}</div>`).parse();
-
-      this.setState({ renderCode: code });
+      this.setState({ renderCode: compileJsx(code) });
     } catch (err) {
       const errorMessage = err && (err.message || '');
 
@@ -198,19 +199,14 @@ export default class Playroom extends Component {
         cursor: this.cmRef.codeMirror.getCursor()
       });
 
-      this.setState(
-        {
-          code: formattedCode,
-          key: Math.random()
-        },
-        () => {
-          this.cmRef.codeMirror.focus();
-          this.cmRef.codeMirror.setCursor({
-            line,
-            ch
-          });
-        }
-      );
+      this.setState({ code: formattedCode });
+      this.updateCode(formattedCode);
+      this.cmRef.codeMirror.setValue(formattedCode);
+      this.cmRef.codeMirror.focus();
+      this.cmRef.codeMirror.setCursor({
+        line,
+        ch
+      });
     }
   };
 
@@ -221,7 +217,11 @@ export default class Playroom extends Component {
     store.setItem('editorSize', ref.offsetHeight);
   };
 
-  handleChange = debounce(this.updateCode, 200);
+  updateCodeDebounced = debounce(this.updateCode, 500);
+  handleChange = code => {
+    this.setState({ code });
+    this.updateCodeDebounced(code);
+  };
 
   handleResize = debounce(this.updateHeight, 200);
 
@@ -253,8 +253,7 @@ export default class Playroom extends Component {
       code,
       renderCode,
       height,
-      editorUndocked,
-      key
+      editorUndocked
     } = this.state;
 
     const themeNames = Object.keys(themes);
@@ -310,7 +309,6 @@ export default class Playroom extends Component {
 
     const codeMirrorEl = (
       <ReactCodeMirror
-        key={key}
         codeMirrorInstance={codeMirror}
         ref={this.storeCodeMirrorRef}
         value={code}
@@ -347,18 +345,13 @@ export default class Playroom extends Component {
       return (
         <div>
           <div className={styles.previewContainer}>
-            <Preview
-              code={renderCode}
-              components={components}
-              themes={themes}
-              frames={frames}
-              frameComponent={frameComponent}
-            />
+            <Preview code={renderCode} themes={themes} frames={frames} />
           </div>
           <WindowPortal
             height={window.outerHeight}
             width={window.outerWidth}
             onClose={this.handleRedockEditor}
+            onKeyDown={this.handleKeyPress}
           >
             <div className={styles.undockedEditorContainer}>{codeMirrorEl}</div>
           </WindowPortal>
