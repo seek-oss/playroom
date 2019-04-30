@@ -4,7 +4,8 @@ export const typeCode = code =>
     .click()
     .focused()
     .clear({ force: true })
-    .type(code, { force: true, delay: 100 });
+    .type(code, { force: true, delay: 100 })
+    .wait(1000);
 
 export const assertFrameContains = async text => {
   const iframe = await cy.get('iframe').first();
