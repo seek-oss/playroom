@@ -120,7 +120,6 @@
   .CodeMirror-hints {
     position: absolute;
     z-index: 10;
-    // overflow-x: hidden;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -131,8 +130,11 @@
     line-height: 150%;
     font-family: @editor-font-family;
     max-height: 20em;
-    // overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 
+  .CodeMirror-hints.snippets {
     left: 0 !important;
     top: inherit !important;
     bottom: 0 !important;

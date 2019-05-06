@@ -21,6 +21,12 @@ class Tooltip extends React.Component {
   }
 }
 
+const addClass = (el, className) => {
+  if (!el.className.includes(className)) {
+    el.className += ` ${className}`;
+  }
+};
+
 const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
   const snippets = Object.keys(config).reduce((all, displayText) => {
     all.push({ text: config[displayText], displayText });
@@ -73,6 +79,7 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
 
       return extraTooltip(cm, hint, Tooltip, data => {
         resetUI();
+        addClass(document.body.querySelector('.CodeMirror-hints'), 'snippets');
         const container = document.body.querySelector('.ReactCodeMirror');
         const input = document.createElement('div');
         input.className = 'snippet-input';
@@ -87,8 +94,6 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
           lines[cursor.line].slice(cursor.ch);
 
         changeRenderedCode(lines.join('\n'));
-        // MARK: uncomment next line to see code in tooltip
-        // return data;
       });
     }
   });
