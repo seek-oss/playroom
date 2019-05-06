@@ -29,11 +29,19 @@ const addClass = (el, className) => {
 };
 
 const showSnippets = (cm, config = {}, code, height, changeRenderedCode) => {
+  const initialCursor = cm.getCursor();
+  const initialToken = cm.getTokenAt(initialCursor);
+  const pad = Array(initialToken.end)
+    .fill()
+    .map(() => ' ')
+    .join('');
   const snippets = Object.keys(config).reduce((all, displayText) => {
     all.push({
-      text: formatCode({ code: config[displayText], cursor: cm.getCursor() })
-        .formattedCode,
-      displayText
+      displayText,
+      text: formatCode({ code: config[displayText], initialCursor })
+        .formattedCode.split('\n')
+        .map(l => `${pad}${l}`)
+        .join('\n')
     });
     return all;
   }, []);
