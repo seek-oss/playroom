@@ -2,6 +2,7 @@ import React from 'react';
 import extraTooltip from './extra-tooltip';
 import dedent from 'dedent';
 import styles from './snippets.less';
+import { formatCode } from '../../utils/formatting';
 
 class Tooltip extends React.Component {
   componentDidMount() {
@@ -29,7 +30,10 @@ const addClass = (el, className) => {
 
 const showSnippets = (cm, config = {}, code, height, changeRenderedCode) => {
   const snippets = Object.keys(config).reduce((all, displayText) => {
-    all.push({ text: config[displayText], displayText });
+    all.push({
+      text: formatCode({ code: config[displayText] }).formattedCode,
+      displayText
+    });
     return all;
   }, []);
 

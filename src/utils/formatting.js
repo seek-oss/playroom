@@ -53,10 +53,12 @@ export const formatCode = ({ code, cursor }) => {
 
   const wrappedCode = wrapJsx(code);
 
-  const currentCursorPosition = positionToCursorOffset(wrappedCode, {
-    line: cursor.line + WRAPPED_LINE_OFFSET,
-    ch: cursor.ch
-  });
+  const currentCursorPosition = cursor
+    ? positionToCursorOffset(wrappedCode, {
+        line: cursor.line + WRAPPED_LINE_OFFSET,
+        ch: cursor.ch
+      })
+    : 0;
 
   const formatResult = runPrettier({
     code: wrappedCode,
