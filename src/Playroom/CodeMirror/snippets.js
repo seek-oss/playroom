@@ -39,14 +39,15 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
     hint: () => {
       const cursor = cm.getCursor();
       const token = cm.getTokenAt(cursor);
-      const start = token.start;
+      const start =
+        token.type === 'tag bracket' ? token.start + 1 : token.start;
       const end = cursor.ch;
       const line = cursor.line;
       const currentWord = token.string;
       const list = snippets.filter(item => item.text.indexOf(currentWord) >= 0);
       const hint = {
         list: list.length ? list : snippets,
-        from: pos(line, start + 1),
+        from: pos(line, start),
         to: pos(line, end)
       };
 
