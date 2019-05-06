@@ -36,6 +36,12 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
 
   cm.showHint({
     completeSingle: false,
+    extraKeys: {
+      Esc: (editor, { close }) => {
+        changeRenderedCode(code);
+        close();
+      }
+    },
     hint: () => {
       const cursor = cm.getCursor();
       const token = cm.getTokenAt(cursor);

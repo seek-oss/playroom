@@ -247,9 +247,7 @@ export default class Playroom extends Component {
     } else if (ifInTag(cm) || ifAfterLt(cm)) {
       completeAfter(cm);
     } else if (!ifInTag(cm) && !ifInCloseTag(cm)) {
-      showSnippets(cm, this.props.snippets, this.state.code, newCode =>
-        this.setState({ renderCode: compileJsx(newCode) })
-      );
+      showSnippets(cm, this.props.snippets, this.state.code, this.validateCode);
     }
   };
 
@@ -345,8 +343,7 @@ export default class Playroom extends Component {
             "' '": complete(ifInTag),
             "'='": complete(ifInTag),
             'Cmd-Space': this.showHints,
-            'Ctrl-Space': this.showHints,
-            Esc: cm => cm.state.completionActive.close()
+            'Ctrl-Space': this.showHints
           }
         }}
       />
