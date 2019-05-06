@@ -345,7 +345,8 @@ export default class Playroom extends Component {
             "' '": complete(ifInTag),
             "'='": complete(ifInTag),
             'Cmd-Space': this.showHints,
-            'Ctrl-Space': this.showHints
+            'Ctrl-Space': this.showHints,
+            Esc: cm => cm.state.completionActive.close()
           }
         }}
       />
