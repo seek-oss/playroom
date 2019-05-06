@@ -239,7 +239,9 @@ export default class Playroom extends Component {
     } else if (ifInTag(cm) || ifAfterLt(cm)) {
       completeAfter(cm);
     } else if (!ifInTag(cm)) {
-      showSnippets(cm, this.props.snippets);
+      showSnippets(cm, this.props.snippets, this.state.code, newCode =>
+        this.setState({ renderCode: compileJsx(newCode) })
+      );
     }
   };
 

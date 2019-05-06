@@ -2,6 +2,11 @@ module.exports = {
   components: './components/index.ts',
   outputPath: './dist',
 
+  snippets: {
+    Foo: `<Foo color='red'>I am foo</Foo>`,
+    Bar: `<Bar color='blue'>I am Bar</Bar>`
+  },
+
   webpackConfig: () => ({
     module: {
       rules: [

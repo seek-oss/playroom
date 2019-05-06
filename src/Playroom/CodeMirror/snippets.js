@@ -21,7 +21,7 @@ class Tooltip extends React.Component {
   }
 }
 
-const showSnippets = (cm, config = {}) => {
+const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
   const snippets = Object.keys(config).reduce((all, displayText) => {
     all.push({ text: config[displayText], displayText });
     return all;
@@ -50,7 +50,19 @@ const showSnippets = (cm, config = {}) => {
         to: pos(line, end)
       };
 
-      return extraTooltip(cm, hint, Tooltip, data => data);
+      return extraTooltip(cm, hint, Tooltip, data => {
+        const lines = code.split('\n');
+
+        lines[cursor.line] =
+          lines[cursor.line].split(0, cursor.ch) +
+          data.text +
+          lines[cursor.line].split(cursor.ch);
+
+        changeRenderedCode(lines.join('\n'));
+
+        // MARK: uncomment next line to see code in tooltip
+        // return data;
+      });
     }
   });
 };
