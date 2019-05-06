@@ -33,14 +33,18 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
 
   const CodeMirror = cm.constructor;
   const pos = CodeMirror.Pos;
+  const resetCode = () => {
+    changeRenderedCode(code);
+
+    if (cm.state.completionActive) {
+      cm.state.completionActive.close();
+    }
+  };
 
   cm.showHint({
     completeSingle: false,
     extraKeys: {
-      Esc: (editor, { close }) => {
-        changeRenderedCode(code);
-        close();
-      }
+      Esc: resetCode
     },
     hint: () => {
       const cursor = cm.getCursor();
@@ -56,6 +60,8 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
         from: pos(line, start),
         to: pos(line, end)
       };
+
+      cm.on('endCompletion', resetCode);
 
       return extraTooltip(cm, hint, Tooltip, data => {
         const lines = code.split('\n');
