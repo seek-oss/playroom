@@ -46,7 +46,7 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
       const list = snippets.filter(item => item.text.indexOf(currentWord) >= 0);
       const hint = {
         list: list.length ? list : snippets,
-        from: pos(line, start),
+        from: pos(line, start + 1),
         to: pos(line, end)
       };
 
@@ -54,12 +54,11 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
         const lines = code.split('\n');
 
         lines[cursor.line] =
-          lines[cursor.line].split(0, cursor.ch) +
+          lines[cursor.line].slice(0, cursor.ch) +
           data.text +
-          lines[cursor.line].split(cursor.ch);
+          lines[cursor.line].slice(cursor.ch);
 
         changeRenderedCode(lines.join('\n'));
-
         // MARK: uncomment next line to see code in tooltip
         // return data;
       });
