@@ -199,23 +199,24 @@ export default class Playroom extends Component {
       (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey)
     ) {
       e.preventDefault();
-
-      const { code } = this.state;
-
-      const { formattedCode, line, ch } = formatCode({
-        code,
-        cursor: this.cmRef.codeMirror.getCursor()
-      });
-
-      this.setState({ code: formattedCode });
-      this.updateCode(formattedCode);
-      this.cmRef.codeMirror.setValue(formattedCode);
-      this.cmRef.codeMirror.focus();
-      this.cmRef.codeMirror.setCursor({
-        line,
-        ch
-      });
+      this.setFormattedCode(this.state.code);
     }
+  };
+
+  setFormattedCode = code => {
+    const { formattedCode, line, ch } = formatCode({
+      code,
+      cursor: this.cmRef.codeMirror.getCursor()
+    });
+
+    this.setState({ code: formattedCode });
+    this.updateCodeDebounced(formattedCode);
+    this.cmRef.codeMirror.setValue(formattedCode);
+    this.cmRef.codeMirror.focus();
+    this.cmRef.codeMirror.setCursor({
+      line,
+      ch
+    });
   };
 
   updateHeight = (event, direction, ref) => {
@@ -231,8 +232,7 @@ export default class Playroom extends Component {
       return;
     }
 
-    this.setState({ code });
-    this.updateCodeDebounced(code);
+    this.setFormattedCode(code);
   };
 
   handleResize = debounce(this.updateHeight, 200);
