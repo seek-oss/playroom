@@ -27,7 +27,7 @@ const addClass = (el, className) => {
   }
 };
 
-const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
+const showSnippets = (cm, config = {}, code, height, changeRenderedCode) => {
   const snippets = Object.keys(config).reduce((all, displayText) => {
     all.push({ text: config[displayText], displayText });
     return all;
@@ -79,7 +79,9 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
 
       return extraTooltip(cm, hint, Tooltip, data => {
         resetUI();
-        addClass(document.body.querySelector('.CodeMirror-hints'), 'snippets');
+        const hints = document.body.querySelector('.CodeMirror-hints');
+        addClass(hints, 'snippets');
+        hints.style.height = `${height - 60}px`;
         const container = document.body.querySelector('.ReactCodeMirror');
         const input = document.createElement('div');
         input.className = 'snippet-input';
