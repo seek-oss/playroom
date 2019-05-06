@@ -31,10 +31,12 @@ const addClass = (el, className) => {
 const showSnippets = (cm, config = {}, code, height, changeRenderedCode) => {
   const initialCursor = cm.getCursor();
   const initialToken = cm.getTokenAt(initialCursor);
-  const pad = Array(initialToken.end)
-    .fill()
-    .map(() => ' ')
-    .join('');
+  const pad = initialToken.string.match(/^[ ]*$/)
+    ? Array(initialToken.end)
+        .fill()
+        .map(() => ' ')
+        .join('')
+    : '';
   const snippets = Object.keys(config).reduce((all, displayText) => {
     all.push({
       displayText,
@@ -70,7 +72,6 @@ const showSnippets = (cm, config = {}, code, height, changeRenderedCode) => {
 
   cm.showHint({
     completeSingle: false,
-    closeOnUnfocus: false,
     extraKeys: {
       Esc: resetCode
     },
@@ -90,6 +91,7 @@ const showSnippets = (cm, config = {}, code, height, changeRenderedCode) => {
       };
 
       cm.on('endCompletion', resetUI);
+      cm.on('blur', () => cm.state.completionActive && resetCode());
 
       return extraTooltip(cm, hint, Tooltip, data => {
         resetUI();
