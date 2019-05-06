@@ -79,6 +79,14 @@ const ifInTag = cm => {
   return inner.tagName;
 };
 
+const ifInCloseTag = cm => {
+  const CodeMirror = cm.constructor;
+  const tok = cm.getTokenAt(cm.getCursor());
+  const inner = CodeMirror.innerMode(cm.getMode(), tok.state).state;
+
+  return inner.state && inner.state.name === 'closeState';
+};
+
 const complete = test => cm => completeAfter(cm, test);
 
 export default class Playroom extends Component {
@@ -238,7 +246,7 @@ export default class Playroom extends Component {
       cm.state.completionActive.close();
     } else if (ifInTag(cm) || ifAfterLt(cm)) {
       completeAfter(cm);
-    } else if (!ifInTag(cm)) {
+    } else if (!ifInTag(cm) && !ifInCloseTag(cm)) {
       showSnippets(cm, this.props.snippets, this.state.code, newCode =>
         this.setState({ renderCode: compileJsx(newCode) })
       );
