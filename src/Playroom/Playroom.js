@@ -227,6 +227,10 @@ export default class Playroom extends Component {
 
   updateCodeDebounced = debounce(this.updateCode, 500);
   handleChange = code => {
+    if (this.cmRef.codeMirror.state.completionActive) {
+      return;
+    }
+
     this.setState({ code });
     this.updateCodeDebounced(code);
   };

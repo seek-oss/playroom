@@ -33,7 +33,15 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
 
   const CodeMirror = cm.constructor;
   const pos = CodeMirror.Pos;
+  const resetUI = () => {
+    const old = document.body.querySelector('.snippet-input');
+
+    if (old) {
+      old.remove();
+    }
+  };
   const resetCode = () => {
+    resetUI();
     changeRenderedCode(code);
 
     if (cm.state.completionActive) {
@@ -64,6 +72,13 @@ const showSnippets = (cm, config = {}, code, changeRenderedCode) => {
       cm.on('endCompletion', resetCode);
 
       return extraTooltip(cm, hint, Tooltip, data => {
+        resetUI();
+        const container = document.body.querySelector('.ReactCodeMirror');
+        const input = document.createElement('div');
+        input.className = 'snippet-input';
+        input.innerText = currentWord;
+        container.prepend(input);
+
         const lines = code.split('\n');
 
         lines[cursor.line] =

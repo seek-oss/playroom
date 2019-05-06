@@ -120,7 +120,7 @@
   .CodeMirror-hints {
     position: absolute;
     z-index: 10;
-    overflow: hidden;
+    // overflow-x: hidden;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -131,7 +131,45 @@
     line-height: 150%;
     font-family: @editor-font-family;
     max-height: 20em;
-    overflow-y: auto;
+    // overflow-y: auto;
+
+    left: 0 !important;
+    top: inherit !important;
+    bottom: 0 !important;
+    width: 100%;
+    height: 100%;
+  }
+
+  .snippet-input {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    background: white;
+    height: 17%;
+    line-height: 58px;
+    padding: 0 20px;
+    font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
+    display: flex;
+    align-items: center;
+  }
+
+  .snippet-input:after {
+    content: ' ';
+    background: black;
+    height: 50%;
+    width: 2px;
+    margin-left: 2px;
+    animation: 1s blink step-end infinite;
+  }
+
+  @keyframes blink {
+    from,
+    to {
+      color: transparent;
+    }
+    50% {
+      color: black;
+    }
   }
 
   .CodeMirror-hint {
