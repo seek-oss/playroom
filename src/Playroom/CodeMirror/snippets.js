@@ -31,7 +31,8 @@ const addClass = (el, className) => {
 const showSnippets = (cm, config = {}, code, height, changeRenderedCode) => {
   const snippets = Object.keys(config).reduce((all, displayText) => {
     all.push({
-      text: formatCode({ code: config[displayText] }).formattedCode,
+      text: formatCode({ code: config[displayText], cursor: cm.getCursor() })
+        .formattedCode,
       displayText
     });
     return all;
@@ -61,6 +62,7 @@ const showSnippets = (cm, config = {}, code, height, changeRenderedCode) => {
 
   cm.showHint({
     completeSingle: false,
+    closeOnUnfocus: false,
     extraKeys: {
       Esc: resetCode
     },
@@ -71,7 +73,7 @@ const showSnippets = (cm, config = {}, code, height, changeRenderedCode) => {
         token.type === 'tag bracket' ? token.start + 1 : token.start;
       const end = cursor.ch;
       const line = cursor.line;
-      const currentWord = token.string;
+      const currentWord = token.string.trim();
       const list = snippets.filter(item => item.text.indexOf(currentWord) >= 0);
       const hint = {
         list: list.length ? list : snippets,
@@ -79,7 +81,7 @@ const showSnippets = (cm, config = {}, code, height, changeRenderedCode) => {
         to: pos(line, end)
       };
 
-      cm.on('endCompletion', resetCode);
+      cm.on('endCompletion', resetUI);
 
       return extraTooltip(cm, hint, Tooltip, data => {
         resetUI();
