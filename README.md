@@ -61,6 +61,11 @@ module.exports = {
       Hello World!
     </Button>
   `,
+  customStyles: `
+    pre.CodeMirror-line {
+			font-size: 15px;
+		}
+  `,
   webpackConfig: () => ({
     // Custom webpack config goes here...
   })
