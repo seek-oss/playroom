@@ -14,6 +14,15 @@ const widths = playroomConfig.widths || [320, 375, 768, 1024];
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);
 
+if (typeof playroomConfig.customStyles === 'string') {
+  const customStyles = document.createElement('style');
+  document.head.appendChild(customStyles);
+  customStyles.type = 'text/css';
+  customStyles.appendChild(
+    document.createTextNode(playroomConfig.customStyles)
+  );
+}
+
 export const store = localforage.createInstance({
   name: playroomConfig.storageKey,
   version: 1
