@@ -16,9 +16,6 @@ export const assertFrameContains = async text => {
     .contains(text);
 };
 
-export const assertTextareaContains = async text => {
-  return cy
-    .get('textarea')
-    .first()
-    .contains(text);
+export const assertCodePaneContains = async text => {
+  return cy.get('.react-codemirror2').contains(text);
 };
