@@ -1,10 +1,17 @@
 language: node_js
 notifications:
   email: false
-before_script:
-  - npm prune
+addons:
+  apt:
+    packages:
+      # Ubuntu 16+ does not install this dependency by default, so we need to install it ourselves
+      - libgconf-2-4
+cache:
+  yarn: true
+  directories:
+    - ~/.cache/Cypress
 after_success:
-  - npm run semantic-release
+  - yarn semantic-release
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
