@@ -7,7 +7,7 @@
     "playroom": "bin/cli.js"
   },
   "scripts": {
-    "test": "npm run lint && npm run jest && npm run cypress",
+    "test": "yarn lint && yarn jest && yarn cypress",
     "cypress": "start-server-and-test cypress:prepare http://localhost:9000 cypress:run",
     "cypress:dev": "start-server-and-test cypress:prepare http://localhost:9000 cypress:open",
     "cypress:prepare": "./bin/cli.js start --config cypress/projects/basic/playroom.config.js",
@@ -27,11 +27,11 @@
   },
   "lint-staged": {
     "**/*.{js}": [
-      "npm run lint",
+      "yarn lint",
       "git add"
     ],
     "**/*.{js,md,less}": [
-      "npm run format",
+      "yarn format",
       "git add"
     ]
   },
