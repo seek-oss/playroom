@@ -1,10 +1,12 @@
 language: node_js
 notifications:
   email: false
-before_script:
-  - npm prune
+cache:
+  yarn: true
+  directories:
+    - ~/.cache/Cypress
 after_success:
-  - npm run semantic-release
+  - yarn semantic-release
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
