@@ -15,8 +15,7 @@ import WindowPortal from './WindowPortal';
 import UndockSvg from '../assets/icons/NewWindowSvg';
 import { formatCode } from '../utils/formatting';
 
-import codeMirror from 'codemirror';
-import ReactCodeMirror from 'react-codemirror';
+import { Controlled as ReactCodeMirror } from 'react-codemirror2';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/closebrackets';
@@ -125,8 +124,8 @@ export default class Playroom extends Component {
     window.removeEventListener('keydown', this.handleKeyPress);
   }
 
-  storeCodeMirrorRef = cmRef => {
-    this.cmRef = cmRef;
+  storeCodeMirrorInstance = editorInstance => {
+    this.editorInstance = editorInstance;
   };
 
   setEditorUndocked = val => {
@@ -157,8 +156,7 @@ export default class Playroom extends Component {
   };
 
   validateCode = code => {
-    const cm = this.cmRef.codeMirror;
-    cm.clearGutter(styles.gutter);
+    this.editorInstance.clearGutter(styles.gutter);
 
     try {
       this.setState({ renderCode: compileJsx(code) });
@@ -180,7 +178,11 @@ export default class Playroom extends Component {
       const marker = document.createElement('div');
       marker.classList.add(styles.marker);
       marker.setAttribute('title', err.message);
-      cm.setGutterMarker(lineNumber - 1, styles.gutter, marker);
+      this.editorInstance.setGutterMarker(
+        lineNumber - 1,
+        styles.gutter,
+        marker
+      );
     }
   };
 
@@ -195,14 +197,14 @@ export default class Playroom extends Component {
 
       const { formattedCode, line, ch } = formatCode({
         code,
-        cursor: this.cmRef.codeMirror.getCursor()
+        cursor: this.editorInstance.codeMirror.getCursor()
       });
 
       this.setState({ code: formattedCode });
       this.updateCode(formattedCode);
-      this.cmRef.codeMirror.setValue(formattedCode);
-      this.cmRef.codeMirror.focus();
-      this.cmRef.codeMirror.setCursor({
+      this.editorInstance.setValue(formattedCode);
+      this.editorInstance.focus();
+      this.editorInstance.setCursor({
         line,
         ch
       });
@@ -217,7 +219,7 @@ export default class Playroom extends Component {
   };
 
   updateCodeDebounced = debounce(this.updateCode, 500);
-  handleChange = code => {
+  handleChange = (editor, data, code) => {
     this.setState({ code });
     this.updateCodeDebounced(code);
   };
@@ -237,7 +239,6 @@ export default class Playroom extends Component {
     const {
       themes,
       components,
-      frameComponent,
       codeReady,
       code,
       renderCode,
@@ -298,10 +299,9 @@ export default class Playroom extends Component {
 
     const codeMirrorEl = (
       <ReactCodeMirror
-        codeMirrorInstance={codeMirror}
-        ref={this.storeCodeMirrorRef}
+        editorDidMount={this.storeCodeMirrorInstance}
         value={code}
-        onChange={this.handleChange}
+        onBeforeChange={this.handleChange}
         options={{
           mode: 'jsx',
           autoCloseTags: true,
@@ -352,13 +352,7 @@ export default class Playroom extends Component {
           className={styles.previewContainer}
           style={{ bottom: this.state.height }}
         >
-          <Preview
-            code={renderCode}
-            components={components}
-            themes={themes}
-            frames={frames}
-            frameComponent={frameComponent}
-          />
+          <Preview code={renderCode} themes={themes} frames={frames} />
         </div>
         <Resizable
           className={styles.editorContainer}
