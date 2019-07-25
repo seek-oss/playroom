@@ -12,7 +12,7 @@ export const formatCode = () =>
   getCodeEditor()
     .focused()
     .type('{meta}s')
-    .wait(1000);
+    .wait(10000);
 
 export const assertFrameContains = async text => {
   const iframe = await cy.get('iframe').first();
