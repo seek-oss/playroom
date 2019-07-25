@@ -1,9 +1,9 @@
 import {
+  formatCode,
   typeCode,
   assertFrameContains,
   assertCodePaneContains,
-  assertCodePaneLineCount,
-  formatCode
+  assertCodePaneLineCount
 } from '../support/utils';
 
 describe('Smoke test', () => {

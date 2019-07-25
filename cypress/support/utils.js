@@ -1,4 +1,4 @@
-const getCodeEditor = () => cy.get('.react-codemirror2');
+const getCodeEditor = () => cy.get('.CodeMirror');
 
 export const typeCode = code =>
   getCodeEditor()
@@ -10,9 +10,10 @@ export const typeCode = code =>
 
 export const formatCode = () =>
   getCodeEditor()
+    .click()
     .focused()
     .type('{meta}s')
-    .wait(10000);
+    .wait(1000);
 
 export const assertFrameContains = async text => {
   const iframe = await cy.get('iframe').first();
