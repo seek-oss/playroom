@@ -1,7 +1,9 @@
 import {
+  formatCode,
   typeCode,
   assertFrameContains,
-  assertCodePaneContains
+  assertCodePaneContains,
+  assertCodePaneLineCount
 } from '../support/utils';
 
 describe('Smoke test', () => {
@@ -17,5 +19,12 @@ describe('Smoke test', () => {
     typeCode('<F{enter} c{enter}={downarrow}{enter} />');
     assertFrameContains('Foo');
     assertCodePaneContains('<Foo color="blue" />');
+  });
+
+  it('formats', () => {
+    typeCode('<Foo><Foo><Bar />');
+    assertCodePaneLineCount(1);
+    formatCode();
+    assertCodePaneLineCount(6);
   });
 });

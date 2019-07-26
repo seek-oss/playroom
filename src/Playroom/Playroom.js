@@ -197,7 +197,7 @@ export default class Playroom extends Component {
 
       const { formattedCode, line, ch } = formatCode({
         code,
-        cursor: this.editorInstance.codeMirror.getCursor()
+        cursor: this.editorInstance.getCursor()
       });
 
       this.setState({ code: formattedCode });
