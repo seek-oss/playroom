@@ -18,16 +18,18 @@ export const formatCode = () =>
 export const assertFrameContains = async text => {
   const iframe = await cy.get('iframe').first();
 
-  return iframe
+  iframe
     .contents()
     .find('body')
     .contains(text);
 };
 
-export const assertCodePaneContains = async text =>
+export const assertCodePaneContains = text => {
   getCodeEditor().contains(text);
+};
 
-export const assertCodePaneLineCount = async lines =>
+export const assertCodePaneLineCount = lines => {
   getCodeEditor().within(() =>
     cy.get('.CodeMirror-line').should('have.length', lines)
   );
+};
