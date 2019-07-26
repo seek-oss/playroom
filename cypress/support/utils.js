@@ -13,7 +13,7 @@ export const formatCode = () =>
     .click()
     .focused()
     .type('{meta}s')
-    .wait(5000);
+    .wait(1000);
 
 export const assertFrameContains = async text => {
   const iframe = await cy.get('iframe').first();

@@ -22,7 +22,9 @@ describe('Smoke test', () => {
   });
 
   it('formats', () => {
-    typeCode('<Foo><Foo><Bar />');
+    cy.visit(
+      'http://localhost:9000/#?code=PEZvbz48Rm9vPjxCYXIvPjwvRm9vPjwvRm9vPg'
+    ).reload();
     assertCodePaneLineCount(1);
     formatCode();
     assertCodePaneLineCount(6);
