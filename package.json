@@ -8,11 +8,14 @@
   },
   "scripts": {
     "test": "yarn lint && yarn jest && yarn cypress",
-    "cypress": "start-server-and-test cypress:prepare http://localhost:9000 cypress:run",
-    "cypress:dev": "start-server-and-test cypress:prepare http://localhost:9000 cypress:open",
-    "cypress:prepare": "./bin/cli.js start --config cypress/projects/basic/playroom.config.js",
+    "cypress": "start-server-and-test example:build-and-serve http://localhost:9000 cypress:run",
+    "cypress:dev": "start-server-and-test example:start http://localhost:9000 cypress:open",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
+    "example:start": "./bin/cli.js start --config cypress/projects/basic/playroom.config.js",
+    "example:build": "./bin/cli.js build --config cypress/projects/basic/playroom.config.js",
+    "example:serve": "(cd cypress/projects/basic/dist && PORT=9000 serve)",
+    "example:build-and-serve": "yarn example:build && yarn example:serve",
     "commit": "git-cz",
     "lint": "eslint . && prettier --list-different '**/*.{js,md,less,ts,tsx}'",
     "format": "prettier --write '**/*.{js,md,less,ts,tsx}'",
@@ -110,6 +113,7 @@
     "jest": "^23.6.0",
     "lint-staged": "^8.0.4",
     "semantic-release": "^15.10.8",
+    "serve": "^11.1.0",
     "start-server-and-test": "^1.7.11"
   }
 }
