@@ -12,7 +12,7 @@ export const formatCode = () =>
   getCodeEditor()
     .click()
     .focused()
-    .type('{meta}s')
+    .type(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}s`)
     .wait(1000);
 
 export const assertFrameContains = async text => {
