@@ -14,7 +14,7 @@
     "cypress:run": "cypress run",
     "example:start": "./bin/cli.js start --config cypress/projects/basic/playroom.config.js",
     "example:build": "./bin/cli.js build --config cypress/projects/basic/playroom.config.js",
-    "example:serve": "(cd cypress/projects/basic/dist && PORT=9000 serve)",
+    "example:serve": "PORT=9000 serve cypress/projects/basic/dist",
     "example:build-and-serve": "yarn example:build && yarn example:serve",
     "commit": "git-cz",
     "lint": "eslint . && prettier --list-different '**/*.{js,md,less,ts,tsx}'",
