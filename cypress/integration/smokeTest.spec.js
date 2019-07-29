@@ -1,7 +1,9 @@
 import {
+  formatCode,
   typeCode,
   assertFrameContains,
-  assertCodePaneContains
+  assertCodePaneContains,
+  assertCodePaneLineCount
 } from '../support/utils';
 
 describe('Smoke test', () => {
@@ -17,5 +19,14 @@ describe('Smoke test', () => {
     typeCode('<F{enter} c{enter}={downarrow}{enter} />');
     assertFrameContains('Foo');
     assertCodePaneContains('<Foo color="blue" />');
+  });
+
+  it('formats', () => {
+    cy.visit(
+      'http://localhost:9000/#?code=PEZvbz48Rm9vPjxCYXIvPjwvRm9vPjwvRm9vPg'
+    ).reload();
+    assertCodePaneLineCount(1);
+    formatCode();
+    assertCodePaneLineCount(6);
   });
 });
