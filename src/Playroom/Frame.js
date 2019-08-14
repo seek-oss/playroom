@@ -50,7 +50,7 @@ export default class Frame extends Component {
       });
 
       module.hot.accept('./frameComponent', () => {
-        this.setState({ frameComponent: require('./frameComponent') });
+        this.setState({ FrameComponent: require('./frameComponent') });
       });
     }
   }
