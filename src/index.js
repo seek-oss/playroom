@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import localforage from 'localforage';
 import queryString from 'query-string';
 import base64url from 'base64-url';
+import lzString from 'lz-string';
 import dedent from 'dedent';
 import Playroom from './Playroom/Playroom';
 
@@ -24,17 +25,26 @@ const getCode = () => {
   const query = queryString.parse(hash);
   const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
 
-  return query.code
-    ? Promise.resolve(query.code ? base64url.decode(query.code) : exampleCode)
-    : store.getItem('code').then(code => code || exampleCode);
+  if (query.source) {
+    return Promise.resolve(
+      lzString.decompressFromEncodedURIComponent(query.source)
+    );
+  }
+
+  if (query.code) {
+    // backward compatibility
+    return Promise.resolve(base64url.decode(query.code));
+  }
+
+  return store.getItem('code').then(code => code || exampleCode);
 };
 
 const updateCode = code => {
-  history.replaceState(
-    null,
-    null,
-    `#?code=${code ? base64url.encode(code) : ''}`
-  );
+  const compressedCode = code
+    ? lzString.compressToEncodedURIComponent(code)
+    : '';
+
+  history.replaceState(null, null, `#?source=${compressedCode}`);
   store.setItem('code', code);
 };
 
