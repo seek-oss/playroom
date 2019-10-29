@@ -6,6 +6,7 @@ import base64url from 'base64-url';
 import lzString from 'lz-string';
 import dedent from 'dedent';
 import Playroom from './Playroom/Playroom';
+import { createUrl } from '../utils';
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
@@ -40,11 +41,9 @@ const getCode = () => {
 };
 
 const updateCode = code => {
-  const compressedCode = code
-    ? lzString.compressToEncodedURIComponent(code)
-    : '';
+  const newUrl = createUrl({ code });
 
-  history.replaceState(null, null, `#?source=${compressedCode}`);
+  history.replaceState(null, null, newUrl);
   store.setItem('code', code);
 };
 
