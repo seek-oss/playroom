@@ -3,8 +3,10 @@ import { render } from 'react-dom';
 import localforage from 'localforage';
 import queryString from 'query-string';
 import base64url from 'base64-url';
+import lzString from 'lz-string';
 import dedent from 'dedent';
 import Playroom from './Playroom/Playroom';
+import { createUrl } from '../utils';
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
@@ -24,17 +26,26 @@ const getCode = () => {
   const query = queryString.parse(hash);
   const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
 
-  return query.code
-    ? Promise.resolve(query.code ? base64url.decode(query.code) : exampleCode)
-    : store.getItem('code').then(code => code || exampleCode);
+  if (query.code) {
+    try {
+      const { code } = JSON.parse(
+        lzString.decompressFromEncodedURIComponent(query.code)
+      );
+
+      return Promise.resolve(code);
+    } catch (e) {
+      // backward compatibility
+      return Promise.resolve(base64url.decode(query.code));
+    }
+  }
+
+  return store.getItem('code').then(code => code || exampleCode);
 };
 
 const updateCode = code => {
-  history.replaceState(
-    null,
-    null,
-    `#?code=${code ? base64url.encode(code) : ''}`
-  );
+  const newUrl = createUrl({ code });
+
+  history.replaceState(null, null, newUrl);
   store.setItem('code', code);
 };
 
