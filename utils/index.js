@@ -1,11 +1,11 @@
 const lzString = require('lz-string');
 
 const createUrl = ({ baseUrl, code }) => {
-  const compressedCode = code
-    ? lzString.compressToEncodedURIComponent(code)
-    : '';
+  const data = JSON.stringify({ code });
 
-  const path = `#?source=${compressedCode}`;
+  const compressedData = lzString.compressToEncodedURIComponent(data);
+
+  const path = `#?code=${compressedData}`;
 
   if (baseUrl) {
     const trimmedBaseUrl = baseUrl.replace(/\/$/, '');

@@ -26,15 +26,17 @@ const getCode = () => {
   const query = queryString.parse(hash);
   const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
 
-  if (query.source) {
-    return Promise.resolve(
-      lzString.decompressFromEncodedURIComponent(query.source)
-    );
-  }
-
   if (query.code) {
-    // backward compatibility
-    return Promise.resolve(base64url.decode(query.code));
+    try {
+      const { code } = JSON.parse(
+        lzString.decompressFromEncodedURIComponent(query.code)
+      );
+
+      return Promise.resolve(code);
+    } catch (e) {
+      // backward compatibility
+      return Promise.resolve(base64url.decode(query.code));
+    }
   }
 
   return store.getItem('code').then(code => code || exampleCode);
