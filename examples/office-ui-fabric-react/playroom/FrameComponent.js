@@ -7,8 +7,6 @@ import { ThemeProvider } from '@uifabric/foundation';
 
 export default ({ theme, children }) => (
   <Fabric>
-    <ThemeProvider theme={theme}>
-      {children}
-    </ThemeProvider>
+    <ThemeProvider theme={theme}>{children}</ThemeProvider>
   </Fabric>
 );
