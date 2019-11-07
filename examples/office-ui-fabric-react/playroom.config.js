@@ -10,9 +10,9 @@ module.exports = {
   frameComponent: './playroom/FrameComponent.js',
   // themes: './themes/index.ts',
   exampleCode: `
-    <Button>
+    <DefaultButton>
       Hello World!
-    </Button>
+    </DefaultButton>
     `,
   port: 9000,
   openBrowser: true,
