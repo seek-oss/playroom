@@ -4,9 +4,12 @@
 import React from 'react';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 import { ThemeProvider } from '@uifabric/foundation';
+import { initializeIcons } from '@uifabric/icons';
 
-export default ({ theme, children }) => (
+initializeIcons();
+
+export default ({ children }) => (
   <Fabric>
-    <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    <ThemeProvider>{children}</ThemeProvider>
   </Fabric>
 );
