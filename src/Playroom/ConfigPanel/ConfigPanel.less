@@ -1,0 +1,57 @@
+@import (reference) '../Playroom.less';
+
+.form {
+  font-family: helvetica;
+  font-size: 14px;
+  position: fixed;
+  background: white;
+  width: 100%;
+  display: flex;
+  padding: 16px;
+  z-index: 999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.fieldset {
+  min-inline-size: unset;
+  border: 0;
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    padding: 8px;
+    border-radius: 4px;
+    margin: 4px 0;
+    border: 1px solid @sandbox-menu-item-borderColor;
+    cursor: pointer;
+
+    &.active {
+      background: @sandbox-menu-item-active-background;
+    }
+
+    &:hover {
+      transition: border 0.2s ease-in;
+      border: 1px solid @sandbox-menu-item-hover-borderColor;
+    }
+  }
+}
+
+.title {
+  font-weight: bold;
+}
+
+.configButton {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  color: @sandbox-icon-color;
+  cursor: pointer;
+
+  &:hover {
+    transition: color 0.2s ease-in;
+    color: @sandbox-icon-hover-color;
+  }
+}
