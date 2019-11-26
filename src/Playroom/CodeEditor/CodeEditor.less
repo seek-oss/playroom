@@ -1,0 +1,122 @@
+@import (reference) '../variables.less';
+
+@editor-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
+@sandbox-editor-height: 30vh;
+@gutter-size: 40px;
+
+.gutter {
+  @box-fade-size: 10px;
+  width: @gutter-size - @box-fade-size;
+  background: white;
+  position: absolute;
+  right: @box-fade-size;
+  box-shadow: 0 0 @box-fade-size 5px white;
+}
+
+.marker {
+  width: @sandbox-marker-size;
+  height: @sandbox-marker-size;
+  border-radius: (@sandbox-marker-size / 2);
+  background-color: @sandbox-marker-color;
+  position: relative;
+  top: (@sandbox-marker-size / 2);
+  left: 10px;
+}
+
+:global {
+  .react-codemirror2 {
+    height: 100%;
+    background-color: #fff;
+  }
+
+  .CodeMirror {
+    height: 100%;
+    width: 100%;
+    font-family: @editor-font-family;
+  }
+
+  .CodeMirror-gutters {
+    width: @gutter-size;
+  }
+
+  .CodeMirror-gutter-elt {
+    position: relative;
+  }
+
+  .CodeMirror pre,
+  .CodeMirror-linenumber {
+    font-size: 16px;
+  }
+
+  .CodeMirror-line > span[role='presentation'] {
+    padding-right: (@dock-size + @dock-fade-distance + @gutter-size) !important;
+  }
+
+  .CodeMirror-lines {
+    padding: 16px 0;
+  }
+
+  .CodeMirror-hints {
+    position: absolute;
+    z-index: 10;
+    overflow: hidden;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    background: white;
+    font-size: 90%;
+    line-height: 150%;
+    font-family: @editor-font-family;
+    max-height: 20em;
+    overflow-y: auto;
+  }
+
+  .CodeMirror-hint {
+    margin: 0;
+    padding: 4px 8px;
+    border-radius: 2px;
+    white-space: pre;
+    color: black;
+    cursor: pointer;
+  }
+
+  li.CodeMirror-hint-active {
+    background: #08f;
+    color: white;
+  }
+
+  .cm-s-neo {
+    &.CodeMirror {
+      background-color: #fff;
+    }
+    .CodeMirror-cursor {
+      background: black;
+      width: 2px;
+    }
+    .CodeMirror-gutters {
+      background: none;
+      border: none;
+      pointer-events: none;
+    }
+    .CodeMirror-linenumber {
+      color: white;
+    }
+    .cm-tag {
+      color: #040080;
+    }
+    .cm-attribute {
+      color: #005ad2;
+    }
+    .cm-string {
+      color: #00439c;
+    }
+    .cm-atom {
+      color: #00439c;
+    }
+    .cm-variable {
+      color: #827eff;
+    }
+  }
+}

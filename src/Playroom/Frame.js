@@ -1,62 +1,33 @@
 import React, { Component } from 'react';
-import queryString from 'query-string';
+import getParamsFromQuery from '../utils/getParamsFromQuery';
 import CatchErrors from './CatchErrors/CatchErrors';
 import RenderCode from './RenderCode/RenderCode';
-
-const themesImport = require('./themes');
-const componentsImport = require('./components');
-const frameComponentImport = require('./frameComponent');
-
-const getQueryParams = () => {
-  try {
-    const hash = window.location.hash.replace(/^#/, '');
-    return queryString.parse(hash);
-  } catch (err) {
-    return {};
-  }
-};
 
 export default class Frame extends Component {
   constructor(props) {
     super(props);
 
-    const { themeName, code = '' } = getQueryParams();
+    const { themeName, code = '' } = getParamsFromQuery();
 
     this.state = {
       themeName,
-      themes: themesImport,
-      components: componentsImport,
-      FrameComponent: frameComponentImport,
       code
     };
   }
 
   componentDidMount() {
     window.addEventListener('hashchange', () => {
-      const { themeName, code } = getQueryParams();
+      const { themeName, code } = getParamsFromQuery();
 
       if (themeName && code) {
         this.setState({ themeName, code });
       }
     });
-
-    if (module.hot) {
-      module.hot.accept('./themes', () => {
-        this.setState({ themes: require('./themes') });
-      });
-
-      module.hot.accept('./components', () => {
-        this.setState({ components: require('./components') });
-      });
-
-      module.hot.accept('./frameComponent', () => {
-        this.setState({ FrameComponent: require('./frameComponent') });
-      });
-    }
   }
 
   render() {
-    const { FrameComponent, themes, themeName, components, code } = this.state;
+    const { themeName, code } = this.state;
+    const { themes, components, FrameComponent } = this.props;
 
     const resolvedThemeName =
       themeName === '__PLAYROOM__NO_THEME__' ? null : themeName;

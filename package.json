@@ -64,6 +64,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "base64-url": "^2.2.0",
     "buble": "^0.19.3",
+    "classnames": "^2.2.6",
     "codemirror": "^5.48.2",
     "command-line-args": "^5.0.2",
     "command-line-usage": "^5.0.5",
@@ -86,10 +87,8 @@
     "prop-types": "^15.6.2",
     "query-string": "^6.1.0",
     "re-resizable": "^4.9.3",
-    "react": "^16.8.6",
     "react-codemirror2": "^6.0.0",
     "react-docgen-typescript": "^1.12.2",
-    "react-dom": "^16.8.6",
     "read-pkg-up": "^5.0.0",
     "scope-eval": "^1.0.0",
     "style-loader": "^0.23.0",
@@ -106,15 +105,20 @@
     "commitlint-config-seek": "^1.0.0",
     "cypress": "^3.4.0",
     "cz-conventional-changelog": "^2.1.0",
-    "eslint": "^5.8.0",
-    "eslint-config-seek": "^3.2.1",
-    "eslint-plugin-cypress": "^2.6.0",
+    "eslint": "^6.7.2",
+    "eslint-config-seek": "^4.3.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "husky": "^1.1.3",
     "jest": "^23.6.0",
     "lint-staged": "^8.0.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "semantic-release": "^15.10.8",
     "serve": "^11.1.0",
     "start-server-and-test": "^1.7.11"
+  },
+  "peerDependencies": {
+    "react": "^16.8",
+    "react-dom": "^16.8"
   }
 }

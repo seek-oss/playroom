@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
+
 const copyStyles = (sourceDoc, targetDoc) => {
   Array.from(sourceDoc.styleSheets).forEach(styleSheet => {
     if (styleSheet.cssRules) {
@@ -28,8 +30,8 @@ export default class WindowPortal extends React.PureComponent {
   static propTypes = {
     height: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
-    onKeyDown: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired,
+    onKeyDown: PropTypes.func,
+    onUnload: PropTypes.func,
     children: PropTypes.node.isRequired
   };
 
@@ -52,16 +54,24 @@ export default class WindowPortal extends React.PureComponent {
 
   createWindow = () => {
     const containerDiv = document.createElement('div');
+    containerDiv.style.height = '100vh';
     const externalWindow = window.open(
       '',
-      '',
+      `${playroomConfig.storageKey}_editor`,
       `width=${this.props.width},height=${this.props.height},left=200,top=200`
     );
 
     externalWindow.document.title = 'Playroom Editor';
+    externalWindow.document.body.innerHTML = '';
     externalWindow.document.body.appendChild(containerDiv);
-    externalWindow.addEventListener('beforeunload', this.props.onClose);
-    externalWindow.addEventListener('keydown', this.props.onKeyDown);
+
+    if (typeof this.props.onUnload === 'function') {
+      externalWindow.addEventListener('unload', this.props.onUnload);
+    }
+
+    if (typeof this.props.onKeyDown === 'function') {
+      externalWindow.addEventListener('keydown', this.props.onKeyDown);
+    }
 
     copyStyles(document, externalWindow.document);
     this.setState({ externalWindow, containerDiv });
