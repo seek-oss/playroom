@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Iframe from './Iframe';
 import styles from './Preview.less';
+import compileJsx from '../../utils/compileJsx';
 
 export default class Preview extends Component {
   static propTypes = {
@@ -19,6 +20,14 @@ export default class Preview extends Component {
 
   render() {
     const { code, frames } = this.props;
+
+    let renderCode = code;
+
+    try {
+      renderCode = compileJsx(code);
+    } catch (e) {
+      renderCode = '';
+    }
 
     return (
       <div className={styles.root}>
@@ -43,7 +52,7 @@ export default class Preview extends Component {
             <Iframe
               src={`frame.html#?themeName=${encodeURIComponent(
                 frame.theme
-              )}&code=${encodeURIComponent(code)}`}
+              )}&code=${encodeURIComponent(renderCode)}`}
               className={styles.frame}
               style={{ width: frame.width }}
             />

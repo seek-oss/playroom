@@ -52,6 +52,7 @@ export default class WindowPortal extends React.PureComponent {
 
   createWindow = () => {
     const containerDiv = document.createElement('div');
+    containerDiv.style.height = '100vh';
     const externalWindow = window.open(
       '',
       '',
