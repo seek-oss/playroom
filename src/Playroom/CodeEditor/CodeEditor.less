@@ -1,0 +1,113 @@
+@import (reference) '../variables.less';
+
+@editor-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
+@sandbox-editor-height: 30vh;
+
+.gutter {
+  width: @sandbox-marker-size * 1.5;
+}
+
+.marker {
+  width: @sandbox-marker-size;
+  height: @sandbox-marker-size;
+  border-radius: (@sandbox-marker-size / 2);
+  background-color: @sandbox-marker-color;
+  position: relative;
+  top: (@sandbox-line-height - @sandbox-marker-size) / 2;
+  left: -20px;
+}
+
+:global {
+  .react-codemirror2 {
+    height: 100%;
+  }
+
+  .CodeMirror {
+    &,
+    & :global(*) {
+      box-sizing: border-box;
+    }
+    height: 100%;
+    padding: 0 16px;
+    font-family: @editor-font-family;
+  }
+
+  .CodeMirror-gutters {
+    display: none;
+  }
+
+  .CodeMirror pre,
+  .CodeMirror-linenumber {
+    @padding: 2px;
+    font-size: 18px;
+    padding: @padding 0;
+    line-height: @sandbox-line-height - (@padding * 2);
+  }
+
+  .CodeMirror-lines {
+    padding: 16px 20px;
+  }
+
+  .CodeMirror-linenumber {
+    padding-right: (@gutter-width * 2);
+  }
+
+  .CodeMirror-hints {
+    position: absolute;
+    z-index: 10;
+    overflow: hidden;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    background: white;
+    font-size: 90%;
+    line-height: 150%;
+    font-family: @editor-font-family;
+    max-height: 20em;
+    overflow-y: auto;
+  }
+
+  .CodeMirror-hint {
+    margin: 0;
+    padding: 4px 8px;
+    border-radius: 2px;
+    white-space: pre;
+    color: black;
+    cursor: pointer;
+  }
+
+  li.CodeMirror-hint-active {
+    background: #08f;
+    color: white;
+  }
+
+  .cm-s-neo {
+    &.CodeMirror {
+      background-color: #fff;
+    }
+    .CodeMirror-cursor {
+      background: black;
+      width: 2px;
+    }
+    .CodeMirror-linenumber {
+      color: white;
+    }
+    .cm-tag {
+      color: #040080;
+    }
+    .cm-attribute {
+      color: #005ad2;
+    }
+    .cm-string {
+      color: #00439c;
+    }
+    .cm-atom {
+      color: #00439c;
+    }
+    .cm-variable {
+      color: #827eff;
+    }
+  }
+}
