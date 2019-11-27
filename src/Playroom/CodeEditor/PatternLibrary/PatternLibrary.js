@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 export default ({ patterns, onSelected, onExit, onHighlight }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(null);
+  const calculatedHighlightedIndex =
+    highlightedIndex === null && searchTerm.length > 0 ? 0 : highlightedIndex;
 
   const filteredPatterns = searchTerm
     ? patterns.filter(({ name }) =>
@@ -34,27 +36,48 @@ export default ({ patterns, onSelected, onExit, onHighlight }) => {
             onHighlight(null);
             onExit();
           }}
-          onChange={e => setSearchTerm(e.target.value)}
+          onChange={e => {
+            const { value } = e.target;
+
+            const freshFilteredPatterns = value
+              ? patterns.filter(({ name }) =>
+                  name.toLowerCase().includes(value.toLowerCase())
+                )
+              : patterns;
+
+            if (value.length > 0 && freshFilteredPatterns.length > 0) {
+              setHighlightedIndex(0);
+              onHighlight(freshFilteredPatterns[0]);
+            } else {
+              setHighlightedIndex(null);
+              onHighlight(null);
+            }
+
+            setSearchTerm(value);
+          }}
           onKeyDown={e => {
             if (e.key === 'ArrowDown' || e.key === 'Down') {
-              if (highlightedIndex === null) {
+              if (calculatedHighlightedIndex === null) {
                 highlight(0);
-              } else if (highlightedIndex < filteredPatterns.length - 1) {
-                highlight(highlightedIndex + 1);
+              } else if (
+                calculatedHighlightedIndex <
+                filteredPatterns.length - 1
+              ) {
+                highlight(calculatedHighlightedIndex + 1);
               }
             } else if (e.key === 'ArrowUp' || e.key === 'Up') {
-              if (highlightedIndex === null) {
+              if (calculatedHighlightedIndex === null) {
                 highlight(filteredPatterns.length - 1);
-              } else if (highlightedIndex > 0) {
-                highlight(highlightedIndex - 1);
+              } else if (calculatedHighlightedIndex > 0) {
+                highlight(calculatedHighlightedIndex - 1);
               }
             } else if (e.key === 'Enter') {
-              if (highlightedIndex !== null) {
-                onSelected(filteredPatterns[highlightedIndex]);
+              if (calculatedHighlightedIndex !== null) {
+                onSelected(filteredPatterns[calculatedHighlightedIndex]);
               }
               onExit();
-            } else {
-              highlight(null);
+            } else if (e.key === 'Escape') {
+              onExit();
             }
           }}
         />
@@ -63,7 +86,8 @@ export default ({ patterns, onSelected, onExit, onHighlight }) => {
         <div
           key={code}
           style={{
-            background: highlightedIndex === index ? 'blue' : undefined
+            background:
+              calculatedHighlightedIndex === index ? 'blue' : undefined
           }}
           onMouseEnter={() => highlight(index)}
           onMouseDown={() => {

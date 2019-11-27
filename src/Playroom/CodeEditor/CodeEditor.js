@@ -204,6 +204,7 @@ export const CodeEditor = ({
             }}
             onExit={() => {
               setShowPatterns(false);
+              editorInstanceRef.current.focus();
             }}
           />
         </div>
