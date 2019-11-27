@@ -26,32 +26,3 @@
   z-index: 1;
   max-height: 95vh;
 }
-
-.toolbar {
-  background-color: rgba(100%, 100%, 100%, 0.8);
-  box-shadow: 0 0 10px rgba(100%, 100%, 100%, 0.8);
-  padding: @row-height * 2;
-  display: flex;
-  justify-content: flex-end;
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 3;
-}
-
-.toolbarIcon {
-  @sandbox-icon-width: 24px;
-  @sandbox-icon-height: 24px;
-  @sandbox-icon-color: #555;
-  @sandbox-icon-hover-color: #000;
-
-  width: @sandbox-icon-width;
-  height: @sandbox-icon-height;
-  cursor: pointer;
-  * {
-    fill: @sandbox-icon-color;
-  }
-  &:hover * {
-    fill: @sandbox-icon-hover-color;
-  }
-}

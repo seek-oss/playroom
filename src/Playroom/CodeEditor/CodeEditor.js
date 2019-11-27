@@ -10,6 +10,7 @@ import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/xml-hint';
 import compileJsx from '../../utils/compileJsx';
+import UndockSvg from '../../assets/icons/NewWindowSvg';
 import PatternLibrary from './PatternLibrary/PatternLibrary';
 
 const completeAfter = (cm, predicate) => {
@@ -98,11 +99,12 @@ export const CodeEditor = ({
   patterns,
   onChange,
   hints,
-  onValidInsertLocation,
+  onUndock,
   onPreviewCode
 }) => {
   const editorInstanceRef = useRef(null);
   const [showPatterns, setShowPatterns] = useState(false);
+  const [validInsertLocation, setValidInsertLocation] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = event => {
@@ -136,6 +138,16 @@ export const CodeEditor = ({
 
   return (
     <div style={{ height: '100%', position: 'relative' }}>
+      <div className={styles.toolbar}>
+        <UndockSvg
+          title="Undock editor"
+          className={styles.toolbarIcon}
+          onClick={() => onUndock()}
+        />
+        {validInsertLocation && (
+          <button onClick={() => setShowPatterns(true)}>ready to add</button>
+        )}
+      </div>
       {showPatterns && patterns && patterns.length ? (
         <div
           style={{
@@ -228,9 +240,7 @@ export const CodeEditor = ({
             line
           ].slice(ch)}`;
 
-          if (typeof onValidInsertLocation === 'function') {
-            onValidInsertLocation(validateCode({ code: testCode.join('\n') }));
-          }
+          setValidInsertLocation(validateCode({ code: testCode.join('\n') }));
         }}
         options={{
           mode: 'jsx',

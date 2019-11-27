@@ -6,10 +6,8 @@ import omit from 'lodash/omit';
 import Resizable from 're-resizable';
 import Preview from './Preview/Preview';
 import styles from './Playroom.less';
-
 import { store } from '../index';
 import WindowPortal from './WindowPortal';
-import UndockSvg from '../assets/icons/NewWindowSvg';
 import { CodeEditor } from './CodeEditor/CodeEditor';
 
 const themesImport = require('./themes');
@@ -40,7 +38,6 @@ export default ({
   const [codeReady, setCodeReady] = useState(false);
   const [editorHeight, setEditorHeight] = useState(200);
   const [editorUndocked, setEditorUndocked] = useState(false);
-  const [validInsertLocation, setValidInsertLocation] = useState(false);
 
   useEffect(() => {
     if (module.hot) {
@@ -123,10 +120,10 @@ export default ({
       onChange={setCode}
       hints={tags}
       patterns={patterns}
+      onUndock={() => setEditorUndocked(docked => !docked)}
       onPreviewCode={newPreviewCode => {
         setPreviewCode(newPreviewCode);
       }}
-      onValidInsertLocation={setValidInsertLocation}
     />
   );
   const editorContainer = editorUndocked ? (
@@ -152,14 +149,6 @@ export default ({
       }}
       enable={resizableConfig}
     >
-      <div className={styles.toolbar}>
-        <UndockSvg
-          title="Undock editor"
-          className={styles.toolbarIcon}
-          onClick={() => setEditorUndocked(true)}
-        />
-        {validInsertLocation && <button>ready to add</button>}
-      </div>
       {codeEditor}
     </Resizable>
   );
