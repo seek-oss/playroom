@@ -12,6 +12,7 @@ import { CodeEditor } from './CodeEditor/CodeEditor';
 
 const themesImport = require('./themes');
 const componentsImport = require('./components');
+const patternsImport = require('./patterns');
 
 const resizableConfig = {
   top: true,
@@ -24,17 +25,13 @@ const resizableConfig = {
   topLeft: false
 };
 
-export default ({
-  getCode,
-  updateCode: persistCode,
-  staticTypes,
-  patterns,
-  widths
-}) => {
-  const [code, setCode] = useState('');
-  const [previewCode, setPreviewCode] = useState(null);
+export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
   const [themes, setThemes] = useState(themesImport);
   const [components, setComponents] = useState(componentsImport);
+  const [patterns, setPatterns] = useState(patternsImport);
+
+  const [code, setCode] = useState('');
+  const [previewCode, setPreviewCode] = useState(null);
   const [codeReady, setCodeReady] = useState(false);
   const [editorHeight, setEditorHeight] = useState(200);
   const [editorUndocked, setEditorUndocked] = useState(false);
@@ -47,6 +44,10 @@ export default ({
 
       module.hot.accept('./components', () => {
         setComponents(require('./components'));
+      });
+
+      module.hot.accept('./patterns', () => {
+        setPatterns(require('./patterns'));
       });
     }
 
@@ -119,7 +120,9 @@ export default ({
       code={code}
       onChange={setCode}
       hints={tags}
-      patterns={patterns}
+      patterns={
+        typeof patterns.default !== 'undefined' ? patterns.default : patterns
+      }
       onUndock={() => setEditorUndocked(docked => !docked)}
       onPreviewCode={newPreviewCode => {
         setPreviewCode(newPreviewCode);
