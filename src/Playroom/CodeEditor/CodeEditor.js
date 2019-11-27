@@ -163,9 +163,6 @@ export const CodeEditor = ({
           style={{
             background: 'white',
             position: 'absolute',
-            paddingLeft: 40,
-            paddingRight: 40,
-            paddingTop: 16,
             top: 0,
             left: 0,
             right: 0,
