@@ -94,6 +94,16 @@ const formatCode = ({ code, cm, cursor }) => {
   return formattedCode;
 };
 
+const isValidLocation = ({ editor, code }) => {
+  const { line, ch } = editor.getCursor();
+  const testCode = code.split('\n');
+  testCode[line] = `${testCode[line].slice(0, ch)}<b>"b"</b>${testCode[
+    line
+  ].slice(ch)}`;
+
+  return validateCode({ code: testCode.join('\n') });
+};
+
 export const CodeEditor = ({
   code,
   patterns,
@@ -222,8 +232,14 @@ export const CodeEditor = ({
         </div>
       ) : null}
       <ReactCodeMirror
-        editorDidMount={editorInstance => {
-          editorInstanceRef.current = editorInstance;
+        editorDidMount={editor => {
+          setValidInsertLocation(
+            isValidLocation({
+              editor,
+              code: editor.getValue()
+            })
+          );
+          editorInstanceRef.current = editor;
           editorInstanceRef.current.focus();
           editorInstanceRef.current.setCursor({ line: 0, ch: 0 });
         }}
@@ -231,16 +247,18 @@ export const CodeEditor = ({
         onBeforeChange={(editor, data, newCode) => {
           editor.clearGutter(styles.gutter);
           onChange(newCode);
-          validateCode({ code: newCode, highlightErrors: true, editor });
+          validateCode({
+            code: newCode,
+            highlightErrors: true,
+            editor
+          });
+
+          setValidInsertLocation(isValidLocation({ editor, code: newCode }));
         }}
         onCursorActivity={editor => {
-          const { line, ch } = editor.getCursor();
-          const testCode = editor.getValue().split('\n');
-          testCode[line] = `${testCode[line].slice(0, ch)}<b>"b"</b>${testCode[
-            line
-          ].slice(ch)}`;
-
-          setValidInsertLocation(validateCode({ code: testCode.join('\n') }));
+          setValidInsertLocation(
+            isValidLocation({ editor, code: editor.getValue() })
+          );
         }}
         options={{
           mode: 'jsx',
