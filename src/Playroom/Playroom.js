@@ -40,6 +40,7 @@ export default ({
   const [codeReady, setCodeReady] = useState(false);
   const [editorHeight, setEditorHeight] = useState(200);
   const [editorUndocked, setEditorUndocked] = useState(false);
+  const [validInsertLocation, setValidInsertLocation] = useState(false);
 
   useEffect(() => {
     if (module.hot) {
@@ -125,6 +126,7 @@ export default ({
       onPreviewCode={newPreviewCode => {
         setPreviewCode(newPreviewCode);
       }}
+      onValidInsertLocation={setValidInsertLocation}
     />
   );
   const editorContainer = editorUndocked ? (
@@ -156,6 +158,7 @@ export default ({
           className={styles.toolbarIcon}
           onClick={() => setEditorUndocked(true)}
         />
+        {validInsertLocation && <button>ready to add</button>}
       </div>
       {codeEditor}
     </Resizable>
