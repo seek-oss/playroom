@@ -114,7 +114,7 @@ export const CodeEditor = ({
           ? event.metaKey
           : event.ctrlKey;
 
-        if (cmdOrCtrlKey && key === 'i') {
+        if (cmdOrCtrlKey && (key === 'p' || key === 'i')) {
           event.preventDefault();
           setShowPatterns(true);
         } else if (cmdOrCtrlKey && key === 's') {
