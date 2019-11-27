@@ -141,6 +141,7 @@ export const CodeEditor = ({
           patterns={patterns}
           onHighlight={item => {
             if (!item) {
+              onPreviewCode(null);
               return;
             }
 

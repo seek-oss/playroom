@@ -23,6 +23,7 @@ export default ({ patterns, onSelected, onExit, onHighlight }) => {
           type="search"
           value={searchTerm}
           onBlur={() => {
+            onHighlight(null);
             onExit();
           }}
           onChange={e => setSearchTerm(e.target.value)}
