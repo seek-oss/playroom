@@ -22,6 +22,9 @@ export default ({ patterns, onSelected, onExit, onHighlight }) => {
           autoFocus
           type="search"
           value={searchTerm}
+          onBlur={() => {
+            onExit();
+          }}
           onChange={e => setSearchTerm(e.target.value)}
           onKeyDown={e => {
             if (e.key === 'ArrowDown' || e.key === 'Down') {
@@ -53,9 +56,9 @@ export default ({ patterns, onSelected, onExit, onHighlight }) => {
           style={{
             background: highlightedIndex === index ? 'blue' : undefined
           }}
-          onMouseEnter={() => setHighlightedIndex(index)}
-          onClick={() => {
-            onSelected(patterns[index]);
+          onMouseEnter={() => highlight(index)}
+          onMouseDown={() => {
+            onSelected(filteredPatterns[index]);
             onExit();
           }}
         >
