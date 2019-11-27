@@ -54,6 +54,7 @@ render(
     staticTypes={staticTypes}
     widths={widths}
     defaultFrames={playroomConfig.defaultFrames}
+    patterns={playroomConfig.patterns}
     getCode={getCode}
     updateCode={updateCode}
   />,

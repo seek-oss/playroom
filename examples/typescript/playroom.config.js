@@ -1,6 +1,10 @@
 module.exports = {
   components: './components/index.ts',
   outputPath: './dist',
+  patterns: [
+    { name: 'Foo', code: '<Foo />' },
+    { name: 'Bar', code: '<Bar />' }
+  ],
   webpackConfig: () => ({
     module: {
       rules: [

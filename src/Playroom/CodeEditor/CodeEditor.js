@@ -1,11 +1,8 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
-
 import { formatCode as format } from '../../utils/formatting';
-
 import styles from './CodeEditor.less';
-
 import { Controlled as ReactCodeMirror } from 'react-codemirror2';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/addon/edit/closetag';
@@ -13,6 +10,7 @@ import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/xml-hint';
 import compileJsx from '../../utils/compileJsx';
+import PatternLibrary from './PatternLibrary/PatternLibrary';
 
 const completeAfter = (cm, predicate) => {
   const CodeMirror = cm.constructor;
@@ -74,79 +72,136 @@ const validateCode = (editorInstanceRef, code) => {
   }
 };
 
-export const CodeEditor = ({ code, onChange, hints }) => {
+const formatCode = ({ code, cm }) => {
+  const { formattedCode, line, ch } = format({
+    code,
+    cursor: cm.getCursor()
+  });
+  cm.setValue(formattedCode);
+  cm.focus();
+  cm.setCursor({
+    line,
+    ch
+  });
+
+  return formattedCode;
+};
+
+export const CodeEditor = ({
+  code,
+  patterns,
+  onChange,
+  hints,
+  onPreviewCode
+}) => {
   const editorInstanceRef = useRef(null);
+  const [showPatterns, setShowPatterns] = useState(false);
 
-  useEffect(
-    () => {
-      const handleKeyDown = e => {
-        if (
-          editorInstanceRef &&
-          editorInstanceRef.current &&
-          e.keyCode === 83 &&
-          (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey)
-        ) {
-          e.preventDefault();
+  useEffect(() => {
+    const handleKeyDown = event => {
+      if (editorInstanceRef && editorInstanceRef.current) {
+        const { key } = event;
+        const cmdOrCtrlKey = navigator.platform.match('Mac')
+          ? event.metaKey
+          : event.ctrlKey;
 
-          const { formattedCode, line, ch } = format({
-            code,
-            cursor: editorInstanceRef.current.getCursor()
-          });
-
-          onChange(formattedCode);
-          editorInstanceRef.current.setValue(formattedCode);
-          editorInstanceRef.current.focus();
-          editorInstanceRef.current.setCursor({
-            line,
-            ch
-          });
+        if (cmdOrCtrlKey && key === 'i') {
+          event.preventDefault();
+          setShowPatterns(true);
+        } else if (cmdOrCtrlKey && key === 's') {
+          event.preventDefault();
+          onChange(
+            formatCode({
+              code,
+              cm: editorInstanceRef.current
+            })
+          );
         }
-      };
+      }
+    };
 
-      window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
 
-      return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-      };
-    },
-    [code, onChange]
-  );
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [code, onChange]);
 
   return (
-    <ReactCodeMirror
-      editorDidMount={editorInstance => {
-        editorInstanceRef.current = editorInstance;
-        editorInstanceRef.current.focus();
-        editorInstanceRef.current.setCursor({ line: 0, ch: 0 });
-      }}
-      value={code}
-      onBeforeChange={(editor, data, newCode) => {
-        onChange(newCode);
-        validateCode(editorInstanceRef.current, newCode);
-      }}
-      options={{
-        mode: 'jsx',
-        autoCloseTags: true,
-        autoCloseBrackets: true,
-        theme: 'neo',
-        gutters: [styles.gutter],
-        hintOptions: { schemaInfo: hints },
-        extraKeys: {
-          Tab: cm => {
-            if (cm.somethingSelected()) {
-              cm.indentSelection('add');
-            } else {
-              const indent = cm.getOption('indentUnit');
-              const spaces = Array(indent + 1).join(' ');
-              cm.replaceSelection(spaces);
+    <div style={{ height: '100%', position: 'relative' }}>
+      {showPatterns && patterns && patterns.length ? (
+        <PatternLibrary
+          patterns={patterns}
+          onHighlight={item => {
+            if (!item) {
+              return;
             }
-          },
-          "'<'": completeAfter,
-          "'/'": completeIfAfterLt,
-          "' '": completeIfInTag,
-          "'='": completeIfInTag
-        }
-      }}
-    />
+
+            const cm = editorInstanceRef.current;
+
+            const { line, ch } = cm.getCursor();
+            const newCode = code.split('\n');
+            newCode[line] = `${newCode[line].slice(0, ch)}${item.code}${newCode[
+              line
+            ].slice(ch)}`;
+
+            onPreviewCode(newCode.join('\n'));
+          }}
+          onSelected={item => {
+            const cm = editorInstanceRef.current;
+            const cursor = cm.getCursor();
+
+            const { line, ch } = cursor;
+            const newCode = code.split('\n');
+            newCode[line] = `${newCode[line].slice(0, ch)}${item.code}${newCode[
+              line
+            ].slice(ch)}`;
+
+            setTimeout(() => {
+              onPreviewCode(null);
+              onChange(formatCode({ cm, code: newCode.join('\n') }));
+            }, 0);
+          }}
+          onExit={() => {
+            setShowPatterns(false);
+          }}
+        />
+      ) : null}
+      <ReactCodeMirror
+        editorDidMount={editorInstance => {
+          editorInstanceRef.current = editorInstance;
+          editorInstanceRef.current.focus();
+          editorInstanceRef.current.setCursor({ line: 0, ch: 0 });
+        }}
+        value={code}
+        onBeforeChange={(editor, data, newCode) => {
+          onChange(newCode);
+          validateCode(editorInstanceRef.current, newCode);
+        }}
+        options={{
+          mode: 'jsx',
+          autoCloseTags: true,
+          autoCloseBrackets: true,
+          theme: 'neo',
+          gutters: [styles.gutter],
+          hintOptions: { schemaInfo: hints },
+          extraKeys: {
+            Tab: cm => {
+              if (cm.somethingSelected()) {
+                cm.indentSelection('add');
+              } else {
+                const indent = cm.getOption('indentUnit');
+                const spaces = Array(indent + 1).join(' ');
+                cm.replaceSelection(spaces);
+              }
+            },
+            "'<'": completeAfter,
+            "'/'": completeIfAfterLt,
+            "' '": completeIfInTag,
+            "'='": completeIfInTag
+          }
+        }}
+      />
+    </div>
   );
 };

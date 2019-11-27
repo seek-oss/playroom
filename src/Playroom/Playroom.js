@@ -26,43 +26,44 @@ const resizableConfig = {
   topLeft: false
 };
 
-export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
+export default ({
+  getCode,
+  updateCode: persistCode,
+  staticTypes,
+  patterns,
+  widths
+}) => {
   const [code, setCode] = useState('');
+  const [previewCode, setPreviewCode] = useState(null);
   const [themes, setThemes] = useState(themesImport);
   const [components, setComponents] = useState(componentsImport);
   const [codeReady, setCodeReady] = useState(false);
   const [editorHeight, setEditorHeight] = useState(200);
   const [editorUndocked, setEditorUndocked] = useState(false);
 
-  useEffect(
-    () => {
-      if (module.hot) {
-        module.hot.accept('./themes', () => {
-          setThemes(require('./themes'));
-        });
+  useEffect(() => {
+    if (module.hot) {
+      module.hot.accept('./themes', () => {
+        setThemes(require('./themes'));
+      });
 
-        module.hot.accept('./components', () => {
-          setComponents(require('./components'));
-        });
+      module.hot.accept('./components', () => {
+        setComponents(require('./components'));
+      });
+    }
+
+    Promise.all([getCode(), store.getItem('editorSize')]).then(
+      ([resolvedCode, height]) => {
+        setEditorHeight(height);
+        setCode(resolvedCode);
+        setCodeReady(true);
       }
+    );
+  }, [getCode]);
 
-      Promise.all([getCode(), store.getItem('editorSize')]).then(
-        ([resolvedCode, height]) => {
-          setEditorHeight(height);
-          setCode(resolvedCode);
-          setCodeReady(true);
-        }
-      );
-    },
-    [getCode]
-  );
-
-  useEffect(
-    () => {
-      debounce(persistCode, 500)(code);
-    },
-    [code, persistCode]
-  );
+  useEffect(() => {
+    debounce(persistCode, 500)(code);
+  }, [code, persistCode]);
 
   const themeNames = Object.keys(themes);
   const frames = flatMap(widths, width =>
@@ -115,7 +116,17 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
     return null;
   }
 
-  const codeEditor = <CodeEditor code={code} onChange={setCode} hints={tags} />;
+  const codeEditor = (
+    <CodeEditor
+      code={code}
+      onChange={setCode}
+      hints={tags}
+      patterns={patterns}
+      onPreviewCode={newPreviewCode => {
+        setPreviewCode(newPreviewCode);
+      }}
+    />
+  );
   const editorContainer = editorUndocked ? (
     <WindowPortal
       height={window.outerHeight}
@@ -156,7 +167,7 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
         className={styles.previewContainer}
         style={{ bottom: !editorUndocked ? editorHeight : undefined }}
       >
-        <Preview code={code} themes={themes} frames={frames} />
+        <Preview code={previewCode || code} themes={themes} frames={frames} />
       </div>
       {editorContainer}
     </div>
