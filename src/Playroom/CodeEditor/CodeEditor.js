@@ -78,10 +78,10 @@ const validateCode = ({ editor, code, highlightErrors }) => {
   }
 };
 
-const formatCode = ({ code, cm }) => {
+const formatCode = ({ code, cm, cursor }) => {
   const { formattedCode, line, ch } = format({
     code,
-    cursor: cm.getCursor()
+    cursor: cursor || cm.getCursor()
   });
   cm.setValue(formattedCode);
   cm.focus();
@@ -174,6 +174,18 @@ export const CodeEditor = ({
               const cursor = cm.getCursor();
 
               const { line, ch } = cursor;
+
+              const snippetLines = item.code.split('\n');
+              const lastSnippetLine = snippetLines[snippetLines.length - 1];
+
+              const newCursor =
+                snippetLines.length === 1
+                  ? { line, ch: ch + lastSnippetLine.length }
+                  : {
+                      line: line + snippetLines.length - 1,
+                      ch: lastSnippetLine.length
+                    };
+
               const newCode = code.split('\n');
               newCode[line] = `${newCode[line].slice(0, ch)}${
                 item.code
@@ -181,7 +193,13 @@ export const CodeEditor = ({
 
               setTimeout(() => {
                 onPreviewCode(null);
-                onChange(formatCode({ cm, code: newCode.join('\n') }));
+                onChange(
+                  formatCode({
+                    cm,
+                    cursor: newCursor,
+                    code: newCode.join('\n')
+                  })
+                );
               }, 0);
             }}
             onExit={() => {

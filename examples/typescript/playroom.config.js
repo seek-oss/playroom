@@ -1,9 +1,37 @@
+const dedent = require('dedent');
+
 module.exports = {
   components: './components/index.ts',
   outputPath: './dist',
   patterns: [
-    { name: 'Foo', code: '<Foo />' },
-    { name: 'Bar', code: '<Bar />' }
+    {
+      name: 'Foo > Without Children',
+      code: dedent`
+        <Foo />
+      `
+    },
+    {
+      name: 'Foo > With Children',
+      code: dedent`
+        <Foo>
+          <strong>Hello</strong>
+        </Foo>
+      `
+    },
+    {
+      name: 'Bar > Without Children',
+      code: dedent`
+        <Bar />
+      `
+    },
+    {
+      name: 'Bar > With Children',
+      code: dedent`
+        <Bar>
+          <strong>Hello</strong>
+        </Bar>
+      `
+    }
   ],
   webpackConfig: () => ({
     module: {
