@@ -1,2 +1,6 @@
 /* eslint-disable-next-line import/no-unresolved */
-module.exports = require('__PLAYROOM_ALIAS__THEMES__');
+const foo = require('__PLAYROOM_ALIAS__THEMES__');
+
+console.log('__PLAYROOM_ALIAS__THEMES__', foo)
+
+module.exports = foo;
