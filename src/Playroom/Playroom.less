@@ -21,8 +21,22 @@
 .editorContainer {
   position: fixed !important; // override internal inline style
   bottom: 0;
+  z-index: 1;
+}
+
+.editorContainer_isRight {
+  right: 0;
+  top: 0;
+  max-width: 95vw;
+}
+
+.editorContainer_isUndocked {
+  width: 100vw;
+  height: 100vh;
+}
+
+.editorContainer_isBottom {
   left: 0;
   right: 0;
-  z-index: 1;
   max-height: 95vh;
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
+
 const copyStyles = (sourceDoc, targetDoc) => {
   Array.from(sourceDoc.styleSheets).forEach(styleSheet => {
     if (styleSheet.cssRules) {
@@ -55,11 +57,12 @@ export default class WindowPortal extends React.PureComponent {
     containerDiv.style.height = '100vh';
     const externalWindow = window.open(
       '',
-      '',
+      `${playroomConfig.storageKey}_editor`,
       `width=${this.props.width},height=${this.props.height},left=200,top=200`
     );
 
     externalWindow.document.title = 'Playroom Editor';
+    externalWindow.document.body.innerHTML = '';
     externalWindow.document.body.appendChild(containerDiv);
     externalWindow.addEventListener('beforeunload', this.props.onClose);
     externalWindow.addEventListener('keydown', this.props.onKeyDown);

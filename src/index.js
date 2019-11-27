@@ -7,6 +7,7 @@ import lzString from 'lz-string';
 import dedent from 'dedent';
 import Playroom from './Playroom/Playroom';
 import { createUrl } from '../utils';
+import { EditorProvider } from './Playroom/CodeEditor/EditorContext';
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
@@ -50,12 +51,14 @@ const updateCode = code => {
 };
 
 render(
-  <Playroom
-    staticTypes={staticTypes}
-    widths={widths}
-    defaultFrames={playroomConfig.defaultFrames}
-    getCode={getCode}
-    updateCode={updateCode}
-  />,
+  <EditorProvider>
+    <Playroom
+      staticTypes={staticTypes}
+      widths={widths}
+      defaultFrames={playroomConfig.defaultFrames}
+      getCode={getCode}
+      updateCode={updateCode}
+    />
+  </EditorProvider>,
   outlet
 );

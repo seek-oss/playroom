@@ -9,22 +9,24 @@ import styles from './Playroom.less';
 import { store } from '../index';
 import WindowPortal from './WindowPortal';
 import { CodeEditor } from './CodeEditor/CodeEditor';
+import { useEditorContext } from './CodeEditor/EditorContext';
 
 const themesImport = require('./themes');
 const componentsImport = require('./components');
 const patternsImport = require('./patterns');
 
-const resizableConfig = {
-  top: true,
+const resizableConfig = (position = 'bottom') => ({
+  top: position === 'bottom',
   right: false,
   bottom: false,
-  left: false,
+  left: position === 'right',
   topRight: false,
   bottomRight: false,
   bottomLeft: false,
   topLeft: false
-};
+});
 
+let firstLoad = true;
 export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
   const [themes, setThemes] = useState(themesImport);
   const [components, setComponents] = useState(componentsImport);
@@ -33,36 +35,56 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
   const [code, setCode] = useState('');
   const [previewCode, setPreviewCode] = useState(null);
   const [codeReady, setCodeReady] = useState(false);
-  const [editorHeight, setEditorHeight] = useState(200);
-  const [editorUndocked, setEditorUndocked] = useState(false);
+  const {
+    editorPosition,
+    editorSize,
+    setEditorSize,
+    setEditorPosition
+  } = useEditorContext();
 
-  useEffect(() => {
-    if (module.hot) {
-      module.hot.accept('./themes', () => {
-        setThemes(require('./themes'));
-      });
+  useEffect(
+    () => {
+      if (module.hot) {
+        module.hot.accept('./themes', () => {
+          setThemes(require('./themes'));
+        });
 
-      module.hot.accept('./components', () => {
-        setComponents(require('./components'));
-      });
+        module.hot.accept('./components', () => {
+          setComponents(require('./components'));
+        });
 
-      module.hot.accept('./patterns', () => {
-        setPatterns(require('./patterns'));
-      });
-    }
+        module.hot.accept('./patterns', () => {
+          setPatterns(require('./patterns'));
+        });
+      }
 
-    Promise.all([getCode(), store.getItem('editorSize')]).then(
-      ([resolvedCode, height]) => {
-        setEditorHeight(height);
+      Promise.all([
+        getCode(),
+        store.getItem('editorSize'),
+        store.getItem('editorPosition')
+      ]).then(([resolvedCode, resolvedSize, resolvedPosition]) => {
+        if (firstLoad) {
+          if (resolvedSize) {
+            setEditorSize(resolvedSize);
+          }
+          if (resolvedPosition) {
+            setEditorPosition(resolvedPosition);
+          }
+          firstLoad = false;
+        }
         setCode(resolvedCode);
         setCodeReady(true);
-      }
-    );
-  }, [getCode]);
+      });
+    },
+    [getCode, setEditorSize, setEditorPosition]
+  );
 
-  useEffect(() => {
-    debounce(persistCode, 500)(code);
-  }, [code, persistCode]);
+  useEffect(
+    () => {
+      debounce(persistCode, 500)(code);
+    },
+    [code, persistCode]
+  );
 
   const themeNames = Object.keys(themes);
   const frames = flatMap(widths, width =>
@@ -123,44 +145,66 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
       patterns={
         typeof patterns.default !== 'undefined' ? patterns.default : patterns
       }
-      onUndock={() => setEditorUndocked(docked => !docked)}
+      onUndock={() => {
+        if (editorPosition === 'undocked') {
+          setEditorPosition('bottom');
+        } else if (editorPosition === 'bottom') {
+          setEditorPosition('right');
+        } else if (editorPosition === 'right') {
+          setEditorPosition('undocked');
+        }
+      }}
       onPreviewCode={newPreviewCode => {
         setPreviewCode(newPreviewCode);
       }}
     />
   );
-  const editorContainer = editorUndocked ? (
-    <WindowPortal
-      height={window.outerHeight}
-      width={window.outerWidth}
-      onClose={() => setEditorUndocked(false)}
-    >
-      {codeEditor}
-    </WindowPortal>
-  ) : (
-    <Resizable
-      className={styles.editorContainer}
-      defaultSize={{
-        height: `${editorHeight}`, // issue in ff & safari when not a string
-        width: '100vw'
-      }}
-      onResize={(event, direction, ref) => {
-        debounce(height => {
-          setEditorHeight(height);
-          store.setItem('editorSize', height);
-        }, 1)(ref.offsetHeight);
-      }}
-      enable={resizableConfig}
-    >
-      {codeEditor}
-    </Resizable>
-  );
+
+  const size = {
+    height: editorPosition === 'bottom' ? `${editorSize}px` : '100vh', // issue in ff & safari when not a string
+    width: editorPosition === 'right' ? `${editorSize}px` : '100vw'
+  };
+  const editorContainer =
+    editorPosition === 'undocked' ? (
+      <WindowPortal
+        height={window.outerHeight}
+        width={window.outerWidth}
+        onClose={() => setEditorPosition('bottom')}
+      >
+        {codeEditor}
+      </WindowPortal>
+    ) : (
+      <Resizable
+        className={`${styles.editorContainer} ${[
+          editorPosition === 'undocked'
+            ? styles.editorContainer_isUndocked
+            : '',
+          editorPosition === 'right' ? styles.editorContainer_isRight : '',
+          editorPosition === 'bottom' ? styles.editorContainer_isBottom : ''
+        ].join(' ')}`}
+        defaultSize={size}
+        size={size}
+        onResize={(event, direction, ref) => {
+          debounce(currentSize => {
+            setEditorSize(currentSize);
+          }, 1)(
+            editorPosition === 'bottom' ? ref.offsetHeight : ref.offsetWidth
+          );
+        }}
+        enable={resizableConfig(editorPosition)}
+      >
+        {codeEditor}
+      </Resizable>
+    );
 
   return (
     <div className={styles.root}>
       <div
         className={styles.previewContainer}
-        style={{ bottom: !editorUndocked ? editorHeight : undefined }}
+        style={{
+          bottom: editorPosition === 'bottom' ? editorSize : undefined,
+          right: editorPosition === 'right' ? editorSize + 5 : undefined
+        }}
       >
         <Preview code={previewCode || code} themes={themes} frames={frames} />
       </div>
