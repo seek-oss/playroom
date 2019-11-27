@@ -54,27 +54,38 @@ const completeIfInTag = cm => {
   });
 };
 
-const validateCode = (editorInstanceRef, code) => {
-  editorInstanceRef.clearGutter(styles.gutter);
-
+const validateCode = ({ editor, code, highlightErrors }) => {
   try {
     compileJsx(code);
+    return true;
   } catch (err) {
-    const errorMessage = err && (err.message || '');
-    const matches = errorMessage.match(/\(([0-9]+):/);
-    const lineNumber =
-      matches && matches.length >= 2 && matches[1] && parseInt(matches[1], 10);
+    if (highlightErrors) {
+      const errorMessage = err && (err.message || '');
+      const matches = errorMessage.match(/\(([0-9]+):/);
+      const lineNumber =
+        matches &&
+        matches.length >= 2 &&
+        matches[1] &&
+        parseInt(matches[1], 10);
 
-    if (lineNumber) {
-      const marker = document.createElement('div');
-      marker.classList.add(styles.marker);
-      marker.setAttribute('title', err.message);
-      editorInstanceRef.setGutterMarker(lineNumber - 1, styles.gutter, marker);
+      if (lineNumber) {
+        const marker = document.createElement('div');
+        marker.classList.add(styles.marker);
+        marker.setAttribute('title', err.message);
+        editor.setGutterMarker(lineNumber - 1, styles.gutter, marker);
+      }
     }
+
+    return false;
   }
 };
 
-export const CodeEditor = ({ code, onChange, hints }) => {
+export const CodeEditor = ({
+  code,
+  onChange,
+  hints,
+  onValidInsertLocation
+}) => {
   const editorInstanceRef = useRef(null);
 
   useEffect(
@@ -121,8 +132,20 @@ export const CodeEditor = ({ code, onChange, hints }) => {
       }}
       value={code}
       onBeforeChange={(editor, data, newCode) => {
+        editor.clearGutter(styles.gutter);
         onChange(newCode);
-        validateCode(editorInstanceRef.current, newCode);
+        validateCode({ code: newCode, highlightErrors: true, editor });
+      }}
+      onCursorActivity={editor => {
+        const { line, ch } = editor.getCursor();
+        const testCode = editor.getValue().split('\n');
+        testCode[line] = `${testCode[line].slice(0, ch)}<b>"b"</b>${testCode[
+          line
+        ].slice(ch)}`;
+
+        if (typeof onValidInsertLocation === 'function') {
+          onValidInsertLocation(validateCode({ code: testCode.join('\n') }));
+        }
       }}
       options={{
         mode: 'jsx',

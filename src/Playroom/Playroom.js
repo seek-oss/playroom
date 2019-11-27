@@ -33,6 +33,7 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
   const [codeReady, setCodeReady] = useState(false);
   const [editorHeight, setEditorHeight] = useState(200);
   const [editorUndocked, setEditorUndocked] = useState(false);
+  const [validInsertLocation, setValidInsertLocation] = useState(false);
 
   useEffect(
     () => {
@@ -115,7 +116,14 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
     return null;
   }
 
-  const codeEditor = <CodeEditor code={code} onChange={setCode} hints={tags} />;
+  const codeEditor = (
+    <CodeEditor
+      code={code}
+      onChange={setCode}
+      hints={tags}
+      onValidInsertLocation={setValidInsertLocation}
+    />
+  );
   const editorContainer = editorUndocked ? (
     <WindowPortal
       height={window.outerHeight}
@@ -145,6 +153,7 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
           className={styles.toolbarIcon}
           onClick={() => setEditorUndocked(true)}
         />
+        {validInsertLocation && <button>ready to add</button>}
       </div>
       {codeEditor}
     </Resizable>
