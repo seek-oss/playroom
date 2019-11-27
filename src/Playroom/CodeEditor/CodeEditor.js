@@ -137,43 +137,58 @@ export const CodeEditor = ({
   return (
     <div style={{ height: '100%', position: 'relative' }}>
       {showPatterns && patterns && patterns.length ? (
-        <PatternLibrary
-          patterns={patterns}
-          onHighlight={item => {
-            if (!item) {
-              onPreviewCode(null);
-              return;
-            }
-
-            const cm = editorInstanceRef.current;
-
-            const { line, ch } = cm.getCursor();
-            const newCode = code.split('\n');
-            newCode[line] = `${newCode[line].slice(0, ch)}${item.code}${newCode[
-              line
-            ].slice(ch)}`;
-
-            onPreviewCode(newCode.join('\n'));
+        <div
+          style={{
+            background: 'white',
+            position: 'absolute',
+            paddingLeft: 40,
+            paddingRight: 40,
+            paddingTop: 16,
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '100%',
+            zIndex: 100
           }}
-          onSelected={item => {
-            const cm = editorInstanceRef.current;
-            const cursor = cm.getCursor();
+        >
+          <PatternLibrary
+            patterns={patterns}
+            onHighlight={item => {
+              if (!item) {
+                onPreviewCode(null);
+                return;
+              }
 
-            const { line, ch } = cursor;
-            const newCode = code.split('\n');
-            newCode[line] = `${newCode[line].slice(0, ch)}${item.code}${newCode[
-              line
-            ].slice(ch)}`;
+              const cm = editorInstanceRef.current;
 
-            setTimeout(() => {
-              onPreviewCode(null);
-              onChange(formatCode({ cm, code: newCode.join('\n') }));
-            }, 0);
-          }}
-          onExit={() => {
-            setShowPatterns(false);
-          }}
-        />
+              const { line, ch } = cm.getCursor();
+              const newCode = code.split('\n');
+              newCode[line] = `${newCode[line].slice(0, ch)}${
+                item.code
+              }${newCode[line].slice(ch)}`;
+
+              onPreviewCode(newCode.join('\n'));
+            }}
+            onSelected={item => {
+              const cm = editorInstanceRef.current;
+              const cursor = cm.getCursor();
+
+              const { line, ch } = cursor;
+              const newCode = code.split('\n');
+              newCode[line] = `${newCode[line].slice(0, ch)}${
+                item.code
+              }${newCode[line].slice(ch)}`;
+
+              setTimeout(() => {
+                onPreviewCode(null);
+                onChange(formatCode({ cm, code: newCode.join('\n') }));
+              }, 0);
+            }}
+            onExit={() => {
+              setShowPatterns(false);
+            }}
+          />
+        </div>
       ) : null}
       <ReactCodeMirror
         editorDidMount={editorInstance => {

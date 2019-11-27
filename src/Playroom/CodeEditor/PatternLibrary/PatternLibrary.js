@@ -17,11 +17,19 @@ export default ({ patterns, onSelected, onExit, onHighlight }) => {
 
   return (
     <div>
-      <div>
+      <div style={{ paddingBottom: 8 }}>
         <input
           autoFocus
-          type="search"
+          type="text"
           value={searchTerm}
+          style={{
+            height: 32,
+            fontSize: 16,
+            lineHeight: '32px',
+            border: '1px solid #ccc',
+            borderRadius: 8,
+            width: '100%'
+          }}
           onBlur={() => {
             onHighlight(null);
             onExit();
