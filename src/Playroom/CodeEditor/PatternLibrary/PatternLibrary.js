@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import fuzzysort from 'fuzzysort';
 
 export default ({ patterns, onSelected, onExit, onHighlight }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -7,9 +8,7 @@ export default ({ patterns, onSelected, onExit, onHighlight }) => {
     highlightedIndex === null && searchTerm.length > 0 ? 0 : highlightedIndex;
 
   const filteredPatterns = searchTerm
-    ? patterns.filter(({ name }) =>
-        name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    ? fuzzysort.go(searchTerm, patterns, { key: 'name' }).map(x => x.obj)
     : patterns;
 
   const highlight = index => {
@@ -40,10 +39,13 @@ export default ({ patterns, onSelected, onExit, onHighlight }) => {
             const { value } = e.target;
 
             const freshFilteredPatterns = value
-              ? patterns.filter(({ name }) =>
-                  name.toLowerCase().includes(value.toLowerCase())
-                )
+              ? fuzzysort
+                  .go(value, patterns, {
+                    key: 'name'
+                  })
+                  .map(x => x.obj)
               : patterns;
+            console.log('freshFilteredPatterns', freshFilteredPatterns);
 
             if (value.length > 0 && freshFilteredPatterns.length > 0) {
               setHighlightedIndex(0);
