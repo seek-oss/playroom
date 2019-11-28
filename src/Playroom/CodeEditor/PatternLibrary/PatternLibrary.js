@@ -30,9 +30,7 @@ export default ({ patterns: rawPatterns, onSelected, onExit, onHighlight }) => {
     <div className={styles.root}>
       <div
         style={{
-          paddingLeft: 40,
-          paddingRight: 40,
-          paddingTop: 24
+          padding: 8
         }}
       >
         <div style={{ paddingBottom: 8 }}>
@@ -107,9 +105,9 @@ export default ({ patterns: rawPatterns, onSelected, onExit, onHighlight }) => {
         <div
           style={{
             position: 'absolute',
-            left: 40,
-            right: 40,
-            top: 72,
+            left: 8,
+            right: 8,
+            top: 56,
             bottom: 0,
             overflow: 'auto'
           }}
