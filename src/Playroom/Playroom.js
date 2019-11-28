@@ -59,22 +59,30 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
 
     Promise.all([
       getCode(),
-      store.getItem('editorSize'),
+      store.getItem('editorHeight'),
+      store.getItem('editorWidth'),
       store.getItem('editorPosition')
-    ]).then(([resolvedCode, resolvedSize, resolvedPosition]) => {
-      if (firstLoad) {
-        if (resolvedSize) {
-          setEditorSize(resolvedSize);
+    ]).then(
+      ([resolvedCode, resolvedHeight, resolvedWidth, resolvedPosition]) => {
+        if (firstLoad) {
+          if (resolvedPosition) {
+            setEditorPosition(resolvedPosition);
+          }
+          if (resolvedHeight || resolvedWidth) {
+            setEditorSize(
+              /(left|right)/.test(resolvedPosition)
+                ? resolvedWidth
+                : resolvedHeight,
+              resolvedPosition
+            );
+          }
+          firstLoad = false;
         }
-        if (resolvedPosition) {
-          setEditorPosition(resolvedPosition);
-        }
-        firstLoad = false;
+        setCode(resolvedCode);
+        setCodeReady(true);
       }
-      setCode(resolvedCode);
-      setCodeReady(true);
-    });
-  }, [getCode, setEditorSize, setEditorPosition]);
+    );
+  }, [getCode, setEditorSize, setEditorPosition, editorPosition]);
 
   useEffect(() => {
     debounce(persistCode, 500)(code);
@@ -180,7 +188,7 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
         size={size}
         onResize={(event, direction, ref) => {
           debounce(currentSize => {
-            setEditorSize(currentSize);
+            setEditorSize(currentSize, editorPosition);
           }, 1)(
             editorPosition === 'bottom' ? ref.offsetHeight : ref.offsetWidth
           );

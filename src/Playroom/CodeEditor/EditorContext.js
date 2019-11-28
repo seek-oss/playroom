@@ -12,12 +12,21 @@ export const EditorProvider = ({ children }) => {
   const [editorPosition, setEditorPosition] = useState('bottom');
   const [editorSize, setEditorSize] = useState(200);
 
-  const setSize = size => {
+  const setSize = (size, position) => {
     setEditorSize(size);
-    store.setItem('editorSize', size);
+    const storeKey = /(left|right)/.test(position)
+      ? 'editorWidth'
+      : 'editorHeight';
+
+    store.setItem(storeKey, size);
   };
   const setPosition = position => {
     setEditorPosition(position);
+
+    const storeKey = /(left|right)/.test(position)
+      ? 'editorWidth'
+      : 'editorHeight';
+    store.getItem(storeKey).then(size => setEditorSize(size));
     store.setItem('editorPosition', position);
   };
 
