@@ -27,7 +27,7 @@ export default ({ patterns: rawPatterns, onSelected, onExit, onHighlight }) => {
   };
 
   return (
-    <div style={{ position: 'relative', height: '100%' }}>
+    <div className={styles.root}>
       <div
         style={{
           paddingLeft: 40,
