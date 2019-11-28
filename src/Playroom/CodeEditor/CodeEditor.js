@@ -119,7 +119,61 @@ export const CodeEditor = ({
 }) => {
   const editorInstanceRef = useRef(null);
   const [showPatterns, setShowPatterns] = useState(false);
+  const [panelLocation, setPanelLocation] = useState({});
   const [validInsertLocation, setValidInsertLocation] = useState(false);
+
+  const openPatternsPanel = () => {
+    const editor = editorInstanceRef.current;
+    const cursor = editor.getCursor();
+    const cc = editor.cursorCoords(cursor, 'local');
+    const gutterWidth = editor.getGutterElement().offsetWidth + 20;
+
+    const scrollOffset = editor.display.scroller.scrollTop;
+
+    const flipPanelAboveCursor =
+      cc.bottom + 450 > editor.display.wrapper.offsetHeight &&
+      cc.top > editor.display.wrapper.offsetHeight / 2;
+    const topPosition =
+      cc.bottom - scrollOffset - 450 > 0 ? cc.bottom - scrollOffset - 450 : 20;
+    const panelOffsetFromLine = 12;
+
+    const top = flipPanelAboveCursor
+      ? topPosition
+      : cc.bottom + panelOffsetFromLine;
+    const bottom = flipPanelAboveCursor
+      ? editor.display.wrapper.offsetHeight +
+        scrollOffset -
+        cc.top +
+        panelOffsetFromLine
+      : 70;
+
+    setPanelLocation({
+      top,
+      bottom,
+      left: gutterWidth,
+      right: gutterWidth,
+      currentLine: editor.getLineHandle(editor.getCursor().line)
+    });
+    setShowPatterns(true);
+
+    editor.addLineClass(
+      editor.getLineHandle(editor.getCursor().line),
+      'background',
+      styles.insertHere
+    );
+  };
+
+  const closePatternsPanel = () => {
+    const editor = editorInstanceRef.current;
+    setShowPatterns(false);
+
+    editor.removeLineClass(
+      panelLocation.currentLine,
+      'background',
+      styles.insertHere
+    );
+    editor.focus();
+  };
 
   useEffect(() => {
     const handleKeyDown = event => {
@@ -131,7 +185,7 @@ export const CodeEditor = ({
 
         if (cmdOrCtrlKey && (key === 'p' || key === 'i')) {
           event.preventDefault();
-          setShowPatterns(true);
+          openPatternsPanel();
         } else if (cmdOrCtrlKey && key === 's') {
           event.preventDefault();
           onChange(
@@ -156,7 +210,7 @@ export const CodeEditor = ({
       <div className={styles.toolbar}>
         <button
           className={styles.addButton}
-          onClick={() => setShowPatterns(true)}
+          onClick={openPatternsPanel}
           disabled={!validInsertLocation}
           title={
             validInsertLocation
@@ -222,12 +276,17 @@ export const CodeEditor = ({
       {showPatterns && patterns && patterns.length ? (
         <div
           style={{
-            background: 'white',
             position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '100%',
+            top: /(left|right)/.test(editorPosition) ? panelLocation.top : 0,
+            left: /(left|right)/.test(editorPosition)
+              ? panelLocation.left
+              : undefined,
+            right: panelLocation.right,
+            bottom: /(left|right)/.test(editorPosition)
+              ? panelLocation.bottom
+              : 70,
+            width: /(left|right)/.test(editorPosition) ? undefined : '45%',
+            maxHeight: /(left|right)/.test(editorPosition) ? 450 : undefined,
             zIndex: 100
           }}
         >
@@ -282,10 +341,7 @@ export const CodeEditor = ({
                 );
               }, 0);
             }}
-            onExit={() => {
-              setShowPatterns(false);
-              editorInstanceRef.current.focus();
-            }}
+            onExit={closePatternsPanel}
           />
         </div>
       ) : null}
