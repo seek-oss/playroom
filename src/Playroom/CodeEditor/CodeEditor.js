@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 import { formatCode as format } from '../../utils/formatting';
@@ -122,24 +122,31 @@ export const CodeEditor = ({
   const [panelLocation, setPanelLocation] = useState({});
   const [validInsertLocation, setValidInsertLocation] = useState(false);
 
-  const openPatternsPanel = () => {
+  const openPatternsPanel = useCallback(() => {
     const editor = editorInstanceRef.current;
     const cursor = editor.getCursor();
     const cc = editor.cursorCoords(cursor, 'local');
     const gutterWidth = editor.getGutterElement().offsetWidth + 20;
+    const lineHeight = editor.defaultTextHeight();
+    const isVerticalEditor = /(left|right)/.test(editorPosition);
 
     const scrollOffset = editor.display.scroller.scrollTop;
 
     const flipPanelAboveCursor =
       cc.bottom + 450 > editor.display.wrapper.offsetHeight &&
       cc.top > editor.display.wrapper.offsetHeight / 2;
+
+    const previewOffset = isVerticalEditor ? lineHeight : 0;
+
     const topPosition =
-      cc.bottom - scrollOffset - 450 > 0 ? cc.bottom - scrollOffset - 450 : 20;
+      cc.bottom - scrollOffset - 450 + previewOffset > 0
+        ? cc.bottom - scrollOffset - 450 + previewOffset
+        : 20;
     const panelOffsetFromLine = 12;
 
     const top = flipPanelAboveCursor
       ? topPosition
-      : cc.bottom + panelOffsetFromLine;
+      : cc.bottom + panelOffsetFromLine + previewOffset;
     const bottom = flipPanelAboveCursor
       ? editor.display.wrapper.offsetHeight +
         scrollOffset -
@@ -147,12 +154,27 @@ export const CodeEditor = ({
         panelOffsetFromLine
       : 70;
 
+    const currentLine = editor.getLineHandle(editor.getCursor().line);
+    if (currentLine.text.trim().length > 0) {
+      const { line, ch } = cursor;
+      const newCode = code.split('\n');
+      newCode[line] = `${newCode[line].slice(0, ch)}\n\u00A0${newCode[
+        line
+      ].slice(ch)}`;
+
+      onChange(newCode.join('\n'));
+      editor.setCursor({
+        line: line + 1,
+        ch
+      });
+    }
+
     setPanelLocation({
       top,
       bottom,
       left: gutterWidth,
       right: gutterWidth,
-      currentLine: editor.getLineHandle(editor.getCursor().line)
+      currentLine
     });
     setShowPatterns(true);
 
@@ -161,18 +183,30 @@ export const CodeEditor = ({
       'background',
       styles.insertHere
     );
-  };
+  }, [code, onChange, editorPosition]);
 
-  const closePatternsPanel = () => {
+  const closePatternsPanel = ({ cancel } = {}) => {
     const editor = editorInstanceRef.current;
     setShowPatterns(false);
 
-    editor.removeLineClass(
-      panelLocation.currentLine,
-      'background',
-      styles.insertHere
-    );
-    editor.focus();
+    const { line } = editor.getCursor();
+    onChange(code.replace('\n\u00A0', ''));
+
+    setTimeout(() => {
+      editor.removeLineClass(
+        panelLocation.currentLine,
+        'background',
+        styles.insertHere
+      );
+      if (cancel) {
+        const prevLine = editor.getLineHandle(line - 1);
+        editor.setCursor({
+          line: line - 1,
+          ch: prevLine.text.length
+        });
+        editor.focus();
+      }
+    });
   };
 
   useEffect(() => {
@@ -203,7 +237,7 @@ export const CodeEditor = ({
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [code, onChange]);
+  }, [code, onChange, openPatternsPanel]);
 
   return (
     <div style={{ height: '100%', position: 'relative' }}>
@@ -336,11 +370,12 @@ export const CodeEditor = ({
                   formatCode({
                     cm,
                     cursor: newCursor,
-                    code: newCode.join('\n')
+                    code: newCode.join('\n').replace('\u00A0', '')
                   })
                 );
               }, 0);
             }}
+            onCancel={() => closePatternsPanel({ cancel: true })}
             onExit={closePatternsPanel}
           />
         </div>

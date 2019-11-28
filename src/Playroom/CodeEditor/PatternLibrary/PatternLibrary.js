@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import styles from './PatternLibrary.less';
 import fuzzysort from 'fuzzysort';
 
-export default ({ patterns: rawPatterns, onSelected, onExit, onHighlight }) => {
+export default ({
+  patterns: rawPatterns,
+  onSelected,
+  onCancel,
+  onExit,
+  onHighlight
+}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(null);
   const calculatedHighlightedIndex =
@@ -51,7 +57,7 @@ export default ({ patterns: rawPatterns, onSelected, onExit, onHighlight }) => {
             }}
             onBlur={() => {
               onHighlight(null);
-              onExit();
+              onCancel();
             }}
             onChange={e => {
               const { value } = e.target;
@@ -97,7 +103,7 @@ export default ({ patterns: rawPatterns, onSelected, onExit, onHighlight }) => {
                 }
                 onExit();
               } else if (e.key === 'Escape') {
-                onExit();
+                onCancel();
               }
             }}
           />
