@@ -1,7 +1,18 @@
+@import (reference) './palette.less';
+
 @row-height: 6px;
 @gutter-width: 40px;
+
 @sandbox-padding: 40px;
-@sandbox-background: #f2f2f2;
+@sandbox-background: @gray50;
 @sandbox-line-height: (@row-height * 5);
 @sandbox-marker-size: 12px;
 @sandbox-marker-color: blue;
+
+@shadow-small: 0 2px 4px 0px rgba(18, 21, 26, 0.1),
+  0 2px 2px -2px rgba(18, 21, 26, 0.1), 0 4px 4px -4px rgba(18, 21, 26, 0.2);
+@shadow-medium: 0 2px 4px 0px rgba(18, 21, 26, 0.1),
+  0 8px 8px -4px rgba(18, 21, 26, 0.1), 0 12px 12px -8px rgba(18, 21, 26, 0.2);
+@shadow-large: 0 2px 4px 0px rgba(18, 21, 26, 0.1),
+  0 12px 12px -4px rgba(18, 21, 26, 0.1),
+  0 20px 20px -12px rgba(18, 21, 26, 0.2);

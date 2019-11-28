@@ -17,14 +17,14 @@
   position: relative;
   height: 97%;
   margin-right: @sandbox-padding;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: @sandbox-preview-background;
+  box-shadow: @shadow-small;
   transition: all 0.3s ease;
   &:first-child {
     margin-left: @sandbox-padding;
   }
   &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: @shadow-medium;
   }
 }
 
@@ -36,11 +36,12 @@
   left: 0;
   right: 0;
   font-family: helvetica;
-  font-size: 14px;
-  opacity: 0.2;
+  font-size: 12px;
+  color: @gray600;
+  opacity: 0.3;
   transition: all 0.2s ease;
   .frameContainer:hover & {
-    opacity: 0.8;
+    opacity: 1;
   }
 }
 

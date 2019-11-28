@@ -1,7 +1,7 @@
 @import (reference) '../variables.less';
 
 @editor-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
-@sandbox-editor-height: 30vh;
+@code-editor-background: @gray50;
 
 .gutter {
   width: @sandbox-marker-size * 1.5;
@@ -13,8 +13,112 @@
   border-radius: (@sandbox-marker-size / 2);
   background-color: @sandbox-marker-color;
   position: relative;
-  top: (@sandbox-line-height - @sandbox-marker-size) / 2;
-  left: -20px;
+  top: 6px;
+  left: 5px;
+}
+
+.toolbar {
+  padding: @row-height * 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+}
+
+@dock-button-size: 36px;
+.toolbarIcon {
+  padding: 0;
+  border: 0;
+  outline: 'none';
+  background: transparent;
+  width: @dock-button-size;
+  height: @dock-button-size;
+  color: @gray400;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: @gray600;
+  }
+  &:focus {
+    background: @gray200;
+    outline: none;
+    border-radius: 100%;
+  }
+}
+
+.dockPosition {
+  display: flex;
+  flex-direction: row-reverse;
+  overflow: hidden;
+  position: relative;
+}
+
+.activePosition {
+  height: @dock-button-size;
+  margin-left: 6px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: @gray400;
+  background: @code-editor-background;
+  z-index: 1;
+
+  .dockPosition:hover & {
+    color: @indigo500;
+  }
+}
+
+.options {
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateX(50%);
+
+  .dockPosition:hover & {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.addButton {
+  color: white;
+  background: @indigo500;
+  border-radius: 100%;
+  height: 48px;
+  width: 48px;
+  transition: all 0.15s ease;
+  outline: none;
+  border: none;
+
+  &:active {
+    border: none;
+  }
+
+  &[disabled] {
+    background: @gray300;
+    color: @gray400;
+  }
+
+  &:not([disabled]) {
+    cursor: pointer;
+    box-shadow: @shadow-medium;
+
+    &:hover {
+      background: lighten(@indigo500, 0.9);
+    }
+    &:active {
+      background: darken(@indigo600, 0.9);
+      transform: scale(0.93);
+    }
+  }
 }
 
 :global {
@@ -28,12 +132,7 @@
       box-sizing: border-box;
     }
     height: 100%;
-    padding: 0 16px;
     font-family: @editor-font-family;
-  }
-
-  .CodeMirror-gutters {
-    display: none;
   }
 
   .CodeMirror pre,
@@ -42,14 +141,6 @@
     font-size: 18px;
     padding: @padding 0;
     line-height: @sandbox-line-height - (@padding * 2);
-  }
-
-  .CodeMirror-lines {
-    padding: 16px 20px;
-  }
-
-  .CodeMirror-linenumber {
-    padding-right: (@gutter-width * 2);
   }
 
   .CodeMirror-hints {
@@ -85,14 +176,25 @@
 
   .cm-s-neo {
     &.CodeMirror {
-      background-color: #fff;
+      background-color: @code-editor-background;
+      box-shadow: 0 0 10px rgba(18, 21, 26, 0.2);
     }
     .CodeMirror-cursor {
       background: black;
       width: 2px;
     }
     .CodeMirror-linenumber {
-      color: white;
+      color: @gray400;
+      font-size: 12px;
+    }
+    .CodeMirror-gutters {
+      background-color: @gray200;
+    }
+    .CodeMirror-scroll {
+      padding: 15px 0;
+    }
+    pre.CodeMirror-line {
+      padding-left: 15px;
     }
     .cm-tag {
       color: #040080;
@@ -109,34 +211,5 @@
     .cm-variable {
       color: #827eff;
     }
-  }
-}
-
-.toolbar {
-  background-color: rgba(100%, 100%, 100%, 0.8);
-  box-shadow: 0 0 10px rgba(100%, 100%, 100%, 0.8);
-  padding: @row-height * 2;
-  display: flex;
-  justify-content: flex-end;
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 3;
-}
-
-.toolbarIcon {
-  @sandbox-icon-width: 24px;
-  @sandbox-icon-height: 24px;
-  @sandbox-icon-color: #555;
-  @sandbox-icon-hover-color: #000;
-
-  width: @sandbox-icon-width;
-  height: @sandbox-icon-height;
-  cursor: pointer;
-  * {
-    fill: @sandbox-icon-color;
-  }
-  &:hover * {
-    fill: @sandbox-icon-hover-color;
   }
 }

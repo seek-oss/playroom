@@ -10,7 +10,11 @@ import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/xml-hint';
 import compileJsx from '../../utils/compileJsx';
-import UndockSvg from '../../assets/icons/NewWindowSvg';
+import EditorUndockedSvg from '../../assets/icons/EditorUndockedSvg';
+import EditorLeftSvg from '../../assets/icons/EditorLeftSvg';
+import EditorBottomSvg from '../../assets/icons/EditorBottomSvg';
+import EditorRightSvg from '../../assets/icons/EditorRightSvg';
+import AddSvg from '../../assets/icons/AddSvg';
 import PatternLibrary from './PatternLibrary/PatternLibrary';
 
 const completeAfter = (cm, predicate) => {
@@ -109,7 +113,8 @@ export const CodeEditor = ({
   patterns,
   onChange,
   hints,
-  onUndock,
+  onEditorPositionChange,
+  editorPosition,
   onPreviewCode
 }) => {
   const editorInstanceRef = useRef(null);
@@ -149,14 +154,70 @@ export const CodeEditor = ({
   return (
     <div style={{ height: '100%', position: 'relative' }}>
       <div className={styles.toolbar}>
-        <UndockSvg
-          title="Undock editor"
-          className={styles.toolbarIcon}
-          onClick={() => onUndock()}
-        />
-        {validInsertLocation && (
-          <button onClick={() => setShowPatterns(true)}>ready to add</button>
-        )}
+        <button
+          className={styles.addButton}
+          onClick={() => setShowPatterns(true)}
+          disabled={!validInsertLocation}
+          title={
+            validInsertLocation
+              ? `Add from pattern library (${
+                  navigator.platform.match('Mac') ? '\u2318' : 'ctrl + '
+                }P)`
+              : 'Cursor must be in valid location to insert from pattern library'
+          }
+        >
+          <AddSvg />
+        </button>
+        <div className={styles.dockPosition}>
+          <div className={styles.activePosition}>
+            {
+              {
+                undocked: <EditorUndockedSvg />,
+                left: <EditorLeftSvg />,
+                right: <EditorRightSvg />,
+                bottom: <EditorBottomSvg />
+              }[editorPosition]
+            }
+          </div>
+          <div className={styles.options}>
+            {editorPosition !== 'undocked' && (
+              <button
+                title="Undock editor"
+                className={styles.toolbarIcon}
+                onClick={() => onEditorPositionChange('undocked')}
+              >
+                <EditorUndockedSvg />
+              </button>
+            )}
+            {editorPosition !== 'left' && (
+              <button
+                title="Dock editor to the left"
+                className={styles.toolbarIcon}
+                onClick={() => onEditorPositionChange('left')}
+              >
+                <EditorLeftSvg />
+              </button>
+            )}
+            {editorPosition !== 'right' && (
+              <button
+                title="Dock editor to the right"
+                className={styles.toolbarIcon}
+                onClick={() => onEditorPositionChange('right')}
+              >
+                <EditorRightSvg />
+              </button>
+            )}
+            {editorPosition !== 'bottom' && (
+              <button
+                title="Dock editor to the bottom"
+                className={styles.toolbarIcon}
+                onClick={() => onEditorPositionChange('bottom')}
+              >
+                <EditorBottomSvg />
+              </button>
+            )}
+          </div>
+        </div>
       </div>
       {showPatterns && patterns && patterns.length ? (
         <div
@@ -262,6 +323,7 @@ export const CodeEditor = ({
           autoCloseTags: true,
           autoCloseBrackets: true,
           theme: 'neo',
+          lineNumbers: true,
           gutters: [styles.gutter],
           hintOptions: { schemaInfo: hints },
           extraKeys: {

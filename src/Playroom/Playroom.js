@@ -17,7 +17,7 @@ const patternsImport = require('./patterns');
 
 const resizableConfig = (position = 'bottom') => ({
   top: position === 'bottom',
-  right: false,
+  right: position === 'left',
   bottom: false,
   left: position === 'right',
   topRight: false,
@@ -42,49 +42,43 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
     setEditorPosition
   } = useEditorContext();
 
-  useEffect(
-    () => {
-      if (module.hot) {
-        module.hot.accept('./themes', () => {
-          setThemes(require('./themes'));
-        });
-
-        module.hot.accept('./components', () => {
-          setComponents(require('./components'));
-        });
-
-        module.hot.accept('./patterns', () => {
-          setPatterns(require('./patterns'));
-        });
-      }
-
-      Promise.all([
-        getCode(),
-        store.getItem('editorSize'),
-        store.getItem('editorPosition')
-      ]).then(([resolvedCode, resolvedSize, resolvedPosition]) => {
-        if (firstLoad) {
-          if (resolvedSize) {
-            setEditorSize(resolvedSize);
-          }
-          if (resolvedPosition) {
-            setEditorPosition(resolvedPosition);
-          }
-          firstLoad = false;
-        }
-        setCode(resolvedCode);
-        setCodeReady(true);
+  useEffect(() => {
+    if (module.hot) {
+      module.hot.accept('./themes', () => {
+        setThemes(require('./themes'));
       });
-    },
-    [getCode, setEditorSize, setEditorPosition]
-  );
 
-  useEffect(
-    () => {
-      debounce(persistCode, 500)(code);
-    },
-    [code, persistCode]
-  );
+      module.hot.accept('./components', () => {
+        setComponents(require('./components'));
+      });
+
+      module.hot.accept('./patterns', () => {
+        setPatterns(require('./patterns'));
+      });
+    }
+
+    Promise.all([
+      getCode(),
+      store.getItem('editorSize'),
+      store.getItem('editorPosition')
+    ]).then(([resolvedCode, resolvedSize, resolvedPosition]) => {
+      if (firstLoad) {
+        if (resolvedSize) {
+          setEditorSize(resolvedSize);
+        }
+        if (resolvedPosition) {
+          setEditorPosition(resolvedPosition);
+        }
+        firstLoad = false;
+      }
+      setCode(resolvedCode);
+      setCodeReady(true);
+    });
+  }, [getCode, setEditorSize, setEditorPosition]);
+
+  useEffect(() => {
+    debounce(persistCode, 500)(code);
+  }, [code, persistCode]);
 
   const themeNames = Object.keys(themes);
   const frames = flatMap(widths, width =>
@@ -145,15 +139,8 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
       patterns={
         typeof patterns.default !== 'undefined' ? patterns.default : patterns
       }
-      onUndock={() => {
-        if (editorPosition === 'undocked') {
-          setEditorPosition('bottom');
-        } else if (editorPosition === 'bottom') {
-          setEditorPosition('right');
-        } else if (editorPosition === 'right') {
-          setEditorPosition('undocked');
-        }
-      }}
+      onEditorPositionChange={position => setEditorPosition(position)}
+      editorPosition={editorPosition}
       onPreviewCode={newPreviewCode => {
         setPreviewCode(newPreviewCode);
       }}
@@ -162,14 +149,20 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
 
   const size = {
     height: editorPosition === 'bottom' ? `${editorSize}px` : '100vh', // issue in ff & safari when not a string
-    width: editorPosition === 'right' ? `${editorSize}px` : '100vw'
+    width: /(left|right)/.test(editorPosition) ? `${editorSize}px` : '100vw'
   };
   const editorContainer =
     editorPosition === 'undocked' ? (
       <WindowPortal
         height={window.outerHeight}
         width={window.outerWidth}
-        onClose={() => setEditorPosition('bottom')}
+        onUnload={() => {
+          store.getItem('editorPosition').then(position => {
+            if (position === 'undocked') {
+              setEditorPosition('bottom');
+            }
+          });
+        }}
       >
         {codeEditor}
       </WindowPortal>
@@ -180,6 +173,7 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
             ? styles.editorContainer_isUndocked
             : '',
           editorPosition === 'right' ? styles.editorContainer_isRight : '',
+          editorPosition === 'left' ? styles.editorContainer_isLeft : '',
           editorPosition === 'bottom' ? styles.editorContainer_isBottom : ''
         ].join(' ')}`}
         defaultSize={size}
@@ -203,7 +197,8 @@ export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
         className={styles.previewContainer}
         style={{
           bottom: editorPosition === 'bottom' ? editorSize : undefined,
-          right: editorPosition === 'right' ? editorSize + 5 : undefined
+          right: editorPosition === 'right' ? editorSize : undefined,
+          left: editorPosition === 'left' ? editorSize : undefined
         }}
       >
         <Preview code={previewCode || code} themes={themes} frames={frames} />
