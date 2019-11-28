@@ -154,19 +154,20 @@ export const CodeEditor = ({
         panelOffsetFromLine
       : 70;
 
-    const currentLine = editor.getLineHandle(editor.getCursor().line);
+    const { line, ch } = cursor;
+    const currentLine = editor.getLineHandle(line);
+    const insertBefore =
+      ch >= 0 && currentLine.text.substr(0, ch).trim().length === 0;
+    const insertAtLineNumber = insertBefore ? line : line + 1;
+
     if (currentLine.text.trim().length > 0) {
-      const { line, ch } = cursor;
       const newCode = code.split('\n');
-      newCode[line] = `${newCode[line].slice(0, ch)}\n\u00A0${newCode[
-        line
-      ].slice(ch)}`;
+
+      newCode[line] = insertBefore
+        ? `\u00A0\n${newCode[line]}`
+        : `${newCode[line]}\n\u00A0`;
 
       onChange(newCode.join('\n'));
-      editor.setCursor({
-        line: line + 1,
-        ch
-      });
     }
 
     setPanelLocation({
@@ -178,11 +179,17 @@ export const CodeEditor = ({
     });
     setShowPatterns(true);
 
-    editor.addLineClass(
-      editor.getLineHandle(editor.getCursor().line),
-      'background',
-      styles.insertHere
-    );
+    setTimeout(() => {
+      editor.setCursor({
+        line: insertAtLineNumber,
+        ch
+      });
+      editor.addLineClass(
+        editor.getLineHandle(insertAtLineNumber),
+        'background',
+        styles.insertHere
+      );
+    }, 1);
   }, [code, onChange, editorPosition]);
 
   const closePatternsPanel = ({ cancel } = {}) => {
