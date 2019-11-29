@@ -108,6 +108,8 @@ const isValidLocation = ({ editor, code }) => {
   return validateCode({ code: testCode.join('\n') });
 };
 
+const maxHeightOfPatternsPanel = 550;
+
 export const CodeEditor = ({
   code,
   patterns,
@@ -133,20 +135,21 @@ export const CodeEditor = ({
     const scrollOffset = editor.display.scroller.scrollTop;
 
     const flipPanelAboveCursor =
-      cc.bottom + 450 > editor.display.wrapper.offsetHeight &&
-      cc.top > editor.display.wrapper.offsetHeight / 2;
+      cc.bottom - scrollOffset + maxHeightOfPatternsPanel >
+        editor.display.wrapper.offsetHeight &&
+      cc.top - scrollOffset > editor.display.wrapper.offsetHeight / 2;
 
     const previewOffset = isVerticalEditor ? lineHeight : 0;
 
     const topPosition =
-      cc.bottom - scrollOffset - 450 + previewOffset > 0
-        ? cc.bottom - scrollOffset - 450 + previewOffset
+      cc.bottom - scrollOffset - maxHeightOfPatternsPanel + previewOffset > 0
+        ? cc.bottom - scrollOffset - maxHeightOfPatternsPanel + previewOffset
         : 20;
     const panelOffsetFromLine = 12;
 
     const top = flipPanelAboveCursor
       ? topPosition
-      : cc.bottom + panelOffsetFromLine + previewOffset;
+      : cc.bottom - scrollOffset + panelOffsetFromLine + previewOffset;
     const bottom = flipPanelAboveCursor
       ? editor.display.wrapper.offsetHeight +
         scrollOffset -
@@ -327,7 +330,9 @@ export const CodeEditor = ({
               ? panelLocation.bottom
               : 70,
             width: /(left|right)/.test(editorPosition) ? undefined : '45%',
-            maxHeight: /(left|right)/.test(editorPosition) ? 450 : undefined,
+            maxHeight: /(left|right)/.test(editorPosition)
+              ? maxHeightOfPatternsPanel
+              : undefined,
             zIndex: 100
           }}
         >
