@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styles from './PatternLibrary.less';
+import SearchSvg from '../../../assets/icons/SearchSvg';
+import ReturnSvg from '../../../assets/icons/ReturnSvg';
 import fuzzysort from 'fuzzysort';
 
 export default ({
@@ -34,27 +36,15 @@ export default ({
 
   return (
     <div className={styles.root}>
-      <div
-        style={{
-          padding: 8
-        }}
-      >
-        <div style={{ paddingBottom: 8 }}>
+      <div>
+        <div className={styles.fieldContainer}>
+          <SearchSvg className={styles.searchIcon} />
           <input
-            className={styles.noFocus}
+            className={`${styles.noFocus} ${styles.field}`}
+            placeholder="Search for..."
             autoFocus
             type="text"
             value={searchTerm}
-            style={{
-              boxSizing: 'border-box',
-              height: 40,
-              fontSize: 14,
-              padding: '0 8px',
-              lineHeight: '32px',
-              border: '1px solid #ccc',
-              borderRadius: 8,
-              width: '100%'
-            }}
             onBlur={() => {
               onHighlight(null);
               onCancel();
@@ -108,28 +98,15 @@ export default ({
             }}
           />
         </div>
-        <div
-          style={{
-            position: 'absolute',
-            left: 8,
-            right: 8,
-            top: 56,
-            bottom: 0,
-            overflow: 'auto'
-          }}
-        >
+        <div className={styles.patternsContainer}>
           {filteredPatterns.map(({ category, name, code }, index) => {
             const isHighlighted = calculatedHighlightedIndex === index;
 
             return (
               <div
                 key={code}
+                className={styles.pattern}
                 style={{
-                  padding: '8px',
-                  borderRadius: '4px',
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                  fontSize: '14px',
                   ...(isHighlighted
                     ? {
                         color: 'white',
@@ -145,10 +122,15 @@ export default ({
                   onExit();
                 }}
               >
-                <strong>{category}</strong>{' '}
-                <span style={{ color: isHighlighted ? '#e1e5ff' : '#69768c' }}>
-                  – {name}
-                </span>
+                <div>
+                  <strong>{category}</strong>{' '}
+                  <span
+                    style={{ color: isHighlighted ? '#e1e5ff' : '#69768c' }}
+                  >
+                    – {name}
+                  </span>
+                </div>
+                <ReturnSvg className={styles.returnIcon} />
               </div>
             );
           })}
