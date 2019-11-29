@@ -31,6 +31,7 @@
   bottom: 0;
   right: 0;
   z-index: 3;
+  pointer-events: none;
 }
 
 @dock-button-size: 36px;
@@ -62,6 +63,7 @@
   flex-direction: row-reverse;
   overflow: hidden;
   position: relative;
+  pointer-events: auto;
 }
 
 .activePosition {
@@ -100,6 +102,7 @@
   transition: all 0.15s ease;
   outline: none;
   border: none;
+  pointer-events: auto;
 
   &:active {
     border: none;
