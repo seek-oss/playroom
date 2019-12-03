@@ -1,160 +1,107 @@
-import React, { useState, useEffect } from 'react';
-import parsePropTypes from 'parse-prop-types';
+import React from 'react';
+import classnames from 'classnames';
 import flatMap from 'lodash/flatMap';
 import debounce from 'lodash/debounce';
-import omit from 'lodash/omit';
 import Resizable from 're-resizable';
 import Preview from './Preview/Preview';
 import styles from './Playroom.less';
 
-import { store } from '../index';
 import WindowPortal from './WindowPortal';
-import UndockSvg from '../assets/icons/NewWindowSvg';
+import componentsToHints from '../utils/componentsToHints';
 import { CodeEditor } from './CodeEditor/CodeEditor';
+import { useStore } from './useStore';
+import DockPosition from './DockPosition/DockPosition';
 
-const themesImport = require('./themes');
-const componentsImport = require('./components');
-
-const resizableConfig = {
-  top: true,
-  right: false,
+const resizableConfig = (position = 'bottom') => ({
+  top: position === 'bottom',
+  right: position === 'left',
   bottom: false,
-  left: false,
+  left: position === 'right',
   topRight: false,
   bottomRight: false,
   bottomLeft: false,
   topLeft: false
-};
+});
 
-export default ({ getCode, updateCode: persistCode, staticTypes, widths }) => {
-  const [code, setCode] = useState('');
-  const [themes, setThemes] = useState(themesImport);
-  const [components, setComponents] = useState(componentsImport);
-  const [codeReady, setCodeReady] = useState(false);
-  const [editorHeight, setEditorHeight] = useState(200);
-  const [editorUndocked, setEditorUndocked] = useState(false);
+export default ({ themes, components, widths }) => {
+  const {
+    editorPosition,
+    setEditorPosition,
+    editorSize,
+    setEditorSize,
+    code,
+    setCode,
+    ready
+  } = useStore();
 
-  useEffect(
-    () => {
-      if (module.hot) {
-        module.hot.accept('./themes', () => {
-          setThemes(require('./themes'));
-        });
-
-        module.hot.accept('./components', () => {
-          setComponents(require('./components'));
-        });
-      }
-
-      Promise.all([getCode(), store.getItem('editorSize')]).then(
-        ([resolvedCode, height]) => {
-          setEditorHeight(height);
-          setCode(resolvedCode);
-          setCodeReady(true);
-        }
-      );
-    },
-    [getCode]
-  );
-
-  useEffect(
-    () => {
-      debounce(persistCode, 500)(code);
-    },
-    [code, persistCode]
-  );
-
-  const themeNames = Object.keys(themes);
-  const frames = flatMap(widths, width =>
-    themeNames.map(theme => {
-      return { theme, width };
-    })
-  );
-
-  const componentNames = Object.keys(components).sort();
-  const tags = Object.assign(
-    {},
-    ...componentNames.map(componentName => {
-      const staticTypesForComponent = staticTypes[componentName];
-      if (
-        staticTypesForComponent &&
-        Object.keys(staticTypesForComponent).length > 0
-      ) {
-        return {
-          [componentName]: {
-            attrs: staticTypesForComponent
-          }
-        };
-      }
-
-      const parsedPropTypes = parsePropTypes(components[componentName]);
-      const filteredPropTypes = omit(parsedPropTypes, 'children', 'className');
-      const propNames = Object.keys(filteredPropTypes);
-
-      return {
-        [componentName]: {
-          attrs: Object.assign(
-            {},
-            ...propNames.map(propName => {
-              const propType = filteredPropTypes[propName].type;
-
-              return {
-                [propName]:
-                  propType.name === 'oneOf'
-                    ? propType.value.filter(x => typeof x === 'string')
-                    : null
-              };
-            })
-          )
-        }
-      };
-    })
-  );
-
-  if (!codeReady) {
+  if (!ready) {
     return null;
   }
 
-  const codeEditor = <CodeEditor code={code} onChange={setCode} hints={tags} />;
-  const editorContainer = editorUndocked ? (
-    <WindowPortal
-      height={window.outerHeight}
-      width={window.outerWidth}
-      onClose={() => setEditorUndocked(false)}
-    >
-      {codeEditor}
-    </WindowPortal>
-  ) : (
-    <Resizable
-      className={styles.editorContainer}
-      defaultSize={{
-        height: `${editorHeight}`, // issue in ff & safari when not a string
-        width: '100vw'
-      }}
-      onResize={(event, direction, ref) => {
-        debounce(height => {
-          setEditorHeight(height);
-          store.setItem('editorSize', height);
-        }, 1)(ref.offsetHeight);
-      }}
-      enable={resizableConfig}
-    >
-      <div className={styles.toolbar}>
-        <UndockSvg
-          title="Undock editor"
-          className={styles.toolbarIcon}
-          onClick={() => setEditorUndocked(true)}
-        />
-      </div>
-      {codeEditor}
-    </Resizable>
+  const themeNames = Object.keys(themes);
+  const frames = flatMap(widths, width =>
+    themeNames.map(theme => ({ theme, width }))
   );
+
+  const codeEditor = (
+    <CodeEditor
+      code={code}
+      onChange={setCode}
+      hints={componentsToHints(components)}
+    />
+  );
+
+  const size = {
+    height: editorPosition === 'bottom' ? `${editorSize}px` : '100vh', // issue in ff & safari when not a string
+    width: /(left|right)/.test(editorPosition) ? `${editorSize}px` : '100vw'
+  };
+  const editorContainer =
+    editorPosition === 'undocked' ? (
+      <WindowPortal
+        height={window.outerHeight}
+        width={window.outerWidth}
+        onUnload={() => setEditorPosition()}
+      >
+        {codeEditor}
+      </WindowPortal>
+    ) : (
+      <Resizable
+        className={classnames(styles.editorContainer, {
+          [styles.editorContainer_isUndocked]: editorPosition === 'undocked',
+          [styles.editorContainer_isRight]: editorPosition === 'right',
+          [styles.editorContainer_isLeft]: editorPosition === 'left',
+          [styles.editorContainer_isBottom]: editorPosition === 'bottom'
+        })}
+        defaultSize={size}
+        size={size}
+        onResize={(event, direction, ref) => {
+          debounce(currentSize => {
+            setEditorSize(currentSize, editorPosition);
+          }, 1)(
+            editorPosition === 'bottom' ? ref.offsetHeight : ref.offsetWidth
+          );
+        }}
+        enable={resizableConfig(editorPosition)}
+      >
+        <div className={styles.dockPosition}>
+          <DockPosition
+            position={editorPosition}
+            setPosition={setEditorPosition}
+          />
+        </div>
+        {codeEditor}
+      </Resizable>
+    );
 
   return (
     <div className={styles.root}>
       <div
         className={styles.previewContainer}
-        style={{ bottom: !editorUndocked ? editorHeight : undefined }}
+        style={
+          editorPosition !== 'undocked'
+            ? { [editorPosition]: editorSize }
+            : undefined
+        }
       >
         <Preview code={code} themes={themes} frames={frames} />
       </div>

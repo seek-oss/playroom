@@ -18,40 +18,39 @@
   background: @sandbox-background;
 }
 
-.editorContainer {
-  position: fixed !important; // override internal inline style
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  max-height: 95vh;
-}
-
-.toolbar {
-  background-color: rgba(100%, 100%, 100%, 0.8);
-  box-shadow: 0 0 10px rgba(100%, 100%, 100%, 0.8);
-  padding: @row-height * 2;
-  display: flex;
-  justify-content: flex-end;
+.dockPosition {
   position: absolute;
-  top: 0;
+  bottom: 0;
   right: 0;
   z-index: 3;
 }
 
-.toolbarIcon {
-  @sandbox-icon-width: 24px;
-  @sandbox-icon-height: 24px;
-  @sandbox-icon-color: #555;
-  @sandbox-icon-hover-color: #000;
+.editorContainer {
+  box-shadow: 0 0 8px rgba(18, 21, 26, 0.2);
+  position: fixed !important; // override internal inline style
+  bottom: 0;
+  z-index: 1;
+}
 
-  width: @sandbox-icon-width;
-  height: @sandbox-icon-height;
-  cursor: pointer;
-  * {
-    fill: @sandbox-icon-color;
-  }
-  &:hover * {
-    fill: @sandbox-icon-hover-color;
-  }
+.editorContainer_isRight {
+  right: 0;
+  top: 0;
+  max-width: 95vw;
+}
+
+.editorContainer_isLeft {
+  left: 0;
+  top: 0;
+  max-width: 95vw;
+}
+
+.editorContainer_isBottom {
+  left: 0;
+  right: 0;
+  max-height: 95vh;
+}
+
+.editorContainer_isUndocked {
+  width: 100vw;
+  height: 100vh;
 }

@@ -64,6 +64,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "base64-url": "^2.2.0",
     "buble": "^0.19.3",
+    "classnames": "^2.2.6",
     "codemirror": "^5.48.2",
     "command-line-args": "^5.0.2",
     "command-line-usage": "^5.0.5",

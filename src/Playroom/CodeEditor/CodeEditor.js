@@ -94,11 +94,13 @@ export const CodeEditor = ({ code, onChange, hints }) => {
           });
 
           onChange(formattedCode);
-          editorInstanceRef.current.setValue(formattedCode);
-          editorInstanceRef.current.focus();
-          editorInstanceRef.current.setCursor({
-            line,
-            ch
+
+          setTimeout(() => {
+            editorInstanceRef.current.focus();
+            editorInstanceRef.current.setCursor({
+              line,
+              ch
+            });
           });
         }
       };
@@ -116,8 +118,7 @@ export const CodeEditor = ({ code, onChange, hints }) => {
     <ReactCodeMirror
       editorDidMount={editorInstance => {
         editorInstanceRef.current = editorInstance;
-        editorInstanceRef.current.focus();
-        editorInstanceRef.current.setCursor({ line: 0, ch: 0 });
+        validateCode(editorInstance, code);
       }}
       value={code}
       onBeforeChange={(editor, data, newCode) => {
@@ -131,6 +132,7 @@ export const CodeEditor = ({ code, onChange, hints }) => {
         theme: 'neo',
         gutters: [styles.gutter],
         hintOptions: { schemaInfo: hints },
+        viewportMargin: 50,
         extraKeys: {
           Tab: cm => {
             if (cm.somethingSelected()) {

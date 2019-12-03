@@ -1,0 +1,61 @@
+@import (reference) '../variables.less';
+
+.root {
+  display: flex;
+  flex-direction: row-reverse;
+  overflow: hidden;
+  position: relative;
+  pointer-events: auto;
+  margin: 15px 20px;
+}
+
+.currentPosition {
+  height: @dock-button-size;
+  margin-left: 6px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a7a7a7;
+  background: white;
+  z-index: 1;
+
+  .root:hover & {
+    color: #5965e3;
+  }
+}
+
+.buttons {
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateX(50%);
+
+  .root:hover & {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@dock-button-size: 36px;
+.button {
+  padding: 0;
+  border: 0;
+  outline: 'none';
+  background: transparent;
+  width: @dock-button-size;
+  height: @dock-button-size;
+  color: #a7a7a7;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: #515151;
+  }
+  &:focus {
+    background: #e8e8e8;
+    outline: none;
+    border-radius: 100%;
+  }
+}
