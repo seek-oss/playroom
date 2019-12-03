@@ -1,61 +1,18 @@
 import React, { useRef, useEffect } from 'react';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/neo.css';
+import MonacoEditor from 'react-monaco-editor';
 
-import { formatCode as format } from '../../utils/formatting';
+import { formatCode } from '../../utils/formatting';
 
-import styles from './CodeEditor.less';
+// import styles from './CodeEditor.less';
 
 import { Controlled as ReactCodeMirror } from 'react-codemirror2';
-import 'codemirror/mode/jsx/jsx';
-import 'codemirror/addon/edit/closetag';
-import 'codemirror/addon/edit/closebrackets';
-import 'codemirror/addon/hint/show-hint';
-import 'codemirror/addon/hint/xml-hint';
+
+import prettier from 'prettier/standalone';
+import babylon from 'prettier/parser-babylon';
 import compileJsx from '../../utils/compileJsx';
 
-const completeAfter = (cm, predicate) => {
-  const CodeMirror = cm.constructor;
-  if (!predicate || predicate()) {
-    setTimeout(() => {
-      if (!cm.state.completionActive) {
-        cm.showHint({ completeSingle: false });
-      }
-    }, 100);
-  }
-
-  return CodeMirror.Pass;
-};
-
-const completeIfAfterLt = cm => {
-  const CodeMirror = cm.constructor;
-
-  return completeAfter(cm, () => {
-    const cur = cm.getCursor();
-    // eslint-disable-next-line new-cap
-    return cm.getRange(CodeMirror.Pos(cur.line, cur.ch - 1), cur) === '<';
-  });
-};
-
-const completeIfInTag = cm => {
-  const CodeMirror = cm.constructor;
-
-  return completeAfter(cm, () => {
-    const tok = cm.getTokenAt(cm.getCursor());
-    if (
-      tok.type === 'string' &&
-      (!/['"]/.test(tok.string.charAt(tok.string.length - 1)) ||
-        tok.string.length === 1)
-    ) {
-      return false;
-    }
-    const inner = CodeMirror.innerMode(cm.getMode(), tok.state).state;
-    return inner.tagName;
-  });
-};
-
 const validateCode = (editorInstanceRef, code) => {
-  editorInstanceRef.clearGutter(styles.gutter);
+  // editorInstanceRef.clearGutter(styles.gutter);
 
   try {
     compileJsx(code);
@@ -67,87 +24,63 @@ const validateCode = (editorInstanceRef, code) => {
 
     if (lineNumber) {
       const marker = document.createElement('div');
-      marker.classList.add(styles.marker);
+      // marker.classList.add(styles.marker);
       marker.setAttribute('title', err.message);
-      editorInstanceRef.setGutterMarker(lineNumber - 1, styles.gutter, marker);
+      // editorInstanceRef.setGutterMarker(lineNumber - 1, styles.gutter, marker);
     }
   }
 };
 
 export const CodeEditor = ({ code, onChange, hints }) => {
-  const editorInstanceRef = useRef(null);
-
-  useEffect(
-    () => {
-      const handleKeyDown = e => {
-        if (
-          editorInstanceRef &&
-          editorInstanceRef.current &&
-          e.keyCode === 83 &&
-          (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey)
-        ) {
-          e.preventDefault();
-
-          const { formattedCode, line, ch } = format({
-            code,
-            cursor: editorInstanceRef.current.getCursor()
-          });
-
-          onChange(formattedCode);
-
-          setTimeout(() => {
-            editorInstanceRef.current.focus();
-            editorInstanceRef.current.setCursor({
-              line,
-              ch
-            });
-          });
-        }
-      };
-
-      window.addEventListener('keydown', handleKeyDown);
-
-      return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-      };
-    },
-    [code, onChange]
-  );
-
   return (
-    <ReactCodeMirror
-      editorDidMount={editorInstance => {
-        editorInstanceRef.current = editorInstance;
-        validateCode(editorInstance, code);
-      }}
+    <MonacoEditor
+      language="javascript"
+      theme="vs-light"
       value={code}
-      onBeforeChange={(editor, data, newCode) => {
-        onChange(newCode);
-        validateCode(editorInstanceRef.current, newCode);
-      }}
       options={{
-        mode: 'jsx',
-        autoCloseTags: true,
-        autoCloseBrackets: true,
-        theme: 'neo',
-        gutters: [styles.gutter],
-        hintOptions: { schemaInfo: hints },
-        viewportMargin: 50,
-        extraKeys: {
-          Tab: cm => {
-            if (cm.somethingSelected()) {
-              cm.indentSelection('add');
-            } else {
-              const indent = cm.getOption('indentUnit');
-              const spaces = Array(indent + 1).join(' ');
-              cm.replaceSelection(spaces);
+        minimap: { enabled: false },
+        contextmenu: false,
+        lineHeight: 23,
+        fontSize: 16,
+        renderLineHighlight: 'none',
+        automaticLayout: true, // consider perf?
+        scrollBeyondLastLine: false,
+        selectionHighlight: false,
+        occurrencesHighlight: false,
+        overviewRulerBorder: false,
+        hideCursorInOverviewRuler: true,
+        formatOnPaste: true,
+        formatOnType: true
+      }}
+      onChange={onChange}
+      editorWillMount={monaco => {
+        monaco.languages.registerDocumentFormattingEditProvider('javascript', {
+          provideDocumentFormattingEdits(model, options, token) {
+            let text;
+            try {
+              text = prettier.format(model.getValue(), {
+                parser: 'babylon',
+                plugins: [babylon],
+                singleQuote: true
+              });
+            } catch (e) {
+              return null;
             }
-          },
-          "'<'": completeAfter,
-          "'/'": completeIfAfterLt,
-          "' '": completeIfInTag,
-          "'='": completeIfInTag
-        }
+
+            return [
+              {
+                range: model.getFullModelRange(),
+                text
+              }
+            ];
+          }
+        });
+      }}
+      editorDidMount={(editor, monaco) => {
+        editor.addCommand(
+          monaco.KeyMod.chord(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S),
+          () => editor.getAction('editor.action.formatDocument').run()
+        );
       }}
     />
   );
