@@ -6,7 +6,7 @@ import * as monaco from 'monaco-editor';
 
 import { wrapJsx, unwrapJsx } from '../../utils/formatting';
 
-// import styles from './CodeEditor.less';
+import styles from './CodeEditor.less';
 
 // import { Controlled as ReactCodeMirror } from 'react-codemirror2';
 
@@ -50,8 +50,43 @@ const monacoOptions = {
   hideCursorInOverviewRuler: true,
   renderIndentGuides: true,
   wordBasedSuggestions: false,
+  suggestLineHeight: 36,
   suggest: {
-    filteredTypes: { keyword: false, module: false, variable: false }
+    showIcons: false,
+    filteredTypes: {
+      keyword: false,
+      module: false,
+      variable: false,
+      reference: false
+      // Available types to filter: [
+      //   "Method",
+      //   "Function",
+      //   "Constructor",
+      //   "Field",
+      //   "Variable",
+      //   "Class",
+      //   "Struct",
+      //   "Interface",
+      //   "Module",
+      //   "Property",
+      //   "Event",
+      //   "Operator",
+      //   "Unit",
+      //   "Value",
+      //   "Constant",
+      //   "Enum",
+      //   "EnumMember",
+      //   "Keyword",
+      //   "Text",
+      //   "Color",
+      //   "File",
+      //   "Reference",
+      //   "Customcolor",
+      //   "Folder",
+      //   "TypeParameter",
+      //   "Snippet"
+      // ]
+    }
   },
   model: monaco.editor.createModel(
     '',
@@ -67,7 +102,20 @@ const configureMonacoInstance = monaco => {
     rules: [],
     colors: {
       'editorIndentGuide.background': '#ffffff',
-      'editorIndentGuide.activeBackground': '#d5d5d5'
+      'editorIndentGuide.activeBackground': '#d5d5d5',
+      'editorSuggestWidget.selectedBackground': '#08f',
+      'editorSuggestWidget.highlightForeground': '#000'
+      // 'dropdown.background': '#fff',
+      // 'list.focusBackground': '#ff0000',
+      // 'list.focusForeground': '#ff0000',
+      // 'list.activeSelectionBackground': '#ff0000',
+      // 'list.activeSelectionForeground': '#ff0000',
+      // 'list.inactiveSelectionBackground': '#ff0000',
+      // 'list.inactiveSelectionForeground': '#ff0000',
+      // 'list.hoverBackground': '#ff0000',
+      // 'list.hoverForeground': '#ff0000',
+      // 'list.dropBackground': '#ff0000',
+      // 'list.highlightForeground': '#ff0000'
     }
   });
 
@@ -86,34 +134,34 @@ const configureMonacoInstance = monaco => {
     noLib: true
   });
 
-  monaco.languages.typescript.typescriptDefaults.addExtraLib(ReactTypes);
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    ReactTypes,
+    'file:///node_modules/@types/react/index.d.ts'
+  );
 
   monaco.languages.typescript.typescriptDefaults.addExtraLib(`
-    import {HELLO} from 'components';
+    import * as components from 'components';
 
     declare global {
-      export const RE_EXPORT_HELLO: typeof HELLO;
+      export const Foo: typeof components.Foo;
+      export const Bar: typeof components.Bar;
     }
   `);
   monaco.languages.typescript.typescriptDefaults.addExtraLib(`
+    // import { Component } from 'react';
+
     declare module 'components' {
-      export declare const HELLO: string;
+      interface FooProps {
+        color: 'red' | 'blue';
+      }
+      export const Foo = (props: FooProps) => JSX.Element;
+
+      interface BarProps {
+        color: 'red' | 'blue';
+      }
+      export const Bar = (props: BarProps) => JSX.Element;
     }
   `);
-  //   import { Component } from 'react';
-  //   interface FooProps {
-  //     color: 'red' | 'blue';
-  //   }
-  //   export class Foo extends Component<FooProps> {
-  //     render(): JSX.Element;
-  //   }
-
-  //   interface BarProps {
-  //     color: 'red' | 'blue';
-  //   }
-  //   export class Bar extends Component<BarProps> {
-  //     render(): JSX.Element;
-  //   }
   // `);
 
   monaco.languages.registerDocumentFormattingEditProvider('typescript', {
