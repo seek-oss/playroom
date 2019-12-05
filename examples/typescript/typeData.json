@@ -1,0 +1,11 @@
+{
+  "components": [
+    "Foo",
+    "Bar"
+  ],
+  "declarations": {
+    "/Users/mjones/projects/playroom/examples/typescript/components/Foo/Foo.d.ts": "import { Component } from 'react';\ninterface Props {\n    color: 'red' | 'blue';\n}\nexport default class Foo extends Component<Props> {\n    render(): JSX.Element;\n}\nexport {};\n",
+    "/Users/mjones/projects/playroom/examples/typescript/components/Bar/Bar.d.ts": "import { Component } from 'react';\ninterface Props {\n    color: 'red' | 'blue';\n}\nexport default class Bar extends Component<Props> {\n    render(): JSX.Element;\n}\nexport {};\n",
+    "components/index.d.ts": "export { default as Foo } from './Foo/Foo';\nexport { default as Bar } from './Bar/Bar';\n"
+  }
+}

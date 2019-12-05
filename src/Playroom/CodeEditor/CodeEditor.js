@@ -139,29 +139,53 @@ const configureMonacoInstance = monaco => {
     'file:///node_modules/@types/react/index.d.ts'
   );
 
-  monaco.languages.typescript.typescriptDefaults.addExtraLib(`
-    import * as components from 'components';
+  const typeInfo = __PLAYROOM_GLOBAL__TYPE_INFO__;
+
+  Object.entries(typeInfo.declarations).forEach(([fileName, content]) => {
+    console.log(`file://${fileName}`);
+    monaco.languages.typescript.typescriptDefaults.addExtraLib(
+      content,
+      `file://${fileName}`
+    );
+  });
+
+  const globalComponentsDeclaration = `
+    import * as components from '${typeInfo.componentsFile.replace(
+      /\.[^/.]+$/,
+      ''
+    )}';
 
     declare global {
-      export const Foo: typeof components.Foo;
-      export const Bar: typeof components.Bar;
+      ${typeInfo.components
+        .map(
+          componentName =>
+            `export const ${componentName}: typeof components.${componentName}`
+        )
+        .join('\n')}
     }
-  `);
-  monaco.languages.typescript.typescriptDefaults.addExtraLib(`
-    // import { Component } from 'react';
+  `;
 
-    declare module 'components' {
-      interface FooProps {
-        color: 'red' | 'blue';
-      }
-      export const Foo = (props: FooProps) => JSX.Element;
+  console.log(globalComponentsDeclaration);
 
-      interface BarProps {
-        color: 'red' | 'blue';
-      }
-      export const Bar = (props: BarProps) => JSX.Element;
-    }
-  `);
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    globalComponentsDeclaration
+  );
+
+  // monaco.languages.typescript.typescriptDefaults.addExtraLib(`
+  //   // import { Component } from 'react';
+
+  //   declare module 'components' {
+  //     interface FooProps {
+  //       color: 'red' | 'blue';
+  //     }
+  //     export const Foo = (props: FooProps) => JSX.Element;
+
+  //     interface BarProps {
+  //       color: 'red' | 'blue';
+  //     }
+  //     export const Bar = (props: BarProps) => JSX.Element;
+  //   }
+  // `);
   // `);
 
   monaco.languages.registerDocumentFormattingEditProvider('typescript', {
