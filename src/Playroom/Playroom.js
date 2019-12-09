@@ -20,7 +20,9 @@ import 'codemirror/mode/jsx/jsx';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/hint/show-hint';
+
 import 'codemirror/addon/hint/xml-hint';
+import getHints from './CodeMirror-JSX';
 
 const themesImport = require('./themes');
 const componentsImport = require('./components');
@@ -44,7 +46,7 @@ const completeAfter = (cm, predicate) => {
   if (!predicate || predicate()) {
     setTimeout(() => {
       if (!cm.state.completionActive) {
-        cm.showHint({ completeSingle: false });
+        cm.showHint({ completeSingle: false, hint: getHints });
       }
     }, 100);
   }
