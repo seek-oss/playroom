@@ -5,7 +5,7 @@ export const runPrettier = ({ code, cursorOffset }) => {
   try {
     return prettier.formatWithCursor(code, {
       cursorOffset,
-      parser: 'babylon',
+      parser: 'babel',
       plugins: [babylon]
     });
   } catch (e) {

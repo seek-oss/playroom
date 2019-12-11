@@ -1,24 +1,22 @@
 {
-    "name": "office-ui-fabric-react-playroom",
-    "private": true,
-    "version": "1.0.0",
-    "description": "Office UI Fabric React Playroom",
-    "scripts": {
-        "playroom:start": "playroom start",
-        "playroom:build": "playroom build"
-    },
-    "dependencies": {
-        "office-ui-fabric-react": "^7.58.0",
-        "playroom": "^0.10.1",
-        "react": "^16.11.0"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.2.0",
-        "@babel/preset-env": "^7.2.0",
-        "@babel/preset-react": "^7.0.0",
-        "@babel/preset-typescript": "^7.1.0",
-        "@types/react": "^16.7.13",
-        "babel-loader": "^8.0.4",
-        "typescript": "3.7.2"
-    }
+  "name": "office-ui-fabric-react-playroom",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Office UI Fabric React Playroom",
+  "scripts": {
+    "build": "node ./../../bin/cli build",
+    "start": "node ./../../bin/cli start"
+  },
+  "dependencies": {
+    "office-ui-fabric-react": "^7.70.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "typescript": "3.7.3"
+  }
 }

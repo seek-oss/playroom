@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import flatMap from 'lodash/flatMap';
 import debounce from 'lodash/debounce';
-import Resizable from 're-resizable';
+import { Resizable } from 're-resizable';
 import Preview from './Preview/Preview';
 import styles from './Playroom.less';
 

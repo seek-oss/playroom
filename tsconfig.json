@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "strict": true,
+    "jsx": "preserve",
+    "lib": ["dom", "es2015"],
+    "target": "es5"
+  },
+  "include": ["lib", "src"]
+}

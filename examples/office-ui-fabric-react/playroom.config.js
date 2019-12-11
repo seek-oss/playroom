@@ -42,7 +42,7 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/preset-env', '@babel/preset-react'],
-              plugins: ['babel-plugin-transform-class-properties']
+              plugins: ['@babel/plugin-proposal-class-properties']
             }
           }
         },
@@ -56,8 +56,10 @@ module.exports = {
             {
               loader: 'css-loader',
               options: {
-                modules: true,
-                localIdentName: '[name]__[local]___[hash:base64:7]',
+                modules: {
+                  mode: 'local',
+                  localIdentName: '[name]__[local]___[hash:base64:7]'
+                },
                 importLoaders: 2
               }
             },
@@ -68,7 +70,7 @@ module.exports = {
               loader: 'babel-loader',
               options: {
                 presets: ['@babel/preset-env', '@babel/preset-react'],
-                plugins: ['babel-plugin-transform-class-properties']
+                plugins: ['@babel/plugin-proposal-class-properties']
               }
             }
           ]
