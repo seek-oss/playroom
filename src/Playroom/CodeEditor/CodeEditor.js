@@ -77,42 +77,39 @@ const validateCode = (editorInstance, code) => {
 export const CodeEditor = ({ code, onChange, hints }) => {
   const editorInstanceRef = useRef(null);
 
-  useEffect(
-    () => {
-      const handleKeyDown = e => {
-        if (
-          editorInstanceRef &&
-          editorInstanceRef.current &&
-          e.keyCode === 83 &&
-          (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey)
-        ) {
-          e.preventDefault();
+  useEffect(() => {
+    const handleKeyDown = e => {
+      if (
+        editorInstanceRef &&
+        editorInstanceRef.current &&
+        e.keyCode === 83 &&
+        (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey)
+      ) {
+        e.preventDefault();
 
-          const { formattedCode, line, ch } = format({
-            code,
-            cursor: editorInstanceRef.current.getCursor()
+        const { formattedCode, line, ch } = format({
+          code,
+          cursor: editorInstanceRef.current.getCursor()
+        });
+
+        onChange(formattedCode);
+
+        setTimeout(() => {
+          editorInstanceRef.current.focus();
+          editorInstanceRef.current.setCursor({
+            line,
+            ch
           });
+        });
+      }
+    };
 
-          onChange(formattedCode);
+    window.addEventListener('keydown', handleKeyDown);
 
-          setTimeout(() => {
-            editorInstanceRef.current.focus();
-            editorInstanceRef.current.setCursor({
-              line,
-              ch
-            });
-          });
-        }
-      };
-
-      window.addEventListener('keydown', handleKeyDown);
-
-      return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-      };
-    },
-    [code, onChange]
-  );
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [code, onChange]);
 
   return (
     <ReactCodeMirror
