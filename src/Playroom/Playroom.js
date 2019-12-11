@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import classnames from 'classnames';
 import flatMap from 'lodash/flatMap';
 import debounce from 'lodash/debounce';
@@ -9,7 +9,7 @@ import styles from './Playroom.less';
 import WindowPortal from './WindowPortal';
 import componentsToHints from '../utils/componentsToHints';
 import { CodeEditor } from './CodeEditor/CodeEditor';
-import { useStore } from './useStore';
+import { StoreContext } from '../StoreContext/StoreContext';
 import DockPosition from './DockPosition/DockPosition';
 
 const resizableConfig = (position = 'bottom') => ({
@@ -24,15 +24,10 @@ const resizableConfig = (position = 'bottom') => ({
 });
 
 export default ({ themes, components, widths }) => {
-  const {
-    editorPosition,
-    setEditorPosition,
-    editorSize,
-    setEditorSize,
-    code,
-    setCode,
-    ready
-  } = useStore();
+  const [
+    { editorPosition, editorHeight, editorWidth, code, ready },
+    dispatch
+  ] = useContext(StoreContext);
 
   if (!ready) {
     return null;
@@ -46,21 +41,24 @@ export default ({ themes, components, widths }) => {
   const codeEditor = (
     <CodeEditor
       code={code}
-      onChange={setCode}
+      onChange={newCode =>
+        dispatch({ type: 'updateCode', payload: { code: newCode } })
+      }
       hints={componentsToHints(components)}
     />
   );
 
-  const size = {
-    height: editorPosition === 'bottom' ? `${editorSize}px` : '100vh', // issue in ff & safari when not a string
-    width: /(left|right)/.test(editorPosition) ? `${editorSize}px` : '100vw'
+  const isVerticalEditor = /^(left|right)$/.test(editorPosition);
+  const sizeStyles = {
+    height: editorPosition === 'bottom' ? `${editorHeight}px` : '100vh', // issue in ff & safari when not a string
+    width: isVerticalEditor ? `${editorWidth}px` : '100vw'
   };
   const editorContainer =
     editorPosition === 'undocked' ? (
       <WindowPortal
         height={window.outerHeight}
         width={window.outerWidth}
-        onUnload={() => setEditorPosition()}
+        onUnload={() => dispatch({ type: 'resetEditorPosition' })}
       >
         {codeEditor}
       </WindowPortal>
@@ -72,21 +70,26 @@ export default ({ themes, components, widths }) => {
           [styles.editorContainer_isLeft]: editorPosition === 'left',
           [styles.editorContainer_isBottom]: editorPosition === 'bottom'
         })}
-        defaultSize={size}
-        size={size}
+        defaultSize={sizeStyles}
+        size={sizeStyles}
         onResize={(event, direction, ref) => {
-          debounce(currentSize => {
-            setEditorSize(currentSize, editorPosition);
-          }, 1)(
-            editorPosition === 'bottom' ? ref.offsetHeight : ref.offsetWidth
-          );
+          debounce(size => {
+            dispatch({
+              type: isVerticalEditor
+                ? 'updateEditorWidth'
+                : 'updateEditorHeight',
+              payload: { size }
+            });
+          }, 1)(isVerticalEditor ? ref.offsetWidth : ref.offsetHeight);
         }}
         enable={resizableConfig(editorPosition)}
       >
         <div className={styles.dockPosition}>
           <DockPosition
             position={editorPosition}
-            setPosition={setEditorPosition}
+            setPosition={position =>
+              dispatch({ type: 'updateEditorPosition', payload: { position } })
+            }
           />
         </div>
         {codeEditor}
@@ -99,7 +102,9 @@ export default ({ themes, components, widths }) => {
         className={styles.previewContainer}
         style={
           editorPosition !== 'undocked'
-            ? { [editorPosition]: editorSize }
+            ? {
+                [editorPosition]: isVerticalEditor ? editorWidth : editorHeight
+              }
             : undefined
         }
       >
