@@ -3,18 +3,24 @@ interface PlayroomConfig {
   outputPath: string;
   title?: string;
   themes?: string;
-  frameComponent?: string;
   widths?: number[];
-  port?: number;
-  openBrowser?: boolean;
+  frameComponent?: string;
   exampleCode?: string;
+  cwd?: string;
   storageKey?: string;
   webpackConfig?: () => void;
 }
 
-interface Window {
-  __playroomConfig__: PlayroomConfig;
+interface InternalPlayroomConfig extends PlayroomConfig {
+  cwd: string;
+  storageKey: string;
+  port: number;
+  openBrowser: boolean;
 }
 
-declare const __PLAYROOM_GLOBAL__CONFIG__: PlayroomConfig;
+interface Window {
+  __playroomConfig__: InternalPlayroomConfig;
+}
+
+declare const __PLAYROOM_GLOBAL__CONFIG__: InternalPlayroomConfig;
 declare const __PLAYROOM_GLOBAL__STATIC_TYPES__: any;
