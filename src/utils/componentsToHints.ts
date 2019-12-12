@@ -1,9 +1,11 @@
 import omit from 'lodash/omit';
+// @ts-ignore
 import parsePropTypes from 'parse-prop-types';
+import { PlayroomProps } from '../Playroom/Playroom';
 
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
 
-export default components => {
+export default (components: PlayroomProps['components']) => {
   const componentNames = Object.keys(components).sort();
 
   return Object.assign(
@@ -35,7 +37,7 @@ export default components => {
               return {
                 [propName]:
                   propType.name === 'oneOf'
-                    ? propType.value.filter(x => typeof x === 'string')
+                    ? propType.value.filter((x: any) => typeof x === 'string')
                     : null
               };
             })

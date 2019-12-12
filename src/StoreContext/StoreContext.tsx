@@ -25,7 +25,7 @@ const store = localforage.createInstance({
 
 const defaultPosition = 'bottom';
 
-type EditorPosition = 'bottom' | 'left' | 'right' | 'undocked';
+export type EditorPosition = 'bottom' | 'left' | 'right' | 'undocked';
 
 interface State {
   code: string;
@@ -111,8 +111,6 @@ const reducer = (state: State, action: Action): State => {
 
 type StoreContextValues = [State, Dispatch<Action>];
 
-export const StoreContext = createContext<StoreContextValues | null>(null);
-
 const initialState: State = {
   code: exampleCode,
   editorPosition: defaultPosition,
@@ -120,6 +118,11 @@ const initialState: State = {
   editorWidth: 400,
   ready: false
 };
+
+export const StoreContext = createContext<StoreContextValues>([
+  initialState,
+  () => {}
+]);
 
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);

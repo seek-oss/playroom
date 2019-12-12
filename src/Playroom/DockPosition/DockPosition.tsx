@@ -3,10 +3,17 @@ import EditorUndockedSvg from './icons/EditorUndockedSvg';
 import EditorLeftSvg from './icons/EditorLeftSvg';
 import EditorBottomSvg from './icons/EditorBottomSvg';
 import EditorRightSvg from './icons/EditorRightSvg';
+import { EditorPosition } from '../../StoreContext/StoreContext';
 
+// @ts-ignore
 import styles from './DockPosition.less';
 
-export default ({ position, setPosition }) => {
+interface DockPositionProps {
+  position: EditorPosition;
+  setPosition: (position: EditorPosition) => void;
+}
+
+export default ({ position, setPosition }: DockPositionProps) => {
   return (
     <div className={styles.root}>
       <div className={styles.container}>

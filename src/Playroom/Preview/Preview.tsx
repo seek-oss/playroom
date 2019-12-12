@@ -1,25 +1,26 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import flatMap from 'lodash/flatMap';
 import Iframe from './Iframe';
-import styles from './Preview.less';
 import compileJsx from '../../utils/compileJsx';
+import { PlayroomProps } from '../Playroom';
 
-export default class Preview extends Component {
-  static propTypes = {
-    code: PropTypes.string.isRequired,
-    themes: PropTypes.object,
-    frames: PropTypes.arrayOf(
-      PropTypes.shape({
-        theme: PropTypes.string.isRequired,
-        width: PropTypes.number.isRequired
-      })
-    )
-  };
+// @ts-ignore
+import styles from './Preview.less';
 
-  static defaultProps = { themes: [], frames: [] };
+interface Props {
+  code: string;
+  themes: PlayroomProps['themes'];
+  widths: PlayroomProps['widths'];
+}
 
+export default class Preview extends Component<Props> {
   render() {
-    const { code, frames } = this.props;
+    const { code, themes, widths } = this.props;
+
+    const themeNames = Object.keys(themes);
+    const frames = flatMap(widths, width =>
+      themeNames.map(theme => ({ theme, width }))
+    );
 
     let renderCode = code;
 

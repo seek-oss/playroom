@@ -1,18 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useContext, ComponentType } from 'react';
 import classnames from 'classnames';
-import flatMap from 'lodash/flatMap';
 import debounce from 'lodash/debounce';
 import { Resizable } from 're-resizable';
 import Preview from './Preview/Preview';
-import styles from './Playroom.less';
-
 import WindowPortal from './WindowPortal';
 import componentsToHints from '../utils/componentsToHints';
-import { CodeEditor } from './CodeEditor/CodeEditor';
-import { StoreContext } from '../StoreContext/StoreContext';
 import DockPosition from './DockPosition/DockPosition';
+import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
 
-const resizableConfig = (position = 'bottom') => ({
+// @ts-ignore
+import { CodeEditor } from './CodeEditor/CodeEditor';
+
+// @ts-ignore
+import styles from './Playroom.less';
+
+const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
   right: position === 'left',
   bottom: false,
@@ -23,7 +25,13 @@ const resizableConfig = (position = 'bottom') => ({
   topLeft: false
 });
 
-export default ({ themes, components, widths }) => {
+export interface PlayroomProps {
+  themes: Record<string, any>;
+  components: Record<string, ComponentType>;
+  widths: number[];
+}
+
+export default ({ themes, components, widths }: PlayroomProps) => {
   const [
     { editorPosition, editorHeight, editorWidth, code, ready },
     dispatch
@@ -33,15 +41,10 @@ export default ({ themes, components, widths }) => {
     return null;
   }
 
-  const themeNames = Object.keys(themes);
-  const frames = flatMap(widths, width =>
-    themeNames.map(theme => ({ theme, width }))
-  );
-
   const codeEditor = (
     <CodeEditor
       code={code}
-      onChange={newCode =>
+      onChange={(newCode: string) =>
         dispatch({ type: 'updateCode', payload: { code: newCode } })
       }
       hints={componentsToHints(components)}
@@ -65,7 +68,6 @@ export default ({ themes, components, widths }) => {
     ) : (
       <Resizable
         className={classnames(styles.editorContainer, {
-          [styles.editorContainer_isUndocked]: editorPosition === 'undocked',
           [styles.editorContainer_isRight]: editorPosition === 'right',
           [styles.editorContainer_isLeft]: editorPosition === 'left',
           [styles.editorContainer_isBottom]: editorPosition === 'bottom'
@@ -87,7 +89,7 @@ export default ({ themes, components, widths }) => {
         <div className={styles.dockPosition}>
           <DockPosition
             position={editorPosition}
-            setPosition={position =>
+            setPosition={(position: EditorPosition) =>
               dispatch({ type: 'updateEditorPosition', payload: { position } })
             }
           />
@@ -108,7 +110,7 @@ export default ({ themes, components, widths }) => {
             : undefined
         }
       >
-        <Preview code={code} themes={themes} frames={frames} />
+        <Preview code={code} themes={themes} widths={widths} />
       </div>
       {editorContainer}
     </div>
