@@ -114,7 +114,7 @@
     "cypress": "^3.7.0",
     "cz-conventional-changelog": "^3.0.2",
     "eslint": "^6.7.2",
-    "eslint-config-seek": "^4.3.2",
+    "eslint-config-seek": "^5.0.0",
     "husky": "^3.1.0",
     "jest": "^24.9.0",
     "lint-staged": "^9.5.0",

@@ -47,7 +47,6 @@ export type Action =
   | { type: 'updateEditorWidth'; payload: { size: number } };
 
 const reducer = (state: State, action: Action): State => {
-  console.log(action.type, action);
   switch (action.type) {
     case 'initialLoad': {
       return {
