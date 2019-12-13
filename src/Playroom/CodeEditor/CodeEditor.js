@@ -1,8 +1,13 @@
 import React from 'react';
-import ReactTypes from '!!raw-loader!./reactTypes.d.ts'; // eslint-disable-line
+import ReactTypes from '!!raw-loader!@types/react/index.d.ts'; // eslint-disable-line
+import CSSTypes from '!!raw-loader!csstype/index.d.ts'; // eslint-disable-line
+import PropTypesTypes from '!!raw-loader!@types/prop-types/index.d.ts'; // eslint-disable-line
+
 import MonacoEditor from 'react-monaco-editor';
 
 import * as monaco from 'monaco-editor';
+
+import es5Lib from './es5Lib';
 
 import { wrapJsx, unwrapJsx } from '../../utils/formatting';
 
@@ -127,66 +132,59 @@ const configureMonacoInstance = monaco => {
   monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
     target: monaco.languages.typescript.ScriptTarget.ESNext,
     allowNonTsExtensions: true,
+    esModuleInterop: true,
     moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
     module: monaco.languages.typescript.ModuleKind.CommonJS,
-    jsx: monaco.languages.typescript.JsxEmit.React,
+    jsx: monaco.languages.typescript.JsxEmit.Preserve,
     noEmit: true,
     noLib: true
   });
 
   monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    PropTypesTypes,
+    'file:///node_modules/prop-types/index.d.ts'
+  );
+
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    CSSTypes,
+    'file:///node_modules/csstype/index.d.ts'
+  );
+
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
     ReactTypes,
-    'file:///node_modules/@types/react/index.d.ts'
+    'file:///node_modules/react/index.d.ts'
   );
 
   const typeInfo = __PLAYROOM_GLOBAL__TYPE_INFO__;
 
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(es5Lib);
+
   Object.entries(typeInfo.declarations).forEach(([fileName, content]) => {
-    console.log(`file://${fileName}`);
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
       content,
-      `file://${fileName}`
+      `file:///node_modules${fileName}`
     );
   });
 
   const globalComponentsDeclaration = `
-    import * as components from '${typeInfo.componentsFile.replace(
-      /\.[^/.]+$/,
-      ''
-    )}';
+    import * as components from '${typeInfo.componentsFile
+      .replace(/\.[^/.]+$/, '')
+      .substring(1)}';
 
     declare global {
       ${typeInfo.components
         .map(
           componentName =>
-            `export const ${componentName}: typeof components.${componentName}`
+            `const ${componentName}: typeof components.${componentName};`
         )
         .join('\n')}
     }
   `;
 
-  console.log(globalComponentsDeclaration);
-
   monaco.languages.typescript.typescriptDefaults.addExtraLib(
-    globalComponentsDeclaration
+    globalComponentsDeclaration,
+    'file:///playroom/index.d.ts'
   );
-
-  // monaco.languages.typescript.typescriptDefaults.addExtraLib(`
-  //   // import { Component } from 'react';
-
-  //   declare module 'components' {
-  //     interface FooProps {
-  //       color: 'red' | 'blue';
-  //     }
-  //     export const Foo = (props: FooProps) => JSX.Element;
-
-  //     interface BarProps {
-  //       color: 'red' | 'blue';
-  //     }
-  //     export const Bar = (props: BarProps) => JSX.Element;
-  //   }
-  // `);
-  // `);
 
   monaco.languages.registerDocumentFormattingEditProvider('typescript', {
     provideDocumentFormattingEdits(model) {
@@ -276,6 +274,27 @@ export const CodeEditor = ({ code, onChange, hints }) => {
       onChange={onChange}
       editorWillMount={configureMonacoInstance}
       editorDidMount={editor => {
+        editor.onDidChangeModelDecorations(() => {
+          const model = editor.getModel();
+          const markers = monaco.editor.getModelMarkers({
+            owner: 'typescript',
+            resource: model.uri
+          });
+
+          // We have to filter out the error that the editor gives on global returns.
+          // Unfortunately the error code is null in the marker, so we have option but to
+          // match on the text of the error.
+          // It will be obvious if this regresses.
+          const filtered = markers.filter(
+            marker =>
+              marker.message !==
+              'Left side of comma operator is unused and has no side effects.'
+          );
+          if (filtered.length !== markers.length) {
+            monaco.editor.setModelMarkers(model, 'typescript', filtered);
+          }
+        });
+
         editor.addCommand(
           monaco.KeyMod.chord(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S),
           () => editor.getAction('editor.action.formatDocument').run()
