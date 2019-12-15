@@ -13,7 +13,6 @@ import { CodeEditor } from './CodeEditor/CodeEditor';
 
 // @ts-ignore
 import styles from './Playroom.less';
-import { red } from 'ansi-colors';
 
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
