@@ -1,6 +1,6 @@
 import React, { useContext, ComponentType } from 'react';
 import classnames from 'classnames';
-import debounce from 'lodash/debounce';
+import { useDebouncedCallback } from 'use-debounce';
 import { Resizable } from 're-resizable';
 import Preview from './Preview/Preview';
 import WindowPortal from './WindowPortal';
@@ -13,6 +13,7 @@ import { CodeEditor } from './CodeEditor/CodeEditor';
 
 // @ts-ignore
 import styles from './Playroom.less';
+import { red } from 'ansi-colors';
 
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
@@ -36,6 +37,24 @@ export default ({ themes, components, widths }: PlayroomProps) => {
     { editorPosition, editorHeight, editorWidth, code, ready },
     dispatch
   ] = useContext(StoreContext);
+
+  const [updateEditorSize] = useDebouncedCallback(
+    ({
+      isVerticalEditor,
+      offsetWidth,
+      offsetHeight
+    }: {
+      isVerticalEditor: boolean;
+      offsetHeight: number;
+      offsetWidth: number;
+    }) => {
+      dispatch({
+        type: isVerticalEditor ? 'updateEditorWidth' : 'updateEditorHeight',
+        payload: { size: isVerticalEditor ? offsetWidth : offsetHeight }
+      });
+    },
+    1
+  );
 
   if (!ready) {
     return null;
@@ -74,15 +93,10 @@ export default ({ themes, components, widths }: PlayroomProps) => {
         })}
         defaultSize={sizeStyles}
         size={sizeStyles}
-        onResize={(event, direction, ref) => {
-          debounce(size => {
-            dispatch({
-              type: isVerticalEditor
-                ? 'updateEditorWidth'
-                : 'updateEditorHeight',
-              payload: { size }
-            });
-          }, 1)(isVerticalEditor ? ref.offsetWidth : ref.offsetHeight);
+        onResize={(_event, _direction, ref) => {
+          const { offsetWidth, offsetHeight } = ref;
+
+          updateEditorSize({ isVerticalEditor, offsetWidth, offsetHeight });
         }}
         enable={resizableConfig(editorPosition)}
       >

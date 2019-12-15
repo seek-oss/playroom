@@ -102,6 +102,7 @@
     "style-loader": "^1.0.1",
     "typescript": "^3.7.3",
     "url-join": "^4.0.1",
+    "use-debounce": "^3.3.0",
     "webpack": "^4.41.2",
     "webpack-dev-server": "^3.9.0",
     "webpack-merge": "^4.2.2"

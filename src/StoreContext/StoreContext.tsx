@@ -13,7 +13,7 @@ import dedent from 'dedent';
 
 import { createUrl } from '../../utils';
 import getParamsFromQuery from '../utils/getParamsFromQuery';
-import debounce from 'lodash/debounce';
+import { useDebouncedCallback } from 'use-debounce';
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
@@ -126,12 +126,10 @@ export const StoreContext = createContext<StoreContextValues>([
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const debouncedCodeUpdate = useRef(
-    debounce((newCode: string) => {
-      history.replaceState(null, '', createUrl({ code: newCode }));
-      store.setItem('code', newCode);
-    }, 500)
-  );
+  const [debouncedCodeUpdate] = useDebouncedCallback((newCode: string) => {
+    history.replaceState(null, '', createUrl({ code: newCode }));
+    store.setItem('code', newCode);
+  }, 500);
 
   useEffect(() => {
     const params = getParamsFromQuery();
@@ -174,7 +172,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
-  useEffect(() => debouncedCodeUpdate.current(state.code), [state.code]);
+  useEffect(() => debouncedCodeUpdate(state.code), [
+    state.code,
+    debouncedCodeUpdate
+  ]);
 
   return (
     <StoreContext.Provider value={[state, dispatch]}>

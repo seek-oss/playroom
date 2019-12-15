@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import debounce from 'lodash/debounce';
+import { useDebouncedCallback } from 'use-debounce';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 
@@ -78,8 +78,10 @@ const validateCode = (editorInstance, code) => {
 export const CodeEditor = ({ code, onChange, hints }) => {
   const editorInstanceRef = useRef(null);
   const [localCode, setLocalCode] = useState(code);
-  const debouncedChange = useRef(debounce(newCode => onChange(newCode), 100));
-
+  const [debouncedChange] = useDebouncedCallback(
+    newCode => onChange(newCode),
+    100
+  );
   useEffect(() => {
     const handleKeyDown = e => {
       if (
@@ -114,7 +116,7 @@ export const CodeEditor = ({ code, onChange, hints }) => {
     };
   }, [localCode, setLocalCode]);
 
-  useEffect(() => debouncedChange.current(localCode), [localCode]);
+  useEffect(() => debouncedChange(localCode), [localCode, debouncedChange]);
 
   return (
     <ReactCodeMirror
