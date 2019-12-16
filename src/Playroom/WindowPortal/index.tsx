@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 
-const copyStyles = (sourceDoc, targetDoc) => {
-  Array.from(sourceDoc.styleSheets).forEach(styleSheet => {
+const copyStyles = (sourceDoc: Document, targetDoc: Document) => {
+  const list = Array.from(sourceDoc.styleSheets) as CSSStyleSheet[];
+
+  list.forEach(styleSheet => {
     if (styleSheet.cssRules) {
       // true for inline styles
       const newStyleEl = sourceDoc.createElement('style');
@@ -26,16 +27,21 @@ const copyStyles = (sourceDoc, targetDoc) => {
   });
 };
 
-export default class WindowPortal extends React.PureComponent {
-  static propTypes = {
-    height: PropTypes.number.isRequired,
-    width: PropTypes.number.isRequired,
-    onKeyDown: PropTypes.func,
-    onUnload: PropTypes.func,
-    children: PropTypes.node.isRequired
-  };
+interface Props {
+  height: number;
+  width: number;
+  onKeyDown?: (event: KeyboardEvent) => void;
+  onUnload?: (event: Event) => void;
+  children: ReactNode;
+}
 
-  constructor(props) {
+interface State {
+  externalWindow: Window | null;
+  containerDiv: HTMLDivElement | null;
+}
+
+export default class WindowPortal extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = { externalWindow: null, containerDiv: null };
   }
@@ -61,20 +67,22 @@ export default class WindowPortal extends React.PureComponent {
       `width=${this.props.width},height=${this.props.height},left=200,top=200`
     );
 
-    externalWindow.document.title = 'Playroom Editor';
-    externalWindow.document.body.innerHTML = '';
-    externalWindow.document.body.appendChild(containerDiv);
+    if (externalWindow) {
+      externalWindow.document.title = 'Playroom Editor';
+      externalWindow.document.body.innerHTML = '';
+      externalWindow.document.body.appendChild(containerDiv);
 
-    if (typeof this.props.onUnload === 'function') {
-      externalWindow.addEventListener('unload', this.props.onUnload);
+      if (typeof this.props.onUnload === 'function') {
+        externalWindow.addEventListener('unload', this.props.onUnload);
+      }
+
+      if (typeof this.props.onKeyDown === 'function') {
+        externalWindow.addEventListener('keydown', this.props.onKeyDown);
+      }
+
+      copyStyles(document, externalWindow.document);
+      this.setState({ externalWindow, containerDiv });
     }
-
-    if (typeof this.props.onKeyDown === 'function') {
-      externalWindow.addEventListener('keydown', this.props.onKeyDown);
-    }
-
-    copyStyles(document, externalWindow.document);
-    this.setState({ externalWindow, containerDiv });
   };
 
   render() {

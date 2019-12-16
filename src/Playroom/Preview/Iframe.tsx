@@ -1,7 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, AllHTMLAttributes } from 'react';
 
-export default class Iframe extends Component {
-  constructor(props) {
+interface State {
+  loaded: boolean;
+}
+interface Props extends AllHTMLAttributes<HTMLIFrameElement> {}
+
+export default class Iframe extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {

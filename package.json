@@ -15,7 +15,7 @@
     "example:serve": "PORT=9000 serve cypress/projects/basic/dist",
     "example:build-and-serve": "yarn example:build && yarn example:serve",
     "commit": "git-cz",
-    "lint": "eslint . && prettier --list-different '**/*.{js,md,less,ts,tsx}'",
+    "lint": "eslint . && prettier --list-different '**/*.{js,md,less,ts,tsx}' && tsc --noEmit",
     "format": "prettier --write '**/*.{js,md,less,ts,tsx}'",
     "semantic-release": "semantic-release",
     "jest": "jest src"
@@ -28,11 +28,11 @@
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [
-      "yarn lint",
+      "yarn eslint",
       "git add"
     ],
     "**/*.{js,md,less,ts,tsx}": [
-      "yarn format",
+      "prettier --write",
       "git add"
     ]
   },
@@ -61,6 +61,12 @@
     "@babel/preset-env": "^7.7.6",
     "@babel/preset-react": "^7.7.4",
     "@babel/preset-typescript": "^7.7.4",
+    "@types/base64-url": "^2.2.0",
+    "@types/buble": "^0.19.2",
+    "@types/classnames": "^2.2.9",
+    "@types/dedent": "^0.7.0",
+    "@types/lodash": "^4.14.149",
+    "@types/lz-string": "^1.3.33",
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",
     "babel-loader": "^8.0.6",
@@ -96,6 +102,7 @@
     "style-loader": "^1.0.1",
     "typescript": "^3.7.3",
     "url-join": "^4.0.1",
+    "use-debounce": "^3.3.0",
     "webpack": "^4.41.2",
     "webpack-dev-server": "^3.9.0",
     "webpack-merge": "^4.2.2"
@@ -108,7 +115,7 @@
     "cypress": "^3.7.0",
     "cz-conventional-changelog": "^3.0.2",
     "eslint": "^6.7.2",
-    "eslint-config-seek": "^4.3.2",
+    "eslint-config-seek": "^5.0.0",
     "husky": "^3.1.0",
     "jest": "^24.9.0",
     "lint-staged": "^9.5.0",

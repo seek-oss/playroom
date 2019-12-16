@@ -4,14 +4,19 @@
     "__PLAYROOM_GLOBAL__CONFIG__": true,
     "__PLAYROOM_GLOBAL__STATIC_TYPES__": true
   },
-  "rules": {
-    "no-console": 0,
-    "no-process-exit": 0
-  },
-  "overrides": [{
-    "files": ["examples/**/*.js"],
-    "rules": {
-      "import/no-unresolved": 0
+  "overrides": [
+    {
+      "files": ["bin/**/*.js", "lib/**/*.js"],
+      "rules": {
+        "no-console": 0,
+        "no-process-exit": 0
+      }
+    },
+    {
+      "files": ["examples/**/*.js"],
+      "rules": {
+        "import/no-unresolved": 0
+      }
     }
-  }]
+  ]
 }

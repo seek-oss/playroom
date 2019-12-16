@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 
@@ -76,7 +77,11 @@ const validateCode = (editorInstance, code) => {
 
 export const CodeEditor = ({ code, onChange, hints }) => {
   const editorInstanceRef = useRef(null);
-
+  const [localCode, setLocalCode] = useState(code);
+  const [debouncedChange] = useDebouncedCallback(
+    newCode => onChange(newCode),
+    100
+  );
   useEffect(() => {
     const handleKeyDown = e => {
       if (
@@ -88,11 +93,11 @@ export const CodeEditor = ({ code, onChange, hints }) => {
         e.preventDefault();
 
         const { formattedCode, line, ch } = format({
-          code,
+          code: localCode,
           cursor: editorInstanceRef.current.getCursor()
         });
 
-        onChange(formattedCode);
+        setLocalCode(formattedCode);
 
         setTimeout(() => {
           editorInstanceRef.current.focus();
@@ -109,7 +114,13 @@ export const CodeEditor = ({ code, onChange, hints }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [code, onChange]);
+  }, [localCode, setLocalCode]);
+
+  useEffect(() => {
+    if (localCode !== code) {
+      debouncedChange(localCode);
+    }
+  }, [localCode, code, debouncedChange]);
 
   return (
     <ReactCodeMirror
@@ -119,9 +130,9 @@ export const CodeEditor = ({ code, onChange, hints }) => {
         editorInstance.focus();
         editorInstance.setCursor(0, 0);
       }}
-      value={code}
+      value={localCode}
       onBeforeChange={(editor, data, newCode) => {
-        onChange(newCode);
+        setLocalCode(newCode);
         validateCode(editorInstanceRef.current, newCode);
       }}
       options={{

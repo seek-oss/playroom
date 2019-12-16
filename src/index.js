@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import Playroom from './Playroom/Playroom';
+import { StoreProvider } from './StoreContext/StoreContext';
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const widths = playroomConfig.widths || [320, 375, 768, 1024];
@@ -13,7 +14,9 @@ const renderPlayroom = ({
   components = require('./components')
 } = {}) => {
   render(
-    <Playroom components={components} widths={widths} themes={themes} />,
+    <StoreProvider>
+      <Playroom components={components} widths={widths} themes={themes} />
+    </StoreProvider>,
     outlet
   );
 };
