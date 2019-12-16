@@ -32,6 +32,7 @@ export interface PlayroomProps {
 }
 
 export default ({ themes, components, widths }: PlayroomProps) => {
+  const allThemes = Object.keys(themes);
   const [
     { editorPosition, editorHeight, editorWidth, code, ready },
     dispatch
@@ -123,7 +124,7 @@ export default ({ themes, components, widths }: PlayroomProps) => {
             : undefined
         }
       >
-        <Preview code={code} themes={themes} widths={widths} />
+        <Preview code={code} themes={allThemes} widths={widths} />
       </div>
       {editorContainer}
     </div>

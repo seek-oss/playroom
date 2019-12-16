@@ -9,7 +9,7 @@ import styles from './Preview.less';
 
 interface Props {
   code: string;
-  themes: PlayroomProps['themes'];
+  themes: string[];
   widths: PlayroomProps['widths'];
 }
 
@@ -17,9 +17,8 @@ export default class Preview extends Component<Props> {
   render() {
     const { code, themes, widths } = this.props;
 
-    const themeNames = Object.keys(themes);
     const frames = flatMap(widths, width =>
-      themeNames.map(theme => ({ theme, width }))
+      themes.map(theme => ({ theme, width }))
     );
 
     let renderCode = code;
