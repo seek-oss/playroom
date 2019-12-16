@@ -39,7 +39,7 @@ module.exports = {
       alias: {
         'sku/treat': 'treat',
         'sku/react-treat': 'react-treat',
-        'sku/@loadable/component': '@loadable/component',
+        'sku/@loadable/component': '@loadable/component'
       }
     },
     module: {
@@ -97,14 +97,14 @@ module.exports = {
           include: [braidDir, __dirname]
         },
         outputCSS: true,
-        outputLoaders: [MiniCssExtractPlugin.loader],
+        outputLoaders: [MiniCssExtractPlugin.loader]
         // localIdentName: 'BRAID__[name]-[local]_[hash:base64:5]',
         // themeIdentName: theme =>
         //   theme.name ? `_${theme.name}` : '[hash:base64:3]'
       }),
       new MiniCssExtractPlugin({
-        filename: 'styles.css',
-      }),
+        filename: 'styles.css'
+      })
     ]
   })
 };

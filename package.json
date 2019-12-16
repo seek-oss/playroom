@@ -8,10 +8,8 @@
   },
   "scripts": {
     "test": "yarn lint && yarn jest && yarn cypress",
-    "cypress": "start-server-and-test example:build-and-serve http://localhost:9000 cypress:run",
-    "cypress:dev": "start-server-and-test example:start http://localhost:9000 cypress:open",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
+    "cypress": "start-server-and-test example:build-and-serve http://localhost:9000 'cypress run'",
+    "cypress:dev": "start-server-and-test example:start http://localhost:9000 'cypress open'",
     "example:braid": "./bin/cli.js start --config examples/braid-design-system/playroom.config.js",
     "example:start": "./bin/cli.js start --config cypress/projects/basic/playroom.config.js",
     "example:build": "./bin/cli.js build --config cypress/projects/basic/playroom.config.js",

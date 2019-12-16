@@ -15,11 +15,8 @@
     "strict": true,
     "jsx": "preserve",
     "lib": ["dom", "es2015"],
-    "paths": {
-      "*": ["*"]
-    },
     "target": "es5"
   },
-  "include": ["components/**/*"],
+  "include": ["playroom/**/*"],
   "exclude": ["node_modules"]
 }
