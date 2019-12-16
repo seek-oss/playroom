@@ -116,7 +116,11 @@ export const CodeEditor = ({ code, onChange, hints }) => {
     };
   }, [localCode, setLocalCode]);
 
-  useEffect(() => debouncedChange(localCode), [localCode, debouncedChange]);
+  useEffect(() => {
+    if (localCode !== code) {
+      debouncedChange(localCode);
+    }
+  }, [localCode, code, debouncedChange]);
 
   return (
     <ReactCodeMirror
