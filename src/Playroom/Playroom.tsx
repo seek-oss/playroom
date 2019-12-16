@@ -1,12 +1,38 @@
-import React, { useContext, ComponentType } from 'react';
+import React, { useContext, ComponentType, Fragment } from 'react';
 import classnames from 'classnames';
 import { useDebouncedCallback } from 'use-debounce';
 import { Resizable } from 're-resizable';
 import Preview from './Preview/Preview';
 import WindowPortal from './WindowPortal';
 import componentsToHints from '../utils/componentsToHints';
-import DockPosition from './DockPosition/DockPosition';
+import Toolbar from './Toolbar/Toolbar';
 import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
+
+// @ts-ignore
+import themeVars from '!!less-vars-loader?resolveVariables!./variables.less';
+
+const getThemeVariable = (name: string) => {
+  const resolvedVar = themeVars[name];
+
+  if (!resolvedVar) {
+    throw new Error(`Cannot resolve "${name}" from variables`);
+  }
+
+  if (!(typeof resolvedVar === 'string' && /(px|[0-9])$/.test(resolvedVar))) {
+    throw new Error(
+      `Invalid characters "${resolvedVar}", must be a number of pixel value`
+    );
+  }
+
+  return parseInt(resolvedVar.replace(/px$/, ''), 10);
+};
+
+const MIN_HEIGHT =
+  getThemeVariable('toolbar-item-size') *
+  getThemeVariable('toolbar-item-count');
+const MIN_WIDTH =
+  getThemeVariable('toolbar-open-size') +
+  getThemeVariable('toolbar-closed-size');
 
 // @ts-ignore
 import { CodeEditor } from './CodeEditor/CodeEditor';
@@ -16,7 +42,7 @@ import styles from './Playroom.less';
 
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
-  right: position === 'left',
+  right: false,
   bottom: false,
   left: position === 'right',
   topRight: false,
@@ -33,8 +59,17 @@ export interface PlayroomProps {
 
 export default ({ themes, components, widths }: PlayroomProps) => {
   const allThemes = Object.keys(themes);
+  const allWidths = widths.sort((a, b) => a - b);
   const [
-    { editorPosition, editorHeight, editorWidth, code, ready },
+    {
+      editorPosition,
+      editorHeight,
+      editorWidth,
+      visibleThemes,
+      visibleWidths,
+      code,
+      ready
+    },
     dispatch
   ] = useContext(StoreContext);
 
@@ -56,58 +91,63 @@ export default ({ themes, components, widths }: PlayroomProps) => {
     1
   );
 
+  const [resetEditorPositionIfClosed] = useDebouncedCallback(() => {
+    if (editorPosition === 'undocked') {
+      dispatch({ type: 'resetEditorPosition' });
+    }
+  }, 1);
+
   if (!ready) {
     return null;
   }
 
   const codeEditor = (
-    <CodeEditor
-      code={code}
-      onChange={(newCode: string) =>
-        dispatch({ type: 'updateCode', payload: { code: newCode } })
-      }
-      hints={componentsToHints(components)}
-    />
+    <Fragment>
+      <div className={styles.editorContainer}>
+        <CodeEditor
+          code={code}
+          onChange={(newCode: string) =>
+            dispatch({ type: 'updateCode', payload: { code: newCode } })
+          }
+          hints={componentsToHints(components)}
+        />
+      </div>
+      <div className={styles.toolbarContainer}>
+        <Toolbar widths={allWidths} themes={allThemes} />
+      </div>
+    </Fragment>
   );
 
-  const isVerticalEditor = /^(left|right)$/.test(editorPosition);
+  const isVerticalEditor = editorPosition === 'right';
+  const isHorizontalEditor = editorPosition === 'bottom';
   const sizeStyles = {
-    height: editorPosition === 'bottom' ? `${editorHeight}px` : '100vh', // issue in ff & safari when not a string
-    width: isVerticalEditor ? `${editorWidth}px` : '100vw'
+    height: isHorizontalEditor ? `${editorHeight}px` : 'auto', // issue in ff & safari when not a string
+    width: isVerticalEditor ? `${editorWidth}px` : 'auto'
   };
   const editorContainer =
     editorPosition === 'undocked' ? (
       <WindowPortal
         height={window.outerHeight}
         width={window.outerWidth}
-        onUnload={() => dispatch({ type: 'resetEditorPosition' })}
+        onUnload={resetEditorPositionIfClosed}
       >
         {codeEditor}
       </WindowPortal>
     ) : (
       <Resizable
-        className={classnames(styles.editorContainer, {
-          [styles.editorContainer_isRight]: editorPosition === 'right',
-          [styles.editorContainer_isLeft]: editorPosition === 'left',
-          [styles.editorContainer_isBottom]: editorPosition === 'bottom'
+        className={classnames(styles.resizeableContainer, {
+          [styles.resizeableContainer_isRight]: isVerticalEditor,
+          [styles.resizeableContainer_isBottom]: isHorizontalEditor
         })}
         defaultSize={sizeStyles}
         size={sizeStyles}
-        onResize={(_event, _direction, ref) => {
-          const { offsetWidth, offsetHeight } = ref;
-
+        minWidth={MIN_WIDTH}
+        minHeight={MIN_HEIGHT}
+        onResize={(_event, _direction, { offsetWidth, offsetHeight }) => {
           updateEditorSize({ isVerticalEditor, offsetWidth, offsetHeight });
         }}
         enable={resizableConfig(editorPosition)}
       >
-        <div className={styles.dockPosition}>
-          <DockPosition
-            position={editorPosition}
-            setPosition={(position: EditorPosition) =>
-              dispatch({ type: 'updateEditorPosition', payload: { position } })
-            }
-          />
-        </div>
         {codeEditor}
       </Resizable>
     );
@@ -117,14 +157,26 @@ export default ({ themes, components, widths }: PlayroomProps) => {
       <div
         className={styles.previewContainer}
         style={
-          editorPosition !== 'undocked'
-            ? {
-                [editorPosition]: isVerticalEditor ? editorWidth : editorHeight
-              }
-            : undefined
+          {
+            right: { right: editorWidth },
+            bottom: { bottom: editorHeight },
+            undocked: undefined
+          }[editorPosition]
         }
       >
-        <Preview code={code} themes={allThemes} widths={widths} />
+        <Preview
+          code={code}
+          themes={
+            visibleThemes && visibleThemes.length > 0
+              ? visibleThemes
+              : allThemes
+          }
+          widths={
+            visibleWidths && visibleWidths.length > 0
+              ? visibleWidths
+              : allWidths
+          }
+        />
       </div>
       {editorContainer}
     </div>

@@ -1,42 +1,40 @@
 @import (reference) '../variables.less';
 
-@editor-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
-@sandbox-editor-height: 30vh;
-@gutter-size: 40px;
-
 .gutter {
   @box-fade-size: 10px;
-  width: @gutter-size - @box-fade-size;
-  background: white;
+  width: @code-gutter-size - @box-fade-size;
+  background-color: @code-background;
   position: absolute;
   right: @box-fade-size;
-  box-shadow: 0 0 @box-fade-size 5px white;
+  box-shadow: 0 0 @box-fade-size 5px @code-background;
 }
 
 .marker {
-  width: @sandbox-marker-size;
-  height: @sandbox-marker-size;
-  border-radius: (@sandbox-marker-size / 2);
-  background-color: @sandbox-marker-color;
+  width: @code-marker-size;
+  height: @code-marker-size;
+  border-radius: (@code-marker-size / 2);
+  background-color: @code-marker-color;
   position: relative;
-  top: (@sandbox-marker-size / 2);
+  top: (@code-marker-size / 2);
   left: 10px;
 }
 
 :global {
   .react-codemirror2 {
     height: 100%;
-    background-color: #fff;
+    background-color: @code-background;
   }
 
   .CodeMirror {
     height: 100%;
     width: 100%;
-    font-family: @editor-font-family;
+    font-family: @code-font-family;
+    position: relative;
+    z-index: 0;
   }
 
   .CodeMirror-gutters {
-    width: @gutter-size;
+    width: @code-gutter-size;
   }
 
   .CodeMirror-gutter-elt {
@@ -46,10 +44,6 @@
   .CodeMirror pre,
   .CodeMirror-linenumber {
     font-size: 16px;
-  }
-
-  .CodeMirror-line > span[role='presentation'] {
-    padding-right: (@dock-size + @dock-fade-distance + @gutter-size) !important;
   }
 
   .CodeMirror-lines {
@@ -63,12 +57,12 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: @shadow-small;
     border-radius: 3px;
-    background: white;
+    background-color: @code-background;
     font-size: 90%;
     line-height: 150%;
-    font-family: @editor-font-family;
+    font-family: @code-font-family;
     max-height: 20em;
     overflow-y: auto;
   }
@@ -78,45 +72,45 @@
     padding: 4px 8px;
     border-radius: 2px;
     white-space: pre;
-    color: black;
+    color: @black;
     cursor: pointer;
   }
 
   li.CodeMirror-hint-active {
-    background: #08f;
-    color: white;
+    background-color: @code-hint-bg;
+    color: @code-hint-fg;
   }
 
   .cm-s-neo {
     &.CodeMirror {
-      background-color: #fff;
+      background-color: @code-background;
     }
     .CodeMirror-cursor {
-      background: black;
+      background-color: @black;
       width: 2px;
     }
     .CodeMirror-gutters {
-      background: none;
+      background-color: none;
       border: none;
       pointer-events: none;
     }
     .CodeMirror-linenumber {
-      color: white;
+      color: @white;
     }
     .cm-tag {
-      color: #040080;
+      color: @code-format-tag;
     }
     .cm-attribute {
-      color: #005ad2;
+      color: @code-format-attribute;
     }
     .cm-string {
-      color: #00439c;
+      color: @code-format-string;
     }
     .cm-atom {
-      color: #00439c;
+      color: @code-format-atom;
     }
     .cm-variable {
-      color: #827eff;
+      color: @code-format-variable;
     }
   }
 }

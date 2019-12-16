@@ -1,0 +1,88 @@
+@import (reference) '../variables.less';
+
+.root {
+  position: relative;
+}
+
+.hasSelection {
+  color: @toolbar-highlight;
+}
+
+.button {
+  position: relative;
+  height: @toolbar-closed-size;
+  width: @toolbar-closed-size;
+  border: 0;
+  padding: 0;
+  background-color: none;
+  appearance: none;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  color: currentColor;
+  cursor: pointer;
+  height: @toolbar-item-size;
+  width: @toolbar-item-size;
+
+  &.button_isActive,
+  &:hover {
+    color: @toolbar-highlight;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: currentColor;
+    opacity: 0;
+    transition: @transition-slow;
+    pointer-events: none;
+
+    :hover& {
+      opacity: 0.1;
+    }
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 5px;
+    background-color: currentColor;
+    transition: @transition-slow;
+
+    :not(.button_isActive)& {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+}
+
+.indicator {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  height: 18px;
+  width: 18px;
+  background-color: @toolbar-highlight;
+  border-radius: 100%;
+  border: 2px solid @code-background;
+  color: @white;
+  font: @text-xsmall;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
+  transition: @transition-fast;
+
+  &:not(.show) {
+    transform: scale(0);
+    opacity: 0;
+  }
+}

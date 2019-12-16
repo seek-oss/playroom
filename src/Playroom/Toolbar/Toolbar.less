@@ -1,0 +1,135 @@
+@import (reference) '../variables.less';
+
+.root {
+  position: relative;
+  height: 100%;
+  min-width: @toolbar-closed-size;
+  display: flex;
+  flex-direction: row-reverse;
+  color: @toolbar-foregound;
+
+  &.isOpen {
+    width: 100vw;
+  }
+}
+
+.backdrop {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: @toolbar-open-size + @toolbar-closed-size;
+  background-color: @toolbar-background;
+  border-left: @toolbar-border-thickness solid @toolbar-border-color;
+  transition: @transition-medium;
+  transform: translateX(@toolbar-open-size);
+  opacity: 0;
+
+  .isOpen & {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.sidebar {
+  position: absolute;
+  display: flex;
+  pointer-events: none;
+  height: 100%;
+  flex-direction: row-reverse;
+}
+
+.topButtons {
+  transition: @transition-medium;
+  order: 0;
+}
+
+.topButtons_hide {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.currentPosition {
+  order: 1;
+}
+
+.positionContainer {
+  position: absolute;
+  bottom: @toolbar-closed-size;
+  top: 0;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: @transition-medium;
+  opacity: 0;
+  pointer-events: none;
+  order: 2;
+
+  &.positions_isOpen {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.position {
+  transition: @transition-medium;
+  transform: translateY(20px);
+
+  .positions_isOpen & {
+    transform: translateY(0);
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: @toolbar-closed-size;
+  pointer-events: auto;
+  justify-content: space-between;
+  position: relative;
+  background-color: @toolbar-background;
+  border-left: @toolbar-border-thickness solid @toolbar-border-color;
+}
+
+.panel {
+  position: relative;
+  display: flex;
+  width: @toolbar-open-size;
+  transition: @transition-medium;
+  transform: translateX(10px);
+  overflow: auto;
+
+  .isOpen & {
+    transform: translateX(0);
+    transition-delay: 0.1s;
+    pointer-events: auto;
+  }
+}
+
+.preference {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 25px 30px;
+  opacity: 0;
+  pointer-events: none;
+
+  .isOpen & {
+    transition-delay: 0.1s;
+  }
+}
+
+.preference_isActive {
+  opacity: 1;
+  pointer-events: auto;
+  transition: @transition-medium;
+}

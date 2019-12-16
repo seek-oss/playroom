@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CatchErrors.less';
 
@@ -38,14 +38,10 @@ export default class CatchErrors extends Component {
 
     return (
       <div className={styles.root}>
-        <div style={{ paddingTop: 20 }}>
-          <Fragment>
-            <div className={styles.strong}>{error.message}</div>
-            {lines.map((line, i) => (
-              <div key={i}>{line}</div>
-            ))}
-          </Fragment>
-        </div>
+        <strong className={styles.strong}>{error.message}</strong>
+        {lines.map((line, i) => (
+          <div key={i}>{line}</div>
+        ))}
       </div>
     );
   }
