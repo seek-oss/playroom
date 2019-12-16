@@ -30,8 +30,8 @@ const copyStyles = (sourceDoc: Document, targetDoc: Document) => {
 interface Props {
   height: number;
   width: number;
-  onKeyDown?: () => void;
-  onUnload?: () => void;
+  onKeyDown?: (event: KeyboardEvent) => void;
+  onUnload?: (event: Event) => void;
   children: ReactNode;
 }
 
