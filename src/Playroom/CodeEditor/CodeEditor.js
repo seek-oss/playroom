@@ -17,6 +17,67 @@ import styles from './CodeEditor.less';
 
 import prettier from 'prettier/standalone';
 import babylon from 'prettier/parser-babylon';
+
+import { SuggestAdapter } from 'monaco-editor/esm/vs/language/typescript/languageFeatures';
+
+const typeInfo = __PLAYROOM_GLOBAL__TYPE_INFO__;
+
+Object.defineProperty(SuggestAdapter.prototype, 'triggerCharacters', {
+  get() {
+    return ['<', '=', ' ', monaco.KeyCode.Enter];
+  },
+  enumerable: true,
+  configurable: true
+});
+
+const iDontLikeSand = SuggestAdapter.prototype.provideCompletionItems;
+SuggestAdapter.prototype.provideCompletionItems = function(...args) {
+  const itsCoarse = iDontLikeSand.call(this, ...args);
+  const model = args[0];
+  const position = args[1];
+  const triggerCharacter = model
+    .getLinesContent()
+    [position.lineNumber - 1].charAt(position.column - 2);
+
+  return itsCoarse.then(({ suggestions }) => {
+    console.log(suggestions, rest);
+
+    if (!Array.isArray(suggestions)) {
+      return { suggestions };
+    }
+
+    let newSuggestions = suggestions.slice();
+
+    if (triggerCharacter === '<') {
+      console.log('trigger');
+
+      // Don't suggest native HTML elements as first character
+      newSuggestions = newSuggestions.filter(({ label }) =>
+        typeInfo.components.includes(label)
+      );
+    }
+
+    // Hack fix to remove suggestions of previous attribute values as keys
+    const isAttributeKeySuggestion = newSuggestions.some(
+      ({ label }) => label === 'key'
+    );
+    if (isAttributeKeySuggestion) {
+      // newSuggestions = newSuggestions.filter(({ kind }) => kind !== 9);
+
+      // Don't suggest built-in react props (e.g. key, ref & children)
+      newSuggestions = newSuggestions.filter(
+        ({ label }) => !['children', 'ref'].includes(label)
+      );
+    }
+
+    console.log(newSuggestions);
+
+    return {
+      suggestions: newSuggestions
+    };
+  });
+};
+
 // import compileJsx from '../../utils/compileJsx';
 
 // const validateCode = (editorInstanceRef, code) => {
@@ -59,31 +120,34 @@ const monacoOptions = {
   suggest: {
     showIcons: false,
     filteredTypes: {
-      class: false,
-      color: false,
-      constant: false,
-      constructor: false,
-      customcolor: false,
-      enum: false,
-      enummember: false,
-      event: false,
-      field: false,
-      file: false,
-      folder: false,
-      function: false,
-      interface: false,
       keyword: false,
-      method: false,
       module: false,
-      operator: false,
-      property: true,
+
+      // class: false,
+      // color: false,
+      // constant: false,
+      // constructor: false,
+      // customcolor: false,
+      // enum: false,
+      // enummember: false,
+      // event: false,
+      // field: false,
+      // file: false,
+      // folder: false,
+      // function: false,
+      interface: false,
+      // keyword: false,
+      // method: false,
+      // module: false,
+      // operator: false,
+      // property: true,
       reference: false,
-      snippet: false,
-      struct: false,
-      text: false,
-      typeparameter: false,
-      unit: false,
-      value: false,
+      // snippet: false,
+      // struct: false,
+      // text: false,
+      // typeparameter: false,
+      // unit: false,
+      // value: false,
       variable: false
       // Available types to filter: [
       //   "Method",
@@ -147,7 +211,7 @@ const configureMonacoInstance = monaco => {
   });
 
   monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-    noSemanticValidation: false,
+    noSemanticValidation: true,
     noSyntaxValidation: true
   });
 
@@ -176,8 +240,6 @@ const configureMonacoInstance = monaco => {
     ReactTypes,
     'file:///node_modules/react/index.d.ts'
   );
-
-  const typeInfo = __PLAYROOM_GLOBAL__TYPE_INFO__;
 
   monaco.languages.typescript.typescriptDefaults.addExtraLib(es5Lib);
 
