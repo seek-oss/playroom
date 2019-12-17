@@ -72,11 +72,9 @@ _Note: `port` and `openBrowser` options will be set to `9000` and `true` (respec
 Your `components` file is expected to export a single object or a series of named exports. For example:
 
 ```js
-module.exports = {
-  Text: require('./Text/Text'),
-  Button: require('./Button/Button')
-  // etc...
-};
+export { default as Button } from '../Button';    // default export
+export { Button } from '../Button';               // destructuring export
+// etc...
 ```
 
 Now that your project is configured, you can start a local development server:
