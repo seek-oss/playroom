@@ -1,35 +1,69 @@
-import React, { Component, AllHTMLAttributes } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  AllHTMLAttributes,
+  MutableRefObject
+} from 'react';
+import { useIntersection } from 'react-use';
 
-interface State {
-  loaded: boolean;
+interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
+  src: string;
+  intersectionRootRef: MutableRefObject<Element | null>;
 }
-interface Props extends AllHTMLAttributes<HTMLIFrameElement> {}
 
-export default class Iframe extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+export default function Iframe({
+  intersectionRootRef,
+  style,
+  src,
+  ...restProps
+}: IframeProps) {
+  const [loaded, setLoaded] = useState(false);
+  const [renderedSrc, setRenderedSrc] = useState<string | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const intersection = useIntersection(iframeRef, {
+    root: intersectionRootRef.current,
+    rootMargin: '800px',
+    threshold: 0
+  });
 
-    this.state = {
-      loaded: false
-    };
-  }
+  const intersectionRatio = intersection?.intersectionRatio ?? null;
 
-  handleLoad = () => {
-    this.setState({ loaded: true });
-  };
+  useEffect(() => {
+    if (intersectionRatio === null) {
+      return;
+    }
 
-  render() {
-    const { style, ...props } = this.props;
-    const { loaded } = this.state;
+    if (intersectionRatio > 0 && src !== renderedSrc) {
+      setRenderedSrc(src);
+    }
+  }, [intersectionRatio, src, renderedSrc]);
 
-    const combinedStyles = {
-      ...style,
-      transition: 'opacity .3s ease',
-      opacity: loaded ? 1 : 0
-    };
+  useEffect(() => {
+    if (renderedSrc !== null) {
+      const location = iframeRef.current?.contentWindow?.location;
 
-    return (
-      <iframe onLoad={this.handleLoad} {...props} style={combinedStyles} />
-    );
-  }
+      if (location) {
+        location.replace(renderedSrc);
+      }
+    }
+  }, [renderedSrc]);
+
+  return (
+    <iframe
+      ref={iframeRef}
+      onLoad={() => setLoaded(true)}
+      onMouseEnter={() => {
+        if (src !== renderedSrc) {
+          setRenderedSrc(src);
+        }
+      }}
+      style={{
+        ...style,
+        transition: 'opacity .3s ease',
+        opacity: loaded ? 1 : 0
+      }}
+      {...restProps}
+    />
+  );
 }
