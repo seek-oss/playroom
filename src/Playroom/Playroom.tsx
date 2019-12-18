@@ -91,7 +91,7 @@ export default ({ themes, components, widths }: PlayroomProps) => {
     1
   );
 
-  const [resetEditorPositionIfClosed] = useDebouncedCallback(() => {
+  const [resetEditorPosition] = useDebouncedCallback(() => {
     if (editorPosition === 'undocked') {
       dispatch({ type: 'resetEditorPosition' });
     }
@@ -129,7 +129,8 @@ export default ({ themes, components, widths }: PlayroomProps) => {
       <WindowPortal
         height={window.outerHeight}
         width={window.outerWidth}
-        onUnload={resetEditorPositionIfClosed}
+        onUnload={resetEditorPosition}
+        onError={resetEditorPosition}
       >
         {codeEditor}
       </WindowPortal>

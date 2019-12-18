@@ -128,7 +128,6 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
           onClick={() => dispatch({ type: 'closeToolbar' })}
         />
       )}
-      <div className={styles.background} />
       <div className={styles.sidebar}>
         <div className={styles.buttons}>
           <div
@@ -175,7 +174,7 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
           </div>
 
           <div
-            aria-hidden={isPositionOpen ? undefined : 'true'}
+            hidden={isPositionOpen ? undefined : true}
             className={classnames(styles.positionContainer, {
               [styles.positions_isOpen]: isPositionOpen
             })}
@@ -204,10 +203,8 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
 
         <div className={styles.panel}>
           <div
-            aria-hidden={isThemeOpen ? undefined : 'true'}
-            className={classnames(styles.preference, {
-              [styles.preference_isActive]: isThemeOpen
-            })}
+            hidden={isThemeOpen ? undefined : true}
+            className={styles.preference}
           >
             <ViewPreference
               title="Themes"
@@ -227,10 +224,8 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
             />
           </div>
           <div
-            aria-hidden={isWidthOpen ? undefined : 'true'}
-            className={classnames(styles.preference, {
-              [styles.preference_isActive]: isWidthOpen
-            })}
+            hidden={isWidthOpen ? undefined : true}
+            className={styles.preference}
           >
             <ViewPreference
               title="Widths"

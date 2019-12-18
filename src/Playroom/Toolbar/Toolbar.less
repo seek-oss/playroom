@@ -19,23 +19,6 @@
   width: 100vw;
 }
 
-.background {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: @toolbar-open-size + @toolbar-closed-size;
-  background-color: @toolbar-background;
-  border-left: @toolbar-border-thickness solid @toolbar-border-color;
-  transition: @transition-medium;
-  transform: translateX(@toolbar-open-size);
-  opacity: 0;
-
-  .isOpen & {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
 .sidebar {
   position: absolute;
   display: flex;
@@ -63,18 +46,19 @@
   bottom: @toolbar-closed-size;
   top: 0;
   width: 100%;
-  display: flex;
-  align-items: flex-end;
   flex-direction: column;
+  align-items: flex-end;
   justify-content: flex-end;
   transition: @transition-medium;
-  opacity: 0;
-  pointer-events: none;
   order: 2;
 
-  &.positions_isOpen {
-    opacity: 1;
-    pointer-events: auto;
+  &:not([hidden]) {
+    display: flex;
+  }
+
+  &:not(.positions_isOpen) {
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
@@ -95,6 +79,7 @@
   pointer-events: auto;
   justify-content: space-between;
   position: relative;
+  z-index: 1;
   background-color: @toolbar-background;
   border-left: @toolbar-border-thickness solid @toolbar-border-color;
 }
@@ -103,14 +88,16 @@
   position: relative;
   display: flex;
   width: @toolbar-open-size;
-  transition: @transition-medium;
-  transform: translateX(10px);
+  background-color: @toolbar-background;
+  border-left: @toolbar-border-thickness solid @toolbar-border-color;
   overflow: auto;
+  transition: @transition-slow;
+  pointer-events: auto;
 
-  .isOpen & {
-    transform: translateX(0);
-    transition-delay: 0.1s;
-    pointer-events: auto;
+  .root:not(.isOpen) & {
+    transform: translateX(@toolbar-open-size * 0.3);
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
@@ -120,16 +107,4 @@
   left: 0;
   right: 0;
   padding: 25px 30px;
-  opacity: 0;
-  pointer-events: none;
-
-  .isOpen & {
-    transition-delay: 0.1s;
-  }
-}
-
-.preference_isActive {
-  opacity: 1;
-  pointer-events: auto;
-  transition: @transition-medium;
 }

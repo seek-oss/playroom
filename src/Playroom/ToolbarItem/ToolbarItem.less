@@ -14,7 +14,7 @@
   width: @toolbar-closed-size;
   border: 0;
   padding: 0;
-  background-color: none;
+  background-color: transparent;
   appearance: none;
   outline: none;
   display: flex;
@@ -41,6 +41,11 @@
     transition: @transition-slow;
     pointer-events: none;
 
+    :not(:hover):focus& {
+      color: @toolbar-foregound;
+    }
+
+    :not(.button_isActive):focus&,
     :hover& {
       opacity: 0.1;
     }

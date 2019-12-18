@@ -31,19 +31,25 @@ interface Props {
   height: number;
   width: number;
   onKeyDown?: (event: KeyboardEvent) => void;
-  onUnload?: (event: Event) => void;
+  onUnload: (event?: Event) => void;
+  onError?: () => void;
   children: ReactNode;
 }
 
 interface State {
   externalWindow: Window | null;
   containerDiv: HTMLDivElement | null;
+  isClosedByParent: boolean;
 }
 
 export default class WindowPortal extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { externalWindow: null, containerDiv: null };
+    this.state = {
+      externalWindow: null,
+      containerDiv: null,
+      isClosedByParent: false
+    };
   }
 
   componentDidMount() {
@@ -73,7 +79,13 @@ export default class WindowPortal extends React.PureComponent<Props, State> {
       externalWindow.document.body.appendChild(containerDiv);
 
       if (typeof this.props.onUnload === 'function') {
-        externalWindow.addEventListener('unload', this.props.onUnload);
+        externalWindow.addEventListener('unload', e => {
+          // Call unload only if window portal is closed explicitly,
+          // not if closed by parent.
+          if (!this.state.isClosedByParent) {
+            this.props.onUnload(e);
+          }
+        });
       }
 
       if (typeof this.props.onKeyDown === 'function') {
@@ -82,6 +94,15 @@ export default class WindowPortal extends React.PureComponent<Props, State> {
 
       copyStyles(document, externalWindow.document);
       this.setState({ externalWindow, containerDiv });
+
+      // Close window portal when parent closes
+      window.addEventListener('beforeunload', () => {
+        this.setState({ isClosedByParent: true });
+        externalWindow.close();
+      });
+    } else if (typeof this.props.onError === 'function') {
+      // If blocked by pop-up blocker, call error handler
+      this.props.onError();
     }
   };
 
