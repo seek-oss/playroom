@@ -1,4 +1,4 @@
-import React, { ReactChild, MouseEvent } from 'react';
+import React, { ReactChild } from 'react';
 import classnames from 'classnames';
 
 // @ts-ignore
@@ -31,7 +31,7 @@ export default ({
           [styles.button_isActive]: active
         })}
         title={title}
-        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+        onClick={event => {
           event.stopPropagation();
           onClick();
         }}
