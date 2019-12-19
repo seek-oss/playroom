@@ -9,6 +9,8 @@ interface Props {
   active?: boolean;
   title: string;
   count?: number;
+  statusMessage?: string;
+  showStatus?: boolean;
   onClick: () => void;
 }
 export default ({
@@ -16,6 +18,8 @@ export default ({
   active = false,
   title,
   count = 0,
+  statusMessage,
+  showStatus = false,
   onClick
 }: Props) => {
   const hasSelection = count > 0;
@@ -44,6 +48,13 @@ export default ({
         })}
       >
         {count || ''}
+      </div>
+      <div
+        className={classnames(styles.status, {
+          [styles.status_show]: showStatus && statusMessage // eslint-disable-line
+        })}
+      >
+        {statusMessage}
       </div>
     </div>
   );

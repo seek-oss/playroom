@@ -79,6 +79,7 @@
     "codemirror": "^5.49.2",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.1.0",
+    "copy-to-clipboard": "^3.2.0",
     "css-loader": "^3.3.2",
     "current-git-branch": "^1.1.0",
     "dedent": "^0.7.0",
