@@ -1,5 +1,6 @@
 import React, { useContext, useReducer, ReactChild } from 'react';
 import classnames from 'classnames';
+import { PlayroomProps } from '../Playroom';
 import ViewPreference from '../ViewPreference/ViewPreference';
 import { StoreContext, EditorPosition } from '../../StoreContext/StoreContext';
 import WidthsSvg from './icons/WidthsSvg';
@@ -13,8 +14,8 @@ import EditorRightSvg from './icons/EditorRightSvg';
 import styles from './Toolbar.less';
 
 interface Props {
-  themes: string[];
-  widths: number[];
+  themes: PlayroomProps['themes'];
+  widths: PlayroomProps['widths'];
 }
 
 interface State {

@@ -13,6 +13,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { createUrl, CreateUrlOptions } from '../../utils';
 import getParamsFromQuery from '../utils/getParamsFromQuery';
+import { PlayroomProps } from '../Playroom/Playroom';
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
@@ -168,7 +169,13 @@ export const StoreContext = createContext<StoreContextValues>([
   () => {}
 ]);
 
-export const StoreProvider = ({ children }: { children: ReactNode }) => {
+export const StoreProvider = ({
+  children,
+  themes
+}: {
+  children: ReactNode;
+  themes: PlayroomProps['themes'];
+}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [debouncedCodeUpdate] = useDebouncedCallback(
     (params: DebounceUpdateUrl) => {
@@ -180,6 +187,9 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     },
     500
   );
+  const hasThemesConfigured =
+    (themes || []).filter(themeName => themeName !== '__PLAYROOM__NO_THEME__')
+      .length > 0;
 
   useEffect(() => {
     const params = getParamsFromQuery();
@@ -206,28 +216,29 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       }
     }
 
-    Promise.all<string, EditorPosition, number, number, string[], number[]>([
+    Promise.all<string, EditorPosition, number, number, number[], string[]>([
       store.getItem('code'),
       store.getItem('editorPosition'),
       store.getItem('editorHeight'),
       store.getItem('editorWidth'),
-      store.getItem('visibleThemes'),
-      store.getItem('visibleWidths')
+      store.getItem('visibleWidths'),
+      store.getItem('visibleThemes')
     ]).then(
       ([
         storedCode,
         storedPosition,
         storedHeight,
         storedWidth,
-        storedVisibleThemes,
-        storedVisibleWidths
+        storedVisibleWidths,
+        storedVisibleThemes
       ]) => {
         const code = codeFromQuery || storedCode || exampleCode;
         const editorPosition = storedPosition;
         const editorHeight = storedHeight;
         const editorWidth = storedWidth;
-        const visibleThemes = themesFromQuery || storedVisibleThemes;
         const visibleWidths = widthsFromQuery || storedVisibleWidths;
+        const visibleThemes =
+          hasThemesConfigured && (themesFromQuery || storedVisibleThemes);
 
         dispatch({
           type: 'initialLoad',
@@ -243,7 +254,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         });
       }
     );
-  }, []);
+  }, [hasThemesConfigured]);
 
   useEffect(() => {
     debouncedCodeUpdate({

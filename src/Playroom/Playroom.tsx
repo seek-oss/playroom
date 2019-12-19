@@ -52,14 +52,17 @@ const resizableConfig = (position: EditorPosition = 'bottom') => ({
 });
 
 export interface PlayroomProps {
-  themes: Record<string, any>;
   components: Record<string, ComponentType>;
+  themes: string[];
   widths: number[];
 }
 
-export default ({ themes, components, widths }: PlayroomProps) => {
-  const allThemes = Object.keys(themes);
-  const allWidths = widths.sort((a, b) => a - b);
+export default ({
+  components,
+  themes,
+  widths: configuredWidths
+}: PlayroomProps) => {
+  const widths = configuredWidths.sort((a, b) => a - b);
   const [
     {
       editorPosition,
@@ -113,7 +116,7 @@ export default ({ themes, components, widths }: PlayroomProps) => {
         />
       </div>
       <div className={styles.toolbarContainer}>
-        <Toolbar widths={allWidths} themes={allThemes} />
+        <Toolbar widths={widths} themes={themes} />
       </div>
     </Fragment>
   );
@@ -168,14 +171,10 @@ export default ({ themes, components, widths }: PlayroomProps) => {
         <Preview
           code={code}
           themes={
-            visibleThemes && visibleThemes.length > 0
-              ? visibleThemes
-              : allThemes
+            visibleThemes && visibleThemes.length > 0 ? visibleThemes : themes
           }
           widths={
-            visibleWidths && visibleWidths.length > 0
-              ? visibleWidths
-              : allWidths
+            visibleWidths && visibleWidths.length > 0 ? visibleWidths : widths
           }
         />
       </div>
