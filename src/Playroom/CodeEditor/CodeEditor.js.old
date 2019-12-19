@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 
@@ -54,8 +55,8 @@ const completeIfInTag = cm => {
   });
 };
 
-const validateCode = (editorInstanceRef, code) => {
-  editorInstanceRef.clearGutter(styles.gutter);
+const validateCode = (editorInstance, code) => {
+  editorInstance.clearGutter(styles.gutter);
 
   try {
     compileJsx(code);
@@ -69,60 +70,69 @@ const validateCode = (editorInstanceRef, code) => {
       const marker = document.createElement('div');
       marker.classList.add(styles.marker);
       marker.setAttribute('title', err.message);
-      editorInstanceRef.setGutterMarker(lineNumber - 1, styles.gutter, marker);
+      editorInstance.setGutterMarker(lineNumber - 1, styles.gutter, marker);
     }
   }
 };
 
 export const CodeEditor = ({ code, onChange, hints }) => {
   const editorInstanceRef = useRef(null);
-
-  useEffect(
-    () => {
-      const handleKeyDown = e => {
-        if (
-          editorInstanceRef &&
-          editorInstanceRef.current &&
-          e.keyCode === 83 &&
-          (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey)
-        ) {
-          e.preventDefault();
-
-          const { formattedCode, line, ch } = format({
-            code,
-            cursor: editorInstanceRef.current.getCursor()
-          });
-
-          onChange(formattedCode);
-
-          setTimeout(() => {
-            editorInstanceRef.current.focus();
-            editorInstanceRef.current.setCursor({
-              line,
-              ch
-            });
-          });
-        }
-      };
-
-      window.addEventListener('keydown', handleKeyDown);
-
-      return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-      };
-    },
-    [code, onChange]
+  const [localCode, setLocalCode] = useState(code);
+  const [debouncedChange] = useDebouncedCallback(
+    newCode => onChange(newCode),
+    100
   );
+  useEffect(() => {
+    const handleKeyDown = e => {
+      if (
+        editorInstanceRef &&
+        editorInstanceRef.current &&
+        e.keyCode === 83 &&
+        (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey)
+      ) {
+        e.preventDefault();
+
+        const { formattedCode, line, ch } = format({
+          code: localCode,
+          cursor: editorInstanceRef.current.getCursor()
+        });
+
+        setLocalCode(formattedCode);
+
+        setTimeout(() => {
+          editorInstanceRef.current.focus();
+          editorInstanceRef.current.setCursor({
+            line,
+            ch
+          });
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [localCode, setLocalCode]);
+
+  useEffect(() => {
+    if (localCode !== code) {
+      debouncedChange(localCode);
+    }
+  }, [localCode, code, debouncedChange]);
 
   return (
     <ReactCodeMirror
       editorDidMount={editorInstance => {
         editorInstanceRef.current = editorInstance;
         validateCode(editorInstance, code);
+        editorInstance.focus();
+        editorInstance.setCursor(0, 0);
       }}
-      value={code}
+      value={localCode}
       onBeforeChange={(editor, data, newCode) => {
-        onChange(newCode);
+        setLocalCode(newCode);
         validateCode(editorInstanceRef.current, newCode);
       }}
       options={{

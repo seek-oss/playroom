@@ -1,14 +1,16 @@
 {
   "extends": "seek",
   "globals": {
-    "__PLAYROOM_GLOBAL__CONFIG__": true,
-    "__PLAYROOM_GLOBAL__STATIC_TYPES__": true
-  },
-  "rules": {
-    "no-console": 0,
-    "no-process-exit": 0
+    "__PLAYROOM_GLOBAL__CONFIG__": true
   },
   "overrides": [
+    {
+      "files": ["bin/**/*.js", "lib/**/*.js"],
+      "rules": {
+        "no-console": 0,
+        "no-process-exit": 0
+      }
+    },
     {
       "files": ["examples/**/*.js"],
       "rules": {

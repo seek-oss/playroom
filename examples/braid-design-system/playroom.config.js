@@ -10,7 +10,7 @@ module.exports = {
   components: 'braid-design-system',
   themes: 'braid-design-system/lib/themes',
   frameComponent: './playroom/FrameComponent.js',
-  widths: [320, 1024],
+  widths: [320, 500, 768, 1024],
   exampleCode: `
     <ChecklistCard>
       <Checkbox id="1" label="This is a checkbox" message={false} onChange={() => {}}>
@@ -51,7 +51,7 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/preset-env', '@babel/preset-react'],
-              plugins: ['babel-plugin-transform-class-properties']
+              plugins: ['@babel/plugin-proposal-class-properties']
             }
           }
         },
@@ -65,8 +65,10 @@ module.exports = {
             {
               loader: 'css-loader',
               options: {
-                modules: true,
-                localIdentName: '[name]__[local]___[hash:base64:7]',
+                modules: {
+                  mode: 'local',
+                  localIdentName: '[name]__[local]___[hash:base64:7]'
+                },
                 importLoaders: 2
               }
             },
@@ -77,7 +79,7 @@ module.exports = {
               loader: 'babel-loader',
               options: {
                 presets: ['@babel/preset-env', '@babel/preset-react'],
-                plugins: ['babel-plugin-transform-class-properties']
+                plugins: ['@babel/plugin-proposal-class-properties']
               }
             }
           ]

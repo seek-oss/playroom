@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 
 import MonacoEditor from 'react-monaco-editor';
@@ -252,7 +253,7 @@ const configureMonacoInstance = monaco => {
       let text;
       try {
         text = prettier.format(wrapJsx(model.getValue()), {
-          parser: 'babylon',
+          parser: 'babel',
           plugins: [babylon],
           singleQuote: true
         });

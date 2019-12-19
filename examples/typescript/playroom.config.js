@@ -6,6 +6,7 @@ module.exports = {
       rules: [
         {
           test: /\.tsx?$/,
+          include: /components/,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',

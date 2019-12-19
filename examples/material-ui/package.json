@@ -9,11 +9,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.1.6",
-    "@babel/preset-env": "^7.1.6",
-    "@babel/preset-react": "^7.0.0",
-    "@material-ui/core": "^3.3.1",
-    "babel-loader": "^8.0.4",
-    "react": "^16.6.0"
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "@material-ui/core": "^4.7.2",
+    "babel-loader": "^8.0.6"
   }
 }
