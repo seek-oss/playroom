@@ -1,7 +1,4 @@
 import React from 'react';
-import ReactTypes from '!!raw-loader!@types/react/index.d.ts'; // eslint-disable-line
-import CSSTypes from '!!raw-loader!csstype/index.d.ts'; // eslint-disable-line
-import PropTypesTypes from '!!raw-loader!@types/prop-types/index.d.ts'; // eslint-disable-line
 
 import MonacoEditor from 'react-monaco-editor';
 
@@ -12,8 +9,6 @@ import es5Lib from './es5Lib';
 import { wrapJsx, unwrapJsx } from '../../utils/formatting';
 
 import styles from './CodeEditor.less';
-
-// import { Controlled as ReactCodeMirror } from 'react-codemirror2';
 
 import prettier from 'prettier/standalone';
 import babylon from 'prettier/parser-babylon';
@@ -40,7 +35,7 @@ SuggestAdapter.prototype.provideCompletionItems = function(...args) {
     [position.lineNumber - 1].charAt(position.column - 2);
 
   return itsCoarse.then(({ suggestions }) => {
-    console.log(suggestions, rest);
+    console.log(suggestions);
 
     if (!Array.isArray(suggestions)) {
       return { suggestions };
@@ -226,34 +221,20 @@ const configureMonacoInstance = monaco => {
     noLib: true
   });
 
-  monaco.languages.typescript.typescriptDefaults.addExtraLib(
-    PropTypesTypes,
-    'file:///node_modules/prop-types/index.d.ts'
-  );
-
-  monaco.languages.typescript.typescriptDefaults.addExtraLib(
-    CSSTypes,
-    'file:///node_modules/csstype/index.d.ts'
-  );
-
-  monaco.languages.typescript.typescriptDefaults.addExtraLib(
-    ReactTypes,
-    'file:///node_modules/react/index.d.ts'
-  );
-
   monaco.languages.typescript.typescriptDefaults.addExtraLib(es5Lib);
 
   Object.entries(typeInfo.declarations).forEach(([fileName, content]) => {
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
       content,
-      `file:///node_modules${fileName}`
+      `file:///${fileName}`
     );
   });
 
   const globalComponentsDeclaration = `
-    import * as components from '${typeInfo.componentsFile
-      .replace(/\.[^/.]+$/, '')
-      .substring(1)}';
+    import * as components from './${typeInfo.componentsFile.replace(
+      /\.[^/.]+$/,
+      ''
+    )}';
 
     declare global {
       ${typeInfo.components
@@ -267,7 +248,7 @@ const configureMonacoInstance = monaco => {
 
   monaco.languages.typescript.typescriptDefaults.addExtraLib(
     globalComponentsDeclaration,
-    'file:///playroom/index.d.ts'
+    'file:///playroom.d.ts'
   );
 
   monaco.languages.registerDocumentFormattingEditProvider('typescript', {
@@ -293,7 +274,7 @@ const configureMonacoInstance = monaco => {
   });
 };
 
-export const CodeEditor = ({ code, onChange, hints }) => {
+export const CodeEditor = ({ code, onChange }) => {
   // const ref = useRef();
   // const editorRef = useRef();
   // const pauseChangeEvents = useRef(false);

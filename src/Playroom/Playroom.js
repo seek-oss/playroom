@@ -7,7 +7,6 @@ import Preview from './Preview/Preview';
 import styles from './Playroom.less';
 
 import WindowPortal from './WindowPortal';
-import componentsToHints from '../utils/componentsToHints';
 import { CodeEditor } from './CodeEditor/CodeEditor';
 import { useStore } from './useStore';
 import DockPosition from './DockPosition/DockPosition';
@@ -43,13 +42,7 @@ export default ({ themes, components, widths }) => {
     themeNames.map(theme => ({ theme, width }))
   );
 
-  const codeEditor = (
-    <CodeEditor
-      code={code}
-      onChange={setCode}
-      hints={componentsToHints(components)}
-    />
-  );
+  const codeEditor = <CodeEditor code={code} onChange={setCode} />;
 
   const size = {
     height: editorPosition === 'bottom' ? `${editorSize}px` : '100vh', // issue in ff & safari when not a string
