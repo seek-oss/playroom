@@ -9,7 +9,7 @@ import styles from './Preview.less';
 
 interface PreviewProps {
   code: string;
-  themes: string[];
+  themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
 }
 

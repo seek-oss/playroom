@@ -13,9 +13,11 @@ const renderPlayroom = ({
   themes = require('./themes'),
   components = require('./components')
 } = {}) => {
+  const themeNames = Object.keys(themes);
+
   render(
-    <StoreProvider>
-      <Playroom components={components} widths={widths} themes={themes} />
+    <StoreProvider themes={themeNames}>
+      <Playroom components={components} widths={widths} themes={themeNames} />
     </StoreProvider>,
     outlet
   );

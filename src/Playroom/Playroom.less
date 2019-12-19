@@ -1,60 +1,58 @@
 @import (reference) './variables.less';
 
+:global(html) {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: @code-background;
+}
+
 :global(body) {
   margin: 0;
 }
 
 .root {
-  background: @sandbox-background;
   height: 100vh;
+  width: 100vw;
 }
 
 .previewContainer {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: @sandbox-background;
+}
+
+.resizeableContainer {
+  position: absolute !important; // override internal inline style
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  box-shadow: @shadow-small;
+}
+
+.resizeableContainer_isRight {
+  top: 0;
+  max-width: 90vw;
+}
+
+.resizeableContainer_isBottom {
+  left: 0;
+  max-height: 90vh;
 }
 
 .editorContainer {
-  box-shadow: 0 0 8px rgba(18, 21, 26, 0.2);
-  position: fixed !important; // override internal inline style
-  bottom: 0;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.editorContainer_isRight {
-  right: 0;
-  top: 0;
-  max-width: 95vw;
-}
-
-.editorContainer_isLeft {
-  left: 0;
-  top: 0;
-  max-width: 95vw;
-}
-
-.editorContainer_isBottom {
-  left: 0;
-  right: 0;
-  max-height: 95vh;
-}
-
-.dockPosition {
   position: absolute;
   top: 0;
   bottom: 0;
-  right: 0;
-  z-index: 3;
-  display: flex;
-  box-shadow: 0 0 20px 10px white;
+  left: 0;
+  right: @toolbar-closed-size;
+}
 
-  .editorContainer_isLeft & {
-    // dont overlap resize hit area when left docked
-    right: 6px;
-  }
+.toolbarContainer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
