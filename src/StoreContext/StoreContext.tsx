@@ -172,7 +172,11 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [debouncedCodeUpdate] = useDebouncedCallback(
     (params: DebounceUpdateUrl) => {
-      history.replaceState(null, '', createUrl(params));
+      // Ensure that when removing theme/width preferences
+      // they are also removed from the url. Replacing state
+      // with an empty string (returned from `createUrl`)
+      // does not do anything, so replacing with `#`
+      history.replaceState(null, '', createUrl(params) || '#');
     },
     500
   );
