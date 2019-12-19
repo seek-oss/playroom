@@ -163,27 +163,24 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
             </ToolbarItem>
           </div>
 
-          <div className={styles.currentPosition}>
-            <ToolbarItem
-              active={isPositionOpen}
-              title="Configure editor position"
-              onClick={() => dispatch({ type: 'togglePosition' })}
-            >
-              {positionIcon[editorPosition].component}
-            </ToolbarItem>
-          </div>
+          <ToolbarItem
+            active={isPositionOpen}
+            title="Configure editor position"
+            onClick={() => dispatch({ type: 'togglePosition' })}
+          >
+            {positionIcon[editorPosition].component}
+          </ToolbarItem>
 
           <div
-            hidden={isPositionOpen ? undefined : true}
             className={classnames(styles.positionContainer, {
-              [styles.positions_isOpen]: isPositionOpen
+              [styles.positions_isOpen]: isPositionOpen // eslint-disable-line css-modules/no-undef-class
             })}
             onClick={() => dispatch({ type: 'closeToolbar' })}
           >
             {positions
               .filter(pos => pos !== editorPosition)
               .map(pos => (
-                <div key={pos} className={styles.position}>
+                <div key={pos} hidden={isPositionOpen ? undefined : true}>
                   <ToolbarItem
                     title={positionIcon[pos].title}
                     onClick={() => {

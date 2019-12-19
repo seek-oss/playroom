@@ -29,7 +29,6 @@
 
 .topButtons {
   transition: @transition-medium;
-  order: 0;
 }
 
 .topButtons_hide {
@@ -37,37 +36,21 @@
   pointer-events: none;
 }
 
-.currentPosition {
-  order: 1;
-}
-
 .positionContainer {
   position: absolute;
   bottom: @toolbar-closed-size;
   top: 0;
   width: 100%;
+  display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-end;
   transition: @transition-medium;
-  order: 2;
-
-  &:not([hidden]) {
-    display: flex;
-  }
 
   &:not(.positions_isOpen) {
     opacity: 0;
     pointer-events: none;
-  }
-}
-
-.position {
-  transition: @transition-medium;
-  transform: translateY(20px);
-
-  .positions_isOpen & {
-    transform: translateY(0);
+    transform: translateY(20px);
   }
 }
 
