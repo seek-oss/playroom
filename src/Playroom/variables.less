@@ -1,9 +1,70 @@
+// Grid
 @row-height: 6px;
 @gutter-width: 40px;
-@sandbox-padding: 40px;
-@sandbox-background: #f2f2f2;
-@sandbox-line-height: (@row-height * 5);
-@sandbox-marker-size: 12px;
-@sandbox-marker-color: blue;
-@dock-size: 86px;
-@dock-fade-distance: 10px;
+
+// Typography
+@typography-family: Helvetica, arial, sans-serif;
+@heading1: bold 20px @typography-family;
+@heading2: bold 18px @typography-family;
+@heading3: bold 16px @typography-family;
+@text-large: normal 16px @typography-family;
+@text-standard: normal 14px @typography-family;
+@text-small: normal 12px @typography-family;
+@text-xsmall: normal 10px @typography-family;
+
+// Palette
+@blue-1: #0088ff;
+@blue-2: #005ad2;
+@blue-3: #00439c;
+@blue-4: #040080;
+@white: #fff;
+@gray-1: #f4f4f4;
+@gray-2: #e8e8e8;
+@gray-3: #a7a7a7;
+@gray-4: #515151;
+@gray-5: #1e1e1e;
+@black: #000;
+
+// Box Shadow:
+@shadow-small: 0 2px 8px rgba(18, 21, 26, 0.3);
+
+// Transitions
+@transition-speed-fast: 100ms;
+@transition-speed-medium: 200ms;
+@transition-speed-slow: 300ms;
+@transition-fast: opacity @transition-speed-fast ease,
+  transform @transition-speed-fast ease;
+@transition-medium: opacity @transition-speed-medium ease,
+  transform @transition-speed-medium ease;
+@transition-slow: opacity @transition-speed-slow ease,
+  transform @transition-speed-slow ease;
+
+// Preview
+@preview-padding: @gutter-width;
+@preview-background: @gray-1;
+@preview-foregound: @gray-4;
+
+// Code Editor
+@code-background: @white;
+@code-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
+@code-gutter-size: @gutter-width;
+@code-marker-size: 12px;
+@code-marker-color: @blue-2;
+@code-format-tag: @blue-4;
+@code-format-attribute: @blue-2;
+@code-format-string: @blue-3;
+@code-format-atom: @blue-3;
+@code-format-variable: @blue-1;
+@code-hint-bg: @blue-1;
+@code-hint-fg: @white;
+
+// Toolbar
+@toolbar-closed-size: 60px;
+@toolbar-open-size: 300px;
+@toolbar-item-size: 60px;
+@toolbar-item-count: 5;
+@toolbar-foregound: @gray-4;
+@toolbar-background: @white;
+@toolbar-highlight: @blue-2;
+@toolbar-border-color: @gray-2;
+@toolbar-border-thickness: 1px;

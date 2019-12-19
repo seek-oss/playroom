@@ -9,10 +9,11 @@ import localforage from 'localforage';
 import base64url from 'base64-url';
 import lzString from 'lz-string';
 import dedent from 'dedent';
-
-import { createUrl } from '../../utils';
-import getParamsFromQuery from '../utils/getParamsFromQuery';
 import { useDebouncedCallback } from 'use-debounce';
+
+import { createUrl, CreateUrlOptions } from '../../utils';
+import getParamsFromQuery from '../utils/getParamsFromQuery';
+import { PlayroomProps } from '../Playroom/Playroom';
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
@@ -24,17 +25,22 @@ const store = localforage.createInstance({
 
 const defaultPosition = 'bottom';
 
-export type EditorPosition = 'bottom' | 'left' | 'right' | 'undocked';
+export type EditorPosition = 'bottom' | 'right' | 'undocked';
+
+interface DebounceUpdateUrl
+  extends Partial<Omit<CreateUrlOptions, 'baseUrl'>> {}
 
 interface State {
   code: string;
   editorPosition: EditorPosition;
   editorHeight: number;
   editorWidth: number;
+  visibleThemes?: string[];
+  visibleWidths?: number[];
   ready: boolean;
 }
 
-export type Action =
+type Action =
   | { type: 'initialLoad'; payload: Partial<State> }
   | { type: 'updateCode'; payload: { code: string } }
   | {
@@ -43,7 +49,11 @@ export type Action =
     }
   | { type: 'resetEditorPosition' }
   | { type: 'updateEditorHeight'; payload: { size: number } }
-  | { type: 'updateEditorWidth'; payload: { size: number } };
+  | { type: 'updateEditorWidth'; payload: { size: number } }
+  | { type: 'updateVisibleThemes'; payload: { themes: string[] } }
+  | { type: 'resetVisibleThemes' }
+  | { type: 'updateVisibleWidths'; payload: { widths: number[] } }
+  | { type: 'resetVisibleWidths' };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -56,6 +66,7 @@ const reducer = (state: State, action: Action): State => {
 
     case 'updateCode': {
       const { code } = action.payload;
+      store.setItem('code', code);
 
       return {
         ...state,
@@ -102,6 +113,42 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'updateVisibleThemes': {
+      const { themes } = action.payload;
+      store.setItem('visibleThemes', themes);
+
+      return {
+        ...state,
+        visibleThemes: themes
+      };
+    }
+
+    case 'resetVisibleThemes': {
+      const { visibleThemes, ...restState } = state;
+      store.removeItem('visibleThemes');
+
+      return restState;
+    }
+
+    case 'updateVisibleWidths': {
+      const { widths } = action.payload;
+      const orderedWidths = widths.sort((a, b) => a - b);
+
+      store.setItem('visibleWidths', orderedWidths);
+
+      return {
+        ...state,
+        visibleWidths: orderedWidths
+      };
+    }
+
+    case 'resetVisibleWidths': {
+      const { visibleWidths, ...restState } = state;
+      store.removeItem('visibleWidths');
+
+      return restState;
+    }
+
     default:
       return state;
   }
@@ -112,8 +159,8 @@ type StoreContextValues = [State, Dispatch<Action>];
 const initialState: State = {
   code: exampleCode,
   editorPosition: defaultPosition,
-  editorHeight: 200,
-  editorWidth: 400,
+  editorHeight: 300,
+  editorWidth: 360,
   ready: false
 };
 
@@ -122,57 +169,103 @@ export const StoreContext = createContext<StoreContextValues>([
   () => {}
 ]);
 
-export const StoreProvider = ({ children }: { children: ReactNode }) => {
+export const StoreProvider = ({
+  children,
+  themes
+}: {
+  children: ReactNode;
+  themes: PlayroomProps['themes'];
+}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const [debouncedCodeUpdate] = useDebouncedCallback((newCode: string) => {
-    history.replaceState(null, '', createUrl({ code: newCode }));
-    store.setItem('code', newCode);
-  }, 500);
+  const [debouncedCodeUpdate] = useDebouncedCallback(
+    (params: DebounceUpdateUrl) => {
+      // Ensure that when removing theme/width preferences
+      // they are also removed from the url. Replacing state
+      // with an empty string (returned from `createUrl`)
+      // does not do anything, so replacing with `#`
+      history.replaceState(null, '', createUrl(params) || '#');
+    },
+    500
+  );
+  const hasThemesConfigured =
+    (themes || []).filter(themeName => themeName !== '__PLAYROOM__NO_THEME__')
+      .length > 0;
 
   useEffect(() => {
     const params = getParamsFromQuery();
-    let codeFromQuery: string | null = null;
+    let codeFromQuery: State['code'];
+    let themesFromQuery: State['visibleThemes'];
+    let widthsFromQuery: State['visibleWidths'];
 
     if (params.code) {
       try {
-        const { code: parsedCode } = JSON.parse(
+        const {
+          code: parsedCode,
+          themes: parsedThemes,
+          widths: parsedWidths
+        } = JSON.parse(
           lzString.decompressFromEncodedURIComponent(String(params.code))
         );
 
         codeFromQuery = parsedCode;
+        themesFromQuery = parsedThemes;
+        widthsFromQuery = parsedWidths;
       } catch (e) {
         // backward compatibility
         codeFromQuery = base64url.decode(String(params.code));
       }
     }
 
-    Promise.all<string, EditorPosition, number, number>([
+    Promise.all<string, EditorPosition, number, number, number[], string[]>([
       store.getItem('code'),
       store.getItem('editorPosition'),
       store.getItem('editorHeight'),
-      store.getItem('editorWidth')
-    ]).then(([storedCode, storedPosition, storedHeight, storedWidth]) => {
-      const code = codeFromQuery || storedCode || exampleCode;
-      const editorPosition = storedPosition;
-      const editorHeight = storedHeight;
-      const editorWidth = storedWidth;
+      store.getItem('editorWidth'),
+      store.getItem('visibleWidths'),
+      store.getItem('visibleThemes')
+    ]).then(
+      ([
+        storedCode,
+        storedPosition,
+        storedHeight,
+        storedWidth,
+        storedVisibleWidths,
+        storedVisibleThemes
+      ]) => {
+        const code = codeFromQuery || storedCode || exampleCode;
+        const editorPosition = storedPosition;
+        const editorHeight = storedHeight;
+        const editorWidth = storedWidth;
+        const visibleWidths = widthsFromQuery || storedVisibleWidths;
+        const visibleThemes =
+          hasThemesConfigured && (themesFromQuery || storedVisibleThemes);
 
-      dispatch({
-        type: 'initialLoad',
-        payload: {
-          ...(code ? { code } : {}),
-          ...(editorPosition ? { editorPosition } : {}),
-          ...(editorHeight ? { editorHeight } : {}),
-          ...(editorWidth ? { editorWidth } : {}),
-          ready: true
-        }
-      });
+        dispatch({
+          type: 'initialLoad',
+          payload: {
+            ...(code ? { code } : {}),
+            ...(editorPosition ? { editorPosition } : {}),
+            ...(editorHeight ? { editorHeight } : {}),
+            ...(editorWidth ? { editorWidth } : {}),
+            ...(visibleThemes ? { visibleThemes } : {}),
+            ...(visibleWidths ? { visibleWidths } : {}),
+            ready: true
+          }
+        });
+      }
+    );
+  }, [hasThemesConfigured]);
+
+  useEffect(() => {
+    debouncedCodeUpdate({
+      code: state.code,
+      themes: state.visibleThemes,
+      widths: state.visibleWidths
     });
-  }, []);
-
-  useEffect(() => debouncedCodeUpdate(state.code), [
+  }, [
     state.code,
+    state.visibleThemes,
+    state.visibleWidths,
     debouncedCodeUpdate
   ]);
 
