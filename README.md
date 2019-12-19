@@ -72,11 +72,9 @@ _Note: `port` and `openBrowser` options will be set to `9000` and `true` (respec
 Your `components` file is expected to export a single object or a series of named exports. For example:
 
 ```js
-module.exports = {
-  Text: require('./Text/Text'),
-  Button: require('./Button/Button')
-  // etc...
-};
+export { default as Text } from '../Text'; // Re-exporting a default export
+export { Button } from '../Button'; // Re-exporting a named export
+// etc...
 ```
 
 Now that your project is configured, you can start a local development server:
@@ -111,11 +109,9 @@ If your component library has multiple themes, you can customise Playroom to ren
 Similar to your `components` file, your `themes` file is expected to export a single object or a series of named exports. For example:
 
 ```js
-module.exports = {
-  themeA: require('./themeA'),
-  themeB: require('./themeB')
-  // etc...
-};
+export { themeA } from './themeA';
+export { themeB } from './themeB';
+// etc...
 ```
 
 ## TypeScript Support
