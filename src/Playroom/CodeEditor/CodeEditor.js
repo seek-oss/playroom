@@ -4,8 +4,6 @@ import MonacoEditor from 'react-monaco-editor';
 
 import * as monaco from 'monaco-editor';
 
-import es5Lib from './es5Lib';
-
 import { wrapJsx, unwrapJsx } from '../../utils/formatting';
 
 import styles from './CodeEditor.less';
@@ -220,8 +218,6 @@ const configureMonacoInstance = monaco => {
     noEmit: true,
     noLib: true
   });
-
-  monaco.languages.typescript.typescriptDefaults.addExtraLib(es5Lib);
 
   Object.entries(typeInfo.declarations).forEach(([fileName, content]) => {
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
