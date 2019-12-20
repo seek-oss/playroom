@@ -1,4 +1,5 @@
-import React, { useContext, useReducer, ReactChild } from 'react';
+import React, { useContext, useReducer, ReactChild, useEffect } from 'react';
+import copy from 'copy-to-clipboard';
 import classnames from 'classnames';
 import { PlayroomProps } from '../Playroom';
 import ViewPreference from '../ViewPreference/ViewPreference';
@@ -9,6 +10,7 @@ import ToolbarItem from '../ToolbarItem/ToolbarItem';
 import EditorUndockedSvg from './icons/EditorUndockedSvg';
 import EditorBottomSvg from './icons/EditorBottomSvg';
 import EditorRightSvg from './icons/EditorRightSvg';
+import ShareSvg from './icons/ShareSvg';
 
 // @ts-ignore
 import styles from './Toolbar.less';
@@ -21,18 +23,21 @@ interface Props {
 interface State {
   open: boolean;
   activePreference: 'theme' | 'width' | 'position' | null;
+  copying: boolean;
 }
 
 const initialState: State = {
   open: false,
-  activePreference: null
+  activePreference: null,
+  copying: false
 };
 
 type Action =
   | { type: 'toggleThemes' }
   | { type: 'toggleWidths' }
   | { type: 'togglePosition' }
-  | { type: 'closeToolbar' };
+  | { type: 'closeToolbar' }
+  | { type: 'copyLink'; payload: { active: boolean } };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -74,6 +79,15 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'copyLink': {
+      return {
+        ...state,
+        open: false,
+        activePreference: null,
+        copying: action.payload.active
+      };
+    }
+
     default:
       return state;
   }
@@ -105,10 +119,19 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
     dispatchPreference
   ] = useContext(StoreContext);
 
-  const [{ open, activePreference }, dispatch] = useReducer(
+  const [{ open, activePreference, copying }, dispatch] = useReducer(
     reducer,
     initialState
   );
+
+  useEffect(() => {
+    if (copying) {
+      copy(window.location.href);
+      setTimeout(() => {
+        dispatch({ type: 'copyLink', payload: { active: false } });
+      }, 2000);
+    }
+  }, [copying]);
 
   const isThemeOpen = activePreference === 'theme' && open;
   const isWidthOpen = activePreference === 'width' && open;
@@ -161,6 +184,18 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
               onClick={() => dispatch({ type: 'toggleWidths' })}
             >
               <WidthsSvg />
+            </ToolbarItem>
+
+            <ToolbarItem
+              active={copying}
+              title="Copy link to clipboard"
+              statusMessage="Link copied to clipboard"
+              showStatus={copying}
+              onClick={() =>
+                dispatch({ type: 'copyLink', payload: { active: true } })
+              }
+            >
+              <ShareSvg />
             </ToolbarItem>
           </div>
 

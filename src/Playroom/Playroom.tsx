@@ -29,7 +29,7 @@ const getThemeVariable = (name: string) => {
 
 const MIN_HEIGHT =
   getThemeVariable('toolbar-item-size') *
-  getThemeVariable('toolbar-item-count');
+  getThemeVariable('toolbar-max-item-count');
 const MIN_WIDTH =
   getThemeVariable('toolbar-open-size') +
   getThemeVariable('toolbar-closed-size');
