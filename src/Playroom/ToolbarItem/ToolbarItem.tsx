@@ -51,7 +51,7 @@ export default ({
       </div>
       <div
         className={classnames(styles.status, {
-          [styles.status_show]: showStatus && statusMessage // eslint-disable-line
+          [styles.status_show]: showStatus && statusMessage // eslint-disable-line css-modules/no-undef-class
         })}
       >
         {statusMessage}
