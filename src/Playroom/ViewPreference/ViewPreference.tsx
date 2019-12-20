@@ -43,7 +43,7 @@ export default <PreferenceType extends string | number>({
                 const newVisiblePreference = [...visible, preference];
                 const isOriginalList =
                   JSON.stringify(newVisiblePreference.sort()) ===
-                  JSON.stringify(available.sort());
+                  JSON.stringify([...available].sort());
 
                 onChange(isOriginalList ? undefined : newVisiblePreference);
               } else {

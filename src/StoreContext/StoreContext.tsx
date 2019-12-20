@@ -55,7 +55,14 @@ type Action =
   | { type: 'updateVisibleWidths'; payload: { widths: number[] } }
   | { type: 'resetVisibleWidths' };
 
-const reducer = (state: State, action: Action): State => {
+interface CreateReducerParams {
+  themes: PlayroomProps['themes'];
+  widths: PlayroomProps['widths'];
+}
+const createReducer = ({
+  themes: configuredThemes,
+  widths: configuredWidths
+}: CreateReducerParams) => (state: State, action: Action): State => {
   switch (action.type) {
     case 'initialLoad': {
       return {
@@ -115,11 +122,12 @@ const reducer = (state: State, action: Action): State => {
 
     case 'updateVisibleThemes': {
       const { themes } = action.payload;
-      store.setItem('visibleThemes', themes);
+      const visibleThemes = configuredThemes.filter(t => themes.includes(t));
+      store.setItem('visibleThemes', visibleThemes);
 
       return {
         ...state,
-        visibleThemes: themes
+        visibleThemes
       };
     }
 
@@ -132,13 +140,12 @@ const reducer = (state: State, action: Action): State => {
 
     case 'updateVisibleWidths': {
       const { widths } = action.payload;
-      const orderedWidths = widths.sort((a, b) => a - b);
-
-      store.setItem('visibleWidths', orderedWidths);
+      const visibleWidths = configuredWidths.filter(w => widths.includes(w));
+      store.setItem('visibleWidths', visibleWidths);
 
       return {
         ...state,
-        visibleWidths: orderedWidths
+        visibleWidths
       };
     }
 
@@ -171,12 +178,17 @@ export const StoreContext = createContext<StoreContextValues>([
 
 export const StoreProvider = ({
   children,
-  themes
+  themes,
+  widths
 }: {
   children: ReactNode;
   themes: PlayroomProps['themes'];
+  widths: PlayroomProps['widths'];
 }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(
+    createReducer({ themes, widths }),
+    initialState
+  );
   const [debouncedCodeUpdate] = useDebouncedCallback(
     (params: DebounceUpdateUrl) => {
       // Ensure that when removing theme/width preferences

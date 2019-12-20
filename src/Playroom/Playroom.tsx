@@ -57,12 +57,7 @@ export interface PlayroomProps {
   widths: number[];
 }
 
-export default ({
-  components,
-  themes,
-  widths: configuredWidths
-}: PlayroomProps) => {
-  const widths = configuredWidths.sort((a, b) => a - b);
+export default ({ components, themes, widths }: PlayroomProps) => {
   const [
     {
       editorPosition,
