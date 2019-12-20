@@ -16,7 +16,7 @@ const renderPlayroom = ({
   const themeNames = Object.keys(themes);
 
   render(
-    <StoreProvider themes={themeNames}>
+    <StoreProvider themes={themeNames} widths={widths}>
       <Playroom components={components} widths={widths} themes={themeNames} />
     </StoreProvider>,
     outlet
