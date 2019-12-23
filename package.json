@@ -87,6 +87,7 @@
     "find-up": "^4.1.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "html-webpack-plugin": "^4.0.0-beta.5",
+    "intersection-observer": "^0.7.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "less-vars-loader": "^1.1.0",
