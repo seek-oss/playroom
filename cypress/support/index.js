@@ -1,3 +1,5 @@
+require('./commands');
+
 beforeEach(() => {
   cy.visit('http://localhost:9000')
     .window()

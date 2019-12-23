@@ -22,7 +22,7 @@ export default <PreferenceType extends string | number>({
   const isFiltered = visible.length > 0 && visible.length <= available.length;
 
   return (
-    <aside>
+    <aside data-testid={`${title.toLowerCase()}Preferences`}>
       <h4 className={styles.title}>
         {title}
         {isFiltered && (
