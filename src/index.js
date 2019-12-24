@@ -3,33 +3,40 @@ import { render } from 'react-dom';
 import Playroom from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';
 
-const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
-const widths = playroomConfig.widths || [320, 375, 768, 1024];
+const polyfillIntersectionObserver = () =>
+  typeof window.IntersectionObserver !== 'undefined'
+    ? Promise.resolve()
+    : import('intersection-observer');
 
-const outlet = document.createElement('div');
-document.body.appendChild(outlet);
+polyfillIntersectionObserver().then(() => {
+  const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
+  const widths = playroomConfig.widths || [320, 375, 768, 1024];
 
-const renderPlayroom = ({
-  themes = require('./themes'),
-  components = require('./components')
-} = {}) => {
-  const themeNames = Object.keys(themes);
+  const outlet = document.createElement('div');
+  document.body.appendChild(outlet);
 
-  render(
-    <StoreProvider themes={themeNames} widths={widths}>
-      <Playroom components={components} widths={widths} themes={themeNames} />
-    </StoreProvider>,
-    outlet
-  );
-};
-renderPlayroom();
+  const renderPlayroom = ({
+    themes = require('./themes'),
+    components = require('./components')
+  } = {}) => {
+    const themeNames = Object.keys(themes);
 
-if (module.hot) {
-  module.hot.accept('./components', () => {
-    renderPlayroom({ components: require('./components') });
-  });
+    render(
+      <StoreProvider themes={themeNames} widths={widths}>
+        <Playroom components={components} widths={widths} themes={themeNames} />
+      </StoreProvider>,
+      outlet
+    );
+  };
+  renderPlayroom();
 
-  module.hot.accept('./themes', () => {
-    renderPlayroom({ themes: require('./themes') });
-  });
-}
+  if (module.hot) {
+    module.hot.accept('./components', () => {
+      renderPlayroom({ components: require('./components') });
+    });
+
+    module.hot.accept('./themes', () => {
+      renderPlayroom({ themes: require('./themes') });
+    });
+  }
+});
