@@ -12,6 +12,7 @@ interface Props {
   statusMessage?: string;
   showStatus?: boolean;
   onClick: () => void;
+  ['data-testid']?: string;
 }
 export default ({
   children,
@@ -20,7 +21,8 @@ export default ({
   count = 0,
   statusMessage,
   showStatus = false,
-  onClick
+  onClick,
+  ['data-testid']: dataTestId
 }: Props) => {
   const hasSelection = count > 0;
 
@@ -31,6 +33,7 @@ export default ({
       })}
     >
       <button
+        data-testid={dataTestId}
         className={classnames(styles.button, {
           [styles.button_isActive]: active
         })}
@@ -49,13 +52,15 @@ export default ({
       >
         {count || ''}
       </div>
-      <div
-        className={classnames(styles.status, {
-          [styles.status_show]: showStatus && statusMessage // eslint-disable-line css-modules/no-undef-class
-        })}
-      >
-        {statusMessage}
-      </div>
+      {statusMessage && (
+        <div
+          className={classnames(styles.status, {
+            [styles.status_show]: showStatus && statusMessage // eslint-disable-line css-modules/no-undef-class
+          })}
+        >
+          {statusMessage}
+        </div>
+      )}
     </div>
   );
 };

@@ -182,6 +182,7 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
                   : 'Configure widths'
               }
               onClick={() => dispatch({ type: 'toggleWidths' })}
+              data-testid="toggleWidths"
             >
               <WidthsSvg />
             </ToolbarItem>
@@ -194,6 +195,7 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
               onClick={() =>
                 dispatch({ type: 'copyLink', payload: { active: true } })
               }
+              data-testid="copyToClipboard"
             >
               <ShareSvg />
             </ToolbarItem>
@@ -235,27 +237,31 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
         </div>
 
         <div className={styles.panel}>
-          <div
-            hidden={isThemeOpen ? undefined : true}
-            className={styles.preference}
-          >
-            <ViewPreference
-              title="Themes"
-              visible={visibleThemes || []}
-              available={allThemes}
-              onChange={newThemes => {
-                if (newThemes) {
-                  dispatchPreference({
-                    type: 'updateVisibleThemes',
-                    payload: { themes: newThemes }
-                  });
-                } else {
-                  dispatchPreference({ type: 'resetVisibleThemes' });
+          {hasThemes && (
+            <div
+              hidden={isThemeOpen ? undefined : true}
+              className={styles.preference}
+            >
+              <ViewPreference
+                title="Themes"
+                visible={visibleThemes || []}
+                available={allThemes}
+                onChange={newThemes => {
+                  if (newThemes) {
+                    dispatchPreference({
+                      type: 'updateVisibleThemes',
+                      payload: { themes: newThemes }
+                    });
+                  } else {
+                    dispatchPreference({ type: 'resetVisibleThemes' });
+                  }
+                }}
+                onReset={() =>
+                  dispatchPreference({ type: 'resetVisibleThemes' })
                 }
-              }}
-              onReset={() => dispatchPreference({ type: 'resetVisibleThemes' })}
-            />
-          </div>
+              />
+            </div>
+          )}
           <div
             hidden={isWidthOpen ? undefined : true}
             className={styles.preference}

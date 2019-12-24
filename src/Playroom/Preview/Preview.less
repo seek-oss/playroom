@@ -1,5 +1,7 @@
 @import (reference) '../variables.less';
 
+@frame-name-height: 30px;
+
 .root {
   background-color: @preview-background;
   box-sizing: border-box;
@@ -8,48 +10,43 @@
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
-  padding: @preview-padding 0;
+  padding: @preview-padding 0 (@preview-padding - 10px);
   text-align: center;
 }
 
 .frameContainer {
-  display: inline-block;
-  text-align: left;
   position: relative;
-  height: 97%;
+  height: 100%;
+  text-align: left;
+  display: inline-flex;
+  flex-direction: column-reverse;
   margin-right: @preview-padding;
-  background-color: @white;
-
-  &:before {
-    pointer-events: none;
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    box-shadow: @shadow-small;
-    transition: @transition-medium;
-
-    :not(:hover)& {
-      opacity: 0.8;
-    }
-  }
 
   &:first-child {
     margin-left: @preview-padding;
   }
 }
 
-.frameName {
+.frameBorder {
   position: absolute;
-  height: 30px;
-  bottom: -30px;
+  top: 0;
+  bottom: @frame-name-height;
   left: 0;
   right: 0;
+  box-shadow: @shadow-small;
+  transition: @transition-medium;
+  pointer-events: none;
+
+  .frameContainer:not(:hover) & {
+    opacity: 0.8;
+  }
+}
+
+.frameName {
+  flex: 0 0 @frame-name-height;
   font: @text-standard;
   color: @preview-foregound;
-  line-height: 30px;
+  line-height: @frame-name-height;
   transition: @transition-medium;
 
   .frameContainer:not(:hover) & {

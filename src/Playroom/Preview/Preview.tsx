@@ -35,7 +35,8 @@ export default function Preview({ code, themes, widths }: PreviewProps) {
           key={`${frame.theme}_${frame.width}`}
           className={styles.frameContainer}
         >
-          <div className={styles.frameName}>
+          <div className={styles.frameBorder} />
+          <div className={styles.frameName} data-testid="frameName">
             {frame.theme === '__PLAYROOM__NO_THEME__' ? (
               <strong className={styles.strong}>
                 {frame.width}
@@ -55,6 +56,7 @@ export default function Preview({ code, themes, widths }: PreviewProps) {
             )}&code=${encodeURIComponent(renderCode)}`}
             className={styles.frame}
             style={{ width: frame.width }}
+            data-testid="previewFrame"
           />
         </div>
       ))}
