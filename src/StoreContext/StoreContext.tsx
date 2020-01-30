@@ -11,9 +11,11 @@ import lzString from 'lz-string';
 import dedent from 'dedent';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { createUrl, CreateUrlOptions } from '../../utils';
+import { createUrl, CreateUrlOptions, Snippet } from '../../utils';
+import { formatForInsertion, formatAndInsert } from '../utils/formatting';
 import getParamsFromQuery from '../utils/getParamsFromQuery';
 import { PlayroomProps } from '../Playroom/Playroom';
+import { isValidLocation } from '../utils/cursor';
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
@@ -30,8 +32,20 @@ export type EditorPosition = 'bottom' | 'right' | 'undocked';
 interface DebounceUpdateUrl
   extends Partial<Omit<CreateUrlOptions, 'baseUrl'>> {}
 
+export interface CursorPosition {
+  line: number;
+  ch: number;
+}
+
+type ToolbarPanel = 'snippets' | 'themes' | 'widths' | 'positions';
 interface State {
   code: string;
+  previewRenderCode?: string;
+  previewEditorCode?: string;
+  highlightLineNumber?: number;
+  activeToolbarPanel?: ToolbarPanel;
+  validCursorPosition: boolean;
+  cursorPosition: CursorPosition;
   editorPosition: EditorPosition;
   editorHeight: number;
   editorWidth: number;
@@ -42,7 +56,15 @@ interface State {
 
 type Action =
   | { type: 'initialLoad'; payload: Partial<State> }
-  | { type: 'updateCode'; payload: { code: string } }
+  | { type: 'updateCode'; payload: { code: string; cursor?: CursorPosition } }
+  | {
+      type: 'updateCursorPosition';
+      payload: { position: CursorPosition };
+    }
+  | { type: 'persistSnippet'; payload: { snippet: Snippet } }
+  | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
+  | { type: 'toggleToolbar'; payload: { panel: ToolbarPanel } }
+  | { type: 'closeToolbar' }
   | {
       type: 'updateEditorPosition';
       payload: { position: EditorPosition };
@@ -54,6 +76,13 @@ type Action =
   | { type: 'resetVisibleThemes' }
   | { type: 'updateVisibleWidths'; payload: { widths: number[] } }
   | { type: 'resetVisibleWidths' };
+
+const resetPreview = ({
+  previewRenderCode,
+  previewEditorCode,
+  highlightLineNumber,
+  ...state
+}: State): State => state;
 
 interface CreateReducerParams {
   themes: PlayroomProps['themes'];
@@ -72,21 +101,114 @@ const createReducer = ({
     }
 
     case 'updateCode': {
-      const { code } = action.payload;
+      const { code, cursor } = action.payload;
       store.setItem('code', code);
 
       return {
         ...state,
-        code
+        code,
+        cursorPosition: cursor || state.cursorPosition
       };
+    }
+
+    case 'persistSnippet': {
+      const { snippet } = action.payload;
+      const { activeToolbarPanel, ...currentState } = state;
+
+      const { code, cursor } = formatAndInsert({
+        code: state.code,
+        snippet: snippet.code,
+        cursor: state.cursorPosition
+      });
+
+      return {
+        ...resetPreview(currentState),
+        code,
+        cursorPosition: cursor
+      };
+    }
+
+    case 'updateCursorPosition': {
+      const { position } = action.payload;
+
+      return {
+        ...state,
+        cursorPosition: position,
+        validCursorPosition: true
+      };
+    }
+
+    case 'previewSnippet': {
+      const { snippet } = action.payload;
+
+      const previewRenderCode = snippet
+        ? formatAndInsert({
+            code: state.code,
+            snippet: snippet.code,
+            cursor: state.cursorPosition
+          }).code
+        : undefined;
+
+      return {
+        ...state,
+        previewRenderCode
+      };
+    }
+
+    case 'toggleToolbar': {
+      const { panel } = action.payload;
+      const { activeToolbarPanel: currentPanel, ...currentState } = state;
+      const shouldOpen = panel !== currentPanel;
+
+      if (shouldOpen) {
+        if (panel === 'snippets') {
+          const validCursorPosition = isValidLocation({
+            code: currentState.code,
+            cursor: currentState.cursorPosition
+          });
+
+          if (!validCursorPosition) {
+            return {
+              ...currentState,
+              validCursorPosition
+            };
+          }
+
+          const { code, cursor } = formatForInsertion({
+            code: (currentState.code || '').trim(),
+            cursor: currentState.cursorPosition
+          });
+
+          return {
+            ...currentState,
+            activeToolbarPanel: panel,
+            previewEditorCode: code,
+            highlightLineNumber: cursor.line
+          };
+        }
+
+        return {
+          ...resetPreview(currentState),
+          activeToolbarPanel: panel
+        };
+      }
+
+      return resetPreview(currentState);
+    }
+
+    case 'closeToolbar': {
+      const { activeToolbarPanel, ...currentState } = state;
+
+      return resetPreview(currentState);
     }
 
     case 'updateEditorPosition': {
       const { position } = action.payload;
+      const { activeToolbarPanel, ...currentState } = state;
       store.setItem('editorPosition', position);
 
       return {
-        ...state,
+        ...currentState,
         editorPosition: position
       };
     }
@@ -165,6 +287,8 @@ type StoreContextValues = [State, Dispatch<Action>];
 
 const initialState: State = {
   code: exampleCode,
+  validCursorPosition: true,
+  cursorPosition: { line: 0, ch: 0 },
   editorPosition: defaultPosition,
   editorHeight: 300,
   editorWidth: 360,

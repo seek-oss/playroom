@@ -4,6 +4,7 @@ interface PlayroomConfig {
   title?: string;
   themes?: string;
   widths?: number[];
+  snippets?: Snippet[];
   frameComponent?: string;
   exampleCode?: string;
   cwd?: string;

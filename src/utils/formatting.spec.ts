@@ -46,27 +46,24 @@ describe('formatting code', () => {
   it('should handle one line', () => {
     const code = `<div><h1>Title</h1></div>`;
     expect(formatCode({ code, cursor: { line: 0, ch: 9 } })).toEqual({
-      line: 1,
-      ch: 6,
-      formattedCode: `<div>\n  <h1>Title</h1>\n</div>\n`
+      cursor: { line: 1, ch: 6 },
+      code: `<div>\n  <h1>Title</h1>\n</div>\n`
     });
   });
 
   it('should handle multiple lines', () => {
     const code = `<div>\n<h1>Title</h1>\n</div>`;
     expect(formatCode({ code, cursor: { line: 1, ch: 4 } })).toEqual({
-      line: 1,
-      ch: 6,
-      formattedCode: `<div>\n  <h1>Title</h1>\n</div>\n`
+      cursor: { line: 1, ch: 6 },
+      code: `<div>\n  <h1>Title</h1>\n</div>\n`
     });
   });
 
   it('should handle multiple root level jsx elements', () => {
     const code = `<div><h1>Title</h1></div><div><h1>Title Two</h1></div>`;
     expect(formatCode({ code, cursor: { line: 0, ch: 34 } })).toEqual({
-      line: 4,
-      ch: 6,
-      formattedCode: `<div>\n  <h1>Title</h1>\n</div>\n<div>\n  <h1>Title Two</h1>\n</div>\n`
+      cursor: { line: 4, ch: 6 },
+      code: `<div>\n  <h1>Title</h1>\n</div>\n<div>\n  <h1>Title Two</h1>\n</div>\n`
     });
   });
 });

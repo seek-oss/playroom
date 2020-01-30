@@ -1,7 +1,7 @@
 import React, { Fragment, useRef } from 'react';
 import flatMap from 'lodash/flatMap';
 import Iframe from './Iframe';
-import compileJsx from '../../utils/compileJsx';
+import { compileJsx } from '../../utils/compileJsx';
 import { PlayroomProps } from '../Playroom';
 
 // @ts-ignore

@@ -4,6 +4,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { Resizable } from 're-resizable';
 import Preview from './Preview/Preview';
 import WindowPortal from './WindowPortal';
+import { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
 import Toolbar from './Toolbar/Toolbar';
 import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
@@ -32,7 +33,8 @@ const MIN_HEIGHT =
   getThemeVariable('toolbar-max-item-count');
 const MIN_WIDTH =
   getThemeVariable('toolbar-open-size') +
-  getThemeVariable('toolbar-closed-size');
+  getThemeVariable('toolbar-closed-size') +
+  getThemeVariable('gutter-width') * 2;
 
 // @ts-ignore
 import { CodeEditor } from './CodeEditor/CodeEditor';
@@ -55,9 +57,10 @@ export interface PlayroomProps {
   components: Record<string, ComponentType>;
   themes: string[];
   widths: number[];
+  snippets: Snippets;
 }
 
-export default ({ components, themes, widths }: PlayroomProps) => {
+export default ({ components, themes, widths, snippets }: PlayroomProps) => {
   const [
     {
       editorPosition,
@@ -66,6 +69,8 @@ export default ({ components, themes, widths }: PlayroomProps) => {
       visibleThemes,
       visibleWidths,
       code,
+      previewRenderCode,
+      previewEditorCode,
       ready
     },
     dispatch
@@ -107,11 +112,12 @@ export default ({ components, themes, widths }: PlayroomProps) => {
           onChange={(newCode: string) =>
             dispatch({ type: 'updateCode', payload: { code: newCode } })
           }
+          previewCode={previewEditorCode}
           hints={componentsToHints(components)}
         />
       </div>
       <div className={styles.toolbarContainer}>
-        <Toolbar widths={widths} themes={themes} />
+        <Toolbar widths={widths} themes={themes} snippets={snippets} />
       </div>
     </Fragment>
   );
@@ -164,7 +170,7 @@ export default ({ components, themes, widths }: PlayroomProps) => {
         }
       >
         <Preview
-          code={code}
+          code={previewRenderCode || code}
           themes={
             visibleThemes && visibleThemes.length > 0 ? visibleThemes : themes
           }

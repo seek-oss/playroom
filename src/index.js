@@ -17,13 +17,23 @@ polyfillIntersectionObserver().then(() => {
 
   const renderPlayroom = ({
     themes = require('./themes'),
-    components = require('./components')
+    components = require('./components'),
+    snippets = require('./snippets')
   } = {}) => {
     const themeNames = Object.keys(themes);
 
     render(
       <StoreProvider themes={themeNames} widths={widths}>
-        <Playroom components={components} widths={widths} themes={themeNames} />
+        <Playroom
+          components={components}
+          widths={widths}
+          themes={themeNames}
+          snippets={
+            typeof snippets.default !== 'undefined'
+              ? snippets.default
+              : snippets
+          }
+        />
       </StoreProvider>,
       outlet
     );
@@ -37,6 +47,10 @@ polyfillIntersectionObserver().then(() => {
 
     module.hot.accept('./themes', () => {
       renderPlayroom({ themes: require('./themes') });
+    });
+
+    module.hot.accept('./snippets', () => {
+      renderPlayroom({ snippets: require('./snippets') });
     });
   }
 });

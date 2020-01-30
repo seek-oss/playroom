@@ -9,6 +9,10 @@
   box-shadow: 0 0 @box-fade-size 5px @code-background;
 }
 
+.insertionPoint {
+  background-color: @code-selection;
+}
+
 .marker {
   width: @code-marker-size;
   height: @code-marker-size;
@@ -93,6 +97,9 @@
       background-color: transparent;
       border: none;
       pointer-events: none;
+    }
+    .CodeMirror-selected {
+      background: @code-selection;
     }
     .CodeMirror-linenumber {
       color: @white;
