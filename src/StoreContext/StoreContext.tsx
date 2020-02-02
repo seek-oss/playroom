@@ -175,7 +175,7 @@ const createReducer = ({
           }
 
           const { code, cursor } = formatForInsertion({
-            code: (currentState.code || '').trim(),
+            code: currentState.code,
             cursor: currentState.cursorPosition
           });
 

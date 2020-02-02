@@ -190,6 +190,13 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           'background',
           styles.insertionPoint
         );
+        editorInstanceRef.current.scrollIntoView(
+          {
+            line: highlightLineNumber,
+            ch: 0
+          },
+          200
+        );
       } else if (insertionPointRef.current) {
         editorInstanceRef.current.removeLineClass(
           insertionPointRef.current,

@@ -103,7 +103,7 @@ export const formatCode = ({
     code: formattedCode,
     cursor: {
       line: position.line - WRAPPED_LINE_OFFSET,
-      ch: position.ch - WRAPPED_INDENT_OFFSET
+      ch: position.ch === 0 ? 0 : position.ch - WRAPPED_INDENT_OFFSET
     }
   };
 };
