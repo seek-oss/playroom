@@ -137,7 +137,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           editorInstanceRef.current.setCursor(formattedCursor);
         }
 
-        if (cmdOrCtrl && /^[ip]$/.test(e.key)) {
+        if (cmdOrCtrl && /^[k]$/.test(e.key)) {
           e.preventDefault();
           dispatch({ type: 'toggleToolbar', payload: { panel: 'snippets' } });
         }

@@ -154,12 +154,12 @@ describe('Smoke test', () => {
 
     it('driven with keyboard', () => {
       // Open and format for insertion point
-      typeCode(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}i`);
+      typeCode(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}k`);
       assertSnippetsListIsVisible();
       assertCodePaneLineCount(8);
       filterSnippets('{esc}');
       assertCodePaneLineCount(1);
-      typeCode(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}p`);
+      typeCode(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}k`);
       assertSnippetsListIsVisible();
       assertCodePaneLineCount(8);
 
@@ -178,7 +178,7 @@ describe('Smoke test', () => {
       assertCodePaneLineCount(1);
 
       // Re-open and persist
-      typeCode(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}p`);
+      typeCode(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}k`);
       filterSnippets('{downarrow}{downarrow}{downarrow}{downarrow}{enter}');
       assertFirstFrameContains('Initial code\nBar\nBlue Bar');
       assertCodePaneLineCount(7);

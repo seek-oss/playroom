@@ -94,7 +94,9 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             {hasSnippets && (
               <ToolbarItem
                 active={isSnippetsOpen}
-                title="Insert snippet"
+                title={`Insert snippet (${
+                  navigator.platform.match('Mac') ? '\u2318' : 'Ctrl + '
+                }K)`}
                 showStatus={!validCursorPosition}
                 statusMessage="Can't insert snippet at cursor"
                 statusMessageTone="critical"
