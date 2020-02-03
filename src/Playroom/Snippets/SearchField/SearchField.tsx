@@ -9,6 +9,7 @@ interface Props {
   onChange: NonNullable<InputProps['onChange']>;
   placeholder?: NonNullable<InputProps['placeholder']>;
   onBlur?: InputProps['onBlur'];
+  onKeyUp?: InputProps['onKeyUp'];
   onKeyDown?: InputProps['onKeyDown'];
   ['data-testid']?: string;
 }
@@ -18,6 +19,7 @@ export default ({
   placeholder,
   onChange,
   onBlur,
+  onKeyUp,
   onKeyDown,
   'data-testid': dataTestId
 }: Props) => (
@@ -28,6 +30,7 @@ export default ({
     value={value}
     onChange={onChange}
     onBlur={onBlur}
+    onKeyUp={onKeyUp}
     onKeyDown={onKeyDown}
     className={styles.field}
     data-testid={dataTestId}
