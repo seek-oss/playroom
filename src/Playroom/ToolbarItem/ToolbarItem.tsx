@@ -10,6 +10,7 @@ interface Props {
   title: string;
   count?: number;
   statusMessage?: string;
+  statusMessageTone?: 'neutral' | 'positive' | 'critical';
   showStatus?: boolean;
   onClick: () => void;
   ['data-testid']?: string;
@@ -20,6 +21,7 @@ export default ({
   title,
   count = 0,
   statusMessage,
+  statusMessageTone = 'neutral',
   showStatus = false,
   onClick,
   ['data-testid']: dataTestId
@@ -55,6 +57,9 @@ export default ({
       {statusMessage && (
         <div
           className={classnames(styles.status, {
+            [styles.neutral]: statusMessageTone === 'neutral',
+            [styles.positive]: statusMessageTone === 'positive',
+            [styles.critical]: statusMessageTone === 'critical',
             [styles.status_show]: showStatus && statusMessage // eslint-disable-line css-modules/no-undef-class
           })}
         >

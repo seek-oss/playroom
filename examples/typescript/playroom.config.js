@@ -1,12 +1,13 @@
 module.exports = {
   components: './components/index.ts',
+  snippets: './snippets/index.ts',
   outputPath: './dist',
   webpackConfig: () => ({
     module: {
       rules: [
         {
           test: /\.tsx?$/,
-          include: /components/,
+          include: __dirname,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',

@@ -52,6 +52,7 @@ module.exports = {
   // Optional:
   title: 'My Awesome Library',
   themes: './src/themes',
+  snippets: './playroom/snippets.js',
   frameComponent: './playroom/FrameComponent.js',
   widths: [320, 375, 768, 1024],
   port: 9000,
@@ -87,6 +88,25 @@ To build your assets for production:
 
 ```bash
 $ npm run playroom:build
+```
+
+## Snippets
+
+Playroom allows you to quickly insert predefined snippets of code, providing live previews across themes and viewports as you navigate the list. These snippets can be configured via a `snippets` file that looks like this:
+
+```js
+export default [
+  {
+    group: 'Button',
+    name: 'Strong',
+    code: `
+      <Button weight="strong">
+        Button
+      </Button>
+    `
+  },
+  ...
+];
 ```
 
 ## Custom Frame Component

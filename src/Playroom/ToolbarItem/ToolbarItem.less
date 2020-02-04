@@ -105,11 +105,21 @@
   align-items: center;
   font: @text-standard;
   white-space: nowrap;
-  background-color: @green-1;
   transition: @transition-medium;
 
   &:not(.status_show) {
     opacity: 0;
+    pointer-events: none;
     transform: translateX(10px);
+  }
+
+  &.neutral {
+    background-color: @neutral;
+  }
+  &.positive {
+    background-color: @positive;
+  }
+  &.critical {
+    background-color: @critical;
   }
 }

@@ -1,9 +1,11 @@
-import React, { useContext, useReducer, ReactChild, useEffect } from 'react';
+import React, { useContext, ReactChild, useEffect, useState } from 'react';
 import copy from 'copy-to-clipboard';
 import classnames from 'classnames';
 import { PlayroomProps } from '../Playroom';
-import ViewPreference from '../ViewPreference/ViewPreference';
 import { StoreContext, EditorPosition } from '../../StoreContext/StoreContext';
+import ViewPreference from '../ViewPreference/ViewPreference';
+import Snippets from '../Snippets/Snippets';
+import AddSvg from './icons/AddSvg';
 import WidthsSvg from './icons/WidthsSvg';
 import ThemesSvg from './icons/ThemesSvg';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
@@ -18,82 +20,9 @@ import styles from './Toolbar.less';
 interface Props {
   themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
+  snippets: PlayroomProps['snippets'];
 }
 
-interface State {
-  open: boolean;
-  activePreference: 'theme' | 'width' | 'position' | null;
-  copying: boolean;
-}
-
-const initialState: State = {
-  open: false,
-  activePreference: null,
-  copying: false
-};
-
-type Action =
-  | { type: 'toggleThemes' }
-  | { type: 'toggleWidths' }
-  | { type: 'togglePosition' }
-  | { type: 'closeToolbar' }
-  | { type: 'copyLink'; payload: { active: boolean } };
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case 'toggleThemes': {
-      const isAlreadyActive = state.activePreference === 'theme';
-
-      return {
-        ...state,
-        open: !isAlreadyActive,
-        activePreference: isAlreadyActive ? null : 'theme'
-      };
-    }
-
-    case 'toggleWidths': {
-      const isAlreadyActive = state.activePreference === 'width';
-
-      return {
-        ...state,
-        open: !isAlreadyActive,
-        activePreference: isAlreadyActive ? null : 'width'
-      };
-    }
-
-    case 'togglePosition': {
-      const isAlreadyActive = state.activePreference === 'position';
-
-      return {
-        ...state,
-        open: false,
-        activePreference: isAlreadyActive ? null : 'position'
-      };
-    }
-
-    case 'closeToolbar': {
-      return {
-        ...state,
-        open: false,
-        activePreference: null
-      };
-    }
-
-    case 'copyLink': {
-      return {
-        ...state,
-        open: false,
-        activePreference: null,
-        copying: action.payload.active
-      };
-    }
-
-    default:
-      return state;
-  }
-};
-
-const positions = ['undocked', 'right', 'bottom'] as const;
 interface Icon {
   component: ReactChild;
   title: string;
@@ -113,40 +42,43 @@ const positionIcon: Record<EditorPosition, Icon> = {
   }
 };
 
-export default ({ themes: allThemes, widths: allWidths }: Props) => {
+export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const [
-    { visibleThemes, visibleWidths, editorPosition },
-    dispatchPreference
+    {
+      visibleThemes,
+      visibleWidths,
+      editorPosition,
+      activeToolbarPanel,
+      validCursorPosition
+    },
+    dispatch
   ] = useContext(StoreContext);
-
-  const [{ open, activePreference, copying }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [copying, setCopying] = useState(false);
 
   useEffect(() => {
     if (copying) {
       copy(window.location.href);
-      setTimeout(() => {
-        dispatch({ type: 'copyLink', payload: { active: false } });
-      }, 2000);
+      setTimeout(() => setCopying(false), 2000);
     }
   }, [copying]);
 
-  const isThemeOpen = activePreference === 'theme' && open;
-  const isWidthOpen = activePreference === 'width' && open;
-  const isPositionOpen = activePreference === 'position';
+  const isSnippetsOpen = activeToolbarPanel === 'snippets';
+  const isThemeOpen = activeToolbarPanel === 'themes';
+  const isWidthOpen = activeToolbarPanel === 'widths';
+  const isPositionOpen = activeToolbarPanel === 'positions';
+  const hasSnippets = snippets && snippets.length > 0;
   const hasThemes =
     allThemes.filter(themeName => themeName !== '__PLAYROOM__NO_THEME__')
       .length > 0;
+  const isOpen = Boolean(activeToolbarPanel);
 
   return (
     <div
       className={classnames(styles.root, {
-        [styles.isOpen]: open
+        [styles.isOpen]: isOpen && !isPositionOpen
       })}
     >
-      {(open || isPositionOpen) && (
+      {isOpen && (
         <div
           className={styles.backdrop}
           onClick={() => dispatch({ type: 'closeToolbar' })}
@@ -159,6 +91,26 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
               [styles.topButtons_hide]: isPositionOpen
             })}
           >
+            {hasSnippets && (
+              <ToolbarItem
+                active={isSnippetsOpen}
+                title={`Insert snippet (${
+                  navigator.platform.match('Mac') ? '\u2318' : 'Ctrl + '
+                }K)`}
+                showStatus={!validCursorPosition}
+                statusMessage="Can't insert snippet at cursor"
+                statusMessageTone="critical"
+                data-testid="toggleSnippets"
+                onClick={() =>
+                  dispatch({
+                    type: 'toggleToolbar',
+                    payload: { panel: 'snippets' }
+                  })
+                }
+              >
+                <AddSvg />
+              </ToolbarItem>
+            )}
             {hasThemes && (
               <ToolbarItem
                 active={isThemeOpen}
@@ -168,7 +120,12 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
                     ? `Showing ${visibleThemes.length} of ${allThemes.length} themes`
                     : 'Configure themes'
                 }
-                onClick={() => dispatch({ type: 'toggleThemes' })}
+                onClick={() =>
+                  dispatch({
+                    type: 'toggleToolbar',
+                    payload: { panel: 'themes' }
+                  })
+                }
               >
                 <ThemesSvg />
               </ToolbarItem>
@@ -181,7 +138,12 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
                   ? `Showing ${visibleWidths.length} of ${allWidths.length} widths`
                   : 'Configure widths'
               }
-              onClick={() => dispatch({ type: 'toggleWidths' })}
+              onClick={() =>
+                dispatch({
+                  type: 'toggleToolbar',
+                  payload: { panel: 'widths' }
+                })
+              }
               data-testid="toggleWidths"
             >
               <WidthsSvg />
@@ -191,10 +153,9 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
               active={copying}
               title="Copy link to clipboard"
               statusMessage="Link copied to clipboard"
+              statusMessageTone="positive"
               showStatus={copying}
-              onClick={() =>
-                dispatch({ type: 'copyLink', payload: { active: true } })
-              }
+              onClick={() => setCopying(true)}
               data-testid="copyToClipboard"
             >
               <ShareSvg />
@@ -204,7 +165,12 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
           <ToolbarItem
             active={isPositionOpen}
             title="Configure editor position"
-            onClick={() => dispatch({ type: 'togglePosition' })}
+            onClick={() =>
+              dispatch({
+                type: 'toggleToolbar',
+                payload: { panel: 'positions' }
+              })
+            }
           >
             {positionIcon[editorPosition].component}
           </ToolbarItem>
@@ -215,28 +181,59 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
             })}
             onClick={() => dispatch({ type: 'closeToolbar' })}
           >
-            {positions
+            {Object.keys(positionIcon)
               .filter(pos => pos !== editorPosition)
-              .map(pos => (
-                <div key={pos} hidden={isPositionOpen ? undefined : true}>
-                  <ToolbarItem
-                    title={positionIcon[pos].title}
-                    onClick={() => {
-                      dispatchPreference({
-                        type: 'updateEditorPosition',
-                        payload: { position: pos }
-                      });
-                      dispatch({ type: 'closeToolbar' });
-                    }}
+              .map(pos => {
+                const position = pos as EditorPosition;
+                return (
+                  <div
+                    key={position}
+                    hidden={isPositionOpen ? undefined : true}
                   >
-                    {positionIcon[pos].component}
-                  </ToolbarItem>
-                </div>
-              ))}
+                    <ToolbarItem
+                      title={positionIcon[position].title}
+                      onClick={() => {
+                        dispatch({
+                          type: 'updateEditorPosition',
+                          payload: { position }
+                        });
+                      }}
+                    >
+                      {positionIcon[position].component}
+                    </ToolbarItem>
+                  </div>
+                );
+              })}
           </div>
         </div>
 
         <div className={styles.panel}>
+          {isSnippetsOpen && (
+            <div
+              hidden={isSnippetsOpen ? undefined : true}
+              className={styles.preference}
+            >
+              <Snippets
+                snippets={snippets}
+                onHighlight={snippet => {
+                  dispatch({
+                    type: 'previewSnippet',
+                    payload: { snippet }
+                  });
+                }}
+                onClose={snippet => {
+                  if (snippet) {
+                    dispatch({
+                      type: 'persistSnippet',
+                      payload: { snippet }
+                    });
+                  } else {
+                    dispatch({ type: 'closeToolbar' });
+                  }
+                }}
+              />
+            </div>
+          )}
           {hasThemes && (
             <div
               hidden={isThemeOpen ? undefined : true}
@@ -248,17 +245,15 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
                 available={allThemes}
                 onChange={newThemes => {
                   if (newThemes) {
-                    dispatchPreference({
+                    dispatch({
                       type: 'updateVisibleThemes',
                       payload: { themes: newThemes }
                     });
                   } else {
-                    dispatchPreference({ type: 'resetVisibleThemes' });
+                    dispatch({ type: 'resetVisibleThemes' });
                   }
                 }}
-                onReset={() =>
-                  dispatchPreference({ type: 'resetVisibleThemes' })
-                }
+                onReset={() => dispatch({ type: 'resetVisibleThemes' })}
               />
             </div>
           )}
@@ -272,15 +267,15 @@ export default ({ themes: allThemes, widths: allWidths }: Props) => {
               available={allWidths}
               onChange={newWidths => {
                 if (newWidths) {
-                  dispatchPreference({
+                  dispatch({
                     type: 'updateVisibleWidths',
                     payload: { widths: newWidths }
                   });
                 } else {
-                  dispatchPreference({ type: 'resetVisibleWidths' });
+                  dispatch({ type: 'resetVisibleWidths' });
                 }
               }}
-              onReset={() => dispatchPreference({ type: 'resetVisibleWidths' })}
+              onReset={() => dispatch({ type: 'resetVisibleWidths' })}
             />
           </div>
         </div>

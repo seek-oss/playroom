@@ -1,4 +1,5 @@
 require('./commands');
+const { getFirstFrame } = require('./utils');
 
 beforeEach(() => {
   cy.visit('http://localhost:9000')
@@ -7,5 +8,10 @@ beforeEach(() => {
       const { storageKey } = win.__playroomConfig__;
       indexedDB.deleteDatabase(storageKey);
     })
-    .visit('http://localhost:9000');
+    .reload()
+    .then(() => {
+      getFirstFrame().then(
+        $iframe => new Cypress.Promise(resolve => $iframe.on('load', resolve))
+      );
+    });
 });

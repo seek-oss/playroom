@@ -1,6 +1,10 @@
 // Grid
 @row-height: 6px;
 @gutter-width: 40px;
+@interaction-height: 44px;
+
+// Field
+@field-gutter: 15px;
 
 // Typography
 @typography-family: Helvetica, arial, sans-serif;
@@ -12,12 +16,16 @@
 @text-small: normal 12px @typography-family;
 @text-xsmall: normal 10px @typography-family;
 
+// Weight
+@bold: 700;
+
 // Palette
 @blue-1: #0088ff;
 @blue-2: #005ad2;
 @blue-3: #00439c;
 @blue-4: #040080;
 @green-1: #c5f5e9;
+@red-1: #fed6e1;
 @white: #fff;
 @gray-1: #f4f4f4;
 @gray-2: #e8e8e8;
@@ -25,6 +33,15 @@
 @gray-4: #515151;
 @gray-5: #1e1e1e;
 @black: #000;
+
+// Tones
+@positive: @green-1;
+@critical: @red-1;
+@neutral: @gray-2;
+
+// Highlights
+@highlight: @blue-2;
+@selection: fade(@blue-2, 10%);
 
 // Box Shadow:
 @shadow-small: 0 2px 8px rgba(18, 21, 26, 0.3);
@@ -55,7 +72,7 @@
 @code-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
 @code-gutter-size: @gutter-width;
 @code-marker-size: 12px;
-@code-marker-color: @blue-2;
+@code-marker-color: @highlight;
 @code-format-tag: @blue-4;
 @code-format-attribute: @blue-2;
 @code-format-string: @blue-3;
@@ -63,6 +80,7 @@
 @code-format-variable: @blue-1;
 @code-hint-bg: @blue-1;
 @code-hint-fg: @white;
+@code-selection: @selection;
 
 // Toolbar
 @toolbar-closed-size: 60px;
@@ -71,6 +89,13 @@
 @toolbar-max-item-count: 4;
 @toolbar-foregound: @gray-4;
 @toolbar-background: @white;
-@toolbar-highlight: @blue-2;
+@toolbar-highlight: @highlight;
 @toolbar-border-color: @gray-2;
 @toolbar-border-thickness: 1px;
+
+// Snippets
+@snippet-background: @toolbar-background;
+@snippet-foreground: @toolbar-foregound;
+@snippet-highlight: @toolbar-highlight;
+@snippet-selection: @selection;
+@snippet-gutter: 6px;

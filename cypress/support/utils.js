@@ -1,25 +1,34 @@
-const getCodeEditor = () => cy.get('.CodeMirror');
+const WAIT_FOR_FRAME_TO_RENDER = 1000;
 
-export const typeCode = code =>
-  getCodeEditor()
-    .click()
-    .focused()
-    .clear({ force: true })
-    .type(code, { force: true, delay: 100 })
-    .wait(1000);
-
-export const formatCode = () =>
-  getCodeEditor()
-    .click()
-    .focused()
-    .type(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}s`)
-    .wait(1000);
+const getCodeEditor = () => cy.get('.CodeMirror-code');
 
 export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
 
 export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
 export const getFirstFrame = () => getPreviewFrames().first();
+
+export const visit = url =>
+  cy
+    .visit(url)
+    .reload()
+    .then(() => {
+      getFirstFrame().then(
+        $iframe => new Cypress.Promise(resolve => $iframe.on('load', resolve))
+      );
+    });
+
+export const typeCode = code =>
+  getCodeEditor()
+    .focused()
+    .type(code, { force: true, delay: 200 })
+    .wait(WAIT_FOR_FRAME_TO_RENDER);
+
+export const formatCode = () =>
+  getCodeEditor()
+    .focused()
+    .type(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}s`)
+    .wait(WAIT_FOR_FRAME_TO_RENDER);
 
 export const selectWidthPreferenceByIndex = index =>
   cy
@@ -29,14 +38,48 @@ export const selectWidthPreferenceByIndex = index =>
     .eq(index)
     .then(el => el.get(0).click());
 
-export const assertFirstFrameContains = async text => {
-  const iframe = await getFirstFrame();
+export const toggleSnippets = () =>
+  cy.get('[data-testid="toggleSnippets"]').click();
 
-  iframe.contains(text);
+export const filterSnippets = search =>
+  cy
+    .get('[data-testid="filterSnippets"]')
+    .type(search, { force: true })
+    .wait(200);
+
+export const assertSnippetsListIsVisible = () =>
+  cy.get('[data-testid="snippets"]').should('be.visible');
+
+const getSnippets = () => cy.get('[data-testid="snippet-list"] li');
+
+export const selectSnippetByIndex = index => getSnippets().eq(index);
+
+export const mouseOverSnippet = index =>
+  selectSnippetByIndex(index)
+    .trigger('mousemove', { force: true }) // force stops cypress scrolling the panel out of the editor
+    .wait(WAIT_FOR_FRAME_TO_RENDER);
+
+export const assertSnippetCount = count =>
+  getSnippets().should('have.length', count);
+
+export const assertFirstFrameContains = text => {
+  getFirstFrame().then($el =>
+    cy
+      .wrap($el.contents().find('body'))
+      .wait(WAIT_FOR_FRAME_TO_RENDER)
+      .then(el => {
+        expect(el.get(0).innerText).to.eq(text);
+      })
+  );
 };
 
 export const assertCodePaneContains = text => {
-  getCodeEditor().contains(text);
+  getCodeEditor().then($el => {
+    const code = $el.get(0).innerText;
+    // removes code mirrors invisible last line character placeholder
+    // which is inserted to preserve prettiers new line at end of string.
+    expect(code.replace(/[\u200b]$/, '')).to.eq(text);
+  });
 };
 
 export const assertCodePaneLineCount = lines => {
