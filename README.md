@@ -92,7 +92,7 @@ $ npm run playroom:build
 
 ## Snippets
 
-Snippets allows the definition of patterns or larger compositions of components. A snippet is previewed in-situ across themes and viewports as you navigate the list, supporting faster exploration and prototyping workflow.
+Playroom allows you to quickly insert predefined snippets of code, providing live previews across themes and viewports as you navigate the list. These snippets can be configured via a `snippets` file that looks like this:
 
 ```js
 export default [
