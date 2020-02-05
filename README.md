@@ -62,6 +62,7 @@ module.exports = {
       Hello World!
     </Button>
   `,
+  baseUrl: '/playroom/',
   webpackConfig: () => ({
     // Custom webpack config goes here...
   })
