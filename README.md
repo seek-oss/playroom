@@ -152,6 +152,10 @@ module.exports = {
 };
 ```
 
+## Storybook Integration
+
+You can run Playroom inside Storybook and use each story source as initial code with [storybook-addon-playroom](https://github.com/rbardini/storybook-addon-playroom).
+
 ## License
 
 MIT.
