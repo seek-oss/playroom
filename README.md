@@ -152,6 +152,18 @@ module.exports = {
 };
 ```
 
+You can also customise `react-docgen-typescript` parser options by providing a `typeScriptParserOptions` configuration option.
+
+```js
+module.exports = {
+  typeScriptParserOptions: {
+    ...
+  }
+}
+```
+
+This is passed directly through to `react-docgen-typescript` and has the same type signature as documented here [parserOptions](https://github.com/styleguidist/react-docgen-typescript#parseroptions).
+
 ## License
 
 MIT.
