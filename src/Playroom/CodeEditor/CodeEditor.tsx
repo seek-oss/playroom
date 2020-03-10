@@ -169,7 +169,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
 
   useEffect(() => {
     if (editorInstanceRef.current) {
-      if (code !== editorInstanceRef.current.getValue()) {
+      if (!previewCode && code !== editorInstanceRef.current.getValue()) {
         // get cursor position
         const { line, ch } = editorInstanceRef.current.getCursor();
         // then update value
@@ -179,7 +179,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         validateCode(editorInstanceRef.current, code);
       }
     }
-  }, [code, setCursorPosition]);
+  }, [code, previewCode, setCursorPosition]);
 
   useEffect(() => {
     if (editorInstanceRef.current && !editorInstanceRef.current.hasFocus()) {
