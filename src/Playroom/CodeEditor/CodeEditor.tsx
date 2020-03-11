@@ -104,7 +104,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
 
   const [debouncedChange] = useDebouncedCallback(
     newCode => onChange(newCode),
-    250
+    100
   );
 
   const setCursorPosition = useCallback(
@@ -169,17 +169,18 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
 
   useEffect(() => {
     if (editorInstanceRef.current) {
-      if (!previewCode && code !== editorInstanceRef.current.getValue()) {
-        // get cursor position
-        const { line, ch } = editorInstanceRef.current.getCursor();
-        // then update value
-        editorInstanceRef.current.setValue(code);
-        // then reinstate cursor position
-        setCursorPosition({ line, ch });
-        validateCode(editorInstanceRef.current, code);
+      if (
+        editorInstanceRef.current.hasFocus() ||
+        code === editorInstanceRef.current.getValue() ||
+        previewCode
+      ) {
+        return;
       }
+
+      editorInstanceRef.current.setValue(code);
+      validateCode(editorInstanceRef.current, code);
     }
-  }, [code, previewCode, setCursorPosition]);
+  }, [code, previewCode]);
 
   useEffect(() => {
     if (editorInstanceRef.current && !editorInstanceRef.current.hasFocus()) {
