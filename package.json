@@ -129,8 +129,10 @@
     "husky": "^4.2.1",
     "jest": "^25.1.0",
     "lint-staged": "^10.0.3",
+    "node-sass": "^4.13.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "sass-loader": "^8.0.2",
     "semantic-release": "^17.0.1",
     "serve": "^11.3.0",
     "start-server-and-test": "^1.10.8"
