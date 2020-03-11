@@ -13,6 +13,8 @@ interface PreviewProps {
   widths: PlayroomProps['widths'];
 }
 
+const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
+
 export default function Preview({ code, themes, widths }: PreviewProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
 
@@ -51,7 +53,9 @@ export default function Preview({ code, themes, widths }: PreviewProps) {
           </div>
           <Iframe
             intersectionRootRef={scrollingPanelRef}
-            src={`frame.html#?themeName=${encodeURIComponent(
+            src={`${
+              playroomConfig.baseUrl
+            }frame.html#?themeName=${encodeURIComponent(
               frame.theme
             )}&code=${encodeURIComponent(renderCode)}`}
             className={styles.frame}
