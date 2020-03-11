@@ -208,7 +208,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
         </div>
 
         <div className={styles.panel}>
-          {hasSnippets && (
+          {isSnippetsOpen && (
             <div
               hidden={isSnippetsOpen ? undefined : true}
               className={styles.preference}

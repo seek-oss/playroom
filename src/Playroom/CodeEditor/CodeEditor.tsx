@@ -221,7 +221,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         setCursorPosition(cursorPosition);
       }}
       onChange={(editorInstance, data, newCode) => {
-        if (editorInstance.hasFocus()) {
+        if (editorInstance.hasFocus() && !previewCode) {
           validateCode(editorInstance, newCode);
           debouncedChange(newCode);
         }
