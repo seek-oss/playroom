@@ -1,7 +1,9 @@
-import { transform } from 'buble';
+import { transform } from '@babel/standalone';
 
 export const compileJsx = (code: string) =>
-  transform(`<React.Fragment>${code.trim() || ''}</React.Fragment>`).code;
+  transform(`<React.Fragment>${code.trim() || ''}</React.Fragment>`, {
+    presets: ['react']
+  }).code;
 
 export const validateCode = (code: string) => {
   try {
