@@ -74,7 +74,6 @@
     "autoprefixer": "^9.7.4",
     "babel-loader": "^8.0.6",
     "base64-url": "^2.3.3",
-    "buble": "^0.19.8",
     "classnames": "^2.2.6",
     "codemirror": "^5.51.0",
     "command-line-args": "^5.1.1",
