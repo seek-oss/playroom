@@ -1,6 +1,6 @@
 import React, { Component, ReactChild } from 'react';
 
-interface Props {
+export interface FooProps {
   children?: ReactChild;
   color: 'red' | 'blue';
 }
@@ -9,7 +9,7 @@ const parent = {
   padding: '10px 10px 10px 15px'
 };
 
-export default class Foo extends Component<Props> {
+export class Foo extends Component<FooProps> {
   render() {
     const { color = 'black', children } = this.props;
 
@@ -20,3 +20,5 @@ export default class Foo extends Component<Props> {
     );
   }
 }
+
+export const NotAComponent = 123;

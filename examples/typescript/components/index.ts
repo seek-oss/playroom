@@ -1,2 +1,2 @@
-export { default as Foo } from './Foo/Foo';
+export * from './Foo';
 export { default as Bar } from './Bar/Bar';
