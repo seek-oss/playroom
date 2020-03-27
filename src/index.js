@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import Playroom from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';
+import { extractComponents } from './utils/extractComponents';
 
 const polyfillIntersectionObserver = () =>
   typeof window.IntersectionObserver !== 'undefined'
@@ -25,7 +26,7 @@ polyfillIntersectionObserver().then(() => {
     render(
       <StoreProvider themes={themeNames} widths={widths}>
         <Playroom
-          components={components}
+          components={extractComponents(components)}
           widths={widths}
           themes={themeNames}
           snippets={
