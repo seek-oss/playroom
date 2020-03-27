@@ -18,6 +18,8 @@ describe('extractComponents', () => {
       otherFunction: () => {
         // Not a React function.
       },
+
+      // These values should be ignored.
       nullValue: null,
       numberValue: 123,
       stringValue: 'abc',
