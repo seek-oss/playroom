@@ -13,7 +13,7 @@ export const visit = url =>
     .visit(url)
     .reload()
     .then(() => {
-      getFirstFrame().then(
+      return getFirstFrame().then(
         $iframe => new Cypress.Promise(resolve => $iframe.on('load', resolve))
       );
     });
