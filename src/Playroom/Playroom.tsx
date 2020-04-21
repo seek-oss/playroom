@@ -7,6 +7,7 @@ import WindowPortal from './WindowPortal';
 import { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
 import Toolbar from './Toolbar/Toolbar';
+import ChevronSvg from './Toolbar/icons/ChevronSvg';
 import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
 
 // @ts-ignore
@@ -53,6 +54,17 @@ const resizableConfig = (position: EditorPosition = 'bottom') => ({
   topLeft: false
 });
 
+const resolveDirection = (
+  editorPosition: EditorPosition,
+  editorHidden: boolean
+) => {
+  if (editorPosition === 'right') {
+    return editorHidden ? 'left' : 'right';
+  }
+
+  return editorHidden ? 'up' : 'down';
+};
+
 export interface PlayroomProps {
   components: Record<string, ComponentType>;
   themes: string[];
@@ -66,6 +78,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       editorPosition,
       editorHeight,
       editorWidth,
+      editorHidden,
       visibleThemes,
       visibleWidths,
       code,
@@ -142,7 +155,8 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       <Resizable
         className={classnames(styles.resizeableContainer, {
           [styles.resizeableContainer_isRight]: isVerticalEditor,
-          [styles.resizeableContainer_isBottom]: isHorizontalEditor
+          [styles.resizeableContainer_isBottom]: isHorizontalEditor,
+          [styles.resizeableContainer_isHidden]: editorHidden
         })}
         defaultSize={sizeStyles}
         size={sizeStyles}
@@ -162,11 +176,13 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       <div
         className={styles.previewContainer}
         style={
-          {
-            right: { right: editorWidth },
-            bottom: { bottom: editorHeight },
-            undocked: undefined
-          }[editorPosition]
+          editorHidden
+            ? undefined
+            : {
+                right: { right: editorWidth },
+                bottom: { bottom: editorHeight },
+                undocked: undefined
+              }[editorPosition]
         }
       >
         <Preview
@@ -178,6 +194,25 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             visibleWidths && visibleWidths.length > 0 ? visibleWidths : widths
           }
         />
+        <div
+          className={classnames(styles.toggleEditorContainer, {
+            [styles.isBottom]: isHorizontalEditor
+          })}
+        >
+          <button
+            className={styles.toggleEditorButton}
+            title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
+            onClick={() =>
+              dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
+            }
+          >
+            <ChevronSvg
+              height={16}
+              width={16}
+              direction={resolveDirection(editorPosition, editorHidden)}
+            />
+          </button>
+        </div>
       </div>
       {editorContainer}
     </div>

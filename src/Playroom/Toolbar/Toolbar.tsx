@@ -1,4 +1,5 @@
-import React, { useContext, ReactChild, useEffect, useState } from 'react';
+import React, { useContext, ReactChild, useState, useCallback } from 'react';
+import { useTimeoutFn } from 'react-use';
 import copy from 'copy-to-clipboard';
 import classnames from 'classnames';
 import { PlayroomProps } from '../Playroom';
@@ -54,13 +55,19 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
     dispatch
   ] = useContext(StoreContext);
   const [copying, setCopying] = useState(false);
+  const [isReady, cancel, reset] = useTimeoutFn(() => setCopying(false), 2000);
 
-  useEffect(() => {
-    if (copying) {
-      copy(window.location.href);
-      setTimeout(() => setCopying(false), 2000);
+  const copyHandler = useCallback(() => {
+    copy(window.location.href);
+    dispatch({ type: 'closeToolbar' });
+    setCopying(true);
+
+    if (isReady() === false) {
+      cancel();
     }
-  }, [copying]);
+
+    reset();
+  }, [cancel, dispatch, isReady, reset]);
 
   const isSnippetsOpen = activeToolbarPanel === 'snippets';
   const isThemeOpen = activeToolbarPanel === 'themes';
@@ -97,16 +104,19 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                 title={`Insert snippet (${
                   navigator.platform.match('Mac') ? '\u2318' : 'Ctrl + '
                 }K)`}
-                showStatus={!validCursorPosition}
+                showStatus={
+                  !copying && !validCursorPosition && !activeToolbarPanel
+                }
                 statusMessage="Can't insert snippet at cursor"
                 statusMessageTone="critical"
                 data-testid="toggleSnippets"
-                onClick={() =>
+                onClick={() => {
+                  setCopying(false);
                   dispatch({
                     type: 'toggleToolbar',
                     payload: { panel: 'snippets' }
-                  })
-                }
+                  });
+                }}
               >
                 <AddSvg />
               </ToolbarItem>
@@ -120,12 +130,13 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                     ? `Showing ${visibleThemes.length} of ${allThemes.length} themes`
                     : 'Configure themes'
                 }
-                onClick={() =>
+                onClick={() => {
+                  setCopying(false);
                   dispatch({
                     type: 'toggleToolbar',
                     payload: { panel: 'themes' }
-                  })
-                }
+                  });
+                }}
               >
                 <ThemesSvg />
               </ToolbarItem>
@@ -138,24 +149,25 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                   ? `Showing ${visibleWidths.length} of ${allWidths.length} widths`
                   : 'Configure widths'
               }
-              onClick={() =>
+              onClick={() => {
+                setCopying(false);
                 dispatch({
                   type: 'toggleToolbar',
                   payload: { panel: 'widths' }
-                })
-              }
+                });
+              }}
               data-testid="toggleWidths"
             >
               <WidthsSvg />
             </ToolbarItem>
 
             <ToolbarItem
-              active={copying}
+              active={copying && !activeToolbarPanel}
               title="Copy link to clipboard"
               statusMessage="Link copied to clipboard"
               statusMessageTone="positive"
-              showStatus={copying}
-              onClick={() => setCopying(true)}
+              showStatus={copying && !activeToolbarPanel}
+              onClick={copyHandler}
               data-testid="copyToClipboard"
             >
               <ShareSvg />
@@ -185,7 +197,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               .filter(pos => pos !== editorPosition)
               .map(pos => {
                 const position = pos as EditorPosition;
-                return (
+                return position === 'undocked' ? null : (
                   <div
                     key={position}
                     hidden={isPositionOpen ? undefined : true}
