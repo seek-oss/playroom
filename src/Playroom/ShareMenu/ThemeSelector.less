@@ -1,0 +1,30 @@
+@import (reference) '../variables.less';
+
+.root {
+  display: flex;
+  position: relative;
+}
+
+.label {
+  font: @text-standard;
+  padding-right: 5px;
+}
+
+.selectValue {
+  user-select: none;
+  pointer-events: none;
+  font: @text-standard;
+  font-weight: @bold;
+  padding-right: 5px;
+}
+
+.select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  opacity: 0;
+  font: @text-standard;
+}

@@ -23,6 +23,29 @@ const createUrl = ({ baseUrl, code, themes, widths }) => {
   return path;
 };
 
+const createPrototypeUrl = ({ baseUrl, code, theme }) => {
+  let path = '';
+
+  if (code || theme) {
+    const data = JSON.stringify({
+      ...(code ? { code } : {}),
+      ...(theme ? { theme } : {})
+    });
+
+    const compressedData = lzString.compressToEncodedURIComponent(data);
+    path = `/prototype.html#?code=${compressedData}`;
+  }
+
+  if (baseUrl) {
+    const trimmedBaseUrl = baseUrl.replace(/\/$/, '');
+
+    return `${trimmedBaseUrl}${path}`;
+  }
+
+  return path;
+};
+
 module.exports = {
-  createUrl
+  createUrl,
+  createPrototypeUrl
 };

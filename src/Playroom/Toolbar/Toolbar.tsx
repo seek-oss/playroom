@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { PlayroomProps } from '../Playroom';
 import { StoreContext, EditorPosition } from '../../StoreContext/StoreContext';
 import ViewPreference from '../ViewPreference/ViewPreference';
+import ShareMenu from '../ShareMenu/ShareMenu';
 import Snippets from '../Snippets/Snippets';
 import AddSvg from './icons/AddSvg';
 import WidthsSvg from './icons/WidthsSvg';
@@ -49,7 +50,8 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
       visibleWidths,
       editorPosition,
       activeToolbarPanel,
-      validCursorPosition
+      validCursorPosition,
+      code
     },
     dispatch
   ] = useContext(StoreContext);
@@ -66,6 +68,8 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const isThemeOpen = activeToolbarPanel === 'themes';
   const isWidthOpen = activeToolbarPanel === 'widths';
   const isPositionOpen = activeToolbarPanel === 'positions';
+  const isShareOpen = activeToolbarPanel === 'share';
+
   const hasSnippets = snippets && snippets.length > 0;
   const hasThemes =
     allThemes.filter(themeName => themeName !== '__PLAYROOM__NO_THEME__')
@@ -150,12 +154,14 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             </ToolbarItem>
 
             <ToolbarItem
-              active={copying}
-              title="Copy link to clipboard"
-              statusMessage="Link copied to clipboard"
-              statusMessageTone="positive"
-              showStatus={copying}
-              onClick={() => setCopying(true)}
+              active={isShareOpen}
+              title="Share playroom"
+              onClick={() =>
+                dispatch({
+                  type: 'toggleToolbar',
+                  payload: { panel: 'share' }
+                })
+              }
               data-testid="copyToClipboard"
             >
               <ShareSvg />
@@ -277,6 +283,13 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               }}
               onReset={() => dispatch({ type: 'resetVisibleWidths' })}
             />
+          </div>
+
+          <div
+            hidden={isShareOpen ? undefined : true}
+            className={styles.preference}
+          >
+            <ShareMenu themes={allThemes} code={code} />
           </div>
         </div>
       </div>

@@ -14,3 +14,11 @@ interface CreateUrlOptions {
 }
 
 export const createUrl: (options: CreateUrlOptions) => string;
+
+interface CreatePrototypeUrlOptions {
+  baseUrl?: string;
+  code?: string;
+  theme?: string;
+}
+
+export const createPrototypeUrl: (options: CreatePrototypeUrlOptions) => string;
