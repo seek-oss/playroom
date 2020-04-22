@@ -3,7 +3,6 @@
 @frame-name-height: 30px;
 
 .root {
-  background-color: @preview-background;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
@@ -50,7 +49,7 @@
   transition: @transition-medium;
 
   .frameContainer:not(:hover) & {
-    opacity: 0.3;
+    opacity: @preview-inactive-label-opacity;
   }
 }
 
