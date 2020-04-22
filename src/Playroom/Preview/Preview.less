@@ -41,16 +41,22 @@
   }
 }
 
-.frameName {
+.frameDetails {
   flex: 0 0 @frame-name-height;
-  font: @text-standard;
-  color: @preview-foregound;
-  line-height: @frame-name-height;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   transition: @transition-medium;
 
   .frameContainer:not(:hover) & {
     opacity: @preview-inactive-label-opacity;
   }
+}
+
+.frameName {
+  font: @text-standard;
+  color: @preview-foregound;
+  line-height: @frame-name-height;
 }
 
 .strong {

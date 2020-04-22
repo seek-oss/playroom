@@ -49,8 +49,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
       visibleWidths,
       editorPosition,
       activeToolbarPanel,
-      validCursorPosition,
-      code
+      validCursorPosition
     },
     dispatch
   ] = useContext(StoreContext);
@@ -280,7 +279,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             hidden={isShareOpen ? undefined : true}
             className={styles.preference}
           >
-            <ShareMenu themes={allThemes} code={code} />
+            <ShareMenu themes={allThemes} />
           </div>
         </div>
       </div>

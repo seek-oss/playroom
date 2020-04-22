@@ -33,7 +33,7 @@ const createPrototypeUrl = ({ baseUrl, code, theme }) => {
     });
 
     const compressedData = lzString.compressToEncodedURIComponent(data);
-    path = `/prototype.html#?code=${compressedData}`;
+    path = `/prototype#?code=${compressedData}`;
   }
 
   if (baseUrl) {
