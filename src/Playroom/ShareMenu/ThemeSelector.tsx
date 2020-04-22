@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ChevronIcon from './ChevronIcon';
+import ChevronIcon from '../Toolbar/icons/ChevronSvg';
 // @ts-ignore
 import styles from './ThemeSelector.less';
 
@@ -16,7 +16,7 @@ export default ({ themes, activeTheme, onChange }: ThemeSelectorProps) => (
     </label>
 
     <div className={styles.selectValue}>{activeTheme}</div>
-    <ChevronIcon />
+    <ChevronIcon size={16} />
 
     <select
       className={styles.select}

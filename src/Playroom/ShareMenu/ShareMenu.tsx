@@ -1,17 +1,16 @@
-import React, { Fragment, ReactNode, useState, useEffect, useRef } from 'react';
-import copy from 'copy-to-clipboard';
+import React, { Fragment, ReactNode, useState } from 'react';
 
-import CopyIcon from './CopyIcon';
 import ThemeSelector from './ThemeSelector';
+import CopyButton from './CopyButton';
 import { createPrototypeUrl } from '../../../utils';
 
 // @ts-ignore
+// eslint-disable-next-line css-modules/no-unused-class
 import styles from './ShareMenu.less';
 
 const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
 const Spacer = () => <div className={styles.vspace} />;
-const SideSpacer = () => <div className={styles.hspace} />;
 const Divider = () => <div className={styles.divider} />;
 
 const Section = ({
@@ -35,48 +34,6 @@ const Section = ({
     {children}
   </Fragment>
 );
-
-interface CopyButtonProps {
-  copyContent: string;
-}
-const CopyButton = ({ copyContent }: CopyButtonProps) => {
-  const [copying, setCopying] = useState(false);
-  const copyLocked = useRef(false);
-
-  useEffect(() => {
-    if (copying && !copyLocked.current) {
-      copyLocked.current = true;
-
-      copy(copyContent);
-
-      setTimeout(() => {
-        copyLocked.current = false;
-
-        setCopying(false);
-      }, 2000);
-    }
-  }, [copying, copyContent]);
-
-  const onClick = () => {
-    if (!copying) {
-      setCopying(true);
-    }
-  };
-
-  return (
-    <button className={styles.copyToClipboard} onClick={onClick}>
-      {copying ? (
-        'Copied'
-      ) : (
-        <Fragment>
-          Copy link
-          <SideSpacer />
-          <CopyIcon size="small" />
-        </Fragment>
-      )}
-    </button>
-  );
-};
 
 interface ShareMenuProps {
   themes: string[];
