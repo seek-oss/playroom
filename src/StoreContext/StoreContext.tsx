@@ -46,6 +46,7 @@ interface State {
   activeToolbarPanel?: ToolbarPanel;
   validCursorPosition: boolean;
   cursorPosition: CursorPosition;
+  editorHidden: boolean;
   editorPosition: EditorPosition;
   editorHeight: number;
   editorWidth: number;
@@ -65,6 +66,8 @@ type Action =
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
   | { type: 'toggleToolbar'; payload: { panel: ToolbarPanel } }
   | { type: 'closeToolbar' }
+  | { type: 'hideEditor' }
+  | { type: 'showEditor' }
   | {
       type: 'updateEditorPosition';
       payload: { position: EditorPosition };
@@ -202,6 +205,21 @@ const createReducer = ({
       return resetPreview(currentState);
     }
 
+    case 'hideEditor': {
+      return {
+        ...state,
+        activeToolbarPanel: undefined,
+        editorHidden: true
+      };
+    }
+
+    case 'showEditor': {
+      return {
+        ...state,
+        editorHidden: false
+      };
+    }
+
     case 'updateEditorPosition': {
       const { position } = action.payload;
       const { activeToolbarPanel, ...currentState } = state;
@@ -289,6 +307,7 @@ const initialState: State = {
   code: exampleCode,
   validCursorPosition: true,
   cursorPosition: { line: 0, ch: 0 },
+  editorHidden: false,
   editorPosition: defaultPosition,
   editorHeight: 300,
   editorWidth: 360,

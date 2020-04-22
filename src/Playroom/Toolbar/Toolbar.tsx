@@ -1,5 +1,4 @@
-import React, { useContext, ReactChild, useEffect, useState } from 'react';
-import copy from 'copy-to-clipboard';
+import React, { useContext, ReactChild } from 'react';
 import classnames from 'classnames';
 import { PlayroomProps } from '../Playroom';
 import { StoreContext, EditorPosition } from '../../StoreContext/StoreContext';
@@ -55,14 +54,6 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
     },
     dispatch
   ] = useContext(StoreContext);
-  const [copying, setCopying] = useState(false);
-
-  useEffect(() => {
-    if (copying) {
-      copy(window.location.href);
-      setTimeout(() => setCopying(false), 2000);
-    }
-  }, [copying]);
 
   const isSnippetsOpen = activeToolbarPanel === 'snippets';
   const isThemeOpen = activeToolbarPanel === 'themes';
@@ -101,16 +92,16 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                 title={`Insert snippet (${
                   navigator.platform.match('Mac') ? '\u2318' : 'Ctrl + '
                 }K)`}
-                showStatus={!validCursorPosition}
+                showStatus={!validCursorPosition && !activeToolbarPanel}
                 statusMessage="Can't insert snippet at cursor"
                 statusMessageTone="critical"
                 data-testid="toggleSnippets"
-                onClick={() =>
+                onClick={() => {
                   dispatch({
                     type: 'toggleToolbar',
                     payload: { panel: 'snippets' }
-                  })
-                }
+                  });
+                }}
               >
                 <AddSvg />
               </ToolbarItem>
@@ -124,12 +115,12 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                     ? `Showing ${visibleThemes.length} of ${allThemes.length} themes`
                     : 'Configure themes'
                 }
-                onClick={() =>
+                onClick={() => {
                   dispatch({
                     type: 'toggleToolbar',
                     payload: { panel: 'themes' }
-                  })
-                }
+                  });
+                }}
               >
                 <ThemesSvg />
               </ToolbarItem>
@@ -142,12 +133,12 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                   ? `Showing ${visibleWidths.length} of ${allWidths.length} widths`
                   : 'Configure widths'
               }
-              onClick={() =>
+              onClick={() => {
                 dispatch({
                   type: 'toggleToolbar',
                   payload: { panel: 'widths' }
-                })
-              }
+                });
+              }}
               data-testid="toggleWidths"
             >
               <WidthsSvg />
@@ -191,7 +182,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               .filter(pos => pos !== editorPosition)
               .map(pos => {
                 const position = pos as EditorPosition;
-                return (
+                return position === 'undocked' ? null : (
                   <div
                     key={position}
                     hidden={isPositionOpen ? undefined : true}
