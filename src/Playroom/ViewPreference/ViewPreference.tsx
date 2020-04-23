@@ -1,5 +1,7 @@
 import React from 'react';
 import Checkmark from './CheckmarkSvg';
+import { Heading } from '../Heading/Heading';
+import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 
 // @ts-ignore
 import styles from './ViewPreference.less';
@@ -22,18 +24,15 @@ export default <PreferenceType extends string | number>({
   const isFiltered = visible.length > 0 && visible.length <= available.length;
 
   return (
-    <aside
-      className={styles.root}
-      data-testid={`${title.toLowerCase()}Preferences`}
-    >
-      <h4 className={styles.title}>
-        {title}
+    <ToolbarPanel data-testid={`${title.toLowerCase()}Preferences`}>
+      <div className={styles.title}>
+        <Heading level="3">{title}</Heading>
         {isFiltered && (
           <button className={styles.reset} onClick={onReset}>
             Show all
           </button>
         )}
-      </h4>
+      </div>
 
       {available.map(preference => (
         <label key={preference} className={styles.label}>
@@ -60,6 +59,6 @@ export default <PreferenceType extends string | number>({
           <div className={styles.labelText}>{preference}</div>
         </label>
       ))}
-    </aside>
+    </ToolbarPanel>
   );
 };

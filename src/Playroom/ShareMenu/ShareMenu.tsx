@@ -1,12 +1,14 @@
 import React, { Fragment, useState } from 'react';
 
+import usePreviewUrl from '../../utils/usePreviewUrl';
 import ThemeSelector from './ThemeSelector';
 import CopyButton from './CopyButton';
+import { Heading } from '../Heading/Heading';
+import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 
 // @ts-ignore
 // eslint-disable-next-line css-modules/no-unused-class
 import styles from './ShareMenu.less';
-import usePreviewUrl from '../../utils/usePreviewUrl';
 
 const Spacer = () => <div className={styles.vspace} />;
 const Divider = () => <div className={styles.divider} />;
@@ -28,8 +30,10 @@ export default ({ themes, visibleThemes }: ShareMenuProps) => {
   const prototypeUrl = usePreviewUrl(activeTheme);
 
   return (
-    <aside className={styles.root} data-testid="share-menu">
-      <h4 className={styles.subHeading}>Share Playroom</h4>
+    <ToolbarPanel data-testid="share-menu">
+      <Heading as="h4" level="3">
+        Share Playroom
+      </Heading>
 
       <Spacer />
       <Spacer />
@@ -43,7 +47,9 @@ export default ({ themes, visibleThemes }: ShareMenuProps) => {
       <Spacer />
       <Spacer />
 
-      <h4 className={styles.subHeading}>Export Prototype</h4>
+      <Heading as="h4" level="3">
+        Export Prototype
+      </Heading>
 
       <Spacer />
       <Spacer />
@@ -61,6 +67,6 @@ export default ({ themes, visibleThemes }: ShareMenuProps) => {
         </Fragment>
       ) : null}
       <CopyButton copyContent={prototypeUrl} />
-    </aside>
+    </ToolbarPanel>
   );
 };
