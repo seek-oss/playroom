@@ -1,17 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import copy from 'copy-to-clipboard';
 
-// @ts-ignore
-// eslint-disable-next-line css-modules/no-unused-class
-import styles from './ShareMenu.less';
-import CopyIcon from './CopyIcon';
-
-const SideSpacer = () => <div className={styles.hspace} />;
+import { ShareButton } from './ShareButton';
+import { CopyIcon } from './CopyIcon';
 
 interface CopyButtonProps {
   copyContent: string;
 }
-export default ({ copyContent }: CopyButtonProps) => {
+export const CopyButton = ({ copyContent }: CopyButtonProps) => {
   const [copying, setCopying] = useState(false);
   const copyLocked = useRef(false);
 
@@ -36,14 +32,13 @@ export default ({ copyContent }: CopyButtonProps) => {
   };
 
   return (
-    <button
-      className={styles.copyToClipboard}
-      onClick={onClick}
-      data-testid="copy-to-clipboard"
-    >
-      {copying ? 'Copied' : 'Copy link'}
-      <SideSpacer />
-      <CopyIcon size={14} />
-    </button>
+    <ShareButton onClick={onClick} data-testid="copy-to-clipboard">
+      <div style={{ display: 'block' }}>
+        {copying ? 'Copied ' : 'Copy link '}
+        <div style={{ display: 'inline' }}>
+          <CopyIcon size={16} />
+        </div>
+      </div>
+    </ShareButton>
   );
 };

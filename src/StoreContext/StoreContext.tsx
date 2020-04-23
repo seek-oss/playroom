@@ -311,7 +311,8 @@ const initialState: State = {
   editorPosition: defaultPosition,
   editorHeight: 300,
   editorWidth: 360,
-  ready: false
+  ready: false,
+  activeToolbarPanel: 'share'
 };
 
 export const StoreContext = createContext<StoreContextValues>([

@@ -1,0 +1,57 @@
+@import (reference) '../variables.less';
+
+.buttonReset {
+  box-sizing: border-box;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  appearance: none;
+  text-decoration: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  user-select: none;
+  position: relative;
+  min-height: @interaction-height;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.variant {
+  border-radius: @radius-large;
+  padding: (@grid * 2) (@grid * 3);
+  color: currentColor;
+  border: 1px solid currentColor;
+  font: @text-large;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: @radius-large;
+    transition: @transition-medium;
+    box-shadow: 2px 2px 1px 1px currentColor;
+    opacity: 0;
+
+    :hover& {
+      opacity: 0.3;
+    }
+  }
+
+  &:hover {
+    color: @highlight;
+  }
+
+  &:focus:not(:active):not(:hover) {
+    box-shadow: @focus-outline;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}

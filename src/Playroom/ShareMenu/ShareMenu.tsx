@@ -1,17 +1,13 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 
 import usePreviewUrl from '../../utils/usePreviewUrl';
-import ThemeSelector from './ThemeSelector';
-import CopyButton from './CopyButton';
+import { ThemeSelector } from './ThemeSelector';
+import { CopyButton } from './CopyButton';
 import { Heading } from '../Heading/Heading';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
-
-// @ts-ignore
-// eslint-disable-next-line css-modules/no-unused-class
-import styles from './ShareMenu.less';
-
-const Spacer = () => <div className={styles.vspace} />;
-const Divider = () => <div className={styles.divider} />;
+import { Stack } from '../Stack/Stack';
+import { ShareButton } from './ShareButton';
+import { Inline } from '../Inline/Inline';
 
 interface ShareMenuProps {
   themes: string[];
@@ -31,45 +27,40 @@ export default ({ themes, visibleThemes }: ShareMenuProps) => {
 
   return (
     <ToolbarPanel data-testid="share-menu">
-      <Heading as="h4" level="3">
-        Share Playroom
-      </Heading>
+      <Stack space="large" dividers>
+        <Stack space="medium">
+          <Heading as="h4" level="3">
+            Share Playroom
+          </Heading>
 
-      <Spacer />
-      <Spacer />
-      <CopyButton copyContent={playroomUrl} />
+          <CopyButton copyContent={playroomUrl} />
+        </Stack>
 
-      <Spacer />
-      <Spacer />
-      <Spacer />
-      <Divider />
-      <Spacer />
-      <Spacer />
-      <Spacer />
+        <Stack space="medium">
+          <Heading as="h4" level="3">
+            Export Prototype
+          </Heading>
 
-      <Heading as="h4" level="3">
-        Export Prototype
-      </Heading>
-
-      <Spacer />
-      <Spacer />
-
-      {isThemed ? (
-        <Fragment>
-          <ThemeSelector
-            themes={themes}
-            visibleThemes={visibleThemes}
-            activeTheme={activeTheme}
-            onChange={setUserSelectedTheme}
-          />
-          <Spacer />
-          <Spacer />
-        </Fragment>
-      ) : null}
-      <a href={prototypeUrl} data-testid="view-prototype">
-        View prototype
-      </a>
-      <CopyButton copyContent={prototypeUrl} />
+          {isThemed ? (
+            <ThemeSelector
+              themes={themes}
+              visibleThemes={visibleThemes}
+              activeTheme={activeTheme}
+              onChange={setUserSelectedTheme}
+            />
+          ) : null}
+          <Inline space="xsmall">
+            <CopyButton copyContent={prototypeUrl} />
+            <ShareButton
+              as="a"
+              href={prototypeUrl}
+              data-testid="view-prototype"
+            >
+              View prototype
+            </ShareButton>
+          </Inline>
+        </Stack>
+      </Stack>
     </ToolbarPanel>
   );
 };

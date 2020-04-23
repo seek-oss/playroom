@@ -3,7 +3,7 @@ import React from 'react';
 interface CopyIconProps {
   size?: number;
 }
-export default ({ size = 24 }: CopyIconProps) => (
+export const CopyIcon = ({ size = 24 }: CopyIconProps) => (
   <svg
     viewBox="0 0 24 24"
     focusable="false"

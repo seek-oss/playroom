@@ -10,7 +10,7 @@ interface ThemeSelectorProps {
   activeTheme: string;
   onChange: (theme: string) => void;
 }
-export default ({
+export const ThemeSelector = ({
   themes,
   activeTheme,
   onChange,
