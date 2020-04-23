@@ -66,6 +66,9 @@ export default ({ themes, visibleThemes }: ShareMenuProps) => {
           <Spacer />
         </Fragment>
       ) : null}
+      <a href={prototypeUrl} data-testid="view-prototype">
+        View prototype
+      </a>
       <CopyButton copyContent={prototypeUrl} />
     </ToolbarPanel>
   );
