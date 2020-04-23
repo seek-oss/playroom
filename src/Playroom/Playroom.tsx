@@ -35,7 +35,7 @@ const MIN_HEIGHT =
 const MIN_WIDTH =
   getThemeVariable('toolbar-open-size') +
   getThemeVariable('toolbar-closed-size') +
-  getThemeVariable('gutter-width') * 2;
+  80;
 
 // @ts-ignore
 import { CodeEditor } from './CodeEditor/CodeEditor';

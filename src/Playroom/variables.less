@@ -1,10 +1,10 @@
 // Grid
-@row-height: 6px;
-@gutter-width: 40px;
-@interaction-height: 44px;
+@grid: 4px;
+@gutter-width: @grid * 10;
+@interaction-height: @grid * 11;
 
 // Field
-@field-gutter: 15px;
+@field-gutter: @grid * 4;
 
 // Typography
 @typography-family: Helvetica, arial, sans-serif;
@@ -71,7 +71,7 @@
 @code-background: @white;
 @code-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
 @code-gutter-size: @gutter-width;
-@code-marker-size: 12px;
+@code-marker-size: @grid * 3;
 @code-marker-color: @highlight;
 @code-format-tag: @blue-4;
 @code-format-attribute: @blue-2;
@@ -98,4 +98,4 @@
 @snippet-foreground: @toolbar-foregound;
 @snippet-highlight: @toolbar-highlight;
 @snippet-selection: @selection;
-@snippet-gutter: 6px;
+@snippet-gutter: @grid * 2;
