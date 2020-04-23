@@ -15,10 +15,10 @@ interface CreateUrlOptions {
 
 export const createUrl: (options: CreateUrlOptions) => string;
 
-interface CreatePrototypeUrlOptions {
+interface CreatePreviewUrlOptions {
   baseUrl?: string;
   code?: string;
   theme?: string;
 }
 
-export const createPrototypeUrl: (options: CreatePrototypeUrlOptions) => string;
+export const createPreviewUrl: (options: CreatePreviewUrlOptions) => string;

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import { StoreContext } from './../StoreContext/StoreContext';
-import { createPrototypeUrl } from '../../utils';
+import { createPreviewUrl } from '../../utils';
 
 const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
@@ -10,7 +10,7 @@ export default (theme: string) => {
 
   const isThemed = theme !== '__PLAYROOM__NO_THEME__';
 
-  return createPrototypeUrl({
+  return createPreviewUrl({
     baseUrl,
     code,
     theme: isThemed ? theme : undefined

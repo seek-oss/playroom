@@ -23,7 +23,7 @@ const createUrl = ({ baseUrl, code, themes, widths }) => {
   return path;
 };
 
-const createPrototypeUrl = ({ baseUrl, code, theme }) => {
+const createPreviewUrl = ({ baseUrl, code, theme }) => {
   let path = '';
 
   if (code || theme) {
@@ -33,7 +33,7 @@ const createPrototypeUrl = ({ baseUrl, code, theme }) => {
     });
 
     const compressedData = lzString.compressToEncodedURIComponent(data);
-    path = `/prototype#?code=${compressedData}`;
+    path = `/preview#?code=${compressedData}`;
   }
 
   if (baseUrl) {
@@ -47,5 +47,5 @@ const createPrototypeUrl = ({ baseUrl, code, theme }) => {
 
 module.exports = {
   createUrl,
-  createPrototypeUrl
+  createPreviewUrl
 };

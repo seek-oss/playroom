@@ -8,11 +8,11 @@ import CatchErrors from './CatchErrors/CatchErrors';
 import RenderCode from './RenderCode/RenderCode';
 import { compileJsx } from '../utils/compileJsx';
 
-interface PrototypeState {
+interface PreviewState {
   code?: string;
   themeName?: string;
 }
-const getStateFromUrl = (): PrototypeState => {
+const getStateFromUrl = (): PreviewState => {
   const params = getParamsFromQuery();
 
   if (params.code) {
@@ -23,23 +23,23 @@ const getStateFromUrl = (): PrototypeState => {
     return {
       code: compileJsx(code),
       themeName: theme
-    } as PrototypeState;
+    } as PreviewState;
   }
 
   return {};
 };
 
-export interface PrototypeProps {
+export interface PreviewProps {
   components: Record<string, ComponentType>;
   themes: Record<string, any>;
   FrameComponent: ComponentType<{ themeName: string; theme: any }>;
 }
-export default ({ themes, components, FrameComponent }: PrototypeProps) => {
-  const [{ themeName, code }, setPrototypeState] = useState(getStateFromUrl);
+export default ({ themes, components, FrameComponent }: PreviewProps) => {
+  const [{ themeName, code }, setPreviewState] = useState(getStateFromUrl);
 
   useEffect(() => {
     const onHashChange = () => {
-      setPrototypeState(getStateFromUrl());
+      setPreviewState(getStateFromUrl());
     };
 
     window.addEventListener('hashchange', onHashChange);

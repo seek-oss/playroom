@@ -6,7 +6,7 @@ import CopyButton from './CopyButton';
 // @ts-ignore
 // eslint-disable-next-line css-modules/no-unused-class
 import styles from './ShareMenu.less';
-import usePrototypeUrl from '../../utils/usePrototypeUrl';
+import usePreviewUrl from '../../utils/usePreviewUrl';
 
 const Spacer = () => <div className={styles.vspace} />;
 const Divider = () => <div className={styles.divider} />;
@@ -25,7 +25,7 @@ export default ({ themes, visibleThemes }: ShareMenuProps) => {
   const isThemed = themes.length > 1;
 
   const playroomUrl = window.location.href;
-  const prototypeUrl = usePrototypeUrl(activeTheme);
+  const prototypeUrl = usePreviewUrl(activeTheme);
 
   return (
     <aside className={styles.root} data-testid="share-menu">
