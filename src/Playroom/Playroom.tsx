@@ -2,7 +2,7 @@ import React, { useContext, ComponentType, Fragment } from 'react';
 import classnames from 'classnames';
 import { useDebouncedCallback } from 'use-debounce';
 import { Resizable } from 're-resizable';
-import Preview from './Preview/Preview';
+import Frames from './Frames/Frames';
 import WindowPortal from './WindowPortal';
 import { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
@@ -185,7 +185,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
               }[editorPosition]
         }
       >
-        <Preview
+        <Frames
           code={previewRenderCode || code}
           themes={
             visibleThemes && visibleThemes.length > 0 ? visibleThemes : themes

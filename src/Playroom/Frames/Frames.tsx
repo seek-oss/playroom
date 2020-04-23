@@ -5,9 +5,9 @@ import { compileJsx } from '../../utils/compileJsx';
 import { PlayroomProps } from '../Playroom';
 
 // @ts-ignore
-import styles from './Preview.less';
+import styles from './Frames.less';
 
-interface PreviewProps {
+interface FrameProps {
   code: string;
   themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
@@ -15,7 +15,7 @@ interface PreviewProps {
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 
-export default function Preview({ code, themes, widths }: PreviewProps) {
+export default function Frame({ code, themes, widths }: FrameProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
 
   const frames = flatMap(widths, width =>
