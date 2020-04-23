@@ -38,6 +38,15 @@ export const selectWidthPreferenceByIndex = index =>
     .eq(index)
     .then(el => el.get(0).click());
 
+export const toggleShareMenu = () =>
+  cy.get('[data-testid="toggleShare"]').then(el => el.get(0).click());
+
+export const gotoPreview = () => {
+  toggleShareMenu()
+    .get('[data-testid="view-prototype"]')
+    .then(el => cy.visit(el.get(0).href));
+};
+
 export const toggleSnippets = () =>
   cy.get('[data-testid="toggleSnippets"]').click();
 
@@ -95,3 +104,8 @@ export const assertFramesMatch = matches =>
       const frameNames = frames.map((_, el) => el.innerText).toArray();
       return expect(frameNames).to.deep.equal(matches);
     });
+
+export const assetPreviewContains = text =>
+  cy.get('body').then(el => {
+    expect(el.get(0).innerText).to.eq(text);
+  });

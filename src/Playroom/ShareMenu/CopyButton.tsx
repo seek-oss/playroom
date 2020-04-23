@@ -36,7 +36,11 @@ export default ({ copyContent }: CopyButtonProps) => {
   };
 
   return (
-    <button className={styles.copyToClipboard} onClick={onClick}>
+    <button
+      className={styles.copyToClipboard}
+      onClick={onClick}
+      data-testid="copy-to-clipboard"
+    >
       {copying ? 'Copied' : 'Copy link'}
       <SideSpacer />
       <CopyIcon size={14} />

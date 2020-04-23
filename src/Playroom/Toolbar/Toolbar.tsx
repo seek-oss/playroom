@@ -152,7 +152,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                   payload: { panel: 'share' }
                 })
               }
-              data-testid="copyToClipboard"
+              data-testid="toggleShare"
             >
               <ShareSvg />
             </ToolbarItem>
