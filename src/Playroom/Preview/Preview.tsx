@@ -6,8 +6,6 @@ import { PlayroomProps } from '../Playroom';
 
 // @ts-ignore
 import styles from './Preview.less';
-import ExpandIcon from '../Icons/ExpandIcon';
-import usePrototypeUrl from '../../utils/usePrototypeUrl';
 
 interface PreviewProps {
   code: string;
@@ -16,35 +14,6 @@ interface PreviewProps {
 }
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
-
-interface FrameDetailsProps {
-  theme: string;
-  width: number;
-}
-const FrameDetails = ({ theme, width }: FrameDetailsProps) => {
-  const prototypeUrl = usePrototypeUrl(theme);
-
-  return (
-    <div className={styles.frameDetails}>
-      <div className={styles.frameName} data-testid="frameName">
-        {theme === '__PLAYROOM__NO_THEME__' ? (
-          <strong className={styles.strong}>
-            {width}
-            px
-          </strong>
-        ) : (
-          <Fragment>
-            <strong className={styles.strong}>{theme}</strong>
-            {` \u2013 ${width}px`}
-          </Fragment>
-        )}
-      </div>
-      <a href={prototypeUrl} target="_blank" rel="noopener noreferrer">
-        <ExpandIcon size={16} />
-      </a>
-    </div>
-  );
-};
 
 export default function Preview({ code, themes, widths }: PreviewProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
@@ -69,7 +38,19 @@ export default function Preview({ code, themes, widths }: PreviewProps) {
           className={styles.frameContainer}
         >
           <div className={styles.frameBorder} />
-          <FrameDetails theme={frame.theme} width={frame.width} />
+          <div className={styles.frameName} data-testid="frameName">
+            {frame.theme === '__PLAYROOM__NO_THEME__' ? (
+              <strong className={styles.strong}>
+                {frame.width}
+                px
+              </strong>
+            ) : (
+              <Fragment>
+                <strong className={styles.strong}>{frame.theme}</strong>
+                {` \u2013 ${frame.width}px`}
+              </Fragment>
+            )}
+          </div>
           <Iframe
             intersectionRootRef={scrollingPanelRef}
             src={`${
