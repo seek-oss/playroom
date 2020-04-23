@@ -279,7 +279,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             hidden={isShareOpen ? undefined : true}
             className={styles.preference}
           >
-            <ShareMenu themes={allThemes} />
+            <ShareMenu themes={allThemes} visibleThemes={visibleThemes} />
           </div>
         </div>
       </div>

@@ -13,9 +13,15 @@ const Divider = () => <div className={styles.divider} />;
 
 interface ShareMenuProps {
   themes: string[];
+  visibleThemes: string[] | undefined;
 }
-export default ({ themes }: ShareMenuProps) => {
-  const [activeTheme, setActiveTheme] = useState(themes[0]);
+export default ({ themes, visibleThemes }: ShareMenuProps) => {
+  const defaultTheme =
+    visibleThemes && visibleThemes.length > 0 ? visibleThemes[0] : themes[0];
+  const [userSelectedTheme, setUserSelectedTheme] = useState();
+
+  const activeTheme = userSelectedTheme || defaultTheme;
+
   const isThemed = themes.length > 1;
 
   const playroomUrl = window.location.href;
@@ -46,8 +52,9 @@ export default ({ themes }: ShareMenuProps) => {
         <Fragment>
           <ThemeSelector
             themes={themes}
+            visibleThemes={visibleThemes}
             activeTheme={activeTheme}
-            onChange={setActiveTheme}
+            onChange={setUserSelectedTheme}
           />
           <Spacer />
           <Spacer />
