@@ -1,18 +1,21 @@
-import React, { useContext, ReactChild } from 'react';
+import React, { useContext, ReactChild, useState, useCallback } from 'react';
+import { useTimeoutFn } from 'react-use';
+import copy from 'copy-to-clipboard';
 import classnames from 'classnames';
 import { PlayroomProps } from '../Playroom';
 import { StoreContext, EditorPosition } from '../../StoreContext/StoreContext';
 import ViewPreference from '../ViewPreference/ViewPreference';
-import ShareMenu from '../ShareMenu/ShareMenu';
+import PreviewPanel from '../PreviewPanel/PreviewPanel';
 import Snippets from '../Snippets/Snippets';
-import AddSvg from './icons/AddSvg';
-import WidthsSvg from './icons/WidthsSvg';
-import ThemesSvg from './icons/ThemesSvg';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
-import EditorUndockedSvg from './icons/EditorUndockedSvg';
-import EditorBottomSvg from './icons/EditorBottomSvg';
-import EditorRightSvg from './icons/EditorRightSvg';
-import ShareSvg from './icons/ShareSvg';
+import AddIcon from '../icons/AddIcon';
+import WidthsIcon from '../icons/WidthsIcon';
+import ThemesIcon from '../icons/ThemesIcon';
+import EditorUndockedIcon from '../icons/EditorUndockedIcon';
+import EditorBottomIcon from '../icons/EditorBottomIcon';
+import EditorRightIcon from '../icons/EditorRightIcon';
+import ShareIcon from '../icons/ShareIcon';
+import PlayIcon from '../icons/PlayIcon';
 
 // @ts-ignore
 import styles from './Toolbar.less';
@@ -29,15 +32,15 @@ interface Icon {
 }
 const positionIcon: Record<EditorPosition, Icon> = {
   undocked: {
-    component: <EditorUndockedSvg />,
+    component: <EditorUndockedIcon />,
     title: 'Undock into separate window '
   },
   right: {
-    component: <EditorRightSvg />,
+    component: <EditorRightIcon />,
     title: 'Dock to right'
   },
   bottom: {
-    component: <EditorBottomSvg />,
+    component: <EditorBottomIcon />,
     title: 'Dock to bottom'
   }
 };
@@ -49,16 +52,31 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
       visibleWidths,
       editorPosition,
       activeToolbarPanel,
-      validCursorPosition
+      validCursorPosition,
+      code
     },
     dispatch
   ] = useContext(StoreContext);
+  const [copying, setCopying] = useState(false);
+  const [isReady, cancel, reset] = useTimeoutFn(() => setCopying(false), 2000);
+
+  const copyHandler = useCallback(() => {
+    copy(window.location.href);
+    dispatch({ type: 'closeToolbar' });
+    setCopying(true);
+
+    if (isReady() === false) {
+      cancel();
+    }
+
+    reset();
+  }, [cancel, dispatch, isReady, reset]);
 
   const isSnippetsOpen = activeToolbarPanel === 'snippets';
   const isThemeOpen = activeToolbarPanel === 'themes';
   const isWidthOpen = activeToolbarPanel === 'widths';
   const isPositionOpen = activeToolbarPanel === 'positions';
-  const isShareOpen = activeToolbarPanel === 'share';
+  const isPreviewOpen = activeToolbarPanel === 'preview';
 
   const hasSnippets = snippets && snippets.length > 0;
   const hasThemes =
@@ -91,7 +109,9 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                 title={`Insert snippet (${
                   navigator.platform.match('Mac') ? '\u2318' : 'Ctrl + '
                 }K)`}
-                showStatus={!validCursorPosition && !activeToolbarPanel}
+                showStatus={
+                  !copying && !validCursorPosition && !activeToolbarPanel
+                }
                 statusMessage="Can't insert snippet at cursor"
                 statusMessageTone="critical"
                 data-testid="toggleSnippets"
@@ -102,7 +122,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                   });
                 }}
               >
-                <AddSvg />
+                <AddIcon />
               </ToolbarItem>
             )}
             {hasThemes && (
@@ -121,7 +141,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                   });
                 }}
               >
-                <ThemesSvg />
+                <ThemesIcon />
               </ToolbarItem>
             )}
             <ToolbarItem
@@ -140,36 +160,52 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               }}
               data-testid="toggleWidths"
             >
-              <WidthsSvg />
+              <WidthsIcon />
             </ToolbarItem>
 
             <ToolbarItem
-              active={isShareOpen}
-              title="Share playroom"
+              active={isPreviewOpen}
+              title="Preview playroom"
+              showStatus={code.trim().length > 0}
+              statusMessage="Nothing to preview"
+              statusMessageTone="critical"
               onClick={() =>
                 dispatch({
                   type: 'toggleToolbar',
-                  payload: { panel: 'share' }
+                  payload: { panel: 'preview' }
                 })
               }
-              data-testid="toggleShare"
+              data-testid="togglePreview"
             >
-              <ShareSvg />
+              <PlayIcon />
             </ToolbarItem>
           </div>
 
-          <ToolbarItem
-            active={isPositionOpen}
-            title="Configure editor position"
-            onClick={() =>
-              dispatch({
-                type: 'toggleToolbar',
-                payload: { panel: 'positions' }
-              })
-            }
-          >
-            {positionIcon[editorPosition].component}
-          </ToolbarItem>
+          <div>
+            <ToolbarItem
+              active={copying && !activeToolbarPanel}
+              title="Copy link to clipboard"
+              statusMessage="Link copied to clipboard"
+              statusMessageTone="positive"
+              showStatus={copying && !activeToolbarPanel}
+              onClick={copyHandler}
+              data-testid="copyToClipboard"
+            >
+              <ShareIcon />
+            </ToolbarItem>
+            <ToolbarItem
+              active={isPositionOpen}
+              title="Configure editor position"
+              onClick={() =>
+                dispatch({
+                  type: 'toggleToolbar',
+                  payload: { panel: 'positions' }
+                })
+              }
+            >
+              {positionIcon[editorPosition].component}
+            </ToolbarItem>
+          </div>
 
           <div
             className={classnames(styles.positionContainer, {
@@ -276,10 +312,10 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
           </div>
 
           <div
-            hidden={isShareOpen ? undefined : true}
+            hidden={isPreviewOpen ? undefined : true}
             className={styles.preference}
           >
-            <ShareMenu themes={allThemes} visibleThemes={visibleThemes} />
+            <PreviewPanel themes={allThemes} visibleThemes={visibleThemes} />
           </div>
         </div>
       </div>

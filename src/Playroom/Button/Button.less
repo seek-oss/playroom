@@ -1,6 +1,6 @@
 @import (reference) '../variables.less';
 
-.buttonReset {
+.reset {
   box-sizing: border-box;
   background: transparent;
   border: 0;
@@ -20,29 +20,24 @@
   justify-content: center;
 }
 
-.variant {
+.base {
   border-radius: @radius-large;
   padding: 0 (@grid * 3);
   color: currentColor;
   border: 1px solid currentColor;
   font: @text-standard;
-  width: 55%;
+  height: @grid * 9;
 
-  &:before {
+  &:after {
     content: '';
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-radius: @radius-large;
-    transition: @transition-medium;
-    box-shadow: 2px 2px 1px 1px currentColor;
-    opacity: 0;
-
-    :hover& {
-      opacity: 0.3;
-    }
+    transform: translateY(-50%);
+    min-height: @interaction-height;
+    min-width: @interaction-height;
+    left: -@grid * 2;
+    right: -@grid * 2;
+    height: 100%;
+    top: 50%;
   }
 
   &:hover:not(.positive) {
@@ -60,22 +55,6 @@
 
 .positive {
   color: @positive-dark;
-}
-
-.slim {
-  height: @grid * 9;
-
-  &:after {
-    content: '';
-    position: absolute;
-    transform: translateY(-50%);
-    min-height: @interaction-height;
-    min-width: @interaction-height;
-    left: -@grid * 2;
-    right: -@grid * 2;
-    height: 100%;
-    top: 50%;
-  }
 }
 
 .iconContainer {

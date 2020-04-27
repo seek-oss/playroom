@@ -3,7 +3,7 @@ import React from 'react';
 interface TickIconProps {
   size?: number;
 }
-export const TickIcon = ({ size = 24 }: TickIconProps) => (
+export default ({ size = 24 }: TickIconProps) => (
   <svg
     viewBox="0 0 24 24"
     focusable="false"

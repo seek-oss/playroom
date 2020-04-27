@@ -11,6 +11,7 @@ module.exports = {
   themes: 'braid-design-system/lib/themes',
   frameComponent: './playroom/FrameComponent.js',
   widths: [320, 500, 768, 1024],
+  snippets: './playroom/snippets.js',
   exampleCode: `
     <ChecklistCard>
       <Checkbox id="1" label="This is a checkbox" message={false} onChange={() => {}}>

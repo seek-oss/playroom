@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import classnames from 'classnames';
 
-import ChevronIcon from '../Toolbar/icons/ChevronSvg';
+import ChevronIcon from '../icons/ChevronIcon';
 import { Text } from '../Text/Text';
 
 // @ts-ignore
@@ -13,6 +13,13 @@ interface ThemeSelectorProps {
   activeTheme: string;
   onChange: (theme: string) => void;
 }
+
+const themeOption = (theme: string) => (
+  <option key={theme} value={theme}>
+    {theme}
+  </option>
+);
+
 export const ThemeSelector = ({
   themes,
   activeTheme,
@@ -23,24 +30,16 @@ export const ThemeSelector = ({
     visibleThemes && visibleThemes.length > 0 ? (
       <Fragment>
         <optgroup label="Visible themes">
-          {visibleThemes.map(theme => (
-            <option key={theme}>{theme}</option>
-          ))}
+          {visibleThemes.map(themeOption)}
         </optgroup>
         <optgroup label="Available themes">
           {themes
             .filter(theme => !visibleThemes.some(t => t === theme))
-            .map(theme => (
-              <option key={theme}>{theme}</option>
-            ))}
+            .map(themeOption)}
         </optgroup>
       </Fragment>
     ) : (
-      themes.map(theme => (
-        <option value={theme} key={theme}>
-          {theme}
-        </option>
-      ))
+      themes.map(themeOption)
     );
 
   return (
@@ -59,7 +58,9 @@ export const ThemeSelector = ({
         </span>
         <span className={classnames(styles.column, styles.minColumn)}>
           &nbsp;
-          <ChevronIcon size={16} />
+          <span style={{ position: 'relative', top: 2 }}>
+            <ChevronIcon size={16} />
+          </span>
         </span>
       </label>
 

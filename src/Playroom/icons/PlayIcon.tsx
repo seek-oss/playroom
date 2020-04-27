@@ -3,7 +3,7 @@ import React from 'react';
 interface PlayIconProps {
   size?: number;
 }
-export const PlayIcon = ({ size = 24 }: PlayIconProps) => (
+export default ({ size = 24 }: PlayIconProps) => (
   <svg
     viewBox="0 0 24 24"
     focusable="false"

@@ -7,7 +7,7 @@ import WindowPortal from './WindowPortal';
 import { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
 import Toolbar from './Toolbar/Toolbar';
-import ChevronSvg from './Toolbar/icons/ChevronSvg';
+import ChevronIcon from './icons/ChevronIcon';
 import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
 
 // @ts-ignore
@@ -206,9 +206,8 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
               dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
             }
           >
-            <ChevronSvg
-              height={16}
-              width={16}
+            <ChevronIcon
+              size={16}
               direction={resolveDirection(editorPosition, editorHidden)}
             />
           </button>

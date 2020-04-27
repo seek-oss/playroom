@@ -2,7 +2,7 @@ import React, { SVGProps } from 'react';
 import classnames from 'classnames';
 
 // @ts-ignore
-import styles from './ChevronSvg.less';
+import styles from './ChevronIcon.less';
 
 interface ChevronSvgProps extends SVGProps<SVGSVGElement> {
   direction?: 'down' | 'up' | 'left' | 'right';
