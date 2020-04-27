@@ -4,13 +4,12 @@ import copy from 'copy-to-clipboard';
 import classnames from 'classnames';
 import { PlayroomProps } from '../Playroom';
 import { StoreContext, EditorPosition } from '../../StoreContext/StoreContext';
-import ViewPreference from '../ViewPreference/ViewPreference';
+import FramesPanel from '../FramesPanel/FramesPanel';
 import PreviewPanel from '../PreviewPanel/PreviewPanel';
 import Snippets from '../Snippets/Snippets';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
 import AddIcon from '../icons/AddIcon';
 import WidthsIcon from '../icons/WidthsIcon';
-import ThemesIcon from '../icons/ThemesIcon';
 import EditorUndockedIcon from '../icons/EditorUndockedIcon';
 import EditorBottomIcon from '../icons/EditorBottomIcon';
 import EditorRightIcon from '../icons/EditorRightIcon';
@@ -48,12 +47,11 @@ const positionIcon: Record<EditorPosition, Icon> = {
 export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const [
     {
-      visibleThemes,
-      visibleWidths,
+      visibleThemes = [],
+      visibleWidths = [],
       editorPosition,
       activeToolbarPanel,
-      validCursorPosition,
-      code
+      validCursorPosition
     },
     dispatch
   ] = useContext(StoreContext);
@@ -73,15 +71,13 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   }, [cancel, dispatch, isReady, reset]);
 
   const isSnippetsOpen = activeToolbarPanel === 'snippets';
-  const isThemeOpen = activeToolbarPanel === 'themes';
-  const isWidthOpen = activeToolbarPanel === 'widths';
+  const isFramesOpen = activeToolbarPanel === 'frames';
   const isPositionOpen = activeToolbarPanel === 'positions';
   const isPreviewOpen = activeToolbarPanel === 'preview';
 
   const hasSnippets = snippets && snippets.length > 0;
-  const hasThemes =
-    allThemes.filter(themeName => themeName !== '__PLAYROOM__NO_THEME__')
-      .length > 0;
+  const hasFilteredFrames =
+    visibleThemes.length > 0 || visibleWidths.length > 0;
   const isOpen = Boolean(activeToolbarPanel);
 
   return (
@@ -125,40 +121,27 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                 <AddIcon />
               </ToolbarItem>
             )}
-            {hasThemes && (
-              <ToolbarItem
-                active={isThemeOpen}
-                count={visibleThemes ? visibleThemes.length : 0}
-                title={
-                  visibleThemes
-                    ? `Showing ${visibleThemes.length} of ${allThemes.length} themes`
-                    : 'Configure themes'
-                }
-                onClick={() => {
-                  dispatch({
-                    type: 'toggleToolbar',
-                    payload: { panel: 'themes' }
-                  });
-                }}
-              >
-                <ThemesIcon />
-              </ToolbarItem>
-            )}
             <ToolbarItem
-              active={isWidthOpen}
-              count={visibleWidths ? visibleWidths.length : 0}
+              active={isFramesOpen}
+              count={
+                hasFilteredFrames
+                  ? visibleWidths.length * visibleThemes.length
+                  : undefined
+              }
               title={
-                visibleWidths
-                  ? `Showing ${visibleWidths.length} of ${allWidths.length} widths`
-                  : 'Configure widths'
+                hasFilteredFrames
+                  ? `Showing ${visibleWidths.length *
+                      visibleThemes.length} of ${allWidths.length *
+                      allThemes.length} frames`
+                  : 'Configure visible frames'
               }
               onClick={() => {
                 dispatch({
                   type: 'toggleToolbar',
-                  payload: { panel: 'widths' }
+                  payload: { panel: 'frames' }
                 });
               }}
-              data-testid="toggleWidths"
+              data-testid="toggleFrames"
             >
               <WidthsIcon />
             </ToolbarItem>
@@ -166,15 +149,13 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             <ToolbarItem
               active={isPreviewOpen}
               title="Preview playroom"
-              showStatus={code.trim().length > 0}
-              statusMessage="Nothing to preview"
-              statusMessageTone="critical"
-              onClick={() =>
+              showStatus={isPreviewOpen}
+              onClick={() => {
                 dispatch({
                   type: 'toggleToolbar',
                   payload: { panel: 'preview' }
-                })
-              }
+                });
+              }}
               data-testid="togglePreview"
             >
               <PlayIcon />
@@ -266,48 +247,13 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               />
             </div>
           )}
-          {hasThemes && (
-            <div
-              hidden={isThemeOpen ? undefined : true}
-              className={styles.preference}
-            >
-              <ViewPreference
-                title="Themes"
-                visible={visibleThemes || []}
-                available={allThemes}
-                onChange={newThemes => {
-                  if (newThemes) {
-                    dispatch({
-                      type: 'updateVisibleThemes',
-                      payload: { themes: newThemes }
-                    });
-                  } else {
-                    dispatch({ type: 'resetVisibleThemes' });
-                  }
-                }}
-                onReset={() => dispatch({ type: 'resetVisibleThemes' })}
-              />
-            </div>
-          )}
           <div
-            hidden={isWidthOpen ? undefined : true}
+            hidden={isFramesOpen ? undefined : true}
             className={styles.preference}
           >
-            <ViewPreference
-              title="Widths"
-              visible={visibleWidths || []}
-              available={allWidths}
-              onChange={newWidths => {
-                if (newWidths) {
-                  dispatch({
-                    type: 'updateVisibleWidths',
-                    payload: { widths: newWidths }
-                  });
-                } else {
-                  dispatch({ type: 'resetVisibleWidths' });
-                }
-              }}
-              onReset={() => dispatch({ type: 'resetVisibleWidths' })}
+            <FramesPanel
+              availableWidths={allWidths}
+              availableThemes={allThemes}
             />
           </div>
 
