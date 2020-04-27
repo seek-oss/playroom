@@ -3,6 +3,7 @@ import copy from 'copy-to-clipboard';
 
 import { ShareButton } from './ShareButton';
 import { CopyIcon } from './CopyIcon';
+import { TickIcon } from './TickIcon';
 
 interface CopyButtonProps {
   copyContent: string;
@@ -32,13 +33,14 @@ export const CopyButton = ({ copyContent }: CopyButtonProps) => {
   };
 
   return (
-    <ShareButton onClick={onClick} data-testid="copy-to-clipboard">
-      <div style={{ display: 'block' }}>
-        {copying ? 'Copied ' : 'Copy link '}
-        <div style={{ display: 'inline' }}>
-          <CopyIcon size={16} />
-        </div>
-      </div>
+    <ShareButton
+      slim
+      onClick={onClick}
+      data-testid="copy-to-clipboard"
+      tone={copying ? 'positive' : undefined}
+      icon={copying ? <TickIcon size={18} /> : <CopyIcon size={18} />}
+    >
+      {copying ? 'Copied ' : 'Copy link '}
     </ShareButton>
   );
 };

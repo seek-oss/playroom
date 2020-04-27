@@ -1,6 +1,9 @@
 import React, { Fragment } from 'react';
+import classnames from 'classnames';
 
 import ChevronIcon from '../Toolbar/icons/ChevronSvg';
+import { Text } from '../Text/Text';
+
 // @ts-ignore
 import styles from './ThemeSelector.less';
 
@@ -42,12 +45,23 @@ export const ThemeSelector = ({
 
   return (
     <div className={styles.root}>
-      <label htmlFor="theme-select" className={styles.label}>
-        Theme:{' '}
+      <label
+        htmlFor="theme-select"
+        className={classnames(styles.label, styles.row)}
+      >
+        <span className={classnames(styles.column, styles.minColumn)}>
+          <Text size="large">Theme:&nbsp;</Text>
+        </span>
+        <span className={styles.column}>
+          <Text size="large" weight="strong" truncate>
+            {activeTheme}
+          </Text>
+        </span>
+        <span className={classnames(styles.column, styles.minColumn)}>
+          &nbsp;
+          <ChevronIcon size={16} />
+        </span>
       </label>
-
-      <div className={styles.selectValue}>{activeTheme}</div>
-      <ChevronIcon size={16} />
 
       <select
         className={styles.select}
@@ -61,6 +75,7 @@ export const ThemeSelector = ({
       >
         {options}
       </select>
+      <div className={styles.focusOverlay} />
     </div>
   );
 };

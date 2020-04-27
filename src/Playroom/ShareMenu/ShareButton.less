@@ -12,7 +12,7 @@
   text-overflow: ellipsis;
   user-select: none;
   position: relative;
-  min-height: @interaction-height;
+  height: @interaction-height;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -21,10 +21,11 @@
 
 .variant {
   border-radius: @radius-large;
-  padding: (@grid * 2) (@grid * 3);
+  padding: 0 (@grid * 3);
   color: currentColor;
   border: 1px solid currentColor;
   font: @text-large;
+  width: 55%;
 
   &:before {
     content: '';
@@ -43,15 +44,41 @@
     }
   }
 
-  &:hover {
+  &:hover:not(.positive) {
     color: @highlight;
   }
 
-  &:focus:not(:active):not(:hover) {
+  &:focus:not(:active):not(:hover):not(.positive) {
     box-shadow: @focus-outline;
   }
 
   &:active {
     transform: scale(0.98);
   }
+}
+
+.positive {
+  color: @positive-dark;
+}
+
+.slim {
+  height: @grid * 9;
+
+  &:after {
+    content: '';
+    position: absolute;
+    transform: translateY(-50%);
+    min-height: @interaction-height;
+    min-width: @interaction-height;
+    left: -@grid * 2;
+    right: -@grid * 2;
+    height: 100%;
+    top: 50%;
+  }
+}
+
+.iconContainer {
+  position: relative;
+  top: 1px;
+  padding-left: 5px;
 }

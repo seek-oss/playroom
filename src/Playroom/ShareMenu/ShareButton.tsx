@@ -1,11 +1,14 @@
-import React, { ElementType, AllHTMLAttributes } from 'react';
+import React, { ElementType, AllHTMLAttributes, ReactElement } from 'react';
 import classnames from 'classnames';
 
 // @ts-ignore
 import styles from './ShareButton.less';
 
 interface BaseProps {
+  slim?: boolean;
   as?: ElementType;
+  tone?: 'positive' | 'critical';
+  icon?: ReactElement;
   'data-testid'?: string;
 }
 
@@ -21,17 +24,20 @@ type Props = ButtonProps | LinkProps;
 
 export const ShareButton = ({
   as: ButtonComponent = 'button',
+  slim = false,
   children,
-  onClick,
-  href,
-  'data-testid': dataTestId
+  icon,
+  tone,
+  ...props
 }: Props) => (
   <ButtonComponent
-    className={classnames(styles.buttonReset, styles.variant)}
-    onClick={onClick}
-    href={href}
-    data-testid={dataTestId}
+    className={classnames(styles.buttonReset, styles.variant, {
+      [styles.slim]: slim,
+      [styles.positive]: tone === 'positive'
+    })}
+    {...props}
   >
     {children}
+    {icon ? <span className={styles.iconContainer}>{icon}</span> : null}
   </ButtonComponent>
 );

@@ -1,21 +1,39 @@
 @import (reference) '../variables.less';
 
 .root {
-  display: flex;
   position: relative;
 }
 
 .label {
-  font: @text-standard;
-  padding-right: 5px;
-}
-
-.selectValue {
   user-select: none;
   pointer-events: none;
-  font: @text-standard;
-  font-weight: @bold;
-  padding-right: 5px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.column {
+  display: block;
+  min-width: 0;
+}
+
+.minColumn {
+  flex-shrink: 0;
+}
+
+.focusOverlay {
+  position: absolute;
+  pointer-events: none;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  box-shadow: @focus-outline;
+  border-radius: @radius-large;
+  opacity: 0;
+  transition: @transition-medium;
 }
 
 .select {
@@ -27,4 +45,10 @@
   width: 100%;
   opacity: 0;
   font: @text-standard;
+
+  &:focus:not(:hover) {
+    ~ .focusOverlay {
+      opacity: 1;
+    }
+  }
 }

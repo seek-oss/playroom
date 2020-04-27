@@ -7,7 +7,7 @@ import { Heading } from '../Heading/Heading';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import { Stack } from '../Stack/Stack';
 import { ShareButton } from './ShareButton';
-import { Inline } from '../Inline/Inline';
+import { PlayIcon } from './PlayIcon';
 
 interface ShareMenuProps {
   themes: string[];
@@ -49,16 +49,22 @@ export default ({ themes, visibleThemes }: ShareMenuProps) => {
               onChange={setUserSelectedTheme}
             />
           ) : null}
-          <Inline space="xsmall">
+
+          <Stack space="xsmall">
             <CopyButton copyContent={prototypeUrl} />
+
             <ShareButton
               as="a"
               href={prototypeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               data-testid="view-prototype"
+              icon={<PlayIcon size={20} />}
+              slim
             >
-              View prototype
+              Preview
             </ShareButton>
-          </Inline>
+          </Stack>
         </Stack>
       </Stack>
     </ToolbarPanel>
