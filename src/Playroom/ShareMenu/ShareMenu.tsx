@@ -51,8 +51,6 @@ export default ({ themes, visibleThemes }: ShareMenuProps) => {
           ) : null}
 
           <Stack space="xsmall">
-            <CopyButton copyContent={prototypeUrl} />
-
             <ShareButton
               as="a"
               href={prototypeUrl}
@@ -64,6 +62,7 @@ export default ({ themes, visibleThemes }: ShareMenuProps) => {
             >
               Preview
             </ShareButton>
+            <CopyButton copyContent={prototypeUrl} />
           </Stack>
         </Stack>
       </Stack>

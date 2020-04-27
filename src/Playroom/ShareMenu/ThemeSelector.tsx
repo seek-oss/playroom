@@ -50,10 +50,10 @@ export const ThemeSelector = ({
         className={classnames(styles.label, styles.row)}
       >
         <span className={classnames(styles.column, styles.minColumn)}>
-          <Text size="large">Theme:&nbsp;</Text>
+          <Text>Theme:&nbsp;</Text>
         </span>
         <span className={styles.column}>
-          <Text size="large" weight="strong" truncate>
+          <Text weight="strong" truncate>
             {activeTheme}
           </Text>
         </span>
