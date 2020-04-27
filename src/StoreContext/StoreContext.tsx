@@ -37,7 +37,7 @@ export interface CursorPosition {
   ch: number;
 }
 
-type ToolbarPanel = 'snippets' | 'themes' | 'widths' | 'positions' | 'share';
+type ToolbarPanel = 'snippets' | 'themes' | 'widths' | 'positions' | 'preview';
 interface State {
   code: string;
   previewRenderCode?: string;
