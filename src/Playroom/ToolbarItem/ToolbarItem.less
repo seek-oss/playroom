@@ -99,11 +99,10 @@
   top: (@toolbar-item-size - @height) /2;
   right: @toolbar-closed-size + 10px;
   height: @height;
-  border-radius: 4px;
+  border-radius: @radius-medium;
   padding: 0 10px;
   display: flex;
   align-items: center;
-  font: @text-standard;
   white-space: nowrap;
   transition: @transition-medium;
 
@@ -117,9 +116,9 @@
     background-color: @neutral;
   }
   &.positive {
-    background-color: @positive;
+    background-color: @positive-light;
   }
   &.critical {
-    background-color: @critical;
+    background-color: @critical-light;
   }
 }

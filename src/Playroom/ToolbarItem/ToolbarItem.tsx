@@ -1,5 +1,6 @@
 import React, { ReactChild } from 'react';
 import classnames from 'classnames';
+import { Text } from '../Text/Text';
 
 // @ts-ignore
 import styles from './ToolbarItem.less';
@@ -63,7 +64,7 @@ export default ({
             [styles.status_show]: showStatus && statusMessage // eslint-disable-line css-modules/no-undef-class
           })}
         >
-          {statusMessage}
+          <Text>{statusMessage}</Text>
         </div>
       )}
     </div>

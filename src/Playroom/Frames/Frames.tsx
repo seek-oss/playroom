@@ -1,8 +1,10 @@
-import React, { Fragment, useRef } from 'react';
+import React, { useRef } from 'react';
 import flatMap from 'lodash/flatMap';
 import Iframe from './Iframe';
 import { compileJsx } from '../../utils/compileJsx';
 import { PlayroomProps } from '../Playroom';
+import { Strong } from '../Strong/Strong';
+import { Text } from '../Text/Text';
 
 // @ts-ignore
 import styles from './Frames.less';
@@ -40,15 +42,15 @@ export default function Frame({ code, themes, widths }: FrameProps) {
           <div className={styles.frameBorder} />
           <div className={styles.frameName} data-testid="frameName">
             {frame.theme === '__PLAYROOM__NO_THEME__' ? (
-              <strong className={styles.strong}>
+              <Text weight="strong">
                 {frame.width}
                 px
-              </strong>
+              </Text>
             ) : (
-              <Fragment>
-                <strong className={styles.strong}>{frame.theme}</strong>
+              <Text>
+                <Strong>{frame.theme}</Strong>
                 {` \u2013 ${frame.width}px`}
-              </Fragment>
+              </Text>
             )}
           </div>
           <Iframe

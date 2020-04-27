@@ -43,18 +43,15 @@
 
 .frameName {
   flex: 0 0 @frame-name-height;
-  font: @text-standard;
   color: @preview-foregound;
-  line-height: @frame-name-height;
+  height: @frame-name-height;
   transition: @transition-medium;
+  display: flex;
+  align-items: center;
 
   .frameContainer:not(:hover) & {
     opacity: @preview-inactive-label-opacity;
   }
-}
-
-.strong {
-  font-weight: @bold;
 }
 
 .frame {

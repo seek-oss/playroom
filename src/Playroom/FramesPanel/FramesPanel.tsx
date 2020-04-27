@@ -7,6 +7,7 @@ import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import styles from './FramesPanel.less';
 import { StoreContext } from '../../StoreContext/StoreContext';
 import { Stack } from '../Stack/Stack';
+import { Text } from '../Text/Text';
 
 interface FramesPanelProps {
   availableWidths: number[];
@@ -72,7 +73,7 @@ function FrameOption<Option>({
       <div className={styles.fakeCheckbox}>
         <Checkmark />
       </div>
-      <div className={styles.labelText}>{option}</div>
+      <Text truncate>{option}</Text>
     </label>
   );
 }

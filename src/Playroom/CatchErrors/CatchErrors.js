@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Text } from '../Text/Text';
+import { Strong } from '../Strong/Strong';
+
 import styles from './CatchErrors.less';
 
 export default class CatchErrors extends Component {
@@ -38,10 +41,12 @@ export default class CatchErrors extends Component {
 
     return (
       <div className={styles.root}>
-        <strong className={styles.strong}>{error.message}</strong>
-        {lines.map((line, i) => (
-          <div key={i}>{line}</div>
-        ))}
+        <Text size="large" tone="critical">
+          <Strong>{error.message}</Strong>
+          {lines.map((line, i) => (
+            <span key={i}>{line}</span>
+          ))}
+        </Text>
       </div>
     );
   }
