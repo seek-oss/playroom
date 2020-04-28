@@ -9,7 +9,7 @@ import PreviewPanel from '../PreviewPanel/PreviewPanel';
 import Snippets from '../Snippets/Snippets';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
 import AddIcon from '../icons/AddIcon';
-import WidthsIcon from '../icons/WidthsIcon';
+import FramesIcon from '../icons/FramesIcon';
 import EditorUndockedIcon from '../icons/EditorUndockedIcon';
 import EditorBottomIcon from '../icons/EditorBottomIcon';
 import EditorRightIcon from '../icons/EditorRightIcon';
@@ -123,18 +123,8 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             )}
             <ToolbarItem
               active={isFramesOpen}
-              count={
-                hasFilteredFrames
-                  ? visibleWidths.length * visibleThemes.length
-                  : undefined
-              }
-              title={
-                hasFilteredFrames
-                  ? `Showing ${visibleWidths.length *
-                      visibleThemes.length} of ${allWidths.length *
-                      allThemes.length} frames`
-                  : 'Configure visible frames'
-              }
+              showIndicator={hasFilteredFrames}
+              title="Configure visible frames"
               onClick={() => {
                 dispatch({
                   type: 'toggleToolbar',
@@ -143,7 +133,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               }}
               data-testid="toggleFrames"
             >
-              <WidthsIcon />
+              <FramesIcon />
             </ToolbarItem>
 
             <ToolbarItem

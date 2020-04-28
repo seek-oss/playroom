@@ -4,7 +4,7 @@
   position: relative;
 }
 
-.hasSelection {
+.showIndicator {
   color: @toolbar-highlight;
 }
 
@@ -71,19 +71,13 @@
 
 .indicator {
   position: absolute;
-  top: 7px;
-  right: 7px;
-  height: 18px;
-  width: 18px;
+  top: 12px;
+  right: 12px;
+  height: 10px;
+  width: 10px;
   background-color: @toolbar-highlight;
   border-radius: 100%;
   border: 2px solid @code-background;
-  color: @white;
-  font: @text-xsmall;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
   pointer-events: none;
   transition: @transition-fast;
 
