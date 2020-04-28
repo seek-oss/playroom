@@ -6,6 +6,7 @@ interface PlayroomConfig {
   widths?: number[];
   snippets?: Snippet[];
   frameComponent?: string;
+  previewComponent?: string;
   exampleCode?: string;
   cwd?: string;
   storageKey?: string;

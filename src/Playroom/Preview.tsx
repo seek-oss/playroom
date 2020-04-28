@@ -1,4 +1,4 @@
-import React, { useState, ComponentType, useEffect } from 'react';
+import React, { useState, ComponentType, useEffect, ReactNode } from 'react';
 import lzString from 'lz-string';
 
 import getParamsFromQuery from '../utils/getParamsFromQuery';
@@ -33,8 +33,14 @@ export interface PreviewProps {
   components: Record<string, ComponentType>;
   themes: Record<string, any>;
   FrameComponent: ComponentType<{ themeName: string; theme: any }>;
+  PreviewComponent: ComponentType<{ children: ReactNode }>;
 }
-export default ({ themes, components, FrameComponent }: PreviewProps) => {
+export default ({
+  themes,
+  components,
+  FrameComponent,
+  PreviewComponent
+}: PreviewProps) => {
   const [{ themeName, code }, setPreviewState] = useState(getStateFromUrl);
 
   useEffect(() => {
@@ -57,7 +63,9 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
         themeName={themeName || '__PLAYROOM__NO_THEME__'}
         theme={resolvedTheme}
       >
-        <RenderCode code={code} scope={components} />
+        <PreviewComponent>
+          <RenderCode code={code} scope={components} />
+        </PreviewComponent>
       </FrameComponent>
     </CatchErrors>
   );

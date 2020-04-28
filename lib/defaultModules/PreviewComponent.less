@@ -1,0 +1,46 @@
+@import (reference) '../../src/Playroom/variables.less';
+
+.root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: @gray-5;
+  color: @white;
+  transition: @transition-speed-slow;
+}
+
+.hideSplash {
+  opacity: 0;
+}
+
+.trace > svg > path {
+  @dash-size: 2000;
+  @keyframes trace {
+    to {
+      stroke-dashoffset: @dash-size;
+    }
+  }
+
+  stroke-dasharray: @dash-size;
+  stroke-dashoffset: 0;
+  animation-name: trace;
+  animation-duration: 1.5s;
+  animation-delay: 0s;
+  animation-timing-function: linear;
+  animation-iteration-count: 2;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+
+.size {
+  margin: 0 auto;
+  width: 40vw;
+  max-width: 200px;
+}

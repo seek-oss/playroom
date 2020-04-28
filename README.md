@@ -54,6 +54,7 @@ module.exports = {
   themes: './src/themes',
   snippets: './playroom/snippets.js',
   frameComponent: './playroom/FrameComponent.js',
+  previewComponent: './playroom/PreviewComponent.js',
   widths: [320, 375, 768, 1024],
   port: 9000,
   openBrowser: true,
@@ -122,6 +123,10 @@ export default ({ theme, children }) => (
   <ThemeProvider theme={theme}>{children}</ThemeProvider>
 );
 ```
+
+## Custom Preview Component
+
+TBD
 
 ## Theme Support
 
