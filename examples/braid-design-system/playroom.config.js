@@ -6,7 +6,7 @@ const braidDir = path.dirname(
 
 module.exports = {
   title: 'BRAID',
-  outputPath: './dist/playroom',
+  outputPath: './dist',
   components: 'braid-design-system',
   themes: 'braid-design-system/lib/themes',
   frameComponent: './playroom/FrameComponent.js',
