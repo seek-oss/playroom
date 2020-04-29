@@ -23,24 +23,27 @@
 .trace > svg > path {
   @dash-size: 1000;
   @keyframes trace {
-    35%,
-    70% {
-      stroke-dashoffset: 0;
+    0%,
+    100% {
+      opacity: 0;
     }
+    20%,
     80% {
       opacity: 1;
     }
+    50%,
     100% {
-      opacity: 0;
+      stroke-dashoffset: 0;
     }
   }
 
   stroke-dasharray: @dash-size;
   stroke-dashoffset: @dash-size;
   animation-name: trace;
-  animation-duration: 3000ms;
-  animation-direction: reverse;
-  animation-timing-function: ease-in-out;
+  animation-duration: 2000ms;
+  animation-delay: 500ms;
+  animation-direction: forwards;
+  animation-timing-function: ease-in;
   animation-iteration-count: 2;
   animation-fill-mode: forwards;
 }
