@@ -9,7 +9,9 @@ export default ({ children }) => {
   const [hide, setHide] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setHide(true), 3000);
+    const hideSplash = setTimeout(() => setHide(true), 5000);
+
+    return () => clearTimeout(hideSplash);
   }, []);
 
   return (

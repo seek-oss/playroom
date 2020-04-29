@@ -9,7 +9,6 @@ export const Logo = ({ size = 100 }: Props) => (
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 390 290"
     focusable="false"
-    height="auto"
     width={size}
   >
     <path
