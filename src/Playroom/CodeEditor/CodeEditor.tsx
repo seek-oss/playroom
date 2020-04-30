@@ -133,6 +133,10 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
             cursor: editorInstanceRef.current.getCursor()
           });
 
+          dispatch({
+            type: 'updateCode',
+            payload: { code: formattedCode, cursor: formattedCursor }
+          });
           editorInstanceRef.current.setValue(formattedCode);
           editorInstanceRef.current.setCursor(formattedCursor);
         }
@@ -149,7 +153,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [dispatch]);
+  }, [code, dispatch, setCursorPosition]);
 
   useEffect(() => {
     if (editorInstanceRef.current) {

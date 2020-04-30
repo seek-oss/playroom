@@ -14,7 +14,7 @@ import DismissIcon from '../icons/DismissIcon';
 import styles from './StatusMessage.less';
 
 const exitAnimationDuration = 300;
-const statusMessageDuration = 2000;
+const statusMessageDuration = 3000;
 
 export const StatusMessage = () => {
   const [{ statusMessage }, dispatch] = useContext(StoreContext);

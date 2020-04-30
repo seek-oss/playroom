@@ -32,17 +32,17 @@ export const formatCode = () =>
 
 export const selectWidthPreferenceByIndex = index =>
   cy
-    .get('[data-testid="toggleWidths"]')
+    .get('[data-testid="toggleFrames"]')
     .then(el => el.get(0).click())
     .get('[data-testid="widthsPreferences"] label')
     .eq(index)
     .then(el => el.get(0).click());
 
-export const toggleShareMenu = () =>
-  cy.get('[data-testid="toggleShare"]').then(el => el.get(0).click());
+export const togglePreviewPanel = () =>
+  cy.get('[data-testid="togglePreview"]').then(el => el.get(0).click());
 
 export const gotoPreview = () => {
-  toggleShareMenu()
+  togglePreviewPanel()
     .get('[data-testid="view-prototype"]')
     .then(el => cy.visit(el.get(0).href));
 };

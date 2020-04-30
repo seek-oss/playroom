@@ -93,7 +93,7 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
   return (
     <ToolbarPanel data-testid="frame-panel">
       <Stack space="large" dividers>
-        <div>
+        <div data-testid="widthsPreferences">
           <FrameHeading
             showReset={hasFilteredWidths}
             onReset={() => dispatch({ type: 'resetVisibleWidths' })}
@@ -123,7 +123,7 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
         </div>
 
         {hasThemes ? (
-          <div>
+          <div data-testid="themePreferences">
             <FrameHeading
               showReset={hasFilteredThemes}
               onReset={() => dispatch({ type: 'resetVisibleThemes' })}

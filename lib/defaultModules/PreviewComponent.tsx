@@ -1,11 +1,15 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, ReactNode } from 'react';
 import classnames from 'classnames';
 import { Logo } from '../../src/Playroom/Logo/Logo';
 
 // @ts-ignore
 import styles from './PreviewComponent.less';
 
-export default ({ children }) => {
+interface Props {
+  children?: ReactNode;
+}
+
+export default ({ children }: Props) => {
   const [hide, setHide] = useState(false);
 
   useEffect(() => {
