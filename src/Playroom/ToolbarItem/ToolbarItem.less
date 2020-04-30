@@ -82,23 +82,34 @@
   height: 10px;
   width: 10px;
   border-radius: 100%;
-  background-color: currentColor;
+  background-color: @toolbar-highlight;
   border: 2px solid @toolbar-background;
   pointer-events: none;
   transition: @transition-fast;
 
-  .success & {
-    height: 16px;
-    width: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 10px;
-    right: 10px;
+  &:not(.show) {
+    transform: scale(0);
+    opacity: 0;
   }
+}
+
+.successIndicator {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  height: 16px;
+  width: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  background-color: @positive;
+  border: 2px solid @toolbar-background;
+  pointer-events: none;
+  transition: @transition-fast;
 
   svg {
-    color: white;
+    color: @white;
   }
 
   &:not(.show) {

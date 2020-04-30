@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import copy from 'copy-to-clipboard';
 
 import TickIcon from '../icons/TickIcon';
-import ShareIcon from '../icons/ShareIcon';
+import CopyIcon from '../icons/CopyIcon';
 import { Button } from '../Button/Button';
 
 interface CopyButtonProps {
@@ -37,7 +37,7 @@ export const CopyButton = ({ copyContent }: CopyButtonProps) => {
       onClick={onClick}
       data-testid="copy-to-clipboard"
       tone={copying ? 'positive' : undefined}
-      icon={copying ? <TickIcon size={18} /> : <ShareIcon size={18} />}
+      icon={copying ? <TickIcon size={18} /> : <CopyIcon size={18} />}
     >
       {copying ? 'Copied ' : 'Copy link '}
     </Button>

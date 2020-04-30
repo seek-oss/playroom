@@ -12,7 +12,7 @@ import FramesIcon from '../icons/FramesIcon';
 import EditorUndockedIcon from '../icons/EditorUndockedIcon';
 import EditorBottomIcon from '../icons/EditorBottomIcon';
 import EditorRightIcon from '../icons/EditorRightIcon';
-import ShareIcon from '../icons/ShareIcon';
+import CopyIcon from '../icons/CopyIcon';
 import PlayIcon from '../icons/PlayIcon';
 
 // @ts-ignore
@@ -157,7 +157,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               onClick={copyHandler}
               data-testid="copyToClipboard"
             >
-              <ShareIcon />
+              <CopyIcon />
             </ToolbarItem>
             <ToolbarItem
               active={isPositionOpen}

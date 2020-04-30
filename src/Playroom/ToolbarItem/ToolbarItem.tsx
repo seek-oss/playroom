@@ -43,10 +43,15 @@ export default ({
     {children}
     <div
       className={classnames(styles.indicator, {
-        [styles.show]: showIndicator || success
+        [styles.show]: showIndicator && !success
+      })}
+    />
+    <div
+      className={classnames(styles.successIndicator, {
+        [styles.show]: success
       })}
     >
-      {success ? <TickIcon size={14} /> : undefined}
+      <TickIcon size={14} />
     </div>
   </button>
 );
