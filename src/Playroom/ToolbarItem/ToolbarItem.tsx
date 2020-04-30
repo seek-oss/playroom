@@ -1,66 +1,52 @@
 import React, { ReactChild } from 'react';
 import classnames from 'classnames';
-import { Text } from '../Text/Text';
 
 // @ts-ignore
 import styles from './ToolbarItem.less';
+import TickIcon from '../icons/TickIcon';
 
 interface Props {
   children: ReactChild;
-  active?: boolean;
   title: string;
+  active?: boolean;
+  success?: boolean;
+  disabled?: boolean;
   showIndicator?: boolean;
-  statusMessage?: string;
-  statusMessageTone?: 'neutral' | 'positive' | 'critical';
-  showStatus?: boolean;
   onClick: () => void;
   ['data-testid']?: string;
 }
+
 export default ({
   children,
-  active = false,
   title,
+  active = false,
+  disabled = false,
   showIndicator = false,
-  statusMessage,
-  statusMessageTone = 'neutral',
-  showStatus = false,
+  success = false,
   onClick,
   ['data-testid']: dataTestId
 }: Props) => (
-  <div
-    className={classnames(styles.root, {
-      [styles.showIndicator]: showIndicator
+  <button
+    data-testid={dataTestId}
+    className={classnames(styles.button, {
+      [styles.button_isActive]: active,
+      [styles.showIndicator]: showIndicator,
+      [styles.disabled]: disabled,
+      [styles.success]: success
     })}
+    title={title}
+    onClick={event => {
+      event.stopPropagation();
+      onClick();
+    }}
   >
-    <button
-      data-testid={dataTestId}
-      className={classnames(styles.button, {
-        [styles.button_isActive]: active
-      })}
-      title={title}
-      onClick={event => {
-        event.stopPropagation();
-        onClick();
-      }}
-    >
-      {children}
-    </button>
+    {children}
     <div
       className={classnames(styles.indicator, {
-        [styles.show]: showIndicator
+        [styles.show]: showIndicator || success
       })}
-    />
-    {statusMessage && (
-      <div
-        className={classnames(styles.status, {
-          [styles.neutral]: statusMessageTone === 'neutral',
-          [styles.positive]: statusMessageTone === 'positive',
-          [styles.critical]: statusMessageTone === 'critical',
-          [styles.status_show]: showStatus && statusMessage // eslint-disable-line css-modules/no-undef-class
-        })}
-      >
-        <Text>{statusMessage}</Text>
-      </div>
-    )}
-  </div>
+    >
+      {success ? <TickIcon size={14} /> : undefined}
+    </div>
+  </button>
 );

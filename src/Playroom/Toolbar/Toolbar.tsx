@@ -1,6 +1,5 @@
 import React, { useContext, ReactChild, useState, useCallback } from 'react';
 import { useTimeoutFn } from 'react-use';
-import copy from 'copy-to-clipboard';
 import classnames from 'classnames';
 import { PlayroomProps } from '../Playroom';
 import { StoreContext, EditorPosition } from '../../StoreContext/StoreContext';
@@ -51,7 +50,8 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
       visibleWidths = [],
       editorPosition,
       activeToolbarPanel,
-      validCursorPosition
+      validCursorPosition,
+      code
     },
     dispatch
   ] = useContext(StoreContext);
@@ -59,8 +59,10 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const [isReady, cancel, reset] = useTimeoutFn(() => setCopying(false), 2000);
 
   const copyHandler = useCallback(() => {
-    copy(window.location.href);
-    dispatch({ type: 'closeToolbar' });
+    dispatch({
+      type: 'copyToClipboard',
+      payload: { url: window.location.href, trigger: 'toolbarItem' }
+    });
     setCopying(true);
 
     if (isReady() === false) {
@@ -105,11 +107,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                 title={`Insert snippet (${
                   navigator.platform.match('Mac') ? '\u2318' : 'Ctrl + '
                 }K)`}
-                showStatus={
-                  !copying && !validCursorPosition && !activeToolbarPanel
-                }
-                statusMessage="Can't insert snippet at cursor"
-                statusMessageTone="critical"
+                disabled={!validCursorPosition}
                 data-testid="toggleSnippets"
                 onClick={() => {
                   dispatch({
@@ -139,7 +137,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             <ToolbarItem
               active={isPreviewOpen}
               title="Preview playroom"
-              showStatus={isPreviewOpen}
+              disabled={code.trim().length === 0}
               onClick={() => {
                 dispatch({
                   type: 'toggleToolbar',
@@ -154,11 +152,8 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
 
           <div>
             <ToolbarItem
-              active={copying && !activeToolbarPanel}
               title="Copy link to clipboard"
-              statusMessage="Link copied to clipboard"
-              statusMessageTone="positive"
-              showStatus={copying && !activeToolbarPanel}
+              success={copying}
               onClick={copyHandler}
               data-testid="copyToClipboard"
             >

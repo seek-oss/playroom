@@ -1,13 +1,5 @@
 @import (reference) '../variables.less';
 
-.root {
-  position: relative;
-}
-
-.showIndicator {
-  color: @toolbar-highlight;
-}
-
 .button {
   position: relative;
   height: @toolbar-closed-size;
@@ -21,15 +13,28 @@
   align-items: center;
   justify-content: center;
   color: currentColor;
-  cursor: pointer;
   height: @toolbar-item-size;
   width: @toolbar-item-size;
 
-  &.button_isActive,
-  &:hover {
+  &.success {
+    color: @positive;
+  }
+
+  &:not(.disabled) {
+    cursor: pointer;
+  }
+
+  &.disabled {
+    color: @gray-3;
+  }
+
+  &.showIndicator,
+  &.button_isActive:not(.success):not(.disabled),
+  &:hover:not(.success):not(.disabled) {
     color: @toolbar-highlight;
   }
 
+  // Background
   &:before {
     content: '';
     position: absolute;
@@ -42,16 +47,17 @@
     transition: @transition-slow;
     pointer-events: none;
 
-    :not(:hover):focus& {
+    :not(.success):not(:hover):focus& {
       color: @toolbar-foregound;
     }
 
-    :not(.button_isActive):focus&,
-    :hover& {
+    :not(.success):not(.disabled):not(.button_isActive):focus&,
+    :not(.success):not(.disabled):hover& {
       opacity: 0.1;
     }
   }
 
+  // Side strip
   &:after {
     content: '';
     position: absolute;
@@ -75,44 +81,28 @@
   right: 12px;
   height: 10px;
   width: 10px;
-  background-color: @toolbar-highlight;
   border-radius: 100%;
-  border: 2px solid @code-background;
+  background-color: currentColor;
+  border: 2px solid @toolbar-background;
   pointer-events: none;
   transition: @transition-fast;
+
+  .success & {
+    height: 16px;
+    width: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 10px;
+    right: 10px;
+  }
+
+  svg {
+    color: white;
+  }
 
   &:not(.show) {
     transform: scale(0);
     opacity: 0;
-  }
-}
-
-.status {
-  @height: 30px;
-  position: absolute;
-  top: (@toolbar-item-size - @height) /2;
-  right: @toolbar-closed-size + 10px;
-  height: @height;
-  border-radius: @radius-medium;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  transition: @transition-medium;
-
-  &:not(.status_show) {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(10px);
-  }
-
-  &.neutral {
-    background-color: @neutral;
-  }
-  &.positive {
-    background-color: @positive-light;
-  }
-  &.critical {
-    background-color: @critical-light;
   }
 }

@@ -8,6 +8,7 @@ import { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
 import Toolbar from './Toolbar/Toolbar';
 import ChevronIcon from './icons/ChevronIcon';
+import { StatusMessage } from './StatusMessage/StatusMessage';
 import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
 
 // @ts-ignore
@@ -128,6 +129,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           previewCode={previewEditorCode}
           hints={componentsToHints(components)}
         />
+        <StatusMessage />
       </div>
       <div className={styles.toolbarContainer}>
         <Toolbar widths={widths} themes={themes} snippets={snippets} />

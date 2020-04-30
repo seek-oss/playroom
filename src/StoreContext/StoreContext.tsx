@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   Dispatch
 } from 'react';
+import copy from 'copy-to-clipboard';
 import localforage from 'localforage';
 import base64url from 'base64-url';
 import lzString from 'lz-string';
@@ -37,6 +38,11 @@ export interface CursorPosition {
   ch: number;
 }
 
+interface StatusMessage {
+  message: string;
+  tone: 'positive' | 'critical';
+}
+
 type ToolbarPanel = 'snippets' | 'frames' | 'positions' | 'preview';
 interface State {
   code: string;
@@ -50,6 +56,7 @@ interface State {
   editorPosition: EditorPosition;
   editorHeight: number;
   editorWidth: number;
+  statusMessage?: StatusMessage;
   visibleThemes?: string[];
   visibleWidths?: number[];
   ready: boolean;
@@ -68,6 +75,11 @@ type Action =
   | { type: 'closeToolbar' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
+  | {
+      type: 'copyToClipboard';
+      payload: { url: string; trigger: 'toolbarItem' | 'previewPanel' };
+    }
+  | { type: 'dismissMessage' }
   | {
       type: 'updateEditorPosition';
       payload: { position: EditorPosition };
@@ -114,6 +126,30 @@ const createReducer = ({
       };
     }
 
+    case 'dismissMessage': {
+      return {
+        ...state,
+        statusMessage: undefined
+      };
+    }
+
+    case 'copyToClipboard': {
+      const { url, trigger } = action.payload;
+
+      copy(url);
+
+      return {
+        ...state,
+        statusMessage:
+          trigger === 'toolbarItem'
+            ? {
+                message: 'Copied to clipboard',
+                tone: 'positive'
+              }
+            : undefined
+      };
+    }
+
     case 'persistSnippet': {
       const { snippet } = action.payload;
       const { activeToolbarPanel, ...currentState } = state;
@@ -137,7 +173,11 @@ const createReducer = ({
       return {
         ...state,
         cursorPosition: position,
-        validCursorPosition: true
+        statusMessage: undefined,
+        validCursorPosition: isValidLocation({
+          code: state.code,
+          cursor: position
+        })
       };
     }
 
@@ -164,6 +204,16 @@ const createReducer = ({
       const shouldOpen = panel !== currentPanel;
 
       if (shouldOpen) {
+        if (panel === 'preview' && state.code.trim().length === 0) {
+          return {
+            ...state,
+            statusMessage: {
+              message: 'Must have code to preview',
+              tone: 'critical'
+            }
+          };
+        }
+
         if (panel === 'snippets') {
           const validCursorPosition = isValidLocation({
             code: currentState.code,
@@ -173,6 +223,10 @@ const createReducer = ({
           if (!validCursorPosition) {
             return {
               ...currentState,
+              statusMessage: {
+                message: "Can't insert snippet at cursor",
+                tone: 'critical'
+              },
               validCursorPosition
             };
           }
@@ -184,6 +238,7 @@ const createReducer = ({
 
           return {
             ...currentState,
+            statusMessage: undefined,
             activeToolbarPanel: panel,
             previewEditorCode: code,
             highlightLineNumber: cursor.line
@@ -192,6 +247,7 @@ const createReducer = ({
 
         return {
           ...resetPreview(currentState),
+          statusMessage: undefined,
           activeToolbarPanel: panel
         };
       }
