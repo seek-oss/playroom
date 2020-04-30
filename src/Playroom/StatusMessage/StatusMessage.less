@@ -1,6 +1,6 @@
 @import (reference) '../variables.less';
 
-@gutter: 10px;
+@gutter: 15px;
 @icon: 16px;
 
 .status {
@@ -18,8 +18,7 @@
   white-space: nowrap;
   transition: @transition-fast;
   box-shadow: @shadow-small;
-  max-width: 320px - @toolbar-item-size - (@code-gutter-size * 2);
-  width: 100%;
+  max-width: calc(100vw - @toolbar-item-size - (@code-gutter-size * 2));
 
   &:not(.show) {
     opacity: 0;
