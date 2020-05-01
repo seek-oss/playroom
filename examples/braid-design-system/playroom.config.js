@@ -14,17 +14,17 @@ module.exports = {
   snippets: './playroom/snippets.js',
   exampleCode: `
     <ChecklistCard>
-      <Checkbox id="1" label="This is a checkbox" message={false} onChange={() => {}}>
+      <Checkbox id="1" label="This is a checkbox" checked={false} message={false} onChange={() => {}}>
         <Text>
           This text is visible when the checkbox is checked.
         </Text>
       </Checkbox>
-      <Checkbox checked id="2" label="This is a checkbox" message={false} onChange={() => {}}>
+      <Checkbox id="2" label="This is a checkbox" checked message={false} onChange={() => {}}>
         <Text>
           This text is visible when the checkbox is checked.
         </Text>
       </Checkbox>
-      <Checkbox id="3" label="This is a checkbox" message={false} onChange={() => {}}>
+      <Checkbox id="3" label="This is a checkbox" checked={false} message={false} onChange={() => {}}>
         <Text>
           This text is visible when the checkbox is checked.
         </Text>

@@ -12,7 +12,7 @@ export default [
     group: 'Checkbox',
     name: 'Unchecked',
     code: dedent`
-      <Checkbox id="1" label="This is a checkbox" message={false} onChange={() => {}} />
+      <Checkbox id="1" label="This is a checkbox" checked={false} message={false} onChange={() => {}} />
     `
   },
   {
