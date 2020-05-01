@@ -1,9 +1,9 @@
 import React, { ReactChild } from 'react';
 import classnames from 'classnames';
+import TickIcon from '../icons/TickIcon';
 
 // @ts-ignore
 import styles from './ToolbarItem.less';
-import TickIcon from '../icons/TickIcon';
 
 interface Props {
   children: ReactChild;
