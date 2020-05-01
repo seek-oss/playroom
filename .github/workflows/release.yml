@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    name: Publish & Deploy
+    name: Publish to npm
     runs-on: ubuntu-latest
     env:
       CI: true
