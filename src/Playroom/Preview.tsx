@@ -1,12 +1,14 @@
-import React, { useState, ComponentType, useEffect, ReactNode } from 'react';
+import React, { useState, ComponentType, useEffect } from 'react';
 import lzString from 'lz-string';
 
 import getParamsFromQuery from '../utils/getParamsFromQuery';
+import { compileJsx } from '../utils/compileJsx';
+import SplashScreen from './SplashScreen/SplashScreen';
+
 // @ts-ignore
 import CatchErrors from './CatchErrors/CatchErrors';
 // @ts-ignore
 import RenderCode from './RenderCode/RenderCode';
-import { compileJsx } from '../utils/compileJsx';
 
 interface PreviewState {
   code?: string;
@@ -33,14 +35,8 @@ export interface PreviewProps {
   components: Record<string, ComponentType>;
   themes: Record<string, any>;
   FrameComponent: ComponentType<{ themeName: string; theme: any }>;
-  PreviewComponent: ComponentType<{ children: ReactNode }>;
 }
-export default ({
-  themes,
-  components,
-  FrameComponent,
-  PreviewComponent
-}: PreviewProps) => {
+export default ({ themes, components, FrameComponent }: PreviewProps) => {
   const [{ themeName, code }, setPreviewState] = useState(getStateFromUrl);
 
   useEffect(() => {
@@ -63,9 +59,8 @@ export default ({
         themeName={themeName || '__PLAYROOM__NO_THEME__'}
         theme={resolvedTheme}
       >
-        <PreviewComponent>
-          <RenderCode code={code} scope={components} />
-        </PreviewComponent>
+        <RenderCode code={code} scope={components} />
+        <SplashScreen />
       </FrameComponent>
     </CatchErrors>
   );

@@ -2,17 +2,16 @@ import React, { useContext, ReactNode } from 'react';
 import Checkmark from './CheckmarkSvg';
 import { Heading } from '../Heading/Heading';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
-
-// @ts-ignore
-import styles from './FramesPanel.less';
 import { StoreContext } from '../../StoreContext/StoreContext';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 
+// @ts-ignore
+import styles from './FramesPanel.less';
+
 interface FramesPanelProps {
   availableWidths: number[];
   availableThemes: string[];
-  // onChange: (items?: number[]) => void;
 }
 
 interface ResetButtonProps {

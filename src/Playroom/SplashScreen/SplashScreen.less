@@ -1,4 +1,8 @@
-@import (reference) '../../src/Playroom/variables.less';
+@import (reference) '../variables.less';
+
+@animationDuration: 1300;
+@animationDelay: 500;
+@animationIterationCount: 2;
 
 .root {
   position: fixed;
@@ -41,11 +45,11 @@
   stroke-dasharray: @dash-size;
   stroke-dashoffset: @dash-size;
   animation-name: trace;
-  animation-duration: 2000ms;
-  animation-delay: 500ms;
+  animation-duration: unit(@animationDuration, ms);
+  animation-delay: unit(@animationDelay, ms);
   animation-direction: forwards;
   animation-timing-function: ease-in;
-  animation-iteration-count: 2;
+  animation-iteration-count: @animationIterationCount;
   animation-fill-mode: forwards;
 }
 
