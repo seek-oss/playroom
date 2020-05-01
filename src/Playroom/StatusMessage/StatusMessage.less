@@ -11,13 +11,17 @@
   top: @grid * 5;
   height: @grid * 8;
   border-radius: @radius-large;
-  padding: 0 (@gutter * 2 + @icon) 0 @gutter;
+  padding: 0 @gutter;
   display: flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
   transition: @transition-fast;
   max-width: calc(100vw - @toolbar-item-size - (@code-gutter-size * 2));
+
+  &.dismissable {
+    padding-right: (@gutter * 2 + @icon);
+  }
 
   &:not(.show) {
     opacity: 0;

@@ -16,7 +16,10 @@ import styles from './StatusMessage.less';
 const exitAnimationDuration = 300;
 const statusMessageDuration = 3000;
 
-export const StatusMessage = () => {
+interface Props {
+  dismissable?: boolean;
+}
+export const StatusMessage = ({ dismissable = false }: Props) => {
   const [{ statusMessage }, dispatch] = useContext(StoreContext);
   const cleanupTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const showStatusTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -57,17 +60,20 @@ export const StatusMessage = () => {
 
   return (
     <div
-      onClick={closeHandler}
+      onClick={dismissable ? closeHandler : undefined}
       className={classnames(styles.status, {
         [styles.positive]: tone === 'positive',
         [styles.critical]: tone === 'critical',
+        [styles.dismissable]: dismissable,
         [styles.show]: show // eslint-disable-line css-modules/no-undef-class
       })}
     >
       <Text>{message}</Text>
-      <div className={styles.dismiss}>
-        <DismissIcon size="100%" />
-      </div>
+      {dismissable ? (
+        <div className={styles.dismiss}>
+          <DismissIcon size="100%" />
+        </div>
+      ) : null}
     </div>
   );
 };
