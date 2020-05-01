@@ -153,7 +153,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [code, dispatch, setCursorPosition]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (editorInstanceRef.current) {
