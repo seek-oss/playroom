@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import copy from 'copy-to-clipboard';
 
 import TickIcon from '../icons/TickIcon';
-import CopyIcon from '../icons/CopyIcon';
+import ShareIcon from '../icons/ShareIcon';
 import { Button } from '../Button/Button';
 
 interface CopyButtonProps {
   copyContent: string;
+  title?: string;
 }
-export const CopyButton = ({ copyContent }: CopyButtonProps) => {
+export const CopyButton = ({ copyContent, title }: CopyButtonProps) => {
   const [copying, setCopying] = useState(false);
   const copyLocked = useRef(false);
 
@@ -36,8 +37,9 @@ export const CopyButton = ({ copyContent }: CopyButtonProps) => {
     <Button
       onClick={onClick}
       data-testid="copy-to-clipboard"
+      title={title}
       tone={copying ? 'positive' : undefined}
-      icon={copying ? <TickIcon size={18} /> : <CopyIcon size={18} />}
+      icon={copying ? <TickIcon size={18} /> : <ShareIcon size={18} />}
     >
       {copying ? 'Copied ' : 'Copy link '}
     </Button>

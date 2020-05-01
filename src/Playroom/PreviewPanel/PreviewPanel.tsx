@@ -46,13 +46,17 @@ export default ({ themes, visibleThemes }: PreviewPanelProps) => {
             as="a"
             href={prototypeUrl}
             target="_blank"
+            title="Open preview in new window"
             rel="noopener noreferrer"
             data-testid="view-prototype"
             icon={<PlayIcon size={20} />}
           >
             Open
           </Button>
-          <CopyButton copyContent={prototypeUrl} />
+          <CopyButton
+            copyContent={prototypeUrl}
+            title="Copy preview link to clipboard"
+          />
         </Inline>
       </Stack>
     </ToolbarPanel>
