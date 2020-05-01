@@ -2,12 +2,13 @@ import React, { useContext, ComponentType, Fragment } from 'react';
 import classnames from 'classnames';
 import { useDebouncedCallback } from 'use-debounce';
 import { Resizable } from 're-resizable';
-import Preview from './Preview/Preview';
+import Frames from './Frames/Frames';
 import WindowPortal from './WindowPortal';
 import { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
 import Toolbar from './Toolbar/Toolbar';
-import ChevronSvg from './Toolbar/icons/ChevronSvg';
+import ChevronIcon from './icons/ChevronIcon';
+import { StatusMessage } from './StatusMessage/StatusMessage';
 import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
 
 // @ts-ignore
@@ -35,7 +36,7 @@ const MIN_HEIGHT =
 const MIN_WIDTH =
   getThemeVariable('toolbar-open-size') +
   getThemeVariable('toolbar-closed-size') +
-  getThemeVariable('gutter-width') * 2;
+  80;
 
 // @ts-ignore
 import { CodeEditor } from './CodeEditor/CodeEditor';
@@ -128,6 +129,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           previewCode={previewEditorCode}
           hints={componentsToHints(components)}
         />
+        <StatusMessage />
       </div>
       <div className={styles.toolbarContainer}>
         <Toolbar widths={widths} themes={themes} snippets={snippets} />
@@ -185,7 +187,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
               }[editorPosition]
         }
       >
-        <Preview
+        <Frames
           code={previewRenderCode || code}
           themes={
             visibleThemes && visibleThemes.length > 0 ? visibleThemes : themes
@@ -206,9 +208,8 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
               dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
             }
           >
-            <ChevronSvg
-              height={16}
-              width={16}
+            <ChevronIcon
+              size={16}
               direction={resolveDirection(editorPosition, editorHidden)}
             />
           </button>

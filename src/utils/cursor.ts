@@ -27,10 +27,12 @@ export const isValidLocation = ({
   code: string;
   cursor: CursorPosition;
 }) =>
-  validateCode(
-    insertAtCursor({
-      code,
-      cursor,
-      snippet: breakoutString
-    })
-  );
+  code.length === 0
+    ? true
+    : validateCode(
+        insertAtCursor({
+          code,
+          cursor,
+          snippet: breakoutString
+        })
+      );

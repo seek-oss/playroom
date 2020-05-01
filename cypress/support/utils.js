@@ -32,11 +32,20 @@ export const formatCode = () =>
 
 export const selectWidthPreferenceByIndex = index =>
   cy
-    .get('[data-testid="toggleWidths"]')
+    .get('[data-testid="toggleFrames"]')
     .then(el => el.get(0).click())
     .get('[data-testid="widthsPreferences"] label')
     .eq(index)
     .then(el => el.get(0).click());
+
+export const togglePreviewPanel = () =>
+  cy.get('[data-testid="togglePreview"]').then(el => el.get(0).click());
+
+export const gotoPreview = () => {
+  togglePreviewPanel()
+    .get('[data-testid="view-prototype"]')
+    .then(el => cy.visit(el.get(0).href));
+};
 
 export const toggleSnippets = () =>
   cy.get('[data-testid="toggleSnippets"]').click();
@@ -95,3 +104,8 @@ export const assertFramesMatch = matches =>
       const frameNames = frames.map((_, el) => el.innerText).toArray();
       return expect(frameNames).to.deep.equal(matches);
     });
+
+export const assertPreviewContains = text =>
+  cy.get('body').then(el => {
+    expect(el.get(0).innerText).to.eq(text);
+  });

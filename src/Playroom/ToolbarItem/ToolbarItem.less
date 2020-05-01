@@ -1,13 +1,5 @@
 @import (reference) '../variables.less';
 
-.root {
-  position: relative;
-}
-
-.hasSelection {
-  color: @toolbar-highlight;
-}
-
 .button {
   position: relative;
   height: @toolbar-closed-size;
@@ -15,21 +7,35 @@
   border: 0;
   padding: 0;
   background-color: @toolbar-background;
+  -webkit-tap-highlight-color: transparent;
   appearance: none;
   outline: none;
   display: flex;
   align-items: center;
   justify-content: center;
   color: currentColor;
-  cursor: pointer;
   height: @toolbar-item-size;
   width: @toolbar-item-size;
 
-  &.button_isActive,
-  &:hover {
+  &.success {
+    color: @positive;
+  }
+
+  &:not(.disabled) {
+    cursor: pointer;
+  }
+
+  &.disabled {
+    color: @gray-3;
+  }
+
+  &.showIndicator,
+  &.button_isActive:not(.success):not(.disabled),
+  &:hover:not(.success):not(.disabled) {
     color: @toolbar-highlight;
   }
 
+  // Background
   &:before {
     content: '';
     position: absolute;
@@ -42,16 +48,17 @@
     transition: @transition-slow;
     pointer-events: none;
 
-    :not(:hover):focus& {
+    :not(.success):not(:hover):focus& {
       color: @toolbar-foregound;
     }
 
-    :not(.button_isActive):focus&,
-    :hover& {
+    :not(.success):not(.disabled):not(.button_isActive):focus&,
+    :not(.success):not(.disabled):hover& {
       opacity: 0.1;
     }
   }
 
+  // Side strip
   &:after {
     content: '';
     position: absolute;
@@ -71,19 +78,13 @@
 
 .indicator {
   position: absolute;
-  top: 7px;
-  right: 7px;
-  height: 18px;
-  width: 18px;
-  background-color: @toolbar-highlight;
+  top: 12px;
+  right: 12px;
+  height: 10px;
+  width: 10px;
   border-radius: 100%;
-  border: 2px solid @code-background;
-  color: @white;
-  font: @text-xsmall;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
+  background-color: @toolbar-highlight;
+  border: 2px solid @toolbar-background;
   pointer-events: none;
   transition: @transition-fast;
 
@@ -93,33 +94,27 @@
   }
 }
 
-.status {
-  @height: 30px;
+.successIndicator {
   position: absolute;
-  top: (@toolbar-item-size - @height) /2;
-  right: @toolbar-closed-size + 10px;
-  height: @height;
-  border-radius: 4px;
-  padding: 0 10px;
+  top: 12px;
+  right: 12px;
+  height: 14px;
+  width: 14px;
   display: flex;
   align-items: center;
-  font: @text-standard;
-  white-space: nowrap;
-  transition: @transition-medium;
+  justify-content: center;
+  border-radius: 100%;
+  background-color: @positive;
+  border: 2px solid @toolbar-background;
+  pointer-events: none;
+  transition: @transition-fast;
 
-  &:not(.status_show) {
+  svg {
+    color: @white;
+  }
+
+  &:not(.show) {
+    transform: translate3d(-15px, 9px, 0) scale(0);
     opacity: 0;
-    pointer-events: none;
-    transform: translateX(10px);
-  }
-
-  &.neutral {
-    background-color: @neutral;
-  }
-  &.positive {
-    background-color: @positive;
-  }
-  &.critical {
-    background-color: @critical;
   }
 }

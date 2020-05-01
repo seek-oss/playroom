@@ -133,6 +133,10 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
             cursor: editorInstanceRef.current.getCursor()
           });
 
+          dispatch({
+            type: 'updateCode',
+            payload: { code: formattedCode, cursor: formattedCursor }
+          });
           editorInstanceRef.current.setValue(formattedCode);
           editorInstanceRef.current.setCursor(formattedCursor);
         }
