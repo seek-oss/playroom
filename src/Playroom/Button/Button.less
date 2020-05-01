@@ -29,6 +29,11 @@
   font: @text-standard;
   height: @grid * 9;
 
+  &:hover:not(.positive),
+  &.positive {
+    border-color: currentColor;
+  }
+
   &:after {
     content: '';
     position: absolute;
