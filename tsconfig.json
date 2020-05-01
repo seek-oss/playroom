@@ -11,5 +11,5 @@
     "lib": ["dom", "es2015"],
     "target": "es5"
   },
-  "include": ["lib", "src"]
+  "include": ["lib", "src", "@types"]
 }

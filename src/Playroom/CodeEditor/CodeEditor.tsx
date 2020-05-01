@@ -133,6 +133,10 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
             cursor: editorInstanceRef.current.getCursor()
           });
 
+          dispatch({
+            type: 'updateCode',
+            payload: { code: formattedCode, cursor: formattedCursor }
+          });
           editorInstanceRef.current.setValue(formattedCode);
           editorInstanceRef.current.setCursor(formattedCursor);
         }
@@ -149,7 +153,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [dispatch, setCursorPosition]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (editorInstanceRef.current) {
@@ -169,12 +173,18 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
 
   useEffect(() => {
     if (editorInstanceRef.current) {
-      if (code !== editorInstanceRef.current.getValue()) {
-        editorInstanceRef.current.setValue(code);
-        validateCode(editorInstanceRef.current, code);
+      if (
+        editorInstanceRef.current.hasFocus() ||
+        code === editorInstanceRef.current.getValue() ||
+        previewCode
+      ) {
+        return;
       }
+
+      editorInstanceRef.current.setValue(code);
+      validateCode(editorInstanceRef.current, code);
     }
-  }, [code]);
+  }, [code, previewCode]);
 
   useEffect(() => {
     if (editorInstanceRef.current && !editorInstanceRef.current.hasFocus()) {
@@ -215,7 +225,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         setCursorPosition(cursorPosition);
       }}
       onChange={(editorInstance, data, newCode) => {
-        if (editorInstance.hasFocus()) {
+        if (editorInstance.hasFocus() && !previewCode) {
           validateCode(editorInstance, newCode);
           debouncedChange(newCode);
         }

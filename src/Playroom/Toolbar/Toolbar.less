@@ -3,7 +3,7 @@
 .root {
   position: relative;
   height: 100%;
-  min-width: @toolbar-closed-size;
+  min-width: @toolbar-closed-size + @toolbar-border-thickness;
   display: flex;
   flex-direction: row-reverse;
   color: @toolbar-foregound;
@@ -25,6 +25,7 @@
   pointer-events: none;
   height: 100%;
   flex-direction: row-reverse;
+  overflow: hidden;
 }
 
 .topButtons {

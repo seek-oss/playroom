@@ -1,19 +1,23 @@
-import React, { Fragment, useRef } from 'react';
+import React, { useRef } from 'react';
 import flatMap from 'lodash/flatMap';
 import Iframe from './Iframe';
 import { compileJsx } from '../../utils/compileJsx';
 import { PlayroomProps } from '../Playroom';
+import { Strong } from '../Strong/Strong';
+import { Text } from '../Text/Text';
 
 // @ts-ignore
-import styles from './Preview.less';
+import styles from './Frames.less';
 
-interface PreviewProps {
+interface FrameProps {
   code: string;
   themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
 }
 
-export default function Preview({ code, themes, widths }: PreviewProps) {
+const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
+
+export default function Frame({ code, themes, widths }: FrameProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
 
   const frames = flatMap(widths, width =>
@@ -38,20 +42,22 @@ export default function Preview({ code, themes, widths }: PreviewProps) {
           <div className={styles.frameBorder} />
           <div className={styles.frameName} data-testid="frameName">
             {frame.theme === '__PLAYROOM__NO_THEME__' ? (
-              <strong className={styles.strong}>
+              <Text weight="strong">
                 {frame.width}
                 px
-              </strong>
+              </Text>
             ) : (
-              <Fragment>
-                <strong className={styles.strong}>{frame.theme}</strong>
+              <Text>
+                <Strong>{frame.theme}</Strong>
                 {` \u2013 ${frame.width}px`}
-              </Fragment>
+              </Text>
             )}
           </div>
           <Iframe
             intersectionRootRef={scrollingPanelRef}
-            src={`frame.html#?themeName=${encodeURIComponent(
+            src={`${
+              playroomConfig.baseUrl
+            }frame.html#?themeName=${encodeURIComponent(
               frame.theme
             )}&code=${encodeURIComponent(renderCode)}`}
             className={styles.frame}

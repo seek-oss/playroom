@@ -5,6 +5,8 @@ import { useDebouncedCallback } from 'use-debounce';
 import { PlayroomProps } from '../Playroom';
 import { Snippet } from '../../../utils';
 import SearchField from './SearchField/SearchField';
+import { Strong } from '../Strong/Strong';
+import { Text } from '../Text/Text';
 
 // @ts-ignore
 import styles from './Snippets.less';
@@ -183,8 +185,10 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
               onMouseDown={() => closeHandler(filteredSnippets[index])}
               title={getLabel(snippet)}
             >
-              <strong className={styles.snippetGroup}>{snippet.group}</strong>
-              <span className={styles.snippetName}>{snippet.name}</span>
+              <Text size="large">
+                <Strong>{snippet.group}</Strong>
+                <span className={styles.snippetName}>{snippet.name}</span>
+              </Text>
             </li>
           );
         })}

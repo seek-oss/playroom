@@ -1,23 +1,22 @@
 // Grid
-@row-height: 6px;
-@gutter-width: 40px;
-@interaction-height: 44px;
+@grid: 4px;
+@gutter-width: @grid * 10;
+@interaction-height: @grid * 11;
 
 // Field
-@field-gutter: 15px;
+@field-gutter: @grid * 4;
 
 // Typography
 @typography-family: Helvetica, arial, sans-serif;
-@heading1: bold 20px @typography-family;
-@heading2: bold 18px @typography-family;
-@heading3: bold 16px @typography-family;
-@text-large: normal 16px @typography-family;
+@text-large: normal 16px/1.3em @typography-family;
 @text-standard: normal 14px @typography-family;
 @text-small: normal 12px @typography-family;
 @text-xsmall: normal 10px @typography-family;
+@text-neutral: @gray-4;
 
 // Weight
 @bold: 700;
+@weak: 100;
 
 // Palette
 @blue-1: #0088ff;
@@ -25,7 +24,9 @@
 @blue-3: #00439c;
 @blue-4: #040080;
 @green-1: #c5f5e9;
+@green-2: #1da584;
 @red-1: #fed6e1;
+@red-2: #e52b50;
 @white: #fff;
 @gray-1: #f4f4f4;
 @gray-2: #e8e8e8;
@@ -35,8 +36,10 @@
 @black: #000;
 
 // Tones
-@positive: @green-1;
-@critical: @red-1;
+@positive-light: @green-1;
+@positive: @green-2;
+@critical-light: @red-1;
+@critical: @red-2;
 @neutral: @gray-2;
 
 // Highlights
@@ -45,6 +48,7 @@
 
 // Box Shadow:
 @shadow-small: 0 2px 8px rgba(18, 21, 26, 0.3);
+@focus-outline: 0 0 0 5px rgba(@highlight, 0.15);
 
 // Border radii
 @radius-small: 2px;
@@ -62,16 +66,18 @@
 @transition-slow: opacity @transition-speed-slow ease,
   transform @transition-speed-slow ease;
 
+// Playroom
+@body: @gray-1;
+
 // Preview
 @preview-padding: @gutter-width;
-@preview-background: @gray-1;
-@preview-foregound: @gray-4;
+@preview-inactive-label-opacity: 0.3;
 
 // Code Editor
 @code-background: @white;
 @code-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
 @code-gutter-size: @gutter-width;
-@code-marker-size: 12px;
+@code-marker-size: @grid * 3;
 @code-marker-color: @highlight;
 @code-format-tag: @blue-4;
 @code-format-attribute: @blue-2;
@@ -87,7 +93,7 @@
 @toolbar-open-size: 300px;
 @toolbar-item-size: 60px;
 @toolbar-max-item-count: 5;
-@toolbar-foregound: @gray-4;
+@toolbar-foregound: @text-neutral;
 @toolbar-background: @white;
 @toolbar-highlight: @highlight;
 @toolbar-border-color: @gray-2;
@@ -98,4 +104,4 @@
 @snippet-foreground: @toolbar-foregound;
 @snippet-highlight: @toolbar-highlight;
 @snippet-selection: @selection;
-@snippet-gutter: 6px;
+@snippet-gutter: @grid * 2;

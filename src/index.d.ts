@@ -10,6 +10,7 @@ interface PlayroomConfig {
   cwd?: string;
   storageKey?: string;
   webpackConfig?: () => void;
+  baseUrl?: string;
 }
 
 interface InternalPlayroomConfig extends PlayroomConfig {
