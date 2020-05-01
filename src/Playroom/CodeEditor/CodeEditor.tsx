@@ -237,7 +237,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
 
             dispatch({
               type: 'updateCursorPosition',
-              payload: { position: { line, ch } }
+              payload: { position: { line, ch }, code: editor.getValue() }
             });
           }
         });
