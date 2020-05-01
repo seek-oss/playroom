@@ -17,7 +17,7 @@ describe('Toolbar', () => {
     assertFramesMatch([frames[widthIndexToSelect]]);
   });
 
-  it.only('preview', () => {
+  it('preview', () => {
     typeCode('<Foo><Foo><Bar/>');
 
     gotoPreview();
