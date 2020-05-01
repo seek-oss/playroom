@@ -67,7 +67,7 @@ type Action =
   | { type: 'updateCode'; payload: { code: string; cursor?: CursorPosition } }
   | {
       type: 'updateCursorPosition';
-      payload: { position: CursorPosition };
+      payload: { position: CursorPosition; code?: string };
     }
   | { type: 'persistSnippet'; payload: { snippet: Snippet } }
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
@@ -168,14 +168,16 @@ const createReducer = ({
     }
 
     case 'updateCursorPosition': {
-      const { position } = action.payload;
+      const { position, code } = action.payload;
+      const newCode = code && code !== state.code ? code : state.code;
 
       return {
         ...state,
+        code: newCode,
         cursorPosition: position,
         statusMessage: undefined,
         validCursorPosition: isValidLocation({
-          code: state.code,
+          code: newCode,
           cursor: position
         })
       };
