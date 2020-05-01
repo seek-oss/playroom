@@ -51,7 +51,7 @@ export default ({
         [styles.show]: success
       })}
     >
-      <TickIcon size={14} />
+      <TickIcon size={12} />
     </div>
   </button>
 );

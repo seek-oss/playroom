@@ -56,7 +56,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
     dispatch
   ] = useContext(StoreContext);
   const [copying, setCopying] = useState(false);
-  const [isReady, cancel, reset] = useTimeoutFn(() => setCopying(false), 2000);
+  const [isReady, cancel, reset] = useTimeoutFn(() => setCopying(false), 3000);
 
   const copyHandler = useCallback(() => {
     dispatch({
