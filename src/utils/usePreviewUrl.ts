@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { StoreContext } from './../StoreContext/StoreContext';
 import { createPreviewUrl } from '../../utils';
 
-const baseUrl = `${window.location.protocol}//${window.location.host}`;
+const baseUrl = window.location.href.split('#')[0];
 
 export default (theme: string) => {
   const [{ code }] = useContext(StoreContext);
