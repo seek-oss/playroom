@@ -105,7 +105,7 @@ export const assertFramesMatch = matches =>
       return expect(frameNames).to.deep.equal(matches);
     });
 
-export const assetPreviewContains = text =>
+export const assertPreviewContains = text =>
   cy.get('body').then(el => {
     expect(el.get(0).innerText).to.eq(text);
   });
