@@ -153,6 +153,10 @@ module.exports = {
 };
 ```
 
+## Storybook Integration
+
+If you are interested in integrating Playroom into Storybook, check out [storybook-addon-playroom](https://github.com/rbardini/storybook-addon-playroom).
+
 ## License
 
 MIT.
