@@ -262,6 +262,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
               cm.replaceSelection(spaces);
             }
           },
+          'Ctrl-Space': completeIfInTag,
           "'<'": completeAfter,
           "'/'": completeIfAfterLt,
           "' '": completeIfInTag,
