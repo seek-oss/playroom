@@ -24,7 +24,7 @@ const getStateFromUrl = (): PreviewState => {
 
     return {
       code: compileJsx(code),
-      themeName: theme
+      themeName: theme,
     } as PreviewState;
   }
 

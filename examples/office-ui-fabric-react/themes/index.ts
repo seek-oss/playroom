@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const styling = require('@uifabric/styling');
 
 styling.loadTheme({
@@ -26,8 +27,8 @@ styling.loadTheme({
     neutralPrimary: '#333333',
     neutralDark: '#272727',
     black: '#1d1d1d',
-    white: '#ffffff'
-  }
+    white: '#ffffff',
+  },
 });
 
 module.exports = {
@@ -41,5 +42,5 @@ module.exports = {
   neutralPrimary: styling.neutralPrimary,
   neutralDark: styling.neutralDark,
   black: styling.black,
-  white: styling.white
+  white: styling.white,
 };

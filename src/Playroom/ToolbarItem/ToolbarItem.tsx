@@ -24,7 +24,7 @@ export default ({
   showIndicator = false,
   success = false,
   onClick,
-  ['data-testid']: dataTestId
+  ['data-testid']: dataTestId,
 }: Props) => (
   <button
     data-testid={dataTestId}
@@ -32,10 +32,10 @@ export default ({
       [styles.button_isActive]: active,
       [styles.showIndicator]: showIndicator,
       [styles.disabled]: disabled,
-      [styles.success]: success
+      [styles.success]: success,
     })}
     title={title}
-    onClick={event => {
+    onClick={(event) => {
       event.stopPropagation();
       onClick();
     }}
@@ -43,12 +43,12 @@ export default ({
     {children}
     <div
       className={classnames(styles.indicator, {
-        [styles.show]: showIndicator && !success
+        [styles.show]: showIndicator && !success,
       })}
     />
     <div
       className={classnames(styles.successIndicator, {
-        [styles.show]: success
+        [styles.show]: success,
       })}
     >
       <TickIcon size={12} />

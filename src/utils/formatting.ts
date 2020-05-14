@@ -1,5 +1,5 @@
 import prettier from 'prettier/standalone';
-import babylon from 'prettier/parser-babylon';
+import babel from 'prettier/parser-babel';
 import { CursorPosition } from './../StoreContext/StoreContext';
 import { insertAtCursor } from './cursor';
 
@@ -10,7 +10,7 @@ export interface CodeWithCursor {
 
 export const runPrettier = ({
   code,
-  cursorOffset
+  cursorOffset,
 }: {
   code: string;
   cursorOffset: number;
@@ -19,7 +19,7 @@ export const runPrettier = ({
     return prettier.formatWithCursor(code, {
       cursorOffset,
       parser: 'babel',
-      plugins: [babylon]
+      plugins: [babel],
     });
   } catch (e) {
     // Just a formatting error so we pass
@@ -50,7 +50,7 @@ export const cursorOffsetToPosition = (
 
   return {
     line,
-    ch: cursorOffset - indexOfLastLine - 1
+    ch: cursorOffset - indexOfLastLine - 1,
   };
 };
 
@@ -65,7 +65,7 @@ export const unwrapJsx = (code: string) =>
 // all while maintaining the cursor position.
 export const formatCode = ({
   code,
-  cursor
+  cursor,
 }: CodeWithCursor): CodeWithCursor => {
   // Since we're automatically adding a line due to the wrapping we need to
   // remove one
@@ -77,19 +77,19 @@ export const formatCode = ({
 
   const currentCursorPosition = positionToCursorOffset(wrappedCode, {
     line: cursor.line + WRAPPED_LINE_OFFSET,
-    ch: cursor.ch
+    ch: cursor.ch,
   });
 
   const formatResult = runPrettier({
     code: wrappedCode,
-    cursorOffset: currentCursorPosition
+    cursorOffset: currentCursorPosition,
   });
 
   if (formatResult === null) {
     // Return inputs if formatting error occurs.
     return {
       code,
-      cursor
+      cursor,
     };
   }
 
@@ -103,15 +103,15 @@ export const formatCode = ({
     code: formattedCode,
     cursor: {
       line: position.line - WRAPPED_LINE_OFFSET,
-      ch: position.ch === 0 ? 0 : position.ch - WRAPPED_INDENT_OFFSET
-    }
+      ch: position.ch === 0 ? 0 : position.ch - WRAPPED_INDENT_OFFSET,
+    },
   };
 };
 
 export const formatAndInsert = ({
   code,
   cursor,
-  snippet
+  snippet,
 }: {
   code: string;
   cursor: CursorPosition;
@@ -125,34 +125,34 @@ export const formatAndInsert = ({
       ? { line, ch: ch + lastLineOfSnippet.length }
       : {
           line: line + snippetLines.length - 1,
-          ch: lastLineOfSnippet.length
+          ch: lastLineOfSnippet.length,
         };
   const newCode = insertAtCursor({
     code,
     cursor,
-    snippet
+    snippet,
   });
 
   return formatCode({
     code: newCode,
-    cursor: updatedCursor
+    cursor: updatedCursor,
   });
 };
 
 export const formatForInsertion = ({
   code,
-  cursor
+  cursor,
 }: CodeWithCursor): CodeWithCursor => {
   const snippet =
     '<AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789 />';
   const { code: formattedCode, cursor: formattedCursor } = formatAndInsert({
     code,
     snippet,
-    cursor
+    cursor,
   });
 
   return {
     code: formattedCode.replace(snippet, ''),
-    cursor: formattedCursor
+    cursor: formattedCursor,
   };
 };

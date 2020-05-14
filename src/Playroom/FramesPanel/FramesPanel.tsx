@@ -49,7 +49,7 @@ function FrameOption<Option>({
   selected,
   visible,
   available,
-  onChange
+  onChange,
 }: FrameOptionProps<Option>) {
   return (
     <label className={styles.label}>
@@ -57,7 +57,7 @@ function FrameOption<Option>({
         type="checkbox"
         checked={selected}
         className={styles.checkbox}
-        onChange={ev => {
+        onChange={(ev) => {
           if (ev.target.checked) {
             const newVisiblePreference = [...visible, option];
             const isOriginalList =
@@ -65,7 +65,7 @@ function FrameOption<Option>({
               JSON.stringify([...available].sort());
             onChange(isOriginalList ? undefined : newVisiblePreference);
           } else {
-            onChange(visible.filter(p => p !== option));
+            onChange(visible.filter((p) => p !== option));
           }
         }}
       />
@@ -82,8 +82,9 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
     StoreContext
   );
   const hasThemes =
-    availableThemes.filter(themeName => themeName !== '__PLAYROOM__NO_THEME__')
-      .length > 0;
+    availableThemes.filter(
+      (themeName) => themeName !== '__PLAYROOM__NO_THEME__'
+    ).length > 0;
   const hasFilteredWidths =
     visibleWidths.length > 0 && visibleWidths.length <= availableWidths.length;
   const hasFilteredThemes =
@@ -100,18 +101,18 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
             Widths
           </FrameHeading>
 
-          {availableWidths.map(option => (
+          {availableWidths.map((option) => (
             <FrameOption
               key={option}
               option={option}
               selected={hasFilteredWidths && visibleWidths.includes(option)}
               visible={visibleWidths}
               available={availableWidths}
-              onChange={newWidths => {
+              onChange={(newWidths) => {
                 if (newWidths) {
                   dispatch({
                     type: 'updateVisibleWidths',
-                    payload: { widths: newWidths }
+                    payload: { widths: newWidths },
                   });
                 } else {
                   dispatch({ type: 'resetVisibleWidths' });
@@ -130,18 +131,18 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
               Themes
             </FrameHeading>
 
-            {availableThemes.map(option => (
+            {availableThemes.map((option) => (
               <FrameOption
                 key={option}
                 option={option}
                 selected={hasFilteredThemes && visibleThemes.includes(option)}
                 visible={visibleThemes}
                 available={availableThemes}
-                onChange={newThemes => {
+                onChange={(newThemes) => {
                   if (newThemes) {
                     dispatch({
                       type: 'updateVisibleThemes',
-                      payload: { themes: newThemes }
+                      payload: { themes: newThemes },
                     });
                   } else {
                     dispatch({ type: 'resetVisibleThemes' });

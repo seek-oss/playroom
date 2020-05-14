@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useRef,
   AllHTMLAttributes,
-  MutableRefObject
+  MutableRefObject,
 } from 'react';
 import { useIntersection } from 'react-use';
 
@@ -24,7 +24,7 @@ export default function Iframe({
   const intersection = useIntersection(iframeRef, {
     root: intersectionRootRef.current,
     rootMargin: '800px',
-    threshold: 0
+    threshold: 0,
   });
 
   const intersectionRatio = intersection?.intersectionRatio ?? null;
@@ -61,7 +61,7 @@ export default function Iframe({
       style={{
         ...style,
         transition: 'opacity .3s ease',
-        opacity: loaded ? 1 : 0
+        opacity: loaded ? 1 : 0,
       }}
       {...restProps}
     />

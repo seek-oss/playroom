@@ -11,7 +11,7 @@ export default class Frame extends Component {
 
     this.state = {
       themeName,
-      code
+      code,
     };
   }
 

@@ -24,7 +24,7 @@ export const ThemeSelector = ({
   themes,
   activeTheme,
   onChange,
-  visibleThemes
+  visibleThemes,
 }: ThemeSelectorProps) => {
   const options =
     visibleThemes && visibleThemes.length > 0 ? (
@@ -34,7 +34,7 @@ export const ThemeSelector = ({
         </optgroup>
         <optgroup label="Available themes">
           {themes
-            .filter(theme => !visibleThemes.some(t => t === theme))
+            .filter((theme) => !visibleThemes.some((t) => t === theme))
             .map(themeOption)}
         </optgroup>
       </Fragment>
@@ -70,7 +70,7 @@ export const ThemeSelector = ({
         title="Select theme"
         value={activeTheme}
         id="theme-select"
-        onChange={e => {
+        onChange={(e) => {
           onChange(e.target.value);
         }}
       >

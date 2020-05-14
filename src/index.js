@@ -18,7 +18,7 @@ polyfillIntersectionObserver().then(() => {
   const renderPlayroom = ({
     themes = require('./themes'),
     components = require('./components'),
-    snippets = require('./snippets')
+    snippets = require('./snippets'),
   } = {}) => {
     const themeNames = Object.keys(themes);
 
