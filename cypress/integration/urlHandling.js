@@ -2,7 +2,7 @@ import {
   assertFirstFrameContains,
   assertCodePaneContains,
   assertFramesMatch,
-  visit
+  visit,
 } from '../support/utils';
 
 describe('URL handling', () => {

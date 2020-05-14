@@ -6,7 +6,7 @@ export default [
     name: 'Default',
     code: dedent`
       <Foo />
-    `
+    `,
   },
   {
     group: 'Foo',
@@ -15,7 +15,7 @@ export default [
       <Foo color="red">
         <strong>Hello</strong>
       </Foo>
-    `
+    `,
   },
   {
     group: 'Foo',
@@ -24,7 +24,7 @@ export default [
       <Foo>
         <strong>The</strong>
       </Foo>
-    `
+    `,
   },
   {
     group: 'Foo',
@@ -33,7 +33,7 @@ export default [
       <Foo>
         <strong>Quick</strong>
       </Foo>
-    `
+    `,
   },
   {
     group: 'Foo',
@@ -42,7 +42,7 @@ export default [
       <Foo>
         <strong>Brown</strong>
       </Foo>
-    `
+    `,
   },
   {
     group: 'Foo',
@@ -51,7 +51,7 @@ export default [
       <Foo>
         <strong>Fox</strong>
       </Foo>
-    `
+    `,
   },
   {
     group: 'Foo',
@@ -60,7 +60,7 @@ export default [
       <Foo>
         <strong>Jumps</strong>
       </Foo>
-    `
+    `,
   },
   {
     group: 'Foo',
@@ -69,7 +69,7 @@ export default [
       <Foo color="red">
         <strong>Over</strong>
       </Foo>
-    `
+    `,
   },
   {
     group: 'Foo',
@@ -78,7 +78,7 @@ export default [
       <Foo color="blue">
         <strong>Lazy</strong>
       </Foo>
-    `
+    `,
   },
   {
     group: 'Foo',
@@ -87,14 +87,14 @@ export default [
       <Foo>
         <strong>Dog</strong>
       </Foo>
-    `
+    `,
   },
   {
     group: 'Bar',
     name: 'Default',
     code: dedent`
       <Bar />
-    `
+    `,
   },
   {
     group: 'Bar',
@@ -103,6 +103,6 @@ export default [
       <Bar color="blue">
         <strong>Hello</strong>
       </Bar>
-    `
-  }
+    `,
+  },
 ];

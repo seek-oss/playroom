@@ -31,16 +31,16 @@ interface Icon {
 const positionIcon: Record<EditorPosition, Icon> = {
   undocked: {
     component: <EditorUndockedIcon />,
-    title: 'Undock into separate window '
+    title: 'Undock into separate window ',
   },
   right: {
     component: <EditorRightIcon />,
-    title: 'Dock to right'
+    title: 'Dock to right',
   },
   bottom: {
     component: <EditorBottomIcon />,
-    title: 'Dock to bottom'
-  }
+    title: 'Dock to bottom',
+  },
 };
 
 export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
@@ -51,9 +51,9 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
       editorPosition,
       activeToolbarPanel,
       validCursorPosition,
-      code
+      code,
     },
-    dispatch
+    dispatch,
   ] = useContext(StoreContext);
   const [copying, setCopying] = useState(false);
   const [isReady, cancel, reset] = useTimeoutFn(() => setCopying(false), 3000);
@@ -61,7 +61,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const copyHandler = useCallback(() => {
     dispatch({
       type: 'copyToClipboard',
-      payload: { url: window.location.href, trigger: 'toolbarItem' }
+      payload: { url: window.location.href, trigger: 'toolbarItem' },
     });
     setCopying(true);
 
@@ -85,7 +85,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   return (
     <div
       className={classnames(styles.root, {
-        [styles.isOpen]: isOpen && !isPositionOpen
+        [styles.isOpen]: isOpen && !isPositionOpen,
       })}
     >
       {isOpen && (
@@ -98,7 +98,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
         <div className={styles.buttons}>
           <div
             className={classnames(styles.topButtons, {
-              [styles.topButtons_hide]: isPositionOpen
+              [styles.topButtons_hide]: isPositionOpen,
             })}
           >
             {hasSnippets && (
@@ -112,7 +112,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                 onClick={() => {
                   dispatch({
                     type: 'toggleToolbar',
-                    payload: { panel: 'snippets' }
+                    payload: { panel: 'snippets' },
                   });
                 }}
               >
@@ -126,7 +126,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               onClick={() => {
                 dispatch({
                   type: 'toggleToolbar',
-                  payload: { panel: 'frames' }
+                  payload: { panel: 'frames' },
                 });
               }}
               data-testid="toggleFrames"
@@ -141,7 +141,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               onClick={() => {
                 dispatch({
                   type: 'toggleToolbar',
-                  payload: { panel: 'preview' }
+                  payload: { panel: 'preview' },
                 });
               }}
               data-testid="togglePreview"
@@ -165,7 +165,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               onClick={() =>
                 dispatch({
                   type: 'toggleToolbar',
-                  payload: { panel: 'positions' }
+                  payload: { panel: 'positions' },
                 })
               }
             >
@@ -175,13 +175,13 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
 
           <div
             className={classnames(styles.positionContainer, {
-              [styles.positions_isOpen]: isPositionOpen // eslint-disable-line css-modules/no-undef-class
+              [styles.positions_isOpen]: isPositionOpen, // eslint-disable-line css-modules/no-undef-class
             })}
             onClick={() => dispatch({ type: 'closeToolbar' })}
           >
             {Object.keys(positionIcon)
-              .filter(pos => pos !== editorPosition)
-              .map(pos => {
+              .filter((pos) => pos !== editorPosition)
+              .map((pos) => {
                 const position = pos as EditorPosition;
                 return position === 'undocked' ? null : (
                   <div
@@ -193,7 +193,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                       onClick={() => {
                         dispatch({
                           type: 'updateEditorPosition',
-                          payload: { position }
+                          payload: { position },
                         });
                       }}
                     >
@@ -213,17 +213,17 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             >
               <Snippets
                 snippets={snippets}
-                onHighlight={snippet => {
+                onHighlight={(snippet) => {
                   dispatch({
                     type: 'previewSnippet',
-                    payload: { snippet }
+                    payload: { snippet },
                   });
                 }}
-                onClose={snippet => {
+                onClose={(snippet) => {
                   if (snippet) {
                     dispatch({
                       type: 'persistSnippet',
-                      payload: { snippet }
+                      payload: { snippet },
                     });
                   } else {
                     dispatch({ type: 'closeToolbar' });

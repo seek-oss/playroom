@@ -13,6 +13,6 @@ export default (theme: string) => {
   return createPreviewUrl({
     baseUrl,
     code,
-    theme: isThemed ? theme : undefined
+    theme: isThemed ? theme : undefined,
   });
 };

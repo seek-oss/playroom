@@ -21,7 +21,7 @@ export default ({
   onBlur,
   onKeyUp,
   onKeyDown,
-  'data-testid': dataTestId
+  'data-testid': dataTestId,
 }: Props) => (
   <input
     type="search"

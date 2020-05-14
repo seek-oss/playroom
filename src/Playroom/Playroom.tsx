@@ -52,7 +52,7 @@ const resizableConfig = (position: EditorPosition = 'bottom') => ({
   topRight: false,
   bottomRight: false,
   bottomLeft: false,
-  topLeft: false
+  topLeft: false,
 });
 
 const resolveDirection = (
@@ -85,16 +85,16 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       code,
       previewRenderCode,
       previewEditorCode,
-      ready
+      ready,
     },
-    dispatch
+    dispatch,
   ] = useContext(StoreContext);
 
   const [updateEditorSize] = useDebouncedCallback(
     ({
       isVerticalEditor,
       offsetWidth,
-      offsetHeight
+      offsetHeight,
     }: {
       isVerticalEditor: boolean;
       offsetHeight: number;
@@ -102,7 +102,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
     }) => {
       dispatch({
         type: isVerticalEditor ? 'updateEditorWidth' : 'updateEditorHeight',
-        payload: { size: isVerticalEditor ? offsetWidth : offsetHeight }
+        payload: { size: isVerticalEditor ? offsetWidth : offsetHeight },
       });
     },
     1
@@ -141,7 +141,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
   const isHorizontalEditor = editorPosition === 'bottom';
   const sizeStyles = {
     height: isHorizontalEditor ? `${editorHeight}px` : 'auto', // issue in ff & safari when not a string
-    width: isVerticalEditor ? `${editorWidth}px` : 'auto'
+    width: isVerticalEditor ? `${editorWidth}px` : 'auto',
   };
   const editorContainer =
     editorPosition === 'undocked' ? (
@@ -158,7 +158,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         className={classnames(styles.resizeableContainer, {
           [styles.resizeableContainer_isRight]: isVerticalEditor,
           [styles.resizeableContainer_isBottom]: isHorizontalEditor,
-          [styles.resizeableContainer_isHidden]: editorHidden
+          [styles.resizeableContainer_isHidden]: editorHidden,
         })}
         defaultSize={sizeStyles}
         size={sizeStyles}
@@ -183,7 +183,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             : {
                 right: { right: editorWidth },
                 bottom: { bottom: editorHeight },
-                undocked: undefined
+                undocked: undefined,
               }[editorPosition]
         }
       >
@@ -198,7 +198,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         />
         <div
           className={classnames(styles.toggleEditorContainer, {
-            [styles.isBottom]: isHorizontalEditor
+            [styles.isBottom]: isHorizontalEditor,
           })}
         >
           <button

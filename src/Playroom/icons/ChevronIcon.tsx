@@ -23,7 +23,7 @@ export default ({
     className={classnames(styles.root, {
       [styles.up]: direction === 'up',
       [styles.left]: direction === 'left',
-      [styles.right]: direction === 'right'
+      [styles.right]: direction === 'right',
     })}
     {...props}
   >

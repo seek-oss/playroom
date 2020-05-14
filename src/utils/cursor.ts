@@ -6,7 +6,7 @@ const breakoutString = '<b>"b"</b>';
 export const insertAtCursor = ({
   code,
   cursor,
-  snippet
+  snippet,
 }: {
   code: string;
   cursor: CursorPosition;
@@ -22,7 +22,7 @@ export const insertAtCursor = ({
 
 export const isValidLocation = ({
   code,
-  cursor
+  cursor,
 }: {
   code: string;
   cursor: CursorPosition;
@@ -33,6 +33,6 @@ export const isValidLocation = ({
         insertAtCursor({
           code,
           cursor,
-          snippet: breakoutString
+          snippet: breakoutString,
         })
       );

@@ -7,7 +7,7 @@ interface Props {
 
 const parent = {
   border: '1px solid currentColor',
-  padding: '10px 10px 10px 15px'
+  padding: '10px 10px 10px 15px',
 };
 
 export default class Bar extends Component<Props> {

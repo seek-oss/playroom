@@ -30,7 +30,7 @@ export const Button = ({
 }: Props) => (
   <ButtonComponent
     className={classnames(styles.reset, styles.base, {
-      [styles.positive]: tone === 'positive'
+      [styles.positive]: tone === 'positive',
     })}
     {...props}
   >

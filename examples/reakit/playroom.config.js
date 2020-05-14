@@ -9,5 +9,5 @@ module.exports = {
       <Button maxWidth="20vmin">Up</Button>
       <Button maxWidth="20vmin">Down</Button>
     </Group>
-  `
+  `,
 };

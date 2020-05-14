@@ -6,12 +6,12 @@ const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__)
 const copyStyles = (sourceDoc: Document, targetDoc: Document) => {
   const list = Array.from(sourceDoc.styleSheets) as CSSStyleSheet[];
 
-  list.forEach(styleSheet => {
+  list.forEach((styleSheet) => {
     if (styleSheet.cssRules) {
       // true for inline styles
       const newStyleEl = sourceDoc.createElement('style');
 
-      Array.from(styleSheet.cssRules).forEach(cssRule => {
+      Array.from(styleSheet.cssRules).forEach((cssRule) => {
         newStyleEl.appendChild(sourceDoc.createTextNode(cssRule.cssText));
       });
 
@@ -48,7 +48,7 @@ export default class WindowPortal extends React.PureComponent<Props, State> {
     this.state = {
       externalWindow: null,
       containerDiv: null,
-      isClosedByParent: false
+      isClosedByParent: false,
     };
   }
 
@@ -79,7 +79,7 @@ export default class WindowPortal extends React.PureComponent<Props, State> {
       externalWindow.document.body.appendChild(containerDiv);
 
       if (typeof this.props.onUnload === 'function') {
-        externalWindow.addEventListener('unload', e => {
+        externalWindow.addEventListener('unload', (e) => {
           // Call unload only if window portal is closed explicitly,
           // not if closed by parent.
           if (!this.state.isClosedByParent) {

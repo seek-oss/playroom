@@ -103,7 +103,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   );
 
   const [debouncedChange] = useDebouncedCallback(
-    newCode => onChange(newCode),
+    (newCode) => onChange(newCode),
     100
   );
 
@@ -130,12 +130,12 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           e.preventDefault();
           const { code: formattedCode, cursor: formattedCursor } = format({
             code: editorInstanceRef.current.getValue(),
-            cursor: editorInstanceRef.current.getCursor()
+            cursor: editorInstanceRef.current.getCursor(),
           });
 
           dispatch({
             type: 'updateCode',
-            payload: { code: formattedCode, cursor: formattedCursor }
+            payload: { code: formattedCode, cursor: formattedCursor },
           });
           editorInstanceRef.current.setValue(formattedCode);
           editorInstanceRef.current.setCursor(formattedCursor);
@@ -203,7 +203,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         editorInstanceRef.current.scrollIntoView(
           {
             line: highlightLineNumber,
-            ch: 0
+            ch: 0,
           },
           200
         );
@@ -219,7 +219,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
 
   return (
     <ReactCodeMirror
-      editorDidMount={editorInstance => {
+      editorDidMount={(editorInstance) => {
         editorInstanceRef.current = editorInstance;
         validateCode(editorInstance, code);
         setCursorPosition(cursorPosition);
@@ -230,14 +230,14 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           debouncedChange(newCode);
         }
       }}
-      onCursorActivity={editor => {
+      onCursorActivity={(editor) => {
         setTimeout(() => {
           if (!editor.somethingSelected() && editor.hasFocus()) {
             const { line, ch } = editor.getCursor();
 
             dispatch({
               type: 'updateCursorPosition',
-              payload: { position: { line, ch }, code: editor.getValue() }
+              payload: { position: { line, ch }, code: editor.getValue() },
             });
           }
         });
@@ -252,7 +252,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         hintOptions: { schemaInfo: hints },
         viewportMargin: 50,
         extraKeys: {
-          Tab: cm => {
+          Tab: (cm) => {
             if (cm.somethingSelected()) {
               // @ts-ignore
               cm.indentSelection('add');
@@ -266,8 +266,8 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           "'<'": completeAfter,
           "'/'": completeIfAfterLt,
           "' '": completeIfInTag,
-          "'='": completeIfInTag
-        }
+          "'='": completeIfInTag,
+        },
       }}
     />
   );

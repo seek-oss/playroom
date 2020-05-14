@@ -13,7 +13,7 @@
 
     const { Octokit } = require('@octokit/rest');
     const octokit = new Octokit({
-      auth: GITHUB_TOKEN
+      auth: GITHUB_TOKEN,
     });
 
     await octokit.repos.createStatus({
@@ -23,7 +23,7 @@
       state: 'success',
       context: 'Preview Site',
       target_url: `https://playroom--${GITHUB_SHA}.surge.sh`,
-      description: 'The preview for this PR has been successfully deployed'
+      description: 'The preview for this PR has been successfully deployed',
     });
 
     console.log('Successfully posted commit status to GitHub');

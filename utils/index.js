@@ -7,7 +7,7 @@ const createUrl = ({ baseUrl, code, themes, widths }) => {
     const data = JSON.stringify({
       ...(code ? { code } : {}),
       ...(themes ? { themes } : {}),
-      ...(widths ? { widths } : {})
+      ...(widths ? { widths } : {}),
     });
 
     const compressedData = lzString.compressToEncodedURIComponent(data);
@@ -29,7 +29,7 @@ const createPreviewUrl = ({ baseUrl, code, theme }) => {
   if (code || theme) {
     const data = JSON.stringify({
       ...(code ? { code } : {}),
-      ...(theme ? { theme } : {})
+      ...(theme ? { theme } : {}),
     });
 
     const compressedData = lzString.compressToEncodedURIComponent(data);
@@ -47,5 +47,5 @@ const createPreviewUrl = ({ baseUrl, code, theme }) => {
 
 module.exports = {
   createUrl,
-  createPreviewUrl
+  createPreviewUrl,
 };

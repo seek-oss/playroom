@@ -4,7 +4,7 @@ import {
   assertPreviewContains,
   typeCode,
   gotoPreview,
-  visit
+  visit,
 } from '../support/utils';
 
 describe('Toolbar', () => {
@@ -33,8 +33,8 @@ describe('Toolbar', () => {
     );
 
     cy.document()
-      .then(doc => {
-        cy.stub(doc, 'execCommand', args => {
+      .then((doc) => {
+        cy.stub(doc, 'execCommand', (args) => {
           if (args === 'copy') {
             copySpy();
             return true;
