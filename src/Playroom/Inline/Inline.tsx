@@ -33,7 +33,7 @@ export const Inline = ({ children, space }: Props) => {
     [styles.small]: space === 'small',
     [styles.medium]: space === 'medium',
     [styles.large]: space === 'large',
-    [styles.xlarge]: space === 'xlarge'
+    [styles.xlarge]: space === 'xlarge',
   });
 
   return (

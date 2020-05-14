@@ -8,7 +8,7 @@ document.body.appendChild(outlet);
 const renderPreview = ({
   themes = require('./themes'),
   components = require('./components'),
-  FrameComponent = require('./frameComponent')
+  FrameComponent = require('./frameComponent'),
 } = {}) => {
   render(
     <Preview

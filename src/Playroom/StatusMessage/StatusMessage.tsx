@@ -3,7 +3,7 @@ import React, {
   useState,
   useEffect,
   useRef,
-  useCallback
+  useCallback,
 } from 'react';
 import classnames from 'classnames';
 import { StoreContext } from '../../StoreContext/StoreContext';
@@ -65,7 +65,7 @@ export const StatusMessage = ({ dismissable = false }: Props) => {
         [styles.positive]: tone === 'positive',
         [styles.critical]: tone === 'critical',
         [styles.dismissable]: dismissable,
-        [styles.show]: show // eslint-disable-line css-modules/no-undef-class
+        [styles.show]: show, // eslint-disable-line css-modules/no-undef-class
       })}
     >
       <Text>{message}</Text>

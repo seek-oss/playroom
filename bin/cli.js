@@ -11,7 +11,7 @@ const showUsage = () => {
       {
         header: 'playroom',
         content:
-          'Code-oriented component design tool.\n\nUsage: playroom <command> [options...]'
+          'Code-oriented component design tool.\n\nUsage: playroom <command> [options...]',
       },
       {
         header: 'Commands',
@@ -19,10 +19,10 @@ const showUsage = () => {
           { name: 'start', summary: 'Start a local playroom.' },
           {
             name: 'build',
-            summary: 'Build a playroom for production.'
+            summary: 'Build a playroom for production.',
           },
-          { name: 'help', summary: 'Show this usage guide.' }
-        ]
+          { name: 'help', summary: 'Show this usage guide.' },
+        ],
       },
       {
         header: 'Options',
@@ -30,10 +30,10 @@ const showUsage = () => {
           {
             name: 'config',
             typeLabel: '{underline path}',
-            description: 'Path to a config file.'
-          }
-        ]
-      }
+            description: 'Path to a config file.',
+          },
+        ],
+      },
     ])
   );
 };
@@ -43,7 +43,7 @@ const showUsage = () => {
   const args = commandLineArgs([
     { name: 'command', defaultOption: true, defaultValue: 'start' },
     { name: 'config' },
-    { name: 'help', type: Boolean }
+    { name: 'help', type: Boolean },
   ]);
 
   if (args.command === 'help' || args.help) {
@@ -66,11 +66,11 @@ const showUsage = () => {
 
   const playroom = lib({
     cwd: path.dirname(configPath),
-    ...config
+    ...config,
   });
 
   if (playroom.hasOwnProperty(args.command)) {
-    playroom[args.command](err => {
+    playroom[args.command]((err) => {
       if (err) {
         console.error(err);
         process.exit(1);

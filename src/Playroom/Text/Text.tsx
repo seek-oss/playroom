@@ -19,7 +19,7 @@ export const Text = ({
   weight = 'regular',
   tone = 'neutral',
   truncate = false,
-  children
+  children,
 }: Props) =>
   React.createElement(
     component,
@@ -32,8 +32,8 @@ export const Text = ({
         [styles.strong]: weight === 'strong',
         [styles.critical]: tone === 'critical',
         [styles.neutral]: tone === 'neutral',
-        [styles.truncate]: truncate
-      })
+        [styles.truncate]: truncate,
+      }),
     },
     children
   );

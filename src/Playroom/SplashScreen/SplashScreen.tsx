@@ -5,7 +5,7 @@ import { Logo } from '../Logo/Logo';
 import {
   animationDuration,
   animationDelay,
-  animationIterationCount
+  animationIterationCount,
   // @ts-ignore
 } from '!!less-vars-loader!./SplashScreen.less';
 
@@ -28,7 +28,7 @@ export default () => {
   return (
     <div
       className={classnames(styles.root, {
-        [styles.hideSplash]: hide
+        [styles.hideSplash]: hide,
       })}
     >
       <div className={classnames(styles.trace, styles.size)}>

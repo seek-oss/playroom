@@ -13,13 +13,13 @@ interface Props {
 export const ToolbarPanel = ({
   as: component = 'aside',
   children,
-  'data-testid': dataTestId
+  'data-testid': dataTestId,
 }: Props) =>
   React.createElement(
     component,
     {
       className: classnames(styles.root),
-      'data-testid': dataTestId
+      'data-testid': dataTestId,
     },
     children
   );

@@ -9,7 +9,7 @@ import {
   toggleSnippets,
   assertSnippetCount,
   assertSnippetsListIsVisible,
-  mouseOverSnippet
+  mouseOverSnippet,
 } from '../support/utils';
 
 describe('Snippets', () => {

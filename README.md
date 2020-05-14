@@ -65,7 +65,7 @@ module.exports = {
   baseUrl: '/playroom/',
   webpackConfig: () => ({
     // Custom webpack config goes here...
-  })
+  }),
 };
 ```
 

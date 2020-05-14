@@ -20,8 +20,8 @@ const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__)
 export default function Frame({ code, themes, widths }: FrameProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
 
-  const frames = flatMap(widths, width =>
-    themes.map(theme => ({ theme, width }))
+  const frames = flatMap(widths, (width) =>
+    themes.map((theme) => ({ theme, width }))
   );
 
   let renderCode = code;
@@ -34,7 +34,7 @@ export default function Frame({ code, themes, widths }: FrameProps) {
 
   return (
     <div ref={scrollingPanelRef} className={styles.root}>
-      {frames.map(frame => (
+      {frames.map((frame) => (
         <div
           key={`${frame.theme}_${frame.width}`}
           className={styles.frameContainer}
