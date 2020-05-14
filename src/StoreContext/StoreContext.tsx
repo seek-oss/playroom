@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   Dispatch
 } from 'react';
+import copy from 'copy-to-clipboard';
 import localforage from 'localforage';
 import base64url from 'base64-url';
 import lzString from 'lz-string';
@@ -37,7 +38,12 @@ export interface CursorPosition {
   ch: number;
 }
 
-type ToolbarPanel = 'snippets' | 'themes' | 'widths' | 'positions';
+interface StatusMessage {
+  message: string;
+  tone: 'positive' | 'critical';
+}
+
+type ToolbarPanel = 'snippets' | 'frames' | 'positions' | 'preview';
 interface State {
   code: string;
   previewRenderCode?: string;
@@ -46,9 +52,11 @@ interface State {
   activeToolbarPanel?: ToolbarPanel;
   validCursorPosition: boolean;
   cursorPosition: CursorPosition;
+  editorHidden: boolean;
   editorPosition: EditorPosition;
   editorHeight: number;
   editorWidth: number;
+  statusMessage?: StatusMessage;
   visibleThemes?: string[];
   visibleWidths?: number[];
   ready: boolean;
@@ -59,12 +67,19 @@ type Action =
   | { type: 'updateCode'; payload: { code: string; cursor?: CursorPosition } }
   | {
       type: 'updateCursorPosition';
-      payload: { position: CursorPosition };
+      payload: { position: CursorPosition; code?: string };
     }
   | { type: 'persistSnippet'; payload: { snippet: Snippet } }
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
   | { type: 'toggleToolbar'; payload: { panel: ToolbarPanel } }
   | { type: 'closeToolbar' }
+  | { type: 'hideEditor' }
+  | { type: 'showEditor' }
+  | {
+      type: 'copyToClipboard';
+      payload: { url: string; trigger: 'toolbarItem' | 'previewPanel' };
+    }
+  | { type: 'dismissMessage' }
   | {
       type: 'updateEditorPosition';
       payload: { position: EditorPosition };
@@ -111,6 +126,30 @@ const createReducer = ({
       };
     }
 
+    case 'dismissMessage': {
+      return {
+        ...state,
+        statusMessage: undefined
+      };
+    }
+
+    case 'copyToClipboard': {
+      const { url, trigger } = action.payload;
+
+      copy(url);
+
+      return {
+        ...state,
+        statusMessage:
+          trigger === 'toolbarItem'
+            ? {
+                message: 'Copied to clipboard',
+                tone: 'positive'
+              }
+            : undefined
+      };
+    }
+
     case 'persistSnippet': {
       const { snippet } = action.payload;
       const { activeToolbarPanel, ...currentState } = state;
@@ -129,12 +168,18 @@ const createReducer = ({
     }
 
     case 'updateCursorPosition': {
-      const { position } = action.payload;
+      const { position, code } = action.payload;
+      const newCode = code && code !== state.code ? code : state.code;
 
       return {
         ...state,
+        code: newCode,
         cursorPosition: position,
-        validCursorPosition: true
+        statusMessage: undefined,
+        validCursorPosition: isValidLocation({
+          code: newCode,
+          cursor: position
+        })
       };
     }
 
@@ -161,6 +206,16 @@ const createReducer = ({
       const shouldOpen = panel !== currentPanel;
 
       if (shouldOpen) {
+        if (panel === 'preview' && state.code.trim().length === 0) {
+          return {
+            ...state,
+            statusMessage: {
+              message: 'Must have code to preview',
+              tone: 'critical'
+            }
+          };
+        }
+
         if (panel === 'snippets') {
           const validCursorPosition = isValidLocation({
             code: currentState.code,
@@ -170,6 +225,10 @@ const createReducer = ({
           if (!validCursorPosition) {
             return {
               ...currentState,
+              statusMessage: {
+                message: "Can't insert snippet at cursor",
+                tone: 'critical'
+              },
               validCursorPosition
             };
           }
@@ -181,6 +240,7 @@ const createReducer = ({
 
           return {
             ...currentState,
+            statusMessage: undefined,
             activeToolbarPanel: panel,
             previewEditorCode: code,
             highlightLineNumber: cursor.line
@@ -189,6 +249,7 @@ const createReducer = ({
 
         return {
           ...resetPreview(currentState),
+          statusMessage: undefined,
           activeToolbarPanel: panel
         };
       }
@@ -200,6 +261,21 @@ const createReducer = ({
       const { activeToolbarPanel, ...currentState } = state;
 
       return resetPreview(currentState);
+    }
+
+    case 'hideEditor': {
+      return {
+        ...state,
+        activeToolbarPanel: undefined,
+        editorHidden: true
+      };
+    }
+
+    case 'showEditor': {
+      return {
+        ...state,
+        editorHidden: false
+      };
     }
 
     case 'updateEditorPosition': {
@@ -289,6 +365,7 @@ const initialState: State = {
   code: exampleCode,
   validCursorPosition: true,
   cursorPosition: { line: 0, ch: 0 },
+  editorHidden: false,
   editorPosition: defaultPosition,
   editorHeight: 300,
   editorWidth: 360,

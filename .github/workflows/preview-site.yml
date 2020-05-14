@@ -1,0 +1,38 @@
+name: Preview site
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  preview:
+    name: Build & deploy
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Setup Node.js 12.x
+        uses: actions/setup-node@master
+        with:
+          node-version: 12.x
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Build
+        run: yarn example:braid:build
+
+      - name: Deploy to surge
+        run: yarn deploy-preview -d playroom--${GITHUB_SHA}.surge.sh
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+
+      - name: Update PR status
+        run: yarn post-commit-status
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

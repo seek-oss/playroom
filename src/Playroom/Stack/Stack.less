@@ -1,0 +1,23 @@
+@import (reference) '../variables.less';
+
+.stackItem:not(:last-child),
+.divider {
+  &.xxsmall {
+    padding-bottom: @grid;
+  }
+  &.xsmall {
+    padding-bottom: @grid * 2;
+  }
+  &.small {
+    padding-bottom: @grid * 3;
+  }
+  &.medium {
+    padding-bottom: @grid * 4;
+  }
+  &.large {
+    padding-bottom: @grid * 6;
+  }
+  &.xlarge {
+    padding-bottom: @grid * 12;
+  }
+}

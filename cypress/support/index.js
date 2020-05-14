@@ -9,9 +9,9 @@ beforeEach(() => {
       indexedDB.deleteDatabase(storageKey);
     })
     .reload()
-    .then(() => {
+    .then(() =>
       getFirstFrame().then(
         $iframe => new Cypress.Promise(resolve => $iframe.on('load', resolve))
-      );
-    });
+      )
+    );
 });

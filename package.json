@@ -8,9 +8,9 @@
     "playroom": "bin/cli.js"
   },
   "scripts": {
-    "test": "yarn lint && yarn jest && yarn cypress",
     "cypress": "start-server-and-test example:build-and-serve http://localhost:9000 'cypress run'",
     "cypress:dev": "start-server-and-test example:start http://localhost:9000 'cypress open'",
+    "example:braid:build": "cd examples/braid-design-system && yarn && yarn build",
     "example:start": "./bin/cli.js start --config cypress/projects/basic/playroom.config.js",
     "example:build": "./bin/cli.js build --config cypress/projects/basic/playroom.config.js",
     "example:serve": "PORT=9000 serve cypress/projects/basic/dist",
@@ -19,7 +19,9 @@
     "lint": "eslint . && prettier --list-different '**/*.{js,md,less,ts,tsx}' && tsc --noEmit",
     "format": "prettier --write '**/*.{js,md,less,ts,tsx}'",
     "semantic-release": "semantic-release",
-    "jest": "jest src"
+    "test": "jest src",
+    "post-commit-status": "node scripts/postCommitStatus.js",
+    "deploy-preview": "surge -p ./examples/braid-design-system/dist"
   },
   "husky": {
     "hooks": {
@@ -65,9 +67,11 @@
     "@babel/standalone": "^7.8.7",
     "@types/base64-url": "^2.2.0",
     "@types/classnames": "^2.2.9",
+    "@types/codemirror": "^0.0.84",
     "@types/dedent": "^0.7.0",
     "@types/lodash": "^4.14.149",
     "@types/lz-string": "^1.3.33",
+    "@types/prettier": "^1.19.0",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "autoprefixer": "^9.7.4",
@@ -116,23 +120,23 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
-    "@types/codemirror": "^0.0.84",
-    "@types/jest": "^25.1.0",
-    "@types/prettier": "^1.19.0",
-    "commitizen": "^4.0.3",
+    "@octokit/rest": "^17.5.1",
+    "@types/jest": "^25.2.1",
+    "commitizen": "^4.0.4",
     "commitlint-config-seek": "^1.0.0",
     "cypress": "^3.8.3",
     "cz-conventional-changelog": "^3.1.0",
     "eslint": "^6.8.0",
-    "eslint-config-seek": "^6.0.1",
-    "husky": "^4.2.1",
-    "jest": "^25.1.0",
-    "lint-staged": "^10.0.3",
+    "eslint-config-seek": "^6.0.2",
+    "husky": "^4.2.5",
+    "jest": "^25.4.0",
+    "lint-staged": "^10.1.7",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "semantic-release": "^17.0.1",
+    "semantic-release": "^17.0.7",
     "serve": "^11.3.0",
-    "start-server-and-test": "^1.10.8"
+    "start-server-and-test": "^1.11.0",
+    "surge": "^0.21.3"
   },
   "peerDependencies": {
     "react": "^16.8",

@@ -6,24 +6,25 @@ const braidDir = path.dirname(
 
 module.exports = {
   title: 'BRAID',
-  outputPath: './dist/playroom',
+  outputPath: './dist',
   components: 'braid-design-system',
   themes: 'braid-design-system/lib/themes',
   frameComponent: './playroom/FrameComponent.js',
   widths: [320, 500, 768, 1024],
+  snippets: './playroom/snippets.js',
   exampleCode: `
     <ChecklistCard>
-      <Checkbox id="1" label="This is a checkbox" message={false} onChange={() => {}}>
+      <Checkbox id="1" label="This is a checkbox" checked={false} message={false} onChange={() => {}}>
         <Text>
           This text is visible when the checkbox is checked.
         </Text>
       </Checkbox>
-      <Checkbox checked id="2" label="This is a checkbox" message={false} onChange={() => {}}>
+      <Checkbox id="2" label="This is a checkbox" checked message={false} onChange={() => {}}>
         <Text>
           This text is visible when the checkbox is checked.
         </Text>
       </Checkbox>
-      <Checkbox id="3" label="This is a checkbox" message={false} onChange={() => {}}>
+      <Checkbox id="3" label="This is a checkbox" checked={false} message={false} onChange={() => {}}>
         <Text>
           This text is visible when the checkbox is checked.
         </Text>

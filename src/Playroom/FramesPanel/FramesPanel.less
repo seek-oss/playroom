@@ -1,13 +1,6 @@
 @import (reference) '../variables.less';
 
-.root {
-  padding: 25px 30px;
-}
-
 .title {
-  font: @heading3;
-  color: currentColor;
-  margin: 0;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
@@ -52,16 +45,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  height: 36px;
+  height: @grid * 9;
   cursor: pointer;
-}
-
-.labelText {
-  font: @text-standard;
-  color: currentColor;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   user-select: none;
 }
 

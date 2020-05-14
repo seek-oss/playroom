@@ -1,6 +1,9 @@
 import {
   assertFramesMatch,
   selectWidthPreferenceByIndex,
+  assertPreviewContains,
+  typeCode,
+  gotoPreview,
   visit
 } from '../support/utils';
 
@@ -12,6 +15,14 @@ describe('Toolbar', () => {
     assertFramesMatch(frames);
     selectWidthPreferenceByIndex(widthIndexToSelect);
     assertFramesMatch([frames[widthIndexToSelect]]);
+  });
+
+  it('preview', () => {
+    typeCode('<Foo><Foo><Bar/>');
+
+    gotoPreview();
+
+    assertPreviewContains('Foo\nFoo\nBar');
   });
 
   it('copy to clipboard', () => {

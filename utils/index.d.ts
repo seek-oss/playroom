@@ -14,3 +14,11 @@ interface CreateUrlOptions {
 }
 
 export const createUrl: (options: CreateUrlOptions) => string;
+
+interface CreatePreviewUrlOptions {
+  baseUrl?: string;
+  code?: string;
+  theme?: string;
+}
+
+export const createPreviewUrl: (options: CreatePreviewUrlOptions) => string;
