@@ -14,7 +14,9 @@ interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 
-const getIframeSandboxAttribute = (iframeSandboxConfig) => {
+const getIframeSandboxAttribute = (
+  iframeSandboxConfig: string | boolean | undefined
+): string | undefined => {
   if (iframeSandboxConfig === true) {
     return 'allow-scripts';
   } else if (typeof iframeSandboxConfig === 'string') {
