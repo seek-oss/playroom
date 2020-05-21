@@ -14,6 +14,14 @@ interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 
+const getIframeSandboxAttribute = (iframeSandboxConfig) => {
+  if (iframeSandboxConfig === true) {
+    return 'allow-scripts';
+  } else if (typeof iframeSandboxConfig === 'string') {
+    return iframeSandboxConfig;
+  }
+};
+
 export default function Iframe({
   intersectionRootRef,
   style,
@@ -54,7 +62,7 @@ export default function Iframe({
   return (
     <iframe
       ref={iframeRef}
-      sandbox={playroomConfig.iframeSandbox ?? "allow-scripts"}
+      sandbox={getIframeSandboxAttribute(playroomConfig.iframeSandbox)}
       onLoad={() => setLoaded(true)}
       onMouseEnter={() => {
         if (src !== renderedSrc) {
