@@ -4,14 +4,15 @@ const { getFirstFrame } = require('./utils');
 beforeEach(() => {
   cy.visit('http://localhost:9000')
     .window()
-    .then(win => {
+    .then((win) => {
       const { storageKey } = win.__playroomConfig__;
       indexedDB.deleteDatabase(storageKey);
     })
     .reload()
-    .then(() => {
+    .then(() =>
       getFirstFrame().then(
-        $iframe => new Cypress.Promise(resolve => $iframe.on('load', resolve))
-      );
-    });
+        ($iframe) =>
+          new Cypress.Promise((resolve) => $iframe.on('load', resolve))
+      )
+    );
 });

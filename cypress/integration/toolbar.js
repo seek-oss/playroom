@@ -1,7 +1,10 @@
 import {
   assertFramesMatch,
   selectWidthPreferenceByIndex,
-  visit
+  assertPreviewContains,
+  typeCode,
+  gotoPreview,
+  visit,
 } from '../support/utils';
 
 describe('Toolbar', () => {
@@ -14,6 +17,14 @@ describe('Toolbar', () => {
     assertFramesMatch([frames[widthIndexToSelect]]);
   });
 
+  it('preview', () => {
+    typeCode('<Foo><Foo><Bar/>');
+
+    gotoPreview();
+
+    assertPreviewContains('Foo\nFoo\nBar');
+  });
+
   it('copy to clipboard', () => {
     const copySpy = cy.spy();
 
@@ -22,8 +33,8 @@ describe('Toolbar', () => {
     );
 
     cy.document()
-      .then(doc => {
-        cy.stub(doc, 'execCommand', args => {
+      .then((doc) => {
+        cy.stub(doc, 'execCommand', (args) => {
           if (args === 'copy') {
             copySpy();
             return true;

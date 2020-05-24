@@ -8,17 +8,18 @@ export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
 export const getFirstFrame = () => getPreviewFrames().first();
 
-export const visit = url =>
+export const visit = (url) =>
   cy
     .visit(url)
     .reload()
     .then(() => {
       return getFirstFrame().then(
-        $iframe => new Cypress.Promise(resolve => $iframe.on('load', resolve))
+        ($iframe) =>
+          new Cypress.Promise((resolve) => $iframe.on('load', resolve))
       );
     });
 
-export const typeCode = code =>
+export const typeCode = (code) =>
   getCodeEditor()
     .focused()
     .type(code, { force: true, delay: 200 })
@@ -30,18 +31,27 @@ export const formatCode = () =>
     .type(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}s`)
     .wait(WAIT_FOR_FRAME_TO_RENDER);
 
-export const selectWidthPreferenceByIndex = index =>
+export const selectWidthPreferenceByIndex = (index) =>
   cy
-    .get('[data-testid="toggleWidths"]')
-    .then(el => el.get(0).click())
+    .get('[data-testid="toggleFrames"]')
+    .then((el) => el.get(0).click())
     .get('[data-testid="widthsPreferences"] label')
     .eq(index)
-    .then(el => el.get(0).click());
+    .then((el) => el.get(0).click());
+
+export const togglePreviewPanel = () =>
+  cy.get('[data-testid="togglePreview"]').then((el) => el.get(0).click());
+
+export const gotoPreview = () => {
+  togglePreviewPanel()
+    .get('[data-testid="view-prototype"]')
+    .then((el) => cy.visit(el.get(0).href));
+};
 
 export const toggleSnippets = () =>
   cy.get('[data-testid="toggleSnippets"]').click();
 
-export const filterSnippets = search =>
+export const filterSnippets = (search) =>
   cy
     .get('[data-testid="filterSnippets"]')
     .type(search, { force: true })
@@ -52,29 +62,29 @@ export const assertSnippetsListIsVisible = () =>
 
 const getSnippets = () => cy.get('[data-testid="snippet-list"] li');
 
-export const selectSnippetByIndex = index => getSnippets().eq(index);
+export const selectSnippetByIndex = (index) => getSnippets().eq(index);
 
-export const mouseOverSnippet = index =>
+export const mouseOverSnippet = (index) =>
   selectSnippetByIndex(index)
     .trigger('mousemove', { force: true }) // force stops cypress scrolling the panel out of the editor
     .wait(WAIT_FOR_FRAME_TO_RENDER);
 
-export const assertSnippetCount = count =>
+export const assertSnippetCount = (count) =>
   getSnippets().should('have.length', count);
 
-export const assertFirstFrameContains = text => {
-  getFirstFrame().then($el =>
+export const assertFirstFrameContains = (text) => {
+  getFirstFrame().then(($el) =>
     cy
       .wrap($el.contents().find('body'))
       .wait(WAIT_FOR_FRAME_TO_RENDER)
-      .then(el => {
+      .then((el) => {
         expect(el.get(0).innerText).to.eq(text);
       })
   );
 };
 
-export const assertCodePaneContains = text => {
-  getCodeEditor().then($el => {
+export const assertCodePaneContains = (text) => {
+  getCodeEditor().then(($el) => {
     const code = $el.get(0).innerText;
     // removes code mirrors invisible last line character placeholder
     // which is inserted to preserve prettiers new line at end of string.
@@ -82,16 +92,21 @@ export const assertCodePaneContains = text => {
   });
 };
 
-export const assertCodePaneLineCount = lines => {
+export const assertCodePaneLineCount = (lines) => {
   getCodeEditor().within(() =>
     cy.get('.CodeMirror-line').should('have.length', lines)
   );
 };
 
-export const assertFramesMatch = matches =>
+export const assertFramesMatch = (matches) =>
   getPreviewFrameNames()
     .should('have.length', matches.length)
-    .then(frames => {
+    .then((frames) => {
       const frameNames = frames.map((_, el) => el.innerText).toArray();
       return expect(frameNames).to.deep.equal(matches);
     });
+
+export const assertPreviewContains = (text) =>
+  cy.get('body').then((el) => {
+    expect(el.get(0).innerText).to.eq(text);
+  });

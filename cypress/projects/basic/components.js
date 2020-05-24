@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const withPropTypes = component => {
+const withPropTypes = (component) => {
   component.propTypes = {
     color: PropTypes.oneOf(['red', 'blue']),
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
   return component;
 };
 const parent = {
   border: '1px solid currentColor',
-  padding: '10px 10px 10px 15px'
+  padding: '10px 10px 10px 15px',
 };
 
 export const Foo = withPropTypes(({ color = 'black', children }) => (

@@ -3,8 +3,9 @@ import React, {
   createContext,
   useReducer,
   ReactNode,
-  Dispatch
+  Dispatch,
 } from 'react';
+import copy from 'copy-to-clipboard';
 import localforage from 'localforage';
 import base64url from 'base64-url';
 import lzString from 'lz-string';
@@ -22,7 +23,7 @@ const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
 
 const store = localforage.createInstance({
   name: playroomConfig.storageKey,
-  version: 1
+  version: 1,
 });
 
 const defaultPosition = 'bottom';
@@ -37,7 +38,12 @@ export interface CursorPosition {
   ch: number;
 }
 
-type ToolbarPanel = 'snippets' | 'themes' | 'widths' | 'positions';
+interface StatusMessage {
+  message: string;
+  tone: 'positive' | 'critical';
+}
+
+type ToolbarPanel = 'snippets' | 'frames' | 'positions' | 'preview';
 interface State {
   code: string;
   previewRenderCode?: string;
@@ -50,6 +56,7 @@ interface State {
   editorPosition: EditorPosition;
   editorHeight: number;
   editorWidth: number;
+  statusMessage?: StatusMessage;
   visibleThemes?: string[];
   visibleWidths?: number[];
   ready: boolean;
@@ -60,7 +67,7 @@ type Action =
   | { type: 'updateCode'; payload: { code: string; cursor?: CursorPosition } }
   | {
       type: 'updateCursorPosition';
-      payload: { position: CursorPosition };
+      payload: { position: CursorPosition; code?: string };
     }
   | { type: 'persistSnippet'; payload: { snippet: Snippet } }
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
@@ -68,6 +75,11 @@ type Action =
   | { type: 'closeToolbar' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
+  | {
+      type: 'copyToClipboard';
+      payload: { url: string; trigger: 'toolbarItem' | 'previewPanel' };
+    }
+  | { type: 'dismissMessage' }
   | {
       type: 'updateEditorPosition';
       payload: { position: EditorPosition };
@@ -93,13 +105,13 @@ interface CreateReducerParams {
 }
 const createReducer = ({
   themes: configuredThemes,
-  widths: configuredWidths
+  widths: configuredWidths,
 }: CreateReducerParams) => (state: State, action: Action): State => {
   switch (action.type) {
     case 'initialLoad': {
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     }
 
@@ -110,7 +122,31 @@ const createReducer = ({
       return {
         ...state,
         code,
-        cursorPosition: cursor || state.cursorPosition
+        cursorPosition: cursor || state.cursorPosition,
+      };
+    }
+
+    case 'dismissMessage': {
+      return {
+        ...state,
+        statusMessage: undefined,
+      };
+    }
+
+    case 'copyToClipboard': {
+      const { url, trigger } = action.payload;
+
+      copy(url);
+
+      return {
+        ...state,
+        statusMessage:
+          trigger === 'toolbarItem'
+            ? {
+                message: 'Copied to clipboard',
+                tone: 'positive',
+              }
+            : undefined,
       };
     }
 
@@ -121,23 +157,29 @@ const createReducer = ({
       const { code, cursor } = formatAndInsert({
         code: state.code,
         snippet: snippet.code,
-        cursor: state.cursorPosition
+        cursor: state.cursorPosition,
       });
 
       return {
         ...resetPreview(currentState),
         code,
-        cursorPosition: cursor
+        cursorPosition: cursor,
       };
     }
 
     case 'updateCursorPosition': {
-      const { position } = action.payload;
+      const { position, code } = action.payload;
+      const newCode = code && code !== state.code ? code : state.code;
 
       return {
         ...state,
+        code: newCode,
         cursorPosition: position,
-        validCursorPosition: true
+        statusMessage: undefined,
+        validCursorPosition: isValidLocation({
+          code: newCode,
+          cursor: position,
+        }),
       };
     }
 
@@ -148,13 +190,13 @@ const createReducer = ({
         ? formatAndInsert({
             code: state.code,
             snippet: snippet.code,
-            cursor: state.cursorPosition
+            cursor: state.cursorPosition,
           }).code
         : undefined;
 
       return {
         ...state,
-        previewRenderCode
+        previewRenderCode,
       };
     }
 
@@ -164,35 +206,51 @@ const createReducer = ({
       const shouldOpen = panel !== currentPanel;
 
       if (shouldOpen) {
+        if (panel === 'preview' && state.code.trim().length === 0) {
+          return {
+            ...state,
+            statusMessage: {
+              message: 'Must have code to preview',
+              tone: 'critical',
+            },
+          };
+        }
+
         if (panel === 'snippets') {
           const validCursorPosition = isValidLocation({
             code: currentState.code,
-            cursor: currentState.cursorPosition
+            cursor: currentState.cursorPosition,
           });
 
           if (!validCursorPosition) {
             return {
               ...currentState,
-              validCursorPosition
+              statusMessage: {
+                message: "Can't insert snippet at cursor",
+                tone: 'critical',
+              },
+              validCursorPosition,
             };
           }
 
           const { code, cursor } = formatForInsertion({
             code: currentState.code,
-            cursor: currentState.cursorPosition
+            cursor: currentState.cursorPosition,
           });
 
           return {
             ...currentState,
+            statusMessage: undefined,
             activeToolbarPanel: panel,
             previewEditorCode: code,
-            highlightLineNumber: cursor.line
+            highlightLineNumber: cursor.line,
           };
         }
 
         return {
           ...resetPreview(currentState),
-          activeToolbarPanel: panel
+          statusMessage: undefined,
+          activeToolbarPanel: panel,
         };
       }
 
@@ -209,14 +267,14 @@ const createReducer = ({
       return {
         ...state,
         activeToolbarPanel: undefined,
-        editorHidden: true
+        editorHidden: true,
       };
     }
 
     case 'showEditor': {
       return {
         ...state,
-        editorHidden: false
+        editorHidden: false,
       };
     }
 
@@ -227,7 +285,7 @@ const createReducer = ({
 
       return {
         ...currentState,
-        editorPosition: position
+        editorPosition: position,
       };
     }
 
@@ -236,7 +294,7 @@ const createReducer = ({
 
       return {
         ...state,
-        editorPosition: defaultPosition
+        editorPosition: defaultPosition,
       };
     }
 
@@ -246,7 +304,7 @@ const createReducer = ({
 
       return {
         ...state,
-        editorHeight: size
+        editorHeight: size,
       };
     }
 
@@ -256,18 +314,18 @@ const createReducer = ({
 
       return {
         ...state,
-        editorWidth: size
+        editorWidth: size,
       };
     }
 
     case 'updateVisibleThemes': {
       const { themes } = action.payload;
-      const visibleThemes = configuredThemes.filter(t => themes.includes(t));
+      const visibleThemes = configuredThemes.filter((t) => themes.includes(t));
       store.setItem('visibleThemes', visibleThemes);
 
       return {
         ...state,
-        visibleThemes
+        visibleThemes,
       };
     }
 
@@ -280,12 +338,12 @@ const createReducer = ({
 
     case 'updateVisibleWidths': {
       const { widths } = action.payload;
-      const visibleWidths = configuredWidths.filter(w => widths.includes(w));
+      const visibleWidths = configuredWidths.filter((w) => widths.includes(w));
       store.setItem('visibleWidths', visibleWidths);
 
       return {
         ...state,
-        visibleWidths
+        visibleWidths,
       };
     }
 
@@ -311,18 +369,18 @@ const initialState: State = {
   editorPosition: defaultPosition,
   editorHeight: 300,
   editorWidth: 360,
-  ready: false
+  ready: false,
 };
 
 export const StoreContext = createContext<StoreContextValues>([
   initialState,
-  () => {}
+  () => {},
 ]);
 
 export const StoreProvider = ({
   children,
   themes,
-  widths
+  widths,
 }: {
   children: ReactNode;
   themes: PlayroomProps['themes'];
@@ -343,7 +401,7 @@ export const StoreProvider = ({
     500
   );
   const hasThemesConfigured =
-    (themes || []).filter(themeName => themeName !== '__PLAYROOM__NO_THEME__')
+    (themes || []).filter((themeName) => themeName !== '__PLAYROOM__NO_THEME__')
       .length > 0;
 
   useEffect(() => {
@@ -357,7 +415,7 @@ export const StoreProvider = ({
         const {
           code: parsedCode,
           themes: parsedThemes,
-          widths: parsedWidths
+          widths: parsedWidths,
         } = JSON.parse(
           lzString.decompressFromEncodedURIComponent(String(params.code))
         );
@@ -377,7 +435,7 @@ export const StoreProvider = ({
       store.getItem('editorHeight'),
       store.getItem('editorWidth'),
       store.getItem('visibleWidths'),
-      store.getItem('visibleThemes')
+      store.getItem('visibleThemes'),
     ]).then(
       ([
         storedCode,
@@ -385,7 +443,7 @@ export const StoreProvider = ({
         storedHeight,
         storedWidth,
         storedVisibleWidths,
-        storedVisibleThemes
+        storedVisibleThemes,
       ]) => {
         const code = codeFromQuery || storedCode || exampleCode;
         const editorPosition = storedPosition;
@@ -404,8 +462,8 @@ export const StoreProvider = ({
             ...(editorWidth ? { editorWidth } : {}),
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
-            ready: true
-          }
+            ready: true,
+          },
         });
       }
     );
@@ -415,13 +473,13 @@ export const StoreProvider = ({
     debouncedCodeUpdate({
       code: state.code,
       themes: state.visibleThemes,
-      widths: state.visibleWidths
+      widths: state.visibleWidths,
     });
   }, [
     state.code,
     state.visibleThemes,
     state.visibleWidths,
-    debouncedCodeUpdate
+    debouncedCodeUpdate,
   ]);
 
   return (

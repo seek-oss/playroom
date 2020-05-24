@@ -8,12 +8,12 @@ export default class RenderCode extends Component {
   static propTypes = {
     code: PropTypes.string.isRequired,
     scope: PropTypes.object,
-    initialState: PropTypes.object
+    initialState: PropTypes.object,
   };
 
   static defaultProps = {
     scope: {},
-    initialState: {}
+    initialState: {},
   };
 
   constructor(props) {

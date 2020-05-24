@@ -1,0 +1,58 @@
+@import (reference) '../variables.less';
+
+.root {
+  display: flex;
+  flex-wrap: wrap;
+
+  &.xxsmall {
+    margin-top: -@grid;
+    margin-left: -@grid;
+  }
+  &.xsmall {
+    margin-top: -@grid * 2;
+    margin-left: -@grid * 2;
+  }
+  &.small {
+    margin-top: -@grid * 3;
+    margin-left: -@grid * 3;
+  }
+  &.medium {
+    margin-top: -@grid * 4;
+    margin-left: -@grid * 4;
+  }
+  &.large {
+    margin-top: -@grid * 6;
+    margin-left: -@grid * 6;
+  }
+  &.xlarge {
+    margin-top: -@grid * 12;
+    margin-left: -@grid * 12;
+  }
+}
+
+.inlineItem {
+  &.xxsmall {
+    padding-left: @grid;
+    padding-top: @grid;
+  }
+  &.xsmall {
+    padding-left: @grid * 2;
+    padding-top: @grid * 2;
+  }
+  &.small {
+    padding-left: @grid * 3;
+    padding-top: @grid * 3;
+  }
+  &.medium {
+    padding-left: @grid * 4;
+    padding-top: @grid * 4;
+  }
+  &.large {
+    padding-left: @grid * 6;
+    padding-top: @grid * 6;
+  }
+  &.xlarge {
+    padding-left: @grid * 12;
+    padding-top: @grid * 12;
+  }
+}

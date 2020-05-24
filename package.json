@@ -10,6 +10,7 @@
   "scripts": {
     "cypress": "start-server-and-test example:build-and-serve http://localhost:9000 'cypress run'",
     "cypress:dev": "start-server-and-test example:start http://localhost:9000 'cypress open'",
+    "example:braid:build": "cd examples/braid-design-system && yarn && yarn build",
     "example:start": "./bin/cli.js start --config cypress/projects/basic/playroom.config.js",
     "example:build": "./bin/cli.js build --config cypress/projects/basic/playroom.config.js",
     "example:serve": "PORT=9000 serve cypress/projects/basic/dist",
@@ -20,7 +21,7 @@
     "semantic-release": "semantic-release",
     "test": "jest src",
     "post-commit-status": "node scripts/postCommitStatus.js",
-    "deploy-preview": "surge -p ./cypress/projects/basic/dist"
+    "deploy-preview": "surge -p ./examples/braid-design-system/dist"
   },
   "husky": {
     "hooks": {
@@ -70,7 +71,7 @@
     "@types/dedent": "^0.7.0",
     "@types/lodash": "^4.14.149",
     "@types/lz-string": "^1.3.33",
-    "@types/prettier": "^1.19.0",
+    "@types/prettier": "^2.0.0",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "autoprefixer": "^9.7.4",
@@ -100,7 +101,7 @@
     "open": "^7.0.0",
     "parse-prop-types": "^0.3.0",
     "postcss-loader": "^3.0.0",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.5",
     "prop-types": "^15.7.2",
     "query-string": "^6.10.1",
     "re-resizable": "^6.1.1",

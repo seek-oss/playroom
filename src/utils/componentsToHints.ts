@@ -10,7 +10,7 @@ export default (components: PlayroomProps['components']) => {
 
   return Object.assign(
     {},
-    ...componentNames.map(componentName => {
+    ...componentNames.map((componentName) => {
       const staticTypesForComponent = staticTypes[componentName];
       if (
         staticTypesForComponent &&
@@ -18,8 +18,8 @@ export default (components: PlayroomProps['components']) => {
       ) {
         return {
           [componentName]: {
-            attrs: staticTypesForComponent
-          }
+            attrs: staticTypesForComponent,
+          },
         };
       }
 
@@ -31,18 +31,18 @@ export default (components: PlayroomProps['components']) => {
         [componentName]: {
           attrs: Object.assign(
             {},
-            ...propNames.map(propName => {
+            ...propNames.map((propName) => {
               const propType = filteredPropTypes[propName].type;
 
               return {
                 [propName]:
                   propType.name === 'oneOf'
                     ? propType.value.filter((x: any) => typeof x === 'string')
-                    : null
+                    : null,
               };
             })
-          )
-        }
+          ),
+        },
       };
     })
   );

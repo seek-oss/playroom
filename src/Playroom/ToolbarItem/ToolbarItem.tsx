@@ -1,71 +1,57 @@
 import React, { ReactChild } from 'react';
 import classnames from 'classnames';
+import TickIcon from '../icons/TickIcon';
 
 // @ts-ignore
 import styles from './ToolbarItem.less';
 
 interface Props {
   children: ReactChild;
-  active?: boolean;
   title: string;
-  count?: number;
-  statusMessage?: string;
-  statusMessageTone?: 'neutral' | 'positive' | 'critical';
-  showStatus?: boolean;
+  active?: boolean;
+  success?: boolean;
+  disabled?: boolean;
+  showIndicator?: boolean;
   onClick: () => void;
   ['data-testid']?: string;
 }
+
 export default ({
   children,
-  active = false,
   title,
-  count = 0,
-  statusMessage,
-  statusMessageTone = 'neutral',
-  showStatus = false,
+  active = false,
+  disabled = false,
+  showIndicator = false,
+  success = false,
   onClick,
-  ['data-testid']: dataTestId
-}: Props) => {
-  const hasSelection = count > 0;
-
-  return (
+  ['data-testid']: dataTestId,
+}: Props) => (
+  <button
+    data-testid={dataTestId}
+    className={classnames(styles.button, {
+      [styles.button_isActive]: active,
+      [styles.showIndicator]: showIndicator,
+      [styles.disabled]: disabled,
+      [styles.success]: success,
+    })}
+    title={title}
+    onClick={(event) => {
+      event.stopPropagation();
+      onClick();
+    }}
+  >
+    {children}
     <div
-      className={classnames(styles.root, {
-        [styles.hasSelection]: hasSelection
+      className={classnames(styles.indicator, {
+        [styles.show]: showIndicator && !success,
+      })}
+    />
+    <div
+      className={classnames(styles.successIndicator, {
+        [styles.show]: success,
       })}
     >
-      <button
-        data-testid={dataTestId}
-        className={classnames(styles.button, {
-          [styles.button_isActive]: active
-        })}
-        title={title}
-        onClick={event => {
-          event.stopPropagation();
-          onClick();
-        }}
-      >
-        {children}
-      </button>
-      <div
-        className={classnames(styles.indicator, {
-          [styles.show]: hasSelection
-        })}
-      >
-        {count || ''}
-      </div>
-      {statusMessage && (
-        <div
-          className={classnames(styles.status, {
-            [styles.neutral]: statusMessageTone === 'neutral',
-            [styles.positive]: statusMessageTone === 'positive',
-            [styles.critical]: statusMessageTone === 'critical',
-            [styles.status_show]: showStatus && statusMessage // eslint-disable-line css-modules/no-undef-class
-          })}
-        >
-          {statusMessage}
-        </div>
-      )}
+      <TickIcon size={12} />
     </div>
-  );
-};
+  </button>
+);

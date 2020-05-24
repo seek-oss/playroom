@@ -15,15 +15,15 @@ module.exports = {
               presets: [
                 '@babel/preset-env',
                 '@babel/preset-typescript',
-                '@babel/preset-react'
-              ]
-            }
-          }
-        }
-      ]
+                '@babel/preset-react',
+              ],
+            },
+          },
+        },
+      ],
     },
     resolve: {
-      extensions: ['.js', '.ts', '.tsx']
-    }
-  })
+      extensions: ['.js', '.ts', '.tsx'],
+    },
+  }),
 };

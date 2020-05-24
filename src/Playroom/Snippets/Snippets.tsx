@@ -5,6 +5,8 @@ import { useDebouncedCallback } from 'use-debounce';
 import { PlayroomProps } from '../Playroom';
 import { Snippet } from '../../../utils';
 import SearchField from './SearchField/SearchField';
+import { Strong } from '../Strong/Strong';
+import { Text } from '../Text/Text';
 
 // @ts-ignore
 import styles from './Snippets.less';
@@ -23,7 +25,7 @@ const filterSnippetsForTerm = (snippets: Props['snippets'], term: string) =>
   term
     ? fuzzy
         .filter(term, snippets, {
-          extract: snippet => `${snippet.group} ${snippet.name}`
+          extract: (snippet) => `${snippet.group} ${snippet.name}`,
         })
         .map(({ original, score }) => ({ ...original, score }))
     : snippets;
@@ -66,7 +68,7 @@ const scrollToHighlightedSnippet = (
       listEl.scrollTo({
         left: 0,
         top,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     } else {
       listEl.scrollTo(0, top);
@@ -116,7 +118,7 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
       <div className={styles.fieldContainer}>
         <SearchField
           value={searchTerm}
-          onChange={e => {
+          onChange={(e) => {
             const { value } = e.currentTarget;
             setSearchTerm(value);
           }}
@@ -127,7 +129,7 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
           onKeyUp={() => {
             debounceScrollToHighlighted(listEl.current, highlightedEl.current);
           }}
-          onKeyDown={event => {
+          onKeyDown={(event) => {
             if (/^(?:Arrow)?Down$/.test(event.key)) {
               if (
                 highlightedIndex === null ||
@@ -175,7 +177,7 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
               ref={isHighlighted ? highlightedEl : undefined}
               key={`${snippet.group}_${snippet.name}_${index}`}
               className={classnames(styles.snippet, {
-                [styles.highlight]: isHighlighted
+                [styles.highlight]: isHighlighted,
               })}
               onMouseMove={
                 isHighlighted ? undefined : () => setHighlightedIndex(index)
@@ -183,8 +185,10 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
               onMouseDown={() => closeHandler(filteredSnippets[index])}
               title={getLabel(snippet)}
             >
-              <strong className={styles.snippetGroup}>{snippet.group}</strong>
-              <span className={styles.snippetName}>{snippet.name}</span>
+              <Text size="large">
+                <Strong>{snippet.group}</Strong>
+                <span className={styles.snippetName}>{snippet.name}</span>
+              </Text>
             </li>
           );
         })}

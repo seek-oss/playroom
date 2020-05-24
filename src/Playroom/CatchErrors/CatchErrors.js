@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Text } from '../Text/Text';
+import { Strong } from '../Strong/Strong';
+
 import styles from './CatchErrors.less';
 
 export default class CatchErrors extends Component {
   static propTypes = {
     code: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
   };
 
   state = {
     error: null,
     invalidCode: null,
-    info: null
+    info: null,
   };
 
   componentDidCatch(error, info) {
@@ -30,18 +33,20 @@ export default class CatchErrors extends Component {
     // Ensure the stack only contains user-provided components
     const componentStack = info.componentStack
       .split('\n')
-      .filter(line => /RenderCode/.test(line))
-      .map(line => line.replace(/ \(created by .*/g, ''));
+      .filter((line) => /RenderCode/.test(line))
+      .map((line) => line.replace(/ \(created by .*/g, ''));
 
     // Ignore the RenderCode container component
     const lines = componentStack.slice(0, componentStack.length - 1);
 
     return (
       <div className={styles.root}>
-        <strong className={styles.strong}>{error.message}</strong>
-        {lines.map((line, i) => (
-          <div key={i}>{line}</div>
-        ))}
+        <Text size="large" tone="critical">
+          <Strong>{error.message}</Strong>
+          {lines.map((line, i) => (
+            <span key={i}>{line}</span>
+          ))}
+        </Text>
       </div>
     );
   }

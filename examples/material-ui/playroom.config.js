@@ -9,5 +9,5 @@ module.exports = {
     <Badge badgeContent="2" color="primary">
       <Button color="primary">Hello</Button>
     </Badge>
-  `
+  `,
 };

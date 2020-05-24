@@ -1,13 +1,15 @@
-import React, { Fragment, useRef } from 'react';
+import React, { useRef } from 'react';
 import flatMap from 'lodash/flatMap';
 import Iframe from './Iframe';
 import { compileJsx } from '../../utils/compileJsx';
 import { PlayroomProps } from '../Playroom';
+import { Strong } from '../Strong/Strong';
+import { Text } from '../Text/Text';
 
 // @ts-ignore
-import styles from './Preview.less';
+import styles from './Frames.less';
 
-interface PreviewProps {
+interface FrameProps {
   code: string;
   themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
@@ -15,11 +17,11 @@ interface PreviewProps {
 
 const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 
-export default function Preview({ code, themes, widths }: PreviewProps) {
+export default function Frame({ code, themes, widths }: FrameProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
 
-  const frames = flatMap(widths, width =>
-    themes.map(theme => ({ theme, width }))
+  const frames = flatMap(widths, (width) =>
+    themes.map((theme) => ({ theme, width }))
   );
 
   let renderCode = code;
@@ -32,7 +34,7 @@ export default function Preview({ code, themes, widths }: PreviewProps) {
 
   return (
     <div ref={scrollingPanelRef} className={styles.root}>
-      {frames.map(frame => (
+      {frames.map((frame) => (
         <div
           key={`${frame.theme}_${frame.width}`}
           className={styles.frameContainer}
@@ -40,15 +42,15 @@ export default function Preview({ code, themes, widths }: PreviewProps) {
           <div className={styles.frameBorder} />
           <div className={styles.frameName} data-testid="frameName">
             {frame.theme === '__PLAYROOM__NO_THEME__' ? (
-              <strong className={styles.strong}>
+              <Text weight="strong">
                 {frame.width}
                 px
-              </strong>
+              </Text>
             ) : (
-              <Fragment>
-                <strong className={styles.strong}>{frame.theme}</strong>
+              <Text>
+                <Strong>{frame.theme}</Strong>
                 {` \u2013 ${frame.width}px`}
-              </Fragment>
+              </Text>
             )}
           </div>
           <Iframe

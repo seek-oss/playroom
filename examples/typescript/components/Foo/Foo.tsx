@@ -6,7 +6,7 @@ export interface FooProps {
 }
 const parent = {
   border: '1px solid currentColor',
-  padding: '10px 10px 10px 15px'
+  padding: '10px 10px 10px 15px',
 };
 
 export class Foo extends Component<FooProps> {

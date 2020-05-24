@@ -3,7 +3,7 @@ import {
   typeCode,
   assertFirstFrameContains,
   assertCodePaneContains,
-  assertCodePaneLineCount
+  assertCodePaneLineCount,
 } from '../support/utils';
 
 describe('Editor', () => {
