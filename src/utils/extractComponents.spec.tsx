@@ -23,7 +23,7 @@ describe('extractComponents', () => {
       nullValue: null,
       numberValue: 123,
       stringValue: 'abc',
-      undefinedValue: undefined
+      undefinedValue: undefined,
     });
 
     // We unfortunately cannot rule out classes or functions. See implementation
@@ -32,7 +32,7 @@ describe('extractComponents', () => {
       'validReactComponent',
       'otherClass',
       'validFunctionComponent',
-      'otherFunction'
+      'otherFunction',
     ]);
   });
 });
