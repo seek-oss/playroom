@@ -12,12 +12,12 @@ export const visit = (url) =>
   cy
     .visit(url)
     .reload()
-    .then(() => {
-      return getFirstFrame().then(
+    .then(() =>
+      getFirstFrame().then(
         ($iframe) =>
           new Cypress.Promise((resolve) => $iframe.on('load', resolve))
-      );
-    });
+      )
+    );
 
 export const typeCode = (code) =>
   getCodeEditor()
