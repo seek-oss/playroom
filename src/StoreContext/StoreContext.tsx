@@ -14,11 +14,11 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { createUrl, CreateUrlOptions, Snippet } from '../../utils';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
-import getParamsFromQuery from '../utils/getParamsFromQuery';
+import { getParamsFromQuery, replaceUrl } from '../utils/params';
 import { PlayroomProps } from '../Playroom/Playroom';
 import { isValidLocation } from '../utils/cursor';
+import playroomConfig from '../config';
 
-const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
 
 const store = localforage.createInstance({
@@ -396,7 +396,7 @@ export const StoreProvider = ({
       // they are also removed from the url. Replacing state
       // with an empty string (returned from `createUrl`)
       // does not do anything, so replacing with `#`
-      history.replaceState(null, '', createUrl(params) || '#');
+      replaceUrl(createUrl({ ...params, paramType: playroomConfig.paramType }));
     },
     500
   );

@@ -5,6 +5,7 @@ import { compileJsx } from '../../utils/compileJsx';
 import { PlayroomProps } from '../Playroom';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
+import playroomConfig from '../../config';
 
 // @ts-ignore
 import styles from './Frames.less';
@@ -14,8 +15,6 @@ interface FrameProps {
   themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
 }
-
-const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 
 export default function Frame({ code, themes, widths }: FrameProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
@@ -55,9 +54,9 @@ export default function Frame({ code, themes, widths }: FrameProps) {
           </div>
           <Iframe
             intersectionRootRef={scrollingPanelRef}
-            src={`${
-              playroomConfig.baseUrl
-            }frame.html#?themeName=${encodeURIComponent(
+            src={`${playroomConfig.baseUrl}frame.html${
+              playroomConfig.paramType === 'hash' ? '#' : ''
+            }?themeName=${encodeURIComponent(
               frame.theme
             )}&code=${encodeURIComponent(renderCode)}`}
             className={styles.frame}

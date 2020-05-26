@@ -3,4 +3,5 @@ module.exports = {
   snippets: './snippets',
   outputPath: './dist',
   openBrowser: false,
+  paramType: 'search',
 };
