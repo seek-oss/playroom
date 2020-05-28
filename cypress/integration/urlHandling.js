@@ -58,7 +58,12 @@ describe('URL handling', () => {
         'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
 
-      assertFramesMatch(['375px', '768px']);
+      assertFramesMatch([
+        'themeOne – 375px',
+        'themeTwo – 375px',
+        'themeOne – 768px',
+        'themeTwo – 768px',
+      ]);
     });
   });
 });

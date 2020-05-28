@@ -10,13 +10,13 @@ import playroomConfig from '../../config';
 // @ts-ignore
 import styles from './Frames.less';
 
-interface FrameProps {
+interface FramesProps {
   code: string;
   themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
 }
 
-export default function Frame({ code, themes, widths }: FrameProps) {
+export default function Frames({ code, themes, widths }: FramesProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
 
   const frames = flatMap(widths, (width) =>
