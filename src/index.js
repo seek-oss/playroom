@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import playroomConfig from './config';
 import Playroom from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';
+import playroomConfig from './config';
 
 const polyfillIntersectionObserver = () =>
   typeof window.IntersectionObserver !== 'undefined'

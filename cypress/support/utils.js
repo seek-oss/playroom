@@ -110,3 +110,19 @@ export const assertPreviewContains = (text) =>
   cy.get('body').then((el) => {
     expect(el.get(0).innerText).to.eq(text);
   });
+
+export const loadPlayroom = () =>
+  cy
+    .visit('http://localhost:9000')
+    .window()
+    .then((win) => {
+      const { storageKey } = win.__playroomConfig__;
+      indexedDB.deleteDatabase(storageKey);
+    })
+    .reload()
+    .then(() =>
+      getFirstFrame().then(
+        ($iframe) =>
+          new Cypress.Promise((resolve) => $iframe.on('load', resolve))
+      )
+    );

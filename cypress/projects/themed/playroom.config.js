@@ -1,7 +1,10 @@
 module.exports = {
   components: './components',
   snippets: './snippets',
+  themes: './themes',
   outputPath: './dist',
   openBrowser: false,
-  storageKey: 'playroom-example-basic',
+  paramType: 'search',
+  port: 9001,
+  storageKey: 'playroom-example-themed',
 };
