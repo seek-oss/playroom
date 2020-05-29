@@ -20,6 +20,7 @@
     "examples:build": "concurrently 'npm:example:build:*'",
     "examples:serve": "concurrently 'npm:example:serve:*'",
     "examples:build-and-serve": "yarn examples:build && yarn examples:serve",
+    "example:build:braid": "cd examples/braid-design-system && yarn && yarn build",
     "commit": "git-cz",
     "lint": "eslint . && prettier --list-different '**/*.{js,md,less,ts,tsx}' && tsc --noEmit",
     "format": "prettier --write '**/*.{js,md,less,ts,tsx}'",

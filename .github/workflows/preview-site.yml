@@ -24,7 +24,7 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: Build
-        run: yarn example:braid:build
+        run: yarn example:build:braid
 
       - name: Deploy to surge
         run: yarn deploy-preview -d playroom--${GITHUB_SHA}.surge.sh
