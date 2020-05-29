@@ -15,7 +15,7 @@
     "example:serve:basic": "PORT=9000 serve cypress/projects/basic/dist",
     "example:start:themed": "./bin/cli.js start --config cypress/projects/themed/playroom.config.js",
     "example:build:themed": "./bin/cli.js build --config cypress/projects/themed/playroom.config.js",
-    "example:serve:themed": "PORT=9001 serve cypress/projects/themed/dist",
+    "example:serve:themed": "PORT=9001 serve --config ../serve.json cypress/projects/themed/dist",
     "examples:start": "concurrently 'npm:example:start:*'",
     "examples:build": "concurrently 'npm:example:build:*'",
     "examples:serve": "concurrently 'npm:example:serve:*'",
