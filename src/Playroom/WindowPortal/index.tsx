@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 
-const playroomConfig = window.__playroomConfig__;
+import playroomConfig from '../../config';
 
 const copyStyles = (sourceDoc: Document, targetDoc: Document) => {
   const list = Array.from(sourceDoc.styleSheets) as CSSStyleSheet[];
