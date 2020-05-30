@@ -11,7 +11,7 @@ interface PlayroomConfig {
   storageKey?: string;
   webpackConfig?: () => void;
   baseUrl?: string;
-  iframeSandbox?: string | boolean;
+  iframeSandbox?: string;
 }
 
 interface InternalPlayroomConfig extends PlayroomConfig {
