@@ -7,12 +7,12 @@ import React, {
 } from 'react';
 import { useIntersection } from 'react-use';
 
+import playroomConfig from '../../config';
+
 interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
   src: string;
   intersectionRootRef: MutableRefObject<Element | null>;
 }
-
-const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 
 export default function Iframe({
   intersectionRootRef,

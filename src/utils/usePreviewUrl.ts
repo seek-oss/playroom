@@ -2,8 +2,11 @@ import { useContext } from 'react';
 
 import { StoreContext } from './../StoreContext/StoreContext';
 import { createPreviewUrl } from '../../utils';
+import playroomConfig from '../config';
 
-const baseUrl = window.location.href.split('#')[0];
+const baseUrl = window.location.href
+  .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
+  .split('index.html')[0];
 
 export default (theme: string) => {
   const [{ code }] = useContext(StoreContext);
@@ -14,5 +17,6 @@ export default (theme: string) => {
     baseUrl,
     code,
     theme: isThemed ? theme : undefined,
+    paramType: playroomConfig.paramType,
   });
 };

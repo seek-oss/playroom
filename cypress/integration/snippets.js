@@ -10,10 +10,14 @@ import {
   assertSnippetCount,
   assertSnippetsListIsVisible,
   mouseOverSnippet,
+  loadPlayroom,
 } from '../support/utils';
 
 describe('Snippets', () => {
-  beforeEach(() => typeCode('<div>Initial <span>code'));
+  beforeEach(() => {
+    loadPlayroom();
+    typeCode('<div>Initial <span>code');
+  });
 
   it('driven with mouse', () => {
     // Open and format for insertion point
