@@ -47,5 +47,5 @@ module.exports = {
         ],
       },
     }),
-  iframeSandbox: true,
+  iframeSandbox: 'allow-scripts',
 };
