@@ -69,6 +69,7 @@ module.exports = {
   webpackConfig: () => ({
     // Custom webpack config goes here...
   }),
+  iframeSandbox: 'allow-scripts',
 };
 ```
 
@@ -81,6 +82,8 @@ export { default as Text } from '../Text'; // Re-exporting a default export
 export { Button } from '../Button'; // Re-exporting a named export
 // etc...
 ```
+
+The `iframeSandbox` option can be used to set the [`sandbox` attribute](https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/) on Playroom's iframe. A minimum of `allow-scripts` is required for Playroom to work.
 
 Now that your project is configured, you can start a local development server:
 

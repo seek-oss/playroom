@@ -7,6 +7,8 @@ import React, {
 } from 'react';
 import { useIntersection } from 'react-use';
 
+import playroomConfig from '../../config';
+
 interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
   src: string;
   intersectionRootRef: MutableRefObject<Element | null>;
@@ -52,6 +54,7 @@ export default function Iframe({
   return (
     <iframe
       ref={iframeRef}
+      sandbox={playroomConfig.iframeSandbox}
       onLoad={() => setLoaded(true)}
       onMouseEnter={() => {
         if (src !== renderedSrc) {

@@ -47,4 +47,5 @@ module.exports = {
         ],
       },
     }),
+  iframeSandbox: 'allow-scripts',
 };
