@@ -12,6 +12,8 @@ interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
   intersectionRootRef: MutableRefObject<Element | null>;
 }
 
+const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
+
 export default function Iframe({
   intersectionRootRef,
   style,
@@ -52,6 +54,7 @@ export default function Iframe({
   return (
     <iframe
       ref={iframeRef}
+      sandbox={playroomConfig.iframeSandbox}
       onLoad={() => setLoaded(true)}
       onMouseEnter={() => {
         if (src !== renderedSrc) {
