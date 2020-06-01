@@ -6,6 +6,7 @@ import { PlayroomProps } from '../Playroom';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 import playroomConfig from '../../config';
+import frameSrc from './frameSrc';
 
 // @ts-ignore
 import styles from './Frames.less';
@@ -54,11 +55,10 @@ export default function Frames({ code, themes, widths }: FramesProps) {
           </div>
           <Iframe
             intersectionRootRef={scrollingPanelRef}
-            src={`${playroomConfig.baseUrl}frame.html${
-              playroomConfig.paramType === 'hash' ? '#' : ''
-            }?themeName=${encodeURIComponent(
-              frame.theme
-            )}&code=${encodeURIComponent(renderCode)}`}
+            src={frameSrc(
+              { themeName: frame.theme, code: renderCode },
+              playroomConfig
+            )}
             className={styles.frame}
             style={{ width: frame.width }}
             data-testid="previewFrame"
