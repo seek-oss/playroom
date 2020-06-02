@@ -1,14 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line import/no-unresolved
 const frameConfig = require('__PLAYROOM_ALIAS__FRAME_COMPONENT__');
 
-interface FrameParams {
-  code: string;
-  themeName: string;
-}
-const defaultFrameSrc = (
-  { code, themeName }: FrameParams,
-  { baseUrl, paramType }: InternalPlayroomConfig
-) =>
+const defaultFrameSrc = ({ code, themeName }, { baseUrl, paramType }) =>
   `${baseUrl}frame.html${
     paramType === 'hash' ? '#' : ''
   }?themeName=${encodeURIComponent(themeName)}&code=${encodeURIComponent(
