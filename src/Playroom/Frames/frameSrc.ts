@@ -1,6 +1,5 @@
-/* eslint-disable-next-line import/no-unresolved */
-// @ts-ignore
-import { frameSrc } from '__PLAYROOM_ALIAS__FRAME_COMPONENT__';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const frameConfig = require('__PLAYROOM_ALIAS__FRAME_COMPONENT__');
 
 interface FrameParams {
   code: string;
@@ -16,4 +15,4 @@ const defaultFrameSrc = (
     code
   )}`;
 
-export default frameSrc ? frameSrc : defaultFrameSrc;
+module.exports = frameConfig.frameSrc ? frameConfig.frameSrc : defaultFrameSrc;
