@@ -17,7 +17,9 @@ interface PreviewPanelProps {
 export default ({ themes, visibleThemes }: PreviewPanelProps) => {
   const defaultTheme =
     visibleThemes && visibleThemes.length > 0 ? visibleThemes[0] : themes[0];
-  const [userSelectedTheme, setUserSelectedTheme] = useState();
+  const [userSelectedTheme, setUserSelectedTheme] = useState<
+    string | undefined
+  >();
 
   const activeTheme = userSelectedTheme || defaultTheme;
 

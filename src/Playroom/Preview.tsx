@@ -25,7 +25,8 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
     (rawParams): PreviewState => {
       if (rawParams.code) {
         const result = JSON.parse(
-          lzString.decompressFromEncodedURIComponent(String(rawParams.code))
+          lzString.decompressFromEncodedURIComponent(String(rawParams.code)) ??
+            ''
         );
 
         return {

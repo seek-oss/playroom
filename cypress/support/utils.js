@@ -52,6 +52,7 @@ export const toggleSnippets = () =>
   cy.get('[data-testid="toggleSnippets"]').click();
 
 export const filterSnippets = (search) =>
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy
     .get('[data-testid="filterSnippets"]')
     .type(search, { force: true })
@@ -74,6 +75,7 @@ export const assertSnippetCount = (count) =>
 
 export const assertFirstFrameContains = (text) => {
   getFirstFrame().then(($el) =>
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy
       .wrap($el.contents().find('body'))
       .wait(WAIT_FOR_FRAME_TO_RENDER)
