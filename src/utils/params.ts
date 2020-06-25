@@ -6,7 +6,21 @@ import playroomConfig from '../config';
 
 const history = createBrowserHistory();
 
-export const replaceUrl = (url: string) => history.replace(url);
+export function updateUrlCode(code: string) {
+  const { pathname } = history.location;
+
+  const existingQuery = getParamsFromQuery();
+
+  const newQuery = queryString.stringify({
+    ...existingQuery,
+    code,
+  });
+
+  const params =
+    playroomConfig.paramType === 'hash' ? `#?${newQuery}` : `?${newQuery}`;
+
+  history.replace(`${pathname}${params}`);
+}
 
 export function getParamsFromQuery(location = history.location) {
   try {
