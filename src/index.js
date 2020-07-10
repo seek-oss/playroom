@@ -1,7 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
+
 import Playroom from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';
+import playroomConfig from './config';
 import { extractComponents } from './utils/extractComponents';
 
 const polyfillIntersectionObserver = () =>
@@ -10,7 +12,6 @@ const polyfillIntersectionObserver = () =>
     : import('intersection-observer');
 
 polyfillIntersectionObserver().then(() => {
-  const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
   const widths = playroomConfig.widths || [320, 375, 768, 1024];
 
   const outlet = document.createElement('div');

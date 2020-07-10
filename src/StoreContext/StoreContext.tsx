@@ -12,13 +12,13 @@ import lzString from 'lz-string';
 import dedent from 'dedent';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { createUrl, CreateUrlOptions, Snippet } from '../../utils';
+import { Snippet, compressParams } from '../../utils';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
-import getParamsFromQuery from '../utils/getParamsFromQuery';
+import { getParamsFromQuery, updateUrlCode } from '../utils/params';
 import { PlayroomProps } from '../Playroom/Playroom';
 import { isValidLocation } from '../utils/cursor';
+import playroomConfig from '../config';
 
-const playroomConfig = (window.__playroomConfig__ = __PLAYROOM_GLOBAL__CONFIG__);
 const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
 
 const store = localforage.createInstance({
@@ -30,8 +30,11 @@ const defaultPosition = 'bottom';
 
 export type EditorPosition = 'bottom' | 'right' | 'undocked';
 
-interface DebounceUpdateUrl
-  extends Partial<Omit<CreateUrlOptions, 'baseUrl'>> {}
+interface DebounceUpdateUrl {
+  code?: string;
+  themes?: string[];
+  widths?: number[];
+}
 
 export interface CursorPosition {
   line: number;
@@ -396,7 +399,7 @@ export const StoreProvider = ({
       // they are also removed from the url. Replacing state
       // with an empty string (returned from `createUrl`)
       // does not do anything, so replacing with `#`
-      history.replaceState(null, '', createUrl(params) || '#');
+      updateUrlCode(compressParams(params));
     },
     500
   );
@@ -417,7 +420,7 @@ export const StoreProvider = ({
           themes: parsedThemes,
           widths: parsedWidths,
         } = JSON.parse(
-          lzString.decompressFromEncodedURIComponent(String(params.code))
+          lzString.decompressFromEncodedURIComponent(String(params.code)) ?? ''
         );
 
         codeFromQuery = parsedCode;

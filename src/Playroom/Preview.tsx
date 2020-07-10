@@ -1,7 +1,7 @@
-import React, { useState, ComponentType, useEffect } from 'react';
+import React, { ComponentType } from 'react';
 import lzString from 'lz-string';
 
-import getParamsFromQuery from '../utils/getParamsFromQuery';
+import { useParams } from '../utils/params';
 import { compileJsx } from '../utils/compileJsx';
 import SplashScreen from './SplashScreen/SplashScreen';
 
@@ -14,22 +14,6 @@ interface PreviewState {
   code?: string;
   themeName?: string;
 }
-const getStateFromUrl = (): PreviewState => {
-  const params = getParamsFromQuery();
-
-  if (params.code) {
-    const { code, theme } = JSON.parse(
-      lzString.decompressFromEncodedURIComponent(String(params.code))
-    );
-
-    return {
-      code: compileJsx(code),
-      themeName: theme,
-    } as PreviewState;
-  }
-
-  return {};
-};
 
 export interface PreviewProps {
   components: Record<string, ComponentType>;
@@ -37,19 +21,23 @@ export interface PreviewProps {
   FrameComponent: ComponentType<{ themeName: string; theme: any }>;
 }
 export default ({ themes, components, FrameComponent }: PreviewProps) => {
-  const [{ themeName, code }, setPreviewState] = useState(getStateFromUrl);
+  const { themeName, code } = useParams(
+    (rawParams): PreviewState => {
+      if (rawParams.code) {
+        const result = JSON.parse(
+          lzString.decompressFromEncodedURIComponent(String(rawParams.code)) ??
+            ''
+        );
 
-  useEffect(() => {
-    const onHashChange = () => {
-      setPreviewState(getStateFromUrl());
-    };
+        return {
+          code: compileJsx(result.code),
+          themeName: result.theme,
+        };
+      }
 
-    window.addEventListener('hashchange', onHashChange);
-
-    return () => {
-      window.removeEventListener('hashchange', onHashChange);
-    };
-  }, []);
+      return {};
+    }
+  );
 
   const resolvedTheme = themeName ? themes[themeName] : null;
 

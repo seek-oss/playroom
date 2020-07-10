@@ -4,9 +4,14 @@ import {
   assertFirstFrameContains,
   assertCodePaneContains,
   assertCodePaneLineCount,
+  loadPlayroom,
 } from '../support/utils';
 
 describe('Editor', () => {
+  beforeEach(() => {
+    loadPlayroom();
+  });
+
   it('renders to frame', () => {
     typeCode('<Foo />');
     assertFirstFrameContains('Foo');

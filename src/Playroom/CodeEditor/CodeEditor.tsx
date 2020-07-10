@@ -103,7 +103,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   );
 
   const [debouncedChange] = useDebouncedCallback(
-    (newCode) => onChange(newCode),
+    (newCode: string) => onChange(newCode),
     100
   );
 
@@ -218,6 +218,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   }, [highlightLineNumber]);
 
   return (
+    // @ts-ignore
     <ReactCodeMirror
       editorDidMount={(editorInstance) => {
         editorInstanceRef.current = editorInstance;
@@ -242,7 +243,6 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           }
         });
       }}
-      // @ts-ignore
       options={{
         mode: 'jsx',
         autoCloseTags: true,

@@ -5,9 +5,14 @@ import {
   typeCode,
   gotoPreview,
   visit,
+  loadPlayroom,
 } from '../support/utils';
 
 describe('Toolbar', () => {
+  beforeEach(() => {
+    loadPlayroom();
+  });
+
   it('filter widths', () => {
     const frames = ['320px', '375px', '768px', '1024px'];
     const widthIndexToSelect = 1;

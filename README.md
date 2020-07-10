@@ -23,6 +23,8 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 [Fannypack](https://fannypack.style/playroom/)
 
+[Overdrive](http://overdrive.autoguru.io/playroom/#?code=N4Igxg9gJgpiBcIA8AhCAPABAIwwZQAsBDKCAdwF4AdEAZhswAcSoBLAOwHMLgBtG+iAA0mGgDYaAXQC+APirtMmJHgAuRMAGtMAZ2ZgO3cTXmKlygCox0qgMIR26jjABOmAjBKGeSABKe2LllfVkxVDxcYTEBeDcBpHaQAen8vILkFc3MkKxtZAHUYABtIAFso1Qgwj0wAQQBXcoBxWpdazFgdVk5FHQBPHVUYYswAWkwAeQA3VygXVimAQkTs1VMMpes7Byd2V1N0zOWASXZGeqYCjRgCCALYF2oQX3JMIkjMHohagH4GBNXlBJqDSaUyJNDoUwgaRAA)
+
 Send us a PR if you'd like to be in this list!
 
 ## Getting Started
@@ -57,6 +59,7 @@ module.exports = {
   widths: [320, 375, 768, 1024],
   port: 9000,
   openBrowser: true,
+  paramType: 'search', // default is 'hash'
   exampleCode: `
     <Button>
       Hello World!
@@ -66,6 +69,7 @@ module.exports = {
   webpackConfig: () => ({
     // Custom webpack config goes here...
   }),
+  iframeSandbox: 'allow-scripts',
 };
 ```
 
@@ -78,6 +82,8 @@ export { default as Text } from '../Text'; // Re-exporting a default export
 export { Button } from '../Button'; // Re-exporting a named export
 // etc...
 ```
+
+The `iframeSandbox` option can be used to set the [`sandbox` attribute](https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/) on Playroom's iframe. A minimum of `allow-scripts` is required for Playroom to work.
 
 Now that your project is configured, you can start a local development server:
 
