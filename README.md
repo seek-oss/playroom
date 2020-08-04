@@ -21,7 +21,7 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 [Braid Design System](https://seek-oss.github.io/braid-design-system/playroom/#?code=PEFsZXJ0IHRvbmU9ImluZm8iPldlbGNvbWUgdG8gUGxheXJvb20hPC9BbGVydD4) (Themed)
 
-[Fannypack](https://fannypack.style/playroom/)
+[Bumbag](https://bumbag.style/playroom/)
 
 [Overdrive](http://overdrive.autoguru.io/playroom/#?code=N4Igxg9gJgpiBcIA8AhCAPABAIwwZQAsBDKCAdwF4AdEAZhswAcSoBLAOwHMLgBtG+iAA0mGgDYaAXQC+APirtMmJHgAuRMAGtMAZ2ZgO3cTXmKlygCox0qgMIR26jjABOmAjBKGeSABKe2LllfVkxVDxcYTEBeDcBpHaQAen8vILkFc3MkKxtZAHUYABtIAFso1Qgwj0wAQQBXcoBxWpdazFgdVk5FHQBPHVUYYswAWkwAeQA3VygXVimAQkTs1VMMpes7Byd2V1N0zOWASXZGeqYCjRgCCALYF2oQX3JMIkjMHohagH4GBNXlBJqDSaUyJNDoUwgaRAA)
 
