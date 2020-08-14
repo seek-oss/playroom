@@ -17,7 +17,7 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 ## Demos
 
-[SEEK Style Guide](https://seek-oss.github.io/seek-style-guide/playroom/#?code=PEhlYWRlciAvPgoKPFNlY3Rpb24gaGVhZGVyPgogIDxUZXh0IGhlcm8-V2VsY29tZSB0byBQbGF5cm9vbSE8L1RleHQ-CjwvU2VjdGlvbj4KCjxGb290ZXIgLz4)
+[SEEK Style Guide](https://seek-oss.github.io/seek-style-guide/playroom/#?code=N4Igxg9gJgpiBcIA8BlGYAuBLCA7AfADq4AEJSAKjAB4YkAWMAThPgOowA2kAtjCRggkACpwCGATxYQeAQiQB6KrSK5FaTDgIgAvkA)
 
 [Braid Design System](https://seek-oss.github.io/braid-design-system/playroom/#?code=PEFsZXJ0IHRvbmU9ImluZm8iPldlbGNvbWUgdG8gUGxheXJvb20hPC9BbGVydD4) (Themed)
 
