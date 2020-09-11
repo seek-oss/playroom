@@ -71,9 +71,18 @@ export interface PlayroomProps {
   themes: string[];
   widths: number[];
   snippets: Snippets;
+  bodyStart: React.ComponentClass;
+  bodyEnd: React.ComponentClass;
 }
 
-export default ({ components, themes, widths, snippets }: PlayroomProps) => {
+export default ({
+  components,
+  themes,
+  widths,
+  snippets,
+  bodyStart: BodyStart,
+  bodyEnd: BodyEnd,
+}: PlayroomProps) => {
   const [
     {
       editorPosition,
@@ -174,48 +183,54 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
     );
 
   return (
-    <div className={styles.root}>
-      <div
-        className={styles.previewContainer}
-        style={
-          editorHidden
-            ? undefined
-            : {
-                right: { right: editorWidth },
-                bottom: { bottom: editorHeight },
-                undocked: undefined,
-              }[editorPosition]
-        }
-      >
-        <Frames
-          code={previewRenderCode || code}
-          themes={
-            visibleThemes && visibleThemes.length > 0 ? visibleThemes : themes
-          }
-          widths={
-            visibleWidths && visibleWidths.length > 0 ? visibleWidths : widths
-          }
-        />
+    <>
+      <BodyStart />
+
+      <div className={styles.root}>
         <div
-          className={classnames(styles.toggleEditorContainer, {
-            [styles.isBottom]: isHorizontalEditor,
-          })}
+          className={styles.previewContainer}
+          style={
+            editorHidden
+              ? undefined
+              : {
+                  right: { right: editorWidth },
+                  bottom: { bottom: editorHeight },
+                  undocked: undefined,
+                }[editorPosition]
+          }
         >
-          <button
-            className={styles.toggleEditorButton}
-            title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
-            onClick={() =>
-              dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
+          <Frames
+            code={previewRenderCode || code}
+            themes={
+              visibleThemes && visibleThemes.length > 0 ? visibleThemes : themes
             }
+            widths={
+              visibleWidths && visibleWidths.length > 0 ? visibleWidths : widths
+            }
+          />
+          <div
+            className={classnames(styles.toggleEditorContainer, {
+              [styles.isBottom]: isHorizontalEditor,
+            })}
           >
-            <ChevronIcon
-              size={16}
-              direction={resolveDirection(editorPosition, editorHidden)}
-            />
-          </button>
+            <button
+              className={styles.toggleEditorButton}
+              title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
+              onClick={() =>
+                dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
+              }
+            >
+              <ChevronIcon
+                size={16}
+                direction={resolveDirection(editorPosition, editorHidden)}
+              />
+            </button>
+          </div>
         </div>
+        {editorContainer}
       </div>
-      {editorContainer}
-    </div>
+
+      <BodyEnd />
+    </>
   );
 };

@@ -20,6 +20,8 @@ polyfillIntersectionObserver().then(() => {
     themes = require('./themes'),
     components = require('./components'),
     snippets = require('./snippets'),
+    bodyStart = require('./bodyStart'),
+    bodyEnd = require('./bodyEnd'),
   } = {}) => {
     const themeNames = Object.keys(themes);
 
@@ -29,6 +31,8 @@ polyfillIntersectionObserver().then(() => {
           components={components}
           widths={widths}
           themes={themeNames}
+          bodyStart={bodyStart}
+          bodyEnd={bodyEnd}
           snippets={
             typeof snippets.default !== 'undefined'
               ? snippets.default
@@ -52,6 +56,14 @@ polyfillIntersectionObserver().then(() => {
 
     module.hot.accept('./snippets', () => {
       renderPlayroom({ snippets: require('./snippets') });
+    });
+
+    module.hot.accept('./bodyStart', () => {
+      renderPlayroom({ bodyStart: require('./bodyStart') });
+    });
+
+    module.hot.accept('./bodyEnd', () => {
+      renderPlayroom({ bodyEnd: require('./bodyEnd') });
     });
   }
 });
