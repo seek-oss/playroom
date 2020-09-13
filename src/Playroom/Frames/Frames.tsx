@@ -39,7 +39,19 @@ export default function Frames({ code, themes, widths }: FramesProps) {
           key={`${frame.theme}_${frame.width}`}
           className={styles.frameContainer}
         >
-          <div className={styles.frameBorder} />
+          <div className={styles.frame}>
+            <div className={styles.frameBorder} />
+            <Iframe
+              intersectionRootRef={scrollingPanelRef}
+              src={frameSrc(
+                { themeName: frame.theme, code: renderCode },
+                playroomConfig
+              )}
+              className={styles.frame}
+              style={{ width: frame.width }}
+              data-testid="previewFrame"
+            />
+          </div>
           <div className={styles.frameName} data-testid="frameName">
             {frame.theme === '__PLAYROOM__NO_THEME__' ? (
               <Text weight="strong">
@@ -53,16 +65,6 @@ export default function Frames({ code, themes, widths }: FramesProps) {
               </Text>
             )}
           </div>
-          <Iframe
-            intersectionRootRef={scrollingPanelRef}
-            src={frameSrc(
-              { themeName: frame.theme, code: renderCode },
-              playroomConfig
-            )}
-            className={styles.frame}
-            style={{ width: frame.width }}
-            data-testid="previewFrame"
-          />
         </div>
       ))}
     </div>
