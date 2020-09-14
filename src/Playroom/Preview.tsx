@@ -6,6 +6,9 @@ import { compileJsx } from '../utils/compileJsx';
 import SplashScreen from './SplashScreen/SplashScreen';
 
 // @ts-ignore
+import styles from './Preview.less';
+
+// @ts-ignore
 import CatchErrors from './CatchErrors/CatchErrors';
 // @ts-ignore
 import RenderCode from './RenderCode/RenderCode';
@@ -47,7 +50,9 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
         themeName={themeName || '__PLAYROOM__NO_THEME__'}
         theme={resolvedTheme}
       >
-        <RenderCode code={code} scope={components} />
+        <div className={styles.container}>
+          <RenderCode code={code} scope={components} />
+        </div>
         <SplashScreen />
       </FrameComponent>
     </CatchErrors>
