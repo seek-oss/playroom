@@ -21,7 +21,11 @@ export default function Frames({ code, themes, widths }: FramesProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
 
   const frames = flatMap(widths, (width) =>
-    themes.map((theme) => ({ theme, width }))
+    themes.map((theme) => ({
+      theme,
+      width,
+      widthName: `${width}${/\d$/.test(width.toString()) ? 'px' : ''}`,
+    }))
   );
 
   let renderCode = code;
@@ -54,14 +58,11 @@ export default function Frames({ code, themes, widths }: FramesProps) {
           </div>
           <div className={styles.frameName} data-testid="frameName">
             {frame.theme === '__PLAYROOM__NO_THEME__' ? (
-              <Text weight="strong">
-                {frame.width}
-                px
-              </Text>
+              <Text weight="strong">{frame.widthName}</Text>
             ) : (
               <Text>
                 <Strong>{frame.theme}</Strong>
-                {` \u2013 ${frame.width}px`}
+                {` \u2013 ${frame.widthName}`}
               </Text>
             )}
           </div>
