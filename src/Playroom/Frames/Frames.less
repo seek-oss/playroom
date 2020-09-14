@@ -1,7 +1,5 @@
 @import (reference) '../variables.less';
 
-@frame-name-height: 30px;
-
 .root {
   box-sizing: border-box;
   width: 100%;
@@ -11,14 +9,15 @@
   white-space: nowrap;
   padding: @preview-padding 0 (@preview-padding - 10px);
   text-align: center;
+  display: flex;
 }
 
 .frameContainer {
   position: relative;
   height: 100%;
   text-align: left;
-  display: inline-flex;
-  flex-direction: column-reverse;
+  display: flex;
+  flex-direction: column;
   margin-right: @preview-padding;
 
   &:first-child {
@@ -26,10 +25,15 @@
   }
 }
 
+.frame {
+  position: relative;
+  flex-grow: 1;
+}
+
 .frameBorder {
   position: absolute;
   top: 0;
-  bottom: @frame-name-height;
+  bottom: 0;
   left: 0;
   right: 0;
   box-shadow: @shadow-small;
@@ -42,6 +46,8 @@
 }
 
 .frameName {
+  @frame-name-height: 30px;
+
   flex: 0 0 @frame-name-height;
   height: @frame-name-height;
   transition: @transition-medium;
