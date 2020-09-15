@@ -7,9 +7,16 @@
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
-  padding: @preview-padding 0 (@preview-padding - 10px);
+  padding: @preview-padding 0 (@preview-padding - 10px) @preview-padding;
   text-align: center;
   display: flex;
+
+  // Simulate centering when fewer frames than viewport width.
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+  }
 }
 
 .frameContainer {
@@ -18,11 +25,7 @@
   text-align: left;
   display: flex;
   flex-direction: column;
-  margin-right: @preview-padding;
-
-  &:first-child {
-    margin-left: @preview-padding;
-  }
+  padding-right: @preview-padding;
 }
 
 .frame {
