@@ -4,7 +4,9 @@ import Preview from './Playroom/Preview';
 import playroomConfig from './config';
 import getOrCreateRoot from './get-or-create-root';
 
-const root = getOrCreateRoot(playroomConfig.previewHtmlTemplate);
+const root = getOrCreateRoot(
+  playroomConfig.htmlTemplate && playroomConfig.htmlTemplate['/preview']
+);
 
 const renderPreview = ({
   themes = require('./themes'),

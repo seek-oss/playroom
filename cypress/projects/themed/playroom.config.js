@@ -7,6 +7,8 @@ module.exports = {
   paramType: 'search',
   port: 9001,
   storageKey: 'playroom-example-themed',
-  htmlTemplate: './template.ejs',
-  previewHtmlTemplate: './preview-template.ejs',
+  htmlTemplate: {
+    '/': './template.ejs',
+    '/preview': './preview-template.ejs',
+  },
 };

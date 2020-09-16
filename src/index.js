@@ -13,7 +13,9 @@ const polyfillIntersectionObserver = () =>
 
 polyfillIntersectionObserver().then(() => {
   const widths = playroomConfig.widths || [320, 375, 768, 1024];
-  const root = getOrCreateRoot(playroomConfig.htmlTemplate);
+  const root = getOrCreateRoot(
+    playroomConfig.htmlTemplate && playroomConfig.htmlTemplate['/']
+  );
 
   const renderPlayroom = ({
     themes = require('./themes'),
