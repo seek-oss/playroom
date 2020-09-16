@@ -23,6 +23,8 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 [Overdrive](http://overdrive.autoguru.io/playroom/#?code=N4Igxg9gJgpiBcIA8AhCAPABAIwwZQAsBDKCAdwF4AdEAZhswAcSoBLAOwHMLgBtG+iAA0mGgDYaAXQC+APirtMmJHgAuRMAGtMAZ2ZgO3cTXmKlygCox0qgMIR26jjABOmAjBKGeSABKe2LllfVkxVDxcYTEBeDcBpHaQAen8vILkFc3MkKxtZAHUYABtIAFso1Qgwj0wAQQBXcoBxWpdazFgdVk5FHQBPHVUYYswAWkwAeQA3VygXVimAQkTs1VMMpes7Byd2V1N0zOWASXZGeqYCjRgCCALYF2oQX3JMIkjMHohagH4GBNXlBJqDSaUyJNDoUwgaRAA)
 
+[Cubes](https://cubes.trampoline.cx/) (Themed)
+
 Send us a PR if you'd like to be in this list!
 
 ## Getting Started
