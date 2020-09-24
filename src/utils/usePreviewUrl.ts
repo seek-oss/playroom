@@ -18,5 +18,6 @@ export default (theme: string) => {
     code,
     theme: isThemed ? theme : undefined,
     paramType: playroomConfig.paramType,
+    includeIndex: playroomConfig.includeIndex,
   });
 };
