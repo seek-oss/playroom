@@ -25,6 +25,8 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 [Cubes](https://cubes.trampoline.cx/) (Themed)
 
+[Mesh Design System](https://www.meshdesignsystem.com/playroom/) (Themed)
+
 Send us a PR if you'd like to be in this list!
 
 ## Getting Started
