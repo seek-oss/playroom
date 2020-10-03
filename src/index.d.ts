@@ -13,6 +13,10 @@ interface PlayroomConfig {
   baseUrl?: string;
   paramType: 'hash' | 'search';
   iframeSandbox?: string;
+  /**
+   * Sets to use the concurrent mode of react-dom render for frames
+   */
+  unstable_concurrentMode?: boolean;
 }
 
 interface InternalPlayroomConfig extends PlayroomConfig {

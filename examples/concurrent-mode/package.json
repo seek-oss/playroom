@@ -1,0 +1,28 @@
+{
+  "name": "braid-design-system-playroom-concurrent-mode",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Playroom example for Braid Design System",
+  "scripts": {
+    "build": "node ./../../bin/cli build",
+    "start": "node ./../../bin/cli start"
+  },
+  "license": "MIT",
+  "resolutions": {
+    "react": "^0.0.0-experimental-94c0244ba",
+    "react-dom": "^0.0.0-experimental-94c0244ba"
+  },
+  "dependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "braid-design-system": "^0.0.6",
+    "css-in-js-loader": "^0.1.2",
+    "postcss-js": "^2.0.3",
+    "style-loader": "^1.0.1",
+    "react": "0.0.0-experimental-94c0244ba",
+    "react-dom": "0.0.0-experimental-94c0244ba"
+  }
+}

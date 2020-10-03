@@ -23,7 +23,7 @@
     "preview:build": "cd examples/braid-design-system && yarn && yarn build",
     "commit": "git-cz",
     "lint": "eslint . && prettier --list-different '**/*.{js,md,less,ts,tsx}' && tsc --noEmit",
-    "format": "prettier --write '**/*.{js,md,less,ts,tsx}'",
+    "format": "prettier --write \"**/*.{js,md,less,ts,tsx}\"",
     "semantic-release": "semantic-release",
     "test": "jest src",
     "post-commit-status": "node scripts/postCommitStatus.js",
