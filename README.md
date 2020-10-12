@@ -125,7 +125,7 @@ If your components need to be nested within custom provider components, you can 
 
 ```js
 import React from 'react';
-import { ThemeProvider } from '../path/to/your/theme';
+import { ThemeProvider } from '../path/to/your/theming-system';
 
 export default function FrameComponent({ theme, children }) {
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
@@ -137,7 +137,7 @@ export default function FrameComponent({ theme, children }) {
 You can provide extra variables within the scope of your JSX via the `scope` option, which is a path to a file that exports a `useScope` Hook that returns a scope object. For example, if you wanted to expose a context-based `theme` variable to consumers of your Playroom:
 
 ```js
-import { useTheme } from '../path/to/your/theme';
+import { useTheme } from '../path/to/your/theming-system';
 
 export default function useScope() {
   return {
