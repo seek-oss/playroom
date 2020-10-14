@@ -50,10 +50,12 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
         themeName={themeName || '__PLAYROOM__NO_THEME__'}
         theme={resolvedTheme}
       >
-        <div className={styles.container}>
+        <div className={styles.renderContainer}>
           <RenderCode code={code} scope={components} />
         </div>
-        <SplashScreen />
+        <div className={styles.splashScreenContainer}>
+          <SplashScreen />
+        </div>
       </FrameComponent>
     </CatchErrors>
   );
