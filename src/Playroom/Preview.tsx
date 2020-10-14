@@ -46,17 +46,17 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
 
   return (
     <CatchErrors code={code}>
-      <FrameComponent
-        themeName={themeName || '__PLAYROOM__NO_THEME__'}
-        theme={resolvedTheme}
-      >
-        <div className={styles.renderContainer}>
+      <div className={styles.renderContainer}>
+        <FrameComponent
+          themeName={themeName || '__PLAYROOM__NO_THEME__'}
+          theme={resolvedTheme}
+        >
           <RenderCode code={code} scope={components} />
-        </div>
-        <div className={styles.splashScreenContainer}>
-          <SplashScreen />
-        </div>
-      </FrameComponent>
+        </FrameComponent>
+      </div>
+      <div className={styles.splashScreenContainer}>
+        <SplashScreen />
+      </div>
     </CatchErrors>
   );
 };
