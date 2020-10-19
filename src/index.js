@@ -4,7 +4,6 @@ import { render } from 'react-dom';
 import Playroom from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';
 import playroomConfig from './config';
-import { extractComponents } from './utils/extractComponents';
 
 const polyfillIntersectionObserver = () =>
   typeof window.IntersectionObserver !== 'undefined'
@@ -19,15 +18,20 @@ polyfillIntersectionObserver().then(() => {
 
   const renderPlayroom = ({
     themes = require('./themes'),
-    components = require('./components'),
+    importedComponents = require('./components'),
     snippets = require('./snippets'),
   } = {}) => {
     const themeNames = Object.keys(themes);
 
+    // Exclude undefined components, e.g. an exported TypeScript type.
+    const components = Object.fromEntries(
+      Object.entries(importedComponents).filter(([_, value]) => value)
+    );
+
     render(
       <StoreProvider themes={themeNames} widths={widths}>
         <Playroom
-          components={extractComponents(components)}
+          components={components}
           widths={widths}
           themes={themeNames}
           snippets={
