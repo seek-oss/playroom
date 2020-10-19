@@ -19,10 +19,10 @@ export const visit = (url) =>
       )
     );
 
-export const typeCode = (code) =>
+export const typeCode = (code, { delay = 200 } = {}) =>
   getCodeEditor()
     .focused()
-    .type(code, { force: true, delay: 200 })
+    .type(code, { force: true, delay })
     .wait(WAIT_FOR_FRAME_TO_RENDER);
 
 export const formatCode = () =>

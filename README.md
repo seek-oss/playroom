@@ -17,13 +17,15 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 ## Demos
 
-[SEEK Style Guide](https://seek-oss.github.io/seek-style-guide/playroom/#?code=PEhlYWRlciAvPgoKPFNlY3Rpb24gaGVhZGVyPgogIDxUZXh0IGhlcm8-V2VsY29tZSB0byBQbGF5cm9vbSE8L1RleHQ-CjwvU2VjdGlvbj4KCjxGb290ZXIgLz4)
+[Braid Design System](https://seek-oss.github.io/braid-design-system/playroom/#?code=N4Igxg9gJgpiBcIA8BBANjATgFwATYgDsYBeAHRAEtCAzCCgPiQBUYAPbBgdRjUgFsY%2BCLgAKaAIYBPTBAj8AhEgD0rDk2XosnEABoQ2ABYxBAZwQBtEBIAOEsCAC6%2BgO6UoR8-AsB2AGwAHI4AvkA) (Themed)
 
-[Braid Design System](https://seek-oss.github.io/braid-design-system/playroom/#?code=PEFsZXJ0IHRvbmU9ImluZm8iPldlbGNvbWUgdG8gUGxheXJvb20hPC9BbGVydD4) (Themed)
-
-[Fannypack](https://fannypack.style/playroom/)
+[Bumbag](https://bumbag.style/playroom/)
 
 [Overdrive](http://overdrive.autoguru.io/playroom/#?code=N4Igxg9gJgpiBcIA8AhCAPABAIwwZQAsBDKCAdwF4AdEAZhswAcSoBLAOwHMLgBtG+iAA0mGgDYaAXQC+APirtMmJHgAuRMAGtMAZ2ZgO3cTXmKlygCox0qgMIR26jjABOmAjBKGeSABKe2LllfVkxVDxcYTEBeDcBpHaQAen8vILkFc3MkKxtZAHUYABtIAFso1Qgwj0wAQQBXcoBxWpdazFgdVk5FHQBPHVUYYswAWkwAeQA3VygXVimAQkTs1VMMpes7Byd2V1N0zOWASXZGeqYCjRgCCALYF2oQX3JMIkjMHohagH4GBNXlBJqDSaUyJNDoUwgaRAA)
+
+[Cubes](https://cubes.trampoline.cx/) (Themed)
+
+[Mesh Design System](https://www.meshdesignsystem.com/playroom/) (Themed)
 
 Send us a PR if you'd like to be in this list!
 
@@ -56,7 +58,8 @@ module.exports = {
   themes: './src/themes',
   snippets: './playroom/snippets.js',
   frameComponent: './playroom/FrameComponent.js',
-  widths: [320, 375, 768, 1024],
+  scope: './playroom/useScope.js',
+  widths: [320, 768, 1024],
   port: 9000,
   openBrowser: true,
   paramType: 'search', // default is 'hash'
@@ -122,11 +125,24 @@ If your components need to be nested within custom provider components, you can 
 
 ```js
 import React from 'react';
-import ThemeProvider from '../path/to/your/ThemeProvider';
+import { ThemeProvider } from '../path/to/your/theming-system';
 
-export default ({ theme, children }) => (
-  <ThemeProvider theme={theme}>{children}</ThemeProvider>
-);
+export default function FrameComponent({ theme, children }) {
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+}
+```
+
+## Custom Scope
+
+You can provide extra variables within the scope of your JSX via the `scope` option, which is a path to a file that exports a `useScope` Hook that returns a scope object. For example, if you wanted to expose a context-based `theme` variable to consumers of your Playroom:
+
+```js
+import { useTheme } from '../path/to/your/theming-system';
+
+export default function useScope() {
+  return {
+    theme: useTheme(),
+  };
 ```
 
 ## Theme Support
