@@ -18,10 +18,15 @@ polyfillIntersectionObserver().then(() => {
 
   const renderPlayroom = ({
     themes = require('./themes'),
-    components = require('./components'),
+    importedComponents = require('./components'),
     snippets = require('./snippets'),
   } = {}) => {
     const themeNames = Object.keys(themes);
+
+    // Exclude undefined components, e.g. an exported TypeScript type.
+    const components = Object.fromEntries(
+      Object.entries(importedComponents).filter(([_, value]) => value)
+    );
 
     render(
       <StoreProvider themes={themeNames} widths={widths}>
