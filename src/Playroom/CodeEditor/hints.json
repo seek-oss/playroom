@@ -1,0 +1,3134 @@
+{
+  "Accordion": {
+    "attrs": {}
+  },
+  "AccordionItem": {
+    "attrs": {
+      "label": [],
+      "id": [],
+      "expanded": [],
+      "onToggle": []
+    }
+  },
+  "Actions": {
+    "attrs": {}
+  },
+  "Alert": {
+    "attrs": {
+      "tone": ["info", "promote", "critical", "caution", "positive"],
+      "id": [],
+      "onClose": [],
+      "closeLabel": []
+    }
+  },
+  "Autosuggest": {
+    "attrs": {
+      "value": [],
+      "suggestions": [],
+      "onChange": [],
+      "automaticSelection": [],
+      "hideSuggestionsOnSelection": [],
+      "showMobileBackdrop": [],
+      "scrollToTopOnMobile": [],
+      "onBlur": [],
+      "onFocus": [],
+      "onClear": [],
+      "placeholder": [],
+      "type": ["text", "search"],
+      "translations": [],
+      "name": [],
+      "id": [],
+      "aria-describedby": [],
+      "label": [],
+      "tone": ["critical", "positive", "neutral"],
+      "autoFocus": [],
+      "data": [],
+      "disabled": [],
+      "required": [],
+      "message": [],
+      "reserveMessageSpace": [],
+      "description": [],
+      "secondaryMessage": [],
+      "secondaryLabel": [],
+      "tertiaryLabel": [],
+      "icon": [],
+      "ref": [],
+      "key": []
+    }
+  },
+  "BackgroundProvider": {
+    "attrs": {
+      "value": []
+    }
+  },
+  "Badge": {
+    "attrs": {
+      "tone": ["info", "promote", "critical", "caution", "positive", "neutral"],
+      "weight": ["regular", "strong"],
+      "bleedY": [],
+      "title": [],
+      "id": []
+    }
+  },
+  "BraidLoadableProvider": {
+    "attrs": {
+      "themeName": [],
+      "fallback": [],
+      "styleBody": [],
+      "linkComponent": []
+    }
+  },
+  "BraidProvider": {
+    "attrs": {
+      "theme": [],
+      "styleBody": [],
+      "linkComponent": []
+    }
+  },
+  "BraidTestProvider": {
+    "attrs": {
+      "themeName": [
+        "apac",
+        "seekAnz",
+        "seekBusiness",
+        "seekUnifiedBeta",
+        "jobsDb",
+        "jobStreet",
+        "jobStreetClassic",
+        "catho",
+        "occ",
+        "wireframe",
+        "docs"
+      ],
+      "breakpoint": ["mobile", "tablet", "desktop"],
+      "linkComponent": []
+    }
+  },
+  "Bullet": {
+    "attrs": {}
+  },
+  "BulletList": {
+    "attrs": {
+      "space": [
+        "medium",
+        "xsmall",
+        "small",
+        "large",
+        "none",
+        "gutter",
+        "xxsmall",
+        "xlarge",
+        "xxlarge"
+      ],
+      "size": ["xsmall", "small", "standard", "large"],
+      "tone": ["neutral", "secondary"]
+    }
+  },
+  "Button": {
+    "attrs": {
+      "id": [],
+      "onClick": [],
+      "type": ["button", "submit", "reset"],
+      "weight": ["regular", "strong", "weak"],
+      "loading": [],
+      "aria-controls": [],
+      "aria-expanded": ["true", "false"],
+      "aria-describedby": [],
+      "data": []
+    }
+  },
+  "ButtonLink": {
+    "attrs": {
+      "weight": ["regular", "strong", "weak"],
+      "loading": [],
+      "color": [],
+      "type": [],
+      "href": [],
+      "download": [],
+      "hrefLang": [],
+      "media": [],
+      "ping": [],
+      "rel": [],
+      "target": [],
+      "referrerPolicy": [],
+      "defaultChecked": [],
+      "defaultValue": [],
+      "suppressContentEditableWarning": [],
+      "suppressHydrationWarning": [],
+      "accessKey": [],
+      "contentEditable": ["inherit", "true", "false"],
+      "contextMenu": [],
+      "dir": [],
+      "draggable": ["true", "false"],
+      "hidden": [],
+      "id": [],
+      "lang": [],
+      "placeholder": [],
+      "slot": [],
+      "spellCheck": ["true", "false"],
+      "tabIndex": [],
+      "title": [],
+      "translate": ["yes", "no"],
+      "radioGroup": [],
+      "role": [],
+      "about": [],
+      "datatype": [],
+      "inlist": [],
+      "prefix": [],
+      "property": [],
+      "resource": [],
+      "typeof": [],
+      "vocab": [],
+      "autoCapitalize": [],
+      "autoCorrect": [],
+      "autoSave": [],
+      "itemProp": [],
+      "itemScope": [],
+      "itemType": [],
+      "itemID": [],
+      "itemRef": [],
+      "results": [],
+      "security": [],
+      "unselectable": ["on", "off"],
+      "inputMode": [
+        "text",
+        "none",
+        "tel",
+        "url",
+        "email",
+        "numeric",
+        "decimal",
+        "search"
+      ],
+      "is": [],
+      "aria-activedescendant": [],
+      "aria-atomic": ["true", "false"],
+      "aria-autocomplete": ["none", "inline", "list", "both"],
+      "aria-busy": ["true", "false"],
+      "aria-checked": ["true", "false", "mixed"],
+      "aria-colcount": [],
+      "aria-colindex": [],
+      "aria-colspan": [],
+      "aria-controls": [],
+      "aria-current": [
+        "step",
+        "time",
+        "true",
+        "false",
+        "page",
+        "location",
+        "date"
+      ],
+      "aria-describedby": [],
+      "aria-details": [],
+      "aria-disabled": ["true", "false"],
+      "aria-dropeffect": ["none", "link", "copy", "move", "execute", "popup"],
+      "aria-errormessage": [],
+      "aria-expanded": ["true", "false"],
+      "aria-flowto": [],
+      "aria-grabbed": ["true", "false"],
+      "aria-haspopup": [
+        "grid",
+        "listbox",
+        "dialog",
+        "menu",
+        "true",
+        "false",
+        "tree"
+      ],
+      "aria-hidden": ["true", "false"],
+      "aria-invalid": ["true", "false", "grammar", "spelling"],
+      "aria-keyshortcuts": [],
+      "aria-label": [],
+      "aria-labelledby": [],
+      "aria-level": [],
+      "aria-live": ["off", "assertive", "polite"],
+      "aria-modal": ["true", "false"],
+      "aria-multiline": ["true", "false"],
+      "aria-multiselectable": ["true", "false"],
+      "aria-orientation": ["horizontal", "vertical"],
+      "aria-owns": [],
+      "aria-placeholder": [],
+      "aria-posinset": [],
+      "aria-pressed": ["true", "false", "mixed"],
+      "aria-readonly": ["true", "false"],
+      "aria-relevant": [
+        "text",
+        "all",
+        "additions",
+        "additions text",
+        "removals"
+      ],
+      "aria-required": ["true", "false"],
+      "aria-roledescription": [],
+      "aria-rowcount": [],
+      "aria-rowindex": [],
+      "aria-rowspan": [],
+      "aria-selected": ["true", "false"],
+      "aria-setsize": [],
+      "aria-sort": ["none", "ascending", "descending", "other"],
+      "aria-valuemax": [],
+      "aria-valuemin": [],
+      "aria-valuenow": [],
+      "aria-valuetext": [],
+      "dangerouslySetInnerHTML": [],
+      "onCopy": [],
+      "onCopyCapture": [],
+      "onCut": [],
+      "onCutCapture": [],
+      "onPaste": [],
+      "onPasteCapture": [],
+      "onCompositionEnd": [],
+      "onCompositionEndCapture": [],
+      "onCompositionStart": [],
+      "onCompositionStartCapture": [],
+      "onCompositionUpdate": [],
+      "onCompositionUpdateCapture": [],
+      "onFocus": [],
+      "onFocusCapture": [],
+      "onBlur": [],
+      "onBlurCapture": [],
+      "onChange": [],
+      "onChangeCapture": [],
+      "onBeforeInput": [],
+      "onBeforeInputCapture": [],
+      "onInput": [],
+      "onInputCapture": [],
+      "onReset": [],
+      "onResetCapture": [],
+      "onSubmit": [],
+      "onSubmitCapture": [],
+      "onInvalid": [],
+      "onInvalidCapture": [],
+      "onLoad": [],
+      "onLoadCapture": [],
+      "onError": [],
+      "onErrorCapture": [],
+      "onKeyDown": [],
+      "onKeyDownCapture": [],
+      "onKeyPress": [],
+      "onKeyPressCapture": [],
+      "onKeyUp": [],
+      "onKeyUpCapture": [],
+      "onAbort": [],
+      "onAbortCapture": [],
+      "onCanPlay": [],
+      "onCanPlayCapture": [],
+      "onCanPlayThrough": [],
+      "onCanPlayThroughCapture": [],
+      "onDurationChange": [],
+      "onDurationChangeCapture": [],
+      "onEmptied": [],
+      "onEmptiedCapture": [],
+      "onEncrypted": [],
+      "onEncryptedCapture": [],
+      "onEnded": [],
+      "onEndedCapture": [],
+      "onLoadedData": [],
+      "onLoadedDataCapture": [],
+      "onLoadedMetadata": [],
+      "onLoadedMetadataCapture": [],
+      "onLoadStart": [],
+      "onLoadStartCapture": [],
+      "onPause": [],
+      "onPauseCapture": [],
+      "onPlay": [],
+      "onPlayCapture": [],
+      "onPlaying": [],
+      "onPlayingCapture": [],
+      "onProgress": [],
+      "onProgressCapture": [],
+      "onRateChange": [],
+      "onRateChangeCapture": [],
+      "onSeeked": [],
+      "onSeekedCapture": [],
+      "onSeeking": [],
+      "onSeekingCapture": [],
+      "onStalled": [],
+      "onStalledCapture": [],
+      "onSuspend": [],
+      "onSuspendCapture": [],
+      "onTimeUpdate": [],
+      "onTimeUpdateCapture": [],
+      "onVolumeChange": [],
+      "onVolumeChangeCapture": [],
+      "onWaiting": [],
+      "onWaitingCapture": [],
+      "onAuxClick": [],
+      "onAuxClickCapture": [],
+      "onClick": [],
+      "onClickCapture": [],
+      "onContextMenu": [],
+      "onContextMenuCapture": [],
+      "onDoubleClick": [],
+      "onDoubleClickCapture": [],
+      "onDrag": [],
+      "onDragCapture": [],
+      "onDragEnd": [],
+      "onDragEndCapture": [],
+      "onDragEnter": [],
+      "onDragEnterCapture": [],
+      "onDragExit": [],
+      "onDragExitCapture": [],
+      "onDragLeave": [],
+      "onDragLeaveCapture": [],
+      "onDragOver": [],
+      "onDragOverCapture": [],
+      "onDragStart": [],
+      "onDragStartCapture": [],
+      "onDrop": [],
+      "onDropCapture": [],
+      "onMouseDown": [],
+      "onMouseDownCapture": [],
+      "onMouseEnter": [],
+      "onMouseLeave": [],
+      "onMouseMove": [],
+      "onMouseMoveCapture": [],
+      "onMouseOut": [],
+      "onMouseOutCapture": [],
+      "onMouseOver": [],
+      "onMouseOverCapture": [],
+      "onMouseUp": [],
+      "onMouseUpCapture": [],
+      "onSelect": [],
+      "onSelectCapture": [],
+      "onTouchCancel": [],
+      "onTouchCancelCapture": [],
+      "onTouchEnd": [],
+      "onTouchEndCapture": [],
+      "onTouchMove": [],
+      "onTouchMoveCapture": [],
+      "onTouchStart": [],
+      "onTouchStartCapture": [],
+      "onPointerDown": [],
+      "onPointerDownCapture": [],
+      "onPointerMove": [],
+      "onPointerMoveCapture": [],
+      "onPointerUp": [],
+      "onPointerUpCapture": [],
+      "onPointerCancel": [],
+      "onPointerCancelCapture": [],
+      "onPointerEnter": [],
+      "onPointerEnterCapture": [],
+      "onPointerLeave": [],
+      "onPointerLeaveCapture": [],
+      "onPointerOver": [],
+      "onPointerOverCapture": [],
+      "onPointerOut": [],
+      "onPointerOutCapture": [],
+      "onGotPointerCapture": [],
+      "onGotPointerCaptureCapture": [],
+      "onLostPointerCapture": [],
+      "onLostPointerCaptureCapture": [],
+      "onScroll": [],
+      "onScrollCapture": [],
+      "onWheel": [],
+      "onWheelCapture": [],
+      "onAnimationStart": [],
+      "onAnimationStartCapture": [],
+      "onAnimationEnd": [],
+      "onAnimationEndCapture": [],
+      "onAnimationIteration": [],
+      "onAnimationIterationCapture": [],
+      "onTransitionEnd": [],
+      "onTransitionEndCapture": [],
+      "css": []
+    }
+  },
+  "ButtonRenderer": {
+    "attrs": {
+      "weight": ["regular", "strong", "weak"],
+      "loading": []
+    }
+  },
+  "Card": {
+    "attrs": {}
+  },
+  "Checkbox": {
+    "attrs": {
+      "checked": [],
+      "value": [],
+      "name": [],
+      "id": [],
+      "aria-describedby": [],
+      "onChange": [],
+      "label": [],
+      "tone": ["critical", "neutral"],
+      "data": [],
+      "disabled": [],
+      "required": [],
+      "message": [],
+      "reserveMessageSpace": [],
+      "description": [],
+      "badge": [],
+      "ref": [],
+      "key": []
+    }
+  },
+  "Column": {
+    "attrs": {
+      "width": [
+        "content",
+        "1/2",
+        "1/3",
+        "2/3",
+        "1/4",
+        "3/4",
+        "1/5",
+        "2/5",
+        "3/5",
+        "4/5"
+      ]
+    }
+  },
+  "Columns": {
+    "attrs": {
+      "space": [],
+      "collapseBelow": ["tablet", "desktop"],
+      "align": [
+        "left",
+        "right",
+        "center",
+        "right",
+        "center\", \"left",
+        "right",
+        "right",
+        "center\", \"left",
+        "right",
+        "center\", \"left",
+        "right"
+      ],
+      "alignY": ["top", "bottom", "center"],
+      "reverse": []
+    }
+  },
+  "ContentBlock": {
+    "attrs": {
+      "width": ["medium", "xsmall", "small", "large"]
+    }
+  },
+  "Dialog": {
+    "attrs": {
+      "width": ["medium", "xsmall", "small", "large", "content"],
+      "id": [],
+      "title": [],
+      "onClose": [],
+      "closeLabel": [],
+      "open": [],
+      "description": [],
+      "illustration": []
+    }
+  },
+  "Disclosure": {
+    "attrs": {
+      "expandLabel": [],
+      "collapseLabel": [],
+      "space": [
+        "medium",
+        "xsmall",
+        "small",
+        "large",
+        "none",
+        "gutter",
+        "xxsmall",
+        "xlarge",
+        "xxlarge"
+      ],
+      "id": [],
+      "expanded": [],
+      "onToggle": []
+    }
+  },
+  "Divider": {
+    "attrs": {
+      "weight": ["regular", "strong"]
+    }
+  },
+  "Drawer": {
+    "attrs": {
+      "width": ["medium", "small", "large"],
+      "id": [],
+      "title": [],
+      "onClose": [],
+      "closeLabel": [],
+      "open": [],
+      "description": []
+    }
+  },
+  "Dropdown": {
+    "attrs": {
+      "value": [],
+      "onChange": [],
+      "onBlur": [],
+      "onFocus": [],
+      "placeholder": [],
+      "name": [],
+      "id": [],
+      "aria-describedby": [],
+      "label": [],
+      "tone": ["critical", "positive", "neutral"],
+      "autoComplete": [],
+      "autoFocus": [],
+      "data": [],
+      "disabled": [],
+      "required": [],
+      "message": [],
+      "reserveMessageSpace": [],
+      "description": [],
+      "secondaryLabel": [],
+      "tertiaryLabel": [],
+      "icon": [],
+      "ref": [],
+      "key": []
+    }
+  },
+  "FieldLabel": {
+    "attrs": {
+      "id": [],
+      "htmlFor": [],
+      "label": [],
+      "secondaryLabel": [],
+      "tertiaryLabel": [],
+      "description": [],
+      "descriptionId": []
+    }
+  },
+  "FieldMessage": {
+    "attrs": {
+      "id": [],
+      "message": [],
+      "reserveMessageSpace": [],
+      "tone": ["critical", "positive", "neutral"],
+      "secondaryMessage": [],
+      "disabled": []
+    }
+  },
+  "Heading": {
+    "attrs": {
+      "level": ["1", "2", "3", "4"],
+      "weight": ["regular", "weak"],
+      "align": [
+        "left",
+        "right",
+        "center",
+        "right",
+        "center\", \"left",
+        "right",
+        "right",
+        "center\", \"left",
+        "right",
+        "center\", \"left",
+        "right"
+      ],
+      "component": [
+        "symbol",
+        "object",
+        "strong",
+        "text",
+        "small",
+        "ruby",
+        "table",
+        "button",
+        "meter",
+        "textarea",
+        "body",
+        "input",
+        "slot",
+        "style",
+        "title",
+        "label",
+        "cite",
+        "data"
+      ],
+      "id": [],
+      "truncate": [],
+      "data": []
+    }
+  },
+  "Hidden": {
+    "attrs": {
+      "screen": [],
+      "print": [],
+      "inline": [],
+      "above": ["mobile", "tablet"],
+      "below": ["tablet", "desktop"]
+    }
+  },
+  "HiddenVisually": {
+    "attrs": {
+      "id": []
+    }
+  },
+  "IconAdd": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconBookmark": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": [],
+      "active": []
+    }
+  },
+  "IconCaution": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconChevron": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": [],
+      "direction": ["left", "right", "up", "down"]
+    }
+  },
+  "IconClear": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconCompany": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconCompose": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconCopy": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconCreditCard": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconCritical": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconDate": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconDelete": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconDocument": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconDocumentBroken": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconDownload": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconEdit": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconEducation": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconFilter": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconGrid": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconHeart": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": [],
+      "active": []
+    }
+  },
+  "IconHelp": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconHistory": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconHome": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconImage": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconInfo": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconInvoice": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconLanguage": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconLink": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconLinkBroken": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconList": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconLocation": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconMail": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconMinus": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconMoney": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconNewWindow": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconNote": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconNotification": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconOverflow": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconPeople": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconPersonAdd": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconPersonVerified": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconPhone": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconPositive": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconPrint": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconProfile": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconPromote": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconRecommended": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconRefresh": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconResume": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSearch": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSecurity": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSend": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSent": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSettings": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconShare": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSocialFacebook": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSocialGitHub": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSocialInstagram": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSocialLinkedIn": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSocialMedium": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSocialTwitter": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconStar": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": [],
+      "active": []
+    }
+  },
+  "IconStatistics": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconSubCategory": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconTag": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconTick": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconTime": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconUpload": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconVideo": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "IconVisibility": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": [],
+      "hidden": []
+    }
+  },
+  "IconWorkExperience": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large", "fill"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "alignY": ["uppercase", "lowercase"],
+      "title": [],
+      "titleId": []
+    }
+  },
+  "Inline": {
+    "attrs": {
+      "space": [],
+      "component": ["div", "ol", "ul"],
+      "collapseBelow": ["tablet", "desktop"],
+      "align": [
+        "left",
+        "right",
+        "center",
+        "right",
+        "center\", \"left",
+        "right",
+        "right",
+        "center\", \"left",
+        "right",
+        "center\", \"left",
+        "right"
+      ],
+      "alignY": ["top", "bottom", "center"],
+      "reverse": []
+    }
+  },
+  "Link": {
+    "attrs": {
+      "color": [],
+      "type": [],
+      "href": [],
+      "download": [],
+      "hrefLang": [],
+      "media": [],
+      "ping": [],
+      "rel": [],
+      "target": [],
+      "referrerPolicy": [],
+      "defaultChecked": [],
+      "defaultValue": [],
+      "suppressContentEditableWarning": [],
+      "suppressHydrationWarning": [],
+      "accessKey": [],
+      "contentEditable": ["inherit", "true", "false"],
+      "contextMenu": [],
+      "dir": [],
+      "draggable": ["true", "false"],
+      "hidden": [],
+      "id": [],
+      "lang": [],
+      "placeholder": [],
+      "slot": [],
+      "spellCheck": ["true", "false"],
+      "style": [],
+      "tabIndex": [],
+      "title": [],
+      "translate": ["yes", "no"],
+      "radioGroup": [],
+      "role": [],
+      "about": [],
+      "datatype": [],
+      "inlist": [],
+      "prefix": [],
+      "property": [],
+      "resource": [],
+      "typeof": [],
+      "vocab": [],
+      "autoCapitalize": [],
+      "autoCorrect": [],
+      "autoSave": [],
+      "itemProp": [],
+      "itemScope": [],
+      "itemType": [],
+      "itemID": [],
+      "itemRef": [],
+      "results": [],
+      "security": [],
+      "unselectable": ["on", "off"],
+      "inputMode": [
+        "text",
+        "none",
+        "tel",
+        "url",
+        "email",
+        "numeric",
+        "decimal",
+        "search"
+      ],
+      "is": [],
+      "aria-activedescendant": [],
+      "aria-atomic": ["true", "false"],
+      "aria-autocomplete": ["none", "inline", "list", "both"],
+      "aria-busy": ["true", "false"],
+      "aria-checked": ["true", "false", "mixed"],
+      "aria-colcount": [],
+      "aria-colindex": [],
+      "aria-colspan": [],
+      "aria-controls": [],
+      "aria-current": [
+        "step",
+        "time",
+        "true",
+        "false",
+        "page",
+        "location",
+        "date"
+      ],
+      "aria-describedby": [],
+      "aria-details": [],
+      "aria-disabled": ["true", "false"],
+      "aria-dropeffect": ["none", "link", "copy", "move", "execute", "popup"],
+      "aria-errormessage": [],
+      "aria-expanded": ["true", "false"],
+      "aria-flowto": [],
+      "aria-grabbed": ["true", "false"],
+      "aria-haspopup": [
+        "grid",
+        "listbox",
+        "dialog",
+        "menu",
+        "true",
+        "false",
+        "tree"
+      ],
+      "aria-hidden": ["true", "false"],
+      "aria-invalid": ["true", "false", "grammar", "spelling"],
+      "aria-keyshortcuts": [],
+      "aria-label": [],
+      "aria-labelledby": [],
+      "aria-level": [],
+      "aria-live": ["off", "assertive", "polite"],
+      "aria-modal": ["true", "false"],
+      "aria-multiline": ["true", "false"],
+      "aria-multiselectable": ["true", "false"],
+      "aria-orientation": ["horizontal", "vertical"],
+      "aria-owns": [],
+      "aria-placeholder": [],
+      "aria-posinset": [],
+      "aria-pressed": ["true", "false", "mixed"],
+      "aria-readonly": ["true", "false"],
+      "aria-relevant": [
+        "text",
+        "all",
+        "additions",
+        "additions text",
+        "removals"
+      ],
+      "aria-required": ["true", "false"],
+      "aria-roledescription": [],
+      "aria-rowcount": [],
+      "aria-rowindex": [],
+      "aria-rowspan": [],
+      "aria-selected": ["true", "false"],
+      "aria-setsize": [],
+      "aria-sort": ["none", "ascending", "descending", "other"],
+      "aria-valuemax": [],
+      "aria-valuemin": [],
+      "aria-valuenow": [],
+      "aria-valuetext": [],
+      "dangerouslySetInnerHTML": [],
+      "onCopy": [],
+      "onCopyCapture": [],
+      "onCut": [],
+      "onCutCapture": [],
+      "onPaste": [],
+      "onPasteCapture": [],
+      "onCompositionEnd": [],
+      "onCompositionEndCapture": [],
+      "onCompositionStart": [],
+      "onCompositionStartCapture": [],
+      "onCompositionUpdate": [],
+      "onCompositionUpdateCapture": [],
+      "onFocus": [],
+      "onFocusCapture": [],
+      "onBlur": [],
+      "onBlurCapture": [],
+      "onChange": [],
+      "onChangeCapture": [],
+      "onBeforeInput": [],
+      "onBeforeInputCapture": [],
+      "onInput": [],
+      "onInputCapture": [],
+      "onReset": [],
+      "onResetCapture": [],
+      "onSubmit": [],
+      "onSubmitCapture": [],
+      "onInvalid": [],
+      "onInvalidCapture": [],
+      "onLoad": [],
+      "onLoadCapture": [],
+      "onError": [],
+      "onErrorCapture": [],
+      "onKeyDown": [],
+      "onKeyDownCapture": [],
+      "onKeyPress": [],
+      "onKeyPressCapture": [],
+      "onKeyUp": [],
+      "onKeyUpCapture": [],
+      "onAbort": [],
+      "onAbortCapture": [],
+      "onCanPlay": [],
+      "onCanPlayCapture": [],
+      "onCanPlayThrough": [],
+      "onCanPlayThroughCapture": [],
+      "onDurationChange": [],
+      "onDurationChangeCapture": [],
+      "onEmptied": [],
+      "onEmptiedCapture": [],
+      "onEncrypted": [],
+      "onEncryptedCapture": [],
+      "onEnded": [],
+      "onEndedCapture": [],
+      "onLoadedData": [],
+      "onLoadedDataCapture": [],
+      "onLoadedMetadata": [],
+      "onLoadedMetadataCapture": [],
+      "onLoadStart": [],
+      "onLoadStartCapture": [],
+      "onPause": [],
+      "onPauseCapture": [],
+      "onPlay": [],
+      "onPlayCapture": [],
+      "onPlaying": [],
+      "onPlayingCapture": [],
+      "onProgress": [],
+      "onProgressCapture": [],
+      "onRateChange": [],
+      "onRateChangeCapture": [],
+      "onSeeked": [],
+      "onSeekedCapture": [],
+      "onSeeking": [],
+      "onSeekingCapture": [],
+      "onStalled": [],
+      "onStalledCapture": [],
+      "onSuspend": [],
+      "onSuspendCapture": [],
+      "onTimeUpdate": [],
+      "onTimeUpdateCapture": [],
+      "onVolumeChange": [],
+      "onVolumeChangeCapture": [],
+      "onWaiting": [],
+      "onWaitingCapture": [],
+      "onAuxClick": [],
+      "onAuxClickCapture": [],
+      "onClick": [],
+      "onClickCapture": [],
+      "onContextMenu": [],
+      "onContextMenuCapture": [],
+      "onDoubleClick": [],
+      "onDoubleClickCapture": [],
+      "onDrag": [],
+      "onDragCapture": [],
+      "onDragEnd": [],
+      "onDragEndCapture": [],
+      "onDragEnter": [],
+      "onDragEnterCapture": [],
+      "onDragExit": [],
+      "onDragExitCapture": [],
+      "onDragLeave": [],
+      "onDragLeaveCapture": [],
+      "onDragOver": [],
+      "onDragOverCapture": [],
+      "onDragStart": [],
+      "onDragStartCapture": [],
+      "onDrop": [],
+      "onDropCapture": [],
+      "onMouseDown": [],
+      "onMouseDownCapture": [],
+      "onMouseEnter": [],
+      "onMouseLeave": [],
+      "onMouseMove": [],
+      "onMouseMoveCapture": [],
+      "onMouseOut": [],
+      "onMouseOutCapture": [],
+      "onMouseOver": [],
+      "onMouseOverCapture": [],
+      "onMouseUp": [],
+      "onMouseUpCapture": [],
+      "onSelect": [],
+      "onSelectCapture": [],
+      "onTouchCancel": [],
+      "onTouchCancelCapture": [],
+      "onTouchEnd": [],
+      "onTouchEndCapture": [],
+      "onTouchMove": [],
+      "onTouchMoveCapture": [],
+      "onTouchStart": [],
+      "onTouchStartCapture": [],
+      "onPointerDown": [],
+      "onPointerDownCapture": [],
+      "onPointerMove": [],
+      "onPointerMoveCapture": [],
+      "onPointerUp": [],
+      "onPointerUpCapture": [],
+      "onPointerCancel": [],
+      "onPointerCancelCapture": [],
+      "onPointerEnter": [],
+      "onPointerEnterCapture": [],
+      "onPointerLeave": [],
+      "onPointerLeaveCapture": [],
+      "onPointerOver": [],
+      "onPointerOverCapture": [],
+      "onPointerOut": [],
+      "onPointerOutCapture": [],
+      "onGotPointerCapture": [],
+      "onGotPointerCaptureCapture": [],
+      "onLostPointerCapture": [],
+      "onLostPointerCaptureCapture": [],
+      "onScroll": [],
+      "onScrollCapture": [],
+      "onWheel": [],
+      "onWheelCapture": [],
+      "onAnimationStart": [],
+      "onAnimationStartCapture": [],
+      "onAnimationEnd": [],
+      "onAnimationEndCapture": [],
+      "onAnimationIteration": [],
+      "onAnimationIterationCapture": [],
+      "onTransitionEnd": [],
+      "onTransitionEndCapture": [],
+      "css": [],
+      "ref": [],
+      "key": []
+    }
+  },
+  "List": {
+    "attrs": {
+      "type": ["number", "icon", "bullet", "alpha", "roman"],
+      "size": ["xsmall", "small", "standard", "large"],
+      "space": [
+        "medium",
+        "xsmall",
+        "small",
+        "large",
+        "none",
+        "gutter",
+        "xxsmall",
+        "xlarge",
+        "xxlarge"
+      ],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "start": [],
+      "icon": []
+    }
+  },
+  "Loader": {
+    "attrs": {
+      "size": ["xsmall", "small", "standard", "large"],
+      "aria-label": [],
+      "delayVisibility": []
+    }
+  },
+  "MenuItem": {
+    "attrs": {
+      "onClick": [],
+      "data": []
+    }
+  },
+  "MenuItemCheckbox": {
+    "attrs": {
+      "onChange": [],
+      "checked": [],
+      "data": []
+    }
+  },
+  "MenuItemDivider": {
+    "attrs": {}
+  },
+  "MenuItemLink": {
+    "attrs": {
+      "onClick": [],
+      "data": [],
+      "href": [],
+      "rel": [],
+      "target": []
+    }
+  },
+  "MenuRenderer": {
+    "attrs": {
+      "trigger": [],
+      "align": ["left", "right"],
+      "offsetSpace": [
+        "medium",
+        "xsmall",
+        "small",
+        "large",
+        "none",
+        "gutter",
+        "xxsmall",
+        "xlarge",
+        "xxlarge"
+      ],
+      "onOpen": [],
+      "onClose": [],
+      "data": []
+    }
+  },
+  "MonthPicker": {
+    "attrs": {
+      "value": [],
+      "onChange": [],
+      "onBlur": [],
+      "onFocus": [],
+      "minYear": [],
+      "maxYear": [],
+      "ascendingYears": [],
+      "monthLabel": [],
+      "yearLabel": [],
+      "monthNames": [],
+      "id": [],
+      "label": [],
+      "tone": ["critical", "positive", "neutral"],
+      "disabled": [],
+      "required": [],
+      "message": [],
+      "reserveMessageSpace": [],
+      "description": [],
+      "secondaryLabel": [],
+      "tertiaryLabel": []
+    }
+  },
+  "Notice": {
+    "attrs": {
+      "tone": ["info", "promote", "critical", "positive"]
+    }
+  },
+  "OverflowMenu": {
+    "attrs": {
+      "label": [],
+      "onClose": [],
+      "data": [],
+      "onOpen": []
+    }
+  },
+  "PasswordField": {
+    "attrs": {
+      "value": [],
+      "onChange": [],
+      "onBlur": [],
+      "onFocus": [],
+      "placeholder": [],
+      "onVisibilityToggle": [],
+      "visibilityToggleLabel": [],
+      "name": [],
+      "id": [],
+      "aria-describedby": [],
+      "label": [],
+      "tone": ["critical", "positive", "neutral"],
+      "autoComplete": [],
+      "autoFocus": [],
+      "data": [],
+      "disabled": [],
+      "required": [],
+      "message": [],
+      "reserveMessageSpace": [],
+      "description": [],
+      "secondaryLabel": [],
+      "tertiaryLabel": [],
+      "ref": [],
+      "key": []
+    }
+  },
+  "Placeholder": {
+    "attrs": {
+      "height": [],
+      "width": [],
+      "label": [],
+      "shape": ["round", "rectangle"]
+    }
+  },
+  "Radio": {
+    "attrs": {
+      "value": [],
+      "name": [],
+      "id": [],
+      "aria-describedby": [],
+      "onChange": [],
+      "label": [],
+      "tone": ["critical", "neutral"],
+      "checked": [],
+      "data": [],
+      "disabled": [],
+      "description": [],
+      "badge": [],
+      "ref": [],
+      "key": []
+    }
+  },
+  "RadioGroup": {
+    "attrs": {
+      "value": [],
+      "onChange": [],
+      "name": [],
+      "id": [],
+      "disabled": [],
+      "label": [],
+      "secondaryLabel": [],
+      "tertiaryLabel": [],
+      "description": [],
+      "message": [],
+      "reserveMessageSpace": [],
+      "tone": ["critical", "positive", "neutral"],
+      "required": []
+    }
+  },
+  "RadioItem": {
+    "attrs": {
+      "value": [],
+      "aria-describedby": [],
+      "label": [],
+      "data": [],
+      "description": [],
+      "badge": [],
+      "ref": [],
+      "key": []
+    }
+  },
+  "Rating": {
+    "attrs": {
+      "rating": [],
+      "size": ["xsmall", "small", "standard", "large"],
+      "showTextRating": [],
+      "aria-label": []
+    }
+  },
+  "Secondary": {
+    "attrs": {
+      "id": []
+    }
+  },
+  "Stack": {
+    "attrs": {
+      "component": ["div", "ol", "ul"],
+      "space": [
+        "medium",
+        "xsmall",
+        "small",
+        "large",
+        "none",
+        "gutter",
+        "xxsmall",
+        "xlarge",
+        "xxlarge"
+      ],
+      "align": [
+        "left",
+        "right",
+        "center",
+        "right",
+        "center\", \"left",
+        "right",
+        "right",
+        "center\", \"left",
+        "right",
+        "center\", \"left",
+        "right"
+      ],
+      "dividers": ["regular", "strong"]
+    }
+  },
+  "Strong": {
+    "attrs": {
+      "id": []
+    }
+  },
+  "Tab": {
+    "attrs": {
+      "item": [],
+      "badge": [],
+      "data": []
+    }
+  },
+  "TabPanel": {
+    "attrs": {
+      "item": [],
+      "data": []
+    }
+  },
+  "TabPanels": {
+    "attrs": {
+      "renderInactivePanels": []
+    }
+  },
+  "Tabs": {
+    "attrs": {
+      "label": [],
+      "align": ["left", "center"],
+      "gutter": [
+        "medium",
+        "xsmall",
+        "small",
+        "large",
+        "none",
+        "gutter",
+        "xxsmall",
+        "xlarge",
+        "xxlarge"
+      ],
+      "reserveHitArea": [],
+      "data": []
+    }
+  },
+  "TabsProvider": {
+    "attrs": {
+      "id": [],
+      "selectedItem": [],
+      "onChange": []
+    }
+  },
+  "Tag": {
+    "attrs": {
+      "onClear": [],
+      "clearLabel": []
+    }
+  },
+  "Text": {
+    "attrs": {
+      "id": [],
+      "size": ["xsmall", "small", "standard", "large"],
+      "tone": [
+        "formAccent",
+        "info",
+        "promote",
+        "critical",
+        "caution",
+        "positive",
+        "neutral",
+        "link",
+        "secondary"
+      ],
+      "weight": ["regular", "medium", "strong"],
+      "baseline": [],
+      "align": [
+        "left",
+        "right",
+        "center",
+        "right",
+        "center\", \"left",
+        "right",
+        "right",
+        "center\", \"left",
+        "right",
+        "center\", \"left",
+        "right"
+      ],
+      "truncate": [],
+      "data": [],
+      "component": [
+        "symbol",
+        "object",
+        "strong",
+        "text",
+        "small",
+        "ruby",
+        "table",
+        "button",
+        "meter",
+        "textarea",
+        "body",
+        "input",
+        "slot",
+        "style",
+        "title",
+        "label",
+        "cite",
+        "data"
+      ]
+    }
+  },
+  "TextDropdown": {
+    "attrs": {
+      "id": [],
+      "value": [],
+      "onChange": [],
+      "onBlur": [],
+      "options": [],
+      "label": []
+    }
+  },
+  "TextField": {
+    "attrs": {
+      "value": [],
+      "type": ["number", "text", "tel", "url", "email", "search", "password"],
+      "onChange": [],
+      "onBlur": [],
+      "onFocus": [],
+      "onClear": [],
+      "placeholder": [],
+      "name": [],
+      "id": [],
+      "aria-describedby": [],
+      "label": [],
+      "tone": ["critical", "positive", "neutral"],
+      "autoComplete": [],
+      "autoFocus": [],
+      "data": [],
+      "disabled": [],
+      "required": [],
+      "message": [],
+      "reserveMessageSpace": [],
+      "description": [],
+      "secondaryLabel": [],
+      "tertiaryLabel": [],
+      "icon": [],
+      "ref": [],
+      "key": []
+    }
+  },
+  "TextLink": {
+    "attrs": {
+      "weight": ["regular", "weak"],
+      "showVisited": [],
+      "hitArea": ["standard", "large"],
+      "color": [],
+      "type": [],
+      "href": [],
+      "download": [],
+      "hrefLang": [],
+      "media": [],
+      "ping": [],
+      "rel": [],
+      "target": [],
+      "referrerPolicy": [],
+      "defaultChecked": [],
+      "defaultValue": [],
+      "suppressContentEditableWarning": [],
+      "suppressHydrationWarning": [],
+      "accessKey": [],
+      "contentEditable": ["inherit", "true", "false"],
+      "contextMenu": [],
+      "dir": [],
+      "draggable": ["true", "false"],
+      "hidden": [],
+      "id": [],
+      "lang": [],
+      "placeholder": [],
+      "slot": [],
+      "spellCheck": ["true", "false"],
+      "tabIndex": [],
+      "title": [],
+      "translate": ["yes", "no"],
+      "radioGroup": [],
+      "role": [],
+      "about": [],
+      "datatype": [],
+      "inlist": [],
+      "prefix": [],
+      "property": [],
+      "resource": [],
+      "typeof": [],
+      "vocab": [],
+      "autoCapitalize": [],
+      "autoCorrect": [],
+      "autoSave": [],
+      "itemProp": [],
+      "itemScope": [],
+      "itemType": [],
+      "itemID": [],
+      "itemRef": [],
+      "results": [],
+      "security": [],
+      "unselectable": ["on", "off"],
+      "inputMode": [
+        "text",
+        "none",
+        "tel",
+        "url",
+        "email",
+        "numeric",
+        "decimal",
+        "search"
+      ],
+      "is": [],
+      "aria-activedescendant": [],
+      "aria-atomic": ["true", "false"],
+      "aria-autocomplete": ["none", "inline", "list", "both"],
+      "aria-busy": ["true", "false"],
+      "aria-checked": ["true", "false", "mixed"],
+      "aria-colcount": [],
+      "aria-colindex": [],
+      "aria-colspan": [],
+      "aria-controls": [],
+      "aria-current": [
+        "step",
+        "time",
+        "true",
+        "false",
+        "page",
+        "location",
+        "date"
+      ],
+      "aria-describedby": [],
+      "aria-details": [],
+      "aria-disabled": ["true", "false"],
+      "aria-dropeffect": ["none", "link", "copy", "move", "execute", "popup"],
+      "aria-errormessage": [],
+      "aria-expanded": ["true", "false"],
+      "aria-flowto": [],
+      "aria-grabbed": ["true", "false"],
+      "aria-haspopup": [
+        "grid",
+        "listbox",
+        "dialog",
+        "menu",
+        "true",
+        "false",
+        "tree"
+      ],
+      "aria-hidden": ["true", "false"],
+      "aria-invalid": ["true", "false", "grammar", "spelling"],
+      "aria-keyshortcuts": [],
+      "aria-label": [],
+      "aria-labelledby": [],
+      "aria-level": [],
+      "aria-live": ["off", "assertive", "polite"],
+      "aria-modal": ["true", "false"],
+      "aria-multiline": ["true", "false"],
+      "aria-multiselectable": ["true", "false"],
+      "aria-orientation": ["horizontal", "vertical"],
+      "aria-owns": [],
+      "aria-placeholder": [],
+      "aria-posinset": [],
+      "aria-pressed": ["true", "false", "mixed"],
+      "aria-readonly": ["true", "false"],
+      "aria-relevant": [
+        "text",
+        "all",
+        "additions",
+        "additions text",
+        "removals"
+      ],
+      "aria-required": ["true", "false"],
+      "aria-roledescription": [],
+      "aria-rowcount": [],
+      "aria-rowindex": [],
+      "aria-rowspan": [],
+      "aria-selected": ["true", "false"],
+      "aria-setsize": [],
+      "aria-sort": ["none", "ascending", "descending", "other"],
+      "aria-valuemax": [],
+      "aria-valuemin": [],
+      "aria-valuenow": [],
+      "aria-valuetext": [],
+      "dangerouslySetInnerHTML": [],
+      "onCopy": [],
+      "onCopyCapture": [],
+      "onCut": [],
+      "onCutCapture": [],
+      "onPaste": [],
+      "onPasteCapture": [],
+      "onCompositionEnd": [],
+      "onCompositionEndCapture": [],
+      "onCompositionStart": [],
+      "onCompositionStartCapture": [],
+      "onCompositionUpdate": [],
+      "onCompositionUpdateCapture": [],
+      "onFocus": [],
+      "onFocusCapture": [],
+      "onBlur": [],
+      "onBlurCapture": [],
+      "onChange": [],
+      "onChangeCapture": [],
+      "onBeforeInput": [],
+      "onBeforeInputCapture": [],
+      "onInput": [],
+      "onInputCapture": [],
+      "onReset": [],
+      "onResetCapture": [],
+      "onSubmit": [],
+      "onSubmitCapture": [],
+      "onInvalid": [],
+      "onInvalidCapture": [],
+      "onLoad": [],
+      "onLoadCapture": [],
+      "onError": [],
+      "onErrorCapture": [],
+      "onKeyDown": [],
+      "onKeyDownCapture": [],
+      "onKeyPress": [],
+      "onKeyPressCapture": [],
+      "onKeyUp": [],
+      "onKeyUpCapture": [],
+      "onAbort": [],
+      "onAbortCapture": [],
+      "onCanPlay": [],
+      "onCanPlayCapture": [],
+      "onCanPlayThrough": [],
+      "onCanPlayThroughCapture": [],
+      "onDurationChange": [],
+      "onDurationChangeCapture": [],
+      "onEmptied": [],
+      "onEmptiedCapture": [],
+      "onEncrypted": [],
+      "onEncryptedCapture": [],
+      "onEnded": [],
+      "onEndedCapture": [],
+      "onLoadedData": [],
+      "onLoadedDataCapture": [],
+      "onLoadedMetadata": [],
+      "onLoadedMetadataCapture": [],
+      "onLoadStart": [],
+      "onLoadStartCapture": [],
+      "onPause": [],
+      "onPauseCapture": [],
+      "onPlay": [],
+      "onPlayCapture": [],
+      "onPlaying": [],
+      "onPlayingCapture": [],
+      "onProgress": [],
+      "onProgressCapture": [],
+      "onRateChange": [],
+      "onRateChangeCapture": [],
+      "onSeeked": [],
+      "onSeekedCapture": [],
+      "onSeeking": [],
+      "onSeekingCapture": [],
+      "onStalled": [],
+      "onStalledCapture": [],
+      "onSuspend": [],
+      "onSuspendCapture": [],
+      "onTimeUpdate": [],
+      "onTimeUpdateCapture": [],
+      "onVolumeChange": [],
+      "onVolumeChangeCapture": [],
+      "onWaiting": [],
+      "onWaitingCapture": [],
+      "onAuxClick": [],
+      "onAuxClickCapture": [],
+      "onClick": [],
+      "onClickCapture": [],
+      "onContextMenu": [],
+      "onContextMenuCapture": [],
+      "onDoubleClick": [],
+      "onDoubleClickCapture": [],
+      "onDrag": [],
+      "onDragCapture": [],
+      "onDragEnd": [],
+      "onDragEndCapture": [],
+      "onDragEnter": [],
+      "onDragEnterCapture": [],
+      "onDragExit": [],
+      "onDragExitCapture": [],
+      "onDragLeave": [],
+      "onDragLeaveCapture": [],
+      "onDragOver": [],
+      "onDragOverCapture": [],
+      "onDragStart": [],
+      "onDragStartCapture": [],
+      "onDrop": [],
+      "onDropCapture": [],
+      "onMouseDown": [],
+      "onMouseDownCapture": [],
+      "onMouseEnter": [],
+      "onMouseLeave": [],
+      "onMouseMove": [],
+      "onMouseMoveCapture": [],
+      "onMouseOut": [],
+      "onMouseOutCapture": [],
+      "onMouseOver": [],
+      "onMouseOverCapture": [],
+      "onMouseUp": [],
+      "onMouseUpCapture": [],
+      "onSelect": [],
+      "onSelectCapture": [],
+      "onTouchCancel": [],
+      "onTouchCancelCapture": [],
+      "onTouchEnd": [],
+      "onTouchEndCapture": [],
+      "onTouchMove": [],
+      "onTouchMoveCapture": [],
+      "onTouchStart": [],
+      "onTouchStartCapture": [],
+      "onPointerDown": [],
+      "onPointerDownCapture": [],
+      "onPointerMove": [],
+      "onPointerMoveCapture": [],
+      "onPointerUp": [],
+      "onPointerUpCapture": [],
+      "onPointerCancel": [],
+      "onPointerCancelCapture": [],
+      "onPointerEnter": [],
+      "onPointerEnterCapture": [],
+      "onPointerLeave": [],
+      "onPointerLeaveCapture": [],
+      "onPointerOver": [],
+      "onPointerOverCapture": [],
+      "onPointerOut": [],
+      "onPointerOutCapture": [],
+      "onGotPointerCapture": [],
+      "onGotPointerCaptureCapture": [],
+      "onLostPointerCapture": [],
+      "onLostPointerCaptureCapture": [],
+      "onScroll": [],
+      "onScrollCapture": [],
+      "onWheel": [],
+      "onWheelCapture": [],
+      "onAnimationStart": [],
+      "onAnimationStartCapture": [],
+      "onAnimationEnd": [],
+      "onAnimationEndCapture": [],
+      "onAnimationIteration": [],
+      "onAnimationIterationCapture": [],
+      "onTransitionEnd": [],
+      "onTransitionEndCapture": [],
+      "css": []
+    }
+  },
+  "TextLinkButton": {
+    "attrs": {
+      "id": [],
+      "onClick": [],
+      "data": [],
+      "aria-controls": [],
+      "aria-expanded": ["true", "false"],
+      "aria-describedby": [],
+      "weight": ["regular", "weak"],
+      "hitArea": ["standard", "large"]
+    }
+  },
+  "TextLinkRenderer": {
+    "attrs": {
+      "weight": ["regular", "weak"],
+      "showVisited": [],
+      "hitArea": ["standard", "large"]
+    }
+  },
+  "Textarea": {
+    "attrs": {
+      "value": [],
+      "onChange": [],
+      "onBlur": [],
+      "onFocus": [],
+      "onPaste": [],
+      "placeholder": [],
+      "highlightRanges": [],
+      "characterLimit": [],
+      "lines": [],
+      "lineLimit": [],
+      "grow": [],
+      "name": [],
+      "id": [],
+      "aria-describedby": [],
+      "label": [],
+      "tone": ["critical", "positive", "neutral"],
+      "autoComplete": [],
+      "autoFocus": [],
+      "data": [],
+      "disabled": [],
+      "required": [],
+      "message": [],
+      "reserveMessageSpace": [],
+      "description": [],
+      "secondaryLabel": [],
+      "tertiaryLabel": [],
+      "ref": [],
+      "key": []
+    }
+  },
+  "ThemeNameConsumer": {
+    "attrs": {}
+  },
+  "Tiles": {
+    "attrs": {
+      "space": [],
+      "columns": [],
+      "dividers": ["regular", "strong"]
+    }
+  },
+  "ToastProvider": {
+    "attrs": {}
+  },
+  "Toggle": {
+    "attrs": {
+      "id": [],
+      "label": [],
+      "on": [],
+      "onChange": [],
+      "align": ["left", "right", "justify"]
+    }
+  },
+  "makeLinkComponent": {
+    "attrs": {
+      "displayName": [],
+      "defaultProps": [],
+      "propTypes": [],
+      "apply": [],
+      "call": [],
+      "bind": [],
+      "toString": [],
+      "prototype": [],
+      "length": [],
+      "arguments": [],
+      "caller": [],
+      "name": [],
+      "__@hasInstance": []
+    }
+  },
+  "useBreakpoint": {
+    "attrs": {}
+  },
+  "useColor": {
+    "attrs": {}
+  },
+  "useSpace": {
+    "attrs": {}
+  },
+  "useThemeName": {
+    "attrs": {}
+  },
+  "useToast": {
+    "attrs": {}
+  }
+}

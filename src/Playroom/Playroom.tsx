@@ -117,7 +117,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
   if (!ready) {
     return null;
   }
-
+  console.log(JSON.stringify(componentsToHints(components), null, 2));
   const codeEditor = (
     <Fragment>
       <div className={styles.editorContainer}>
@@ -187,7 +187,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
               }[editorPosition]
         }
       >
-        <Frames
+        {/* <Frames
           code={previewRenderCode || code}
           themes={
             visibleThemes && visibleThemes.length > 0 ? visibleThemes : themes
@@ -195,7 +195,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           widths={
             visibleWidths && visibleWidths.length > 0 ? visibleWidths : widths
           }
-        />
+        /> */}
         <div
           className={classnames(styles.toggleEditorContainer, {
             [styles.isBottom]: isHorizontalEditor,
