@@ -17,6 +17,8 @@ interface FramesProps {
   widths: PlayroomProps['widths'];
 }
 
+let renderCode = '<React.Fragment></React.Fragment>';
+
 export default function Frames({ code, themes, widths }: FramesProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
 
@@ -28,13 +30,9 @@ export default function Frames({ code, themes, widths }: FramesProps) {
     }))
   );
 
-  let renderCode = code;
-
   try {
     renderCode = compileJsx(code);
-  } catch (e) {
-    renderCode = '';
-  }
+  } catch (e) {}
 
   return (
     <div ref={scrollingPanelRef} className={styles.root}>
