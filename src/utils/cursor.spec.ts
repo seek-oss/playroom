@@ -47,7 +47,8 @@ describe('cursor', () => {
           output: false,
         },
       ].forEach(({ should, input, output }) => {
-        it(should, () => { // eslint-disable-line jest/valid-title
+        // eslint-disable-next-line jest/valid-title
+        it(should, () => {
           expect(isValidLocation(input)).toEqual(output);
         });
       });
