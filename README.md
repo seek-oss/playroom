@@ -175,6 +175,23 @@ module.exports = {
 };
 ```
 
+### Missing autocomplete options
+
+In some cases, when there are a large number of possible values for a prop, not all options will appear within Playroom's autocomplete popup. This is caused [by an unintended behaviour in TypeScript's compiler](https://github.com/Microsoft/TypeScript/issues/26238).
+
+To force TypeScript to show all possible values for a prop, you can provide a `noErrorTruncation: true` option in `tsconfig.json`.
+
+```json
+{
+  "compilerOptions": {
+    ...
+    "noErrorTruncation": true
+  },
+}
+```
+
+_NOTE: This may cause longer than usual error messages from the TypeScript compiler when the same `tsconfig.json` is used outside of Playroom._
+
 ## Storybook Integration
 
 If you are interested in integrating Playroom into Storybook, check out [storybook-addon-playroom](https://github.com/rbardini/storybook-addon-playroom).
