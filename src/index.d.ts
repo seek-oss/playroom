@@ -1,5 +1,6 @@
 interface PlayroomConfig {
   components: string;
+  componentHints: () => Record<string, Hint> | Record<string, Hint>;
   outputPath: string;
   title?: string;
   themes?: string;
@@ -13,6 +14,10 @@ interface PlayroomConfig {
   baseUrl?: string;
   paramType: 'hash' | 'search';
   iframeSandbox?: string;
+}
+
+interface Hint {
+  attrs: Record<string, any>;
 }
 
 interface InternalPlayroomConfig extends PlayroomConfig {

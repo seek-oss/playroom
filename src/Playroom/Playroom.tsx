@@ -68,12 +68,19 @@ const resolveDirection = (
 
 export interface PlayroomProps {
   components: Record<string, ComponentType>;
+  hints: Record<string, Hint>;
   themes: string[];
   widths: number[];
   snippets: Snippets;
 }
 
-export default ({ components, themes, widths, snippets }: PlayroomProps) => {
+export default ({
+  components,
+  hints,
+  themes,
+  widths,
+  snippets,
+}: PlayroomProps) => {
   const [
     {
       editorPosition,
@@ -127,7 +134,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             dispatch({ type: 'updateCode', payload: { code: newCode } })
           }
           previewCode={previewEditorCode}
-          hints={componentsToHints(components)}
+          hints={hints || componentsToHints(components)}
         />
         <StatusMessage />
       </div>

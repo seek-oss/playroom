@@ -82,9 +82,9 @@ const validateCode = (editorInstance: Editor, code: string) => {
   }
 };
 
-interface Hint {
-  attrs: Record<string, any>;
-}
+// interface Hint {
+//   attrs: Record<string, any>;
+// }
 
 interface Props {
   code: string;

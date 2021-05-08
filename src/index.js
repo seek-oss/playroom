@@ -32,6 +32,7 @@ polyfillIntersectionObserver().then(() => {
       <StoreProvider themes={themeNames} widths={widths}>
         <Playroom
           components={components}
+          hints={playroomConfig.componentHints}
           widths={widths}
           themes={themeNames}
           snippets={
