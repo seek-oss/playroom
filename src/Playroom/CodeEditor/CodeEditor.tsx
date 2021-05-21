@@ -249,6 +249,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         autoCloseBrackets: true,
         theme: 'neo',
         gutters: [styles.gutter],
+        lineNumbers: true,
         hintOptions: { schemaInfo: hints },
         viewportMargin: 50,
         extraKeys: {

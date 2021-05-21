@@ -41,10 +41,6 @@
     width: @code-gutter-size;
   }
 
-  .CodeMirror-gutter-elt {
-    position: relative;
-  }
-
   .CodeMirror pre,
   .CodeMirror-linenumber {
     font-size: 16px;
@@ -102,7 +98,10 @@
       background: @code-selection;
     }
     .CodeMirror-linenumber {
-      color: @white;
+      color: @gray-2;
+      &:hover {
+        color: @gray-3;
+      }
     }
     .cm-tag {
       color: @code-format-tag;
