@@ -27,6 +27,7 @@
 @green-2: #1da584;
 @red-1: #fed6e1;
 @red-2: #e52b50;
+@red-3: #c3183a;
 @white: #fff;
 @gray-1: #f4f4f4;
 @gray-2: #e8e8e8;
@@ -40,6 +41,7 @@
 @positive: @green-2;
 @critical-light: @red-1;
 @critical: @red-2;
+@critical-dark: @red-3;
 @neutral: @gray-2;
 
 // Highlights
@@ -76,9 +78,8 @@
 // Code Editor
 @code-background: @white;
 @code-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
-@code-gutter-size: @gutter-width;
-@code-marker-size: @grid * 3;
-@code-marker-color: @highlight;
+@code-gutter-size: @gutter-width * 2;
+@code-line-gutter: 16px;
 @code-format-tag: @blue-4;
 @code-format-attribute: @blue-2;
 @code-format-string: @blue-3;

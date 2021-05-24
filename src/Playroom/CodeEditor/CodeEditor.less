@@ -14,13 +14,13 @@
 }
 
 .marker {
-  width: @code-marker-size;
-  height: @code-marker-size;
-  border-radius: (@code-marker-size / 2);
-  background-color: @code-marker-color;
+  border-radius: @radius-large;
+  background-color: @critical-light;
+  color: @critical-dark;
   position: relative;
-  top: (@code-marker-size / 2);
-  left: 10px;
+  left: 4px;
+  text-align: right;
+  padding-right: 10px;
 }
 
 :global {
@@ -39,10 +39,6 @@
 
   .CodeMirror-gutters {
     width: @code-gutter-size;
-  }
-
-  .CodeMirror-gutter-elt {
-    position: relative;
   }
 
   .CodeMirror pre,
@@ -102,7 +98,14 @@
       background: @code-selection;
     }
     .CodeMirror-linenumber {
-      color: @white;
+      box-sizing: border-box;
+      width: @code-gutter-size !important;
+      padding-right: @code-line-gutter;
+      color: @gray-3;
+      transition: @transition-fast;
+      &:not(:hover) {
+        opacity: 0.4;
+      }
     }
     .cm-tag {
       color: @code-format-tag;
