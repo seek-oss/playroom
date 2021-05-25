@@ -86,11 +86,16 @@ export const assertFirstFrameContains = (text) => {
 };
 
 export const assertCodePaneContains = (text) => {
-  getCodeEditor().then(($el) => {
-    const code = $el.get(0).innerText;
-    // removes code mirrors invisible last line character placeholder
-    // which is inserted to preserve prettiers new line at end of string.
-    expect(code.replace(/[\u200b]$/, '')).to.eq(text);
+  getCodeEditor().within(() => {
+    const lines = [];
+    cy.get('.CodeMirror-line')
+      .each(($el) => lines.push($el.text()))
+      .then(() => {
+        const code = lines.join('\n');
+        // removes code mirrors invisible last line character placeholder
+        // which is inserted to preserve prettiers new line at end of string.
+        expect(code.replace(/[\u200b]$/, '')).to.eq(text);
+      });
   });
 };
 
