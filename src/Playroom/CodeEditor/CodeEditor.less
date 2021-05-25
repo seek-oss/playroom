@@ -14,13 +14,29 @@
 }
 
 .marker {
+  @keyframes fadeIn {
+    90% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
   border-radius: @radius-large;
   background-color: @critical-light;
   color: @critical-dark;
   position: relative;
   left: 4px;
   text-align: right;
+  opacity: 0;
   padding-right: 10px;
+  animation-name: fadeIn;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-delay: 2s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
 :global {
