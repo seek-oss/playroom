@@ -14,13 +14,29 @@
 }
 
 .marker {
-  width: @code-marker-size;
-  height: @code-marker-size;
-  border-radius: (@code-marker-size / 2);
-  background-color: @code-marker-color;
+  @keyframes fadeIn {
+    90% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  border-radius: @radius-large;
+  background-color: @critical-light;
+  color: @critical-dark;
   position: relative;
-  top: (@code-marker-size / 2);
-  left: 10px;
+  left: 4px;
+  margin-right: 4px;
+  text-align: right;
+  opacity: 0;
+  padding-right: 10px;
+  animation-name: fadeIn;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
 :global {
@@ -39,10 +55,6 @@
 
   .CodeMirror-gutters {
     width: @code-gutter-size;
-  }
-
-  .CodeMirror-gutter-elt {
-    position: relative;
   }
 
   .CodeMirror pre,
@@ -102,7 +114,15 @@
       background: @code-selection;
     }
     .CodeMirror-linenumber {
-      color: @white;
+      box-sizing: border-box;
+      width: @code-gutter-size !important;
+      padding-left: 8px;
+      padding-right: @code-line-gutter;
+      color: @gray-4;
+      transition: @transition-fast;
+      &:not(:hover) {
+        opacity: 0.4;
+      }
     }
     .cm-tag {
       color: @code-format-tag;

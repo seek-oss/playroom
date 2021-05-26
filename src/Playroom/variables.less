@@ -12,7 +12,7 @@
 @text-standard: normal 14px @typography-family;
 @text-small: normal 12px @typography-family;
 @text-xsmall: normal 10px @typography-family;
-@text-neutral: @gray-4;
+@text-neutral: @gray-5;
 
 // Weight
 @bold: 700;
@@ -27,12 +27,14 @@
 @green-2: #1da584;
 @red-1: #fed6e1;
 @red-2: #e52b50;
+@red-3: #c3183a;
 @white: #fff;
 @gray-1: #f4f4f4;
 @gray-2: #e8e8e8;
 @gray-3: #a7a7a7;
-@gray-4: #515151;
-@gray-5: #1e1e1e;
+@gray-4: #767676;
+@gray-5: #515151;
+@gray-6: #1e1e1e;
 @black: #000;
 
 // Tones
@@ -40,6 +42,7 @@
 @positive: @green-2;
 @critical-light: @red-1;
 @critical: @red-2;
+@critical-dark: @red-3;
 @neutral: @gray-2;
 
 // Highlights
@@ -76,9 +79,8 @@
 // Code Editor
 @code-background: @white;
 @code-font-family: Source Code Pro, Firacode, Hasklig, Menlo, monospace;
-@code-gutter-size: @gutter-width;
-@code-marker-size: @grid * 3;
-@code-marker-color: @highlight;
+@code-gutter-size: @gutter-width * 1.75;
+@code-line-gutter: 20px;
 @code-format-tag: @blue-4;
 @code-format-attribute: @blue-2;
 @code-format-string: @blue-3;

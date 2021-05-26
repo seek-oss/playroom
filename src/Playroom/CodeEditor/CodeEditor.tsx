@@ -76,7 +76,14 @@ const validateCode = (editorInstance: Editor, code: string) => {
     if (lineNumber) {
       const marker = document.createElement('div');
       marker.classList.add(styles.marker);
-      marker.setAttribute('title', err.message);
+      marker.setAttribute(
+        'title',
+        // Remove our wrapping Fragment from error message
+        (err.message || '')
+          .replace(/\<React\.Fragment\>/, '')
+          .replace(/\<\/React\.Fragment\>$/, '')
+      );
+      marker.innerText = String(lineNumber);
       editorInstance.setGutterMarker(lineNumber - 1, styles.gutter, marker);
     }
   }
@@ -251,6 +258,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         gutters: [styles.gutter],
         hintOptions: { schemaInfo: hints },
         viewportMargin: 50,
+        lineNumbers: true,
         extraKeys: {
           Tab: (cm) => {
             if (cm.somethingSelected()) {
