@@ -129,15 +129,23 @@
       width: 2px;
     }
     .CodeMirror-gutters {
-      background-color: transparent;
+      background-color: @code-background;
       border: none;
+      &::after {
+        content: '';
+        background-color: @code-background;
+        position: absolute;
+        right: 0;
+        height: 100%;
+        box-shadow: 0 0 10px 5px @code-background;
+      }
     }
     .CodeMirror-selected {
       background: @code-selection;
     }
 
     .CodeMirror-activeline-background {
-      background: @code-active-line;
+      background: transparent;
     }
 
     .CodeMirror-guttermarker-subtle {
