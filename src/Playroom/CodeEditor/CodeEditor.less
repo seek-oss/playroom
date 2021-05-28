@@ -1,19 +1,13 @@
 @import (reference) '../variables.less';
 
-.gutter {
-  @box-fade-size: 10px;
-  width: @code-gutter-size - @box-fade-size;
-  background-color: @code-background;
-  position: absolute;
-  right: @box-fade-size;
-  box-shadow: 0 0 @box-fade-size 5px @code-background;
-}
+@minimumLineNumberWidth: 50px;
+@lineNumberOpacity: 0.4;
 
 .insertionPoint {
   background-color: @code-selection;
 }
 
-.marker {
+.errorMarker {
   @keyframes fadeIn {
     90% {
       opacity: 0;
@@ -27,16 +21,32 @@
   background-color: @critical-light;
   color: @critical-dark;
   position: relative;
-  left: 4px;
+  min-width: @minimumLineNumberWidth;
   margin-right: 4px;
   text-align: right;
   opacity: 0;
-  padding-right: 10px;
+  padding-right: 8px;
   animation-name: fadeIn;
   animation-duration: 1s;
   animation-timing-function: ease;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
+}
+
+.foldGutter {
+  width: 1em;
+  padding: 0 8px;
+}
+.foldOpen,
+.foldFolded {
+  cursor: pointer;
+}
+.foldOpen::after {
+  content: '-';
+}
+.foldFolded::after {
+  content: '+';
+  color: @highlight;
 }
 
 :global {
@@ -54,7 +64,9 @@
   }
 
   .CodeMirror-gutters {
-    width: @code-gutter-size;
+    min-width: @code-gutter-size;
+    box-sizing: border-box;
+    padding-left: 8px;
   }
 
   .CodeMirror pre,
@@ -97,6 +109,17 @@
     color: @code-hint-fg;
   }
 
+  .CodeMirror-linenumbers {
+    min-width: @minimumLineNumberWidth;
+  }
+
+  .CodeMirror-foldmarker {
+    color: @highlight;
+    font-family: arial;
+    cursor: pointer;
+    padding: 0 @grid;
+  }
+
   .cm-s-neo {
     &.CodeMirror {
       background-color: @code-background;
@@ -108,20 +131,33 @@
     .CodeMirror-gutters {
       background-color: transparent;
       border: none;
-      pointer-events: none;
     }
     .CodeMirror-selected {
       background: @code-selection;
     }
-    .CodeMirror-linenumber {
-      box-sizing: border-box;
-      width: @code-gutter-size !important;
-      padding-left: 8px;
-      padding-right: @code-line-gutter;
+
+    .CodeMirror-activeline-background {
+      background: @code-active-line;
+    }
+
+    .CodeMirror-guttermarker-subtle {
+      display: flex;
+      justify-content: center;
       color: @gray-4;
       transition: @transition-fast;
-      &:not(:hover) {
-        opacity: 0.4;
+      &:not(:hover):not(:local(.foldFolded)) {
+        opacity: @lineNumberOpacity;
+      }
+    }
+
+    .CodeMirror-linenumber {
+      min-width: @minimumLineNumberWidth;
+      color: @gray-4;
+      transition: @transition-fast;
+      &:not(:hover):not(.cm-s-neo
+          .CodeMirror-activeline
+          .CodeMirror-linenumber) {
+        opacity: @lineNumberOpacity;
       }
     }
     .cm-tag {
