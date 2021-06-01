@@ -73,6 +73,7 @@ module.exports = {
     // Custom webpack config goes here...
   }),
   iframeSandbox: 'allow-scripts',
+  unstable_concurrentMode: true, // uses react concurrent mode render createRoot (default false)
 };
 ```
 
