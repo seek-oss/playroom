@@ -1,7 +1,6 @@
 import { createBrowserHistory } from 'history';
-import { useState, useEffect } from 'react';
 import queryString, { ParsedQuery } from 'query-string';
-
+import { useEffect, useState } from 'react';
 import playroomConfig from '../config';
 
 const history = createBrowserHistory();
@@ -42,7 +41,7 @@ export function useParams<ReturnType>(
   useEffect(
     () =>
       history.listen((location) => {
-        setParams(getParamsFromQuery(location));
+        setParams(getParamsFromQuery(location.location));
       }),
     []
   );
