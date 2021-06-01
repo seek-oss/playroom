@@ -73,10 +73,19 @@ module.exports = {
     // Custom webpack config goes here...
   }),
   iframeSandbox: 'allow-scripts',
+
+  // Advanced options (optional):
+  htmlTemplate: {
+    // Keys are constant here, always `/̀  and `/preview`, even if basePath is specified
+    '/': './pathToMainTemplate.ejs',
+    '/preview': './pathToPreviewTemplate.ejs',
+  },
 };
 ```
 
 _Note: `port` and `openBrowser` options will be set to `9000` and `true` (respectively) by default whenever they are omitted from the config above._
+
+_Note 2: `htmlTemplate` templates will be loaded by [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin). For advanced templating options, see their [documentation](https://github.com/jantimon/html-webpack-plugin/blob/master/docs/template-option.md) on this option (named `template` and not `htmlTemplate` like Playroom) or the [default template](https://github.com/jantimon/html-webpack-plugin/blob/master/default_index.ejs) used. Insert an element with ID `root` in your HTML and Playroom will be rendered in it. Note that unless you explicitely render the config title option, the title used for the document will be the one you hardcode in your template file._
 
 Your `components` file is expected to export a single object or a series of named exports. For example:
 
