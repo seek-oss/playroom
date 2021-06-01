@@ -11,13 +11,22 @@ const compressParams = ({ code, themes, widths, theme }) => {
   return lzString.compressToEncodedURIComponent(data);
 };
 
-const createUrl = ({ baseUrl, code, themes, widths, paramType = 'hash' }) => {
+const createUrl = ({
+  baseUrl,
+  code,
+  themes,
+  widths,
+  paramType = 'hash',
+  includeIndex = false,
+}) => {
   let path = '';
 
   if (code || themes || widths) {
     const compressedData = compressParams({ code, themes, widths });
 
-    path = `${paramType === 'hash' ? '#' : ''}?code=${compressedData}`;
+    path = `${includeIndex ? '/index.html' : ''}${
+      paramType === 'hash' ? '#' : ''
+    }?code=${compressedData}`;
   }
 
   if (baseUrl) {
@@ -29,13 +38,21 @@ const createUrl = ({ baseUrl, code, themes, widths, paramType = 'hash' }) => {
   return path;
 };
 
-const createPreviewUrl = ({ baseUrl, code, theme, paramType = 'hash' }) => {
+const createPreviewUrl = ({
+  baseUrl,
+  code,
+  theme,
+  paramType = 'hash',
+  includeIndex = false,
+}) => {
   let path = '';
 
   if (code || theme) {
     const compressedData = compressParams({ code, theme });
 
-    path = `/preview${paramType === 'hash' ? '#' : ''}?code=${compressedData}`;
+    path = `/preview${includeIndex ? '/index.html' : ''}${
+      paramType === 'hash' ? '#' : ''
+    }?code=${compressedData}`;
   }
 
   if (baseUrl) {

@@ -13,6 +13,7 @@ interface PlayroomConfig {
   baseUrl?: string;
   paramType: 'hash' | 'search';
   iframeSandbox?: string;
+  includeIndex?: boolean;
 }
 
 interface InternalPlayroomConfig extends PlayroomConfig {

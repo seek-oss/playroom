@@ -22,6 +22,7 @@ interface CreateUrlOptions {
   themes?: string[];
   widths?: number[];
   paramType?: ParamType;
+  includeIndex?: boolean;
 }
 
 export const createUrl: (options: CreateUrlOptions) => string;
@@ -31,6 +32,7 @@ interface CreatePreviewUrlOptions {
   code?: string;
   theme?: string;
   paramType?: ParamType;
+  includeIndex?: boolean;
 }
 
 export const createPreviewUrl: (options: CreatePreviewUrlOptions) => string;
