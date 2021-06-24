@@ -17,6 +17,10 @@ import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/xml-hint';
+import 'codemirror/addon/selection/active-line';
+import 'codemirror/addon/fold/foldcode';
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/fold/brace-fold';
 
 const completeAfter = (cm: Editor, predicate: () => boolean) => {
   const CodeMirror = cm.constructor;
@@ -63,7 +67,7 @@ const completeIfInTag = (cm: Editor) => {
 };
 
 const validateCode = (editorInstance: Editor, code: string) => {
-  editorInstance.clearGutter(styles.gutter);
+  editorInstance.clearGutter('errorGutter');
 
   try {
     compileJsx(code);
@@ -75,9 +79,16 @@ const validateCode = (editorInstance: Editor, code: string) => {
 
     if (lineNumber) {
       const marker = document.createElement('div');
-      marker.classList.add(styles.marker);
-      marker.setAttribute('title', err.message);
-      editorInstance.setGutterMarker(lineNumber - 1, styles.gutter, marker);
+      marker.classList.add(styles.errorMarker);
+      marker.setAttribute(
+        'title',
+        // Remove our wrapping Fragment from error message
+        (err.message || '')
+          .replace(/\<React\.Fragment\>/, '')
+          .replace(/\<\/React\.Fragment\>$/, '')
+      );
+      marker.innerText = String(lineNumber);
+      editorInstance.setGutterMarker(lineNumber - 1, 'errorGutter', marker);
     }
   }
 };
@@ -244,9 +255,20 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         autoCloseTags: true,
         autoCloseBrackets: true,
         theme: 'neo',
-        gutters: [styles.gutter],
+        gutters: ['errorGutter', 'CodeMirror-linenumbers', styles.foldGutter],
         hintOptions: { schemaInfo: hints },
         viewportMargin: 50,
+        lineNumbers: true,
+        styleActiveLine: !previewCode,
+        foldGutter: {
+          gutter: styles.foldGutter,
+          indicatorOpen: styles.foldOpen,
+          indicatorFolded: styles.foldFolded,
+        },
+        foldOptions: {
+          widget: '\u2026',
+          minFoldSize: 1,
+        },
         extraKeys: {
           Tab: (cm) => {
             if (cm.somethingSelected()) {

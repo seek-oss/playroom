@@ -1,26 +1,52 @@
 @import (reference) '../variables.less';
 
-.gutter {
-  @box-fade-size: 10px;
-  width: @code-gutter-size - @box-fade-size;
-  background-color: @code-background;
-  position: absolute;
-  right: @box-fade-size;
-  box-shadow: 0 0 @box-fade-size 5px @code-background;
-}
+@minimumLineNumberWidth: 50px;
+@lineNumberOpacity: 0.4;
 
 .insertionPoint {
   background-color: @code-selection;
 }
 
-.marker {
-  width: @code-marker-size;
-  height: @code-marker-size;
-  border-radius: (@code-marker-size / 2);
-  background-color: @code-marker-color;
+.errorMarker {
+  @keyframes fadeIn {
+    90% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  border-radius: @radius-large;
+  background-color: @critical-light;
+  color: @critical-dark;
   position: relative;
-  top: (@code-marker-size / 2);
-  left: 10px;
+  min-width: @minimumLineNumberWidth;
+  margin-right: 4px;
+  text-align: right;
+  opacity: 0;
+  padding-right: 8px;
+  animation-name: fadeIn;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.foldGutter {
+  width: 1em;
+  padding: 0 8px;
+}
+.foldOpen,
+.foldFolded {
+  cursor: pointer;
+}
+.foldOpen::after {
+  content: '-';
+}
+.foldFolded::after {
+  content: '+';
+  color: @highlight;
 }
 
 :global {
@@ -38,11 +64,9 @@
   }
 
   .CodeMirror-gutters {
-    width: @code-gutter-size;
-  }
-
-  .CodeMirror-gutter-elt {
-    position: relative;
+    min-width: @code-gutter-size;
+    box-sizing: border-box;
+    padding-left: 8px;
   }
 
   .CodeMirror pre,
@@ -85,6 +109,17 @@
     color: @code-hint-fg;
   }
 
+  .CodeMirror-linenumbers {
+    min-width: @minimumLineNumberWidth;
+  }
+
+  .CodeMirror-foldmarker {
+    color: @highlight;
+    font-family: arial;
+    cursor: pointer;
+    padding: 0 @grid;
+  }
+
   .cm-s-neo {
     &.CodeMirror {
       background-color: @code-background;
@@ -94,15 +129,44 @@
       width: 2px;
     }
     .CodeMirror-gutters {
-      background-color: transparent;
+      background-color: @code-background;
       border: none;
-      pointer-events: none;
+      &::after {
+        content: '';
+        background-color: @code-background;
+        position: absolute;
+        right: 0;
+        height: 100%;
+        box-shadow: 0 0 10px 5px @code-background;
+      }
     }
     .CodeMirror-selected {
       background: @code-selection;
     }
+
+    .CodeMirror-activeline-background {
+      background: transparent;
+    }
+
+    .CodeMirror-guttermarker-subtle {
+      display: flex;
+      justify-content: center;
+      color: @gray-4;
+      transition: @transition-fast;
+      &:not(:hover):not(:local(.foldFolded)) {
+        opacity: @lineNumberOpacity;
+      }
+    }
+
     .CodeMirror-linenumber {
-      color: @white;
+      min-width: @minimumLineNumberWidth;
+      color: @gray-4;
+      transition: @transition-fast;
+      &:not(:hover):not(.cm-s-neo
+          .CodeMirror-activeline
+          .CodeMirror-linenumber) {
+        opacity: @lineNumberOpacity;
+      }
     }
     .cm-tag {
       color: @code-format-tag;
