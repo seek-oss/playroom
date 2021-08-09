@@ -1,6 +1,7 @@
 import { createBrowserHistory } from 'history';
 import { useState, useEffect } from 'react';
 import queryString, { ParsedQuery } from 'query-string';
+
 import playroomConfig from '../config';
 
 const history = createBrowserHistory();
