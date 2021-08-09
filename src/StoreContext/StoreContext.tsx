@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import copy from 'copy-to-clipboard';
 import localforage from 'localforage';
-import base64url from 'base64-url';
 import lzString from 'lz-string';
 import dedent from 'dedent';
 import { useDebouncedCallback } from 'use-debounce';
@@ -414,25 +413,27 @@ export const StoreProvider = ({
     let widthsFromQuery: State['visibleWidths'];
 
     if (params.code) {
-      try {
-        const {
-          code: parsedCode,
-          themes: parsedThemes,
-          widths: parsedWidths,
-        } = JSON.parse(
-          lzString.decompressFromEncodedURIComponent(String(params.code)) ?? ''
-        );
+      const {
+        code: parsedCode,
+        themes: parsedThemes,
+        widths: parsedWidths,
+      } = JSON.parse(
+        lzString.decompressFromEncodedURIComponent(String(params.code)) ?? ''
+      );
 
-        codeFromQuery = parsedCode;
-        themesFromQuery = parsedThemes;
-        widthsFromQuery = parsedWidths;
-      } catch (e) {
-        // backward compatibility
-        codeFromQuery = base64url.decode(String(params.code));
-      }
+      codeFromQuery = parsedCode;
+      themesFromQuery = parsedThemes;
+      widthsFromQuery = parsedWidths;
     }
 
-    Promise.all<string, EditorPosition, number, number, number[], string[]>([
+    Promise.all<
+      string | null,
+      EditorPosition | null,
+      number | null,
+      number | null,
+      number[] | null,
+      string[] | null
+    >([
       store.getItem('code'),
       store.getItem('editorPosition'),
       store.getItem('editorHeight'),

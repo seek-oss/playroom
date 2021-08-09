@@ -42,7 +42,7 @@ export function useParams<ReturnType>(
   useEffect(
     () =>
       history.listen((location) => {
-        setParams(getParamsFromQuery(location));
+        setParams(getParamsFromQuery(location.location));
       }),
     []
   );
