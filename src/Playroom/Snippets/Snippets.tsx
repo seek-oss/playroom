@@ -88,7 +88,7 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
       onClose(returnValue);
     }
   };
-  const debouncedPreview = useDebouncedCallback(
+  const [debouncedPreview] = useDebouncedCallback(
     (previewSnippet: ReturnedSnippet) => {
       if (typeof onHighlight === 'function') {
         onHighlight(previewSnippet);
@@ -96,7 +96,7 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
     },
     50
   );
-  const debounceScrollToHighlighted = useDebouncedCallback(
+  const [debounceScrollToHighlighted] = useDebouncedCallback(
     scrollToHighlightedSnippet,
     50
   );

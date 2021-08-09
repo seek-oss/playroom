@@ -113,7 +113,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
     StoreContext
   );
 
-  const debouncedChange = useDebouncedCallback(
+  const [debouncedChange] = useDebouncedCallback(
     (newCode: string) => onChange(newCode),
     100
   );

@@ -119,7 +119,7 @@
     "style-loader": "^2.0.0",
     "typescript": "^4.2.3",
     "url-join": "^4.0.1",
-    "use-debounce": "^6.0.0",
+    "use-debounce": "^3.3.0",
     "webpack": "^5.26.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.7.3"
@@ -146,7 +146,7 @@
     "surge": "^0.22.1"
   },
   "peerDependencies": {
-    "react": "^17.0",
-    "react-dom": "^17.0"
+    "react": "^16.8 || ^17.0",
+    "react-dom": "^16.8 || ^17.0"
   }
 }

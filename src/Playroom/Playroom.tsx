@@ -90,7 +90,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
     dispatch,
   ] = useContext(StoreContext);
 
-  const updateEditorSize = useDebouncedCallback(
+  const [updateEditorSize] = useDebouncedCallback(
     ({
       isVerticalEditor,
       offsetWidth,
@@ -108,7 +108,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
     1
   );
 
-  const resetEditorPosition = useDebouncedCallback(() => {
+  const [resetEditorPosition] = useDebouncedCallback(() => {
     if (editorPosition === 'undocked') {
       dispatch({ type: 'resetEditorPosition' });
     }
