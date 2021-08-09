@@ -7,16 +7,7 @@ import {
 
 describe('URL handling', () => {
   describe('where paramType is hash', () => {
-    it('code (base64 encoding)', () => {
-      visit(
-        'http://localhost:9000/#?code=PEZvbz48Rm9vPjxCYXIvPjwvRm9vPjwvRm9vPg'
-      );
-
-      assertFirstFrameContains('Foo\nFoo\nBar');
-      assertCodePaneContains('<Foo><Foo><Bar/></Foo></Foo>');
-    });
-
-    it('code (LZ-based compression)', () => {
+    it('code', () => {
       visit(
         'http://localhost:9000/#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
       );
@@ -35,16 +26,7 @@ describe('URL handling', () => {
   });
 
   describe('where paramType is search', () => {
-    it('code (base64 encoding)', () => {
-      visit(
-        'http://localhost:9001/index.html?code=PEZvbz48Rm9vPjxCYXIvPjwvRm9vPjwvRm9vPg'
-      );
-
-      assertFirstFrameContains('Foo\nFoo\nBar');
-      assertCodePaneContains('<Foo><Foo><Bar/></Foo></Foo>');
-    });
-
-    it('code (LZ-based compression)', () => {
+    it('code', () => {
       visit(
         'http://localhost:9001/index.html?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
       );
