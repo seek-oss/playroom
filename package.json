@@ -111,7 +111,7 @@
     "query-string": "^6.14.1",
     "re-resizable": "^6.9.0",
     "react-codemirror2": "^7.2.1",
-    "react-docgen-typescript": "^1.21.0",
+    "react-docgen-typescript": "^2.1.0",
     "react-use": "^17.2.1",
     "read-pkg-up": "^7.0.1",
     "scope-eval": "^1.0.0",
