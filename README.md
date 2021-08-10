@@ -63,6 +63,7 @@ module.exports = {
   port: 9000,
   openBrowser: true,
   paramType: 'search', // default is 'hash'
+  includeIndex: true, // default is false, explicitly includes 'index.html' in links.
   exampleCode: `
     <Button>
       Hello World!
