@@ -24,7 +24,7 @@ export default (components: PlayroomProps['components']) => {
       }
 
       const parsedPropTypes = parsePropTypes(components[componentName]);
-      const filteredPropTypes = omit(parsedPropTypes, 'children', 'className');
+      const filteredPropTypes = omit(parsedPropTypes, 'children');
       const propNames = Object.keys(filteredPropTypes);
 
       return {

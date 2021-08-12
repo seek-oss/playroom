@@ -175,6 +175,21 @@ module.exports = {
 };
 ```
 
+If you need to customise the [parser options](https://github.com/styleguidist/react-docgen-typescript#options), you can provide a `reactDocgenTypescriptConfig` option in `playroom.config.js`.
+
+For example:
+
+```js
+module.exports = {
+  ...,
+  reactDocgenTypescriptConfig: {
+    propFilter: (prop, component) => {
+      ...
+    }
+  }
+};
+```
+
 ## Storybook Integration
 
 If you are interested in integrating Playroom into Storybook, check out [storybook-addon-playroom](https://github.com/rbardini/storybook-addon-playroom).

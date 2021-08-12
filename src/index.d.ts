@@ -13,6 +13,7 @@ interface PlayroomConfig {
   baseUrl?: string;
   paramType: 'hash' | 'search';
   iframeSandbox?: string;
+  reactDocgenTypescriptConfig?: import('react-docgen-typescript').ParserOptions;
 }
 
 interface InternalPlayroomConfig extends PlayroomConfig {

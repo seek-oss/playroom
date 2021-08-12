@@ -115,7 +115,7 @@
     "read-pkg-up": "^7.0.1",
     "scope-eval": "^1.0.0",
     "style-loader": "^3.2.1",
-    "typescript": "^4.2.3",
+    "typescript": "^4.3.2",
     "url-join": "^4.0.1",
     "use-debounce": "^3.3.0",
     "webpack": "^5.26.0",
