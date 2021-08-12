@@ -113,9 +113,9 @@ export default [
       <Button weight="strong">
         Button
       </Button>
-    `
+    `,
   },
-  ...
+  // etc...
 ];
 ```
 
@@ -167,11 +167,8 @@ If you need to customise this behaviour, you can provide a `typeScriptFiles` opt
 
 ```js
 module.exports = {
-  ...,
-  typeScriptFiles: [
-    'src/components/**/*.{ts,tsx}',
-    '!**/node_modules'
-  ]
+  // ...
+  typeScriptFiles: ['src/components/**/*.{ts,tsx}', '!**/node_modules'],
 };
 ```
 
@@ -181,12 +178,12 @@ For example:
 
 ```js
 module.exports = {
-  ...,
+  // ...
   reactDocgenTypescriptConfig: {
     propFilter: (prop, component) => {
-      ...
-    }
-  }
+      // ...
+    },
+  },
 };
 ```
 
