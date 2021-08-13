@@ -16,7 +16,7 @@
       auth: GITHUB_TOKEN,
     });
 
-    await octokit.repos.createStatus({
+    await octokit.repos.createCommitStatus({
       owner: 'seek-oss',
       repo: 'playroom',
       sha: GITHUB_SHA,

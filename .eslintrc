@@ -11,12 +11,6 @@
         "no-console": 0,
         "no-process-exit": 0
       }
-    },
-    {
-      "files": ["examples/**/*.js"],
-      "rules": {
-        "import/no-unresolved": 0
-      }
     }
   ]
 }

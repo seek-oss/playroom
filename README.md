@@ -113,9 +113,9 @@ export default [
       <Button weight="strong">
         Button
       </Button>
-    `
+    `,
   },
-  ...
+  // etc...
 ];
 ```
 
@@ -167,11 +167,23 @@ If you need to customise this behaviour, you can provide a `typeScriptFiles` opt
 
 ```js
 module.exports = {
-  ...,
-  typeScriptFiles: [
-    'src/components/**/*.{ts,tsx}',
-    '!**/node_modules'
-  ]
+  // ...
+  typeScriptFiles: ['src/components/**/*.{ts,tsx}', '!**/node_modules'],
+};
+```
+
+If you need to customise the [parser options](https://github.com/styleguidist/react-docgen-typescript#options), you can provide a `reactDocgenTypescriptConfig` option in `playroom.config.js`.
+
+For example:
+
+```js
+module.exports = {
+  // ...
+  reactDocgenTypescriptConfig: {
+    propFilter: (prop, component) => {
+      // ...
+    },
+  },
 };
 ```
 
