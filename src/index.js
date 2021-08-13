@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 
 import Playroom from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';
+import getOrCreateRoot from './get-or-create-root';
 import playroomConfig from './config';
 
 const polyfillIntersectionObserver = () =>
@@ -12,9 +13,9 @@ const polyfillIntersectionObserver = () =>
 
 polyfillIntersectionObserver().then(() => {
   const widths = playroomConfig.widths || [320, 375, 768, 1024];
-
-  const outlet = document.createElement('div');
-  document.body.appendChild(outlet);
+  const root = getOrCreateRoot(
+    playroomConfig.htmlTemplate && playroomConfig.htmlTemplate['/']
+  );
 
   const renderPlayroom = ({
     themes = require('./themes'),
@@ -41,7 +42,7 @@ polyfillIntersectionObserver().then(() => {
           }
         />
       </StoreProvider>,
-      outlet
+      root
     );
   };
   renderPlayroom();

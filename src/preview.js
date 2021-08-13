@@ -1,9 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
 import Preview from './Playroom/Preview';
+import playroomConfig from './config';
+import getOrCreateRoot from './get-or-create-root';
 
-const outlet = document.createElement('div');
-document.body.appendChild(outlet);
+const root = getOrCreateRoot(
+  playroomConfig.htmlTemplate && playroomConfig.htmlTemplate['/preview']
+);
 
 const renderPreview = ({
   themes = require('./themes'),
@@ -16,7 +19,7 @@ const renderPreview = ({
       themes={themes}
       FrameComponent={FrameComponent}
     />,
-    outlet
+    root
   );
 };
 renderPreview();
