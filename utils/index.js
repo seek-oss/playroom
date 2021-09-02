@@ -35,7 +35,7 @@ const createPreviewUrl = ({ baseUrl, code, theme, paramType = 'hash' }) => {
   if (code || theme) {
     const compressedData = compressParams({ code, theme });
 
-    path = `/preview${paramType === 'hash' ? '#' : ''}?code=${compressedData}`;
+    path = `/preview/${paramType === 'hash' ? '#' : ''}?code=${compressedData}`;
   }
 
   if (baseUrl) {
