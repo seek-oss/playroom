@@ -27,6 +27,8 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 [Mesh Design System](https://www.meshdesignsystem.com/playroom/) (Themed)
 
+[Mística Design System](https://mistica-web.vercel.app/playroom) (Themed)
+
 Send us a PR if you'd like to be in this list!
 
 ## Getting Started
