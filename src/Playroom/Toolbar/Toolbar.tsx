@@ -1,22 +1,20 @@
-import React, { useContext, ReactChild, useState, useCallback } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { useTimeoutFn } from 'react-use';
 import classnames from 'classnames';
 import { PlayroomProps } from '../Playroom';
-import { StoreContext, EditorPosition } from '../../StoreContext/StoreContext';
+import { StoreContext } from '../../StoreContext/StoreContext';
 import FramesPanel from '../FramesPanel/FramesPanel';
 import PreviewPanel from '../PreviewPanel/PreviewPanel';
 import Snippets from '../Snippets/Snippets';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
 import AddIcon from '../icons/AddIcon';
 import FramesIcon from '../icons/FramesIcon';
-import EditorUndockedIcon from '../icons/EditorUndockedIcon';
-import EditorBottomIcon from '../icons/EditorBottomIcon';
-import EditorRightIcon from '../icons/EditorRightIcon';
 import ShareIcon from '../icons/ShareIcon';
 import PlayIcon from '../icons/PlayIcon';
 
-// @ts-ignore
-import styles from './Toolbar.less';
+import * as styles from './Toolbar.css';
+import SettingsPanel from '../SettingsPanel/SettingsPanel';
+import SettingsIcon from '../icons/SettingsIcon';
 
 interface Props {
   themes: PlayroomProps['themes'];
@@ -24,31 +22,13 @@ interface Props {
   snippets: PlayroomProps['snippets'];
 }
 
-interface Icon {
-  component: ReactChild;
-  title: string;
-}
-const positionIcon: Record<EditorPosition, Icon> = {
-  undocked: {
-    component: <EditorUndockedIcon />,
-    title: 'Undock into separate window ',
-  },
-  right: {
-    component: <EditorRightIcon />,
-    title: 'Dock to right',
-  },
-  bottom: {
-    component: <EditorBottomIcon />,
-    title: 'Dock to bottom',
-  },
-};
+export const toolbarItemCount = 5;
 
 export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const [
     {
       visibleThemes = [],
       visibleWidths = [],
-      editorPosition,
       activeToolbarPanel,
       validCursorPosition,
       code,
@@ -74,7 +54,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
 
   const isSnippetsOpen = activeToolbarPanel === 'snippets';
   const isFramesOpen = activeToolbarPanel === 'frames';
-  const isPositionOpen = activeToolbarPanel === 'positions';
+  const isSettingsOpen = activeToolbarPanel === 'settings';
   const isPreviewOpen = activeToolbarPanel === 'preview';
 
   const hasSnippets = snippets && snippets.length > 0;
@@ -85,7 +65,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   return (
     <div
       className={classnames(styles.root, {
-        [styles.isOpen]: isOpen && !isPositionOpen,
+        [styles.isOpen]: isOpen,
       })}
     >
       {isOpen && (
@@ -96,11 +76,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
       )}
       <div className={styles.sidebar}>
         <div className={styles.buttons}>
-          <div
-            className={classnames(styles.topButtons, {
-              [styles.topButtons_hide]: isPositionOpen,
-            })}
-          >
+          <div className={styles.topButtons}>
             {hasSnippets && (
               <ToolbarItem
                 active={isSnippetsOpen}
@@ -160,48 +136,17 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               <ShareIcon />
             </ToolbarItem>
             <ToolbarItem
-              active={isPositionOpen}
-              title="Configure editor position"
+              active={isSettingsOpen}
+              title="Edit settings"
               onClick={() =>
                 dispatch({
                   type: 'toggleToolbar',
-                  payload: { panel: 'positions' },
+                  payload: { panel: 'settings' },
                 })
               }
             >
-              {positionIcon[editorPosition].component}
+              <SettingsIcon />
             </ToolbarItem>
-          </div>
-
-          <div
-            className={classnames(styles.positionContainer, {
-              [styles.positions_isOpen]: isPositionOpen, // eslint-disable-line css-modules/no-undef-class
-            })}
-            onClick={() => dispatch({ type: 'closeToolbar' })}
-          >
-            {Object.keys(positionIcon)
-              .filter((pos) => pos !== editorPosition)
-              .map((pos) => {
-                const position = pos as EditorPosition;
-                return position === 'undocked' ? null : (
-                  <div
-                    key={position}
-                    hidden={isPositionOpen ? undefined : true}
-                  >
-                    <ToolbarItem
-                      title={positionIcon[position].title}
-                      onClick={() => {
-                        dispatch({
-                          type: 'updateEditorPosition',
-                          payload: { position },
-                        });
-                      }}
-                    >
-                      {positionIcon[position].component}
-                    </ToolbarItem>
-                  </div>
-                );
-              })}
           </div>
         </div>
 
@@ -247,6 +192,13 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             className={styles.preference}
           >
             <PreviewPanel themes={allThemes} visibleThemes={visibleThemes} />
+          </div>
+
+          <div
+            hidden={isSettingsOpen ? undefined : true}
+            className={styles.preference}
+          >
+            <SettingsPanel />
           </div>
         </div>
       </div>

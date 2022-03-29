@@ -8,8 +8,7 @@ import { StoreContext, CursorPosition } from '../../StoreContext/StoreContext';
 import { formatCode as format } from '../../utils/formatting';
 import { compileJsx } from '../../utils/compileJsx';
 
-// @ts-ignore
-import styles from './CodeEditor.less';
+import * as styles from './CodeEditor.css';
 
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import 'codemirror/mode/jsx/jsx';
@@ -79,7 +78,7 @@ const validateCode = (editorInstance: Editor, code: string) => {
 
     if (lineNumber) {
       const marker = document.createElement('div');
-      marker.classList.add(styles.errorMarker);
+      marker.setAttribute('class', styles.errorMarker);
       marker.setAttribute(
         'title',
         // Remove our wrapping Fragment from error message

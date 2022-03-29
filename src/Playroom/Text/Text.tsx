@@ -1,8 +1,7 @@
 import React, { ElementType, ReactNode } from 'react';
 import classnames from 'classnames';
 
-// @ts-ignore
-import styles from './Text.less';
+import * as styles from './Text.css';
 
 interface Props {
   size?: 'xsmall' | 'small' | 'standard' | 'large';
@@ -24,14 +23,8 @@ export const Text = ({
   React.createElement(
     component,
     {
-      className: classnames(styles.base, {
-        [styles.xsmall]: size === 'xsmall',
-        [styles.small]: size === 'small',
-        [styles.standard]: size === 'standard',
-        [styles.large]: size === 'large',
+      className: classnames(styles.base, styles[size], styles[tone], {
         [styles.strong]: weight === 'strong',
-        [styles.critical]: tone === 'critical',
-        [styles.neutral]: tone === 'neutral',
         [styles.truncate]: truncate,
       }),
     },

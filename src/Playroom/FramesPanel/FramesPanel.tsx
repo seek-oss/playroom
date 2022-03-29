@@ -6,8 +6,7 @@ import { StoreContext } from '../../StoreContext/StoreContext';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 
-// @ts-ignore
-import styles from './FramesPanel.less';
+import * as styles from './FramesPanel.css';
 
 interface FramesPanelProps {
   availableWidths: number[];

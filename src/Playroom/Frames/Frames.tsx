@@ -8,8 +8,7 @@ import { Text } from '../Text/Text';
 import playroomConfig from '../../config';
 import frameSrc from './frameSrc';
 
-// @ts-ignore
-import styles from './Frames.less';
+import * as styles from './Frames.css';
 
 interface FramesProps {
   code: string;

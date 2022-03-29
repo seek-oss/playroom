@@ -28,6 +28,13 @@ const store = localforage.createInstance({
 const defaultPosition = 'bottom';
 
 export type EditorPosition = 'bottom' | 'right' | 'undocked';
+export type ColorScheme = 'light' | 'dark' | 'system';
+
+const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
+  document.documentElement[
+    colorScheme === 'dark' ? 'setAttribute' : 'removeAttribute'
+  ]('data-playroom-dark', '');
+};
 
 interface DebounceUpdateUrl {
   code?: string;
@@ -45,7 +52,7 @@ interface StatusMessage {
   tone: 'positive' | 'critical';
 }
 
-type ToolbarPanel = 'snippets' | 'frames' | 'positions' | 'preview';
+type ToolbarPanel = 'snippets' | 'frames' | 'preview' | 'settings';
 interface State {
   code: string;
   previewRenderCode?: string;
@@ -62,6 +69,7 @@ interface State {
   visibleThemes?: string[];
   visibleWidths?: number[];
   ready: boolean;
+  colorScheme: ColorScheme;
 }
 
 type Action =
@@ -82,6 +90,10 @@ type Action =
       payload: { url: string; trigger: 'toolbarItem' | 'previewPanel' };
     }
   | { type: 'dismissMessage' }
+  | {
+      type: 'updateColorScheme';
+      payload: { colorScheme: ColorScheme };
+    }
   | {
       type: 'updateEditorPosition';
       payload: { position: EditorPosition };
@@ -280,13 +292,22 @@ const createReducer = ({
       };
     }
 
+    case 'updateColorScheme': {
+      const { colorScheme } = action.payload;
+      store.setItem('colorScheme', colorScheme);
+
+      return {
+        ...state,
+        colorScheme,
+      };
+    }
+
     case 'updateEditorPosition': {
       const { position } = action.payload;
-      const { activeToolbarPanel, ...currentState } = state;
       store.setItem('editorPosition', position);
 
       return {
-        ...currentState,
+        ...state,
         editorPosition: position,
       };
     }
@@ -372,6 +393,7 @@ const initialState: State = {
   editorHeight: 300,
   editorWidth: 360,
   ready: false,
+  colorScheme: 'light',
 };
 
 export const StoreContext = createContext<StoreContextValues>([
@@ -432,7 +454,8 @@ export const StoreProvider = ({
       number | null,
       number | null,
       number[] | null,
-      string[] | null
+      string[] | null,
+      ColorScheme | null
     >([
       store.getItem('code'),
       store.getItem('editorPosition'),
@@ -440,6 +463,7 @@ export const StoreProvider = ({
       store.getItem('editorWidth'),
       store.getItem('visibleWidths'),
       store.getItem('visibleThemes'),
+      store.getItem('colorScheme'),
     ]).then(
       ([
         storedCode,
@@ -448,6 +472,7 @@ export const StoreProvider = ({
         storedWidth,
         storedVisibleWidths,
         storedVisibleThemes,
+        storedColorScheme,
       ]) => {
         const code = codeFromQuery || storedCode || exampleCode;
         const editorPosition = storedPosition;
@@ -456,6 +481,7 @@ export const StoreProvider = ({
         const visibleWidths = widthsFromQuery || storedVisibleWidths;
         const visibleThemes =
           hasThemesConfigured && (themesFromQuery || storedVisibleThemes);
+        const colorScheme = storedColorScheme;
 
         dispatch({
           type: 'initialLoad',
@@ -466,12 +492,31 @@ export const StoreProvider = ({
             ...(editorWidth ? { editorWidth } : {}),
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
+            ...(colorScheme ? { colorScheme } : {}),
             ready: true,
           },
         });
       }
     );
   }, [hasThemesConfigured]);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+    if (state.colorScheme === 'system') {
+      const handler = (e: MediaQueryListEvent) => {
+        applyColorScheme(e.matches ? 'dark' : 'light');
+      };
+      mq.addEventListener('change', handler);
+      applyColorScheme(mq.matches ? 'dark' : 'light');
+
+      return () => {
+        mq.removeEventListener('change', handler);
+      };
+    }
+
+    applyColorScheme(state.colorScheme);
+  }, [state.colorScheme]);
 
   useEffect(() => {
     debouncedCodeUpdate({

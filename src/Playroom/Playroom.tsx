@@ -6,43 +6,20 @@ import Frames from './Frames/Frames';
 import WindowPortal from './WindowPortal';
 import { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
-import Toolbar from './Toolbar/Toolbar';
+import Toolbar, { toolbarItemCount } from './Toolbar/Toolbar';
 import ChevronIcon from './icons/ChevronIcon';
 import { StatusMessage } from './StatusMessage/StatusMessage';
 import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
 
-// @ts-ignore
-import themeVars from '!!less-vars-loader?resolveVariables!./variables.less';
-
-const getThemeVariable = (name: string) => {
-  const resolvedVar = themeVars[name];
-
-  if (!resolvedVar) {
-    throw new Error(`Cannot resolve "${name}" from variables`);
-  }
-
-  if (!(typeof resolvedVar === 'string' && /(px|[0-9])$/.test(resolvedVar))) {
-    throw new Error(
-      `Invalid characters "${resolvedVar}", must be a number of pixel value`
-    );
-  }
-
-  return parseInt(resolvedVar.replace(/px$/, ''), 10);
-};
-
-const MIN_HEIGHT =
-  getThemeVariable('toolbar-item-size') *
-  getThemeVariable('toolbar-max-item-count');
-const MIN_WIDTH =
-  getThemeVariable('toolbar-open-size') +
-  getThemeVariable('toolbar-closed-size') +
-  80;
+const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
+const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;
 
 // @ts-ignore
 import { CodeEditor } from './CodeEditor/CodeEditor';
 
-// @ts-ignore
-import styles from './Playroom.less';
+import * as styles from './Playroom.css';
+import { toolbarOpenSize } from './Toolbar/Toolbar.css';
+import { toolbarItemSize } from './ToolbarItem/ToolbarItem.css';
 
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',

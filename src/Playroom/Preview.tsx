@@ -5,8 +5,7 @@ import { useParams } from '../utils/params';
 import { compileJsx } from '../utils/compileJsx';
 import SplashScreen from './SplashScreen/SplashScreen';
 
-// @ts-ignore
-import styles from './Preview.less';
+import * as styles from './Preview.css';
 
 // @ts-ignore
 import CatchErrors from './CatchErrors/CatchErrors';

@@ -4,8 +4,7 @@ import classnames from 'classnames';
 import ChevronIcon from '../icons/ChevronIcon';
 import { Text } from '../Text/Text';
 
-// @ts-ignore
-import styles from './ThemeSelector.less';
+import * as styles from './ThemeSelector.css';
 
 interface ThemeSelectorProps {
   themes: string[];

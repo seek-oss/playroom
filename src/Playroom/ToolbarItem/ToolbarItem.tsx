@@ -2,8 +2,7 @@ import React, { ReactChild } from 'react';
 import classnames from 'classnames';
 import TickIcon from '../icons/TickIcon';
 
-// @ts-ignore
-import styles from './ToolbarItem.less';
+import * as styles from './ToolbarItem.css';
 
 interface Props {
   children: ReactChild;
@@ -34,24 +33,25 @@ export default ({
       [styles.disabled]: disabled,
       [styles.success]: success,
     })}
+    disabled={disabled}
     title={title}
     onClick={(event) => {
       event.stopPropagation();
       onClick();
     }}
   >
-    {children}
-    <div
+    <span style={{ display: 'block', position: 'relative' }}>{children}</span>
+    <span
       className={classnames(styles.indicator, {
         [styles.show]: showIndicator && !success,
       })}
     />
-    <div
+    <span
       className={classnames(styles.successIndicator, {
         [styles.show]: success,
       })}
     >
       <TickIcon size={12} />
-    </div>
+    </span>
   </button>
 );

@@ -1,8 +1,7 @@
 import React, { ElementType, AllHTMLAttributes, ReactElement } from 'react';
 import classnames from 'classnames';
 
-// @ts-ignore
-import styles from './Button.less';
+import * as styles from './Button.css';
 
 interface BaseProps {
   as?: ElementType;
@@ -32,6 +31,7 @@ export const Button = ({
     className={classnames(styles.reset, styles.base, {
       [styles.positive]: tone === 'positive',
     })}
+    disabled={tone === 'positive'}
     {...props}
   >
     {children}

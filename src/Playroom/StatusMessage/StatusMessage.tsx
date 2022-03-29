@@ -10,8 +10,7 @@ import { StoreContext } from '../../StoreContext/StoreContext';
 import { Text } from '../Text/Text';
 import DismissIcon from '../icons/DismissIcon';
 
-// @ts-ignore
-import styles from './StatusMessage.less';
+import * as styles from './StatusMessage.css';
 
 const exitAnimationDuration = 300;
 const statusMessageDuration = 3000;
@@ -65,7 +64,7 @@ export const StatusMessage = ({ dismissable = false }: Props) => {
         [styles.positive]: tone === 'positive',
         [styles.critical]: tone === 'critical',
         [styles.dismissable]: dismissable,
-        [styles.show]: show, // eslint-disable-line css-modules/no-undef-class
+        [styles.show]: show,
       })}
     >
       <Text>{message}</Text>
