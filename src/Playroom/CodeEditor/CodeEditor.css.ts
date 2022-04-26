@@ -113,7 +113,7 @@ globalStyle('.CodeMirror-hint', {
   padding: '4px 8px',
   borderRadius: vars.radii.small,
   whiteSpace: 'pre',
-  color: colorPaletteVars.foreground.neutral,
+  color: colorPaletteVars.code.text,
   cursor: 'pointer',
 });
 
