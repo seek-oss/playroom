@@ -1,8 +1,7 @@
 import React, { ElementType, ReactNode } from 'react';
 import classnames from 'classnames';
 
-// @ts-ignore
-import styles from './Heading.less';
+import * as styles from './Heading.css';
 
 interface Props {
   level: '1' | '2' | '3';

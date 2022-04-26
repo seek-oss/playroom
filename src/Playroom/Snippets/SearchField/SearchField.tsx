@@ -1,7 +1,6 @@
 import React, { AllHTMLAttributes } from 'react';
 
-// @ts-ignore
-import styles from './SearchField.less';
+import * as styles from './SearchField.css';
 
 type InputProps = AllHTMLAttributes<HTMLInputElement>;
 interface Props {

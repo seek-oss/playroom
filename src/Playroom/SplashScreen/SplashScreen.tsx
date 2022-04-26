@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import classnames from 'classnames';
 import { Logo } from '../Logo/Logo';
 
-import {
+import * as stylesheet from './SplashScreen.css';
+
+const {
   animationDuration,
   animationDelay,
   animationIterationCount,
-  // @ts-ignore
-} from '!!less-vars-loader!./SplashScreen.less';
-
-// @ts-ignore
-import styles from './SplashScreen.less';
+  ...styles
+} = stylesheet;
 
 export default () => {
   const [hide, setHide] = useState(false);
@@ -18,8 +17,7 @@ export default () => {
   useEffect(() => {
     const hideSplash = setTimeout(
       () => setHide(true),
-      parseInt(animationDelay, 10) +
-        parseInt(animationDuration, 10) * parseInt(animationIterationCount, 10)
+      animationDelay + animationDuration * animationIterationCount
     );
 
     return () => clearTimeout(hideSplash);

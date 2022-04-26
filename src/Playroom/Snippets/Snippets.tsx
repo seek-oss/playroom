@@ -8,8 +8,7 @@ import SearchField from './SearchField/SearchField';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 
-// @ts-ignore
-import styles from './Snippets.less';
+import * as styles from './Snippets.css';
 
 type HighlightIndex = number | null;
 type ReturnedSnippet = Snippet | null;
@@ -185,10 +184,12 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
               onMouseDown={() => closeHandler(filteredSnippets[index])}
               title={getLabel(snippet)}
             >
-              <Text size="large">
-                <Strong>{snippet.group}</Strong>
-                <span className={styles.snippetName}>{snippet.name}</span>
-              </Text>
+              <span style={{ display: 'block', position: 'relative' }}>
+                <Text size="large">
+                  <Strong>{snippet.group}</Strong>
+                  <span className={styles.snippetName}>{snippet.name}</span>
+                </Text>
+              </span>
             </li>
           );
         })}

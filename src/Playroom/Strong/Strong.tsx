@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 
-// @ts-ignore
-import styles from './Strong.less';
+import * as styles from './Strong.css';
 
 interface Props {
   children: ReactNode;

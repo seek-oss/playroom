@@ -1,7 +1,6 @@
 import React from 'react';
 
-// @ts-ignore
-import styles from './Divider.less';
+import * as styles from './Divider.css';
 
 export const Divider = () => (
   <div className={styles.root}>

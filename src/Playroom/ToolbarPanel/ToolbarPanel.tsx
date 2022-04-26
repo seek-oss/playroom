@@ -1,8 +1,6 @@
 import React, { ElementType, ReactNode } from 'react';
-import classnames from 'classnames';
 
-// @ts-ignore
-import styles from './ToolbarPanel.less';
+import * as styles from './ToolbarPanel.css';
 
 interface Props {
   children: ReactNode;
@@ -18,7 +16,7 @@ export const ToolbarPanel = ({
   React.createElement(
     component,
     {
-      className: classnames(styles.root),
+      className: styles.root,
       'data-testid': dataTestId,
     },
     children
