@@ -1,4 +1,4 @@
-import { sprinkles } from './../sprinkles.css';
+import { sprinkles } from '../sprinkles.css';
 
 export const root = sprinkles({
   padding: 'xxlarge',

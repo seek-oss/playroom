@@ -1,4 +1,4 @@
-import { CursorPosition } from './../StoreContext/StoreContext';
+import { CursorPosition } from '../StoreContext/StoreContext';
 import { validateCode } from './compileJsx';
 
 const breakoutString = '<b>"b"</b>';

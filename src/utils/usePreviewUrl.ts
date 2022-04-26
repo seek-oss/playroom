@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { StoreContext } from './../StoreContext/StoreContext';
+import { StoreContext } from '../StoreContext/StoreContext';
 import { createPreviewUrl } from '../../utils';
 import playroomConfig from '../config';
 

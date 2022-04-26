@@ -1,6 +1,6 @@
 import { calc } from '@vanilla-extract/css-utils';
 import { globalStyle, style } from '@vanilla-extract/css';
-import { colorPaletteVars, sprinkles, vars } from './../sprinkles.css';
+import { colorPaletteVars, sprinkles, vars } from '../sprinkles.css';
 
 export const title = sprinkles({
   display: 'flex',

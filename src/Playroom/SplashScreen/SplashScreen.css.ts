@@ -1,5 +1,5 @@
 import { style, globalStyle, keyframes } from '@vanilla-extract/css';
-import { sprinkles, colorPaletteVars } from './../sprinkles.css';
+import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 
 export const animationDuration = 1300;
 export const animationDelay = 500;

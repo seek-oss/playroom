@@ -1,6 +1,6 @@
 import { calc } from '@vanilla-extract/css-utils';
 import { style } from '@vanilla-extract/css';
-import { sprinkles, colorPaletteVars } from './../sprinkles.css';
+import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
 export const toolbarOpenSize = 300;

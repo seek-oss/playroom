@@ -1,6 +1,6 @@
 import { calc } from '@vanilla-extract/css-utils';
 import { createVar, style } from '@vanilla-extract/css';
-import { sprinkles, vars } from './../sprinkles.css';
+import { sprinkles, vars } from '../sprinkles.css';
 
 const size = createVar();
 

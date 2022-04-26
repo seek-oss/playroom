@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { sprinkles, colorPaletteVars } from './../sprinkles.css';
+import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 
 export const root = sprinkles({
   position: 'relative',

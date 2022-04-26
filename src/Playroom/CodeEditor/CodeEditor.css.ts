@@ -1,6 +1,5 @@
-import { sprinkles } from './../sprinkles.css';
 import { style, globalStyle, keyframes } from '@vanilla-extract/css';
-import { vars, colorPaletteVars } from '../sprinkles.css';
+import { vars, colorPaletteVars, sprinkles } from '../sprinkles.css';
 
 const minimumLineNumberWidth = '50px';
 
