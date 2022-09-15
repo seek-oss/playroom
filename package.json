@@ -50,6 +50,11 @@
   "release": {
     "success": false
   },
+  "jest": {
+    "moduleNameMapper": {
+      "^__PLAYROOM_ALIAS__PROCESS_CODE__$": "<rootDir>/lib/defaultModules/processCode"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/seek-oss/playroom.git"

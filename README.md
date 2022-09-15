@@ -160,6 +160,12 @@ export { themeB } from './themeB';
 // etc...
 ```
 
+## Additional Code Transformations
+
+A hook into the internal processing of code is available via the `processCode` option, which is a path to a file that exports a function that receives the code as entered into the editor, and returns the new code to be rendered.
+
+One example is [wrapping code in an IIFE for state support](https://github.com/seek-oss/playroom/issues/66).
+
 ## TypeScript Support
 
 If a `tsconfig.json` file is present in your project, static prop types are parsed using [react-docgen-typescript](https://github.com/styleguidist/react-docgen-typescript) to provide better autocompletion in the Playroom editor.
