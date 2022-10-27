@@ -5,6 +5,7 @@ import { Resizable } from 're-resizable';
 import Frames from './Frames/Frames';
 import WindowPortal from './WindowPortal';
 import { Snippets } from '../../utils';
+import { CodeEditor2 } from './CodeEditor2/CodeEditor2';
 import componentsToHints from '../utils/componentsToHints';
 import Toolbar, { toolbarItemCount } from './Toolbar/Toolbar';
 import ChevronIcon from './icons/ChevronIcon';
@@ -13,9 +14,6 @@ import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
 
 const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
 const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;
-
-// @ts-ignore
-import { CodeEditor } from './CodeEditor/CodeEditor';
 
 import * as styles from './Playroom.css';
 import { toolbarOpenSize } from './Toolbar/Toolbar.css';
@@ -98,13 +96,13 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
   const codeEditor = (
     <Fragment>
       <div className={styles.editorContainer}>
-        <CodeEditor
+        <CodeEditor2
           code={code}
           onChange={(newCode: string) =>
             dispatch({ type: 'updateCode', payload: { code: newCode } })
           }
           previewCode={previewEditorCode}
-          hints={componentsToHints(components)}
+          /* hints={componentsToHints(components)} */
         />
         <StatusMessage />
       </div>
