@@ -13,7 +13,7 @@ jobs:
       CI: true
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
         with:
           # This makes Actions fetch all Git history for semantic-release
           fetch-depth: 0
