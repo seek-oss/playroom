@@ -1,18 +1,15 @@
-name: Release
+name: Snapshot
 
-on:
-  push:
-    branches:
-      - master
+on: workflow_dispatch
 
 jobs:
   release:
-    name: Publish to npm
+    name: Publish snapshot version
     runs-on: ubuntu-latest
     env:
       CI: true
     steps:
-      - name: Checkout Repo
+      - name: Check out repo
         uses: actions/checkout@v3
         with:
           # This makes Actions fetch all Git history for semantic-release
@@ -24,11 +21,11 @@ jobs:
         with:
           node-version-file: 'package.json'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: Publish to npm
-        run: yarn semantic-release
+      - name: Publish
+        uses: seek-oss/changesets-snapshot@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.SEEK_OSS_CI_NPM_TOKEN }}
