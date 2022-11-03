@@ -19,10 +19,10 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node.js 12.x
-        uses: actions/setup-node@master
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version-file: 'package.json'
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile
