@@ -15,6 +15,7 @@ export function updateUrlCode(code: string) {
     ...existingQuery,
     code,
   });
+  console.log({ existingQuery, newQuery });
 
   const params =
     playroomConfig.paramType === 'hash' ? `#?${newQuery}` : `?${newQuery}`;

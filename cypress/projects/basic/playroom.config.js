@@ -1,5 +1,5 @@
 module.exports = {
-  components: './components',
+  components: './components.jsx',
   scope: './useScope',
   snippets: './snippets',
   outputPath: './dist',

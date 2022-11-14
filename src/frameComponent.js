@@ -1,4 +1,2 @@
 /* eslint-disable-next-line import/no-unresolved */
-const frameComponent = require('__PLAYROOM_ALIAS__FRAME_COMPONENT__');
-
-module.exports = frameComponent.default || frameComponent;
+export { default as playroomFrameComponent } from '__PLAYROOM_ALIAS__FRAME_COMPONENT__';

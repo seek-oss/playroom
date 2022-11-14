@@ -1,7 +1,8 @@
 import { useContext } from 'react';
 
 import { StoreContext } from '../StoreContext/StoreContext';
-import { createPreviewUrl } from '../../utils';
+
+import { createPreviewUrl } from './url';
 import playroomConfig from '../config';
 
 const baseUrl = window.location.href

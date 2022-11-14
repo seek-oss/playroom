@@ -1,14 +1,17 @@
-interface PlayroomConfig {
+export interface PlayroomConfig {
   components: string;
   outputPath: string;
   title?: string;
   themes?: string;
   widths?: number[];
-  snippets?: Snippet[];
+  snippets?: string;
+  scope?: string;
   frameComponent?: string;
   exampleCode?: string;
   cwd?: string;
   storageKey?: string;
+  port?: number;
+  openBrowser?: boolean;
   webpackConfig?: () => void;
   baseUrl?: string;
   paramType: 'hash' | 'search';

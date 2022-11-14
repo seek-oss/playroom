@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const withPropTypes = (component) => {
   component.propTypes = {
-    color: PropTypes.oneOf(['red', 'blue']),
+    color: PropTypes.oneOf(['red', 'blue', 'green']),
     children: PropTypes.node,
   };
 
@@ -14,7 +14,7 @@ const parent = {
   padding: '10px 10px 10px 15px',
 };
 
-export const Foo = withPropTypes(({ color = 'black', children }) => (
+export const Foo = withPropTypes(({ color = 'blue', children }) => (
   <div style={{ color }}>
     Foo{children ? <div style={parent}>{children}</div> : null}
   </div>

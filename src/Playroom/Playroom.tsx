@@ -4,7 +4,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { Resizable } from 're-resizable';
 import Frames from './Frames/Frames';
 import WindowPortal from './WindowPortal';
-import { Snippets } from '../../utils';
+import { Snippets } from '../utils/url';
 import componentsToHints from '../utils/componentsToHints';
 import Toolbar, { toolbarItemCount } from './Toolbar/Toolbar';
 import ChevronIcon from './icons/ChevronIcon';

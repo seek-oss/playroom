@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import fuzzy from 'fuzzy';
 import { useDebouncedCallback } from 'use-debounce';
 import { PlayroomProps } from '../Playroom';
-import { Snippet } from '../../../utils';
+import { Snippet } from '../../utils/url';
 import SearchField from './SearchField/SearchField';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';

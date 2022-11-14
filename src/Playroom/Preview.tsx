@@ -1,5 +1,5 @@
 import React, { ComponentType } from 'react';
-import lzString from 'lz-string';
+import { decompressFromEncodedURIComponent } from 'lz-string';
 
 import { useParams } from '../utils/params';
 import { compileJsx } from '../utils/compileJsx';
@@ -23,23 +23,20 @@ export interface PreviewProps {
   FrameComponent: ComponentType<{ themeName: string; theme: any }>;
 }
 export default ({ themes, components, FrameComponent }: PreviewProps) => {
-  const { themeName, code } = useParams(
-    (rawParams): PreviewState => {
-      if (rawParams.code) {
-        const result = JSON.parse(
-          lzString.decompressFromEncodedURIComponent(String(rawParams.code)) ??
-            ''
-        );
+  const { themeName, code } = useParams((rawParams): PreviewState => {
+    if (rawParams.code) {
+      const result = JSON.parse(
+        decompressFromEncodedURIComponent(String(rawParams.code)) ?? ''
+      );
 
-        return {
-          code: compileJsx(result.code),
-          themeName: result.theme,
-        };
-      }
-
-      return {};
+      return {
+        code: compileJsx(result.code),
+        themeName: result.theme,
+      };
     }
-  );
+
+    return {};
+  });
 
   const resolvedTheme = themeName ? themes[themeName] : null;
 

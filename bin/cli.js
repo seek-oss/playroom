@@ -22,6 +22,10 @@ const showUsage = () => {
             summary: 'Build a playroom for production.',
           },
           { name: 'help', summary: 'Show this usage guide.' },
+          {
+            name: 'vite-start',
+            summary: 'Start a local playroom with vite (experimental)',
+          },
         ],
       },
       {
@@ -46,11 +50,13 @@ const showUsage = () => {
     { name: 'help', type: Boolean },
   ]);
 
+  // show help
   if (args.command === 'help' || args.help) {
     return showUsage();
   }
 
   const cwd = process.cwd();
+  // Use the explicit config path if provided otherwise findup a playroom.config.js file
   const configPath = args.config
     ? path.resolve(cwd, args.config)
     : await findUp('playroom.config.js', { cwd });
@@ -64,11 +70,14 @@ const showUsage = () => {
 
   const config = require(configPath);
 
+  // Get the thing that does the playroom stuff
   const playroom = lib({
     cwd: path.dirname(configPath),
     ...config,
   });
 
+  // If playroom can do "command", then do it
+  console.log('command:', args.command);
   if (playroom.hasOwnProperty(args.command)) {
     playroom[args.command]((err) => {
       if (err) {
