@@ -1,6 +1,6 @@
 import React, { useRef, useContext, useEffect, useCallback } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { Editor } from 'codemirror';
+import CodeMirror, { Editor } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 
@@ -10,7 +10,7 @@ import { compileJsx } from '../../utils/compileJsx';
 
 import * as styles from './CodeEditor.css';
 
-import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
+import { UnControlled as ReactCodeMirror } from './CodeMirror2';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/closebrackets';
@@ -21,36 +21,27 @@ import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
 
-const completeAfter = (cm: Editor, predicate: () => boolean) => {
-  const CodeMirror = cm.constructor;
+const completeAfter = (cm: Editor, predicate?: () => boolean) => {
   if (!predicate || predicate()) {
     setTimeout(() => {
       if (!cm.state.completionActive) {
-        // @ts-ignore
         cm.showHint({ completeSingle: false });
       }
     }, 100);
   }
 
-  // @ts-ignore
   return CodeMirror.Pass;
 };
 
-const completeIfAfterLt = (cm: Editor) => {
-  const CodeMirror = cm.constructor;
-
-  return completeAfter(cm, () => {
+const completeIfAfterLt = (cm: Editor) =>
+  completeAfter(cm, () => {
     const cur = cm.getCursor();
-    // @ts-ignore
     // eslint-disable-next-line new-cap
     return cm.getRange(CodeMirror.Pos(cur.line, cur.ch - 1), cur) === '<';
   });
-};
 
-const completeIfInTag = (cm: Editor) => {
-  const CodeMirror = cm.constructor;
-
-  return completeAfter(cm, () => {
+const completeIfInTag = (cm: Editor) =>
+  completeAfter(cm, () => {
     const tok = cm.getTokenAt(cm.getCursor());
     if (
       tok.type === 'string' &&
@@ -59,11 +50,9 @@ const completeIfInTag = (cm: Editor) => {
     ) {
       return false;
     }
-    // @ts-ignore
     const inner = CodeMirror.innerMode(cm.getMode(), tok.state).state;
     return inner.tagName;
   });
-};
 
 const validateCode = (editorInstance: Editor, code: string) => {
   editorInstance.clearGutter('errorGutter');
@@ -228,7 +217,6 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   }, [highlightLineNumber]);
 
   return (
-    // @ts-ignore
     <ReactCodeMirror
       editorDidMount={(editorInstance) => {
         editorInstanceRef.current = editorInstance;
@@ -259,6 +247,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         autoCloseBrackets: true,
         theme: 'neo',
         gutters: ['errorGutter', 'CodeMirror-linenumbers', styles.foldGutter],
+        // @ts-expect-error
         hintOptions: { schemaInfo: hints },
         viewportMargin: 50,
         lineNumbers: true,
@@ -275,7 +264,6 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         extraKeys: {
           Tab: (cm) => {
             if (cm.somethingSelected()) {
-              // @ts-ignore
               cm.indentSelection('add');
             } else {
               const indent = cm.getOption('indentUnit') as number;

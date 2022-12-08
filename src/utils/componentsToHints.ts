@@ -1,5 +1,5 @@
 import omit from 'lodash/omit';
-// @ts-ignore
+// @ts-expect-error
 import parsePropTypes from 'parse-prop-types';
 import { PlayroomProps } from '../Playroom/Playroom';
 

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import playroomConfig from '../../config';
@@ -36,83 +36,78 @@ interface Props {
   children: ReactNode;
 }
 
-interface State {
-  externalWindow: Window | null;
-  containerDiv: HTMLDivElement | null;
-  isClosedByParent: boolean;
-}
+const createWindow = ({ width, height }: { width: number; height: number }) => {
+  const containerDiv = document.createElement('div');
+  containerDiv.style.height = '100vh';
+  const newWindow = window.open(
+    '',
+    `${playroomConfig.storageKey}_editor`,
+    `width=${width},height=${height},left=200,top=200`
+  );
 
-export default class WindowPortal extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      externalWindow: null,
-      containerDiv: null,
-      isClosedByParent: false,
-    };
+  if (newWindow) {
+    newWindow.document.title = 'Playroom Editor';
+    newWindow.document.body.innerHTML = '';
+    copyStyles(document, newWindow.document);
   }
 
-  componentDidMount() {
-    this.createWindow();
-  }
+  return newWindow;
+};
 
-  componentWillUnmount() {
-    const { externalWindow } = this.state;
+export const WindowPortal = ({
+  width,
+  height,
+  children,
+  onUnload,
+  onKeyDown,
+  onError,
+}: Props) => {
+  const externalWindow = useRef<Window | null>(null);
+  const containerDiv = useRef<HTMLDivElement | null>(null);
+  const [isClosedByParent, setClosedByParent] = useState(false);
 
-    if (externalWindow) {
-      externalWindow.close();
-    }
-  }
+  useEffect(() => {
+    externalWindow.current = createWindow({ width, height });
 
-  createWindow = () => {
-    const containerDiv = document.createElement('div');
-    containerDiv.style.height = '100vh';
-    const externalWindow = window.open(
-      '',
-      `${playroomConfig.storageKey}_editor`,
-      `width=${this.props.width},height=${this.props.height},left=200,top=200`
-    );
+    if (externalWindow.current && containerDiv.current) {
+      externalWindow.current.document.body.appendChild(containerDiv.current);
 
-    if (externalWindow) {
-      externalWindow.document.title = 'Playroom Editor';
-      externalWindow.document.body.innerHTML = '';
-      externalWindow.document.body.appendChild(containerDiv);
-
-      if (typeof this.props.onUnload === 'function') {
-        externalWindow.addEventListener('unload', (e) => {
+      if (typeof onUnload === 'function') {
+        externalWindow.current.addEventListener('unload', (e) => {
           // Call unload only if window portal is closed explicitly,
           // not if closed by parent.
-          if (!this.state.isClosedByParent) {
-            this.props.onUnload(e);
+          if (!isClosedByParent) {
+            onUnload(e);
           }
         });
       }
 
-      if (typeof this.props.onKeyDown === 'function') {
-        externalWindow.addEventListener('keydown', this.props.onKeyDown);
+      if (typeof onKeyDown === 'function') {
+        externalWindow.current.addEventListener('keydown', onKeyDown);
       }
-
-      copyStyles(document, externalWindow.document);
-      this.setState({ externalWindow, containerDiv });
 
       // Close window portal when parent closes
       window.addEventListener('beforeunload', () => {
-        this.setState({ isClosedByParent: true });
-        externalWindow.close();
+        setClosedByParent(true);
+
+        if (externalWindow.current) {
+          externalWindow.current.close();
+        }
       });
-    } else if (typeof this.props.onError === 'function') {
+    } else if (typeof onError === 'function') {
       // If blocked by pop-up blocker, call error handler
-      this.props.onError();
-    }
-  };
-
-  render() {
-    const { containerDiv } = this.state;
-
-    if (!containerDiv) {
-      return null;
+      onError();
     }
 
-    return ReactDOM.createPortal(this.props.children, containerDiv);
-  }
-}
+    return () => {
+      if (externalWindow.current) {
+        externalWindow.current.close();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return containerDiv.current
+    ? ReactDOM.createPortal(children, containerDiv.current)
+    : null;
+};
