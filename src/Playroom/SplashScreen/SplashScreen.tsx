@@ -28,6 +28,7 @@ export default () => {
       className={classnames(styles.root, {
         [styles.hideSplash]: hide,
       })}
+      data-testid="splashscreen"
     >
       <div className={classnames(styles.trace, styles.size)}>
         <Logo size="100%" />

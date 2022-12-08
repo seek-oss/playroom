@@ -114,9 +114,14 @@ export const assertFramesMatch = (matches) =>
     });
 
 export const assertPreviewContains = (text) =>
-  cy.get('body').then((el) => {
-    expect(el.get(0).innerText).to.eq(text);
-  });
+  cy
+    .then(() => {
+      cy.get('[data-testid="splashscreen"]').should('not.be.visible');
+    })
+    .get('body')
+    .then((el) => {
+      expect(el.get(0).innerText).to.eq(text);
+    });
 
 export const loadPlayroom = () =>
   cy
