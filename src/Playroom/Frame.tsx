@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useParams } from '../utils/params';
-// @ts-ignore
 import CatchErrors from './CatchErrors/CatchErrors';
-// @ts-ignore
+// @ts-expect-error
 import RenderCode from './RenderCode/RenderCode';
 
 interface FrameProps {
@@ -11,6 +10,7 @@ interface FrameProps {
   FrameComponent: React.ComponentType<{
     themeName: string | null;
     theme: string;
+    children?: ReactNode;
   }>;
 }
 export default function Frame({

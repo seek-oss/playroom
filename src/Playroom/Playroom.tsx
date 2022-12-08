@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { useDebouncedCallback } from 'use-debounce';
 import { Resizable } from 're-resizable';
 import Frames from './Frames/Frames';
-import WindowPortal from './WindowPortal';
+import { WindowPortal } from './WindowPortal';
 import { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
 import Toolbar, { toolbarItemCount } from './Toolbar/Toolbar';
@@ -14,7 +14,6 @@ import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
 const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
 const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;
 
-// @ts-ignore
 import { CodeEditor } from './CodeEditor/CodeEditor';
 
 import * as styles from './Playroom.css';

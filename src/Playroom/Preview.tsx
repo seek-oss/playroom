@@ -1,16 +1,14 @@
-import React, { ComponentType } from 'react';
+import React, { ComponentType, ReactNode } from 'react';
 import lzString from 'lz-string';
 
 import { useParams } from '../utils/params';
 import { compileJsx } from '../utils/compileJsx';
 import SplashScreen from './SplashScreen/SplashScreen';
+import CatchErrors from './CatchErrors/CatchErrors';
+// @ts-expect-error
+import RenderCode from './RenderCode/RenderCode';
 
 import * as styles from './Preview.css';
-
-// @ts-ignore
-import CatchErrors from './CatchErrors/CatchErrors';
-// @ts-ignore
-import RenderCode from './RenderCode/RenderCode';
 
 interface PreviewState {
   code?: string;
@@ -20,7 +18,11 @@ interface PreviewState {
 export interface PreviewProps {
   components: Record<string, ComponentType>;
   themes: Record<string, any>;
-  FrameComponent: ComponentType<{ themeName: string; theme: any }>;
+  FrameComponent: ComponentType<{
+    themeName: string;
+    theme: any;
+    children?: ReactNode;
+  }>;
 }
 export default ({ themes, components, FrameComponent }: PreviewProps) => {
   const { themeName, code } = useParams(

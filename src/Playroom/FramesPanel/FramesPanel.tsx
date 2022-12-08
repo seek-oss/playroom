@@ -71,7 +71,7 @@ function FrameOption<Option>({
       <div className={styles.fakeCheckbox}>
         <Checkmark />
       </div>
-      <Text truncate>{option}</Text>
+      <Text truncate>{String(option)}</Text>
     </label>
   );
 }
