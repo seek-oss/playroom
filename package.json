@@ -1,6 +1,6 @@
 {
   "name": "playroom",
-  "version": "0.0.0-semantically-released",
+  "version": "0.28.1",
   "description": "Design with code, powered by your own component library",
   "main": "utils/index.js",
   "types": "utils/index.d.ts",
@@ -23,14 +23,14 @@
     "commit": "git-cz",
     "lint": "eslint . && prettier --list-different '**/*.{js,md,less,ts,tsx}' && tsc --noEmit",
     "format": "prettier --write '**/*.{js,md,less,ts,tsx}'",
-    "semantic-release": "semantic-release",
+    "version": "changeset version",
+    "release": "changeset publish",
     "test": "jest src",
     "post-commit-status": "node scripts/postCommitStatus.js",
     "deploy-preview": "surge -p ./cypress/projects/themed/dist"
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint --edit --extends seek",
       "pre-commit": "lint-staged"
     }
   },
@@ -41,11 +41,6 @@
     "**/*.{js,md,less,ts,tsx}": [
       "prettier --write"
     ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
   },
   "release": {
     "success": false
@@ -121,14 +116,11 @@
     "webpack-merge": "^5.7.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "^12.0.1",
+    "@changesets/cli": "^2.25.2",
     "@octokit/rest": "^18.3.5",
     "@types/jest": "^26.0.20",
-    "commitizen": "^4.2.3",
-    "commitlint-config-seek": "^1.0.0",
     "concurrently": "^6.0.0",
     "cypress": "^6.7.1",
-    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.22.0",
     "eslint-config-seek": "^7.0.8",
     "husky": "^4.3.8",
@@ -136,7 +128,6 @@
     "lint-staged": "^10.5.4",
     "react": "^18.0.1",
     "react-dom": "^18.0.1",
-    "semantic-release": "^17.4.2",
     "serve": "^11.3.2",
     "start-server-and-test": "^1.12.0",
     "surge": "^0.22.1"
