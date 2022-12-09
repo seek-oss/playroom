@@ -19,19 +19,23 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2.2.2
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: 'package.json'
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile
+        run: pnpm i
 
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1
         with:
-          version: yarn run version
-          publish: yarn release
+          version: pnpm run version
+          publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.SEEK_OSS_CI_NPM_TOKEN }}

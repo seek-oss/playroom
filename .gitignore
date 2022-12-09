@@ -5,6 +5,7 @@ cypress/plugins/
 cypress/fixtures/
 node_modules/
 package-lock.json
+yarn.lock
 *.log
 .DS_Store
 .vscode/

@@ -15,24 +15,28 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2.2.2
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: 'package.json'
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile
+        run: pnpm i
 
       - name: Build
-        run: yarn build:themed
+        run: pnpm build:themed
 
       - name: Deploy to surge
-        run: yarn deploy-preview -d playroom--${GITHUB_SHA}.surge.sh
+        run: pnpm deploy-preview -d playroom--${GITHUB_SHA}.surge.sh
         env:
           SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
 
       - name: Update PR status
-        run: yarn post-commit-status
+        run: pnpm post-commit-status
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
