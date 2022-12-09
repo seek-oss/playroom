@@ -31,7 +31,6 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint --edit --extends seek",
       "pre-commit": "lint-staged"
     }
   },
