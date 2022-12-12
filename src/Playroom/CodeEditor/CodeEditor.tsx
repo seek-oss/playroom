@@ -60,7 +60,7 @@ const validateCode = (editorInstance: Editor, code: string) => {
   try {
     compileJsx(code);
   } catch (err) {
-    const errorMessage = err && (err.message || '');
+    const errorMessage = err instanceof Error ? err.message : '';
     const matches = errorMessage.match(/\(([0-9]+):/);
     const lineNumber =
       matches && matches.length >= 2 && matches[1] && parseInt(matches[1], 10);
@@ -71,7 +71,7 @@ const validateCode = (editorInstance: Editor, code: string) => {
       marker.setAttribute(
         'title',
         // Remove our wrapping Fragment from error message
-        (err.message || '')
+        errorMessage
           .replace(/\<React\.Fragment\>/, '')
           .replace(/\<\/React\.Fragment\>$/, '')
       );
@@ -100,7 +100,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   const [{ cursorPosition, highlightLineNumber }, dispatch] =
     useContext(StoreContext);
 
-  const [debouncedChange] = useDebouncedCallback(
+  const debouncedChange = useDebouncedCallback(
     (newCode: string) => onChange(newCode),
     100
   );
@@ -246,7 +246,6 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         autoCloseBrackets: true,
         theme: 'neo',
         gutters: ['errorGutter', 'CodeMirror-linenumbers', styles.foldGutter],
-        // @ts-expect-error
         hintOptions: { schemaInfo: hints },
         viewportMargin: 50,
         lineNumbers: true,
