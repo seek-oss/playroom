@@ -30,5 +30,8 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Setup Cypress Binary
+        run: pnpx cypress install
+
       - name: Cypress
         run: pnpm cypress

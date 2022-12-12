@@ -120,10 +120,11 @@ export const fakeCheckbox = style([
       background: colorPaletteVars.background.surface,
     },
     selectors: {
-      [`${checkbox}:hover:not(:focus) ~ &::before, ${checkbox}:focus ~ &::before`]: {
-        opacity: 1,
-        transform: 'scale(1)',
-      },
+      [`${checkbox}:hover:not(:focus) ~ &::before, ${checkbox}:focus ~ &::before`]:
+        {
+          opacity: 1,
+          transform: 'scale(1)',
+        },
     },
   },
 ]);

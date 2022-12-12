@@ -117,270 +117,276 @@ interface CreateReducerParams {
   themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
 }
-const createReducer = ({
-  themes: configuredThemes,
-  widths: configuredWidths,
-}: CreateReducerParams) => (state: State, action: Action): State => {
-  switch (action.type) {
-    case 'initialLoad': {
-      return {
-        ...state,
-        ...action.payload,
-      };
-    }
-
-    case 'updateCode': {
-      const { code, cursor } = action.payload;
-      store.setItem('code', code);
-
-      return {
-        ...state,
-        code,
-        cursorPosition: cursor || state.cursorPosition,
-      };
-    }
-
-    case 'dismissMessage': {
-      return {
-        ...state,
-        statusMessage: undefined,
-      };
-    }
-
-    case 'copyToClipboard': {
-      const { url, trigger } = action.payload;
-
-      copy(url);
-
-      return {
-        ...state,
-        statusMessage:
-          trigger === 'toolbarItem'
-            ? {
-                message: 'Copied to clipboard',
-                tone: 'positive',
-              }
-            : undefined,
-      };
-    }
-
-    case 'persistSnippet': {
-      const { snippet } = action.payload;
-      const { activeToolbarPanel, ...currentState } = state;
-
-      const { code, cursor } = formatAndInsert({
-        code: state.code,
-        snippet: snippet.code,
-        cursor: state.cursorPosition,
-      });
-
-      return {
-        ...resetPreview(currentState),
-        code,
-        cursorPosition: cursor,
-      };
-    }
-
-    case 'updateCursorPosition': {
-      const { position, code } = action.payload;
-      const newCode = code && code !== state.code ? code : state.code;
-
-      return {
-        ...state,
-        code: newCode,
-        cursorPosition: position,
-        statusMessage: undefined,
-        validCursorPosition: isValidLocation({
-          code: newCode,
-          cursor: position,
-        }),
-      };
-    }
-
-    case 'previewSnippet': {
-      const { snippet } = action.payload;
-
-      const previewRenderCode = snippet
-        ? formatAndInsert({
-            code: state.code,
-            snippet: snippet.code,
-            cursor: state.cursorPosition,
-          }).code
-        : undefined;
-
-      return {
-        ...state,
-        previewRenderCode,
-      };
-    }
-
-    case 'toggleToolbar': {
-      const { panel } = action.payload;
-      const { activeToolbarPanel: currentPanel, ...currentState } = state;
-      const shouldOpen = panel !== currentPanel;
-
-      if (shouldOpen) {
-        if (panel === 'preview' && state.code.trim().length === 0) {
-          return {
-            ...state,
-            statusMessage: {
-              message: 'Must have code to preview',
-              tone: 'critical',
-            },
-          };
-        }
-
-        if (panel === 'snippets') {
-          const validCursorPosition = isValidLocation({
-            code: currentState.code,
-            cursor: currentState.cursorPosition,
-          });
-
-          if (!validCursorPosition) {
-            return {
-              ...currentState,
-              statusMessage: {
-                message: "Can't insert snippet at cursor",
-                tone: 'critical',
-              },
-              validCursorPosition,
-            };
-          }
-
-          const { code, cursor } = formatForInsertion({
-            code: currentState.code,
-            cursor: currentState.cursorPosition,
-          });
-
-          return {
-            ...currentState,
-            statusMessage: undefined,
-            activeToolbarPanel: panel,
-            previewEditorCode: code,
-            highlightLineNumber: cursor.line,
-          };
-        }
-
+const createReducer =
+  ({
+    themes: configuredThemes,
+    widths: configuredWidths,
+  }: CreateReducerParams) =>
+  (state: State, action: Action): State => {
+    switch (action.type) {
+      case 'initialLoad': {
         return {
-          ...resetPreview(currentState),
-          statusMessage: undefined,
-          activeToolbarPanel: panel,
+          ...state,
+          ...action.payload,
         };
       }
 
-      return resetPreview(currentState);
+      case 'updateCode': {
+        const { code, cursor } = action.payload;
+        store.setItem('code', code);
+
+        return {
+          ...state,
+          code,
+          cursorPosition: cursor || state.cursorPosition,
+        };
+      }
+
+      case 'dismissMessage': {
+        return {
+          ...state,
+          statusMessage: undefined,
+        };
+      }
+
+      case 'copyToClipboard': {
+        const { url, trigger } = action.payload;
+
+        copy(url);
+
+        return {
+          ...state,
+          statusMessage:
+            trigger === 'toolbarItem'
+              ? {
+                  message: 'Copied to clipboard',
+                  tone: 'positive',
+                }
+              : undefined,
+        };
+      }
+
+      case 'persistSnippet': {
+        const { snippet } = action.payload;
+        const { activeToolbarPanel, ...currentState } = state;
+
+        const { code, cursor } = formatAndInsert({
+          code: state.code,
+          snippet: snippet.code,
+          cursor: state.cursorPosition,
+        });
+
+        return {
+          ...resetPreview(currentState),
+          code,
+          cursorPosition: cursor,
+        };
+      }
+
+      case 'updateCursorPosition': {
+        const { position, code } = action.payload;
+        const newCode = code && code !== state.code ? code : state.code;
+
+        return {
+          ...state,
+          code: newCode,
+          cursorPosition: position,
+          statusMessage: undefined,
+          validCursorPosition: isValidLocation({
+            code: newCode,
+            cursor: position,
+          }),
+        };
+      }
+
+      case 'previewSnippet': {
+        const { snippet } = action.payload;
+
+        const previewRenderCode = snippet
+          ? formatAndInsert({
+              code: state.code,
+              snippet: snippet.code,
+              cursor: state.cursorPosition,
+            }).code
+          : undefined;
+
+        return {
+          ...state,
+          previewRenderCode,
+        };
+      }
+
+      case 'toggleToolbar': {
+        const { panel } = action.payload;
+        const { activeToolbarPanel: currentPanel, ...currentState } = state;
+        const shouldOpen = panel !== currentPanel;
+
+        if (shouldOpen) {
+          if (panel === 'preview' && state.code.trim().length === 0) {
+            return {
+              ...state,
+              statusMessage: {
+                message: 'Must have code to preview',
+                tone: 'critical',
+              },
+            };
+          }
+
+          if (panel === 'snippets') {
+            const validCursorPosition = isValidLocation({
+              code: currentState.code,
+              cursor: currentState.cursorPosition,
+            });
+
+            if (!validCursorPosition) {
+              return {
+                ...currentState,
+                statusMessage: {
+                  message: "Can't insert snippet at cursor",
+                  tone: 'critical',
+                },
+                validCursorPosition,
+              };
+            }
+
+            const { code, cursor } = formatForInsertion({
+              code: currentState.code,
+              cursor: currentState.cursorPosition,
+            });
+
+            return {
+              ...currentState,
+              statusMessage: undefined,
+              activeToolbarPanel: panel,
+              previewEditorCode: code,
+              highlightLineNumber: cursor.line,
+            };
+          }
+
+          return {
+            ...resetPreview(currentState),
+            statusMessage: undefined,
+            activeToolbarPanel: panel,
+          };
+        }
+
+        return resetPreview(currentState);
+      }
+
+      case 'closeToolbar': {
+        const { activeToolbarPanel, ...currentState } = state;
+
+        return resetPreview(currentState);
+      }
+
+      case 'hideEditor': {
+        return {
+          ...state,
+          activeToolbarPanel: undefined,
+          editorHidden: true,
+        };
+      }
+
+      case 'showEditor': {
+        return {
+          ...state,
+          editorHidden: false,
+        };
+      }
+
+      case 'updateColorScheme': {
+        const { colorScheme } = action.payload;
+        store.setItem('colorScheme', colorScheme);
+
+        return {
+          ...state,
+          colorScheme,
+        };
+      }
+
+      case 'updateEditorPosition': {
+        const { position } = action.payload;
+        store.setItem('editorPosition', position);
+
+        return {
+          ...state,
+          editorPosition: position,
+        };
+      }
+
+      case 'resetEditorPosition': {
+        store.setItem('editorPosition', defaultPosition);
+
+        return {
+          ...state,
+          editorPosition: defaultPosition,
+        };
+      }
+
+      case 'updateEditorHeight': {
+        const { size } = action.payload;
+        store.setItem('editorHeight', size);
+
+        return {
+          ...state,
+          editorHeight: size,
+        };
+      }
+
+      case 'updateEditorWidth': {
+        const { size } = action.payload;
+        store.setItem('editorWidth', size);
+
+        return {
+          ...state,
+          editorWidth: size,
+        };
+      }
+
+      case 'updateVisibleThemes': {
+        const { themes } = action.payload;
+        const visibleThemes = configuredThemes.filter((t) =>
+          themes.includes(t)
+        );
+        store.setItem('visibleThemes', visibleThemes);
+
+        return {
+          ...state,
+          visibleThemes,
+        };
+      }
+
+      case 'resetVisibleThemes': {
+        const { visibleThemes, ...restState } = state;
+        store.removeItem('visibleThemes');
+
+        return restState;
+      }
+
+      case 'updateVisibleWidths': {
+        const { widths } = action.payload;
+        const visibleWidths = configuredWidths.filter((w) =>
+          widths.includes(w)
+        );
+        store.setItem('visibleWidths', visibleWidths);
+
+        return {
+          ...state,
+          visibleWidths,
+        };
+      }
+
+      case 'resetVisibleWidths': {
+        const { visibleWidths, ...restState } = state;
+        store.removeItem('visibleWidths');
+
+        return restState;
+      }
+
+      default:
+        return state;
     }
-
-    case 'closeToolbar': {
-      const { activeToolbarPanel, ...currentState } = state;
-
-      return resetPreview(currentState);
-    }
-
-    case 'hideEditor': {
-      return {
-        ...state,
-        activeToolbarPanel: undefined,
-        editorHidden: true,
-      };
-    }
-
-    case 'showEditor': {
-      return {
-        ...state,
-        editorHidden: false,
-      };
-    }
-
-    case 'updateColorScheme': {
-      const { colorScheme } = action.payload;
-      store.setItem('colorScheme', colorScheme);
-
-      return {
-        ...state,
-        colorScheme,
-      };
-    }
-
-    case 'updateEditorPosition': {
-      const { position } = action.payload;
-      store.setItem('editorPosition', position);
-
-      return {
-        ...state,
-        editorPosition: position,
-      };
-    }
-
-    case 'resetEditorPosition': {
-      store.setItem('editorPosition', defaultPosition);
-
-      return {
-        ...state,
-        editorPosition: defaultPosition,
-      };
-    }
-
-    case 'updateEditorHeight': {
-      const { size } = action.payload;
-      store.setItem('editorHeight', size);
-
-      return {
-        ...state,
-        editorHeight: size,
-      };
-    }
-
-    case 'updateEditorWidth': {
-      const { size } = action.payload;
-      store.setItem('editorWidth', size);
-
-      return {
-        ...state,
-        editorWidth: size,
-      };
-    }
-
-    case 'updateVisibleThemes': {
-      const { themes } = action.payload;
-      const visibleThemes = configuredThemes.filter((t) => themes.includes(t));
-      store.setItem('visibleThemes', visibleThemes);
-
-      return {
-        ...state,
-        visibleThemes,
-      };
-    }
-
-    case 'resetVisibleThemes': {
-      const { visibleThemes, ...restState } = state;
-      store.removeItem('visibleThemes');
-
-      return restState;
-    }
-
-    case 'updateVisibleWidths': {
-      const { widths } = action.payload;
-      const visibleWidths = configuredWidths.filter((w) => widths.includes(w));
-      store.setItem('visibleWidths', visibleWidths);
-
-      return {
-        ...state,
-        visibleWidths,
-      };
-    }
-
-    case 'resetVisibleWidths': {
-      const { visibleWidths, ...restState } = state;
-      store.removeItem('visibleWidths');
-
-      return restState;
-    }
-
-    default:
-      return state;
-  }
-};
+  };
 
 type StoreContextValues = [State, Dispatch<Action>];
 

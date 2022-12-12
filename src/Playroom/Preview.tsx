@@ -25,23 +25,20 @@ export interface PreviewProps {
   }>;
 }
 export default ({ themes, components, FrameComponent }: PreviewProps) => {
-  const { themeName, code } = useParams(
-    (rawParams): PreviewState => {
-      if (rawParams.code) {
-        const result = JSON.parse(
-          lzString.decompressFromEncodedURIComponent(String(rawParams.code)) ??
-            ''
-        );
+  const { themeName, code } = useParams((rawParams): PreviewState => {
+    if (rawParams.code) {
+      const result = JSON.parse(
+        lzString.decompressFromEncodedURIComponent(String(rawParams.code)) ?? ''
+      );
 
-        return {
-          code: compileJsx(result.code),
-          themeName: result.theme,
-        };
-      }
-
-      return {};
+      return {
+        code: compileJsx(result.code),
+        themeName: result.theme,
+      };
     }
-  );
+
+    return {};
+  });
 
   const resolvedTheme = themeName ? themes[themeName] : null;
 

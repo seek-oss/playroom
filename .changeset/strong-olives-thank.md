@@ -2,4 +2,4 @@
 'playroom': patch
 ---
 
-Update depedencies (and move to pnpm internally)
+Update dependencies (and move to pnpm internally)
