@@ -16,13 +16,17 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2.2.2
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: 'package.json'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: pnpm i
 
       - name: Publish
         uses: seek-oss/changesets-snapshot@v0

@@ -77,9 +77,8 @@ const scrollToHighlightedSnippet = (
 
 export default ({ snippets, onHighlight, onClose }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [highlightedIndex, setHighlightedIndex] = useState<HighlightIndex>(
-    null
-  );
+  const [highlightedIndex, setHighlightedIndex] =
+    useState<HighlightIndex>(null);
   const listEl = useRef<HTMLUListElement | null>(null);
   const highlightedEl = useRef<HTMLLIElement | null>(null);
   const closeHandler = (returnValue: ReturnedSnippet) => {

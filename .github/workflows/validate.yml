@@ -12,19 +12,26 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2.2.2
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: 'package.json'
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile
+        run: pnpm i
 
       - name: Lint
-        run: yarn lint
+        run: pnpm lint
 
       - name: Test
-        run: yarn test
+        run: pnpm test
+
+      - name: Setup Cypress Binary
+        run: pnpx cypress install
 
       - name: Cypress
-        run: yarn cypress
+        run: pnpm cypress

@@ -77,9 +77,8 @@ function FrameOption<Option>({
 }
 
 export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
-  const [{ visibleWidths = [], visibleThemes = [] }, dispatch] = useContext(
-    StoreContext
-  );
+  const [{ visibleWidths = [], visibleThemes = [] }, dispatch] =
+    useContext(StoreContext);
   const hasThemes =
     availableThemes.filter(
       (themeName) => themeName !== '__PLAYROOM__NO_THEME__'

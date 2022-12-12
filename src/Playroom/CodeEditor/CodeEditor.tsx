@@ -97,9 +97,8 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
     null
   );
-  const [{ cursorPosition, highlightLineNumber }, dispatch] = useContext(
-    StoreContext
-  );
+  const [{ cursorPosition, highlightLineNumber }, dispatch] =
+    useContext(StoreContext);
 
   const [debouncedChange] = useDebouncedCallback(
     (newCode: string) => onChange(newCode),
