@@ -66,14 +66,24 @@ const validateCode = (editorInstance: Editor, code: string) => {
       matches && matches.length >= 2 && matches[1] && parseInt(matches[1], 10);
 
     if (lineNumber) {
+      const openFragment = '<React.Fragment>';
+      const openWrapperStartIndex = errorMessage.indexOf(openFragment);
+      const closeFragment = '</React.Fragment>';
+      const closeWrapperStartIndex = errorMessage.lastIndexOf(closeFragment);
+
       const marker = document.createElement('div');
       marker.setAttribute('class', styles.errorMarker);
       marker.setAttribute(
         'title',
         // Remove our wrapping Fragment from error message
-        errorMessage
-          .replace(/\<React\.Fragment\>/, '')
-          .replace(/\<\/React\.Fragment\>$/, '')
+        [
+          errorMessage.slice(0, openWrapperStartIndex),
+          errorMessage.slice(
+            openWrapperStartIndex + openFragment.length,
+            closeWrapperStartIndex
+          ),
+          errorMessage.slice(closeWrapperStartIndex + closeFragment.length),
+        ].join('')
       );
       marker.innerText = String(lineNumber);
       editorInstance.setGutterMarker(lineNumber - 1, 'errorGutter', marker);
