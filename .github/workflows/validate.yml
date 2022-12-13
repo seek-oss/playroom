@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: 'package.json'
-          cache: 'pnpm'
 
       - name: Get pnpm store directory
         id: pnpm-cache
