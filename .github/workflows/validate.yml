@@ -38,7 +38,7 @@ jobs:
         id: cypress-version
         shell: bash
         run: |
-          echo "CYPRESS_VERSION=$(pnpm exec cypress version --component binary)" >> $GITHUB_OUTPUT
+          echo "CYPRESS_VERSION=$(./node_modules/.bin/cypress version --component binary)" >> $GITHUB_OUTPUT
 
       - name: Cache Cypress binary
         uses: actions/cache@v3
