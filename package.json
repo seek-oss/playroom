@@ -10,6 +10,7 @@
   "scripts": {
     "cypress": "start-server-and-test build-and-serve:all '9000|9001' 'cypress run'",
     "cypress:dev": "start-server-and-test start:all '9000|9001' 'cypress open --browser chrome --e2e'",
+    "cypress:verify": "cypress verify",
     "start:basic": "./bin/cli.js start --config cypress/projects/basic/playroom.config.js",
     "build:basic": "./bin/cli.js build --config cypress/projects/basic/playroom.config.js",
     "serve:basic": "PORT=9000 serve --no-request-logging cypress/projects/basic/dist",
