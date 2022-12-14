@@ -6,7 +6,11 @@ import 'codemirror/theme/neo.css';
 
 import { StoreContext, CursorPosition } from '../../StoreContext/StoreContext';
 import { formatCode as format } from '../../utils/formatting';
-import { compileJsx } from '../../utils/compileJsx';
+import {
+  closeFragmentTag,
+  compileJsx,
+  openFragmentTag,
+} from '../../utils/compileJsx';
 
 import * as styles from './CodeEditor.css';
 
@@ -66,25 +70,21 @@ const validateCode = (editorInstance: Editor, code: string) => {
       matches && matches.length >= 2 && matches[1] && parseInt(matches[1], 10);
 
     if (lineNumber) {
-      const openFragment = '<React.Fragment>';
-      const openWrapperStartIndex = errorMessage.indexOf(openFragment);
-      const closeFragment = '</React.Fragment>';
-      const closeWrapperStartIndex = errorMessage.lastIndexOf(closeFragment);
+      // Remove our wrapping Fragment from error message
+      const openWrapperStartIndex = errorMessage.indexOf(openFragmentTag);
+      const closeWrapperStartIndex = errorMessage.lastIndexOf(closeFragmentTag);
+      const formattedMessage = [
+        errorMessage.slice(0, openWrapperStartIndex),
+        errorMessage.slice(
+          openWrapperStartIndex + openFragmentTag.length,
+          closeWrapperStartIndex
+        ),
+        errorMessage.slice(closeWrapperStartIndex + closeFragmentTag.length),
+      ].join('');
 
       const marker = document.createElement('div');
       marker.setAttribute('class', styles.errorMarker);
-      marker.setAttribute(
-        'title',
-        // Remove our wrapping Fragment from error message
-        [
-          errorMessage.slice(0, openWrapperStartIndex),
-          errorMessage.slice(
-            openWrapperStartIndex + openFragment.length,
-            closeWrapperStartIndex
-          ),
-          errorMessage.slice(closeWrapperStartIndex + closeFragment.length),
-        ].join('')
-      );
+      marker.setAttribute('title', formattedMessage);
       marker.innerText = String(lineNumber);
       editorInstance.setGutterMarker(lineNumber - 1, 'errorGutter', marker);
     }
@@ -107,8 +107,9 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
     null
   );
-  const [{ cursorPosition, highlightLineNumber }, dispatch] =
-    useContext(StoreContext);
+  const [{ cursorPosition, highlightLineNumber }, dispatch] = useContext(
+    StoreContext
+  );
 
   const debouncedChange = useDebouncedCallback(
     (newCode: string) => onChange(newCode),

@@ -1,7 +1,10 @@
 import { transform } from '@babel/standalone';
 
+export const openFragmentTag = '<React.Fragment>';
+export const closeFragmentTag = '</React.Fragment>';
+
 export const compileJsx = (code: string) =>
-  transform(`<React.Fragment>${code.trim() || ''}</React.Fragment>`, {
+  transform(`${openFragmentTag}${code.trim() || ''}${closeFragmentTag}`, {
     presets: ['react'],
   }).code;
 
