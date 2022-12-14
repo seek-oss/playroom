@@ -34,17 +34,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Get Cypress version
-        id: cypress-version
-        shell: bash
-        run: |
-          echo "CYPRESS_VERSION=$($(pnpm bin)/cypress version --component binary)" >> $GITHUB_OUTPUT
-
       - name: Cache Cypress binary
         uses: actions/cache@v3
         with:
           path: ~/.cache/Cypress
-          key: cypress-${{ runner.os }}-cypress-${{ steps.cypress-version.outputs.CYPRESS_VERSION }}
+          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             cypress-${{ runner.os }}-cypress-
 
