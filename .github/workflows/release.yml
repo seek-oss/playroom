@@ -15,9 +15,8 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
         with:
-          # This makes Actions fetch all Git history for semantic-release
+          # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v2.2.2
