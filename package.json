@@ -21,8 +21,8 @@
     "build:all": "concurrently 'npm:build:basic' 'npm:build:themed'",
     "serve:all": "concurrently 'npm:serve:basic' 'npm:serve:themed'",
     "build-and-serve:all": "pnpm build:all && pnpm serve:all",
-    "lint": "eslint . && prettier --list-different '**/*.{js,md,less,ts,tsx}' && tsc --noEmit",
-    "format": "prettier --write '**/*.{js,md,less,ts,tsx}'",
+    "lint": "eslint . && prettier --list-different '**/*.{js,md,ts,tsx}' && tsc --noEmit",
+    "format": "prettier --write '**/*.{js,md,ts,tsx}'",
     "version": "changeset version",
     "release": "changeset publish",
     "test": "jest src",
@@ -33,7 +33,7 @@
     "**/*.{js,ts,tsx}": [
       "eslint"
     ],
-    "**/*.{js,md,less,ts,tsx}": [
+    "**/*.{js,md,ts,tsx}": [
       "prettier --write"
     ]
   },
