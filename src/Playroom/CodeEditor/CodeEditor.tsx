@@ -6,7 +6,11 @@ import 'codemirror/theme/neo.css';
 
 import { StoreContext, CursorPosition } from '../../StoreContext/StoreContext';
 import { formatCode as format } from '../../utils/formatting';
-import { compileJsx } from '../../utils/compileJsx';
+import {
+  closeFragmentTag,
+  compileJsx,
+  openFragmentTag,
+} from '../../utils/compileJsx';
 
 import * as styles from './CodeEditor.css';
 
@@ -60,21 +64,27 @@ const validateCode = (editorInstance: Editor, code: string) => {
   try {
     compileJsx(code);
   } catch (err) {
-    const errorMessage = err && (err.message || '');
+    const errorMessage = err instanceof Error ? err.message : '';
     const matches = errorMessage.match(/\(([0-9]+):/);
     const lineNumber =
       matches && matches.length >= 2 && matches[1] && parseInt(matches[1], 10);
 
     if (lineNumber) {
+      // Remove our wrapping Fragment from error message
+      const openWrapperStartIndex = errorMessage.indexOf(openFragmentTag);
+      const closeWrapperStartIndex = errorMessage.lastIndexOf(closeFragmentTag);
+      const formattedMessage = [
+        errorMessage.slice(0, openWrapperStartIndex),
+        errorMessage.slice(
+          openWrapperStartIndex + openFragmentTag.length,
+          closeWrapperStartIndex
+        ),
+        errorMessage.slice(closeWrapperStartIndex + closeFragmentTag.length),
+      ].join('');
+
       const marker = document.createElement('div');
       marker.setAttribute('class', styles.errorMarker);
-      marker.setAttribute(
-        'title',
-        // Remove our wrapping Fragment from error message
-        (err.message || '')
-          .replace(/\<React\.Fragment\>/, '')
-          .replace(/\<\/React\.Fragment\>$/, '')
-      );
+      marker.setAttribute('title', formattedMessage);
       marker.innerText = String(lineNumber);
       editorInstance.setGutterMarker(lineNumber - 1, 'errorGutter', marker);
     }
@@ -100,7 +110,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   const [{ cursorPosition, highlightLineNumber }, dispatch] =
     useContext(StoreContext);
 
-  const [debouncedChange] = useDebouncedCallback(
+  const debouncedChange = useDebouncedCallback(
     (newCode: string) => onChange(newCode),
     100
   );
@@ -246,7 +256,6 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         autoCloseBrackets: true,
         theme: 'neo',
         gutters: ['errorGutter', 'CodeMirror-linenumbers', styles.foldGutter],
-        // @ts-expect-error
         hintOptions: { schemaInfo: hints },
         viewportMargin: 50,
         lineNumbers: true,

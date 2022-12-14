@@ -19,7 +19,28 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: 'package.json'
-          cache: 'pnpm'
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Cache Cypress binary
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-cypress-
 
       - name: Install Dependencies
         run: pnpm i
@@ -30,8 +51,7 @@ jobs:
       - name: Test
         run: pnpm test
 
-      - name: Setup Cypress Binary
-        run: pnpx cypress install
-
       - name: Cypress
-        run: pnpm cypress
+        run: |
+          pnpm cypress:verify
+          pnpm cypress

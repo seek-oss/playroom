@@ -420,7 +420,7 @@ export const StoreProvider = ({
     createReducer({ themes, widths }),
     initialState
   );
-  const [debouncedCodeUpdate] = useDebouncedCallback(
+  const debouncedCodeUpdate = useDebouncedCallback(
     (params: DebounceUpdateUrl) => {
       // Ensure that when removing theme/width preferences
       // they are also removed from the url. Replacing state
@@ -454,22 +454,14 @@ export const StoreProvider = ({
       widthsFromQuery = parsedWidths;
     }
 
-    Promise.all<
-      string | null,
-      EditorPosition | null,
-      number | null,
-      number | null,
-      number[] | null,
-      string[] | null,
-      ColorScheme | null
-    >([
-      store.getItem('code'),
-      store.getItem('editorPosition'),
-      store.getItem('editorHeight'),
-      store.getItem('editorWidth'),
-      store.getItem('visibleWidths'),
-      store.getItem('visibleThemes'),
-      store.getItem('colorScheme'),
+    Promise.all([
+      store.getItem<string>('code'),
+      store.getItem<EditorPosition>('editorPosition'),
+      store.getItem<number>('editorHeight'),
+      store.getItem<number>('editorWidth'),
+      store.getItem<number[]>('visibleWidths'),
+      store.getItem<string[]>('visibleThemes'),
+      store.getItem<ColorScheme>('colorScheme'),
     ]).then(
       ([
         storedCode,
