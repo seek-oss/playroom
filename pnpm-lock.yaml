@@ -22,7 +22,7 @@ specifiers:
   '@vanilla-extract/css': ^1.9.2
   '@vanilla-extract/css-utils': ^0.1.3
   '@vanilla-extract/sprinkles': ^1.5.1
-  '@vanilla-extract/webpack-plugin': 2.1.12
+  '@vanilla-extract/webpack-plugin': ^2.2.0
   babel-loader: ^9.1.0
   classnames: ^2.3.2
   codemirror: ^5.65.10
@@ -90,7 +90,7 @@ dependencies:
   '@vanilla-extract/css': 1.9.2
   '@vanilla-extract/css-utils': 0.1.3
   '@vanilla-extract/sprinkles': 1.5.1_@vanilla-extract+css@1.9.2
-  '@vanilla-extract/webpack-plugin': 2.1.12_webpack@5.75.0
+  '@vanilla-extract/webpack-plugin': 2.2.0_webpack@5.75.0
   babel-loader: 9.1.0_ztqwsvkb6z73luspkai6ilstpu
   classnames: 2.3.2
   codemirror: 5.65.10
@@ -2614,6 +2614,14 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
+  /@vanilla-extract/babel-plugin-debug-ids/1.0.0:
+    resolution: {integrity: sha512-Q2Nh/0FEAENfcphAv+fvcMoKfl3bhPWO/2x3MPviNAhsTsvuvYPuRtLjcXwoe4aJ8MxxI46JLY33j8NBEzpTIg==}
+    dependencies:
+      '@babel/core': 7.20.5
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /@vanilla-extract/css-utils/0.1.3:
     resolution: {integrity: sha512-PZAcHROlgtCUGI2y0JntdNwvPwCNyeVnkQu6KTYKdmxBbK3w72XJUmLFYapfaFfgami4I9CTLnrJTPdtmS3gpw==}
     dev: false
@@ -2634,9 +2642,12 @@ packages:
       outdent: 0.8.0
     dev: false
 
-  /@vanilla-extract/integration/5.0.1:
-    resolution: {integrity: sha512-HRV/HvC/lihb9wT3x5s7pf5qLjqxSd9nBePJ10juOuMB5cl2ZClEcts076m9BuRKM3wRK2h7KuwkNsaUtjujxQ==}
+  /@vanilla-extract/integration/6.0.1:
+    resolution: {integrity: sha512-8D2JdBTH6UEao5Tm50m1qtY63JP4hDxiv/sNvgj2+ix/9M5RML9sa0diS80u0hW/r26+/ZsdzoA5YIbg6ghOMw==}
     dependencies:
+      '@babel/core': 7.20.5
+      '@babel/plugin-syntax-typescript': 7.20.0_@babel+core@7.20.5
+      '@vanilla-extract/babel-plugin-debug-ids': 1.0.0
       '@vanilla-extract/css': 1.9.2
       esbuild: 0.11.23
       eval: 0.1.6
@@ -2644,6 +2655,8 @@ packages:
       javascript-stringify: 2.1.0
       lodash: 4.17.21
       outdent: 0.8.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /@vanilla-extract/private/1.0.3:
@@ -2658,12 +2671,12 @@ packages:
       '@vanilla-extract/css': 1.9.2
     dev: false
 
-  /@vanilla-extract/webpack-plugin/2.1.12_webpack@5.75.0:
-    resolution: {integrity: sha512-8mAbIDEh9r7a5cgb3wcILzuhEbGNddV4/qvwogOlxhoGrP4deUKJHEtPURDviWZ+x/FzFZtZ3glWU7WD8+WN8A==}
+  /@vanilla-extract/webpack-plugin/2.2.0_webpack@5.75.0:
+    resolution: {integrity: sha512-EQrnT7gIki+Wm57eIRZRw6pi4M4VVnwiSp5OOcQF81XdZvoYXo51Ern7+dHKS+Xxli151BWTUsg/UZSpaAz29Q==}
     peerDependencies:
       webpack: ^4.30.0 || ^5.20.2
     dependencies:
-      '@vanilla-extract/integration': 5.0.1
+      '@vanilla-extract/integration': 6.0.1
       chalk: 4.1.2
       debug: 4.3.4
       loader-utils: 2.0.4
