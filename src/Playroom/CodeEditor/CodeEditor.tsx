@@ -69,48 +69,45 @@ const swapLineUp = (cm: Editor) => {
   }
 
   const ranges = cm.listSelections();
-  const linesToMove: number[] = [];
-  let at = cm.firstLine() - 1;
 
-  for (const range of ranges) {
-    const from = range.from().line - 1;
-    let to = range.to().line;
-
-    if (range.to().ch === 0 && !range.empty()) {
-      --to;
-    }
-
-    if (from > at) {
-      linesToMove.push(from, to);
-    } else if (linesToMove.length) {
-      linesToMove[linesToMove.length - 1] = to;
-    }
-
-    at = to;
+  if (ranges.length > 1) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "The swap line command doesn't support multiple cursors yet. Please ask for this feature."
+    );
   }
 
-  cm.operation(function () {
-    for (let i = 0; i < linesToMove.length; i += 2) {
-      const from = linesToMove[i];
-      const to = linesToMove[i + 1];
-      const line = cm.getLine(from);
+  const range = ranges[0];
 
-      cm.replaceRange('', new Pos(from, 0), new Pos(from + 1, 0), '+swapLine');
+  // If we're already at the top, do nothing
+  if (range.from().line > 0) {
+    const switchLineNumber = range.from().line - 1;
+    const switchLineContent = cm.getLine(switchLineNumber);
 
-      if (to > cm.lastLine()) {
-        cm.replaceRange(
-          `\n${line}`,
-          new Pos(cm.lastLine()),
-          undefined,
-          '+swapLine'
-        );
-      } else {
-        cm.replaceRange(`${line}\n`, new Pos(to, 0), undefined, '+swapLine');
-      }
-    }
+    // Expand to the end of the selected lines
+    const rangeStart = new Pos(range.from().line, 0);
+    const rangeEnd = new Pos(range.to().line, undefined);
 
-    cm.scrollIntoView(null);
-  });
+    const rangeContent = cm.getRange(rangeStart, rangeEnd);
+
+    cm.operation(() => {
+      // Switch the order of the range and the preceding line
+      const newContent = [rangeContent, switchLineContent].join('\n');
+
+      cm.replaceRange(
+        newContent,
+        new Pos(switchLineNumber, 0),
+        rangeEnd,
+        '+swapLine'
+      );
+
+      // Shift the selection up by one line to match the moved content
+      cm.setSelection(
+        new Pos(range.anchor.line - 1, range.anchor.ch),
+        new Pos(range.head.line - 1, range.head.ch)
+      );
+    });
+  }
 };
 
 const swapLineDown = (cm: Editor) => {
@@ -119,47 +116,45 @@ const swapLineDown = (cm: Editor) => {
   }
 
   const ranges = cm.listSelections();
-  const linesToMove: number[] = [];
-  let at = cm.lastLine() + 1;
 
-  for (const range of ranges.reverse()) {
-    let from = range.to().line + 1;
-    const to = range.from().line;
-
-    if (range.to().ch === 0 && !range.empty()) {
-      from--;
-    }
-
-    if (from < at) {
-      linesToMove.push(from, to);
-    } else if (linesToMove.length) {
-      linesToMove[linesToMove.length - 1] = to;
-    }
-
-    at = to;
+  if (ranges.length > 1) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "The swap line command doesn't support multiple cursors yet. Please ask for this feature."
+    );
   }
 
-  cm.operation(function () {
-    for (let i = linesToMove.length - 2; i >= 0; i -= 2) {
-      const from = linesToMove[i];
-      const to = linesToMove[i + 1];
-      const line = cm.getLine(from);
+  const range = ranges[0];
 
-      if (from === cm.lastLine()) {
-        cm.replaceRange('', new Pos(from - 1), new Pos(from), '+swapLine');
-      } else {
-        cm.replaceRange(
-          '',
-          new Pos(from, 0),
-          new Pos(from + 1, 0),
-          '+swapLine'
-        );
-      }
-      cm.replaceRange(`${line}\n`, new Pos(to, 0), undefined, '+swapLine');
-    }
+  // If we're already at the bottom, do nothing
+  if (range.to().line < cm.lastLine()) {
+    const switchLineNumber = range.to().line + 1;
+    const switchLineContent = cm.getLine(switchLineNumber);
 
-    cm.scrollIntoView(null);
-  });
+    // Expand to the end of the selected lines
+    const rangeStart = new Pos(range.from().line, 0);
+    const rangeEnd = new Pos(range.to().line, undefined);
+
+    const rangeContent = cm.getRange(rangeStart, rangeEnd);
+
+    cm.operation(() => {
+      // Switch the order of the range and the preceding line
+      const newContent = [switchLineContent, rangeContent].join('\n');
+
+      cm.replaceRange(
+        newContent,
+        rangeStart,
+        new Pos(switchLineNumber),
+        '-swapLine'
+      );
+
+      // Shift the selection down by one line to match the moved content
+      cm.setSelection(
+        new Pos(range.anchor.line + 1, range.anchor.ch),
+        new Pos(range.head.line + 1, range.head.ch)
+      );
+    });
+  }
 };
 
 const completeAfter = (cm: Editor, predicate?: () => boolean) => {
