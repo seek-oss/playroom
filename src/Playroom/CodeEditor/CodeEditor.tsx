@@ -1,6 +1,6 @@
 import React, { useRef, useContext, useEffect, useCallback } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import CodeMirror, { Editor } from 'codemirror';
+import CodeMirror, { Editor, Pos } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 
@@ -24,6 +24,154 @@ import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
+
+const directionToMethod = {
+  up: 'to',
+  down: 'from',
+} as const;
+
+type DuplicationDirection = keyof typeof directionToMethod;
+
+const getNewPosition = (
+  range: CodeMirror.Range,
+  direction: DuplicationDirection
+) => {
+  const currentLine = range[directionToMethod[direction]]().line;
+
+  const newLine = direction === 'up' ? currentLine + 1 : currentLine;
+  return new Pos(newLine, 0);
+};
+
+const duplicateLine = (direction: DuplicationDirection) => (cm: Editor) =>
+  cm.operation(function () {
+    const ranges = cm.listSelections();
+
+    if (ranges.length > 1) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "The duplicate line command doesn't support multiple cursors yet. Please ask for this feature."
+      );
+    }
+
+    const range = ranges[0];
+
+    const existingContent = cm.getRange(
+      new Pos(range.from().line, 0),
+      new Pos(range.to().line)
+    );
+
+    const newContentParts = [existingContent, '\n'];
+
+    // Copy up on the last line has some unusual behaviour
+    if (range.to().line === cm.lastLine() && direction === 'up') {
+      newContentParts.reverse();
+    }
+
+    const newContent = newContentParts.join('');
+
+    cm.replaceRange(newContent, getNewPosition(range, direction));
+
+    // Copy up doesn't always handle its cursors correctly
+    if (direction === 'up') {
+      cm.setSelection(range.anchor, range.head);
+    }
+
+    cm.scrollIntoView(null);
+  });
+
+const swapLineUp = (cm: Editor) => {
+  if (cm.isReadOnly()) {
+    return CodeMirror.Pass;
+  }
+
+  const ranges = cm.listSelections();
+
+  if (ranges.length > 1) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "The swap line command doesn't support multiple cursors yet. Please ask for this feature."
+    );
+  }
+
+  const range = ranges[0];
+
+  // If we're already at the top, do nothing
+  if (range.from().line > 0) {
+    const switchLineNumber = range.from().line - 1;
+    const switchLineContent = cm.getLine(switchLineNumber);
+
+    // Expand to the end of the selected lines
+    const rangeStart = new Pos(range.from().line, 0);
+    const rangeEnd = new Pos(range.to().line, undefined);
+
+    const rangeContent = cm.getRange(rangeStart, rangeEnd);
+
+    cm.operation(() => {
+      // Switch the order of the range and the preceding line
+      const newContent = [rangeContent, switchLineContent].join('\n');
+
+      cm.replaceRange(
+        newContent,
+        new Pos(switchLineNumber, 0),
+        rangeEnd,
+        '+swapLine'
+      );
+
+      // Shift the selection up by one line to match the moved content
+      cm.setSelection(
+        new Pos(range.anchor.line - 1, range.anchor.ch),
+        new Pos(range.head.line - 1, range.head.ch)
+      );
+    });
+  }
+};
+
+const swapLineDown = (cm: Editor) => {
+  if (cm.isReadOnly()) {
+    return CodeMirror.Pass;
+  }
+
+  const ranges = cm.listSelections();
+
+  if (ranges.length > 1) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "The swap line command doesn't support multiple cursors yet. Please ask for this feature."
+    );
+  }
+
+  const range = ranges[0];
+
+  // If we're already at the bottom, do nothing
+  if (range.to().line < cm.lastLine()) {
+    const switchLineNumber = range.to().line + 1;
+    const switchLineContent = cm.getLine(switchLineNumber);
+
+    // Expand to the end of the selected lines
+    const rangeStart = new Pos(range.from().line, 0);
+    const rangeEnd = new Pos(range.to().line, undefined);
+
+    const rangeContent = cm.getRange(rangeStart, rangeEnd);
+
+    cm.operation(() => {
+      // Switch the order of the range and the preceding line
+      const newContent = [switchLineContent, rangeContent].join('\n');
+
+      cm.replaceRange(
+        newContent,
+        rangeStart,
+        new Pos(switchLineNumber),
+        '+swapLine'
+      );
+
+      // Shift the selection down by one line to match the moved content
+      cm.setSelection(
+        new Pos(range.anchor.line + 1, range.anchor.ch),
+        new Pos(range.head.line + 1, range.head.ch)
+      );
+    });
+  }
+};
 
 const completeAfter = (cm: Editor, predicate?: () => boolean) => {
   if (!predicate || predicate()) {
@@ -284,6 +432,10 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           "'/'": completeIfAfterLt,
           "' '": completeIfInTag,
           "'='": completeIfInTag,
+          'Alt-Up': swapLineUp,
+          'Alt-Down': swapLineDown,
+          'Shift-Alt-Up': duplicateLine('up'),
+          'Shift-Alt-Down': duplicateLine('down'),
         },
       }}
     />
