@@ -1,6 +1,6 @@
 import React, { useRef, useContext, useEffect, useCallback } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import CodeMirror, { Editor } from 'codemirror';
+import CodeMirror, { Editor, Pos } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 
@@ -24,6 +24,140 @@ import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
+
+type DuplicationDirection = 'up' | 'down';
+
+const getNewPosition = (
+  range: CodeMirror.Range,
+  direction: DuplicationDirection
+) => {
+  const newPositionDirection = direction === 'up' ? 'from' : 'to';
+
+  const currentLine = range[newPositionDirection]().line;
+
+  const newLine = direction === 'up' ? currentLine : currentLine + 1;
+  return new Pos(newLine, 0);
+};
+
+const duplicateLine = (direction: DuplicationDirection) => (cm: Editor) => {
+  cm.operation(function () {
+    for (const range of cm.listSelections()) {
+      if (range.empty()) {
+        cm.replaceRange(
+          `${cm.getLine(range.head.line)}\n`,
+          getNewPosition(range, direction)
+        );
+      } else {
+        const newRange = cm.getRange(
+          new Pos(range.from().line, 0),
+          new Pos(range.to().line)
+        );
+
+        cm.replaceRange(`${newRange}\n`, getNewPosition(range, direction));
+      }
+    }
+    cm.scrollIntoView(null);
+  });
+};
+
+const swapLineUp = (cm: Editor) => {
+  if (cm.isReadOnly()) {
+    return CodeMirror.Pass;
+  }
+
+  const ranges = cm.listSelections();
+  const linesToMove: number[] = [];
+  let at = cm.firstLine() - 1;
+
+  for (const range of ranges) {
+    const from = range.from().line - 1;
+    let to = range.to().line;
+
+    if (range.to().ch === 0 && !range.empty()) {
+      --to;
+    }
+
+    if (from > at) {
+      linesToMove.push(from, to);
+    } else if (linesToMove.length) {
+      linesToMove[linesToMove.length - 1] = to;
+    }
+
+    at = to;
+  }
+
+  cm.operation(function () {
+    for (let i = 0; i < linesToMove.length; i += 2) {
+      const from = linesToMove[i];
+      const to = linesToMove[i + 1];
+      const line = cm.getLine(from);
+
+      cm.replaceRange('', new Pos(from, 0), new Pos(from + 1, 0), '+swapLine');
+
+      if (to > cm.lastLine()) {
+        cm.replaceRange(
+          `\n${line}`,
+          new Pos(cm.lastLine()),
+          undefined,
+          '+swapLine'
+        );
+      } else {
+        cm.replaceRange(`${line}\n`, new Pos(to, 0), undefined, '+swapLine');
+      }
+    }
+
+    cm.scrollIntoView(null);
+  });
+};
+
+const swapLineDown = (cm: Editor) => {
+  if (cm.isReadOnly()) {
+    return CodeMirror.Pass;
+  }
+
+  const ranges = cm.listSelections();
+  const linesToMove: number[] = [];
+  let at = cm.lastLine() + 1;
+
+  for (const range of ranges.reverse()) {
+    let from = range.to().line + 1;
+    const to = range.from().line;
+
+    if (range.to().ch === 0 && !range.empty()) {
+      from--;
+    }
+
+    if (from < at) {
+      linesToMove.push(from, to);
+    } else if (linesToMove.length) {
+      linesToMove[linesToMove.length - 1] = to;
+    }
+
+    at = to;
+  }
+
+  cm.operation(function () {
+    for (let i = linesToMove.length - 2; i >= 0; i -= 2) {
+      const from = linesToMove[i];
+      const to = linesToMove[i + 1];
+      const line = cm.getLine(from);
+
+      if (from === cm.lastLine()) {
+        cm.replaceRange('', new Pos(from - 1), new Pos(from), '+swapLine');
+      } else {
+        cm.replaceRange(
+          '',
+          new Pos(from, 0),
+          new Pos(from + 1, 0),
+          '+swapLine'
+        );
+      }
+      cm.replaceRange(`${line}\n`, new Pos(to, 0), undefined, '+swapLine');
+    }
+
+    cm.scrollIntoView(null);
+  });
+};
 
 const completeAfter = (cm: Editor, predicate?: () => boolean) => {
   if (!predicate || predicate()) {
@@ -284,6 +418,10 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           "'/'": completeIfAfterLt,
           "' '": completeIfInTag,
           "'='": completeIfInTag,
+          'Alt-Up': swapLineUp,
+          'Alt-Down': swapLineDown,
+          'Shift-Alt-Up': duplicateLine('up'),
+          'Shift-Alt-Down': duplicateLine('down'),
         },
       }}
     />
