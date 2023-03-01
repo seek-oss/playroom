@@ -35,7 +35,7 @@ const getNewPosition = (
 
   const currentLine = range[newPositionDirection]().line;
 
-  const newLine = direction === 'up' ? currentLine : currentLine + 1;
+  const newLine = direction === 'up' ? currentLine + 1 : currentLine;
   return new Pos(newLine, 0);
 };
 
