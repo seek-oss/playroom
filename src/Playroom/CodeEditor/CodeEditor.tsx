@@ -27,13 +27,16 @@ import 'codemirror/addon/fold/brace-fold';
 
 type DuplicationDirection = 'up' | 'down';
 
+const directionToMethod = {
+  up: 'to',
+  down: 'from',
+} as const;
+
 const getNewPosition = (
   range: CodeMirror.Range,
   direction: DuplicationDirection
 ) => {
-  const newPositionDirection = direction === 'up' ? 'from' : 'to';
-
-  const currentLine = range[newPositionDirection]().line;
+  const currentLine = range[directionToMethod[direction]]().line;
 
   const newLine = direction === 'up' ? currentLine + 1 : currentLine;
   return new Pos(newLine, 0);
