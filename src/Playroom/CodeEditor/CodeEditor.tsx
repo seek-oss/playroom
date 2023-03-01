@@ -25,12 +25,12 @@ import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
 
-type DuplicationDirection = 'up' | 'down';
-
 const directionToMethod = {
   up: 'to',
   down: 'from',
 } as const;
+
+type DuplicationDirection = keyof typeof directionToMethod;
 
 const getNewPosition = (
   range: CodeMirror.Range,
