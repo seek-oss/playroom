@@ -42,26 +42,42 @@ const getNewPosition = (
   return new Pos(newLine, 0);
 };
 
-const duplicateLine = (direction: DuplicationDirection) => (cm: Editor) => {
+const duplicateLine = (direction: DuplicationDirection) => (cm: Editor) =>
   cm.operation(function () {
-    for (const range of cm.listSelections()) {
-      if (range.empty()) {
-        cm.replaceRange(
-          `${cm.getLine(range.head.line)}\n`,
-          getNewPosition(range, direction)
-        );
-      } else {
-        const newRange = cm.getRange(
-          new Pos(range.from().line, 0),
-          new Pos(range.to().line)
-        );
+    const ranges = cm.listSelections();
 
-        cm.replaceRange(`${newRange}\n`, getNewPosition(range, direction));
-      }
+    if (ranges.length > 1) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "The duplicate line command doesn't support multiple cursors yet. Please ask for this feature."
+      );
     }
+
+    const range = ranges[0];
+
+    const existingContent = cm.getRange(
+      new Pos(range.from().line, 0),
+      new Pos(range.to().line)
+    );
+
+    const newContentParts = [existingContent, '\n'];
+
+    // Copy up on the last line has some unusual behaviour
+    if (range.to().line === cm.lastLine() && direction === 'up') {
+      newContentParts.reverse();
+    }
+
+    const newContent = newContentParts.join('');
+
+    cm.replaceRange(newContent, getNewPosition(range, direction));
+
+    // Copy up doesn't always handle its cursors correctly
+    if (direction === 'up') {
+      cm.setSelection(range.anchor, range.head);
+    }
+
     cm.scrollIntoView(null);
   });
-};
 
 const swapLineUp = (cm: Editor) => {
   if (cm.isReadOnly()) {
@@ -145,7 +161,7 @@ const swapLineDown = (cm: Editor) => {
         newContent,
         rangeStart,
         new Pos(switchLineNumber),
-        '-swapLine'
+        '+swapLine'
       );
 
       // Shift the selection down by one line to match the moved content
