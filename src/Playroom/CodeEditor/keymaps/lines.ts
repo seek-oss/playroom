@@ -1,18 +1,19 @@
 import CodeMirror from 'codemirror';
 import { Editor, Pos } from 'codemirror';
+import { Direction } from './types';
+type RangeMethod = Extract<keyof CodeMirror.Range, 'from' | 'to'>;
 
-const directionToMethod = {
+const directionToMethod: Record<Direction, RangeMethod> = {
   up: 'to',
   down: 'from',
-} as const;
+};
 
-type DuplicationDirection = keyof typeof directionToMethod;
 type Selections = Parameters<Editor['setSelections']>[0];
 type ContentUpdate = [string, [CodeMirror.Position, CodeMirror.Position?]];
 
 const getNewPosition = (
   range: CodeMirror.Range,
-  direction: DuplicationDirection,
+  direction: Direction,
   extraLines: number
 ) => {
   const currentLine = range[directionToMethod[direction]]().line;
@@ -28,55 +29,54 @@ const moveByLines = (range: CodeMirror.Range, lines: number) => {
   return { anchor, head };
 };
 
-export const duplicateLine =
-  (direction: DuplicationDirection) => (cm: Editor) => {
-    const ranges = cm.listSelections();
+export const duplicateLine = (direction: Direction) => (cm: Editor) => {
+  const ranges = cm.listSelections();
 
-    const contentUpdates: ContentUpdate[] = [];
-    const newSelections: Selections = [];
+  const contentUpdates: ContentUpdate[] = [];
+  const newSelections: Selections = [];
 
-    // To keep the selections in the right spot, we need to track how many additional
-    // lines have been introduced to the document (in multicursor mode).
-    let newLinesSoFar = 0;
+  // To keep the selections in the right spot, we need to track how many additional
+  // lines have been introduced to the document (in multicursor mode).
+  let newLinesSoFar = 0;
 
-    for (const range of ranges) {
-      const newLineCount = range.to().line - range.from().line + 1;
-      const existingContent = cm.getRange(
-        new Pos(range.from().line, 0),
-        new Pos(range.to().line)
-      );
+  for (const range of ranges) {
+    const newLineCount = range.to().line - range.from().line + 1;
+    const existingContent = cm.getRange(
+      new Pos(range.from().line, 0),
+      new Pos(range.to().line)
+    );
 
-      const newContentParts = [existingContent, '\n'];
+    const newContentParts = [existingContent, '\n'];
 
-      // Copy up on the last line has some unusual behaviour
-      if (range.to().line === cm.lastLine() && direction === 'up') {
-        newContentParts.reverse();
-      }
-
-      const newContent = newContentParts.join('');
-
-      contentUpdates.push([
-        newContent,
-        [getNewPosition(range, direction, newLinesSoFar)],
-      ]);
-
-      // Copy up doesn't always handle its cursors correctly
-      if (direction === 'up') {
-        newSelections.push(moveByLines(range, newLinesSoFar));
-      }
-
-      newLinesSoFar += newLineCount;
+    // Copy up on the last line has some unusual behaviour
+    if (range.to().line === cm.lastLine() && direction === 'up') {
+      newContentParts.reverse();
     }
 
-    cm.operation(function () {
-      for (const [newContent, [start, end]] of contentUpdates) {
-        cm.replaceRange(newContent, start, end, '+swapLine');
-      }
+    const newContent = newContentParts.join('');
 
-      // Shift the selection up by one line to match the moved content
-      cm.setSelections(newSelections);
-    });
-  };
+    contentUpdates.push([
+      newContent,
+      [getNewPosition(range, direction, newLinesSoFar)],
+    ]);
+
+    // Copy up doesn't always handle its cursors correctly
+    if (direction === 'up') {
+      newSelections.push(moveByLines(range, newLinesSoFar));
+    }
+
+    newLinesSoFar += newLineCount;
+  }
+
+  cm.operation(function () {
+    for (const [newContent, [start, end]] of contentUpdates) {
+      cm.replaceRange(newContent, start, end, '+swapLine');
+    }
+
+    // Shift the selection up by one line to match the moved content
+    cm.setSelections(newSelections);
+  });
+};
 
 export const swapLineUp = (cm: Editor) => {
   if (cm.isReadOnly()) {
