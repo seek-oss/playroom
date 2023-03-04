@@ -1,6 +1,6 @@
 import CodeMirror from 'codemirror';
 import { Editor, Pos } from 'codemirror';
-import { Direction } from './types';
+import { Direction, Selection } from './types';
 type RangeMethod = Extract<keyof CodeMirror.Range, 'from' | 'to'>;
 
 const directionToMethod: Record<Direction, RangeMethod> = {
@@ -8,7 +8,6 @@ const directionToMethod: Record<Direction, RangeMethod> = {
   down: 'from',
 };
 
-type Selections = Parameters<Editor['setSelections']>[0];
 type ContentUpdate = [string, [CodeMirror.Position, CodeMirror.Position?]];
 
 const getNewPosition = (
@@ -33,7 +32,7 @@ export const duplicateLine = (direction: Direction) => (cm: Editor) => {
   const ranges = cm.listSelections();
 
   const contentUpdates: ContentUpdate[] = [];
-  const newSelections: Selections = [];
+  const newSelections: Selection[] = [];
 
   // To keep the selections in the right spot, we need to track how many additional
   // lines have been introduced to the document (in multicursor mode).
@@ -88,7 +87,7 @@ export const swapLineUp = function (cm: Editor) {
   let lastLine = cm.firstLine() - 1;
 
   const rangesToMove: Array<{ from: number; to: number }> = [];
-  const newSels: Selections = [];
+  const newSels: Selection[] = [];
 
   for (const range of cm.listSelections()) {
     // Include one line above the current range
