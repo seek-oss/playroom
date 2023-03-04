@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 const core = require('@actions/core');
 
-const writeSummary = async ({ title, message }) => {
+const writeSummary = async ({ title, link }) => {
   core.summary.addHeading(title, 3);
-  core.summary.addRaw(`<p>${message}</p>`, true);
+  core.summary.addLink(link, link);
 
   await core.summary.write();
 };
@@ -41,7 +41,7 @@ const writeSummary = async ({ title, message }) => {
 
     await writeSummary({
       title: 'Preview published',
-      message: `Playroom preview available at ${previewUrl}`,
+      link: previewUrl,
     });
   } catch (err) {
     console.error(err);
