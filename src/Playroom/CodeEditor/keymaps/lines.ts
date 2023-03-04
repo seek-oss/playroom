@@ -78,102 +78,117 @@ export const duplicateLine = (direction: Direction) => (cm: Editor) => {
   });
 };
 
-export const swapLineUp = (cm: Editor) => {
+export const swapLineUp = function (cm: Editor) {
   if (cm.isReadOnly()) {
     return CodeMirror.Pass;
   }
 
-  const ranges = cm.listSelections();
+  // We need to keep track of the current bottom of the block
+  // to make sure we're not overwriting lines
+  let lastLine = cm.firstLine() - 1;
 
-  const contentUpdates: ContentUpdate[] = [];
-  const newSelections: Selections = [];
+  const rangesToMove: Array<{ from: number; to: number }> = [];
+  const newSels: Selections = [];
 
-  for (const range of ranges) {
-    // If we're already at the top, do nothing
-    if (range.from().line > 0) {
-      const switchLineNumber = range.from().line - 1;
-      const switchLineContent = cm.getLine(switchLineNumber);
+  for (const range of cm.listSelections()) {
+    // Include one line above the current range
+    const from = range.from().line - 1;
+    let to = range.to().line;
 
-      // Expand to the end of the selected lines
-      const rangeStart = new Pos(range.from().line, 0);
-      const rangeEnd = new Pos(range.to().line, undefined);
+    // Shift the selection up by one line
+    newSels.push({
+      anchor: new Pos(range.anchor.line - 1, range.anchor.ch),
+      head: new Pos(range.head.line - 1, range.head.ch),
+    });
 
-      const rangeContent = cm.getRange(rangeStart, rangeEnd);
-
-      // Switch the order of the range and the preceding line
-      const newContent = [rangeContent, switchLineContent].join('\n');
-
-      contentUpdates.push([
-        newContent,
-        [new Pos(switchLineNumber, 0), rangeEnd],
-      ]);
-
-      newSelections.push({
-        anchor: new Pos(range.anchor.line - 1, range.anchor.ch),
-        head: new Pos(range.head.line - 1, range.head.ch),
-      });
+    // If we've accidentally run over to the start of the
+    // next line, then go back up one
+    if (range.to().ch === 0 && !range.empty()) {
+      --to;
     }
+
+    // If the one-line-before-current-range is after the last line, put
+    // the start and end lines in the list of lines to move
+    if (from > lastLine) {
+      rangesToMove.push({ from, to });
+      // If the ranges overlap, update the last range in the list
+      // to include both ranges
+    } else if (rangesToMove.length) {
+      rangesToMove[rangesToMove.length - 1].to = to;
+    }
+
+    // Move the last line to the end of the current range
+    lastLine = to;
   }
 
-  cm.operation(() => {
-    for (const [newContent, [start, end]] of contentUpdates) {
-      cm.replaceRange(newContent, start, end, '+swapLine');
+  cm.operation(function () {
+    for (const range of rangesToMove) {
+      const { from, to } = range;
+      const line = cm.getLine(from);
+      cm.replaceRange('', new Pos(from, 0), new Pos(from + 1, 0), '+swapLine');
+
+      if (to > cm.lastLine()) {
+        cm.replaceRange(
+          `\n${line}`,
+          new Pos(cm.lastLine()),
+          undefined,
+          '+swapLine'
+        );
+      } else {
+        cm.replaceRange(`${line}\n`, new Pos(to, 0), undefined, '+swapLine');
+      }
     }
 
-    // Shift the selection up by one line to match the moved content
-    cm.setSelections(newSelections);
+    cm.setSelections(newSels);
+    cm.scrollIntoView(null);
   });
 };
 
-export const swapLineDown = (cm: Editor) => {
+export const swapLineDown = function (cm: Editor) {
   if (cm.isReadOnly()) {
     return CodeMirror.Pass;
   }
 
   const ranges = cm.listSelections();
+  const rangesToMove: Array<{ from: number; to: number }> = [];
 
-  const contentUpdates: ContentUpdate[] = [];
-  const newSelections: Selections = [];
+  // Keep track of the bottom of the
+  let firstLine = cm.lastLine() + 1;
 
   for (const range of ranges.reverse()) {
-    // If we're already at the bottom, do nothing
-    if (range.to().line < cm.lastLine()) {
-      const switchLineNumber = range.to().line + 1;
-      const switchLineContent = cm.getLine(switchLineNumber);
+    let from = range.to().line + 1;
+    const to = range.from().line;
 
-      // Expand to the end of the selected lines
-      const rangeStart = new Pos(range.from().line, 0);
-      const rangeEnd = new Pos(range.to().line, undefined);
-
-      const rangeContent = cm.getRange(rangeStart, rangeEnd);
-
-      // Switch the order of the range and the preceding line
-      const newContent = [switchLineContent, rangeContent].join('\n');
-
-      contentUpdates.push([
-        newContent,
-        [rangeStart, new Pos(switchLineNumber)],
-      ]);
-
-      newSelections.push({
-        anchor: new Pos(range.anchor.line + 1, range.anchor.ch),
-        head: new Pos(range.head.line + 1, range.head.ch),
-      });
-    } else {
-      // If we have reached the bottom, just preserve that cursor
-      newSelections.push({
-        anchor: new Pos(range.anchor.line, range.anchor.ch),
-        head: new Pos(range.head.line, range.head.ch),
-      });
+    if (range.to().ch === 0 && !range.empty()) {
+      from--;
     }
+
+    if (from < firstLine) {
+      rangesToMove.push({ from, to });
+    } else if (rangesToMove.length) {
+      rangesToMove[rangesToMove.length - 1].to = to;
+    }
+
+    firstLine = to;
   }
 
-  cm.operation(() => {
-    for (const [newContent, [start, end]] of contentUpdates) {
-      cm.replaceRange(newContent, start, end, '+swapLine');
-    }
+  cm.operation(function () {
+    for (const range of rangesToMove) {
+      const { from, to } = range;
+      const line = cm.getLine(from);
+      if (from === cm.lastLine()) {
+        cm.replaceRange('', new Pos(from - 1), new Pos(from), '+swapLine');
+      } else {
+        cm.replaceRange(
+          '',
+          new Pos(from, 0),
+          new Pos(from + 1, 0),
+          '+swapLine'
+        );
+      }
 
-    // Shift the selection up by one line to match the moved content
-    cm.setSelections(newSelections);
+      cm.replaceRange(`${line}\n`, new Pos(to, 0), undefined, '+swapLine');
+    }
+    cm.scrollIntoView(null);
   });
 };
