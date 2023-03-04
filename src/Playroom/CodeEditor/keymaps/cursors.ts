@@ -2,6 +2,8 @@ import CodeMirror, { Editor, Pos } from 'codemirror';
 
 import 'codemirror/addon/search/searchcursor';
 
+import { Direction, Selection } from './types';
+
 function wordAt(cm: Editor, pos: CodeMirror.Position) {
   let start = pos.ch;
   let end = start;
@@ -88,32 +90,24 @@ export const selectNextOccurrence = (cm: Editor) => {
   }
 };
 
-// function addCursorToSelection(cm: Editor, dir: Direction) {
-//   const ranges = cm.listSelections();
-//   const newRanges = [];
+function addCursorToSelection(cm: Editor, dir: Direction) {
+  const ranges = cm.listSelections();
+  const newRanges: Selection[] = [];
 
-//   const linesToMove = dir === 'up' ? -1 : 1;
+  const linesToMove = dir === 'up' ? -1 : 1;
 
-//   for (const range of ranges) {
-//     const newAnchor = cm.findPosV(range.anchor, linesToMove, 'line');
-//     const newHead = cm.findPosV(range.head, linesToMove, 'line');
+  for (const range of ranges) {
+    const newAnchor = cm.findPosV(range.anchor, linesToMove, 'line');
+    const newHead = cm.findPosV(range.head, linesToMove, 'line');
 
-//     newAnchor.goalColumn =
-//       range.anchor.goalColumn != null
-//         ? range.anchor.goalColumn
-//         : cm.cursorCoords(range.anchor, 'div').left;
-//     newHead.goalColumn =
-//       range.head.goalColumn != null
-//         ? range.head.goalColumn
-//         : cm.cursorCoords(range.head, 'div').left;
-//     const newRange = { anchor: newAnchor, head: newHead };
-//     newRanges.push(range);
-//     newRanges.push(newRange);
-//   }
-//   cm.setSelections(newRanges);
-// }
+    newRanges.push(range);
+    newRanges.push({ anchor: newAnchor, head: newHead });
+  }
 
-// export const addCursorToPrevLine = (cm: Editor) =>
-//   addCursorToSelection(cm, 'up');
-// export const addCursorToNextLine = (cm: Editor) =>
-//   addCursorToSelection(cm, 'down');
+  cm.setSelections(newRanges);
+}
+
+export const addCursorToPrevLine = (cm: Editor) =>
+  addCursorToSelection(cm, 'up');
+export const addCursorToNextLine = (cm: Editor) =>
+  addCursorToSelection(cm, 'down');
