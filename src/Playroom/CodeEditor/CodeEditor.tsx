@@ -31,6 +31,7 @@ import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
+import { selectNextOccurrence } from './keymaps/cursors';
 
 const validateCode = (editorInstance: Editor, code: string) => {
   editorInstance.clearGutter('errorGutter');
@@ -262,6 +263,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           'Alt-Down': swapLineDown,
           'Shift-Alt-Up': duplicateLine('up'),
           'Shift-Alt-Down': duplicateLine('down'),
+          'Cmd-D': selectNextOccurrence,
         },
       }}
     />
