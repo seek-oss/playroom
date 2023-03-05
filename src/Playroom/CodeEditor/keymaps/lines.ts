@@ -151,10 +151,9 @@ export const swapLineDown = function (cm: Editor) {
   const ranges = cm.listSelections();
   const rangesToMove: Array<{ from: number; to: number }> = [];
 
-  // Keep track of the bottom of the
   let firstLine = cm.lastLine() + 1;
 
-  for (const range of ranges.reverse()) {
+  for (const range of [...ranges].reverse()) {
     let from = range.to().line + 1;
     const to = range.from().line;
 
