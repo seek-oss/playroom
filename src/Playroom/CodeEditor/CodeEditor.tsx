@@ -269,7 +269,10 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           'Shift-Alt-Down': duplicateLine('down'),
           'Cmd-Alt-Up': addCursorToPrevLine,
           'Cmd-Alt-Down': addCursorToNextLine,
+          'Ctrl-Alt-Up': addCursorToPrevLine,
+          'Ctrl-Alt-Down': addCursorToNextLine,
           'Cmd-D': selectNextOccurrence,
+          'Ctrl-D': selectNextOccurrence,
         },
       }}
     />
