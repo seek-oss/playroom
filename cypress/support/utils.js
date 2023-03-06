@@ -85,6 +85,19 @@ export const assertFirstFrameContains = (text) => {
   );
 };
 
+export const selectNextCharacters = (numCharacters) => {
+  typeCode('{shift+rightArrow}'.repeat(numCharacters));
+};
+
+export const selectNextWords = (numWords) => {
+  typeCode('{shift+alt+rightArrow}'.repeat(numWords));
+};
+
+export const selectLines = (numLines, direction = 'down') => {
+  const arrowCode = `${direction}Arrow`;
+  typeCode(`{shift+${arrowCode}}`.repeat(numLines));
+};
+
 export const assertCodePaneContains = (text) => {
   getCodeEditor().within(() => {
     const lines = [];
