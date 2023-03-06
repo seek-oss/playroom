@@ -6,16 +6,15 @@ import {
   selectNextWords,
   selectLines,
   selectNextCharacters,
+  isMac,
 } from '../support/utils';
 
 const cmdPlus = (keyCombo) => {
-  const platformSpecificKey = navigator.platform.match('Mac') ? 'cmd' : 'ctrl';
+  const platformSpecificKey = isMac() ? 'cmd' : 'ctrl';
   return `${platformSpecificKey}+${keyCombo}`;
 };
 
-const moveToStart = navigator.platform.match('Mac')
-  ? '{cmd+upArrow}'
-  : '{ctrl+home}';
+const moveToStart = isMac() ? '{cmd+upArrow}' : '{ctrl+home}';
 
 describe('Keymaps', () => {
   beforeEach(() => {
