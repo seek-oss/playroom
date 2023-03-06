@@ -8,6 +8,11 @@ import {
   selectNextCharacters,
 } from '../support/utils';
 
+const cmdPlus = (keyCombo) => {
+  const platformSpecificKey = navigator.platform.match('Mac') ? 'cmd' : 'ctrl';
+  return `${platformSpecificKey}+${keyCombo}`;
+};
+
 describe('Keymaps', () => {
   beforeEach(() => {
     loadPlayroom();
@@ -22,7 +27,7 @@ describe('Keymaps', () => {
     );
 
     // Reset the cursor to a reliable position at the beginning
-    typeCode('{cmd+upArrow}{cmd+leftArrow}');
+    typeCode(`{${cmdPlus('upArrow')}}{${cmdPlus('leftArrow')}}`);
   });
 
   describe('swapLine', () => {
@@ -114,8 +119,10 @@ describe('Keymaps', () => {
   });
 
   describe('selectNextOccurrence', () => {
+    const cmdPlusD = cmdPlus('D');
+
     it('should select the current word on one use', () => {
-      typeCode('{rightArrow}{cmd+D}');
+      typeCode(`{rightArrow}{${cmdPlusD}}`);
 
       // Overwrite to check the selection
       typeCode('a');
@@ -128,7 +135,7 @@ describe('Keymaps', () => {
     });
 
     it('should select the next instance of the word on two uses', () => {
-      typeCode('{rightArrow}{cmd+D}{cmd+D}');
+      typeCode(`{rightArrow}{${cmdPlusD}}{${cmdPlusD}}`);
 
       // Overwrite to check the selection
       typeCode('a');
@@ -141,7 +148,7 @@ describe('Keymaps', () => {
     });
 
     it('should select the all instances of the word when spamming the key', () => {
-      typeCode(`{rightArrow}${'{cmd+D}'.repeat(20)}`);
+      typeCode(`{rightArrow}${`{${cmdPlusD}}`.repeat(20)}`);
 
       // Overwrite to check the selection and that multiple cursors were created
       typeCode('span');
@@ -156,7 +163,7 @@ describe('Keymaps', () => {
 
   describe('addCursor', () => {
     it('should add a cursor on the next line', () => {
-      typeCode('{cmd+alt+downArrow}a');
+      typeCode(`{${cmdPlus('alt+downArrow')}}a`);
       assertCodePaneContains(dedent`
         a<div>First line</div>
         a<div>Second line</div>
@@ -166,7 +173,7 @@ describe('Keymaps', () => {
 
     it('should add a cursor on the previous line', () => {
       typeCode('{downArrow}{downArrow}');
-      typeCode('{cmd+alt+upArrow}a');
+      typeCode(`{${cmdPlus('alt+upArrow')}}a`);
       assertCodePaneContains(dedent`
         <div>First line</div>
         a<div>Second line</div>
