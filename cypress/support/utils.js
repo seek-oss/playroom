@@ -8,6 +8,8 @@ export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
 export const getFirstFrame = () => getPreviewFrames().first();
 
+export const isMac = () => navigator.platform.match('Mac');
+
 export const visit = (url) =>
   cy
     .visit(url)
@@ -28,7 +30,7 @@ export const typeCode = (code, { delay = 200 } = {}) =>
 export const formatCode = () =>
   getCodeEditor()
     .focused()
-    .type(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}s`)
+    .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`)
     .wait(WAIT_FOR_FRAME_TO_RENDER);
 
 export const selectWidthPreferenceByIndex = (index) =>
@@ -90,7 +92,8 @@ export const selectNextCharacters = (numCharacters) => {
 };
 
 export const selectNextWords = (numWords) => {
-  typeCode('{shift+alt+rightArrow}'.repeat(numWords));
+  const modifier = isMac() ? 'alt' : 'ctrl';
+  typeCode(`{shift+${modifier}+rightArrow}`.repeat(numWords));
 };
 
 export const selectLines = (numLines, direction = 'down') => {
