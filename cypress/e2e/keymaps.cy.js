@@ -13,6 +13,10 @@ const cmdPlus = (keyCombo) => {
   return `${platformSpecificKey}+${keyCombo}`;
 };
 
+const moveToStart = navigator.platform.match('Mac')
+  ? '{cmd+upArrow}'
+  : '{ctrl+home}';
+
 describe('Keymaps', () => {
   beforeEach(() => {
     loadPlayroom();
@@ -27,7 +31,7 @@ describe('Keymaps', () => {
     );
 
     // Reset the cursor to a reliable position at the beginning
-    typeCode(`{${cmdPlus('upArrow')}}{${cmdPlus('leftArrow')}}`);
+    typeCode(moveToStart);
   });
 
   describe('swapLine', () => {
