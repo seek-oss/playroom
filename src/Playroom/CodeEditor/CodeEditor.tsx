@@ -204,6 +204,8 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
     }
   }, [highlightLineNumber]);
 
+  const keymapModifierKey = navigator.platform.match('Mac') ? 'Cmd' : 'Ctrl';
+
   return (
     <ReactCodeMirror
       editorDidMount={(editorInstance) => {
@@ -267,12 +269,9 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           'Alt-Down': swapLineDown,
           'Shift-Alt-Up': duplicateLine('up'),
           'Shift-Alt-Down': duplicateLine('down'),
-          'Cmd-Alt-Up': addCursorToPrevLine,
-          'Cmd-Alt-Down': addCursorToNextLine,
-          'Ctrl-Alt-Up': addCursorToPrevLine,
-          'Ctrl-Alt-Down': addCursorToNextLine,
-          'Cmd-D': selectNextOccurrence,
-          'Ctrl-D': selectNextOccurrence,
+          [`${keymapModifierKey}-Alt-Up`]: addCursorToPrevLine,
+          [`${keymapModifierKey}-Alt-Down`]: addCursorToNextLine,
+          [`${keymapModifierKey}-D`]: selectNextOccurrence,
         },
       }}
     />
