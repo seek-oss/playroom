@@ -46,12 +46,10 @@ jobs:
           restore-keys: |
             cypress-${{ runner.os }}-cypress-
 
-      - name: Install Cypress
-        if: steps.cypress-cache.outputs.cache-hit != 'true'
-        run: pnpm exec cypress install
-
       - name: Install Dependencies
-        run: pnpm i
+        run: |
+          pnpm install
+          pnpm exec cypress install
 
       - name: Lint
         run: pnpm lint
