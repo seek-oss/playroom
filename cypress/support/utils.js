@@ -8,6 +8,8 @@ export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
 export const getFirstFrame = () => getPreviewFrames().first();
 
+export const isMac = () => navigator.platform.match('Mac');
+
 export const visit = (url) =>
   cy
     .visit(url)
@@ -28,7 +30,7 @@ export const typeCode = (code, { delay = 200 } = {}) =>
 export const formatCode = () =>
   getCodeEditor()
     .focused()
-    .type(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}s`)
+    .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`)
     .wait(WAIT_FOR_FRAME_TO_RENDER);
 
 export const selectWidthPreferenceByIndex = (index) =>
@@ -83,6 +85,27 @@ export const assertFirstFrameContains = (text) => {
         expect(el.get(0).innerText).to.eq(text);
       })
   );
+};
+
+export const selectNextCharacters = (numCharacters) => {
+  typeCode('{shift+rightArrow}'.repeat(numCharacters));
+};
+
+export const selectNextWords = (numWords) => {
+  const modifier = isMac() ? 'alt' : 'ctrl';
+  typeCode(`{shift+${modifier}+rightArrow}`.repeat(numWords));
+};
+
+/**
+ * @typedef {import('../../src/Playroom/CodeEditor/keymaps/types').Direction} Direction
+ */
+/**
+ * @param {number}    numLines
+ * @param {Direction} direction
+ */
+export const selectLines = (numLines, direction = 'down') => {
+  const arrowCode = direction === 'down' ? 'downArrow' : 'upArrow';
+  typeCode(`{shift+${arrowCode}}`.repeat(numLines));
 };
 
 export const assertCodePaneContains = (text) => {

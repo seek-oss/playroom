@@ -4,8 +4,11 @@ on: [push, pull_request]
 
 jobs:
   test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     name: Lint & Test
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     env:
       CI: true
     steps:
@@ -35,6 +38,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Cache Cypress binary
+        id: cypress-cache
         uses: actions/cache@v3
         with:
           path: ~/.cache/Cypress
@@ -43,7 +47,9 @@ jobs:
             cypress-${{ runner.os }}-cypress-
 
       - name: Install Dependencies
-        run: pnpm i
+        run: |
+          pnpm install
+          pnpm exec cypress install
 
       - name: Lint
         run: pnpm lint

@@ -11,6 +11,7 @@ import {
   assertSnippetsListIsVisible,
   mouseOverSnippet,
   loadPlayroom,
+  isMac,
 } from '../support/utils';
 
 describe('Snippets', () => {
@@ -67,12 +68,12 @@ describe('Snippets', () => {
 
   it('driven with keyboard', () => {
     // Open and format for insertion point
-    typeCode(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}k`);
+    typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
     assertSnippetsListIsVisible();
     assertCodePaneLineCount(8);
     filterSnippets('{esc}');
     assertCodePaneLineCount(1);
-    typeCode(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}k`);
+    typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
     assertSnippetsListIsVisible();
     assertCodePaneLineCount(8);
 
@@ -91,7 +92,7 @@ describe('Snippets', () => {
     assertCodePaneLineCount(1);
 
     // Re-open and persist
-    typeCode(`${navigator.platform.match('Mac') ? '{cmd}' : '{ctrl}'}k`);
+    typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
     filterSnippets('{downarrow}{downarrow}{downarrow}{downarrow}{enter}');
     assertFirstFrameContains('Initial code\nBar\nBlue Bar');
     assertCodePaneLineCount(7);
