@@ -96,8 +96,15 @@ export const selectNextWords = (numWords) => {
   typeCode(`{shift+${modifier}+rightArrow}`.repeat(numWords));
 };
 
+/**
+ * @typedef {import('../../src/Playroom/CodeEditor/keymaps/types').Direction} Direction
+ */
+/**
+ * @param {number}    numLines
+ * @param {Direction} direction
+ */
 export const selectLines = (numLines, direction = 'down') => {
-  const arrowCode = `${direction}Arrow`;
+  const arrowCode = direction === 'down' ? 'downArrow' : 'upArrow';
   typeCode(`{shift+${arrowCode}}`.repeat(numLines));
 };
 

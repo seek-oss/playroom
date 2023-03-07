@@ -21,13 +21,11 @@ describe('Keymaps', () => {
     loadPlayroom();
 
     // The last closing div is automatically inserted by autotag
-    typeCode(
-      dedent`
+    typeCode(dedent`
       <div>First line</div>
       <div>Second line</div>
       <div>Third line
-    `
-    );
+    `);
 
     // Reset the cursor to a reliable position at the beginning
     typeCode(moveToStart);
