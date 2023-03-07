@@ -38,12 +38,17 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Cache Cypress binary
+        id: cypress-cache
         uses: actions/cache@v3
         with:
           path: ~/.cache/Cypress
           key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             cypress-${{ runner.os }}-cypress-
+
+      - name: Install Cypress
+        if: steps.cypress-cache.outputs.cache-hit != 'true'
+        run: pnpm exec cypress install
 
       - name: Install Dependencies
         run: pnpm i
