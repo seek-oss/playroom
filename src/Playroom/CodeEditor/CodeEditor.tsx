@@ -36,6 +36,7 @@ import {
   addCursorToPrevLine,
   selectNextOccurrence,
 } from './keymaps/cursors';
+import { wrapInTag } from './keymaps/wrap';
 
 const validateCode = (editorInstance: Editor, code: string) => {
   editorInstance.clearGutter('errorGutter');
@@ -272,6 +273,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           [`${keymapModifierKey}-Alt-Up`]: addCursorToPrevLine,
           [`${keymapModifierKey}-Alt-Down`]: addCursorToNextLine,
           [`${keymapModifierKey}-D`]: selectNextOccurrence,
+          'Shift-Ctrl-W': wrapInTag,
         },
       }}
     />
