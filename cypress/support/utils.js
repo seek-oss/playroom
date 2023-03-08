@@ -1,3 +1,6 @@
+import dedent from 'dedent';
+import { createUrl } from '../../utils';
+
 const WAIT_FOR_FRAME_TO_RENDER = 1000;
 
 const getCodeEditor = () => cy.get('.CodeMirror-code');
@@ -146,9 +149,14 @@ export const assertPreviewContains = (text) =>
       expect(el.get(0).innerText).to.eq(text);
     });
 
-export const loadPlayroom = () =>
-  cy
-    .visit('http://localhost:9000')
+export const loadPlayroom = (initialCode) => {
+  const baseUrl = 'http://localhost:9000';
+  const visitUrl = initialCode
+    ? createUrl({ baseUrl, code: dedent(initialCode) })
+    : baseUrl;
+
+  return cy
+    .visit(visitUrl)
     .window()
     .then((win) => {
       const { storageKey } = win.__playroomConfig__;
@@ -161,3 +169,4 @@ export const loadPlayroom = () =>
           new Cypress.Promise((resolve) => $iframe.on('load', resolve))
       )
     );
+};
