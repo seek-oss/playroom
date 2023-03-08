@@ -7,6 +7,7 @@ import {
   selectLines,
   selectNextCharacters,
   isMac,
+  selectToEndOfLine,
 } from '../support/utils';
 
 const cmdPlus = (keyCombo) => {
@@ -171,6 +172,62 @@ describe('Keymaps', () => {
         <div>First line</div>
         a<div>Second line</div>
         a<div>Third line</div>
+      `);
+    });
+  });
+
+  describe('wrapTag', () => {
+    const modifierKey = isMac() ? 'cmd' : 'ctrl';
+
+    it("should insert a fragment with cursors when there's no selection", () => {
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('a');
+
+      assertCodePaneContains(dedent`
+        <a></a><div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap the selection when there is one', () => {
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span><div>First line</div></span>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap multiple selections', () => {
+      typeCode(`{${modifierKey}+alt+down}`.repeat(1));
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('article');
+
+      assertCodePaneContains(dedent`
+        <article><div>First line</div></article>
+        <article><div>Second line</div></article>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap a multi-line selection', () => {
+      typeCode(`{shift+down}`.repeat(1));
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span><div>First line</div>
+        <div>Second line</div></span>
+        <div>Third line</div>
       `);
     });
   });

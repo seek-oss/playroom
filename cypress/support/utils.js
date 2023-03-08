@@ -99,6 +99,10 @@ export const selectNextWords = (numWords) => {
   typeCode(`{shift+${modifier}+rightArrow}`.repeat(numWords));
 };
 
+export const selectToEndOfLine = () => {
+  typeCode(isMac() ? '{shift+cmd+rightArrow}' : '{shift+end}');
+};
+
 /**
  * @typedef {import('../../src/Playroom/CodeEditor/keymaps/types').Direction} Direction
  */
