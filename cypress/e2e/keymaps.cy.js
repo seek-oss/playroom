@@ -203,20 +203,6 @@ describe('Keymaps', () => {
       `);
     });
 
-    it('should wrap multiple selections', () => {
-      typeCode(`{${modifierKey}+alt+downArrow}`.repeat(1));
-      selectToEndOfLine();
-
-      typeCode(`{shift+${modifierKey}+,}`);
-      typeCode('article');
-
-      assertCodePaneContains(dedent`
-        <article><div>First line</div></article>
-        <article><div>Second line</div></article>
-        <div>Third line</div>
-      `);
-    });
-
     it('should wrap a multi-line selection', () => {
       typeCode(`{shift+downArrow}`.repeat(1));
       selectToEndOfLine();
@@ -225,8 +211,47 @@ describe('Keymaps', () => {
       typeCode('span');
 
       assertCodePaneContains(dedent`
-        <span><div>First line</div>
-        <div>Second line</div></span>
+        <span>
+          <div>First line</div>
+          <div>Second line</div>
+        </span>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap a multi-cursor single-line selection', () => {
+      typeCode(`{${modifierKey}+alt+downArrow}`);
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span><div>First line</div></span>
+        <span><div>Second line</div></span>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap a multi-cursor multi-line selection', () => {
+      typeCode(`{${modifierKey}+alt+downArrow}`);
+      typeCode('{shift+alt+downArrow}{upArrow}');
+
+      selectLines(1);
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span>
+          <div>First line</div>
+          <div>First line</div>
+        </span>
+        <span>
+          <div>Second line</div>
+          <div>Second line</div>
+        </span>
         <div>Third line</div>
       `);
     });
