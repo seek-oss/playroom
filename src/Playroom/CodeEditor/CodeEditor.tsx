@@ -206,7 +206,6 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   }, [highlightLineNumber]);
 
   const keymapModifierKey = navigator.platform.match('Mac') ? 'Cmd' : 'Ctrl';
-  const secondaryModifierKey = navigator.platform.match('Mac') ? 'Ctrl' : 'Alt';
 
   return (
     <ReactCodeMirror

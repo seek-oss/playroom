@@ -11,15 +11,13 @@ export const wrapInTag = (cm: Editor) => {
 
     tagRanges.push({ from, to });
 
-    newSelections.push({
-      anchor: new Pos(from.line, from.ch + 1),
-      head: new Pos(from.line, from.ch + 1),
-    });
+    const endCursorOffset = to.line === from.line ? 4 : 2;
 
-    newSelections.push({
-      anchor: new Pos(to.line, to.ch + 4),
-      head: new Pos(to.line, to.ch + 4),
-    });
+    const newStartCursor = new Pos(from.line, from.ch + 1);
+    const newEndCursor = new Pos(to.line, to.ch + endCursorOffset);
+
+    newSelections.push({ anchor: newStartCursor, head: newStartCursor });
+    newSelections.push({ anchor: newEndCursor, head: newEndCursor });
   }
 
   cm.operation(() => {
