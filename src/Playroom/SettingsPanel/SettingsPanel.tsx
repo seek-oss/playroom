@@ -40,8 +40,12 @@ const KeyboardShortcut = ({
 }: KeyboardShortcutProps) => {
   const shortcutSegments = keybinding
     .split('+')
-    .map((segment) => <kbd key={`${keybinding}-${segment}`}>{segment}</kbd>)
-    .flatMap((segment, index) => (index === 0 ? [segment] : ['+', segment]));
+    .map((segment) => (
+      <kbd className={styles.kbd} key={`${keybinding}-${segment}`}>
+        {segment}
+      </kbd>
+    ))
+    .flatMap((segment, index) => (index === 0 ? [segment] : [' + ', segment]));
 
   return (
     <div
@@ -50,7 +54,7 @@ const KeyboardShortcut = ({
     >
       <Text>{description}</Text>
       <Text>
-        <kbd>{shortcutSegments}</kbd>
+        <kbd className={styles.kbd}>{shortcutSegments}</kbd>
       </Text>
     </div>
   );

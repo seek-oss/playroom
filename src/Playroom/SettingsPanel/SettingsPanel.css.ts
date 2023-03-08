@@ -12,6 +12,13 @@ export const radioContainer = sprinkles({
   paddingTop: 'medium',
 });
 
+export const kbd = style({
+  background: '#d1d1d9',
+  borderRadius: 5,
+  padding: 3,
+  fontFamily: 'monospace',
+});
+
 export const realRadio = style([
   sprinkles({
     position: 'absolute',
