@@ -3,7 +3,7 @@ import { style } from '@vanilla-extract/css';
 import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
-export const toolbarOpenSize = 300;
+export const toolbarOpenSize = 400;
 const toolbarBorderThickness = '1px';
 
 export const isOpen = style({});

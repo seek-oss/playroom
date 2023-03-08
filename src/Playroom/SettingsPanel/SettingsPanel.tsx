@@ -15,6 +15,7 @@ import * as styles from './SettingsPanel.css';
 import ColorModeSystemIcon from '../icons/ColorModeSystemIcon';
 import ColorModeLightIcon from '../icons/ColorModeLightIcon';
 import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
+import { Text } from '../Text/Text';
 
 const positionIcon: Record<EditorPosition, ReactChild> = {
   undocked: <EditorUndockedIcon />,
@@ -26,6 +27,33 @@ const colorModeIcon: Record<ColorScheme, ReactChild> = {
   light: <ColorModeLightIcon />,
   dark: <ColorModeDarkIcon />,
   system: <ColorModeSystemIcon />,
+};
+
+interface KeyboardShortcutProps {
+  keybinding: string;
+  description: string;
+}
+
+const KeyboardShortcut = ({
+  keybinding,
+  description,
+}: KeyboardShortcutProps) => {
+  const shortcutSegments = keybinding
+    .split('+')
+    .map((segment) => <kbd key={`${keybinding}-${segment}`}>{segment}</kbd>)
+    .flatMap((segment, index) => (index === 0 ? [segment] : ['+', segment]));
+
+  return (
+    <div
+      className={styles.radioContainer}
+      style={{ justifyContent: 'space-between' }}
+    >
+      <Text>{description}</Text>
+      <Text>
+        <kbd>{shortcutSegments}</kbd>
+      </Text>
+    </div>
+  );
 };
 
 interface SettingsPanelProps {}
@@ -111,6 +139,41 @@ export default ({}: SettingsPanelProps) => {
             ))}
           </div>
         </fieldset>
+
+        <Stack space="medium">
+          <Heading level="3">Keyboard Shortcuts</Heading>
+          <Stack space="medium" dividers>
+            <KeyboardShortcut keybinding="Alt+Up" description="Swap line up" />
+            <KeyboardShortcut
+              keybinding="Alt+Down"
+              description="Swap line down"
+            />
+            <KeyboardShortcut
+              keybinding="Shift+Alt+Up"
+              description="Duplicate line up"
+            />
+            <KeyboardShortcut
+              keybinding="Shift+Alt+Down"
+              description="Duplicate line down"
+            />
+            <KeyboardShortcut
+              keybinding="Cmd+Alt+Up"
+              description="Add cursor to prev line"
+            />
+            <KeyboardShortcut
+              keybinding="Cmd+Alt+Down"
+              description="Add cursor to next line"
+            />
+            <KeyboardShortcut
+              keybinding="Cmd+D"
+              description="Select next occurrence"
+            />
+            <KeyboardShortcut
+              keybinding="Cmd+Shift+,"
+              description="Wrap selection in tag"
+            />
+          </Stack>
+        </Stack>
       </Stack>
     </ToolbarPanel>
   );
