@@ -274,7 +274,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           [`${keymapModifierKey}-Alt-Up`]: addCursorToPrevLine,
           [`${keymapModifierKey}-Alt-Down`]: addCursorToNextLine,
           [`${keymapModifierKey}-D`]: selectNextOccurrence,
-          [`Shift-${secondaryModifierKey}-W`]: wrapInTag,
+          [`Shift-${secondaryModifierKey}-P`]: wrapInTag,
         },
       }}
     />
