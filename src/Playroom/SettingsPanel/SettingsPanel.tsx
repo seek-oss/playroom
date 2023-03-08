@@ -147,6 +147,7 @@ export default ({}: SettingsPanelProps) => {
         <Stack space="medium">
           <Heading level="3">Keyboard Shortcuts</Heading>
           <Stack space="medium" dividers>
+            <KeyboardShortcut keybinding="Cmd+S" description="Format code" />
             <KeyboardShortcut keybinding="Alt+Up" description="Swap line up" />
             <KeyboardShortcut
               keybinding="Alt+Down"
