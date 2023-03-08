@@ -14,21 +14,13 @@ const cmdPlus = (keyCombo) => {
   return `${platformSpecificKey}+${keyCombo}`;
 };
 
-const moveToStart = isMac() ? '{cmd+upArrow}' : '{ctrl+home}';
-
 describe('Keymaps', () => {
   beforeEach(() => {
-    loadPlayroom();
-
-    // The last closing div is automatically inserted by autotag
-    typeCode(dedent`
+    loadPlayroom(`
       <div>First line</div>
       <div>Second line</div>
-      <div>Third line
+      <div>Third line</div>
     `);
-
-    // Reset the cursor to a reliable position at the beginning
-    typeCode(moveToStart);
   });
 
   describe('swapLine', () => {
