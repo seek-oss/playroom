@@ -6,9 +6,9 @@ import {
   selectNextWords,
   selectLines,
   selectNextCharacters,
-  isMac,
   selectToEndOfLine,
 } from '../support/utils';
+import { isMac } from '../../src/utils/formatting';
 
 const cmdPlus = (keyCombo) => {
   const platformSpecificKey = isMac() ? 'cmd' : 'ctrl';
