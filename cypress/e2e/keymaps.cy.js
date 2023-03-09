@@ -153,6 +153,19 @@ describe('Keymaps', () => {
         <span>Third line</span>
       `);
     });
+
+    it("should select next occurrence in whole word mode when there's no selection", () => {
+      typeCode('{rightArrow}'.repeat(3));
+
+      typeCode(cmdPlusD.repeat(2));
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span>First line</span>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
   });
 
   describe('addCursor', () => {
@@ -214,6 +227,36 @@ describe('Keymaps', () => {
         <span>
           <div>First line</div>
           <div>Second line</div>
+        </span>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap a multi-line selection when selected from a different indent level', () => {
+      // This is a replay of the previous test, to give us an indent level
+      typeCode('{shift+downArrow}');
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      // Return to the start
+      const moveToStart = isMac() ? '{cmd+upArrow}' : '{ctrl+home}';
+      typeCode(moveToStart);
+
+      // Select from the far left and try wrap
+      typeCode('{downArrow}');
+      typeCode('{shift+downArrow}'.repeat(2));
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('a');
+
+      assertCodePaneContains(dedent`
+        <span>
+          <a>
+            <div>First line</div>
+            <div>Second line</div>
+          </a>
         </span>
         <div>Third line</div>
       `);
