@@ -1,11 +1,16 @@
 import React, { useRef, useContext, useEffect, useCallback } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Editor } from 'codemirror';
+import mapValues from 'lodash/mapValues';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 
-import { StoreContext, CursorPosition } from '../../StoreContext/StoreContext';
-import { formatCode as format } from '../../utils/formatting';
+import {
+  StoreContext,
+  StoreContextValues,
+  CursorPosition,
+} from '../../StoreContext/StoreContext';
+import { formatCode as format, isMac } from '../../utils/formatting';
 import {
   closeFragmentTag,
   compileJsx,
@@ -37,6 +42,81 @@ import {
   selectNextOccurrence,
 } from './keymaps/cursors';
 import { wrapInTag } from './keymaps/wrap';
+
+type Keymap = Record<
+  string,
+  {
+    handler: (cm: Editor, dispatch: StoreContextValues[1]) => unknown;
+    description: string;
+  }
+>;
+
+const keymapModifierKey = isMac() ? 'Cmd' : 'Ctrl';
+
+const ownKeymap = {
+  [`${keymapModifierKey}-K`]: {
+    handler: (cm, dispatch) => {
+      dispatch({ type: 'toggleToolbar', payload: { panel: 'snippets' } });
+    },
+    description: 'Toggle toolbar',
+  },
+  [`${keymapModifierKey}-S`]: {
+    handler: (cm, dispatch) => {
+      const { code: formattedCode, cursor: formattedCursor } = format({
+        code: cm.getValue(),
+        cursor: cm.getCursor(),
+      });
+
+      dispatch({
+        type: 'updateCode',
+        payload: { code: formattedCode, cursor: formattedCursor },
+      });
+      cm.setValue(formattedCode);
+      cm.setCursor(formattedCursor);
+    },
+    description: 'Format code',
+  },
+} satisfies Keymap;
+
+const codeMirrorKeymap = {
+  'Alt-Up': {
+    handler: swapLineUp,
+    description: 'Swap line up',
+  },
+  'Alt-Down': {
+    handler: swapLineDown,
+    description: 'Swap line down',
+  },
+  'Shift-Alt-Up': {
+    handler: duplicateLine('up'),
+    description: 'Duplicate line up',
+  },
+  'Shift-Alt-Down': {
+    handler: duplicateLine('down'),
+    description: 'Duplicate line down',
+  },
+  [`${keymapModifierKey}-Alt-Up`]: {
+    handler: addCursorToPrevLine,
+    description: 'Add cursor to prev line',
+  },
+  [`${keymapModifierKey}-Alt-Down`]: {
+    handler: addCursorToNextLine,
+    description: 'Add cursor to next line',
+  },
+  [`${keymapModifierKey}-D`]: {
+    handler: selectNextOccurrence,
+    description: 'Select next occurrence',
+  },
+  [`Shift-${keymapModifierKey}-,`]: {
+    handler: wrapInTag,
+    description: 'Wrap selection in tag',
+  },
+} satisfies Keymap;
+
+export const keymap = {
+  ...ownKeymap,
+  ...codeMirrorKeymap,
+};
 
 const validateCode = (editorInstance: Editor, code: string) => {
   editorInstance.clearGutter('errorGutter');
@@ -110,28 +190,22 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (editorInstanceRef && editorInstanceRef.current) {
-        const cmdOrCtrl = navigator.platform.match('Mac')
-          ? e.metaKey
-          : e.ctrlKey;
+        const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
 
-        if (cmdOrCtrl && e.keyCode === 83) {
+        if (cmdOrCtrl && e.key === 'S'.toLowerCase()) {
           e.preventDefault();
-          const { code: formattedCode, cursor: formattedCursor } = format({
-            code: editorInstanceRef.current.getValue(),
-            cursor: editorInstanceRef.current.getCursor(),
-          });
-
-          dispatch({
-            type: 'updateCode',
-            payload: { code: formattedCode, cursor: formattedCursor },
-          });
-          editorInstanceRef.current.setValue(formattedCode);
-          editorInstanceRef.current.setCursor(formattedCursor);
+          keymap[`${keymapModifierKey}-S`].handler(
+            editorInstanceRef.current,
+            dispatch
+          );
         }
 
-        if (cmdOrCtrl && /^[k]$/.test(e.key)) {
+        if (cmdOrCtrl && e.key === 'K'.toLowerCase()) {
           e.preventDefault();
-          dispatch({ type: 'toggleToolbar', payload: { panel: 'snippets' } });
+          keymap[`${keymapModifierKey}-K`].handler(
+            editorInstanceRef.current,
+            dispatch
+          );
         }
       }
     };
@@ -205,8 +279,6 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
     }
   }, [highlightLineNumber]);
 
-  const keymapModifierKey = navigator.platform.match('Mac') ? 'Cmd' : 'Ctrl';
-
   return (
     <ReactCodeMirror
       editorDidMount={(editorInstance) => {
@@ -266,14 +338,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           "'/'": completeIfAfterLt,
           "' '": completeIfInTag,
           "'='": completeIfInTag,
-          'Alt-Up': swapLineUp,
-          'Alt-Down': swapLineDown,
-          'Shift-Alt-Up': duplicateLine('up'),
-          'Shift-Alt-Down': duplicateLine('down'),
-          [`${keymapModifierKey}-Alt-Up`]: addCursorToPrevLine,
-          [`${keymapModifierKey}-Alt-Down`]: addCursorToNextLine,
-          [`${keymapModifierKey}-D`]: selectNextOccurrence,
-          [`Shift-${keymapModifierKey}-,`]: wrapInTag,
+          ...mapValues(codeMirrorKeymap, (value) => value.handler),
         },
       }}
     />

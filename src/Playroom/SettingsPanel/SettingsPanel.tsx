@@ -17,24 +17,15 @@ import ColorModeLightIcon from '../icons/ColorModeLightIcon';
 import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
 import { Text } from '../Text/Text';
 import { Inline } from '../Inline/Inline';
+import { keymap } from '../CodeEditor/CodeEditor';
+import { isMac } from '../../utils/formatting';
 
-const getKeyBindings = () => {
-  const isMac = navigator.platform.match('Mac');
-
-  const metaKeySymbol = isMac ? '⌘' : 'Ctrl';
-  const altKeySymbol = isMac ? '⌥' : 'Alt';
-
-  return {
-    'Format code': [metaKeySymbol, 'S'],
-    'Swap line up': [altKeySymbol, '↑'],
-    'Swap line down': [altKeySymbol, '↓'],
-    'Duplicate line up': ['⇧', altKeySymbol, '↑'],
-    'Duplicate line down': ['⇧', altKeySymbol, '↓'],
-    'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
-    'Add cursor to next line': [metaKeySymbol, altKeySymbol, '↓'],
-    'Select next occurrence': [metaKeySymbol, 'D'],
-    'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
-  };
+const keySymbols: Record<string, string> = {
+  Cmd: '⌘',
+  Alt: isMac() ? '⌥' : 'Alt',
+  Up: '↑',
+  Down: '↓',
+  Shift: '⇧',
 };
 
 const positionIcon: Record<EditorPosition, ReactChild> = {
@@ -77,7 +68,12 @@ const KeyboardShortcut = ({
 export default React.memo(() => {
   const [{ editorPosition, colorScheme }, dispatch] = useContext(StoreContext);
 
-  const keybindings = getKeyBindings();
+  const keybindings = Object.fromEntries(
+    Object.entries(keymap).map(([keybinding, { description }]) => [
+      description,
+      keybinding.split('-').map((segment) => keySymbols[segment] || segment),
+    ])
+  );
 
   return (
     <ToolbarPanel data-testid="frame-panel">

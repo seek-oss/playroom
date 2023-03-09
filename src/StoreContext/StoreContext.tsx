@@ -388,7 +388,7 @@ const createReducer =
     }
   };
 
-type StoreContextValues = [State, Dispatch<Action>];
+export type StoreContextValues = [State, Dispatch<Action>];
 
 const initialState: State = {
   code: exampleCode,

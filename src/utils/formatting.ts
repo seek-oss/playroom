@@ -156,3 +156,5 @@ export const formatForInsertion = ({
     cursor: formattedCursor,
   };
 };
+
+export const isMac = () => navigator.platform.match('Mac');
