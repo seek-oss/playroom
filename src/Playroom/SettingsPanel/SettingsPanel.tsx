@@ -15,6 +15,26 @@ import * as styles from './SettingsPanel.css';
 import ColorModeSystemIcon from '../icons/ColorModeSystemIcon';
 import ColorModeLightIcon from '../icons/ColorModeLightIcon';
 import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
+import { Text } from '../Text/Text';
+import { Inline } from '../Inline/Inline';
+import { isMac } from '../../utils/formatting';
+
+const getKeyBindings = () => {
+  const metaKeySymbol = isMac() ? '⌘' : 'Ctrl';
+  const altKeySymbol = isMac() ? '⌥' : 'Alt';
+
+  return {
+    'Format code': [metaKeySymbol, 'S'],
+    'Swap line up': [altKeySymbol, '↑'],
+    'Swap line down': [altKeySymbol, '↓'],
+    'Duplicate line up': ['⇧', altKeySymbol, '↑'],
+    'Duplicate line down': ['⇧', altKeySymbol, '↓'],
+    'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
+    'Add cursor to next line': [metaKeySymbol, altKeySymbol, '↓'],
+    'Select next occurrence': [metaKeySymbol, 'D'],
+    'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
+  };
+};
 
 const positionIcon: Record<EditorPosition, ReactChild> = {
   undocked: <EditorUndockedIcon />,
@@ -28,10 +48,35 @@ const colorModeIcon: Record<ColorScheme, ReactChild> = {
   system: <ColorModeSystemIcon />,
 };
 
-interface SettingsPanelProps {}
+interface KeyboardShortcutProps {
+  keybinding: string[];
+  description: string;
+}
 
-export default ({}: SettingsPanelProps) => {
+const KeyboardShortcut = ({
+  keybinding,
+  description,
+}: KeyboardShortcutProps) => {
+  const shortcutSegments = keybinding.map((segment) => (
+    <kbd className={styles.kbd} key={`${keybinding}-${segment}`}>
+      {segment}
+    </kbd>
+  ));
+
+  return (
+    <div className={styles.keyboardShortcutRow}>
+      <Text>{description}</Text>
+      <Text size={isMac() ? 'large' : 'standard'}>
+        <Inline space="xxsmall">{shortcutSegments}</Inline>
+      </Text>
+    </div>
+  );
+};
+
+export default React.memo(() => {
   const [{ editorPosition, colorScheme }, dispatch] = useContext(StoreContext);
+
+  const keybindings = getKeyBindings();
 
   return (
     <ToolbarPanel data-testid="frame-panel">
@@ -111,7 +156,18 @@ export default ({}: SettingsPanelProps) => {
             ))}
           </div>
         </fieldset>
+
+        <Stack space="medium">
+          <Heading level="3">Keyboard Shortcuts</Heading>
+          {Object.entries(keybindings).map(([description, keybinding]) => (
+            <KeyboardShortcut
+              description={description}
+              keybinding={keybinding}
+              key={description}
+            />
+          ))}
+        </Stack>
       </Stack>
     </ToolbarPanel>
   );
-};
+});

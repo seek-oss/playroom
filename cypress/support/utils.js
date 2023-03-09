@@ -1,3 +1,10 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress" />
+import dedent from 'dedent';
+
+import { createUrl } from '../../utils';
+import { isMac } from '../../src/utils/formatting';
+
 const WAIT_FOR_FRAME_TO_RENDER = 1000;
 
 const getCodeEditor = () => cy.get('.CodeMirror-code');
@@ -7,8 +14,6 @@ export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
 export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
 export const getFirstFrame = () => getPreviewFrames().first();
-
-export const isMac = () => navigator.platform.match('Mac');
 
 export const visit = (url) =>
   cy
@@ -96,6 +101,10 @@ export const selectNextWords = (numWords) => {
   typeCode(`{shift+${modifier}+rightArrow}`.repeat(numWords));
 };
 
+export const selectToEndOfLine = () => {
+  typeCode(isMac() ? '{shift+cmd+rightArrow}' : '{shift+end}');
+};
+
 /**
  * @typedef {import('../../src/Playroom/CodeEditor/keymaps/types').Direction} Direction
  */
@@ -146,9 +155,14 @@ export const assertPreviewContains = (text) =>
       expect(el.get(0).innerText).to.eq(text);
     });
 
-export const loadPlayroom = () =>
-  cy
-    .visit('http://localhost:9000')
+export const loadPlayroom = (initialCode) => {
+  const baseUrl = 'http://localhost:9000';
+  const visitUrl = initialCode
+    ? createUrl({ baseUrl, code: dedent(initialCode) })
+    : baseUrl;
+
+  return cy
+    .visit(visitUrl)
     .window()
     .then((win) => {
       const { storageKey } = win.__playroomConfig__;
@@ -161,3 +175,4 @@ export const loadPlayroom = () =>
           new Cypress.Promise((resolve) => $iframe.on('load', resolve))
       )
     );
+};

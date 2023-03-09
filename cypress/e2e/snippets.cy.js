@@ -11,8 +11,8 @@ import {
   assertSnippetsListIsVisible,
   mouseOverSnippet,
   loadPlayroom,
-  isMac,
 } from '../support/utils';
+import { isMac } from '../../src/utils/formatting';
 
 describe('Snippets', () => {
   beforeEach(() => {

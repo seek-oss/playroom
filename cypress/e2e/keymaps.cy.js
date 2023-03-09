@@ -6,29 +6,22 @@ import {
   selectNextWords,
   selectLines,
   selectNextCharacters,
-  isMac,
+  selectToEndOfLine,
 } from '../support/utils';
+import { isMac } from '../../src/utils/formatting';
 
 const cmdPlus = (keyCombo) => {
   const platformSpecificKey = isMac() ? 'cmd' : 'ctrl';
   return `${platformSpecificKey}+${keyCombo}`;
 };
 
-const moveToStart = isMac() ? '{cmd+upArrow}' : '{ctrl+home}';
-
 describe('Keymaps', () => {
   beforeEach(() => {
-    loadPlayroom();
-
-    // The last closing div is automatically inserted by autotag
-    typeCode(dedent`
+    loadPlayroom(`
       <div>First line</div>
       <div>Second line</div>
-      <div>Third line
+      <div>Third line</div>
     `);
-
-    // Reset the cursor to a reliable position at the beginning
-    typeCode(moveToStart);
   });
 
   describe('swapLine', () => {
@@ -160,6 +153,19 @@ describe('Keymaps', () => {
         <span>Third line</span>
       `);
     });
+
+    it("should select next occurrence in whole word mode when there's no selection", () => {
+      typeCode('{rightArrow}'.repeat(3));
+
+      typeCode(`{${cmdPlusD}}`.repeat(2));
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span>First line</span>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
   });
 
   describe('addCursor', () => {
@@ -179,6 +185,117 @@ describe('Keymaps', () => {
         <div>First line</div>
         a<div>Second line</div>
         a<div>Third line</div>
+      `);
+    });
+  });
+
+  describe('wrapTag', () => {
+    const modifierKey = isMac() ? 'cmd' : 'ctrl';
+
+    it("should insert a fragment with cursors when there's no selection", () => {
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('a');
+
+      assertCodePaneContains(dedent`
+        <a></a><div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap the selection when there is one', () => {
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span><div>First line</div></span>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap a multi-line selection', () => {
+      typeCode('{shift+downArrow}');
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span>
+          <div>First line</div>
+          <div>Second line</div>
+        </span>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap a multi-line selection when selected from a different indent level', () => {
+      // This is a replay of the previous test, to give us an indent level
+      typeCode('{shift+downArrow}');
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      // Return to the start
+      const moveToStart = isMac() ? '{cmd+upArrow}' : '{ctrl+home}';
+      typeCode(moveToStart);
+
+      // Select from the far left and try wrap
+      typeCode('{downArrow}');
+      typeCode('{shift+downArrow}'.repeat(2));
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('a');
+
+      assertCodePaneContains(dedent`
+        <span>
+          <a>
+            <div>First line</div>
+            <div>Second line</div>
+          </a>
+        </span>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap a multi-cursor single-line selection', () => {
+      typeCode(`{${modifierKey}+alt+downArrow}`);
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span><div>First line</div></span>
+        <span><div>Second line</div></span>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should wrap a multi-cursor multi-line selection', () => {
+      typeCode(`{${modifierKey}+alt+downArrow}`);
+      typeCode('{shift+alt+downArrow}{upArrow}');
+
+      selectLines(1);
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span>
+          <div>First line</div>
+          <div>First line</div>
+        </span>
+        <span>
+          <div>Second line</div>
+          <div>Second line</div>
+        </span>
+        <div>Third line</div>
       `);
     });
   });

@@ -5,7 +5,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 
 import { StoreContext, CursorPosition } from '../../StoreContext/StoreContext';
-import { formatCode as format } from '../../utils/formatting';
+import { formatCode as format, isMac } from '../../utils/formatting';
 import {
   closeFragmentTag,
   compileJsx,
@@ -36,6 +36,7 @@ import {
   addCursorToPrevLine,
   selectNextOccurrence,
 } from './keymaps/cursors';
+import { wrapInTag } from './keymaps/wrap';
 
 const validateCode = (editorInstance: Editor, code: string) => {
   editorInstance.clearGutter('errorGutter');
@@ -109,11 +110,9 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (editorInstanceRef && editorInstanceRef.current) {
-        const cmdOrCtrl = navigator.platform.match('Mac')
-          ? e.metaKey
-          : e.ctrlKey;
+        const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
 
-        if (cmdOrCtrl && e.keyCode === 83) {
+        if (cmdOrCtrl && e.key === 's') {
           e.preventDefault();
           const { code: formattedCode, cursor: formattedCursor } = format({
             code: editorInstanceRef.current.getValue(),
@@ -128,7 +127,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           editorInstanceRef.current.setCursor(formattedCursor);
         }
 
-        if (cmdOrCtrl && /^[k]$/.test(e.key)) {
+        if (cmdOrCtrl && e.key === 'k') {
           e.preventDefault();
           dispatch({ type: 'toggleToolbar', payload: { panel: 'snippets' } });
         }
@@ -204,7 +203,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
     }
   }, [highlightLineNumber]);
 
-  const keymapModifierKey = navigator.platform.match('Mac') ? 'Cmd' : 'Ctrl';
+  const keymapModifierKey = isMac() ? 'Cmd' : 'Ctrl';
 
   return (
     <ReactCodeMirror
@@ -272,6 +271,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           [`${keymapModifierKey}-Alt-Up`]: addCursorToPrevLine,
           [`${keymapModifierKey}-Alt-Down`]: addCursorToNextLine,
           [`${keymapModifierKey}-D`]: selectNextOccurrence,
+          [`Shift-${keymapModifierKey}-,`]: wrapInTag,
         },
       }}
     />

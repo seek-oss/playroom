@@ -1,4 +1,5 @@
 import { style, globalStyle, keyframes } from '@vanilla-extract/css';
+import { dark } from '../palettes';
 import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 
 export const animationDuration = 1300;
@@ -17,7 +18,7 @@ export const root = style([
   }),
   {
     zIndex: 100,
-    background: colorPaletteVars.background.neutral,
+    background: dark.background.neutral,
     color: colorPaletteVars.foreground.neutralInverted,
   },
 ]);
