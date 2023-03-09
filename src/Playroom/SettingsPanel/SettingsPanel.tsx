@@ -18,11 +18,11 @@ import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
 import { Text } from '../Text/Text';
 import { Inline } from '../Inline/Inline';
 
-const getKeyBindings = () => {
-  const isMac = navigator.platform.match('Mac');
+const isMac = () => Boolean(navigator.platform.match('Mac'));
 
-  const metaKeySymbol = isMac ? '⌘' : 'Ctrl';
-  const altKeySymbol = isMac ? '⌥' : 'Alt';
+const getKeyBindings = () => {
+  const metaKeySymbol = isMac() ? '⌘' : 'Ctrl';
+  const altKeySymbol = isMac() ? '⌥' : 'Alt';
 
   return {
     'Format code': [metaKeySymbol, 'S'],
@@ -67,7 +67,7 @@ const KeyboardShortcut = ({
   return (
     <div className={styles.keyboardShortcutRow}>
       <Text>{description}</Text>
-      <Text size="large">
+      <Text size={isMac() ? 'large' : 'standard'}>
         <Inline space="xxsmall">{shortcutSegments}</Inline>
       </Text>
     </div>
