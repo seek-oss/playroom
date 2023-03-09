@@ -1,4 +1,4 @@
-import React, { useContext, ReactChild } from 'react';
+import React, { useContext, ReactChild, useMemo } from 'react';
 import { Heading } from '../Heading/Heading';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import {
@@ -16,6 +16,26 @@ import ColorModeSystemIcon from '../icons/ColorModeSystemIcon';
 import ColorModeLightIcon from '../icons/ColorModeLightIcon';
 import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
 import { Text } from '../Text/Text';
+import { Inline } from '../Inline/Inline';
+
+const getKeyBindings = () => {
+  const isMac = navigator.platform.match('Mac');
+
+  const metaKeySymbol = isMac ? '⌘' : 'Ctrl';
+  const altKeySymbol = isMac ? '⌥' : 'Alt';
+
+  return {
+    'Format code': [metaKeySymbol, 'S'],
+    'Swap line up': [altKeySymbol, '↑'],
+    'Swap line down': [altKeySymbol, '↓'],
+    'Duplicate line up': ['⇧', altKeySymbol, '↑'],
+    'Duplicate line down': ['⇧', altKeySymbol, '↓'],
+    'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
+    'Add cursor to next line': [metaKeySymbol, altKeySymbol, '↓'],
+    'Select next occurrence': [metaKeySymbol, 'D'],
+    'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
+  };
+};
 
 const positionIcon: Record<EditorPosition, ReactChild> = {
   undocked: <EditorUndockedIcon />,
@@ -30,7 +50,7 @@ const colorModeIcon: Record<ColorScheme, ReactChild> = {
 };
 
 interface KeyboardShortcutProps {
-  keybinding: string;
+  keybinding: string[];
   description: string;
 }
 
@@ -38,23 +58,17 @@ const KeyboardShortcut = ({
   keybinding,
   description,
 }: KeyboardShortcutProps) => {
-  const shortcutSegments = keybinding
-    .split('+')
-    .map((segment) => (
-      <kbd className={styles.kbd} key={`${keybinding}-${segment}`}>
-        {segment}
-      </kbd>
-    ))
-    .flatMap((segment, index) => (index === 0 ? [segment] : [' + ', segment]));
+  const shortcutSegments = keybinding.map((segment) => (
+    <kbd className={styles.kbd} key={`${keybinding}-${segment}`}>
+      {segment}
+    </kbd>
+  ));
 
   return (
-    <div
-      className={styles.radioContainer}
-      style={{ justifyContent: 'space-between' }}
-    >
+    <div className={styles.keyboardShortcutRow}>
       <Text>{description}</Text>
-      <Text>
-        <kbd className={styles.kbd}>{shortcutSegments}</kbd>
+      <Text size="large">
+        <Inline space="xxsmall">{shortcutSegments}</Inline>
       </Text>
     </div>
   );
@@ -64,6 +78,8 @@ interface SettingsPanelProps {}
 
 export default ({}: SettingsPanelProps) => {
   const [{ editorPosition, colorScheme }, dispatch] = useContext(StoreContext);
+
+  const keybindings = useMemo(getKeyBindings, [navigator.platform]);
 
   return (
     <ToolbarPanel data-testid="frame-panel">
@@ -146,38 +162,13 @@ export default ({}: SettingsPanelProps) => {
 
         <Stack space="medium">
           <Heading level="3">Keyboard Shortcuts</Heading>
-          <Stack space="medium" dividers>
-            <KeyboardShortcut keybinding="Cmd+S" description="Format code" />
-            <KeyboardShortcut keybinding="Alt+Up" description="Swap line up" />
+          {Object.entries(keybindings).map(([description, keybinding]) => (
             <KeyboardShortcut
-              keybinding="Alt+Down"
-              description="Swap line down"
+              description={description}
+              keybinding={keybinding}
+              key={description}
             />
-            <KeyboardShortcut
-              keybinding="Shift+Alt+Up"
-              description="Duplicate line up"
-            />
-            <KeyboardShortcut
-              keybinding="Shift+Alt+Down"
-              description="Duplicate line down"
-            />
-            <KeyboardShortcut
-              keybinding="Cmd+Alt+Up"
-              description="Add cursor to prev line"
-            />
-            <KeyboardShortcut
-              keybinding="Cmd+Alt+Down"
-              description="Add cursor to next line"
-            />
-            <KeyboardShortcut
-              keybinding="Cmd+D"
-              description="Select next occurrence"
-            />
-            <KeyboardShortcut
-              keybinding="Cmd+Shift+,"
-              description="Wrap selection in tag"
-            />
-          </Stack>
+          ))}
         </Stack>
       </Stack>
     </ToolbarPanel>
