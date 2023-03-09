@@ -19,7 +19,6 @@ export const wrapInTag = (cm: Editor) => {
     let to = range.to();
 
     if (to.line !== from.line && to.ch === 0) {
-      console.log('new Pos(to.line - 1): ', new Pos(to.line - 1));
       to = new Pos(to.line - 1);
     }
 
