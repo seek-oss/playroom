@@ -157,7 +157,7 @@ describe('Keymaps', () => {
     it("should select next occurrence in whole word mode when there's no selection", () => {
       typeCode('{rightArrow}'.repeat(3));
 
-      typeCode(cmdPlusD.repeat(2));
+      typeCode(`{${cmdPlusD}}`.repeat(2));
       typeCode('span');
 
       assertCodePaneContains(dedent`
