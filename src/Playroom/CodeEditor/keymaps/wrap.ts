@@ -5,6 +5,7 @@ interface TagRange {
   from: CodeMirror.Position;
   to: CodeMirror.Position;
   multiLine: boolean;
+  existingIndent: number;
 }
 
 export const wrapInTag = (cm: Editor) => {
@@ -15,15 +16,32 @@ export const wrapInTag = (cm: Editor) => {
 
   for (const range of cm.listSelections()) {
     const from = range.from();
-    const to = range.to();
+    let to = range.to();
+
+    if (to.line !== from.line && to.ch === 0) {
+      console.log('new Pos(to.line - 1): ', new Pos(to.line - 1));
+      to = new Pos(to.line - 1);
+    }
+
+    const existingContent = cm.getRange(from, to);
+    const existingIndent =
+      existingContent.length - existingContent.trimStart().length;
 
     const isMultiLineSelection = to.line !== from.line;
 
-    tagRanges.push({ from, to, multiLine: isMultiLineSelection });
+    tagRanges.push({
+      from,
+      to,
+      multiLine: isMultiLineSelection,
+      existingIndent,
+    });
 
-    const newStartCursor = new Pos(from.line + linesAdded, from.ch + 1);
+    const newStartCursor = new Pos(
+      from.line + linesAdded,
+      from.ch + existingIndent + 1
+    );
     const newEndCursor = isMultiLineSelection
-      ? new Pos(to.line + linesAdded + 2, from.ch + 2)
+      ? new Pos(to.line + linesAdded + 2, from.ch + existingIndent + 2)
       : new Pos(to.line + linesAdded, to.ch + 4);
 
     if (isMultiLineSelection) {
@@ -47,10 +65,13 @@ export const wrapInTag = (cm: Editor) => {
           })
           .join('\n');
 
-        const closeTagIndentLevel = ' '.repeat(range.from.ch);
+        const openTagIndentLevel = ' '.repeat(range.existingIndent);
+        const closeTagIndentLevel = ' '.repeat(
+          range.from.ch + range.existingIndent
+        );
 
         cm.replaceRange(
-          `<>\n${formattedExistingContent}\n${closeTagIndentLevel}</>`,
+          `${openTagIndentLevel}<>\n${formattedExistingContent}\n${closeTagIndentLevel}</>`,
           range.from,
           range.to
         );
