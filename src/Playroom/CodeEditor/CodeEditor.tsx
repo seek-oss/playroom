@@ -112,7 +112,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
       if (editorInstanceRef && editorInstanceRef.current) {
         const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
 
-        if (cmdOrCtrl && e.keyCode === 83) {
+        if (cmdOrCtrl && e.key === 's') {
           e.preventDefault();
           const { code: formattedCode, cursor: formattedCursor } = format({
             code: editorInstanceRef.current.getValue(),
@@ -127,7 +127,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           editorInstanceRef.current.setCursor(formattedCursor);
         }
 
-        if (cmdOrCtrl && /^[k]$/.test(e.key)) {
+        if (cmdOrCtrl && e.key === 'k') {
           e.preventDefault();
           dispatch({ type: 'toggleToolbar', payload: { panel: 'snippets' } });
         }
