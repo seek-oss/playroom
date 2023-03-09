@@ -17,8 +17,7 @@ import ColorModeLightIcon from '../icons/ColorModeLightIcon';
 import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
 import { Text } from '../Text/Text';
 import { Inline } from '../Inline/Inline';
-
-const isMac = () => Boolean(navigator.platform.match('Mac'));
+import { isMac } from '../../utils/formatting';
 
 const getKeyBindings = () => {
   const metaKeySymbol = isMac() ? '⌘' : 'Ctrl';

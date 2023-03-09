@@ -1,7 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="cypress" />
 import dedent from 'dedent';
+
 import { createUrl } from '../../utils';
+import { isMac } from '../../src/utils/formatting';
 
 const WAIT_FOR_FRAME_TO_RENDER = 1000;
 
@@ -12,8 +14,6 @@ export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
 export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
 export const getFirstFrame = () => getPreviewFrames().first();
-
-export const isMac = () => navigator.platform.match('Mac');
 
 export const visit = (url) =>
   cy

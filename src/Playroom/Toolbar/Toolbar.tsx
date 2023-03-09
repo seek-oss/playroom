@@ -15,6 +15,7 @@ import PlayIcon from '../icons/PlayIcon';
 import * as styles from './Toolbar.css';
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import SettingsIcon from '../icons/SettingsIcon';
+import { isMac } from '../../utils/formatting';
 
 interface Props {
   themes: PlayroomProps['themes'];
@@ -80,9 +81,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             {hasSnippets && (
               <ToolbarItem
                 active={isSnippetsOpen}
-                title={`Insert snippet (${
-                  navigator.platform.match('Mac') ? '\u2318' : 'Ctrl + '
-                }K)`}
+                title={`Insert snippet (${isMac() ? '\u2318' : 'Ctrl + '}K)`}
                 disabled={!validCursorPosition}
                 data-testid="toggleSnippets"
                 onClick={() => {

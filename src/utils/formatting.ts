@@ -8,6 +8,8 @@ export interface CodeWithCursor {
   cursor: CursorPosition;
 }
 
+export const isMac = () => Boolean(navigator.platform.match('Mac'));
+
 export const runPrettier = ({
   code,
   cursorOffset,

@@ -5,7 +5,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 
 import { StoreContext, CursorPosition } from '../../StoreContext/StoreContext';
-import { formatCode as format } from '../../utils/formatting';
+import { formatCode as format, isMac } from '../../utils/formatting';
 import {
   closeFragmentTag,
   compileJsx,
@@ -110,9 +110,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (editorInstanceRef && editorInstanceRef.current) {
-        const cmdOrCtrl = navigator.platform.match('Mac')
-          ? e.metaKey
-          : e.ctrlKey;
+        const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
 
         if (cmdOrCtrl && e.keyCode === 83) {
           e.preventDefault();
@@ -205,7 +203,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
     }
   }, [highlightLineNumber]);
 
-  const keymapModifierKey = navigator.platform.match('Mac') ? 'Cmd' : 'Ctrl';
+  const keymapModifierKey = isMac() ? 'Cmd' : 'Ctrl';
 
   return (
     <ReactCodeMirror
