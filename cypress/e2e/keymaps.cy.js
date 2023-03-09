@@ -204,7 +204,7 @@ describe('Keymaps', () => {
     });
 
     it('should wrap a multi-line selection', () => {
-      typeCode(`{shift+downArrow}`.repeat(1));
+      typeCode('{shift+downArrow}');
       selectToEndOfLine();
 
       typeCode(`{shift+${modifierKey}+,}`);

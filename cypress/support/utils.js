@@ -1,3 +1,5 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress" />
 import dedent from 'dedent';
 import { createUrl } from '../../utils';
 

@@ -1,4 +1,4 @@
-import React, { useContext, ReactChild, useMemo } from 'react';
+import React, { useContext, ReactChild } from 'react';
 import { Heading } from '../Heading/Heading';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import {
@@ -74,12 +74,10 @@ const KeyboardShortcut = ({
   );
 };
 
-interface SettingsPanelProps {}
-
-export default ({}: SettingsPanelProps) => {
+export default React.memo(() => {
   const [{ editorPosition, colorScheme }, dispatch] = useContext(StoreContext);
 
-  const keybindings = useMemo(getKeyBindings, [navigator.platform]);
+  const keybindings = getKeyBindings();
 
   return (
     <ToolbarPanel data-testid="frame-panel">
@@ -173,4 +171,4 @@ export default ({}: SettingsPanelProps) => {
       </Stack>
     </ToolbarPanel>
   );
-};
+});
