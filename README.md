@@ -1,7 +1,7 @@
 <img src="images/logo.png?raw=true#gh-light-mode-only" alt="Playroom" title="Playroom" width="292" height="50" />
 <img src="images/logo-inverted.png?raw=true#gh-dark-mode-only" alt="Playroom" title="Playroom" width="292" height="50" />
 
-[![npm](https://img.shields.io/npm/v/playroom.svg?style=for-the-badge)](https://www.npmjs.com/package/playroom) [![Build Status](https://img.shields.io/github/workflow/status/seek-oss/playroom/Validate/master.svg?style=for-the-badge)](https://github.com/seek-oss/playroom/actions?query=workflow%3AValidate+branch%3Amaster)
+[![npm](https://img.shields.io/npm/v/playroom.svg?style=for-the-badge)](https://www.npmjs.com/package/playroom) [![Build Status](https://img.shields.io/github/actions/workflow/status/seek-oss/playroom/validate.yml?branch=master&style=for-the-badge)](https://github.com/seek-oss/playroom/actions?query=workflow%3AValidate+branch%3Amaster)
 
 ---
 
