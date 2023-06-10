@@ -12,7 +12,7 @@
 
 /* eslint-disable */
 import * as React from 'react';
-import * as codemirror from 'codemirror';
+import codemirror from 'codemirror';
 
 declare let global: any;
 declare let require: any;
