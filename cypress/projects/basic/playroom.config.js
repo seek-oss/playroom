@@ -5,4 +5,5 @@ module.exports = {
   outputPath: './dist',
   openBrowser: false,
   storageKey: 'playroom-example-basic',
+  bundler: 'webpack',
 };
