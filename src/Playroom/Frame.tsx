@@ -1,14 +1,12 @@
-import type React from 'react';
-import type { ReactNode } from 'react';
+import { ComponentType, ReactNode } from 'react';
 import { useParams } from '../utils/params';
 import CatchErrors from './CatchErrors/CatchErrors';
-// @ts-expect-error
 import RenderCode from './RenderCode/RenderCode';
 
 interface FrameProps {
   themes: Record<string, any>;
-  components: Array<any>;
-  FrameComponent: React.ComponentType<{
+  components: Record<string, ComponentType>;
+  FrameComponent: ComponentType<{
     themeName: string | null;
     theme: string;
     children?: ReactNode;

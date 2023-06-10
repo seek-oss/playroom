@@ -7,10 +7,17 @@ const canUseNewReactRootApi =
   reactDomVersion &&
   (reactDomVersion.startsWith('18') || reactDomVersion.startsWith('0.0.0'));
 
-export const renderElement = (node, outlet) => {
+declare let __webpack_public_path__: string | undefined;
+
+export const renderElement = async (node: any, outlet: HTMLElement) => {
   if (canUseNewReactRootApi) {
-    // eslint-disable-next-line import/no-unresolved
-    const { createRoot } = require('react-dom/client');
+    // webpack needs to know the public path when doing dynamic imports,
+    // otherwise the HTML chunk for the preview page, will end up importing
+    // react-dom/client from the wront path
+    if (typeof __webpack_public_path__ !== 'undefined') {
+      __webpack_public_path__ = '../../../';
+    }
+    const { createRoot } = await import('react-dom/client');
     const root = createRoot(outlet);
     root.render(node);
   } else {

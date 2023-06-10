@@ -21,10 +21,7 @@ const SERVER_RENDERED =
   typeof navigator === 'undefined' ||
   (typeof global !== 'undefined' && global.PREVENT_CODEMIRROR_RENDER === true);
 
-let cm: typeof codemirror.default;
-if (!SERVER_RENDERED) {
-  cm = require('codemirror');
-}
+let cm = codemirror;
 
 export interface IDefineModeOptions {
   fn: () => codemirror.Mode<any>;

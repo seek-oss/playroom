@@ -1,4 +1,6 @@
-interface PlayroomConfig {
+import { type Snippet } from './utils/url';
+
+export interface PlayroomConfig {
   components: string;
   outputPath: string;
   title?: string;
@@ -9,7 +11,9 @@ interface PlayroomConfig {
   exampleCode?: string;
   cwd?: string;
   storageKey?: string;
-  webpackConfig?: () => void;
+  bundler: 'webpack' | 'vite';
+  viteConfig: () => Promise<any>;
+  webpackConfig?: () => Promise<any>;
   baseUrl?: string;
   paramType: 'hash' | 'search';
   iframeSandbox?: string;
@@ -17,7 +21,7 @@ interface PlayroomConfig {
   reactDocgenTypescriptConfig?: import('react-docgen-typescript').ParserOptions;
 }
 
-interface InternalPlayroomConfig extends PlayroomConfig {
+export interface InternalPlayroomConfig extends PlayroomConfig {
   cwd: string;
   storageKey: string;
   port: number;
