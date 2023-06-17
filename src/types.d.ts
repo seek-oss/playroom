@@ -28,6 +28,16 @@ export interface InternalPlayroomConfig extends PlayroomConfig {
   openBrowser: boolean;
 }
 
+export interface FrameParams {
+  code: string;
+  themeName: string;
+}
+
+export type FrameSrcHandler = (
+  frameParams: FrameParams,
+  config: InternalPlayroomConfig
+) => string;
+
 declare global {
   declare const __PLAYROOM_GLOBAL__CONFIG__: InternalPlayroomConfig;
   declare const __PLAYROOM_GLOBAL__STATIC_TYPES__: any;

@@ -1,5 +1,5 @@
 declare module '__PLAYROOM_ALIAS__SNIPPETS__' {
-  import type { Snippet } from '../utils';
+  import type { Snippet } from './utils/url';
   const snippets: Snippet[];
   export default snippets;
 }
@@ -18,7 +18,7 @@ declare module '__PLAYROOM_ALIAS__COMPONENTS__' {
 
 declare module '__PLAYROOM_ALIAS__FRAME_COMPONENT__' {
   import { ComponentType, ComponentType } from 'react';
-  const frameComponent: ComponentType<any>;
+  const frameComponent: ComponentType<any> & { frameSrc?: any };
   export default frameComponent;
 }
 

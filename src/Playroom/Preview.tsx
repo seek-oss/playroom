@@ -5,7 +5,6 @@ import { useParams } from '../utils/params';
 import { compileJsx } from '../utils/compileJsx';
 import SplashScreen from './SplashScreen/SplashScreen';
 import CatchErrors from './CatchErrors/CatchErrors';
-// @ts-expect-error
 import RenderCode from './RenderCode/RenderCode';
 
 import * as styles from './Preview.css';

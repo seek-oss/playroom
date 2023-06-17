@@ -1,16 +1,6 @@
-import type { InternalPlayroomConfig } from '../../types';
+import type { FrameSrcHandler } from '../../types';
 
 import frameConfig from '__PLAYROOM_ALIAS__FRAME_COMPONENT__';
-
-interface FrameParams {
-  code: string;
-  themeName: string;
-}
-
-type FrameSrcHandler = (
-  frameParams: FrameParams,
-  config: InternalPlayroomConfig
-) => string;
 
 const defaultFrameSrc: FrameSrcHandler = (
   { code, themeName },
