@@ -28,9 +28,11 @@ export interface InternalPlayroomConfig extends PlayroomConfig {
   openBrowser: boolean;
 }
 
-interface Window {
-  __playroomConfig__: InternalPlayroomConfig;
-}
+declare global {
+  declare const __PLAYROOM_GLOBAL__CONFIG__: InternalPlayroomConfig;
+  declare const __PLAYROOM_GLOBAL__STATIC_TYPES__: any;
 
-declare const __PLAYROOM_GLOBAL__CONFIG__: InternalPlayroomConfig;
-declare const __PLAYROOM_GLOBAL__STATIC_TYPES__: any;
+  interface Window {
+    __playroomConfig__: InternalPlayroomConfig;
+  }
+}

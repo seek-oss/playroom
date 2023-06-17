@@ -1,3 +1,5 @@
+import type { InternalPlayroomConfig } from '../../types';
+
 interface FrameParams {
   code: string;
   themeName: string;

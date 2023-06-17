@@ -1,4 +1,4 @@
-import type { InternalPlayroomConfig } from '../../index';
+import type { InternalPlayroomConfig } from '../../types';
 
 import frameConfig from '__PLAYROOM_ALIAS__FRAME_COMPONENT__';
 

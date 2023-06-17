@@ -15,7 +15,8 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 - :zap: Create quick mock-ups and interactive prototypes with real code.
 - :microscope: Exercise and evaluate the flexibility of your design system.
 - :exploding_head: Share your work with others by simply copying the URL.
-- :boom: Supports both [vite](https://vitejs.dev/) and [webpack](https://webpack.js.org/)
+- :boom: Supports both [vite](https://vitejs.dev/) and [webpack](https://webpack.js.org/).
+- :star: Supports TypeScript and React out of the box when using Vite as a bundler.
 
 ## Demos
 

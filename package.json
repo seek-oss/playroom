@@ -3,7 +3,7 @@
   "version": "0.34.1",
   "description": "Design with code, powered by your own component library",
   "main": "utils/index.js",
-  "types": "utils/index.d.ts",
+  "types": "utils/types.d.ts",
   "bin": {
     "playroom": "bin/cli.cjs"
   },
@@ -37,7 +37,8 @@
     "release": "changeset publish",
     "test": "jest src",
     "post-commit-status": "node scripts/postCommitStatus.js",
-    "deploy-preview": "surge -p ./cypress/projects/themed/dist"
+    "deploy-preview": "surge -p ./cypress/projects/themed/dist",
+    "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [
