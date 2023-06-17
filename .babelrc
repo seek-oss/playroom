@@ -1,11 +1,6 @@
 {
   "presets": [
-    [
-      "@babel/preset-typescript",
-      {
-        "shippedProposals": true
-      }
-    ],
+    "@babel/preset-typescript",
     "@babel/preset-env",
     ["@babel/preset-react", { "runtime": "automatic" }]
   ]
