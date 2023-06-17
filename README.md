@@ -75,7 +75,7 @@ module.exports = {
   widths: [320, 768, 1024],
   port: 9000,
   openBrowser: true,
-  paramType: 'search', // default is 'hash'
+  paramType: 'search', // default is 'hash'. When using 'search' the iframes may refresh on every change.
   exampleCode: `
     <Button>
       Hello World!

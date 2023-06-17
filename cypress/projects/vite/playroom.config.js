@@ -8,8 +8,7 @@ module.exports = {
   frameComponent: './FrameComponent.jsx',
   outputPath: './dist',
   openBrowser: false,
-  paramType: 'search',
-  port: 9001,
+  port: 9002,
   storageKey: 'playroom-example-vite',
   bundler: 'vite',
 };
