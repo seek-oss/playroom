@@ -27,7 +27,7 @@ describe('Snippets', () => {
     assertCodePaneLineCount(8);
 
     // Browse snippetlist
-    assertSnippetCount(4);
+    assertSnippetCount(5);
     mouseOverSnippet(0);
     assertFirstFrameContains('Initial code\nFoo\nFoo');
     mouseOverSnippet(1);
@@ -78,7 +78,7 @@ describe('Snippets', () => {
     assertCodePaneLineCount(8);
 
     // Browse snippetlist
-    assertSnippetCount(4);
+    assertSnippetCount(5);
     filterSnippets('{downarrow}');
     assertFirstFrameContains('Initial code\nFoo\nFoo');
     filterSnippets('{downarrow}');

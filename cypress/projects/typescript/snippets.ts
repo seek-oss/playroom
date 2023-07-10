@@ -19,9 +19,4 @@ export default [
     name: 'Blue',
     code: '<Bar color="blue">Blue Bar</Bar>',
   },
-  {
-    group: 'Scope',
-    name: 'hello world',
-    code: '<Foo>{hello()} {world()}</Foo>',
-  },
 ];
