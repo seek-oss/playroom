@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import copy from 'copy-to-clipboard';
 
 import TickIcon from '../icons/TickIcon';

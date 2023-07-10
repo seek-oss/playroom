@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import flatMap from 'lodash/flatMap';
 import Iframe from './Iframe';
 import { compileJsx } from '../../utils/compileJsx';
-import { PlayroomProps } from '../Playroom';
+import type { PlayroomProps } from '../Playroom';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 import playroomConfig from '../../config';

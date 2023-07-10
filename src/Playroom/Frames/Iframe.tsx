@@ -1,9 +1,9 @@
-import React, {
+import {
   useState,
   useEffect,
   useRef,
-  AllHTMLAttributes,
-  MutableRefObject,
+  type AllHTMLAttributes,
+  type MutableRefObject,
 } from 'react';
 import { useIntersection } from 'react-use';
 

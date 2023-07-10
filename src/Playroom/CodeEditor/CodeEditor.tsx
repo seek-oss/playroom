@@ -1,10 +1,14 @@
-import React, { useRef, useContext, useEffect, useCallback } from 'react';
+import { useRef, useContext, useEffect, useCallback } from 'react';
+// @ts-expect-error no types
 import { useDebouncedCallback } from 'use-debounce';
-import { Editor } from 'codemirror';
+import type { Editor } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 
-import { StoreContext, CursorPosition } from '../../StoreContext/StoreContext';
+import {
+  StoreContext,
+  type CursorPosition,
+} from '../../StoreContext/StoreContext';
 import { formatCode as format, isMac } from '../../utils/formatting';
 import {
   closeFragmentTag,

@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import classnames from 'classnames';
 import fuzzy from 'fuzzy';
+// @ts-expect-error no types
 import { useDebouncedCallback } from 'use-debounce';
-import { PlayroomProps } from '../Playroom';
-import { Snippet } from '../../../utils';
+import type { PlayroomProps } from '../Playroom';
+import type { Snippet } from '../../../utils';
 import SearchField from './SearchField/SearchField';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';

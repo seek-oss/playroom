@@ -1,4 +1,4 @@
-import { Editor } from 'codemirror';
+import type { Editor } from 'codemirror';
 
 export type Direction = 'up' | 'down';
 

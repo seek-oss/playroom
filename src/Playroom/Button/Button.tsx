@@ -1,4 +1,4 @@
-import React, { ElementType, AllHTMLAttributes, ReactElement } from 'react';
+import type { ElementType, AllHTMLAttributes, ReactElement } from 'react';
 import classnames from 'classnames';
 
 import * as styles from './Button.css';

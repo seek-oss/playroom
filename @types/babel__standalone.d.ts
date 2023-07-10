@@ -3,7 +3,7 @@ interface TransformResponse {
 }
 
 declare module '@babel/standalone' {
-  import { TransformOptions } from '@babel/core';
+  import type { TransformOptions } from '@babel/core';
 
   function transform(
     code: string,

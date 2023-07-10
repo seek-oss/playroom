@@ -1,7 +1,7 @@
-import React, { useContext, useState, useCallback } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import { useTimeoutFn } from 'react-use';
 import classnames from 'classnames';
-import { PlayroomProps } from '../Playroom';
+import type { PlayroomProps } from '../Playroom';
 import { StoreContext } from '../../StoreContext/StoreContext';
 import FramesPanel from '../FramesPanel/FramesPanel';
 import PreviewPanel from '../PreviewPanel/PreviewPanel';

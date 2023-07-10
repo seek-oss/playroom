@@ -1,4 +1,4 @@
-import React, { ComponentType, ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import lzString from 'lz-string';
 
 import { useParams } from '../utils/params';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { renderElement } from './render';
 import Frame from './Playroom/Frame';
 

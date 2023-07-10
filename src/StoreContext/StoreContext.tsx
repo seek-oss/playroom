@@ -1,20 +1,21 @@
-import React, {
+import {
   useEffect,
   createContext,
   useReducer,
-  ReactNode,
-  Dispatch,
+  type ReactNode,
+  type Dispatch,
 } from 'react';
 import copy from 'copy-to-clipboard';
 import localforage from 'localforage';
 import lzString from 'lz-string';
 import dedent from 'dedent';
+// @ts-expect-error no types
 import { useDebouncedCallback } from 'use-debounce';
 
-import { Snippet, compressParams } from '../../utils';
+import { type Snippet, compressParams } from '../../utils';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
 import { getParamsFromQuery, updateUrlCode } from '../utils/params';
-import { PlayroomProps } from '../Playroom/Playroom';
+import type { PlayroomProps } from '../Playroom/Playroom';
 import { isValidLocation } from '../utils/cursor';
 import playroomConfig from '../config';
 

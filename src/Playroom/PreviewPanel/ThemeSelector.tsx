@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import classnames from 'classnames';
 
 import ChevronIcon from '../icons/ChevronIcon';

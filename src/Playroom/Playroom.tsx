@@ -1,15 +1,19 @@
-import React, { useContext, ComponentType, Fragment } from 'react';
+import { useContext, type ComponentType, Fragment } from 'react';
 import classnames from 'classnames';
+// @ts-expect-error no types
 import { useDebouncedCallback } from 'use-debounce';
 import { Resizable } from 're-resizable';
 import Frames from './Frames/Frames';
 import { WindowPortal } from './WindowPortal';
-import { Snippets } from '../../utils';
+import type { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
 import Toolbar, { toolbarItemCount } from './Toolbar/Toolbar';
 import ChevronIcon from './icons/ChevronIcon';
 import { StatusMessage } from './StatusMessage/StatusMessage';
-import { StoreContext, EditorPosition } from '../StoreContext/StoreContext';
+import {
+  StoreContext,
+  type EditorPosition,
+} from '../StoreContext/StoreContext';
 
 const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
 const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;

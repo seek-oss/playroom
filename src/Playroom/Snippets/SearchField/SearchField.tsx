@@ -1,4 +1,4 @@
-import React, { AllHTMLAttributes } from 'react';
+import type { AllHTMLAttributes } from 'react';
 
 import * as styles from './SearchField.css';
 

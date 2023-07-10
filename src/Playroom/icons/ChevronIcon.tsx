@@ -1,4 +1,4 @@
-import React, { SVGProps } from 'react';
+import type { SVGProps } from 'react';
 import classnames from 'classnames';
 
 import * as styles from './ChevronIcon.css';

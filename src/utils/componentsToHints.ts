@@ -1,7 +1,7 @@
 import omit from 'lodash/omit';
 // @ts-expect-error
 import parsePropTypes from 'parse-prop-types';
-import { PlayroomProps } from '../Playroom/Playroom';
+import type { PlayroomProps } from '../Playroom/Playroom';
 
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
 

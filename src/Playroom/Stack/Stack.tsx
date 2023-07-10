@@ -1,4 +1,4 @@
-import React, { ReactElement, Children } from 'react';
+import { type ReactElement, Children } from 'react';
 import classnames from 'classnames';
 
 import { Divider } from '../Divider/Divider';
