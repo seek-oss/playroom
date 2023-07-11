@@ -2,7 +2,7 @@ import type React from 'react';
 import { parent } from './styles';
 
 type Props = {
-  color: 'red' | 'blue';
+  color: 'red' | 'blue' | 'black';
   children: React.ReactNode;
 };
 
