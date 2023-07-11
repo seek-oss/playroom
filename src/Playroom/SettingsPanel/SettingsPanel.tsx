@@ -1,9 +1,9 @@
-import React, { useContext, ReactChild } from 'react';
+import React, { useContext, type ReactChild } from 'react';
 import { Heading } from '../Heading/Heading';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import {
-  ColorScheme,
-  EditorPosition,
+  type ColorScheme,
+  type EditorPosition,
   StoreContext,
 } from '../../StoreContext/StoreContext';
 import { Stack } from '../Stack/Stack';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { renderElement } from './render';
 import Preview from './Playroom/Preview';
 

@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { Text } from '../Text/Text';
 import { Strong } from '../Strong/Strong';
 

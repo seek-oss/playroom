@@ -1,5 +1,6 @@
-import CodeMirror, { Editor, Pos } from 'codemirror';
-import { Selection } from './types';
+import type CodeMirror from 'codemirror';
+import { type Editor, Pos } from 'codemirror';
+import type { Selection } from './types';
 
 interface TagRange {
   from: CodeMirror.Position;

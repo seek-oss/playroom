@@ -1,4 +1,4 @@
-import React, { ReactChild } from 'react';
+import type { ReactChild } from 'react';
 import classnames from 'classnames';
 import TickIcon from '../icons/TickIcon';
 

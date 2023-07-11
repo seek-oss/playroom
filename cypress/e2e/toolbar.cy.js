@@ -47,7 +47,7 @@ describe('Toolbar', () => {
         });
       })
       .get('[data-testid="copyToClipboard"]')
-      .click()
-      .then(() => expect(copySpy).to.have.been.called);
+      .click();
+    cy.then(() => expect(copySpy).to.have.been.called);
   });
 });

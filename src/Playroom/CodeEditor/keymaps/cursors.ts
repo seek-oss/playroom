@@ -1,8 +1,8 @@
-import CodeMirror, { Editor, Pos } from 'codemirror';
+import CodeMirror, { type Editor, Pos } from 'codemirror';
 
 import 'codemirror/addon/search/searchcursor';
 
-import { Direction, Selection } from './types';
+import type { Direction, Selection } from './types';
 
 function wordAt(cm: Editor, pos: CodeMirror.Position) {
   let start = pos.ch;

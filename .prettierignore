@@ -1,3 +1,4 @@
 cypress/plugins/
 cypress/fixtures/
 dist
+pnpm-lock.yaml

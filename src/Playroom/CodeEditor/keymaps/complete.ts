@@ -1,4 +1,4 @@
-import CodeMirror, { Editor } from 'codemirror';
+import CodeMirror, { type Editor } from 'codemirror';
 
 export const completeAfter = (cm: Editor, predicate?: () => boolean) => {
   if (!predicate || predicate()) {

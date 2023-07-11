@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-} from 'react';
+import { useContext, useState, useEffect, useRef, useCallback } from 'react';
 import classnames from 'classnames';
 import { StoreContext } from '../../StoreContext/StoreContext';
 import { Text } from '../Text/Text';

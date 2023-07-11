@@ -58,12 +58,11 @@ export const gotoPreview = () => {
 export const toggleSnippets = () =>
   cy.get('[data-testid="toggleSnippets"]').click();
 
-export const filterSnippets = (search) =>
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy
-    .get('[data-testid="filterSnippets"]')
-    .type(search, { force: true })
-    .wait(200);
+export const filterSnippets = (search) => {
+  cy.get('[data-testid="filterSnippets"]').type(search, { force: true });
+  // eslint-disable-next-line @finsit/cypress/no-unnecessary-waiting
+  cy.wait(200);
+};
 
 export const assertSnippetsListIsVisible = () =>
   cy.get('[data-testid="snippets"]').should('be.visible');
@@ -82,7 +81,7 @@ export const assertSnippetCount = (count) =>
 
 export const assertFirstFrameContains = (text) => {
   getFirstFrame().then(($el) =>
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    // eslint-disable-next-line @finsit/cypress/no-unnecessary-waiting
     cy
       .wrap($el.contents().find('body'))
       .wait(WAIT_FOR_FRAME_TO_RENDER)
@@ -120,14 +119,13 @@ export const selectLines = (numLines, direction = 'down') => {
 export const assertCodePaneContains = (text) => {
   getCodeEditor().within(() => {
     const lines = [];
-    cy.get('.CodeMirror-line')
-      .each(($el) => lines.push($el.text()))
-      .then(() => {
-        const code = lines.join('\n');
-        // removes code mirrors invisible last line character placeholder
-        // which is inserted to preserve prettiers new line at end of string.
-        expect(code.replace(/[\u200b]$/, '')).to.eq(text);
-      });
+    cy.get('.CodeMirror-line').each(($el) => lines.push($el.text()));
+    cy.then(() => {
+      const code = lines.join('\n');
+      // removes code mirrors invisible last line character placeholder
+      // which is inserted to preserve prettiers new line at end of string.
+      expect(code.replace(/[\u200b]$/, '')).to.eq(text);
+    });
   });
 };
 

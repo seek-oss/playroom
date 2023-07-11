@@ -1,4 +1,4 @@
-import React, { useContext, ReactNode } from 'react';
+import { useContext, type ReactNode } from 'react';
 import Checkmark from './CheckmarkSvg';
 import { Heading } from '../Heading/Heading';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
