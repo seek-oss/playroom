@@ -1,5 +1,12 @@
 # playroom
 
+## 0.32.0
+
+### Minor Changes
+
+- 720d542: Drop support for React 16. Consumers are encouraged to upgrade to React 17+, which is a drop-in replacement.
+- 720d542: Support TypeScript 5.0+
+
 ## 0.31.0
 
 ### Minor Changes
