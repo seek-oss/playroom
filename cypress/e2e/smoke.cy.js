@@ -17,4 +17,12 @@ describe('Smoke', () => {
 
     assertPreviewContains('Foo\nFoo\nBar');
   });
+
+  it('preview mode works with TypeScript components', () => {
+    cy.visit(
+      'http://localhost:9002/preview#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
+    );
+
+    assertPreviewContains('Foo\nFoo\nBar');
+  });
 });
