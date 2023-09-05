@@ -13,6 +13,7 @@ interface CompressParamsOptions {
   themes?: string[];
   widths?: number[];
   theme?: string;
+  title?: string;
 }
 export const compressParams: (options: CompressParamsOptions) => string;
 

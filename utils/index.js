@@ -1,11 +1,12 @@
 const lzString = require('lz-string');
 
-const compressParams = ({ code, themes, widths, theme }) => {
+const compressParams = ({ code, themes, widths, theme, title }) => {
   const data = JSON.stringify({
     ...(code ? { code } : {}),
     ...(themes ? { themes } : {}),
     ...(widths ? { widths } : {}),
     ...(theme ? { theme } : {}),
+    ...(title ? { title } : {}),
   });
 
   return lzString.compressToEncodedURIComponent(data);

@@ -114,12 +114,21 @@ export default React.memo(() => {
               id="playroomTitleField"
               placeholder="Enter a title for this Playroom..."
               className={styles.textField}
+              value={localTitle}
               onChange={(e) =>
                 dispatch({
                   type: 'updateTitle',
                   payload: { title: e.target.value },
                 })
               }
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  dispatch({
+                    type: 'toggleToolbar',
+                    payload: { panel: 'settings' },
+                  });
+                }
+              }}
             />
           </fieldset>
 
