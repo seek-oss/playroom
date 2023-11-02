@@ -62,7 +62,7 @@ const showUsage = () => {
     process.exit(1);
   }
 
-  const config = require(configPath);
+  const { default: config } = await import(configPath);
 
   const playroom = lib({
     cwd: path.dirname(configPath),
