@@ -1,7 +1,11 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import flatMap from 'lodash/flatMap';
 import Iframe from './Iframe';
-import { compileJsx } from '../../utils/compileJsx';
+import {
+  compileJsx,
+  openFragmentTag,
+  closeFragmentTag,
+} from '../../utils/compileJsx';
 import type { PlayroomProps } from '../Playroom';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
@@ -16,8 +20,6 @@ interface FramesProps {
   widths: PlayroomProps['widths'];
 }
 
-let renderCode = '<React.Fragment></React.Fragment>';
-
 export default function Frames({ code, themes, widths }: FramesProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
 
@@ -29,9 +31,16 @@ export default function Frames({ code, themes, widths }: FramesProps) {
     }))
   );
 
-  try {
-    renderCode = compileJsx(code);
-  } catch (e) {}
+  const [renderCode, setRenderCode] = useState(
+    () => `${openFragmentTag}${closeFragmentTag}`
+  );
+
+  useEffect(() => {
+    try {
+      const newCode = compileJsx(code);
+      setRenderCode(newCode);
+    } catch (e) {}
+  }, [code]);
 
   return (
     <div ref={scrollingPanelRef} className={styles.root}>
