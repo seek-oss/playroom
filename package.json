@@ -5,20 +5,20 @@
   "main": "utils/index.js",
   "types": "utils/index.d.ts",
   "bin": {
-    "playroom": "bin/cli.js"
+    "playroom": "bin/cli.cjs"
   },
   "scripts": {
     "cypress": "start-server-and-test build-and-serve:all '9000|9001|9002' 'cypress run'",
     "cypress:dev": "start-server-and-test start:all '9000|9001|9002' 'cypress open --browser chrome --e2e'",
     "cypress:verify": "cypress verify",
-    "start:basic": "./bin/cli.js start --config cypress/projects/basic/playroom.config.js",
-    "build:basic": "./bin/cli.js build --config cypress/projects/basic/playroom.config.js",
+    "start:basic": "./bin/cli.cjs start --config cypress/projects/basic/playroom.config.js",
+    "build:basic": "./bin/cli.cjs build --config cypress/projects/basic/playroom.config.js",
     "serve:basic": "PORT=9000 serve --no-request-logging cypress/projects/basic/dist",
-    "start:themed": "./bin/cli.js start --config cypress/projects/themed/playroom.config.js",
-    "build:themed": "./bin/cli.js build --config cypress/projects/themed/playroom.config.js",
+    "start:themed": "./bin/cli.cjs start --config cypress/projects/themed/playroom.config.js",
+    "build:themed": "./bin/cli.cjs build --config cypress/projects/themed/playroom.config.js",
     "serve:themed": "PORT=9001 serve --config ../serve.json --no-request-logging cypress/projects/themed/dist",
-    "start:typescript": "./bin/cli.js start --config cypress/projects/typescript/playroom.config.js",
-    "build:typescript": "./bin/cli.js build --config cypress/projects/typescript/playroom.config.js",
+    "start:typescript": "./bin/cli.cjs start --config cypress/projects/typescript/playroom.config.js",
+    "build:typescript": "./bin/cli.cjs build --config cypress/projects/typescript/playroom.config.js",
     "serve:typescript": "PORT=9002 serve --no-request-logging cypress/projects/typescript/dist",
     "start:all": "concurrently 'npm:start:*(!all)'",
     "build:all": "concurrently 'npm:build:*(!all)'",
