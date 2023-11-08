@@ -53,7 +53,10 @@ const showUsage = () => {
   const cwd = process.cwd();
   const configPath = args.config
     ? path.resolve(cwd, args.config)
-    : await findUp('playroom.config.js', { cwd });
+    : await findUp(
+        ['playroom.config.js', 'playroom.config.mjs', 'playroom.config.cjs'],
+        { cwd }
+      );
 
   if (!configPath) {
     console.error(
