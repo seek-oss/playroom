@@ -1,5 +1,13 @@
 # playroom
 
+## 0.33.0
+
+### Minor Changes
+
+- 2d3571b: Add support for loading mjs config files
+
+  Consumers should now be able to write their configuration files using ES modules. By default Playroom will look for `playroom.config.js` with either a `.js`, `.mjs` or `.cjs` file extension.
+
 ## 0.32.1
 
 ### Patch Changes
