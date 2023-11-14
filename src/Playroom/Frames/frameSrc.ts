@@ -1,4 +1,4 @@
-import type { FrameSrcHandler } from '../../types';
+import type { FrameSrcHandler } from '../../internalTypes';
 
 import frameConfig from '__PLAYROOM_ALIAS__FRAME_COMPONENT__';
 

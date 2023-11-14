@@ -1,4 +1,4 @@
-import { ComponentType, ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import { useParams } from '../utils/params';
 import CatchErrors from './CatchErrors/CatchErrors';
 import RenderCode from './RenderCode/RenderCode';
@@ -12,6 +12,7 @@ interface FrameProps {
     children?: ReactNode;
   }>;
 }
+
 export default function Frame({
   themes,
   components,

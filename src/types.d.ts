@@ -1,4 +1,12 @@
-import { type Snippet } from './utils/url';
+import type { ParamType } from './utils/url';
+
+// all of the types in here get exposed as part of the public API
+
+export interface Snippet {
+  group: string;
+  name: string;
+  code: string;
+}
 
 export interface PlayroomConfig {
   components: string;
@@ -12,37 +20,11 @@ export interface PlayroomConfig {
   cwd?: string;
   storageKey?: string;
   bundler: 'webpack' | 'vite';
-  viteConfig: () => Promise<any>;
+  viteConfig?: () => Promise<any>;
   webpackConfig?: () => Promise<any>;
   baseUrl?: string;
-  paramType: 'hash' | 'search';
+  paramType: ParamType;
   iframeSandbox?: string;
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   reactDocgenTypescriptConfig?: import('react-docgen-typescript').ParserOptions;
-}
-
-export interface InternalPlayroomConfig extends PlayroomConfig {
-  cwd: string;
-  storageKey: string;
-  port: number;
-  openBrowser: boolean;
-}
-
-export interface FrameParams {
-  code: string;
-  themeName: string;
-}
-
-export type FrameSrcHandler = (
-  frameParams: FrameParams,
-  config: InternalPlayroomConfig
-) => string;
-
-declare global {
-  declare const __PLAYROOM_GLOBAL__CONFIG__: InternalPlayroomConfig;
-  declare const __PLAYROOM_GLOBAL__STATIC_TYPES__: any;
-
-  interface Window {
-    __playroomConfig__: InternalPlayroomConfig;
-  }
 }

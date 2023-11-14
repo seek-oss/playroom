@@ -1,13 +1,5 @@
 import lzString from 'lz-string';
 
-export interface Snippet {
-  group: string;
-  name: string;
-  code: string;
-}
-
-export type Snippets = Snippet[];
-
 export type ParamType = 'hash' | 'search';
 
 export interface CompressParamsOptions {
