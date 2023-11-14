@@ -1,5 +1,3 @@
-import React from 'react';
-
 const parent = {
   border: '1px solid currentColor',
   padding: '10px 10px 10px 15px',
