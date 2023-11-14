@@ -15,7 +15,6 @@ interface PlayroomConfig {
   iframeSandbox?: string;
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   reactDocgenTypescriptConfig?: import('react-docgen-typescript').ParserOptions;
-  production?: boolean;
 }
 
 interface InternalPlayroomConfig extends PlayroomConfig {
