@@ -10,6 +10,7 @@ const polyfillIntersectionObserver = () =>
 
 polyfillIntersectionObserver().then(() => {
   const widths = playroomConfig.widths || [320, 375, 768, 1024];
+  const defaultWidths = playroomConfig.defaultWidths;
 
   const outlet = document.createElement('div');
   document.body.appendChild(outlet);
@@ -31,6 +32,7 @@ polyfillIntersectionObserver().then(() => {
         <Playroom
           components={filteredComponents}
           widths={widths}
+          defaultWidths={defaultWidths}
           themes={themeNames}
           snippets={
             typeof snippets.default !== 'undefined'

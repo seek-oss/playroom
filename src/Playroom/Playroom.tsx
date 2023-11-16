@@ -50,10 +50,11 @@ export interface PlayroomProps {
   components: Record<string, ComponentType>;
   themes: string[];
   widths: number[];
+  defaultWidths: number[];
   snippets: Snippets;
 }
 
-export default ({ components, themes, widths, snippets }: PlayroomProps) => {
+export default ({ components, themes, widths, defaultWidths, snippets }: PlayroomProps) => {
   const [
     {
       editorPosition,
@@ -173,7 +174,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             visibleThemes && visibleThemes.length > 0 ? visibleThemes : themes
           }
           widths={
-            visibleWidths && visibleWidths.length > 0 ? visibleWidths : widths
+            visibleWidths && visibleWidths.length > 0 ? visibleWidths : defaultWidths ?? widths
           }
         />
         <div
