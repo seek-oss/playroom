@@ -1,11 +1,12 @@
-import { transform } from '@babel/standalone';
+import { transform } from 'sucrase';
 
 export const openFragmentTag = '<React.Fragment>';
 export const closeFragmentTag = '</React.Fragment>';
 
 export const compileJsx = (code: string) =>
   transform(`${openFragmentTag}${code.trim() || ''}${closeFragmentTag}`, {
-    presets: ['react'],
+    transforms: ['jsx'],
+    production: true,
   }).code;
 
 export const validateCode = (code: string) => {
