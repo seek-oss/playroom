@@ -10,6 +10,14 @@ import {
 } from '../../utils/compileJsx';
 
 export default function RenderCode({ code, scope }) {
+  // TODO: move these up
+  if (ReactCreateElementPragma in scope) {
+    throw new Error(`${ReactCreateElementPragma} not allowed in scope`);
+  }
+  if (ReactFragmentPragma in scope) {
+    throw new Error(`${ReactFragmentPragma} not allowed in scope`);
+  }
+
   return scopeEval(code, {
     ...(useScope() ?? {}),
     ...scope,

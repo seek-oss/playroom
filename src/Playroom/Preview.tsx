@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from 'react';
+import { useState, type ComponentType, type ReactNode, useEffect } from 'react';
 import lzString from 'lz-string';
 
 import { useParams } from '../utils/params';
@@ -32,12 +32,22 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
       );
 
       return {
-        code: compileJsx(result.code),
+        code: result.code,
         themeName: result.theme,
       };
     }
 
     return {};
+  });
+  const [renderCode, setRenderCode] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const newCode = await compileJsx(code || '');
+        setRenderCode(newCode);
+      } catch (e) {}
+    })();
   });
 
   const resolvedTheme = themeName ? themes[themeName] : null;
@@ -49,7 +59,7 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
           themeName={themeName || '__PLAYROOM__NO_THEME__'}
           theme={resolvedTheme}
         >
-          <RenderCode code={code} scope={components} />
+          <RenderCode code={renderCode} scope={components} />
         </FrameComponent>
       </div>
       <div className={styles.splashScreenContainer}>

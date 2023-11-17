@@ -35,6 +35,7 @@ specifiers:
   current-git-branch: ^1.1.0
   cypress: ^12.0.2
   dedent: ^0.7.0
+  esbuild-wasm: ^0.19.5
   eslint: ^8.44.0
   eslint-config-seek: ^11.3.1
   fast-glob: ^3.2.12
@@ -49,6 +50,7 @@ specifiers:
   localforage: ^1.10.0
   lodash: ^4.17.21
   lz-string: ^1.4.4
+  memoize-one: ^6.0.0
   mini-css-extract-plugin: ^2.7.2
   parse-prop-types: ^0.3.0
   polished: ^4.2.2
@@ -101,6 +103,7 @@ dependencies:
   css-loader: 6.7.2_webpack@5.75.0
   current-git-branch: 1.1.0
   dedent: 0.7.0
+  esbuild-wasm: 0.19.5
   fast-glob: 3.2.12
   find-up: 5.0.0
   fuzzy: 0.1.3
@@ -110,6 +113,7 @@ dependencies:
   localforage: 1.10.0
   lodash: 4.17.21
   lz-string: 1.4.4
+  memoize-one: 6.0.0
   mini-css-extract-plugin: 2.7.2_webpack@5.75.0
   parse-prop-types: 0.3.0_prop-types@15.8.1
   polished: 4.2.2
@@ -4784,6 +4788,12 @@ packages:
       is-symbol: 1.0.4
     dev: true
 
+  /esbuild-wasm/0.19.5:
+    resolution: {integrity: sha512-7zmLLn2QCj93XfMmHtzrDJ1UBuOHB2CZz1ghoCEZiRajxjUvHsF40PnbzFIY/pmesqPRaEtEWii0uzsTbnAgrA==}
+    engines: {node: '>=12'}
+    hasBin: true
+    dev: false
+
   /esbuild/0.11.23:
     resolution: {integrity: sha512-iaiZZ9vUF5wJV8ob1tl+5aJTrwDczlvGP0JoMmnpC2B0ppiMCu8n8gmy5ZTGl5bcG081XBVn+U+jP+mPFm5T5Q==}
     hasBin: true
@@ -6985,7 +6995,6 @@ packages:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
-    dev: true
 
   /jsonfile/4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
@@ -7158,7 +7167,7 @@ packages:
     dependencies:
       big.js: 5.2.2
       emojis-list: 3.0.0
-      json5: 2.2.1
+      json5: 2.2.3
     dev: false
 
   /localforage/1.10.0:
@@ -7309,6 +7318,10 @@ packages:
     engines: {node: '>= 4.0.0'}
     dependencies:
       fs-monkey: 1.0.3
+    dev: false
+
+  /memoize-one/6.0.0:
+    resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
     dev: false
 
   /meow/6.1.1:

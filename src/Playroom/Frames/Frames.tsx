@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import flatMap from 'lodash/flatMap';
 import Iframe from './Iframe';
-import {
-  compileJsx,
-  openFragmentTag,
-  closeFragmentTag,
-} from '../../utils/compileJsx';
+import { compileJsx } from '../../utils/compileJsx';
 import type { PlayroomProps } from '../Playroom';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
@@ -31,16 +27,16 @@ export default function Frames({ code, themes, widths }: FramesProps) {
     }))
   );
 
-  const [renderCode, setRenderCode] = useState(
-    () => `${openFragmentTag}${closeFragmentTag}`
-  );
+  const [renderCode, setRenderCode] = useState('');
 
   useEffect(() => {
-    try {
-      const newCode = compileJsx(code);
-      setRenderCode(newCode);
-    } catch (e) {}
-  }, [code]);
+    (async () => {
+      try {
+        const newCode = await compileJsx(code);
+        setRenderCode(newCode);
+      } catch (e) {}
+    })();
+  });
 
   return (
     <div ref={scrollingPanelRef} className={styles.root}>

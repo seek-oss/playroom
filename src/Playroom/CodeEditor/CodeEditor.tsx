@@ -12,8 +12,8 @@ import {
 import { formatCode as format, isMac } from '../../utils/formatting';
 import {
   closeFragmentTag,
-  compileJsx,
   openFragmentTag,
+  validateCode,
 } from '../../utils/compileJsx';
 
 import * as styles from './CodeEditor.css';
@@ -42,13 +42,13 @@ import {
 } from './keymaps/cursors';
 import { wrapInTag } from './keymaps/wrap';
 
-const validateCode = (editorInstance: Editor, code: string) => {
+const validateCodeInEditor = (editorInstance: Editor, code: string) => {
   editorInstance.clearGutter('errorGutter');
 
-  try {
-    compileJsx(code);
-  } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : '';
+  const validOrError = validateCode(code);
+  if (validOrError !== true) {
+    const errorMessage =
+      validOrError instanceof Error ? validOrError.message : '';
     const matches = errorMessage.match(/\(([0-9]+):/);
     const lineNumber =
       matches && matches.length >= 2 && matches[1] && parseInt(matches[1], 10);
@@ -172,7 +172,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
       }
 
       editorInstanceRef.current.setValue(code);
-      validateCode(editorInstanceRef.current, code);
+      validateCodeInEditor(editorInstanceRef.current, code);
     }
   }, [code, previewCode]);
 
@@ -213,12 +213,12 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
     <ReactCodeMirror
       editorDidMount={(editorInstance) => {
         editorInstanceRef.current = editorInstance;
-        validateCode(editorInstance, code);
+        validateCodeInEditor(editorInstance, code);
         setCursorPosition(cursorPosition);
       }}
       onChange={(editorInstance, data, newCode) => {
         if (editorInstance.hasFocus() && !previewCode) {
-          validateCode(editorInstance, newCode);
+          validateCodeInEditor(editorInstance, newCode);
           debouncedChange(newCode);
         }
       }}
