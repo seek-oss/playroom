@@ -1,4 +1,4 @@
-import { transform } from '@babel/standalone';
+import { transform } from 'sucrase';
 
 export const ReactFragmentPragma = 'R_F';
 export const ReactCreateElementPragma = 'R_cE';
@@ -8,15 +8,10 @@ export const closeFragmentTag = '</>';
 
 export const compileJsx = (code: string) =>
   transform(`${openFragmentTag}${code.trim()}${closeFragmentTag}`, {
-    presets: [
-      [
-        'react',
-        {
-          pragma: ReactCreateElementPragma,
-          pragmaFrag: ReactFragmentPragma,
-        },
-      ],
-    ],
+    transforms: ['jsx'],
+    jsxPragma: ReactCreateElementPragma,
+    jsxFragmentPragma: ReactFragmentPragma,
+    production: true,
   }).code;
 
 export const validateCode = (code: string) => {

@@ -194,6 +194,10 @@ module.exports = {
 };
 ```
 
+## ESM Support
+
+Playroom supports loading [ESM](https://nodejs.org/api/esm.html#introduction) configuration files. By default, Playroom will look for a playroom config file with either a `.js`, `.mjs` or `.cjs` file extension.
+
 ## Storybook Integration
 
 If you are interested in integrating Playroom into Storybook, check out [storybook-addon-playroom](https://github.com/rbardini/storybook-addon-playroom).

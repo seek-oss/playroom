@@ -6,7 +6,7 @@
   },
   "overrides": [
     {
-      "files": ["bin/**/*.js", "lib/**/*.js"],
+      "files": ["bin/**/*.cjs", "lib/**/*.js"],
       "rules": {
         "no-console": 0,
         "no-process-exit": 0
