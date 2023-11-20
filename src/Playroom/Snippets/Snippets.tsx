@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import classnames from 'classnames';
 import fuzzy from 'fuzzy';
-// @ts-expect-error no types
 import { useDebouncedCallback } from 'use-debounce';
 import type { PlayroomProps } from '../Playroom';
 import type { Snippet } from '../../../utils';

@@ -1,5 +1,4 @@
 import { useRef, useContext, useEffect, useCallback } from 'react';
-// @ts-expect-error no types
 import { useDebouncedCallback } from 'use-debounce';
 import type { Editor } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
