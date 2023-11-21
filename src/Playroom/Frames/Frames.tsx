@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import flatMap from 'lodash/flatMap';
 import Iframe from './Iframe';
 import { compileJsx } from '../../utils/compileJsx';
@@ -18,7 +18,7 @@ interface FramesProps {
 
 export default function Frames({ code, themes, widths }: FramesProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
-  const [renderCode, setRenderCode] = useState('');
+  const renderCode = useRef<string>('');
 
   const frames = flatMap(widths, (width) =>
     themes.map((theme) => ({
@@ -28,11 +28,9 @@ export default function Frames({ code, themes, widths }: FramesProps) {
     }))
   );
 
-  useEffect(() => {
-    try {
-      setRenderCode(compileJsx(code));
-    } catch (e) {}
-  }, [code]);
+  try {
+    renderCode.current = compileJsx(code);
+  } catch (e) {}
 
   return (
     <div ref={scrollingPanelRef} className={styles.root}>
@@ -46,7 +44,7 @@ export default function Frames({ code, themes, widths }: FramesProps) {
             <Iframe
               intersectionRootRef={scrollingPanelRef}
               src={frameSrc(
-                { themeName: frame.theme, code: renderCode },
+                { themeName: frame.theme, code: renderCode.current },
                 playroomConfig
               )}
               className={styles.frame}
