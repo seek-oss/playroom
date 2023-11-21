@@ -92,6 +92,7 @@
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "lz-string": "^1.4.4",
+    "memoize-one": "^6.0.0",
     "mini-css-extract-plugin": "^2.7.2",
     "parse-prop-types": "^0.3.0",
     "polished": "^4.2.2",

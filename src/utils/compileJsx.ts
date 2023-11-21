@@ -1,5 +1,6 @@
 import { transform } from 'sucrase';
 import { transform as transformWithBabel } from '@babel/standalone';
+import memoizeOne from 'memoize-one';
 
 export const ReactFragmentPragma = 'R_F';
 export const ReactCreateElementPragma = 'R_cE';
@@ -11,16 +12,18 @@ const wrapInFragment = (code: string) =>
   `${openFragmentTag}${code}${closeFragmentTag}`;
 
 // This one sometimes throws errors with less useful information, but is fast
-export const compileJsx = (code: string) =>
-  transform(wrapInFragment(code.trim()), {
-    transforms: ['jsx'],
-    jsxPragma: ReactCreateElementPragma,
-    jsxFragmentPragma: ReactFragmentPragma,
-    production: true,
-  }).code;
+export const compileJsx = memoizeOne(
+  (code: string) =>
+    transform(wrapInFragment(code.trim()), {
+      transforms: ['jsx'],
+      jsxPragma: ReactCreateElementPragma,
+      jsxFragmentPragma: ReactFragmentPragma,
+      production: true,
+    }).code
+);
 
 // This one throws errors with line numbers. Useful for validation
-const compileJsxWithBabel = (code: string) =>
+const compileJsxWithBabel = memoizeOne((code: string) =>
   transformWithBabel(wrapInFragment(code), {
     presets: [
       [
@@ -35,7 +38,8 @@ const compileJsxWithBabel = (code: string) =>
         },
       ],
     ],
-  });
+  })
+);
 
 export const validateCode = (code: string): true | Error => {
   try {
