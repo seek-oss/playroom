@@ -10,9 +10,24 @@ import {
 } from '../../utils/compileJsx';
 
 export default function RenderCode({ code, scope }) {
-  return scopeEval(code, {
+  const userScope = {
     ...(useScope() ?? {}),
     ...scope,
+  };
+
+  if (ReactCreateElementPragma in userScope) {
+    throw new Error(
+      `'${ReactCreateElementPragma}' is used internally by Playroom and is not allowed in scope`
+    );
+  }
+  if (ReactFragmentPragma in userScope) {
+    throw new Error(
+      `'${ReactFragmentPragma}' is used internally by Playroom and is not allowed in scope`
+    );
+  }
+
+  return scopeEval(code, {
+    ...userScope,
     React,
     [ReactCreateElementPragma]: React.createElement,
     [ReactFragmentPragma]: React.Fragment,
