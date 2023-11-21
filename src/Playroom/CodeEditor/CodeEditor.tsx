@@ -9,11 +9,7 @@ import {
   type CursorPosition,
 } from '../../StoreContext/StoreContext';
 import { formatCode as format, isMac } from '../../utils/formatting';
-import {
-  closeFragmentTag,
-  openFragmentTag,
-  validateCode,
-} from '../../utils/compileJsx';
+import { validateCode } from '../../utils/compileJsx';
 
 import * as styles from './CodeEditor.css';
 
@@ -42,31 +38,18 @@ import {
 import { wrapInTag } from './keymaps/wrap';
 
 const validateCodeInEditor = (editorInstance: Editor, code: string) => {
-  editorInstance.clearGutter('errorGutter');
+  const maybeValid = validateCode(code);
 
-  const validOrError = validateCode(code);
-  if (validOrError !== true) {
-    const errorMessage = validOrError.message;
-    const matches = errorMessage.match(/\(([0-9]+):/);
-    const lineNumber =
-      matches && matches.length >= 2 && matches[1] && parseInt(matches[1], 10);
+  if (maybeValid === true) {
+    editorInstance.clearGutter('errorGutter');
+  } else {
+    const errorMessage = maybeValid.message;
+    const lineNumber = maybeValid.loc?.line;
 
     if (lineNumber) {
-      // Remove our wrapping Fragment from error message
-      const openWrapperStartIndex = errorMessage.indexOf(openFragmentTag);
-      const closeWrapperStartIndex = errorMessage.lastIndexOf(closeFragmentTag);
-      const formattedMessage = [
-        errorMessage.slice(0, openWrapperStartIndex),
-        errorMessage.slice(
-          openWrapperStartIndex + openFragmentTag.length,
-          closeWrapperStartIndex
-        ),
-        errorMessage.slice(closeWrapperStartIndex + closeFragmentTag.length),
-      ].join('');
-
       const marker = document.createElement('div');
       marker.setAttribute('class', styles.errorMarker);
-      marker.setAttribute('title', formattedMessage);
+      marker.setAttribute('title', errorMessage);
       marker.innerText = String(lineNumber);
       editorInstance.setGutterMarker(lineNumber - 1, 'errorGutter', marker);
     }

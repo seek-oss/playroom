@@ -1,5 +1,5 @@
 import dedent from 'dedent';
-import { compileJsx, validateCode } from './compileJsx';
+import { type ErrorWithLocation, compileJsx, validateCode } from './compileJsx';
 
 describe('compileJsx', () => {
   test('valid code', () => {
@@ -46,20 +46,21 @@ describe('validateCode', () => {
   });
 
   test('invalid code', () => {
-    expect(
-      validateCode(`
-        <Foo />
-        <Bar />
-        <FooBarBaz ::invalid />
-      `)
-    ).toMatchInlineSnapshot(`
-      [SyntaxError: unknown: Unexpected token (4:20)
-
-        2 |         <Foo />
-        3 |         <Bar />
-      > 4 |         <FooBarBaz ::invalid />
-          |                     ^
-        5 |       </>]
+    const error = validateCode(`- line 1
+      <Foo />                   - line 2
+      <Bar />                   - line 3
+      <This is not ::valid />   - line 4
+                   ^ column 20
+    `);
+    expect(error).toMatchInlineSnapshot(
+      `[SyntaxError: Unexpected token (4:20)]`
+    );
+    expect((error as ErrorWithLocation).loc).toMatchInlineSnapshot(`
+      Position {
+        "column": 20,
+        "index": 113,
+        "line": 4,
+      }
     `);
   });
 });

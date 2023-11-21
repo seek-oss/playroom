@@ -1,5 +1,5 @@
 import { transform } from 'sucrase';
-import { transform as transformWithBabel } from '@babel/standalone';
+import { parse } from '@babel/parser';
 import memoizeOne from 'memoize-one';
 
 export const ReactFragmentPragma = 'R_F';
@@ -11,7 +11,6 @@ export const closeFragmentTag = '</>';
 const wrapInFragment = (code: string) =>
   `${openFragmentTag}${code}${closeFragmentTag}`;
 
-// This one sometimes throws errors with less useful information, but is fast
 export const compileJsx = memoizeOne(
   (code: string) =>
     transform(wrapInFragment(code.trim()), {
@@ -22,30 +21,25 @@ export const compileJsx = memoizeOne(
     }).code
 );
 
-// This one throws errors with line numbers. Useful for validation
-const compileJsxWithBabel = memoizeOne((code: string) =>
-  transformWithBabel(wrapInFragment(code), {
-    presets: [
-      [
-        'react',
-        {
-          development: false,
-          pure: false,
-          pragma: ReactCreateElementPragma,
-          pragmaFrag: ReactFragmentPragma,
-          runtime: 'classic',
-          useBuiltIns: true,
-        },
-      ],
-    ],
+const parseWithBabel = memoizeOne((code: string) =>
+  parse(wrapInFragment(code), {
+    sourceType: 'script',
+    plugins: ['jsx'],
   })
 );
 
-export const validateCode = (code: string): true | Error => {
+export interface ErrorWithLocation extends Error {
+  loc?: {
+    line: number;
+    column: number;
+  };
+}
+
+export const validateCode = (code: string): true | ErrorWithLocation => {
   try {
-    compileJsxWithBabel(code);
+    parseWithBabel(code);
     return true;
   } catch (err) {
-    return err as Error;
+    return err as ErrorWithLocation;
   }
 };
