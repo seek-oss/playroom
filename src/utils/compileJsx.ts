@@ -10,7 +10,7 @@ export const closeFragmentTag = '</>';
 const wrapInFragment = (code: string) =>
   `${openFragmentTag}${code}${closeFragmentTag}`;
 
-// This one throws error with no useful information, but is fast
+// This one sometimes throws errors with less useful information, but is fast
 export const compileJsx = (code: string) =>
   transform(wrapInFragment(code.trim()), {
     transforms: ['jsx'],
@@ -26,14 +26,18 @@ const compileJsxWithBabel = (code: string) =>
       [
         'react',
         {
+          development: false,
+          pure: false,
           pragma: ReactCreateElementPragma,
           pragmaFrag: ReactFragmentPragma,
+          runtime: 'classic',
+          useBuiltIns: true,
         },
       ],
     ],
   });
 
-export const validateCode = (code: string) => {
+export const validateCode = (code: string): true | Error => {
   try {
     compileJsxWithBabel(code);
     return true;
