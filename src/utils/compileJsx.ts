@@ -1,5 +1,5 @@
 import { transform } from 'sucrase';
-import { parse } from '@babel/parser';
+import { parseExpression } from '@babel/parser';
 import memoizeOne from 'memoize-one';
 
 export const ReactFragmentPragma = 'R_F';
@@ -22,9 +22,10 @@ export const compileJsx = memoizeOne(
 );
 
 const parseWithBabel = memoizeOne((code: string) =>
-  parse(wrapInFragment(code), {
-    sourceType: 'script',
+  parseExpression(wrapInFragment(code), {
     plugins: ['jsx'],
+    sourceType: 'script',
+    strictMode: true,
   })
 );
 
