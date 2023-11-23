@@ -1,5 +1,16 @@
 # playroom
 
+## 0.34.0
+
+### Minor Changes
+
+- 1c8ae6b: Use smaller React pragmas to reduce the payload sent to iframes
+- c4b639c: Replace `@babel/standalone` with `sucrase` for JSX compilation
+
+### Patch Changes
+
+- 1c8ae6b: Highlight the correct error location when code has syntax errors
+
 ## 0.33.0
 
 ### Minor Changes
