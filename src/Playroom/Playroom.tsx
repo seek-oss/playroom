@@ -1,6 +1,5 @@
 import { useContext, type ComponentType, Fragment } from 'react';
 import classnames from 'classnames';
-// @ts-expect-error no types
 import { useDebouncedCallback } from 'use-debounce';
 import { Resizable } from 're-resizable';
 import Frames from './Frames/Frames';
