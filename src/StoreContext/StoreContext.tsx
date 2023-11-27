@@ -411,10 +411,14 @@ export const StoreProvider = ({
   children,
   themes,
   widths,
+  defaultVisibleThemes,
+  defaultVisibleWidths,
 }: {
   children: ReactNode;
   themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
+  defaultVisibleThemes?: PlayroomProps['themes'];
+  defaultVisibleWidths?: PlayroomProps['widths'];
 }) => {
   const [state, dispatch] = useReducer(
     createReducer({ themes, widths }),
@@ -476,9 +480,11 @@ export const StoreProvider = ({
         const editorPosition = storedPosition;
         const editorHeight = storedHeight;
         const editorWidth = storedWidth;
-        const visibleWidths = widthsFromQuery || storedVisibleWidths;
+        const visibleWidths =
+          widthsFromQuery || storedVisibleWidths || defaultVisibleWidths;
         const visibleThemes =
-          hasThemesConfigured && (themesFromQuery || storedVisibleThemes);
+          hasThemesConfigured &&
+          (themesFromQuery || storedVisibleThemes || defaultVisibleThemes);
         const colorScheme = storedColorScheme;
 
         dispatch({

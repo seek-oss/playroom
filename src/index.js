@@ -27,7 +27,12 @@ polyfillIntersectionObserver().then(() => {
     );
 
     renderElement(
-      <StoreProvider themes={themeNames} widths={widths}>
+      <StoreProvider
+        themes={themeNames}
+        widths={widths}
+        defaultVisibleThemes={playroomConfig.defaultVisibleThemes}
+        defaultVisibleWidths={playroomConfig.defaultVisibleWidths}
+      >
         <Playroom
           components={filteredComponents}
           widths={widths}
