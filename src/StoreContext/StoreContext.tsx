@@ -502,7 +502,7 @@ export const StoreProvider = ({
         });
       }
     );
-  }, [hasThemesConfigured]);
+  }, [hasThemesConfigured, defaultVisibleThemes, defaultVisibleWidths]);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
