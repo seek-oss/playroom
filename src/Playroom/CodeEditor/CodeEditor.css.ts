@@ -24,7 +24,7 @@ export const errorMarker = style([
   }),
   {
     ':hover': {
-      cursor: 'pointer',
+      cursor: 'help',
     },
     backgroundColor: colorPaletteVars.background.critical,
     color: colorPaletteVars.foreground.critical,
