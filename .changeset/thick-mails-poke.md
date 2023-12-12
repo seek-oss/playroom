@@ -2,4 +2,4 @@
 'playroom': patch
 ---
 
-Make the error marker hoverable
+Improve affordance of error marker detail
