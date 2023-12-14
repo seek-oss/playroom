@@ -2,6 +2,8 @@ import { renderElement } from './render';
 import Playroom from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';
 import playroomConfig from './config';
+import faviconPath from '../images/favicon.png';
+import faviconInvertedPath from '../images/favicon-inverted.png';
 
 const polyfillIntersectionObserver = () =>
   typeof window.IntersectionObserver !== 'undefined'
@@ -13,6 +15,15 @@ polyfillIntersectionObserver().then(() => {
 
   const outlet = document.createElement('div');
   document.body.appendChild(outlet);
+
+  const selectedElement = document.head.querySelector('link[rel="icon"]');
+  const favicon = window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? faviconInvertedPath
+    : faviconPath;
+
+  if (selectedElement) {
+    selectedElement.setAttribute('href', favicon);
+  }
 
   const renderPlayroom = ({
     themes = require('./themes'),
