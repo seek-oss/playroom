@@ -1,5 +1,12 @@
 # playroom
 
+## 0.34.1
+
+### Patch Changes
+
+- e3b820b: Add favicon to Playroom site.
+- 4fb69cb: Improve affordance of error marker detail
+
 ## 0.34.0
 
 ### Minor Changes
