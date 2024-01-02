@@ -4,6 +4,7 @@ module.exports = {
   outputPath: './dist',
   openBrowser: false,
   storageKey: 'playroom-example-typescript',
+  faviconPath: '../../../images/favicon.svg',
   webpackConfig: () => ({
     module: {
       rules: [
