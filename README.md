@@ -69,6 +69,7 @@ module.exports = {
   widths: [320, 768, 1024],
   port: 9000,
   openBrowser: true,
+  faviconPath: './favicon.svg',
   paramType: 'search', // default is 'hash'
   exampleCode: `
     <Button>
