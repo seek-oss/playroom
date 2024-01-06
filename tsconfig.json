@@ -9,7 +9,6 @@
     "isolatedModules": true,
     "resolveJsonModule": true,
     "noUnusedLocals": true,
-    "allowJs": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
