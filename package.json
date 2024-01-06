@@ -34,8 +34,7 @@
     "release": "changeset publish",
     "test": "jest src",
     "post-commit-status": "node scripts/postCommitStatus.js",
-    "deploy-preview": "surge -p ./cypress/projects/themed/dist",
-    "typecheck": "tsc --noEmit"
+    "deploy-preview": "surge -p ./cypress/projects/themed/dist"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [
