@@ -9,12 +9,13 @@
     "isolatedModules": true,
     "resolveJsonModule": true,
     "noUnusedLocals": true,
+    "allowJs": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "lib": ["dom", "es2022"],
     "target": "es2022"
   },
-  "include": ["src"],
+  "include": ["src", "utils"],
   "exclude": ["cypress", "node_modules"]
 }
