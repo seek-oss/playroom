@@ -2,8 +2,8 @@
   "name": "playroom",
   "version": "0.34.1",
   "description": "Design with code, powered by your own component library",
-  "main": "utils/index.js",
-  "types": "utils/types.ts",
+  "main": "utils/index.ts",
+  "types": "utils/index.ts",
   "bin": {
     "playroom": "bin/cli.cjs"
   },

@@ -1,10 +1,7 @@
 import lzString from 'lz-string';
+import type { Snippet } from '../src/types';
 
-export interface Snippet {
-  group: string;
-  name: string;
-  code: string;
-}
+export type { PlayroomConfig, Snippet } from '../src/types';
 
 export type Snippets = Snippet[];
 
