@@ -18,7 +18,7 @@ export const renderElement = async (node: ReactNode, outlet: HTMLElement) => {
     if (typeof __webpack_public_path__ !== 'undefined') {
       __webpack_public_path__ = '../../../';
     }
-       const { createRoot } = await import('react-dom/client');
+    const { createRoot } = await import('react-dom/client');
     const root = createRoot(outlet);
     root.render(node);
   } else {
