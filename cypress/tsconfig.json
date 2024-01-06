@@ -4,6 +4,6 @@
     "isolatedModules": false,
     "types": ["cypress"]
   },
-  "include": ["**/*"], // override the include from the root tsconfig
+  "include": ["**/*", "../src/userDefinedModules.d.ts"], // override the include from the root tsconfig
   "exclude": [] // override the exclude from the root tsconfig
 }
