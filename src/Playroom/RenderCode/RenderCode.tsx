@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ComponentType } from 'react';
 import scopeEval from 'scope-eval';
 
 // eslint-disable-next-line import/no-unresolved
@@ -9,7 +9,13 @@ import {
   ReactFragmentPragma,
 } from '../../utils/compileJsx';
 
-export default function RenderCode({ code, scope }) {
+export default function RenderCode({
+  code,
+  scope,
+}: {
+  code: string | undefined;
+  scope: Record<string, ComponentType>;
+}) {
   const userScope = {
     ...(useScope() ?? {}),
     ...scope,
