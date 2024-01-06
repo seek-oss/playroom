@@ -3,7 +3,7 @@
   "version": "0.34.1",
   "description": "Design with code, powered by your own component library",
   "main": "utils/index.js",
-  "types": "utils/index.d.ts",
+  "types": "utils/types.ts",
   "bin": {
     "playroom": "bin/cli.cjs"
   },
