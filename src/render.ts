@@ -14,7 +14,7 @@ export const renderElement = async (node: ReactNode, outlet: HTMLElement) => {
   if (canUseNewReactRootApi) {
     // webpack needs to know the public path when doing dynamic imports,
     // otherwise the HTML chunk for the preview page, will end up importing
-    // react-dom/client from the wront path
+    // react-dom/client from the wrong path
     if (typeof __webpack_public_path__ !== 'undefined') {
       __webpack_public_path__ = '../../../';
     }

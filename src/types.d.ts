@@ -26,6 +26,5 @@ export interface PlayroomConfig {
   baseUrl?: string;
   paramType: ParamType;
   iframeSandbox?: string;
-  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   reactDocgenTypescriptConfig?: ParserOptions;
 }
