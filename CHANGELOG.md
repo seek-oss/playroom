@@ -1,5 +1,31 @@
 # playroom
 
+## 0.34.1
+
+### Patch Changes
+
+- e3b820b: Add favicon to Playroom site.
+- 4fb69cb: Improve affordance of error marker detail
+
+## 0.34.0
+
+### Minor Changes
+
+- 1c8ae6b: Use smaller React pragmas to reduce the payload sent to iframes
+- c4b639c: Replace `@babel/standalone` with `sucrase` for JSX compilation
+
+### Patch Changes
+
+- 1c8ae6b: Highlight the correct error location when code has syntax errors
+
+## 0.33.0
+
+### Minor Changes
+
+- 2d3571b: Add support for loading mjs config files
+
+  Consumers should now be able to write their configuration files using ES modules. By default Playroom will look for `playroom.config.js` with either a `.js`, `.mjs` or `.cjs` file extension.
+
 ## 0.32.1
 
 ### Patch Changes

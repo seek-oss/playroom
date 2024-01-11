@@ -16,10 +16,9 @@ interface FramesProps {
   widths: PlayroomProps['widths'];
 }
 
-let renderCode = '<React.Fragment></React.Fragment>';
-
 export default function Frames({ code, themes, widths }: FramesProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
+  const renderCode = useRef<string>('');
 
   const frames = flatMap(widths, (width) =>
     themes.map((theme) => ({
@@ -30,7 +29,7 @@ export default function Frames({ code, themes, widths }: FramesProps) {
   );
 
   try {
-    renderCode = compileJsx(code);
+    renderCode.current = compileJsx(code);
   } catch (e) {}
 
   return (
@@ -45,7 +44,7 @@ export default function Frames({ code, themes, widths }: FramesProps) {
             <Iframe
               intersectionRootRef={scrollingPanelRef}
               src={frameSrc(
-                { themeName: frame.theme, code: renderCode },
+                { themeName: frame.theme, code: renderCode.current },
                 playroomConfig
               )}
               className={styles.frame}

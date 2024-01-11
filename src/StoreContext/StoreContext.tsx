@@ -9,7 +9,6 @@ import copy from 'copy-to-clipboard';
 import localforage from 'localforage';
 import lzString from 'lz-string';
 import dedent from 'dedent';
-// @ts-expect-error no types
 import { useDebouncedCallback } from 'use-debounce';
 
 import { type Snippet, compressParams } from '../../utils';

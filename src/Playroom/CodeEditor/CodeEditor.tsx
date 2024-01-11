@@ -1,5 +1,4 @@
 import { useRef, useContext, useEffect, useCallback } from 'react';
-// @ts-expect-error no types
 import { useDebouncedCallback } from 'use-debounce';
 import type { Editor } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
@@ -10,11 +9,7 @@ import {
   type CursorPosition,
 } from '../../StoreContext/StoreContext';
 import { formatCode as format, isMac } from '../../utils/formatting';
-import {
-  closeFragmentTag,
-  compileJsx,
-  openFragmentTag,
-} from '../../utils/compileJsx';
+import { validateCode } from '../../utils/compileJsx';
 
 import * as styles from './CodeEditor.css';
 
@@ -42,33 +37,19 @@ import {
 } from './keymaps/cursors';
 import { wrapInTag } from './keymaps/wrap';
 
-const validateCode = (editorInstance: Editor, code: string) => {
-  editorInstance.clearGutter('errorGutter');
+const validateCodeInEditor = (editorInstance: Editor, code: string) => {
+  const maybeValid = validateCode(code);
 
-  try {
-    compileJsx(code);
-  } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : '';
-    const matches = errorMessage.match(/\(([0-9]+):/);
-    const lineNumber =
-      matches && matches.length >= 2 && matches[1] && parseInt(matches[1], 10);
+  if (maybeValid === true) {
+    editorInstance.clearGutter('errorGutter');
+  } else {
+    const errorMessage = maybeValid.message;
+    const lineNumber = maybeValid.loc?.line;
 
     if (lineNumber) {
-      // Remove our wrapping Fragment from error message
-      const openWrapperStartIndex = errorMessage.indexOf(openFragmentTag);
-      const closeWrapperStartIndex = errorMessage.lastIndexOf(closeFragmentTag);
-      const formattedMessage = [
-        errorMessage.slice(0, openWrapperStartIndex),
-        errorMessage.slice(
-          openWrapperStartIndex + openFragmentTag.length,
-          closeWrapperStartIndex
-        ),
-        errorMessage.slice(closeWrapperStartIndex + closeFragmentTag.length),
-      ].join('');
-
       const marker = document.createElement('div');
       marker.setAttribute('class', styles.errorMarker);
-      marker.setAttribute('title', formattedMessage);
+      marker.setAttribute('title', errorMessage);
       marker.innerText = String(lineNumber);
       editorInstance.setGutterMarker(lineNumber - 1, 'errorGutter', marker);
     }
@@ -172,7 +153,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
       }
 
       editorInstanceRef.current.setValue(code);
-      validateCode(editorInstanceRef.current, code);
+      validateCodeInEditor(editorInstanceRef.current, code);
     }
   }, [code, previewCode]);
 
@@ -213,12 +194,12 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
     <ReactCodeMirror
       editorDidMount={(editorInstance) => {
         editorInstanceRef.current = editorInstance;
-        validateCode(editorInstance, code);
+        validateCodeInEditor(editorInstance, code);
         setCursorPosition(cursorPosition);
       }}
       onChange={(editorInstance, data, newCode) => {
         if (editorInstance.hasFocus() && !previewCode) {
-          validateCode(editorInstance, newCode);
+          validateCodeInEditor(editorInstance, newCode);
           debouncedChange(newCode);
         }
       }}
