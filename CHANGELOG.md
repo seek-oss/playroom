@@ -1,5 +1,11 @@
 # playroom
 
+## 0.34.2
+
+### Patch Changes
+
+- 88bd204: Fix `playroom build` by making favicon path relative to webpack config
+
 ## 0.34.1
 
 ### Patch Changes
