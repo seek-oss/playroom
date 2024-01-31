@@ -26,6 +26,7 @@ export const wrapInTag = (cm: Editor) => {
     const existingContent = cm.getRange(from, to);
     const existingIndent =
       existingContent.length - existingContent.trimStart().length;
+    const leadingWhitespace = existingContent.match(/^[ \t]+/)?.[0].length ?? 0;
 
     const isMultiLineSelection = to.line !== from.line;
 
@@ -38,7 +39,10 @@ export const wrapInTag = (cm: Editor) => {
 
     const newStartCursor = new Pos(
       from.line + linesAdded,
-      from.ch + existingIndent + 1
+      from.ch +
+        existingIndent +
+        1 -
+        (isMultiLineSelection ? 0 : leadingWhitespace)
     );
     const newEndCursor = isMultiLineSelection
       ? new Pos(to.line + linesAdded + 2, from.ch + existingIndent + 2)
