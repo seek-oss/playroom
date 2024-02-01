@@ -76,13 +76,13 @@ const KeyboardShortcut = ({
 
 const getTitle = (localTitle: string | undefined) => {
   if (localTitle) {
-    return `Playroom | ${localTitle}`;
+    return `${localTitle} | Playroom`;
   }
 
   const configTitle = window?.__playroomConfig__.title;
 
   if (configTitle) {
-    return `Playroom | ${configTitle}`;
+    return `${configTitle} | Playroom`;
   }
 
   return 'Playroom';
