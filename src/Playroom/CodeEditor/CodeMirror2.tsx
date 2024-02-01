@@ -12,7 +12,7 @@
 
 /* eslint-disable */
 import * as React from 'react';
-import * as codemirror from 'codemirror';
+import codemirror from 'codemirror';
 
 declare let global: any;
 declare let require: any;
@@ -21,10 +21,7 @@ const SERVER_RENDERED =
   typeof navigator === 'undefined' ||
   (typeof global !== 'undefined' && global.PREVENT_CODEMIRROR_RENDER === true);
 
-let cm: typeof codemirror.default;
-if (!SERVER_RENDERED) {
-  cm = require('codemirror');
-}
+let cm = codemirror;
 
 export interface IDefineModeOptions {
   fn: () => codemirror.Mode<any>;
