@@ -1,4 +1,4 @@
-import React, { useContext, type ReactChild, useState } from 'react';
+import React, { useContext, type ReactChild } from 'react';
 import { Helmet } from 'react-helmet';
 import { Heading } from '../Heading/Heading';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
