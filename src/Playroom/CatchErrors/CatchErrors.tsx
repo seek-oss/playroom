@@ -34,12 +34,11 @@ export default class CatchErrors extends Component<Props, State> {
     }
 
     // Ensure the stack only contains user-provided components
-    const componentStack = errorInfo
-      ? errorInfo.componentStack
-          .split('\n')
-          .filter((line: string) => /RenderCode/.test(line))
-          .map((line: string) => line.replace(/ \(created by .*/g, ''))
-      : [];
+    const componentStack =
+      errorInfo?.componentStack
+        ?.split('\n')
+        .filter((line: string) => /RenderCode/.test(line))
+        .map((line: string) => line.replace(/ \(created by .*/g, '')) ?? [];
 
     // Ignore the RenderCode container component
     const lines = componentStack.slice(0, componentStack.length - 1);
