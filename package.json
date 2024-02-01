@@ -3,13 +3,13 @@
   "version": "0.34.2",
   "description": "Design with code, powered by your own component library",
   "main": "utils/index.js",
-  "types": "utils/index.d.ts",
+  "types": "utils/types.d.ts",
   "bin": {
     "playroom": "bin/cli.cjs"
   },
   "scripts": {
-    "cypress": "start-server-and-test build-and-serve:all '9000|9001|9002' 'cypress run'",
-    "cypress:dev": "start-server-and-test start:all '9000|9001|9002' 'cypress open --browser chrome --e2e'",
+    "cypress": "start-server-and-test build-and-serve:all '9000|9001|9002|9003' 'cypress run'",
+    "cypress:dev": "start-server-and-test start:all '9000|9001|9002|9003' 'cypress open --browser chrome --e2e'",
     "cypress:verify": "cypress verify",
     "start:basic": "./bin/cli.cjs start --config cypress/projects/basic/playroom.config.js",
     "build:basic": "./bin/cli.cjs build --config cypress/projects/basic/playroom.config.js",
@@ -20,6 +20,9 @@
     "start:typescript": "./bin/cli.cjs start --config cypress/projects/typescript/playroom.config.js",
     "build:typescript": "./bin/cli.cjs build --config cypress/projects/typescript/playroom.config.js",
     "serve:typescript": "PORT=9002 serve --no-request-logging cypress/projects/typescript/dist",
+    "start:vite": "./bin/cli.js start --config cypress/projects/vite/playroom.config.js",
+    "build:vite": "./bin/cli.js build --config cypress/projects/vite/playroom.config.js",
+    "serve:vite": "PORT=9003 serve --no-request-logging cypress/projects/vite/dist",
     "start:all": "concurrently 'npm:start:*(!all)'",
     "build:all": "concurrently 'npm:build:*(!all)'",
     "serve:all": "concurrently 'npm:serve:*(!all)'",
@@ -34,7 +37,8 @@
     "release": "changeset publish",
     "test": "jest src",
     "post-commit-status": "node scripts/postCommitStatus.js",
-    "deploy-preview": "surge -p ./cypress/projects/themed/dist"
+    "deploy-preview": "surge -p ./cypress/projects/themed/dist",
+    "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [
@@ -72,7 +76,9 @@
     "@vanilla-extract/css": "^1.9.2",
     "@vanilla-extract/css-utils": "^0.1.3",
     "@vanilla-extract/sprinkles": "^1.5.1",
+    "@vanilla-extract/vite-plugin": "^3.8.2",
     "@vanilla-extract/webpack-plugin": "2.1.12",
+    "@vitejs/plugin-react": "^4.0.0",
     "babel-loader": "^9.1.0",
     "classnames": "^2.3.2",
     "codemirror": "^5.65.10",
@@ -107,6 +113,7 @@
     "sucrase": "^3.34.0",
     "typescript": ">=5.0.0",
     "use-debounce": "^9.0.4",
+    "vite": "^4.3.9",
     "webpack": "^5.75.0",
     "webpack-dev-server": "^4.11.1",
     "webpack-merge": "^5.8.0"
@@ -116,6 +123,7 @@
     "@changesets/cli": "^2.25.2",
     "@octokit/rest": "^19.0.5",
     "@types/jest": "^29.2.4",
+    "@types/webpack-env": "^1.18.4",
     "concurrently": "^7.6.0",
     "cypress": "^12.0.2",
     "eslint": "^8.44.0",

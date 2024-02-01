@@ -2,7 +2,7 @@
 /// <reference types="cypress" />
 import dedent from 'dedent';
 
-import { createUrl } from '../../utils';
+import { createUrl } from '../../src/utils/url';
 import { isMac } from '../../src/utils/formatting';
 
 const WAIT_FOR_FRAME_TO_RENDER = 1000;

@@ -2,20 +2,17 @@
   "compilerOptions": {
     "noEmit": true,
     "skipLibCheck": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "module": "es2022",
+    "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "allowJs": true,
     "resolveJsonModule": true,
-    "noUnusedLocals": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "lib": ["dom", "es2022"],
     "target": "es2022"
-  },
-  "include": ["src"],
-  "exclude": ["cypress", "node_modules"]
+  }
 }

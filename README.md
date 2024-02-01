@@ -11,10 +11,12 @@ Simultaneously design across a variety of themes and screen sizes, powered by JS
 
 Playroom allows you to create a zero-install code-oriented design environment, built into a standalone bundle that can be deployed alongside your existing design system documentation.
 
-- Iterate on your designs in the final medium.
-- Create quick mock-ups and interactive prototypes with real code.
-- Exercise and evaluate the flexibility of your design system.
-- Share your work with others by simply copying the URL.
+- :sparkles: Iterate on your designs in the final medium.
+- :zap: Create quick mock-ups and interactive prototypes with real code.
+- :microscope: Exercise and evaluate the flexibility of your design system.
+- :exploding_head: Share your work with others by simply copying the URL.
+- :boom: Supports both [vite](https://vitejs.dev/) and [webpack](https://webpack.js.org/).
+- :star: Supports TypeScript and React out of the box when using Vite as a bundler.
 
 ## Demos
 
@@ -56,6 +58,9 @@ Add the following scripts to your `package.json`:
 Add a `playroom.config.js` file to the root of your project:
 
 ```js
+/**
+ * @type {import('playroom').PlayroomConfig}
+ */
 module.exports = {
   components: './src/components',
   outputPath: './dist/playroom',
@@ -63,23 +68,41 @@ module.exports = {
   // Optional:
   title: 'My Awesome Library',
   themes: './src/themes',
+  // these files can also have the .ts/.tsx extension
   snippets: './playroom/snippets.js',
   frameComponent: './playroom/FrameComponent.js',
   scope: './playroom/useScope.js',
   widths: [320, 768, 1024],
   port: 9000,
   openBrowser: true,
-  paramType: 'search', // default is 'hash'
+  paramType: 'search', // default is 'hash'. When using 'search' the iframes may refresh on every change.
   exampleCode: `
     <Button>
       Hello World!
     </Button>
   `,
   baseUrl: '/playroom/',
+  // you can also specify 'vite' as a bundler and use the 'viteConfig' config key
+  bundler: 'vite',
+  viteConfig: () => ({
+    // Custom vite config goes here...
+  }),
+  iframeSandbox: 'allow-scripts',
+};
+```
+
+You can also use Webpack as a bundler:
+
+```js
+/**
+ * @type {import('playroom').PlayroomConfig}
+ */
+module.exports = {
+  // ... other config
+  bundler: 'webpack',
   webpackConfig: () => ({
     // Custom webpack config goes here...
   }),
-  iframeSandbox: 'allow-scripts',
 };
 ```
 

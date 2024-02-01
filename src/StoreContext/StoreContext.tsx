@@ -11,7 +11,8 @@ import lzString from 'lz-string';
 import dedent from 'dedent';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { type Snippet, compressParams } from '../../utils';
+import type { Snippet } from '../types';
+import { compressParams } from '../utils/url';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
 import { getParamsFromQuery, updateUrlCode } from '../utils/params';
 import type { PlayroomProps } from '../Playroom/Playroom';

@@ -4,6 +4,10 @@ import { StoreProvider } from './StoreContext/StoreContext';
 import playroomConfig from './config';
 import faviconPath from '../images/favicon.png';
 import faviconInvertedPath from '../images/favicon-inverted.png';
+import playroomThemes from './themes';
+import playroomComponents from './components';
+import playroomSnippets from './snippets';
+import { hmrAccept } from './utils/hmr';
 
 const polyfillIntersectionObserver = () =>
   typeof window.IntersectionObserver !== 'undefined'
@@ -26,9 +30,9 @@ polyfillIntersectionObserver().then(() => {
   }
 
   const renderPlayroom = ({
-    themes = require('./themes'),
-    components = require('./components'),
-    snippets = require('./snippets'),
+    themes = playroomThemes,
+    components = playroomComponents,
+    snippets = playroomSnippets,
   } = {}) => {
     const themeNames = Object.keys(themes);
 
@@ -43,11 +47,7 @@ polyfillIntersectionObserver().then(() => {
           components={filteredComponents}
           widths={widths}
           themes={themeNames}
-          snippets={
-            typeof snippets.default !== 'undefined'
-              ? snippets.default
-              : snippets
-          }
+          snippets={snippets}
         />
       </StoreProvider>,
       outlet
@@ -55,17 +55,17 @@ polyfillIntersectionObserver().then(() => {
   };
   renderPlayroom();
 
-  if (module.hot) {
-    module.hot.accept('./components', () => {
-      renderPlayroom({ components: require('./components') });
+  hmrAccept((accept) => {
+    accept('./components', () => {
+      renderPlayroom({ components: playroomComponents });
     });
 
-    module.hot.accept('./themes', () => {
-      renderPlayroom({ themes: require('./themes') });
+    accept('./themes', () => {
+      renderPlayroom({ themes: playroomThemes });
     });
 
-    module.hot.accept('./snippets', () => {
-      renderPlayroom({ snippets: require('./snippets') });
+    accept('./snippets', () => {
+      renderPlayroom({ snippets: playroomSnippets });
     });
-  }
+  });
 });
