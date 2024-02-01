@@ -216,6 +216,21 @@ describe('Keymaps', () => {
       `);
     });
 
+    it('should ignore surrounding whitespace when wrapping a single line selection', () => {
+      typeCode(' ');
+      typeCode('{leftArrow}');
+      selectToEndOfLine();
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('span');
+
+      assertCodePaneContains(dedent`
+        <span> <div>First line</div></span>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
     it('should wrap a multi-line selection', () => {
       typeCode('{shift+downArrow}');
       selectToEndOfLine();

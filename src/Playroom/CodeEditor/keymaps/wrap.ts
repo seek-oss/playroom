@@ -36,10 +36,13 @@ export const wrapInTag = (cm: Editor) => {
       existingIndent,
     });
 
+    const startCursorCharacterPosition =
+      from.ch + 1 + (isMultiLineSelection ? existingIndent : 0);
     const newStartCursor = new Pos(
       from.line + linesAdded,
-      from.ch + existingIndent + 1
+      startCursorCharacterPosition
     );
+
     const newEndCursor = isMultiLineSelection
       ? new Pos(to.line + linesAdded + 2, from.ch + existingIndent + 2)
       : new Pos(to.line + linesAdded, to.ch + 4);
