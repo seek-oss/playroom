@@ -107,7 +107,7 @@ type Action =
   | { type: 'resetVisibleThemes' }
   | { type: 'updateVisibleWidths'; payload: { widths: number[] } }
   | { type: 'resetVisibleWidths' }
-  | { type: 'updateTitle'; payload: { title?: string } };
+  | { type: 'updateTitle'; payload: { title: string } };
 
 const resetPreview = ({
   previewRenderCode,
