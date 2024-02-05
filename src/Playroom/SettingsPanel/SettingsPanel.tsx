@@ -123,10 +123,7 @@ export default React.memo(() => {
               }
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  dispatch({
-                    type: 'toggleToolbar',
-                    payload: { panel: 'settings' },
-                  });
+                  (e.target as HTMLInputElement).blur();
                 }
               }}
             />
