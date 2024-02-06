@@ -103,7 +103,7 @@ export default React.memo(() => {
           <title>{displayedTitle}</title>
         </Helmet>
       )}
-      <ToolbarPanel data-testid="frame-panel">
+      <ToolbarPanel data-testid="settings-panel">
         <Stack space="xxxlarge">
           <label>
             <Stack space="medium">
