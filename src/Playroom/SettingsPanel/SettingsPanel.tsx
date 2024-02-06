@@ -104,29 +104,24 @@ export default React.memo(() => {
         </Helmet>
       )}
       <ToolbarPanel data-testid="frame-panel">
-        <Stack space="large" dividers>
+        <Stack space="xxxlarge">
           <label>
-            <legend>
+            <Stack space="medium">
               <Heading level="3">Title</Heading>
-            </legend>
-            <input
-              type="text"
-              id="playroomTitleField"
-              placeholder="Enter a title for this Playroom..."
-              className={styles.textField}
-              value={localTitle}
-              onChange={(e) =>
-                dispatch({
-                  type: 'updateTitle',
-                  payload: { title: e.target.value },
-                })
-              }
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  (e.target as HTMLInputElement).blur();
+              <input
+                type="text"
+                id="playroomTitleField"
+                placeholder="Enter a title for this Playroom..."
+                className={styles.textField}
+                value={localTitle}
+                onChange={(e) =>
+                  dispatch({
+                    type: 'updateTitle',
+                    payload: { title: e.target.value },
+                  })
                 }
-              }}
-            />
+              />
+            </Stack>
           </label>
 
           <fieldset className={styles.fieldset}>
@@ -205,7 +200,7 @@ export default React.memo(() => {
             </div>
           </fieldset>
 
-          <Stack space="medium">
+          <Stack space="xlarge">
             <Heading level="3">Keyboard Shortcuts</Heading>
             {Object.entries(keybindings).map(([description, keybinding]) => (
               <KeyboardShortcut
