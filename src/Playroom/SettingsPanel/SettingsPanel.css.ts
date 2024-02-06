@@ -102,9 +102,10 @@ export const label = style([
 export const textField = style([
   sprinkles({
     font: 'large',
-    border: 0,
     width: 'full',
-    paddingX: 'medium',
+    paddingX: 'large',
+    boxSizing: 'border-box',
+    borderRadius: 'medium',
   }),
   {
     color: colorPaletteVars.foreground.neutral,
@@ -116,5 +117,6 @@ export const textField = style([
     '::placeholder': {
       color: colorPaletteVars.foreground.neutralSoft,
     },
+    border: `1px solid ${colorPaletteVars.border.standard}`,
   },
 ]);
