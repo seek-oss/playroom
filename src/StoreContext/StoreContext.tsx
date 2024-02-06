@@ -56,7 +56,7 @@ interface StatusMessage {
 type ToolbarPanel = 'snippets' | 'frames' | 'preview' | 'settings';
 interface State {
   code: string;
-  localTitle?: string;
+  title?: string;
   previewRenderCode?: string;
   previewEditorCode?: string;
   highlightLineNumber?: number;
@@ -388,11 +388,11 @@ const createReducer =
 
       case 'updateTitle': {
         const { title } = action.payload;
-        store.setItem('localTitle', title);
+        store.setItem('title', title);
 
         return {
           ...state,
-          localTitle: title,
+          title,
         };
       }
 
@@ -452,7 +452,7 @@ export const StoreProvider = ({
     let codeFromQuery: State['code'];
     let themesFromQuery: State['visibleThemes'];
     let widthsFromQuery: State['visibleWidths'];
-    let titleFromQuery: State['localTitle'];
+    let titleFromQuery: State['title'];
 
     if (params.code) {
       const {
@@ -478,7 +478,7 @@ export const StoreProvider = ({
       store.getItem<number[]>('visibleWidths'),
       store.getItem<string[]>('visibleThemes'),
       store.getItem<ColorScheme>('colorScheme'),
-      store.getItem<string | undefined>('localTitle'),
+      store.getItem<string | undefined>('title'),
     ]).then(
       ([
         storedCode,
@@ -509,7 +509,7 @@ export const StoreProvider = ({
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
-            localTitle: titleFromQuery ?? storedTitle ?? undefined,
+            title: titleFromQuery ?? storedTitle ?? undefined,
             ready: true,
           },
         });
@@ -540,13 +540,13 @@ export const StoreProvider = ({
       code: state.code,
       themes: state.visibleThemes,
       widths: state.visibleWidths,
-      title: state.localTitle,
+      title: state.title,
     });
   }, [
     state.code,
     state.visibleThemes,
     state.visibleWidths,
-    state.localTitle,
+    state.title,
     debouncedCodeUpdate,
   ]);
 

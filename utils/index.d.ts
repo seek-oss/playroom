@@ -23,6 +23,7 @@ interface CreateUrlOptions {
   themes?: string[];
   widths?: number[];
   paramType?: ParamType;
+  title?: string;
 }
 
 export const createUrl: (options: CreateUrlOptions) => string;
@@ -32,6 +33,7 @@ interface CreatePreviewUrlOptions {
   code?: string;
   theme?: string;
   paramType?: ParamType;
+  title?: string;
 }
 
 export const createPreviewUrl: (options: CreatePreviewUrlOptions) => string;

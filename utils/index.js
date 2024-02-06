@@ -12,11 +12,18 @@ const compressParams = ({ code, themes, widths, theme, title }) => {
   return lzString.compressToEncodedURIComponent(data);
 };
 
-const createUrl = ({ baseUrl, code, themes, widths, paramType = 'hash' }) => {
+const createUrl = ({
+  baseUrl,
+  code,
+  themes,
+  widths,
+  title,
+  paramType = 'hash',
+}) => {
   let path = '';
 
-  if (code || themes || widths) {
-    const compressedData = compressParams({ code, themes, widths });
+  if (code || themes || widths || title) {
+    const compressedData = compressParams({ code, themes, widths, title });
 
     path = `${paramType === 'hash' ? '#' : ''}?code=${compressedData}`;
   }
@@ -30,11 +37,17 @@ const createUrl = ({ baseUrl, code, themes, widths, paramType = 'hash' }) => {
   return path;
 };
 
-const createPreviewUrl = ({ baseUrl, code, theme, paramType = 'hash' }) => {
+const createPreviewUrl = ({
+  baseUrl,
+  code,
+  theme,
+  title,
+  paramType = 'hash',
+}) => {
   let path = '';
 
-  if (code || theme) {
-    const compressedData = compressParams({ code, theme });
+  if (code || theme || title) {
+    const compressedData = compressParams({ code, theme, title });
 
     path = `/preview/${paramType === 'hash' ? '#' : ''}?code=${compressedData}`;
   }

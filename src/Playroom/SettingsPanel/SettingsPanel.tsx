@@ -74,9 +74,9 @@ const KeyboardShortcut = ({
   );
 };
 
-const getTitle = (localTitle: string | undefined) => {
-  if (localTitle) {
-    return `${localTitle} | Playroom`;
+const getTitle = (title: string | undefined) => {
+  if (title) {
+    return `${title} | Playroom`;
   }
 
   const configTitle = window?.__playroomConfig__.title;
@@ -89,16 +89,16 @@ const getTitle = (localTitle: string | undefined) => {
 };
 
 export default React.memo(() => {
-  const [{ editorPosition, colorScheme, localTitle }, dispatch] =
+  const [{ editorPosition, colorScheme, title }, dispatch] =
     useContext(StoreContext);
 
   const keybindings = getKeyBindings();
 
-  const displayedTitle = getTitle(localTitle);
+  const displayedTitle = getTitle(title);
 
   return (
     <>
-      {localTitle === undefined ? null : (
+      {title === undefined ? null : (
         <Helmet>
           <title>{displayedTitle}</title>
         </Helmet>
@@ -113,7 +113,7 @@ export default React.memo(() => {
                 id="playroomTitleField"
                 placeholder="Enter a title for this Playroom..."
                 className={styles.textField}
-                value={localTitle}
+                value={title}
                 onChange={(e) =>
                   dispatch({
                     type: 'updateTitle',

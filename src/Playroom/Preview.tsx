@@ -9,10 +9,12 @@ import CatchErrors from './CatchErrors/CatchErrors';
 import RenderCode from './RenderCode/RenderCode';
 
 import * as styles from './Preview.css';
+import { Helmet } from 'react-helmet';
 
 interface PreviewState {
   code?: string;
   themeName?: string;
+  title?: string;
 }
 
 export interface PreviewProps {
@@ -25,7 +27,7 @@ export interface PreviewProps {
   }>;
 }
 export default ({ themes, components, FrameComponent }: PreviewProps) => {
-  const { themeName, code } = useParams((rawParams): PreviewState => {
+  const { themeName, code, title } = useParams((rawParams): PreviewState => {
     if (rawParams.code) {
       const result = JSON.parse(
         lzString.decompressFromEncodedURIComponent(String(rawParams.code)) ?? ''
@@ -34,6 +36,7 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
       return {
         code: compileJsx(result.code),
         themeName: result.theme,
+        title: result.title,
       };
     }
 
@@ -44,6 +47,11 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
 
   return (
     <CatchErrors code={code}>
+      <Helmet>
+        <title>
+          {title ? `${title} | Playroom Preview` : 'Playroom Preview'}
+        </title>
+      </Helmet>
       <div className={styles.renderContainer}>
         <FrameComponent
           themeName={themeName || '__PLAYROOM__NO_THEME__'}

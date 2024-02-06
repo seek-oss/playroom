@@ -9,7 +9,7 @@ const baseUrl = window.location.href
   .split('index.html')[0];
 
 export default (theme: string) => {
-  const [{ code }] = useContext(StoreContext);
+  const [{ code, title }] = useContext(StoreContext);
 
   const isThemed = theme !== '__PLAYROOM__NO_THEME__';
 
@@ -18,5 +18,6 @@ export default (theme: string) => {
     code,
     theme: isThemed ? theme : undefined,
     paramType: playroomConfig.paramType,
+    title,
   });
 };
