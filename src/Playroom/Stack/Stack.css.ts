@@ -1,5 +1,4 @@
-import { calc } from '@vanilla-extract/css-utils';
-import { style, createVar } from '@vanilla-extract/css';
+import { style, createVar, styleVariants } from '@vanilla-extract/css';
 import { vars } from '../sprinkles.css';
 
 const size = createVar();
@@ -12,38 +11,8 @@ export const gap = style({
   },
 });
 
-export const xxsmall = style({
+export const spaceScale = styleVariants(vars.space, (space) => ({
   vars: {
-    [size]: vars.grid,
+    [size]: space,
   },
-});
-
-export const xsmall = style({
-  vars: {
-    [size]: calc(vars.grid).multiply(2).toString(),
-  },
-});
-
-export const small = style({
-  vars: {
-    [size]: calc(vars.grid).multiply(3).toString(),
-  },
-});
-
-export const medium = style({
-  vars: {
-    [size]: calc(vars.grid).multiply(4).toString(),
-  },
-});
-
-export const large = style({
-  vars: {
-    [size]: calc(vars.grid).multiply(6).toString(),
-  },
-});
-
-export const xlarge = style({
-  vars: {
-    [size]: calc(vars.grid).multiply(12).toString(),
-  },
-});
+}));
