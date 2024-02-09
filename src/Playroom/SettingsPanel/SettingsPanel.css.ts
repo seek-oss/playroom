@@ -111,9 +111,6 @@ export const textField = style([
     color: colorPaletteVars.foreground.neutral,
     height: vars.touchableSize,
     background: colorPaletteVars.background.surface,
-    ':focus': {
-      outline: 'none',
-    },
     '::placeholder': {
       color: colorPaletteVars.foreground.neutralSoft,
     },
