@@ -29,7 +29,7 @@ export default ({ themes, visibleThemes }: PreviewPanelProps) => {
 
   return (
     <ToolbarPanel data-testid="preview-panel">
-      <Stack space="medium">
+      <Stack space="xxlarge">
         <Heading as="h4" level="3">
           Preview
         </Heading>

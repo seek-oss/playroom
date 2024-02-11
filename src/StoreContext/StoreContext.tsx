@@ -40,6 +40,7 @@ interface DebounceUpdateUrl {
   code?: string;
   themes?: string[];
   widths?: number[];
+  title?: string;
 }
 
 export interface CursorPosition {
@@ -55,6 +56,7 @@ interface StatusMessage {
 type ToolbarPanel = 'snippets' | 'frames' | 'preview' | 'settings';
 interface State {
   code: string;
+  title?: string;
   previewRenderCode?: string;
   previewEditorCode?: string;
   highlightLineNumber?: number;
@@ -104,7 +106,8 @@ type Action =
   | { type: 'updateVisibleThemes'; payload: { themes: string[] } }
   | { type: 'resetVisibleThemes' }
   | { type: 'updateVisibleWidths'; payload: { widths: number[] } }
-  | { type: 'resetVisibleWidths' };
+  | { type: 'resetVisibleWidths' }
+  | { type: 'updateTitle'; payload: { title: string } };
 
 const resetPreview = ({
   previewRenderCode,
@@ -383,6 +386,16 @@ const createReducer =
         return restState;
       }
 
+      case 'updateTitle': {
+        const { title } = action.payload;
+        store.setItem('title', title);
+
+        return {
+          ...state,
+          title,
+        };
+      }
+
       default:
         return state;
     }
@@ -439,12 +452,14 @@ export const StoreProvider = ({
     let codeFromQuery: State['code'];
     let themesFromQuery: State['visibleThemes'];
     let widthsFromQuery: State['visibleWidths'];
+    let titleFromQuery: State['title'];
 
     if (params.code) {
       const {
         code: parsedCode,
         themes: parsedThemes,
         widths: parsedWidths,
+        title: parsedTitle,
       } = JSON.parse(
         lzString.decompressFromEncodedURIComponent(String(params.code)) ?? ''
       );
@@ -452,6 +467,7 @@ export const StoreProvider = ({
       codeFromQuery = parsedCode;
       themesFromQuery = parsedThemes;
       widthsFromQuery = parsedWidths;
+      titleFromQuery = parsedTitle;
     }
 
     Promise.all([
@@ -462,6 +478,7 @@ export const StoreProvider = ({
       store.getItem<number[]>('visibleWidths'),
       store.getItem<string[]>('visibleThemes'),
       store.getItem<ColorScheme>('colorScheme'),
+      store.getItem<string | undefined>('title'),
     ]).then(
       ([
         storedCode,
@@ -471,6 +488,7 @@ export const StoreProvider = ({
         storedVisibleWidths,
         storedVisibleThemes,
         storedColorScheme,
+        storedTitle,
       ]) => {
         const code = codeFromQuery || storedCode || exampleCode;
         const editorPosition = storedPosition;
@@ -491,6 +509,7 @@ export const StoreProvider = ({
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
+            title: titleFromQuery ?? storedTitle ?? undefined,
             ready: true,
           },
         });
@@ -521,11 +540,13 @@ export const StoreProvider = ({
       code: state.code,
       themes: state.visibleThemes,
       widths: state.visibleWidths,
+      title: state.title,
     });
   }, [
     state.code,
     state.visibleThemes,
     state.visibleWidths,
+    state.title,
     debouncedCodeUpdate,
   ]);
 

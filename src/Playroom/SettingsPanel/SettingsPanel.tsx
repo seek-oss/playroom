@@ -1,4 +1,5 @@
 import React, { useContext, type ReactChild } from 'react';
+import { Helmet } from 'react-helmet';
 import { Heading } from '../Heading/Heading';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import {
@@ -73,101 +74,144 @@ const KeyboardShortcut = ({
   );
 };
 
+const getTitle = (title: string | undefined) => {
+  if (title) {
+    return `${title} | Playroom`;
+  }
+
+  const configTitle = window?.__playroomConfig__.title;
+
+  if (configTitle) {
+    return `${configTitle} | Playroom`;
+  }
+
+  return 'Playroom';
+};
+
 export default React.memo(() => {
-  const [{ editorPosition, colorScheme }, dispatch] = useContext(StoreContext);
+  const [{ editorPosition, colorScheme, title }, dispatch] =
+    useContext(StoreContext);
 
   const keybindings = getKeyBindings();
 
+  const displayedTitle = getTitle(title);
+
   return (
-    <ToolbarPanel data-testid="frame-panel">
-      <Stack space="large" dividers>
-        <fieldset className={styles.fieldset}>
-          <legend>
-            <Heading level="3">Editor Position</Heading>
-          </legend>
-          <div className={styles.radioContainer}>
-            {['Bottom', 'Right'].map((option) => (
-              <div key={option}>
-                <input
-                  type="radio"
-                  name="editorPosition"
-                  id={`editorPosition${option}`}
-                  value={option.toLowerCase()}
-                  title={option}
-                  checked={option.toLowerCase() === editorPosition}
-                  onChange={() =>
-                    dispatch({
-                      type: 'updateEditorPosition',
-                      payload: {
-                        position: option.toLowerCase() as EditorPosition,
-                      },
-                    })
-                  }
-                  className={styles.realRadio}
-                />
-                <label
-                  htmlFor={`editorPosition${option}`}
-                  className={styles.label}
-                  title={option}
-                >
-                  <span className={styles.labelText}>
-                    {positionIcon[option.toLowerCase() as EditorPosition]}
-                  </span>
-                </label>
-              </div>
-            ))}
-          </div>
-        </fieldset>
+    <>
+      {title === undefined ? null : (
+        <Helmet>
+          <title>{displayedTitle}</title>
+        </Helmet>
+      )}
+      <ToolbarPanel data-testid="settings-panel">
+        <Stack space="xxxlarge">
+          <label>
+            <Stack space="medium">
+              <Heading level="3">Title</Heading>
+              <input
+                type="text"
+                id="playroomTitleField"
+                placeholder="Enter a title for this Playroom..."
+                className={styles.textField}
+                value={title}
+                onChange={(e) =>
+                  dispatch({
+                    type: 'updateTitle',
+                    payload: { title: e.target.value },
+                  })
+                }
+              />
+            </Stack>
+          </label>
 
-        <fieldset className={styles.fieldset}>
-          <legend>
-            <Heading level="3">Color Scheme</Heading>
-          </legend>
-          <div className={styles.radioContainer}>
-            {['Light', 'Dark', 'System'].map((option) => (
-              <div key={option}>
-                <input
-                  type="radio"
-                  name="colorScheme"
-                  id={`colorScheme${option}`}
-                  value={option.toLowerCase()}
-                  title={option}
-                  checked={option.toLowerCase() === colorScheme}
-                  onChange={() =>
-                    dispatch({
-                      type: 'updateColorScheme',
-                      payload: {
-                        colorScheme: option.toLowerCase() as ColorScheme,
-                      },
-                    })
-                  }
-                  className={styles.realRadio}
-                />
-                <label
-                  htmlFor={`colorScheme${option}`}
-                  className={styles.label}
-                  title={option}
-                >
-                  <span className={styles.labelText}>
-                    {colorModeIcon[option.toLowerCase() as ColorScheme]}
-                  </span>
-                </label>
-              </div>
-            ))}
-          </div>
-        </fieldset>
+          <fieldset className={styles.fieldset}>
+            <legend>
+              <Heading level="3">Editor Position</Heading>
+            </legend>
+            <div className={styles.radioContainer}>
+              {['Bottom', 'Right'].map((option) => (
+                <div key={option}>
+                  <input
+                    type="radio"
+                    name="editorPosition"
+                    id={`editorPosition${option}`}
+                    value={option.toLowerCase()}
+                    title={option}
+                    checked={option.toLowerCase() === editorPosition}
+                    onChange={() =>
+                      dispatch({
+                        type: 'updateEditorPosition',
+                        payload: {
+                          position: option.toLowerCase() as EditorPosition,
+                        },
+                      })
+                    }
+                    className={styles.realRadio}
+                  />
+                  <label
+                    htmlFor={`editorPosition${option}`}
+                    className={styles.label}
+                    title={option}
+                  >
+                    <span className={styles.labelText}>
+                      {positionIcon[option.toLowerCase() as EditorPosition]}
+                    </span>
+                  </label>
+                </div>
+              ))}
+            </div>
+          </fieldset>
 
-        <Stack space="medium">
-          <Heading level="3">Keyboard Shortcuts</Heading>
-          {Object.entries(keybindings).map(([description, keybinding]) => (
-            <KeyboardShortcut
-              description={description}
-              keybinding={keybinding}
-              key={description}
-            />
-          ))}
+          <fieldset className={styles.fieldset}>
+            <legend>
+              <Heading level="3">Color Scheme</Heading>
+            </legend>
+            <div className={styles.radioContainer}>
+              {['Light', 'Dark', 'System'].map((option) => (
+                <div key={option}>
+                  <input
+                    type="radio"
+                    name="colorScheme"
+                    id={`colorScheme${option}`}
+                    value={option.toLowerCase()}
+                    title={option}
+                    checked={option.toLowerCase() === colorScheme}
+                    onChange={() =>
+                      dispatch({
+                        type: 'updateColorScheme',
+                        payload: {
+                          colorScheme: option.toLowerCase() as ColorScheme,
+                        },
+                      })
+                    }
+                    className={styles.realRadio}
+                  />
+                  <label
+                    htmlFor={`colorScheme${option}`}
+                    className={styles.label}
+                    title={option}
+                  >
+                    <span className={styles.labelText}>
+                      {colorModeIcon[option.toLowerCase() as ColorScheme]}
+                    </span>
+                  </label>
+                </div>
+              ))}
+            </div>
+          </fieldset>
+
+          <Stack space="xlarge">
+            <Heading level="3">Keyboard Shortcuts</Heading>
+            {Object.entries(keybindings).map(([description, keybinding]) => (
+              <KeyboardShortcut
+                description={description}
+                keybinding={keybinding}
+                key={description}
+              />
+            ))}
+          </Stack>
         </Stack>
-      </Stack>
-    </ToolbarPanel>
+      </ToolbarPanel>
+    </>
   );
 });

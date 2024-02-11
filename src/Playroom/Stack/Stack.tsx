@@ -15,14 +15,7 @@ type ReactNodeNoStrings =
 
 interface Props {
   children: ReactNodeNoStrings;
-  space:
-    | 'none'
-    | 'xxsmall'
-    | 'xsmall'
-    | 'small'
-    | 'medium'
-    | 'large'
-    | 'xlarge';
+  space: keyof typeof styles.spaceScale;
   dividers?: boolean;
 }
 
@@ -31,7 +24,7 @@ export const Stack = ({ children, space, dividers = false }: Props) => (
     {Children.toArray(children).map((item, index) => (
       <div
         key={index}
-        className={classnames(styles.gap, space !== 'none' && styles[space])}
+        className={classnames(styles.gap, styles.spaceScale[space])}
       >
         {dividers && index > 0 ? (
           <div className={styles.gap}>

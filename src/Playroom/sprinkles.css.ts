@@ -42,6 +42,7 @@ export const vars = createGlobalTheme(':root', {
     large: '12px',
     xlarge: '16px',
     xxlarge: '20px',
+    xxxlarge: '28px',
     gutter: '40px',
   },
 });
