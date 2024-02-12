@@ -314,4 +314,20 @@ describe('Keymaps', () => {
       `);
     });
   });
+
+  describe('wrapComment', () => {
+    const modifierKey = isMac() ? 'cmd' : 'ctrl';
+
+    it.only('should wrap the selection in a comment', () => {
+      selectToEndOfLine();
+
+      typeCode(`{${modifierKey}+/}`);
+
+      assertCodePaneContains(dedent`
+        {/* <div>First line</div> */}
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+  });
 });
