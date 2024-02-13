@@ -494,9 +494,15 @@ export const StoreProvider = ({
         const editorPosition = storedPosition;
         const editorHeight = storedHeight;
         const editorWidth = storedWidth;
-        const visibleWidths = widthsFromQuery || storedVisibleWidths;
+        const visibleWidths =
+          widthsFromQuery ||
+          storedVisibleWidths ||
+          playroomConfig?.defaultVisibleWidths;
         const visibleThemes =
-          hasThemesConfigured && (themesFromQuery || storedVisibleThemes);
+          hasThemesConfigured &&
+          (themesFromQuery ||
+            storedVisibleThemes ||
+            playroomConfig?.defaultVisibleThemes);
         const colorScheme = storedColorScheme;
 
         dispatch({

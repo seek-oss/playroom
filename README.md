@@ -80,6 +80,12 @@ module.exports = {
     // Custom webpack config goes here...
   }),
   iframeSandbox: 'allow-scripts',
+  defaultVisibleWidths: [
+    // subset of widths to display on first load
+  ],
+  defaultVisibleThemes: [
+    // subset of themes to display on first load
+  ],
 };
 ```
 
