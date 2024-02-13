@@ -324,6 +324,20 @@ describe('Keymaps', () => {
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
     const typeComment = () => typeCode(`{${modifierKey}+/}`);
 
+    // Todo - find word to indicate this is not for prop comments
+    describe('should wrap a single line in a block comment when there is no selection', () => {
+      it('standard', () => {
+        typeComment();
+
+        assertCodePaneContains(dedent`
+        {/* <div>First line</div> */}
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+      });
+    });
+
+    // Todo - find word to indicate this is not for prop comments
     describe('should wrap a single line selection in a block comment', () => {
       it('standard', () => {
         selectToEndOfLine();
@@ -407,6 +421,7 @@ describe('Keymaps', () => {
       });
     });
 
+    // Todo - find word to indicate this is not for prop comments
     describe('should wrap a multi line selection in a block comment', () => {
       it('standard', () => {
         selectNextLines(3);
@@ -457,20 +472,19 @@ describe('Keymaps', () => {
           </div>
       `);
       });
-
-      // TODO: Update this to handle non-selections
-      it.skip('should not create a comment when there is no selection', () => {
-        typeComment();
-
-        assertCodePaneContains(dedent`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      });
     });
 
-    describe('should uncomment', () => {
+    // Todo - rename this describe
+    // Todo - remove skip after implementation
+    describe.skip('prop comment tests ', () => {
+      it('with no selection');
+      it('with partial internal selection');
+      it('with full external selection');
+      it('with overlapping external partial selection');
+    });
+
+    // Todo - remove skip after implementation
+    describe.skip('should uncomment', () => {
       describe('a single line block comment', () => {
         it('with no selection', () => {
           loadPlayroom(`
@@ -538,6 +552,7 @@ describe('Keymaps', () => {
         `);
         });
       });
+
       describe('a multi line block comment', () => {
         it('with partial internal selection that spans all lines of the comment', () => {
           loadPlayroom(`
