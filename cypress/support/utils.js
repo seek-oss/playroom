@@ -114,6 +114,19 @@ export const selectToEndOfLine = () => {
   typeCode(isMac() ? '{shift+cmd+rightArrow}' : '{shift+end}');
 };
 
+/**
+ * @param {number} x;
+ * @param {number | undefined} y
+ */
+export const moveBy = (x, y = 0) => {
+  const xDirection = x >= 0 ? '{rightArrow}' : '{leftArrow}';
+  typeCode(xDirection.repeat(x));
+  if (y) {
+    const yDirection = y >= 0 ? '{downArrow}' : '{upArrow}';
+    typeCode(yDirection.repeat(y));
+  }
+};
+
 export const moveToEndOfLine = () => {
   typeCode(isMac() ? '{cmd+rightArrow}' : '{end}');
 };
