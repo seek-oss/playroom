@@ -138,7 +138,7 @@ export const moveToEndOfLine = () => {
  * @param {number}    numLines
  * @param {Direction} direction
  */
-export const selectLines = (numLines, direction = 'down') => {
+export const selectNextLines = (numLines, direction = 'down') => {
   const arrowCode = direction === 'down' ? 'downArrow' : 'upArrow';
   typeCode(`{shift+${arrowCode}}`.repeat(numLines));
 };

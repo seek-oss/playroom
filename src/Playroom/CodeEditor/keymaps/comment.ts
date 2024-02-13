@@ -71,19 +71,12 @@ export const wrapInComment = (cm: Editor) => {
 
   cm.operation(() => {
     for (const range of [...tagRanges].reverse()) {
-      // Todo - handle partial line selection
-      // if (range.from.ch !== 0) {
-      //   const newFrom = new Pos(range.from.line, 0);
-      //   cm.replaceRange('/* ', newFrom, range.from);
-      // } else {
-      //   cm.replaceRange('/* ', range.from, range.from);
-      // }
+      const newRangeFrom = new Pos(range.from.line, 0);
+      const newRangeTo = new Pos(range.to.line);
 
-      const existingContent = cm.getRange(range.from, range.to);
+      const existingContent = cm.getRange(newRangeFrom, newRangeTo);
 
-      // const isMultiLineSelection = to.line !== from.line;
-
-      cm.replaceRange(`{/* ${existingContent} */}`, range.from, range.to);
+      cm.replaceRange(`{/* ${existingContent} */}`, newRangeFrom, newRangeTo);
     }
 
     cm.setSelections(newSelections);
