@@ -2,41 +2,22 @@ import type CodeMirror from 'codemirror';
 import { type Editor, Pos } from 'codemirror';
 import type { Selection } from './types';
 
-const COMMENT_SYNTAX_OFFSET = '{/* '.length;
-
-// Todo - find word for bookend in software
-interface GetSelectionRangeOffsetCountOptions {
-  pointType: 'anchor' | 'head';
-  multiLine?: boolean;
-  reverseSelection: boolean;
-}
-
-function getSelectionRangeOffsetCount({
-  pointType,
-  multiLine,
-  reverseSelection,
-}: GetSelectionRangeOffsetCountOptions): number {
-  if (!multiLine) {
-    return COMMENT_SYNTAX_OFFSET;
-  }
-
-  if (
-    (pointType === 'head' && !reverseSelection) ||
-    (pointType === 'anchor' && reverseSelection)
-  ) {
-    return 0;
-  }
-
-  return COMMENT_SYNTAX_OFFSET;
-}
+const BLOCK_COMMENT_OFFSET = '{/* '.length;
+// const LINE_COMMENT_OFFSET = '// '.length;
 
 interface IsReverseSelectionOptions {
-  from: CodeMirror.Position;
-  to: CodeMirror.Position;
+  anchor: CodeMirror.Position;
+  head: CodeMirror.Position;
 }
 
-function isReverseSelection({ from, to }: IsReverseSelectionOptions): boolean {
-  return from.line > to.line || (from.line === to.line && from.ch > to.ch);
+function isReverseSelection({
+  anchor,
+  head,
+}: IsReverseSelectionOptions): boolean {
+  return (
+    anchor.line > head.line ||
+    (anchor.line === head.line && anchor.ch > head.ch)
+  );
 }
 
 interface TagRange {
@@ -71,37 +52,21 @@ export const wrapInComment = (cm: Editor) => {
       existingIndent,
     });
 
-    // Todo - change offset "+ 4" for prop comment
-    const anchorOffset = getSelectionRangeOffsetCount({
-      pointType: 'anchor',
-      multiLine: isMultiLineSelection,
-      reverseSelection: isReverseSelection({ from, to }),
-    });
+    // Todo - change offset from BLOCK_COMMENT_OFFSET to LINE_COMMENT_OFFSET for prop comment
 
-    const headOffset = getSelectionRangeOffsetCount({
-      pointType: 'head',
-      multiLine: isMultiLineSelection,
-      reverseSelection: isReverseSelection({ from, to }),
-    });
+    const toOffset = isMultiLineSelection ? 0 : BLOCK_COMMENT_OFFSET;
 
-    const newSelectionRangeAnchor = new Pos(from.line, from.ch + anchorOffset);
-    const newSelectionRangeHead = new Pos(to.line, to.ch + headOffset);
+    const newSelectionRangeFrom = new Pos(
+      from.line,
+      from.ch + BLOCK_COMMENT_OFFSET
+    );
+    const newSelectionRangeTo = new Pos(to.line, to.ch + toOffset);
 
-    newSelections.push({
-      anchor: newSelectionRangeAnchor,
-      head: newSelectionRangeHead,
-    });
+    const newSelection = isReverseSelection(range)
+      ? { anchor: newSelectionRangeTo, head: newSelectionRangeFrom }
+      : { anchor: newSelectionRangeFrom, head: newSelectionRangeTo };
 
-    if (from.ch < to.ch) {
-      console.log('from.ch < to.ch');
-    } else {
-      console.log('from.ch >= to.ch');
-    }
-
-    // Todo - incorporate lines added
-    // if (isMultiLineSelection) {
-    //   linesAdded += 2;
-    // }
+    newSelections.push(newSelection);
   }
 
   cm.operation(() => {
