@@ -81,10 +81,10 @@ module.exports = {
   }),
   iframeSandbox: 'allow-scripts',
   defaultVisibleWidths: [
-    // Custom subset of your specified widths to display on first load
+    // subset of widths to display on first load
   ],
   defaultVisibleThemes: [
-    // Custom subset of your specified themes to display on first load
+    // subset of themes to display on first load
   ],
 };
 ```

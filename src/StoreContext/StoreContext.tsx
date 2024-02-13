@@ -424,14 +424,10 @@ export const StoreProvider = ({
   children,
   themes,
   widths,
-  defaultVisibleThemes,
-  defaultVisibleWidths,
 }: {
   children: ReactNode;
   themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
-  defaultVisibleThemes?: PlayroomProps['themes'];
-  defaultVisibleWidths?: PlayroomProps['widths'];
 }) => {
   const [state, dispatch] = useReducer(
     createReducer({ themes, widths }),
@@ -499,10 +495,14 @@ export const StoreProvider = ({
         const editorHeight = storedHeight;
         const editorWidth = storedWidth;
         const visibleWidths =
-          widthsFromQuery || storedVisibleWidths || defaultVisibleWidths;
+          widthsFromQuery ||
+          storedVisibleWidths ||
+          playroomConfig?.defaultVisibleWidths;
         const visibleThemes =
           hasThemesConfigured &&
-          (themesFromQuery || storedVisibleThemes || defaultVisibleThemes);
+          (themesFromQuery ||
+            storedVisibleThemes ||
+            playroomConfig?.defaultVisibleThemes);
         const colorScheme = storedColorScheme;
 
         dispatch({
@@ -521,7 +521,7 @@ export const StoreProvider = ({
         });
       }
     );
-  }, [hasThemesConfigured, defaultVisibleThemes, defaultVisibleWidths]);
+  }, [hasThemesConfigured]);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
