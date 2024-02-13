@@ -342,5 +342,18 @@ describe('Keymaps', () => {
         <div>Third line</div> */}
       `);
     });
+
+    it.only('should wrap a multi line in a block comment when full lines are not selected ', () => {
+      typeCode('{rightArrow}'.repeat(6));
+      typeCode('{shift+downArrow}'.repeat(2));
+
+      typeCode(`{${modifierKey}+/}`);
+
+      assertCodePaneContains(dedent`
+        {/* <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div> */}
+      `);
+    });
   });
 });
