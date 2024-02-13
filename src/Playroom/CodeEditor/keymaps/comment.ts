@@ -39,9 +39,12 @@ export const wrapInComment = (cm: Editor) => {
       to = new Pos(to.line - 1);
     }
 
-    const existingContent = cm.getRange(from, to);
-    const existingIndent =
-      existingContent.length - existingContent.trimStart().length;
+    const fullContent = cm.getRange(new Pos(from.line, 0), to);
+    const existingIndent = fullContent.length - fullContent.trimStart().length;
+
+    const selectedContent = cm.getRange(from, to);
+    const selectedLeadingWhitespace =
+      selectedContent.length - selectedContent.trimStart().length;
 
     const isMultiLineSelection = to.line !== from.line;
 
@@ -58,7 +61,7 @@ export const wrapInComment = (cm: Editor) => {
 
     const newSelectionRangeFrom = new Pos(
       from.line,
-      from.ch + BLOCK_COMMENT_OFFSET
+      from.ch + BLOCK_COMMENT_OFFSET + selectedLeadingWhitespace
     );
     const newSelectionRangeTo = new Pos(to.line, to.ch + toOffset);
 
@@ -71,7 +74,7 @@ export const wrapInComment = (cm: Editor) => {
 
   cm.operation(() => {
     for (const range of [...tagRanges].reverse()) {
-      const newRangeFrom = new Pos(range.from.line, 0);
+      const newRangeFrom = new Pos(range.from.line, range.existingIndent);
       const newRangeTo = new Pos(range.to.line);
 
       const existingContent = cm.getRange(newRangeFrom, newRangeTo);
