@@ -100,8 +100,16 @@ export const selectNextWords = (numWords) => {
   typeCode(`{shift+${modifier}+rightArrow}`.repeat(numWords));
 };
 
+export const selectToStartOfLine = () => {
+  typeCode(isMac() ? '{shift+cmd+leftArrow}' : '{shift+home}');
+};
+
 export const selectToEndOfLine = () => {
   typeCode(isMac() ? '{shift+cmd+rightArrow}' : '{shift+end}');
+};
+
+export const moveToEndOfLine = () => {
+  typeCode(isMac() ? '{cmd+rightArrow}' : '{end}');
 };
 
 /**
