@@ -90,7 +90,7 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
 
   return (
     <ToolbarPanel data-testid="frame-panel">
-      <Stack space="large" dividers>
+      <Stack space="xxxlarge">
         <div data-testid="widthsPreferences">
           <FrameHeading
             showReset={hasFilteredWidths}
