@@ -130,6 +130,14 @@ export const moveBy = (x, y = 0) => {
   }
 };
 
+/**
+ * @param {number} numWords
+ */
+export const moveByWords = (numWords) => {
+  const modifier = isMac() ? 'alt' : 'ctrl';
+  typeCode(`{${modifier}+rightArrow}`.repeat(numWords));
+};
+
 export const moveToEndOfLine = () => {
   typeCode(isMac() ? '{cmd+rightArrow}' : '{end}');
 };

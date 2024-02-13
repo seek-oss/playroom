@@ -10,6 +10,7 @@ import {
   selectToEndOfLine,
   moveToEndOfLine,
   moveBy,
+  moveByWords,
 } from '../support/utils';
 import { isMac } from '../../src/utils/formatting';
 
@@ -368,7 +369,7 @@ describe('Keymaps', () => {
       });
 
       it('when the line is only partially selected', () => {
-        moveBy(5);
+        moveByWords(3);
 
         selectNextWords(2);
 
@@ -420,7 +421,7 @@ describe('Keymaps', () => {
       });
 
       it('when the lines are only partially selected', () => {
-        moveBy(5);
+        moveByWords(3);
         selectNextLines(1);
 
         typeComment();
@@ -442,7 +443,7 @@ describe('Keymaps', () => {
         `);
 
         moveBy(0, 1);
-        moveBy(7);
+        moveByWords(4);
         selectNextLines(1);
         selectNextWords(1);
 
