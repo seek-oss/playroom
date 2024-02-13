@@ -34,7 +34,7 @@ const getKeyBindings = () => {
     'Add cursor to next line': [metaKeySymbol, altKeySymbol, '↓'],
     'Select next occurrence': [metaKeySymbol, 'D'],
     'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
-    'Wrap selection in comment': [metaKeySymbol, '/'],
+    'Toggle comment': [metaKeySymbol, '/'],
   };
 };
 
