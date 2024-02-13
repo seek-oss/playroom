@@ -91,10 +91,16 @@ export const assertFirstFrameContains = (text) => {
   );
 };
 
+/**
+ * @param {number} numCharacters
+ */
 export const selectNextCharacters = (numCharacters) => {
   typeCode('{shift+rightArrow}'.repeat(numCharacters));
 };
 
+/**
+ * @param {number} numWords
+ */
 export const selectNextWords = (numWords) => {
   const modifier = isMac() ? 'alt' : 'ctrl';
   typeCode(`{shift+${modifier}+rightArrow}`.repeat(numWords));
