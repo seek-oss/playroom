@@ -1,6 +1,6 @@
 import type CodeMirror from 'codemirror';
 import { type Editor, Pos } from 'codemirror';
-// import type { Selection } from './types';
+import type { Selection } from './types';
 
 interface TagRange {
   from: CodeMirror.Position;
@@ -10,6 +10,7 @@ interface TagRange {
 }
 
 export const wrapInComment = (cm: Editor) => {
+  const newSelections: Selection[] = [];
   const tagRanges: TagRange[] = [];
 
   // let linesAdded = 0;
@@ -35,6 +36,19 @@ export const wrapInComment = (cm: Editor) => {
       existingIndent,
     });
 
+    // Todo - change offset "+ 4" for prop comment
+    const newSelectionRangeAnchor = new Pos(from.line, from.ch + 4);
+
+    const newSelectionRangeHead = new Pos(
+      to.line,
+      to.ch + (isMultiLineSelection ? 0 : 4)
+    );
+
+    newSelections.push({
+      anchor: newSelectionRangeAnchor,
+      head: newSelectionRangeHead,
+    });
+
     // Todo - incorporate lines added
     // if (isMultiLineSelection) {
     //   linesAdded += 2;
@@ -43,11 +57,21 @@ export const wrapInComment = (cm: Editor) => {
 
   cm.operation(() => {
     for (const range of [...tagRanges].reverse()) {
+      // Todo - handle partial line selection
+      // if (range.from.ch !== 0) {
+      //   const newFrom = new Pos(range.from.line, 0);
+      //   cm.replaceRange('/* ', newFrom, range.from);
+      // } else {
+      //   cm.replaceRange('/* ', range.from, range.from);
+      // }
+
       const existingContent = cm.getRange(range.from, range.to);
 
       // const isMultiLineSelection = to.line !== from.line;
 
       cm.replaceRange(`{/* ${existingContent} */}`, range.from, range.to);
     }
+
+    cm.setSelections(newSelections);
   });
 };
