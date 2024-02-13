@@ -4,7 +4,7 @@ import {
   assertCodePaneContains,
   loadPlayroom,
   selectNextWords,
-  selectLines,
+  selectNextLines,
   selectNextCharacters,
   selectToStartOfLine,
   selectToEndOfLine,
@@ -70,7 +70,7 @@ describe('Keymaps', () => {
 
     it('should swap multiple lines up and down with a selection', () => {
       typeCode('{rightArrow}');
-      selectLines(1);
+      selectNextLines(1);
       selectNextCharacters(3);
 
       typeCode('{alt+downArrow}');
@@ -298,7 +298,7 @@ describe('Keymaps', () => {
       typeCode(`{${modifierKey}+alt+downArrow}`);
       typeCode('{shift+alt+downArrow}{upArrow}');
 
-      selectLines(1);
+      selectNextLines(1);
       selectToEndOfLine();
 
       typeCode(`{shift+${modifierKey}+,}`);
@@ -380,11 +380,35 @@ describe('Keymaps', () => {
           <div>Third line</div>
         `);
       });
+
+      it('and respect indent levels', () => {
+        loadPlayroom(`
+          <div>
+            <div>First line</div>
+            <div>Second line</div>
+            <div>Third line</div>
+          </div>
+        `);
+
+        moveBy(0, 1);
+        selectToEndOfLine();
+
+        typeComment();
+        typeCode('c');
+
+        assertCodePaneContains(dedent`
+        <div>
+          {/* c */}
+          <div>Second line</div>
+          <div>Third line</div>
+        </div>
+      `);
+      });
     });
 
     describe('should wrap a multi line selection in a block comment', () => {
       it('standard', () => {
-        selectLines(3);
+        selectNextLines(3);
 
         typeComment();
 
@@ -397,7 +421,7 @@ describe('Keymaps', () => {
 
       it('when the lines are only partially selected', () => {
         moveBy(5);
-        selectLines(2);
+        selectNextLines(1);
 
         typeComment();
 
@@ -406,6 +430,31 @@ describe('Keymaps', () => {
           <div>Second line</div> */}
           <div>Third line</div>
         `);
+      });
+
+      it('and respect indent levels', () => {
+        loadPlayroom(`
+          <div>
+            <div>First line</div>
+            <div>Second line</div>
+            <div>Third line</div>
+          </div>
+        `);
+
+        moveBy(0, 1);
+        moveBy(7);
+        selectNextLines(1);
+        selectNextWords(1);
+
+        typeComment();
+        typeCode('c');
+
+        assertCodePaneContains(dedent`
+          <div>
+            {/* <div>c line</div> */}
+            <div>Third line</div>
+          </div>
+      `);
       });
 
       // TODO: Update this to handle non-selections
