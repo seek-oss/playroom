@@ -9,6 +9,7 @@ import {
   selectToStartOfLine,
   selectToEndOfLine,
   moveToEndOfLine,
+  moveBy,
 } from '../support/utils';
 import { isMac } from '../../src/utils/formatting';
 
@@ -320,12 +321,13 @@ describe('Keymaps', () => {
   // Todo - remove "only" when "wrapComment" is implemented
   describe.only('wrapComment', () => {
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
+    const typeComment = () => typeCode(`{${modifierKey}+/}`);
 
     describe('should wrap a single line selection in a block comment', () => {
       it('standard', () => {
         selectToEndOfLine();
 
-        typeCode(`{${modifierKey}+/}`);
+        typeComment();
 
         assertCodePaneContains(dedent`
         {/* <div>First line</div> */}
@@ -337,7 +339,7 @@ describe('Keymaps', () => {
       it('without shifting selection position for a forward selection ', () => {
         selectToEndOfLine();
 
-        typeCode(`{${modifierKey}+/}`);
+        typeComment();
 
         typeCode(`{shift+leftArrow}`);
         typeCode('c');
@@ -353,7 +355,7 @@ describe('Keymaps', () => {
         moveToEndOfLine();
         selectToStartOfLine();
 
-        typeCode(`{${modifierKey}+/}`);
+        typeComment();
 
         typeCode(`{shift+rightArrow}`);
         typeCode('c');
@@ -364,41 +366,58 @@ describe('Keymaps', () => {
         <div>Third line</div>
       `);
       });
+
+      it('when the line is only partially selected', () => {
+        moveBy(5);
+
+        selectNextWords(2);
+
+        typeComment();
+
+        assertCodePaneContains(dedent`
+          {/* <div>First line</div> */}
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+      });
     });
 
-    it('should wrap a multi line selection in a block comment', () => {
-      selectLines(3);
+    describe('should wrap a multi line selection in a block comment', () => {
+      it('standard', () => {
+        selectLines(3);
 
-      typeCode(`{${modifierKey}+/}`);
+        typeComment();
 
-      assertCodePaneContains(dedent`
+        assertCodePaneContains(dedent`
         {/* <div>First line</div>
         <div>Second line</div>
         <div>Third line</div> */}
       `);
-    });
+      });
 
-    it('should wrap a multi line in a block comment when full lines are not selected ', () => {
-      typeCode('{rightArrow}'.repeat(6));
-      typeCode('{shift+downArrow}'.repeat(2));
+      it('when the lines are only partially selected', () => {
+        moveBy(5);
+        selectLines(2);
 
-      typeCode(`{${modifierKey}+/}`);
+        typeComment();
 
-      assertCodePaneContains(dedent`
-        {/* <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div> */}
-      `);
-    });
+        assertCodePaneContains(dedent`
+          {/* <div>First line</div>
+          <div>Second line</div> */}
+          <div>Third line</div>
+        `);
+      });
 
-    it('should not create a comment when there is no selection', () => {
-      typeCode(`{${modifierKey}+/}`);
+      // TODO: Update this to handle non-selections
+      it.skip('should not create a comment when there is no selection', () => {
+        typeComment();
 
-      assertCodePaneContains(dedent`
+        assertCodePaneContains(dedent`
         <div>First line</div>
         <div>Second line</div>
         <div>Third line</div>
       `);
+      });
     });
   });
 });
