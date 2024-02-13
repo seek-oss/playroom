@@ -472,10 +472,124 @@ describe('Keymaps', () => {
 
     describe('should uncomment', () => {
       describe('a single line block comment', () => {
-        it('with no selection');
-        it('with partial internal selection');
-        it('with full external selection');
-        it('with overlapping external selection');
+        it('with no selection', () => {
+          loadPlayroom(`
+          {/* <div>First line</div> */}
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+          typeComment();
+
+          assertCodePaneContains(dedent`
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+        });
+
+        it('with partial internal selection', () => {
+          loadPlayroom(`
+          {/* <div>First line</div> */}
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+
+          moveByWords(4);
+          selectNextWords(2);
+          typeComment();
+
+          assertCodePaneContains(dedent`
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+        });
+
+        it('with full external selection', () => {
+          loadPlayroom(`
+          {/* <div>First line</div> */}
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+          selectToEndOfLine();
+          typeComment();
+
+          assertCodePaneContains(dedent`
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+        });
+
+        // Todo - come up with a better name for this
+        it('with overlapping partial external selection', () => {
+          loadPlayroom(`
+          {/* <div>First line</div> */}
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+          selectNextWords(5);
+          typeComment();
+
+          assertCodePaneContains(dedent`
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+        });
+      });
+      describe('a multi line block comment', () => {
+        it('with partial internal selection that spans all lines of the comment', () => {
+          loadPlayroom(`
+          {/* <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div> */}
+        `);
+          moveByWords(4);
+          selectNextLines(2);
+          typeComment();
+
+          assertCodePaneContains(dedent`
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+        });
+
+        it('with full external selection that spans all lines of the comment', () => {
+          loadPlayroom(`
+          {/* <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div> */}
+        `);
+          selectNextLines(3);
+          typeComment();
+
+          assertCodePaneContains(dedent`
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+        });
+
+        // Todo - come up with a better name for this
+        it('with overlapping external partial selection that spans all lines of the comment', () => {
+          loadPlayroom(`
+          {/* <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div> */}
+        `);
+          selectNextWords(5);
+          selectNextLines(2);
+
+          typeComment();
+
+          assertCodePaneContains(dedent`
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+        });
       });
     });
   });
