@@ -469,5 +469,14 @@ describe('Keymaps', () => {
       `);
       });
     });
+
+    describe('should uncomment', () => {
+      describe('a single line block comment', () => {
+        it('with no selection');
+        it('with partial internal selection');
+        it('with full external selection');
+        it('with overlapping external selection');
+      });
+    });
   });
 });
