@@ -355,7 +355,7 @@ describe('Keymaps', () => {
 
         typeCode(`{${modifierKey}+/}`);
 
-        typeCode(`{shift+leftArrow}`);
+        typeCode(`{shift+rightArrow}`);
         typeCode('c');
 
         assertCodePaneContains(dedent`
@@ -388,6 +388,16 @@ describe('Keymaps', () => {
         {/* <div>First line</div>
         <div>Second line</div>
         <div>Third line</div> */}
+      `);
+    });
+
+    it('should not create a comment when there is no selection', () => {
+      typeCode(`{${modifierKey}+/}`);
+
+      assertCodePaneContains(dedent`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
       `);
     });
   });
