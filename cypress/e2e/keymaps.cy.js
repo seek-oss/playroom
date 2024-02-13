@@ -6,7 +6,9 @@ import {
   selectNextWords,
   selectLines,
   selectNextCharacters,
+  selectToStartOfLine,
   selectToEndOfLine,
+  moveToEndOfLine,
 } from '../support/utils';
 import { isMac } from '../../src/utils/formatting';
 
@@ -316,22 +318,55 @@ describe('Keymaps', () => {
   });
 
   // Todo - remove "only" when "wrapComment" is implemented
-  describe('wrapComment', () => {
+  describe.only('wrapComment', () => {
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
 
-    it.only('should wrap a single line selection in a block comment', () => {
-      selectToEndOfLine();
+    describe('should wrap a single line selection in a block comment', () => {
+      it('standard', () => {
+        selectToEndOfLine();
 
-      typeCode(`{${modifierKey}+/}`);
+        typeCode(`{${modifierKey}+/}`);
 
-      assertCodePaneContains(dedent`
+        assertCodePaneContains(dedent`
         {/* <div>First line</div> */}
         <div>Second line</div>
         <div>Third line</div>
       `);
+      });
+
+      it('without shifting selection position for a forward selection ', () => {
+        selectToEndOfLine();
+
+        typeCode(`{${modifierKey}+/}`);
+
+        typeCode(`{shift+leftArrow}`);
+        typeCode('c');
+
+        assertCodePaneContains(dedent`
+        {/* c> */}
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+      });
+
+      it('without shifting selection position for a backward selection ', () => {
+        moveToEndOfLine();
+        selectToStartOfLine();
+
+        typeCode(`{${modifierKey}+/}`);
+
+        typeCode(`{shift+leftArrow}`);
+        typeCode('c');
+
+        assertCodePaneContains(dedent`
+        {/* <c */}
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+      });
     });
 
-    it.only('should wrap a multi line selection in a block comment', () => {
+    it('should wrap a multi line selection in a block comment', () => {
       selectLines(3);
 
       typeCode(`{${modifierKey}+/}`);
@@ -343,7 +378,7 @@ describe('Keymaps', () => {
       `);
     });
 
-    it.only('should wrap a multi line in a block comment when full lines are not selected ', () => {
+    it('should wrap a multi line in a block comment when full lines are not selected ', () => {
       typeCode('{rightArrow}'.repeat(6));
       typeCode('{shift+downArrow}'.repeat(2));
 
