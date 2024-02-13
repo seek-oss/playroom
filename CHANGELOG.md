@@ -1,5 +1,32 @@
 # playroom
 
+## 0.35.0
+
+### Minor Changes
+
+- ad60e01: Add support for specifying default subsets of themes and screen widths via the config.
+
+  #### Example usage
+
+  ```js
+  // playroom.config.js
+  module.exports = {
+    ...,
+    defaultVisibleWidths: [
+      // subset of widths to display on first load
+    ],
+    defaultVisibleThemes: [
+      // subset of themes to display on first load
+    ],
+  }
+  ```
+
+- f45dd04: Add ability to customise tab titles via a "Title" section in the settings panel.
+
+### Patch Changes
+
+- f491105: Fix bug in "Wrap selection in tag" command that caused the start cursor to occasionally be placed in the wrong postion.
+
 ## 0.34.2
 
 ### Patch Changes
