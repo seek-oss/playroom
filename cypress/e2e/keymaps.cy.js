@@ -315,10 +315,11 @@ describe('Keymaps', () => {
     });
   });
 
+  // Todo - remove "only" when "wrapComment" is implemented
   describe('wrapComment', () => {
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
 
-    it.only('should wrap the selection in a comment', () => {
+    it.only('should wrap a single line selection in a block comment', () => {
       selectToEndOfLine();
 
       typeCode(`{${modifierKey}+/}`);
@@ -327,6 +328,18 @@ describe('Keymaps', () => {
         {/* <div>First line</div> */}
         <div>Second line</div>
         <div>Third line</div>
+      `);
+    });
+
+    it.only('should wrap a multi line selection in a block comment', () => {
+      selectLines(3);
+
+      typeCode(`{${modifierKey}+/}`);
+
+      assertCodePaneContains(dedent`
+        {/* <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div> */}
       `);
     });
   });
