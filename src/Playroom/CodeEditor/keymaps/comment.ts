@@ -98,6 +98,28 @@ interface TagRange {
   isAlreadyCommented: boolean;
 }
 
+const determineCommentType = (
+  cm: Editor,
+  from: CodeMirror.Position
+): 'line' | 'block' => {
+  if (cm.getModeAt(from).name === 'javascript') {
+    return 'line';
+  }
+
+  const lineTokens = cm.getLineTokens(from.line);
+
+  const containsTag = lineTokens.some((token) => token.type === 'tag');
+  const containsAttribute = lineTokens.some(
+    (token) => token.type === 'attribute'
+  );
+
+  if (containsAttribute && !containsTag) {
+    return 'line';
+  }
+
+  return 'block';
+};
+
 export const wrapInComment = (cm: Editor) => {
   const newSelections: Selection[] = [];
   const tagRanges: TagRange[] = [];
@@ -110,6 +132,8 @@ export const wrapInComment = (cm: Editor) => {
       to = new Pos(to.line - 1);
     }
 
+    const commentType = determineCommentType(cm, from);
+    console.log('commentType: ', commentType);
     const fullContent = cm.getRange(new Pos(from.line, 0), new Pos(to.line));
     const existingIndent = fullContent.length - fullContent.trimStart().length;
 
