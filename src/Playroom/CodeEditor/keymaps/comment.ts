@@ -5,8 +5,10 @@ import type { Selection } from './types';
 const BLOCK_COMMENT_START = '{/*';
 const BLOCK_COMMENT_END = '*/}';
 
+const LINE_COMMENT = '//';
+
 const BLOCK_COMMENT_OFFSET = BLOCK_COMMENT_START.length + 1;
-// const LINE_COMMENT_OFFSET = '// '.length;
+const LINE_COMMENT_OFFSET = LINE_COMMENT.length + 1;
 
 interface IsReverseSelectionOptions {
   anchor: CodeMirror.Position;
@@ -90,18 +92,21 @@ function getSelectionToOffset({
   return BLOCK_COMMENT_OFFSET;
 }
 
+type CommentType = 'line' | 'block';
+
 interface TagRange {
   from: CodeMirror.Position;
   to: CodeMirror.Position;
   multiLine: boolean;
   existingIndent: number;
   isAlreadyCommented: boolean;
+  commentType: CommentType;
 }
 
 const determineCommentType = (
   cm: Editor,
   from: CodeMirror.Position
-): 'line' | 'block' => {
+): CommentType => {
   if (cm.getModeAt(from).name === 'javascript') {
     return 'line';
   }
@@ -133,7 +138,7 @@ export const wrapInComment = (cm: Editor) => {
     }
 
     const commentType = determineCommentType(cm, from);
-    console.log('commentType: ', commentType);
+
     const fullContent = cm.getRange(new Pos(from.line, 0), new Pos(to.line));
     const existingIndent = fullContent.length - fullContent.trimStart().length;
 
@@ -155,6 +160,7 @@ export const wrapInComment = (cm: Editor) => {
       multiLine: isMultiLineSelection,
       existingIndent,
       isAlreadyCommented,
+      commentType,
     });
 
     // Todo - change offset from BLOCK_COMMENT_OFFSET to LINE_COMMENT_OFFSET for prop comment
@@ -189,6 +195,7 @@ export const wrapInComment = (cm: Editor) => {
       const existingContent = cm.getRange(newRangeFrom, newRangeTo);
 
       if (range.isAlreadyCommented) {
+        // TODO: Handle line uncomments
         const existingContentWithoutComment = existingContent.replace(
           /\{\/\*\s?|\s?\*\/\}/g,
           ''
@@ -198,8 +205,19 @@ export const wrapInComment = (cm: Editor) => {
           newRangeFrom,
           newRangeTo
         );
+      } else if (range.commentType === 'block') {
+        cm.replaceRange(
+          `${BLOCK_COMMENT_START} ${existingContent} ${BLOCK_COMMENT_END}`,
+          newRangeFrom,
+          newRangeTo
+        );
       } else {
-        cm.replaceRange(`{/* ${existingContent} */}`, newRangeFrom, newRangeTo);
+        // TODO: Handle multiline line comments
+        cm.replaceRange(
+          `${LINE_COMMENT} ${existingContent}`,
+          newRangeFrom,
+          newRangeTo
+        );
       }
     }
 
