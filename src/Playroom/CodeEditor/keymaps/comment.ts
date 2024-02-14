@@ -23,6 +23,42 @@ function isReverseSelection({
   );
 }
 
+interface GetSelectionFromOffsetOptions {
+  isAlreadyCommented: boolean;
+  selectedLeadingWhitespace: number;
+}
+
+function getSelectionFromOffset({
+  isAlreadyCommented,
+  selectedLeadingWhitespace,
+}: GetSelectionFromOffsetOptions) {
+  if (!isAlreadyCommented) {
+    return selectedLeadingWhitespace + BLOCK_COMMENT_OFFSET;
+  }
+
+  return selectedLeadingWhitespace - BLOCK_COMMENT_OFFSET;
+}
+
+interface GetSelectionToOffsetOptions {
+  isAlreadyCommented: boolean;
+  isMultiLineSelection: boolean;
+}
+
+function getSelectionToOffset({
+  isAlreadyCommented,
+  isMultiLineSelection,
+}: GetSelectionToOffsetOptions) {
+  if (isMultiLineSelection) {
+    return 0;
+  }
+  
+  if (isAlreadyCommented) {
+    return -BLOCK_COMMENT_OFFSET;
+  }
+
+  return BLOCK_COMMENT_OFFSET;
+}
+
 interface TagRange {
   from: CodeMirror.Position;
   to: CodeMirror.Position;
@@ -68,15 +104,15 @@ export const wrapInComment = (cm: Editor) => {
 
     // Todo - change offset from BLOCK_COMMENT_OFFSET to LINE_COMMENT_OFFSET for prop comment
 
-    const offsetMultiplier = isAlreadyCommented ? -1 : 1;
-    // && trimmedContent.startsWith(`${BLOCK_COMMENT_START} `)
+    const fromOffset = getSelectionFromOffset({
+      isAlreadyCommented,
+      selectedLeadingWhitespace,
+    });
 
-    const fromOffset =
-      offsetMultiplier * BLOCK_COMMENT_OFFSET + selectedLeadingWhitespace;
-
-    const toOffset = isMultiLineSelection
-      ? 0
-      : offsetMultiplier * BLOCK_COMMENT_OFFSET;
+    const toOffset = getSelectionToOffset({
+      isAlreadyCommented,
+      isMultiLineSelection,
+    });
 
     const newSelectionRangeFrom = new Pos(from.line, from.ch + fromOffset);
     const newSelectionRangeTo = new Pos(to.line, to.ch + toOffset);
