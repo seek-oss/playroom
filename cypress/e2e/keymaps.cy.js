@@ -559,6 +559,107 @@ describe('Keymaps', () => {
             <div>Third line</div>
           `);
         });
+
+        describe.only('should respect indentation', () => {
+          it('for an external, partial selection', () => {
+            loadPlayroom(`
+            <div>
+                {/* <div>First line</div> */}
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+            moveBy(2, 1);
+            selectNextWords(5);
+
+            typeComment();
+
+            assertCodePaneContains(dedent`
+            <div>
+                <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+            <div>
+              cFirst line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+            `);
+          });
+
+          it('for an internal, partial selection', () => {
+            loadPlayroom(`
+            <div>
+                {/* <div>First line</div> */}
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+            moveBy(0, 1);
+            moveByWords(5);
+            selectNextWords(2);
+
+            typeComment();
+
+            assertCodePaneContains(dedent`
+            <div>
+                <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+            <div>
+                <div>c</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+          });
+
+          it('for an selection beginning during opening block comment syntax', () => {
+            loadPlayroom(`
+            <div>
+                {/* <div>First line</div> */}
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+            moveBy(0, 1);
+            moveByWords(1);
+            moveBy(1);
+            selectNextWords(4);
+
+            typeComment();
+
+            assertCodePaneContains(dedent`
+            <div>
+                <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+            <div>
+                cFirst line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+          });
+        });
       });
 
       describe('a multi line block comment', () => {
