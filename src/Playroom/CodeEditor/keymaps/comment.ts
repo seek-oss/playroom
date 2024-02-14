@@ -2,7 +2,10 @@ import type CodeMirror from 'codemirror';
 import { type Editor, Pos } from 'codemirror';
 import type { Selection } from './types';
 
-const BLOCK_COMMENT_OFFSET = '{/* '.length;
+const BLOCK_COMMENT_START = '{/*';
+const BLOCK_COMMENT_END = '*/}';
+
+const BLOCK_COMMENT_OFFSET = BLOCK_COMMENT_START.length + 1;
 // const LINE_COMMENT_OFFSET = '// '.length;
 
 interface IsReverseSelectionOptions {
@@ -25,6 +28,7 @@ interface TagRange {
   to: CodeMirror.Position;
   multiLine: boolean;
   existingIndent: number;
+  isAlreadyCommented: boolean;
 }
 
 export const wrapInComment = (cm: Editor) => {
@@ -39,8 +43,14 @@ export const wrapInComment = (cm: Editor) => {
       to = new Pos(to.line - 1);
     }
 
-    const fullContent = cm.getRange(new Pos(from.line, 0), to);
+    const fullContent = cm.getRange(new Pos(from.line, 0), new Pos(to.line));
     const existingIndent = fullContent.length - fullContent.trimStart().length;
+
+    const trimmedContent = fullContent.trim();
+
+    const isAlreadyCommented =
+      trimmedContent.startsWith(BLOCK_COMMENT_START) &&
+      trimmedContent.endsWith(BLOCK_COMMENT_END);
 
     const selectedContent = cm.getRange(from, to);
     const selectedLeadingWhitespace =
@@ -53,6 +63,7 @@ export const wrapInComment = (cm: Editor) => {
       to,
       multiLine: isMultiLineSelection,
       existingIndent,
+      isAlreadyCommented,
     });
 
     // Todo - change offset from BLOCK_COMMENT_OFFSET to LINE_COMMENT_OFFSET for prop comment
@@ -79,7 +90,19 @@ export const wrapInComment = (cm: Editor) => {
 
       const existingContent = cm.getRange(newRangeFrom, newRangeTo);
 
-      cm.replaceRange(`{/* ${existingContent} */}`, newRangeFrom, newRangeTo);
+      if (range.isAlreadyCommented) {
+        const existingContentWithoutComment = existingContent.replace(
+          /\{\/\*\s?|\s?\*\/\}/g,
+          ''
+        );
+        cm.replaceRange(
+          existingContentWithoutComment,
+          newRangeFrom,
+          newRangeTo
+        );
+      } else {
+        cm.replaceRange(`{/* ${existingContent} */}`, newRangeFrom, newRangeTo);
+      }
     }
 
     cm.setSelections(newSelections);
