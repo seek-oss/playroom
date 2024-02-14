@@ -68,12 +68,17 @@ export const wrapInComment = (cm: Editor) => {
 
     // Todo - change offset from BLOCK_COMMENT_OFFSET to LINE_COMMENT_OFFSET for prop comment
 
-    const toOffset = isMultiLineSelection ? 0 : BLOCK_COMMENT_OFFSET;
+    const offsetMultiplier = isAlreadyCommented ? -1 : 1;
+    // && trimmedContent.startsWith(`${BLOCK_COMMENT_START} `)
 
-    const newSelectionRangeFrom = new Pos(
-      from.line,
-      from.ch + BLOCK_COMMENT_OFFSET + selectedLeadingWhitespace
-    );
+    const fromOffset =
+      offsetMultiplier * BLOCK_COMMENT_OFFSET + selectedLeadingWhitespace;
+
+    const toOffset = isMultiLineSelection
+      ? 0
+      : offsetMultiplier * BLOCK_COMMENT_OFFSET;
+
+    const newSelectionRangeFrom = new Pos(from.line, from.ch + fromOffset);
     const newSelectionRangeTo = new Pos(to.line, to.ch + toOffset);
 
     const newSelection = isReverseSelection(range)
