@@ -474,17 +474,8 @@ describe('Keymaps', () => {
       });
     });
 
-    // Todo - rename this describe
     // Todo - remove skip after implementation
-    describe.skip('prop comment tests ', () => {
-      it('with no selection');
-      it('with partial internal selection');
-      it('with full external selection');
-      it('with overlapping external partial selection');
-    });
-
-    // Todo - remove skip after implementation
-    describe.skip('should uncomment', () => {
+    describe.only('should uncomment', () => {
       describe('a single line block comment', () => {
         it('with no selection', () => {
           loadPlayroom(`
@@ -511,9 +502,10 @@ describe('Keymaps', () => {
           moveByWords(4);
           selectNextWords(2);
           typeComment();
+          typeCode('c');
 
           assertCodePaneContains(dedent`
-          <div>First line</div>
+          <div>c</div>
           <div>Second line</div>
           <div>Third line</div>
         `);
@@ -529,7 +521,15 @@ describe('Keymaps', () => {
           typeComment();
 
           assertCodePaneContains(dedent`
-          <div>First line</div>
+            <div>First line</div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+          c
           <div>Second line</div>
           <div>Third line</div>
         `);
@@ -546,10 +546,18 @@ describe('Keymaps', () => {
           typeComment();
 
           assertCodePaneContains(dedent`
-          <div>First line</div>
-          <div>Second line</div>
-          <div>Third line</div>
-        `);
+            <div>First line</div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            c line</div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
         });
       });
 
@@ -565,10 +573,16 @@ describe('Keymaps', () => {
           typeComment();
 
           assertCodePaneContains(dedent`
-          <div>First line</div>
-          <div>Second line</div>
-          <div>Third line</div>
-        `);
+            <div>First line</div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            <div>cd line</div>
+          `);
         });
 
         it('with full external selection that spans all lines of the comment', () => {
@@ -581,10 +595,10 @@ describe('Keymaps', () => {
           typeComment();
 
           assertCodePaneContains(dedent`
-          <div>First line</div>
-          <div>Second line</div>
-          <div>Third line</div>
-        `);
+            <div>First line</div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
         });
 
         // Todo - come up with a better name for this
@@ -600,12 +614,28 @@ describe('Keymaps', () => {
           typeComment();
 
           assertCodePaneContains(dedent`
-          <div>First line</div>
-          <div>Second line</div>
-          <div>Third line</div>
-        `);
+            <div>First line</div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            ce</div>
+          `);
         });
       });
+    });
+
+    // Todo - rename this describe
+    // Todo - remove skip after implementation
+    // Todo - make these sub tests of the above describes
+    describe.skip('prop comment tests ', () => {
+      it('with no selection');
+      it('with partial internal selection');
+      it('with full external selection');
+      it('with overlapping external partial selection');
     });
   });
 });
