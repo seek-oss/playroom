@@ -475,7 +475,7 @@ describe('Keymaps', () => {
     });
 
     // Todo - remove skip after implementation
-    describe.only('should uncomment', () => {
+    describe('should uncomment', () => {
       describe('a single line block comment', () => {
         it('with no selection', () => {
           loadPlayroom(`
@@ -560,7 +560,7 @@ describe('Keymaps', () => {
           `);
         });
 
-        describe.only('should respect indentation', () => {
+        describe('should respect indentation', () => {
           it('for an external, partial selection', () => {
             loadPlayroom(`
             <div>

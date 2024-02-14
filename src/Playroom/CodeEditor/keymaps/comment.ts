@@ -26,17 +26,48 @@ function isReverseSelection({
 interface GetSelectionFromOffsetOptions {
   isAlreadyCommented: boolean;
   selectedLeadingWhitespace: number;
+  fullContent: string;
+  from: CodeMirror.Position;
 }
 
 function getSelectionFromOffset({
   isAlreadyCommented,
   selectedLeadingWhitespace,
+  fullContent,
+  from,
 }: GetSelectionFromOffsetOptions) {
   if (!isAlreadyCommented) {
     return selectedLeadingWhitespace + BLOCK_COMMENT_OFFSET;
   }
 
-  return selectedLeadingWhitespace - BLOCK_COMMENT_OFFSET;
+  function getSelectionStatus(): 'full' | 'partial' | 'none' {
+    if (from.ch < commentStartIndex) {
+      return 'full';
+    }
+    if (from.ch > commentStartIndex + commentStartUsed.length) {
+      return 'none';
+    }
+    return 'partial';
+  }
+
+  const commentStartWithSpace = `${BLOCK_COMMENT_START} `;
+
+  const commentStartUsed =
+    fullContent.indexOf(commentStartWithSpace) === -1
+      ? BLOCK_COMMENT_START
+      : commentStartWithSpace;
+
+  const commentStartIndex = fullContent.indexOf(commentStartUsed);
+  const selectionStatus = getSelectionStatus();
+
+  switch (selectionStatus) {
+    case 'none':
+      return -commentStartUsed.length;
+    case 'full':
+      return 0;
+    case 'partial':
+      return commentStartIndex - from.ch;
+  }
 }
 
 interface GetSelectionToOffsetOptions {
@@ -51,7 +82,7 @@ function getSelectionToOffset({
   if (isMultiLineSelection) {
     return 0;
   }
-  
+
   if (isAlreadyCommented) {
     return -BLOCK_COMMENT_OFFSET;
   }
@@ -107,6 +138,8 @@ export const wrapInComment = (cm: Editor) => {
     const fromOffset = getSelectionFromOffset({
       isAlreadyCommented,
       selectedLeadingWhitespace,
+      fullContent,
+      from,
     });
 
     const toOffset = getSelectionToOffset({
