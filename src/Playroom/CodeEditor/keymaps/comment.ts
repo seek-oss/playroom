@@ -209,8 +209,13 @@ export const wrapInComment = (cm: Editor) => {
           newRangeFrom,
           newRangeTo
         );
+      } else if (range.multiLine) {
+        const updatedContent = existingContent.replace(
+          /^(\s*)/gm,
+          `$1${LINE_COMMENT} `
+        );
+        cm.replaceRange(updatedContent, newRangeFrom, newRangeTo);
       } else {
-        // TODO: Handle multiline line comments
         cm.replaceRange(
           `${LINE_COMMENT} ${existingContent}`,
           newRangeFrom,
