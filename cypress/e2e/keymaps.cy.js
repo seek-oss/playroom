@@ -777,7 +777,7 @@ describe('Keymaps', () => {
         });
       });
 
-      describe.only('and respect indent levels', () => {
+      describe('and respect indent levels', () => {
         it('block', () => {
           loadPlayroom(`
           <div>
@@ -838,22 +838,66 @@ describe('Keymaps', () => {
       });
     });
 
-    // Todo - remove skip after implementation
     describe('should uncomment', () => {
-      describe('a single line block comment', () => {
-        it('with no selection', () => {
-          loadPlayroom(`
-          {/* <div>First line</div> */}
-          <div>Second line</div>
-          <div>Third line</div>
-        `);
-          typeComment();
+      describe('a single line comment', () => {
+        describe.only('with no selection', () => {
+          it('block', () => {
+            loadPlayroom(`
+              {/* <div>First line</div> */}
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+            typeComment();
 
-          assertCodePaneContains(dedent`
-          <div>First line</div>
-          <div>Second line</div>
-          <div>Third line</div>
-        `);
+            assertCodePaneContains(dedent`
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+
+          // Todo - fix this failing test
+          it('line', () => {
+            loadPlayroom(`
+              <div
+                prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+            moveBy(0, 1);
+            typeComment();
+
+            assertCodePaneContains(dedent`
+              <div
+                // prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              <div
+              c  // prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
         });
 
         it('with partial internal selection', () => {
