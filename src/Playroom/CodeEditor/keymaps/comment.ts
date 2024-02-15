@@ -81,23 +81,28 @@ function getSelectionFromOffset({
 }
 
 interface GetSelectionToOffsetOptions {
+  commentType: CommentType;
   isAlreadyCommented: boolean;
   isMultiLineSelection: boolean;
 }
 
 function getSelectionToOffset({
+  commentType,
   isAlreadyCommented,
   isMultiLineSelection,
 }: GetSelectionToOffsetOptions) {
+  const commentOffset =
+    commentType === 'block' ? BLOCK_COMMENT_OFFSET : LINE_COMMENT_OFFSET;
+
   if (isMultiLineSelection) {
     return 0;
   }
 
   if (isAlreadyCommented) {
-    return -BLOCK_COMMENT_OFFSET;
+    return -commentOffset;
   }
 
-  return BLOCK_COMMENT_OFFSET;
+  return commentOffset;
 }
 
 type CommentType = 'line' | 'block';
@@ -170,8 +175,6 @@ export const wrapInComment = (cm: Editor) => {
       commentType,
     });
 
-    // Todo - change offset from BLOCK_COMMENT_OFFSET to LINE_COMMENT_OFFSET for prop comment
-
     const fromOffset = getSelectionFromOffset({
       commentType,
       isAlreadyCommented,
@@ -181,6 +184,7 @@ export const wrapInComment = (cm: Editor) => {
     });
 
     const toOffset = getSelectionToOffset({
+      commentType,
       isAlreadyCommented,
       isMultiLineSelection,
     });
