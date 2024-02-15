@@ -26,6 +26,7 @@ function isReverseSelection({
 }
 
 interface GetSelectionFromOffsetOptions {
+  commentType: CommentType;
   isAlreadyCommented: boolean;
   selectedLeadingWhitespace: number;
   fullContent: string;
@@ -33,13 +34,17 @@ interface GetSelectionFromOffsetOptions {
 }
 
 function getSelectionFromOffset({
+  commentType,
   isAlreadyCommented,
   selectedLeadingWhitespace,
   fullContent,
   from,
 }: GetSelectionFromOffsetOptions) {
   if (!isAlreadyCommented) {
-    return selectedLeadingWhitespace + BLOCK_COMMENT_OFFSET;
+    return (
+      selectedLeadingWhitespace +
+      (commentType === 'block' ? BLOCK_COMMENT_OFFSET : LINE_COMMENT_OFFSET)
+    );
   }
 
   function getSelectionStatus(): 'full' | 'partial' | 'none' {
@@ -52,11 +57,14 @@ function getSelectionFromOffset({
     return 'partial';
   }
 
-  const commentStartWithSpace = `${BLOCK_COMMENT_START} `;
+  const commentStart =
+    commentType === 'block' ? BLOCK_COMMENT_START : LINE_COMMENT_START;
+
+  const commentStartWithSpace = `${commentStart} `;
 
   const commentStartUsed =
     fullContent.indexOf(commentStartWithSpace) === -1
-      ? BLOCK_COMMENT_START
+      ? commentStart
       : commentStartWithSpace;
 
   const commentStartIndex = fullContent.indexOf(commentStartUsed);
@@ -165,6 +173,7 @@ export const wrapInComment = (cm: Editor) => {
     // Todo - change offset from BLOCK_COMMENT_OFFSET to LINE_COMMENT_OFFSET for prop comment
 
     const fromOffset = getSelectionFromOffset({
+      commentType,
       isAlreadyCommented,
       selectedLeadingWhitespace,
       fullContent,
