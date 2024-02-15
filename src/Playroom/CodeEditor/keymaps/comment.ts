@@ -5,10 +5,10 @@ import type { Selection } from './types';
 const BLOCK_COMMENT_START = '{/*';
 const BLOCK_COMMENT_END = '*/}';
 
-const LINE_COMMENT = '//';
+const LINE_COMMENT_START = '//';
 
 const BLOCK_COMMENT_OFFSET = BLOCK_COMMENT_START.length + 1;
-const LINE_COMMENT_OFFSET = LINE_COMMENT.length + 1;
+const LINE_COMMENT_OFFSET = LINE_COMMENT_START.length + 1;
 
 interface IsReverseSelectionOptions {
   anchor: CodeMirror.Position;
@@ -143,8 +143,9 @@ export const wrapInComment = (cm: Editor) => {
     const trimmedContent = fullContent.trim();
 
     const isAlreadyCommented =
-      trimmedContent.startsWith(BLOCK_COMMENT_START) &&
-      trimmedContent.endsWith(BLOCK_COMMENT_END);
+      (trimmedContent.startsWith(BLOCK_COMMENT_START) &&
+        trimmedContent.endsWith(BLOCK_COMMENT_END)) ||
+      trimmedContent.startsWith(LINE_COMMENT_START);
 
     const selectedContent = cm.getRange(from, to);
     const selectedLeadingWhitespace =
@@ -193,9 +194,14 @@ export const wrapInComment = (cm: Editor) => {
       const existingContent = cm.getRange(newRangeFrom, newRangeTo);
 
       if (range.isAlreadyCommented) {
-        // TODO: Handle line uncomments
+        const uncommentType: CommentType = existingContent
+          .trimStart()
+          .startsWith(BLOCK_COMMENT_START)
+          ? 'block'
+          : 'line';
+
         const existingContentWithoutComment = existingContent.replace(
-          /\{\/\*\s?|\s?\*\/\}/g,
+          uncommentType === 'block' ? /\{\/\*\s?|\s?\*\/\}/g : /\/\/\s?/g,
           ''
         );
         cm.replaceRange(
@@ -212,12 +218,12 @@ export const wrapInComment = (cm: Editor) => {
       } else if (range.multiLine) {
         const updatedContent = existingContent.replace(
           /^(\s*)/gm,
-          `$1${LINE_COMMENT} `
+          `$1${LINE_COMMENT_START} `
         );
         cm.replaceRange(updatedContent, newRangeFrom, newRangeTo);
       } else {
         cm.replaceRange(
-          `${LINE_COMMENT} ${existingContent}`,
+          `${LINE_COMMENT_START} ${existingContent}`,
           newRangeFrom,
           newRangeTo
         );
