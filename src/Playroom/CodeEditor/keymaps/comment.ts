@@ -107,10 +107,6 @@ const determineCommentType = (
   cm: Editor,
   from: CodeMirror.Position
 ): CommentType => {
-  if (cm.getModeAt(from).name === 'javascript') {
-    return 'line';
-  }
-
   const lineTokens = cm.getLineTokens(from.line);
 
   const containsTag = lineTokens.some((token) => token.type === 'tag');
@@ -118,11 +114,13 @@ const determineCommentType = (
     (token) => token.type === 'attribute'
   );
 
-  if (containsAttribute && !containsTag) {
-    return 'line';
+  const isJavaScriptMode = cm.getModeAt(from).name === 'javascript';
+
+  if (containsTag || (!isJavaScriptMode && !containsAttribute)) {
+    return 'block';
   }
 
-  return 'block';
+  return 'line';
 };
 
 export const wrapInComment = (cm: Editor) => {
