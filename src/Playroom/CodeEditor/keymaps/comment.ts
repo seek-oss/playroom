@@ -137,9 +137,6 @@ export const wrapInComment = (cm: Editor) => {
 
     const commentType = determineCommentType(cm, from);
 
-    // Todo - remove console log
-    console.log('commentType: ', commentType);
-
     const fullContent = cm.getRange(new Pos(from.line, 0), new Pos(to.line));
     const existingIndent = fullContent.length - fullContent.trimStart().length;
 
