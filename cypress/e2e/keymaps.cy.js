@@ -20,15 +20,15 @@ const cmdPlus = (keyCombo) => {
 };
 
 describe('Keymaps', () => {
-  beforeEach(() => {
-    loadPlayroom(`
-      <div>First line</div>
-      <div>Second line</div>
-      <div>Third line</div>
-    `);
-  });
-
   describe('swapLine', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
     it('should swap single lines up and down without a selection', () => {
       // Move the first line down
       typeCode('{alt+downArrow}');
@@ -93,6 +93,14 @@ describe('Keymaps', () => {
   });
 
   describe('duplicateLine', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
     it('should duplicate single lines up and down', () => {
       // Duplicate the first line down
       typeCode('{shift+alt+downArrow}a');
@@ -117,6 +125,14 @@ describe('Keymaps', () => {
   });
 
   describe('selectNextOccurrence', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
     const cmdPlusD = cmdPlus('D');
 
     it('should select the current word on one use', () => {
@@ -173,6 +189,14 @@ describe('Keymaps', () => {
   });
 
   describe('addCursor', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
     it('should add a cursor on the next line', () => {
       typeCode(`{${cmdPlus('alt+downArrow')}}a`);
       assertCodePaneContains(dedent`
@@ -194,6 +218,13 @@ describe('Keymaps', () => {
   });
 
   describe('wrapTag', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
 
     it("should insert a fragment with cursors when there's no selection", () => {
@@ -321,6 +352,15 @@ describe('Keymaps', () => {
 
   // Todo - remove "only" when "wrapComment" is implemented
   describe.only('wrapComment', () => {
+    // Todo - remove this before each and loadPlayroom at the start of every test
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+    
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
     const typeComment = () => typeCode(`{${modifierKey}+/}`);
 
