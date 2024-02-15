@@ -41,8 +41,18 @@ function getSelectionFromOffset({
   from,
 }: GetSelectionFromOffsetOptions) {
   if (!isAlreadyCommented) {
+    // Todo - refactor
+    const totalLeadingWhitespace =
+      fullContent.length - fullContent.trimStart().length;
+
+    const removeLeadingWhitespace = !(from.ch > totalLeadingWhitespace);
+
+    const whitespaceToRemove = removeLeadingWhitespace
+      ? selectedLeadingWhitespace
+      : 0;
+
     return (
-      selectedLeadingWhitespace +
+      whitespaceToRemove +
       (commentType === 'block' ? BLOCK_COMMENT_OFFSET : LINE_COMMENT_OFFSET)
     );
   }
@@ -94,7 +104,7 @@ function getSelectionToOffset({
   const commentOffset =
     commentType === 'block' ? BLOCK_COMMENT_OFFSET : LINE_COMMENT_OFFSET;
 
-  if (isMultiLineSelection) {
+  if (isMultiLineSelection && commentType === 'block') {
     return 0;
   }
 
