@@ -974,7 +974,7 @@ describe('Keymaps', () => {
           });
         });
 
-        describe.only('with full external selection', () => {
+        describe('with full external selection', () => {
           it('block', () => {
             loadPlayroom(`
               {/* <div>First line</div> */}
@@ -1046,28 +1046,75 @@ describe('Keymaps', () => {
         });
 
         // Todo - come up with a better name for this
-        it('with overlapping partial external selection', () => {
-          loadPlayroom(`
-          {/* <div>First line</div> */}
-          <div>Second line</div>
-          <div>Third line</div>
-        `);
-          selectNextWords(5);
-          typeComment();
+        describe.only('with overlapping partial external selection', () => {
+          it('block', () => {
+            loadPlayroom(`
+              {/* <div>First line</div> */}
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
 
-          assertCodePaneContains(dedent`
-            <div>First line</div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+            selectNextWords(5);
+            typeComment();
 
-          typeCode('c');
+            assertCodePaneContains(dedent`
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
 
-          assertCodePaneContains(dedent`
-            c line</div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              c line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+
+          it('block', () => {
+            loadPlayroom(`
+              <div
+                // prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            moveBy(0, 1);
+            selectNextWords(5);
+            typeComment();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              <div
+              c is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
         });
 
         describe('should respect indentation', () => {
