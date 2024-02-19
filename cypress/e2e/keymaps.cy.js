@@ -1046,7 +1046,7 @@ describe('Keymaps', () => {
         });
 
         // Todo - come up with a better name for this
-        describe.only('with overlapping partial external selection', () => {
+        describe('with overlapping partial external selection', () => {
           it('block', () => {
             loadPlayroom(`
               {/* <div>First line</div> */}
@@ -1118,36 +1118,87 @@ describe('Keymaps', () => {
         });
 
         describe('should respect indentation', () => {
-          it('for an external, partial selection', () => {
-            loadPlayroom(`
-            <div>
-                {/* <div>First line</div> */}
-              <div>Second line</div>
-              <div>Third line</div>
-            </div>
-          `);
-            moveBy(2, 1);
-            selectNextWords(5);
+          describe.only('for an external, partial selection', () => {
+            it('line', () => {
+              loadPlayroom(`
+                <div>
+                    {/* <div>First line</div> */}
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
 
-            typeComment();
+              moveBy(0, 1);
+              moveByWords(1);
+              selectNextWords(4);
 
-            assertCodePaneContains(dedent`
-            <div>
-                <div>First line</div>
-              <div>Second line</div>
-              <div>Third line</div>
-            </div>
-          `);
+              typeComment();
 
-            typeCode('c');
+              assertCodePaneContains(dedent`
+                <div>
+                    <div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
 
-            assertCodePaneContains(dedent`
-            <div>
-              cFirst line</div>
-              <div>Second line</div>
-              <div>Third line</div>
-            </div>
-            `);
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div>
+                    cFirst line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+            });
+
+            it('block', () => {
+              loadPlayroom(`
+                <div
+                    // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+
+              selectNextWords(3);
+
+              typeComment();
+
+              assertCodePaneContains(dedent`
+                <div
+                    prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                    cThis is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
           });
 
           it('for an internal, partial selection', () => {
