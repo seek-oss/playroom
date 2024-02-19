@@ -1451,6 +1451,53 @@ describe('Keymaps', () => {
             });
           });
         });
+
+        // Todo - fix failing test
+        describe.only('should preserve secondary comments at the end of the line', () => {
+          it('line', () => {
+            loadPlayroom(`
+              <div
+                prop1="This is the first prop" // Prop1
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            moveBy(0, 1);
+
+            typeComment();
+
+            assertCodePaneContains(dedent`
+              <div
+                // prop1="This is the first prop" // Prop1
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeComment();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop" // Prop1
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+        });
       });
 
       describe('a multi line comment', () => {
