@@ -351,21 +351,21 @@ describe('Keymaps', () => {
   });
 
   describe.only('toggleComment', () => {
-    // Todo - format this better
-    const blockStarter = `<div>First line</div>
-    <div>Second line</div>
-    <div>Third line</div>`;
+    const blockStarter = `
+      <div>First line</div>
+      <div>Second line</div>
+      <div>Third line</div>`;
 
-    // Todo - format this better
-    const lineStarter = `<div
-     prop1="This is the first prop"
-     prop2="This is the second prop"
-     prop3="This is the third prop"
-   >
-     First line
-   </div>
-   <div>Second line</div>
-   <div>Third line</div>`;
+    const lineStarter = `
+      <div
+        prop1="This is the first prop"
+        prop2="This is the second prop"
+        prop3="This is the third prop"
+      >
+        First line
+      </div>
+      <div>Second line</div>
+      <div>Third line</div>`;
 
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
     const typeComment = () => typeCode(`{${modifierKey}+/}`);
