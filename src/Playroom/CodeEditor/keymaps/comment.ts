@@ -162,6 +162,12 @@ const determineCommentType = (
   const isJavaScriptMode = cm.getModeAt(from).name === 'javascript';
   const isInlineComment = cm.getLine(from.line).trimStart().startsWith('//');
 
+  // Todo - remove logs
+  // console.log('containsTag: ', containsTag);
+  // console.log('containsAttribute: ', containsAttribute);
+  // console.log('isJavaScriptMode: ', isJavaScriptMode);
+  // console.log('isInlineComment: ', isInlineComment);
+
   // Todo (1/3) - refactor. This logic is technically incorrect because you could begin a line with "//" at the tag level
   // Todo (2/3) - this would be a syntax error but it is technically not an inline comment
   // Todo (3/3) - using toggleComment command here should wrap the line in a block comment
