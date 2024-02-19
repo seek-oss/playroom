@@ -351,7 +351,7 @@ describe('Keymaps', () => {
   });
 
   // Todo - remove "only" when "wrapComment" is implemented
-  describe.only('wrapComment', () => {
+  describe.only('toggleComment', () => {
     // Todo - remove this before each and loadPlayroom at the start of every test
     // Todo - make the common beforeEach strings consts to be reused
     beforeEach(() => {
@@ -543,7 +543,7 @@ describe('Keymaps', () => {
 
           assertCodePaneContains(dedent`
             <div
-              // pc
+             c
               prop2="This is the second prop"
               prop3="This is the third prop"
             >
@@ -636,6 +636,7 @@ describe('Keymaps', () => {
           `);
 
           moveBy(0, 1);
+          moveByWords(1);
           selectToEndOfLine();
 
           typeComment();
@@ -664,6 +665,7 @@ describe('Keymaps', () => {
           `);
 
           moveBy(0, 1);
+          moveByWords(1);
           selectToEndOfLine();
 
           typeComment();
@@ -1489,7 +1491,7 @@ describe('Keymaps', () => {
         });
 
         // Todo - come up with a better name for this
-        describe.only('with overlapping external partial selection that spans all lines of the comment', () => {
+        describe('with overlapping external partial selection that spans all lines of the comment', () => {
           it('block', () => {
             loadPlayroom(`
             {/* <div>First line</div>
@@ -1561,15 +1563,5 @@ describe('Keymaps', () => {
         });
       });
     });
-
-    // Todo - rename this describe
-    // Todo - remove skip after implementation
-    // Todo - make these sub tests of the above describes
-    // describe.skip('prop comment tests ', () => {
-    //   it('with no selection');
-    //   it('with partial internal selection');
-    //   it('with full external selection');
-    //   it('with overlapping external partial selection');
-    // });
   });
 });
