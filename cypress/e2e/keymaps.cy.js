@@ -350,7 +350,7 @@ describe('Keymaps', () => {
     });
   });
 
-  describe.only('toggleComment', () => {
+  describe('toggleComment', () => {
     const blockStarter = `
       <div>First line</div>
       <div>Second line</div>
