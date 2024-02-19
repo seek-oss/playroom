@@ -350,22 +350,29 @@ describe('Keymaps', () => {
     });
   });
 
-  describe('toggleComment', () => {
-    // Todo - remove this before each and loadPlayroom at the start of every test
-    // Todo - make the common beforeEach strings consts to be reused
-    beforeEach(() => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-    });
+  describe.only('toggleComment', () => {
+    // Todo - format this better
+    const blockStarter = `<div>First line</div>
+    <div>Second line</div>
+    <div>Third line</div>`;
+
+    // Todo - format this better
+    const lineStarter = `<div
+     prop1="This is the first prop"
+     prop2="This is the second prop"
+     prop3="This is the third prop"
+   >
+     First line
+   </div>
+   <div>Second line</div>
+   <div>Third line</div>`;
 
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
     const typeComment = () => typeCode(`{${modifierKey}+/}`);
 
     describe('should wrap a single line in a comment when there is no selection', () => {
       it('block', () => {
+        loadPlayroom(blockStarter);
         typeComment();
 
         assertCodePaneContains(dedent`
@@ -376,17 +383,7 @@ describe('Keymaps', () => {
       });
 
       it('line', () => {
-        loadPlayroom(`
-          <div
-            prop1="This is the first prop"
-            prop2="This is the second prop"
-            prop3="This is the third prop"
-          >
-            First line
-          </div>
-          <div>Second line</div>
-          <div>Third line</div>
-        `);
+        loadPlayroom(lineStarter);
 
         moveBy(0, 1);
 
@@ -409,6 +406,7 @@ describe('Keymaps', () => {
     describe('should wrap a single line selection in a comment', () => {
       describe('standard', () => {
         it('block', () => {
+          loadPlayroom(blockStarter);
           selectToEndOfLine();
 
           typeComment();
@@ -421,17 +419,7 @@ describe('Keymaps', () => {
         });
 
         it('line', () => {
-          loadPlayroom(`
-            <div
-              prop1="This is the first prop"
-              prop2="This is the second prop"
-              prop3="This is the third prop"
-            >
-              First line
-            </div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+          loadPlayroom(lineStarter);
 
           moveBy(0, 1);
           selectToEndOfLine();
@@ -454,6 +442,7 @@ describe('Keymaps', () => {
 
       describe('without shifting selection position for a forward selection', () => {
         it('block', () => {
+          loadPlayroom(blockStarter);
           selectToEndOfLine();
 
           typeComment();
@@ -469,17 +458,7 @@ describe('Keymaps', () => {
         });
 
         it('line', () => {
-          loadPlayroom(`
-            <div
-              prop1="This is the first prop"
-              prop2="This is the second prop"
-              prop3="This is the third prop"
-            >
-              First line
-            </div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+          loadPlayroom(lineStarter);
 
           moveBy(0, 1);
           moveByWords(1);
@@ -506,6 +485,8 @@ describe('Keymaps', () => {
 
       describe('without shifting selection position for a backward selection', () => {
         it('block', () => {
+          loadPlayroom(blockStarter);
+
           moveToEndOfLine();
           selectToStartOfLine();
 
@@ -522,17 +503,7 @@ describe('Keymaps', () => {
         });
 
         it('line', () => {
-          loadPlayroom(`
-            <div
-              prop1="This is the first prop"
-              prop2="This is the second prop"
-              prop3="This is the third prop"
-            >
-              First line
-            </div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+          loadPlayroom(lineStarter);
 
           moveBy(0, 1);
           moveToEndOfLine();
@@ -559,8 +530,9 @@ describe('Keymaps', () => {
 
       describe('when the line is only partially selected', () => {
         it('block', () => {
-          moveByWords(3);
+          loadPlayroom(blockStarter);
 
+          moveByWords(3);
           selectNextWords(2);
 
           typeComment();
@@ -581,17 +553,7 @@ describe('Keymaps', () => {
         });
 
         it('line', () => {
-          loadPlayroom(`
-            <div
-              prop1="This is the first prop"
-              prop2="This is the second prop"
-              prop3="This is the third prop"
-            >
-              First line
-            </div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+          loadPlayroom(lineStarter);
 
           moveBy(0, 1);
           moveByWords(3);
@@ -655,17 +617,7 @@ describe('Keymaps', () => {
         });
 
         it('line', () => {
-          loadPlayroom(`
-            <div
-              prop1="This is the first prop"
-              prop2="This is the second prop"
-              prop3="This is the third prop"
-            >
-              First line
-            </div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+          loadPlayroom(lineStarter);
 
           moveBy(0, 1);
           moveByWords(1);
@@ -692,6 +644,8 @@ describe('Keymaps', () => {
     describe('should wrap a multi line selection in a comment', () => {
       describe('standard', () => {
         it('block', () => {
+          loadPlayroom(blockStarter);
+
           selectNextLines(3);
 
           typeComment();
@@ -704,17 +658,7 @@ describe('Keymaps', () => {
         });
 
         it('line', () => {
-          loadPlayroom(`
-            <div
-              prop1="This is the first prop"
-              prop2="This is the second prop"
-              prop3="This is the third prop"
-            >
-              First line
-            </div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+          loadPlayroom(lineStarter);
 
           moveBy(0, 1);
           selectNextLines(3);
@@ -737,6 +681,8 @@ describe('Keymaps', () => {
 
       describe('when the lines are only partially selected', () => {
         it('block', () => {
+          loadPlayroom(blockStarter);
+
           moveByWords(3);
           selectNextLines(1);
 
@@ -750,17 +696,7 @@ describe('Keymaps', () => {
         });
 
         it('line', () => {
-          loadPlayroom(`
-            <div
-              prop1="This is the first prop"
-              prop2="This is the second prop"
-              prop3="This is the third prop"
-            >
-              First line
-            </div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+          loadPlayroom(lineStarter);
 
           moveBy(0, 1);
           moveByWords(4);
@@ -809,17 +745,7 @@ describe('Keymaps', () => {
         });
 
         it('line', () => {
-          loadPlayroom(`
-            <div
-              prop1="This is the first prop"
-              prop2="This is the second prop"
-              prop3="This is the third prop"
-            >
-              First line
-            </div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+          loadPlayroom(lineStarter);
 
           moveBy(0, 1);
           moveByWords(4);
@@ -862,17 +788,8 @@ describe('Keymaps', () => {
           });
 
           it('line', () => {
-            loadPlayroom(`
-              <div
-                prop1="This is the first prop"
-                prop2="This is the second prop"
-                prop3="This is the third prop"
-              >
-                First line
-              </div>
-              <div>Second line</div>
-              <div>Third line</div>
-            `);
+            loadPlayroom(lineStarter);
+
             moveBy(0, 1);
             typeComment();
 
