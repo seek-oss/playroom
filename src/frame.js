@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-unresolved
+import '__PLAYROOM_ALIAS__FRAME_ENTRY__';
+
 import { renderElement } from './render';
 import Frame from './Playroom/Frame';
 

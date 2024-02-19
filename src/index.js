@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-unresolved
+import '__PLAYROOM_ALIAS__PLAYROOM_ENTRY__';
+
 import { renderElement } from './render';
 import Playroom from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';

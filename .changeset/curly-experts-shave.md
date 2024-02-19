@@ -1,0 +1,5 @@
+---
+'playroom': minor
+---
+
+Add entries
