@@ -1439,7 +1439,7 @@ describe('Keymaps', () => {
           });
         });
 
-        describe.only('with full external selection that spans all lines of the comment', () => {
+        describe('with full external selection that spans all lines of the comment', () => {
           it('block', () => {
             loadPlayroom(`
               {/* <div>First line</div>
@@ -1489,28 +1489,75 @@ describe('Keymaps', () => {
         });
 
         // Todo - come up with a better name for this
-        it('with overlapping external partial selection that spans all lines of the comment', () => {
-          loadPlayroom(`
-          {/* <div>First line</div>
-          <div>Second line</div>
-          <div>Third line</div> */}
-        `);
-          selectNextWords(5);
-          selectNextLines(2);
+        describe.only('with overlapping external partial selection that spans all lines of the comment', () => {
+          it('block', () => {
+            loadPlayroom(`
+            {/* <div>First line</div>
+            <div>Second line</div>
+            <div>Third line</div> */}
+          `);
 
-          typeComment();
+            selectNextWords(5);
+            selectNextLines(2);
 
-          assertCodePaneContains(dedent`
+            typeComment();
+
+            assertCodePaneContains(dedent`
             <div>First line</div>
             <div>Second line</div>
             <div>Third line</div>
           `);
 
-          typeCode('c');
+            typeCode('c');
 
-          assertCodePaneContains(dedent`
+            assertCodePaneContains(dedent`
             ce</div>
           `);
+          });
+
+          it('line', () => {
+            loadPlayroom(`
+            <div
+              // prop1="This is the first prop"
+              // prop2="This is the second prop"
+              // prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+
+            moveBy(0, 1);
+            selectNextWords(5);
+            selectNextLines(2);
+
+            typeComment();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+            <div
+            c is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+          });
         });
       });
     });
