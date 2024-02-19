@@ -350,8 +350,7 @@ describe('Keymaps', () => {
     });
   });
 
-  // Todo - remove "only" when "wrapComment" is implemented
-  describe.only('toggleComment', () => {
+  describe('toggleComment', () => {
     // Todo - remove this before each and loadPlayroom at the start of every test
     // Todo - make the common beforeEach strings consts to be reused
     beforeEach(() => {
