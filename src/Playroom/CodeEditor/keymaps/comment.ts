@@ -282,9 +282,12 @@ export const toggleComment = (cm: Editor) => {
           ? 'block'
           : 'line';
 
+        // Todo - refactor - use lookbehind?
         const existingContentWithoutComment = existingContent.replace(
-          uncommentType === 'block' ? /\{\/\*\s?|\s?\*\/\}/g : /\/\/\s?/g,
-          ''
+          uncommentType === 'block'
+            ? /\{\/\*\s?|\s?\*\/\}/g
+            : /^(\s*)\/\/\s?/gm,
+          uncommentType === 'block' ? '' : '$1'
         );
         cm.replaceRange(
           existingContentWithoutComment,

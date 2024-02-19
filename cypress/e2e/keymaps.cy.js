@@ -1452,8 +1452,7 @@ describe('Keymaps', () => {
           });
         });
 
-        // Todo - fix failing test
-        describe.only('should preserve secondary comments at the end of the line', () => {
+        describe('should preserve secondary comments at the end of the line', () => {
           it('line', () => {
             loadPlayroom(`
               <div
