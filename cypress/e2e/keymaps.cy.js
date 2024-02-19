@@ -507,6 +507,9 @@ describe('Keymaps', () => {
 
           moveBy(0, 1);
           moveToEndOfLine();
+
+          // todo - refactor
+          selectToStartOfLine();
           selectToStartOfLine();
 
           typeComment();
