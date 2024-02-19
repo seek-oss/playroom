@@ -63,14 +63,18 @@ function getSelectionFromOffset({
     );
   }
 
-  function getSelectionStatus(): 'full' | 'partial' | 'none' {
+  // Todo - come up with a better name
+  function getFromPositionRelativeToCommentStart():
+    | 'before'
+    | 'during'
+    | 'after' {
     if (from.ch < commentStartIndex) {
-      return 'full';
+      return 'before';
     }
     if (from.ch > commentStartIndex + commentStartUsed.length) {
-      return 'none';
+      return 'after';
     }
-    return 'partial';
+    return 'during';
   }
 
   const commentStart =
@@ -84,14 +88,15 @@ function getSelectionFromOffset({
       : commentStartWithSpace;
 
   const commentStartIndex = fullContent.indexOf(commentStartUsed);
-  const selectionStatus = getSelectionStatus();
+  const fromPositionRelativeToCommentStart =
+    getFromPositionRelativeToCommentStart();
 
-  switch (selectionStatus) {
-    case 'none':
+  switch (fromPositionRelativeToCommentStart) {
+    case 'after':
       return -commentStartUsed.length;
-    case 'full':
+    case 'before':
       return 0;
-    case 'partial':
+    case 'during':
       return commentStartIndex - from.ch;
   }
 }
