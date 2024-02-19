@@ -1370,7 +1370,7 @@ describe('Keymaps', () => {
       });
 
       describe('a multi line comment', () => {
-        describe.only('with partial internal selection that spans all lines of the comment', () => {
+        describe('with partial internal selection that spans all lines of the comment', () => {
           it('block', () => {
             loadPlayroom(`
               {/* <div>First line</div>
@@ -1439,20 +1439,53 @@ describe('Keymaps', () => {
           });
         });
 
-        it('with full external selection that spans all lines of the comment', () => {
-          loadPlayroom(`
-          {/* <div>First line</div>
-          <div>Second line</div>
-          <div>Third line</div> */}
-        `);
-          selectNextLines(3);
-          typeComment();
+        describe.only('with full external selection that spans all lines of the comment', () => {
+          it('block', () => {
+            loadPlayroom(`
+              {/* <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div> */}
+            `);
 
-          assertCodePaneContains(dedent`
-            <div>First line</div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+            selectNextLines(3);
+            typeComment();
+
+            assertCodePaneContains(dedent`
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+
+          it('line', () => {
+            loadPlayroom(`
+              <div
+                // prop1="This is the first prop"
+                // prop2="This is the second prop"
+                // prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            moveBy(0, 1);
+            selectNextLines(3);
+            typeComment();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
         });
 
         // Todo - come up with a better name for this
