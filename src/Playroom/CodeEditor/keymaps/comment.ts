@@ -45,6 +45,12 @@ function getSelectionFromOffset({
     const totalLeadingWhitespace =
       fullContent.length - fullContent.trimStart().length;
 
+    const fromPositionBeforeCodeStart = from.ch < totalLeadingWhitespace;
+
+    if (fromPositionBeforeCodeStart) {
+      return 0;
+    }
+
     const removeLeadingWhitespace = !(from.ch > totalLeadingWhitespace);
 
     const whitespaceToRemove = removeLeadingWhitespace
@@ -91,15 +97,19 @@ function getSelectionFromOffset({
 }
 
 interface GetSelectionToOffsetOptions {
+  to: CodeMirror.Position;
   commentType: CommentType;
   isAlreadyCommented: boolean;
   isMultiLineSelection: boolean;
+  fullContent: string;
 }
 
 function getSelectionToOffset({
+  to,
   commentType,
   isAlreadyCommented,
   isMultiLineSelection,
+  fullContent,
 }: GetSelectionToOffsetOptions) {
   const commentOffset =
     commentType === 'block' ? BLOCK_COMMENT_OFFSET : LINE_COMMENT_OFFSET;
@@ -110,6 +120,13 @@ function getSelectionToOffset({
 
   if (isAlreadyCommented) {
     return -commentOffset;
+  }
+
+  const totalLeadingWhitespace =
+    fullContent.length - fullContent.trimStart().length;
+  const toPositionBeforeCodeStart = to.ch < totalLeadingWhitespace;
+  if (!isMultiLineSelection && toPositionBeforeCodeStart) {
+    return 0;
   }
 
   return commentOffset;
@@ -140,7 +157,9 @@ const determineCommentType = (
   const isJavaScriptMode = cm.getModeAt(from).name === 'javascript';
   const isInlineComment = cm.getLine(from.line).trimStart().startsWith('//');
 
-  // todo - refactor
+  // Todo (1/3) - refactor. This logic is technically incorrect because you could begin a line with "//" at the tag level
+  // Todo (2/3) - this would be a syntax error but it is technically not an inline comment
+  // Todo (3/3) - using toggleComment command here should wrap the line in a block comment
   if (isInlineComment) {
     return 'line';
   }
@@ -200,9 +219,11 @@ export const toggleComment = (cm: Editor) => {
     });
 
     const toOffset = getSelectionToOffset({
+      to,
       commentType,
       isAlreadyCommented,
       isMultiLineSelection,
+      fullContent,
     });
 
     const newSelectionRangeFrom = new Pos(from.line, from.ch + fromOffset);
