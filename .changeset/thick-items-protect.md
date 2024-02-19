@@ -1,0 +1,5 @@
+---
+'playroom': patch
+---
+
+Update dependencies
