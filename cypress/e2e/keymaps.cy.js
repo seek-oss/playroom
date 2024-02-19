@@ -1072,7 +1072,7 @@ describe('Keymaps', () => {
             `);
           });
 
-          it('block', () => {
+          it('line', () => {
             loadPlayroom(`
               <div
                 // prop1="This is the first prop"
@@ -1118,8 +1118,8 @@ describe('Keymaps', () => {
         });
 
         describe('should respect indentation', () => {
-          describe.only('for an external, partial selection', () => {
-            it('line', () => {
+          describe('for an external, partial selection', () => {
+            it('block', () => {
               loadPlayroom(`
                 <div>
                     {/* <div>First line</div> */}
@@ -1153,7 +1153,7 @@ describe('Keymaps', () => {
               `);
             });
 
-            it('block', () => {
+            it('line', () => {
               loadPlayroom(`
                 <div
                     // prop1="This is the first prop"
@@ -1201,37 +1201,86 @@ describe('Keymaps', () => {
             });
           });
 
-          it('for an internal, partial selection', () => {
-            loadPlayroom(`
-            <div>
-                {/* <div>First line</div> */}
-              <div>Second line</div>
-              <div>Third line</div>
-            </div>
-          `);
-            moveBy(0, 1);
-            moveByWords(5);
-            selectNextWords(2);
+          describe.only('for an internal, partial selection', () => {
+            it('block', () => {
+              loadPlayroom(`
+                <div>
+                    {/* <div>First line</div> */}
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
 
-            typeComment();
+              moveBy(0, 1);
+              moveByWords(5);
+              selectNextWords(2);
 
-            assertCodePaneContains(dedent`
-            <div>
-                <div>First line</div>
-              <div>Second line</div>
-              <div>Third line</div>
-            </div>
-          `);
+              typeComment();
 
-            typeCode('c');
+              assertCodePaneContains(dedent`
+                <div>
+                    <div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
 
-            assertCodePaneContains(dedent`
-            <div>
-                <div>c</div>
-              <div>Second line</div>
-              <div>Third line</div>
-            </div>
-          `);
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div>
+                    <div>c</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+            });
+
+            it('line', () => {
+              loadPlayroom(`
+                <div
+                    // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(4);
+              selectNextWords(5);
+
+              typeComment();
+
+              assertCodePaneContains(dedent`
+                <div
+                    prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                    prop1="c"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
           });
 
           it('for an selection beginning during opening block comment syntax', () => {
