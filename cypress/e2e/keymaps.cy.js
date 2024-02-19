@@ -370,10 +370,10 @@ describe('Keymaps', () => {
         typeComment();
 
         assertCodePaneContains(dedent`
-        {/* <div>First line</div> */}
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
+          {/* <div>First line</div> */}
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
       });
 
       it('line', () => {
@@ -388,6 +388,7 @@ describe('Keymaps', () => {
           <div>Second line</div>
           <div>Third line</div>
         `);
+
         moveBy(0, 1);
 
         typeComment();
@@ -432,6 +433,7 @@ describe('Keymaps', () => {
             <div>Second line</div>
             <div>Third line</div>
           `);
+
           moveBy(0, 1);
           selectToEndOfLine();
 
@@ -479,6 +481,7 @@ describe('Keymaps', () => {
             <div>Second line</div>
             <div>Third line</div>
           `);
+
           moveBy(0, 1);
           moveByWords(1);
           selectToEndOfLine();
@@ -489,15 +492,15 @@ describe('Keymaps', () => {
           typeCode('c');
 
           assertCodePaneContains(dedent`
-          <div
-            // c"
-            prop2="This is the second prop"
-            prop3="This is the third prop"
-          >
-            First line
-          </div>
-          <div>Second line</div>
-          <div>Third line</div>
+            <div
+              // c"
+              prop2="This is the second prop"
+              prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
           `);
         });
       });
@@ -590,6 +593,7 @@ describe('Keymaps', () => {
             <div>Second line</div>
             <div>Third line</div>
           `);
+
           moveBy(0, 1);
           moveByWords(3);
 
@@ -643,12 +647,12 @@ describe('Keymaps', () => {
           typeCode('c');
 
           assertCodePaneContains(dedent`
-          <div>
-            {/* c */}
-            <div>Second line</div>
-            <div>Third line</div>
-          </div>
-        `);
+            <div>
+              {/* c */}
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
         });
 
         it('line', () => {
@@ -712,8 +716,8 @@ describe('Keymaps', () => {
             <div>Second line</div>
             <div>Third line</div>
           `);
-          moveBy(0, 1);
 
+          moveBy(0, 1);
           selectNextLines(3);
 
           typeComment();
@@ -782,12 +786,12 @@ describe('Keymaps', () => {
       describe('and respect indent levels', () => {
         it('block', () => {
           loadPlayroom(`
-          <div>
-            <div>First line</div>
-            <div>Second line</div>
-            <div>Third line</div>
-          </div>
-        `);
+            <div>
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
 
           moveBy(0, 1);
           moveByWords(4);
@@ -840,8 +844,6 @@ describe('Keymaps', () => {
       });
     });
 
-    // Todo - add test. When uncommenting and cursor is before start comment syntax (no highlight)...
-    // Todo ctd. The cursor should jump to the start of the code content
     describe('should uncomment', () => {
       describe('a single line comment', () => {
         describe('with no selection', () => {
@@ -988,10 +990,10 @@ describe('Keymaps', () => {
             typeComment();
 
             assertCodePaneContains(dedent`
-            <div>First line</div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
 
             typeCode('c');
 
@@ -1585,16 +1587,16 @@ describe('Keymaps', () => {
             typeComment();
 
             assertCodePaneContains(dedent`
-            <div>First line</div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
 
             typeCode('c');
 
             assertCodePaneContains(dedent`
-            ce</div>
-          `);
+              ce</div>
+            `);
           });
 
           it('line', () => {
@@ -1631,14 +1633,14 @@ describe('Keymaps', () => {
             typeCode('c');
 
             assertCodePaneContains(dedent`
-            <div
-            c is the third prop"
-            >
-              First line
-            </div>
-            <div>Second line</div>
-            <div>Third line</div>
-          `);
+              <div
+              c is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
           });
         });
       });
