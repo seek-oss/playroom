@@ -146,7 +146,7 @@ const determineCommentType = (
   return 'line';
 };
 
-export const wrapInComment = (cm: Editor) => {
+export const toggleComment = (cm: Editor) => {
   const newSelections: Selection[] = [];
   const tagRanges: TagRange[] = [];
 
