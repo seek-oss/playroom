@@ -138,6 +138,12 @@ const determineCommentType = (
   );
 
   const isJavaScriptMode = cm.getModeAt(from).name === 'javascript';
+  const isInlineComment = cm.getLine(from.line).trimStart().startsWith('//');
+
+  // todo - refactor
+  if (isInlineComment) {
+    return 'line';
+  }
 
   if (containsTag || (!isJavaScriptMode && !containsAttribute)) {
     return 'block';
