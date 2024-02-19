@@ -124,6 +124,22 @@ function getSelectionToOffset({
   }
 
   if (isAlreadyCommented) {
+    // Todo - refactor. These consts are duplicated between get from and to offset functions
+    const commentStart =
+      commentType === 'block' ? BLOCK_COMMENT_START : LINE_COMMENT_START;
+
+    const commentStartWithSpace = `${commentStart} `;
+    const commentStartUsed =
+      fullContent.indexOf(commentStartWithSpace) === -1
+        ? commentStart
+        : commentStartWithSpace;
+
+    const commentStartIndex = fullContent.indexOf(commentStartUsed);
+
+    const toPositionBeforeCommentStart = to.ch <= commentStartIndex;
+    if (toPositionBeforeCommentStart) {
+      return 0;
+    }
     return -commentOffset;
   }
 

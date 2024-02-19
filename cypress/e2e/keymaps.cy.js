@@ -1368,6 +1368,86 @@ describe('Keymaps', () => {
               `);
             });
           });
+
+          describe('for no selection', () => {
+            it('block', () => {
+              loadPlayroom(`
+                <div>
+                  {/* <div>First line</div> */}
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+
+              typeComment();
+
+              assertCodePaneContains(dedent`
+                <div>
+                  <div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div>
+                  c<div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+            });
+
+            it('line', () => {
+              loadPlayroom(`
+                <div
+                  // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+
+              typeComment();
+
+              assertCodePaneContains(dedent`
+                <div
+                  prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                  cprop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
+          });
         });
       });
 
