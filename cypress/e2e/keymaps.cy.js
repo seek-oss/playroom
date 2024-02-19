@@ -1201,7 +1201,7 @@ describe('Keymaps', () => {
             });
           });
 
-          describe.only('for an internal, partial selection', () => {
+          describe('for an internal, partial selection', () => {
             it('block', () => {
               loadPlayroom(`
                 <div>
@@ -1283,38 +1283,88 @@ describe('Keymaps', () => {
             });
           });
 
-          it('for an selection beginning during opening block comment syntax', () => {
-            loadPlayroom(`
-            <div>
-                {/* <div>First line</div> */}
-              <div>Second line</div>
-              <div>Third line</div>
-            </div>
-          `);
-            moveBy(0, 1);
-            moveByWords(1);
-            moveBy(1);
-            selectNextWords(4);
+          describe.only('for an selection beginning during opening comment syntax', () => {
+            it('block', () => {
+              loadPlayroom(`
+                <div>
+                    {/* <div>First line</div> */}
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
 
-            typeComment();
+              moveBy(0, 1);
+              moveByWords(1);
+              moveBy(1);
+              selectNextWords(4);
 
-            assertCodePaneContains(dedent`
-            <div>
-                <div>First line</div>
-              <div>Second line</div>
-              <div>Third line</div>
-            </div>
-          `);
+              typeComment();
 
-            typeCode('c');
+              assertCodePaneContains(dedent`
+                <div>
+                    <div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
 
-            assertCodePaneContains(dedent`
-            <div>
-                cFirst line</div>
-              <div>Second line</div>
-              <div>Third line</div>
-            </div>
-          `);
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div>
+                    cFirst line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+            });
+
+            it('line', () => {
+              loadPlayroom(`
+                <div
+                    // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+              moveBy(1);
+              selectNextWords(3);
+
+              typeComment();
+
+              assertCodePaneContains(dedent`
+                <div
+                    prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                    cThis is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
           });
         });
       });
