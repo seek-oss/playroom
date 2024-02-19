@@ -838,6 +838,8 @@ describe('Keymaps', () => {
       });
     });
 
+    // Todo - add test. When uncommenting and cursor is before start comment syntax (no highlight)...
+    // Todo ctd. The cursor should jump to the start of the code content
     describe('should uncomment', () => {
       describe('a single line comment', () => {
         describe.only('with no selection', () => {
@@ -856,7 +858,6 @@ describe('Keymaps', () => {
             `);
           });
 
-          // Todo - fix this failing test
           it('line', () => {
             loadPlayroom(`
               <div
