@@ -164,7 +164,12 @@ const determineCommentType = (
     return 'line';
   }
 
-  if (containsTag || (!isJavaScriptMode && !containsAttribute)) {
+  // Todo - check this logic. maybe doesn't work for the onClick weird thing
+  if (
+    (!isJavaScriptMode && !containsAttribute) ||
+    containsTag ||
+    isJavaScriptMode
+  ) {
     return 'block';
   }
 
