@@ -1,5 +1,3 @@
-import './entry.mjs';
-
 import { renderElement } from './render';
 import Frame from './Playroom/Frame';
 
