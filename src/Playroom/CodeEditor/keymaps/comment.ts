@@ -25,6 +25,24 @@ function isReverseSelection({
   );
 }
 
+function getCommentStartInfo(commentType: CommentType, fullContent: string) {
+  const commentStart =
+    commentType === 'block' ? BLOCK_COMMENT_START : LINE_COMMENT_START;
+
+  const commentStartWithSpace = `${commentStart} `;
+  const commentStartUsed =
+    fullContent.indexOf(commentStartWithSpace) === -1
+      ? commentStart
+      : commentStartWithSpace;
+
+  const commentStartIndex = fullContent.indexOf(commentStartUsed);
+
+  return {
+    commentStartUsed,
+    commentStartIndex,
+  };
+}
+
 interface GetSelectionFromOffsetOptions {
   commentType: CommentType;
   isAlreadyCommented: boolean;
@@ -64,17 +82,11 @@ function getSelectionFromOffset({
     return 'during';
   }
 
-  const commentStart =
-    commentType === 'block' ? BLOCK_COMMENT_START : LINE_COMMENT_START;
+  const { commentStartUsed, commentStartIndex } = getCommentStartInfo(
+    commentType,
+    fullContent
+  );
 
-  const commentStartWithSpace = `${commentStart} `;
-
-  const commentStartUsed =
-    fullContent.indexOf(commentStartWithSpace) === -1
-      ? commentStart
-      : commentStartWithSpace;
-
-  const commentStartIndex = fullContent.indexOf(commentStartUsed);
   const fromPositionRelativeToCommentStart =
     getFromPositionRelativeToCommentStart();
 
@@ -111,18 +123,7 @@ function getSelectionToOffset({
   }
 
   if (isAlreadyCommented) {
-    // Todo - convert this to function that returns commentStartUsed and commentStartIndex
-    // todo - consume this function in getSelectionFromOffset and getSelectionToOffset
-    const commentStart =
-      commentType === 'block' ? BLOCK_COMMENT_START : LINE_COMMENT_START;
-
-    const commentStartWithSpace = `${commentStart} `;
-    const commentStartUsed =
-      fullContent.indexOf(commentStartWithSpace) === -1
-        ? commentStart
-        : commentStartWithSpace;
-
-    const commentStartIndex = fullContent.indexOf(commentStartUsed);
+    const { commentStartIndex } = getCommentStartInfo(commentType, fullContent);
 
     const toPositionBeforeCommentStart = to.ch <= commentStartIndex;
     if (toPositionBeforeCommentStart) {
