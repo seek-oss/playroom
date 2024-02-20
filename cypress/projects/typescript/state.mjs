@@ -1,15 +1,9 @@
 /* eslint-disable no-console */
 
-declare global {
-  interface Window {
-    counter: number;
-  }
-}
-
-window.counter = 0;
+export let counter = 0;
 
 export function increment() {
-  window.counter++;
+  window.counter = ++counter;
 
   console.log('incremented', window.counter);
 }
