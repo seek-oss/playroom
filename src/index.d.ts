@@ -1,8 +1,8 @@
 interface PlayroomConfig {
-  entry?: string;
   components: string;
   outputPath: string;
   title?: string;
+  entry?: string;
   themes?: string;
   widths?: number[];
   snippets?: Snippet[];

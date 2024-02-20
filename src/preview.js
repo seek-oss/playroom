@@ -1,4 +1,4 @@
-import './entry';
+import './entry.mjs';
 
 import { renderElement } from './render';
 import Preview from './Playroom/Preview';
