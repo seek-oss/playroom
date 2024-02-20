@@ -969,8 +969,7 @@ describe('Keymaps', () => {
           });
         });
 
-        // Todo - come up with a better name for this
-        describe('with overlapping partial external selection', () => {
+        describe('with an external to internal selection', () => {
           it('block', () => {
             loadPlayroom(`
               {/* <div>First line</div> */}
@@ -1538,8 +1537,7 @@ describe('Keymaps', () => {
           });
         });
 
-        // Todo - come up with a better name for this
-        describe('with overlapping external partial selection that spans all lines of the comment', () => {
+        describe('with an external to internal selection that spans all lines of the comment', () => {
           it('block', () => {
             loadPlayroom(`
             {/* <div>First line</div>
