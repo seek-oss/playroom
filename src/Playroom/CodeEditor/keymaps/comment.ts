@@ -28,7 +28,6 @@ function isReverseSelection({
 interface GetSelectionFromOffsetOptions {
   commentType: CommentType;
   isAlreadyCommented: boolean;
-  selectedLeadingWhitespace: number;
   fullContent: string;
   from: CodeMirror.Position;
 }
@@ -36,12 +35,10 @@ interface GetSelectionFromOffsetOptions {
 function getSelectionFromOffset({
   commentType,
   isAlreadyCommented,
-  selectedLeadingWhitespace,
   fullContent,
   from,
 }: GetSelectionFromOffsetOptions) {
   if (!isAlreadyCommented) {
-    // Todo - refactor
     const totalLeadingWhitespace =
       fullContent.length - fullContent.trimStart().length;
 
@@ -51,16 +48,7 @@ function getSelectionFromOffset({
       return 0;
     }
 
-    const removeLeadingWhitespace = !(from.ch > totalLeadingWhitespace);
-
-    const whitespaceToRemove = removeLeadingWhitespace
-      ? selectedLeadingWhitespace
-      : 0;
-
-    return (
-      whitespaceToRemove +
-      (commentType === 'block' ? BLOCK_COMMENT_OFFSET : LINE_COMMENT_OFFSET)
-    );
+    return commentType === 'block' ? BLOCK_COMMENT_OFFSET : LINE_COMMENT_OFFSET;
   }
 
   // Todo - come up with a better name
@@ -239,7 +227,6 @@ export const toggleComment = (cm: Editor) => {
     const fromOffset = getSelectionFromOffset({
       commentType,
       isAlreadyCommented,
-      selectedLeadingWhitespace,
       fullContent,
       from,
     });
