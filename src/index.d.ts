@@ -1,4 +1,5 @@
 interface PlayroomConfig {
+  entry?: string;
   components: string;
   outputPath: string;
   title?: string;

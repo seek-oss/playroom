@@ -1,3 +1,5 @@
+import './entry';
+
 import { renderElement } from './render';
 import Playroom from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';

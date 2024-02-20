@@ -1,3 +1,5 @@
+import './entry';
+
 import { renderElement } from './render';
 import Frame from './Playroom/Frame';
 
