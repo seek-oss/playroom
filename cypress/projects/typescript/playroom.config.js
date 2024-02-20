@@ -1,4 +1,5 @@
 module.exports = {
+  entry: './entry.ts',
   components: './components.ts',
   snippets: './snippets.ts',
   outputPath: './dist',
