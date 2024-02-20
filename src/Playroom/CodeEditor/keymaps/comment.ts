@@ -51,7 +51,6 @@ function getSelectionFromOffset({
     return commentType === 'block' ? BLOCK_COMMENT_OFFSET : LINE_COMMENT_OFFSET;
   }
 
-  // Todo - come up with a better name
   function getFromPositionRelativeToCommentStart():
     | 'before'
     | 'during'
@@ -112,7 +111,8 @@ function getSelectionToOffset({
   }
 
   if (isAlreadyCommented) {
-    // Todo - refactor. These consts are duplicated between get from and to offset functions
+    // Todo - convert this to function that returns commentStartUsed and commentStartIndex
+    // todo - consume this function in getSelectionFromOffset and getSelectionToOffset
     const commentStart =
       commentType === 'block' ? BLOCK_COMMENT_START : LINE_COMMENT_START;
 
@@ -166,19 +166,11 @@ const determineCommentType = (
   const isJavaScriptMode = cm.getModeAt(from).name === 'javascript';
   const isInlineComment = cm.getLine(from.line).trimStart().startsWith('//');
 
-  // Todo (1/3) - refactor. This logic is technically incorrect because you could begin a line with "//" at the tag level
-  // Todo (2/3) - this would be a syntax error but it is technically not an inline comment
-  // Todo (3/3) - using toggleComment command here should wrap the line in a block comment
   if (isInlineComment) {
     return 'line';
   }
 
-  // Todo - check this logic. maybe doesn't work for the onClick weird thing
-  if (
-    (!isJavaScriptMode && !containsAttribute) ||
-    containsTag ||
-    isJavaScriptMode
-  ) {
+  if ((!isJavaScriptMode && !containsAttribute) || containsTag) {
     return 'block';
   }
 
@@ -208,10 +200,6 @@ export const toggleComment = (cm: Editor) => {
       (trimmedContent.startsWith(BLOCK_COMMENT_START) &&
         trimmedContent.endsWith(BLOCK_COMMENT_END)) ||
       trimmedContent.startsWith(LINE_COMMENT_START);
-
-    const selectedContent = cm.getRange(from, to);
-    const selectedLeadingWhitespace =
-      selectedContent.length - selectedContent.trimStart().length;
 
     const isMultiLineSelection = to.line !== from.line;
 
@@ -263,7 +251,6 @@ export const toggleComment = (cm: Editor) => {
           ? 'block'
           : 'line';
 
-        // Todo - refactor - use lookbehind?
         const existingContentWithoutComment = existingContent.replace(
           uncommentType === 'block'
             ? /\{\/\*\s?|\s?\*\/\}/g
