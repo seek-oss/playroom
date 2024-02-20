@@ -74,6 +74,7 @@ function getSelectionFromOffset({
     fullContent
   );
 
+  // Todo - extract this to a function
   function getFromPositionRelativeToCommentStart():
     | 'before'
     | 'during'
@@ -91,12 +92,12 @@ function getSelectionFromOffset({
     getFromPositionRelativeToCommentStart();
 
   switch (fromPositionRelativeToCommentStart) {
-    case 'after':
-      return -commentStartUsed.length;
     case 'before':
       return 0;
     case 'during':
       return commentStartIndex - from.ch;
+    case 'after':
+      return -commentStartUsed.length;
   }
 }
 
@@ -122,24 +123,51 @@ function getSelectionToOffset({
     return 0;
   }
 
-  if (isAlreadyCommented) {
-    const { commentStartIndex } = getCommentStartInfo(commentType, fullContent);
-
-    const toPositionBeforeCommentStart = to.ch <= commentStartIndex;
-    if (toPositionBeforeCommentStart) {
-      return 0;
-    }
-    return -commentOffset;
-  }
-
   const totalLeadingWhitespace =
     fullContent.length - fullContent.trimStart().length;
   const toPositionBeforeCodeStart = to.ch < totalLeadingWhitespace;
-  if (!isMultiLineSelection && toPositionBeforeCodeStart) {
-    return 0;
+
+  if (!isAlreadyCommented) {
+    if (!isMultiLineSelection && toPositionBeforeCodeStart) {
+      return 0;
+    }
+
+    return commentOffset;
   }
 
-  return commentOffset;
+  const { commentStartUsed, commentStartIndex } = getCommentStartInfo(
+    commentType,
+    fullContent
+  );
+  const toPositionBeforeCommentStart = to.ch <= commentStartIndex;
+
+  // Todo - extract this to a function
+  function getToPositionRelativeToCommentStart():
+    | 'before'
+    | 'during'
+    | 'after' {
+    if (toPositionBeforeCommentStart) {
+      return 'before';
+    }
+
+    if (to.ch > commentStartIndex + commentStartUsed.length) {
+      return 'after';
+    }
+
+    return to.ch <= commentStartIndex ? 'before' : 'during';
+  }
+
+  const toPositionRelativeToCommentStart =
+    getToPositionRelativeToCommentStart();
+
+  switch (toPositionRelativeToCommentStart) {
+    case 'before':
+      return 0;
+    case 'during':
+      return commentStartIndex - to.ch;
+    case 'after':
+      return -commentOffset;
+  }
 }
 
 type CommentType = 'line' | 'block';
