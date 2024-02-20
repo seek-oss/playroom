@@ -69,6 +69,11 @@ function getSelectionFromOffset({
     return commentType === 'block' ? BLOCK_COMMENT_OFFSET : LINE_COMMENT_OFFSET;
   }
 
+  const { commentStartUsed, commentStartIndex } = getCommentStartInfo(
+    commentType,
+    fullContent
+  );
+
   function getFromPositionRelativeToCommentStart():
     | 'before'
     | 'during'
@@ -81,11 +86,6 @@ function getSelectionFromOffset({
     }
     return 'during';
   }
-
-  const { commentStartUsed, commentStartIndex } = getCommentStartInfo(
-    commentType,
-    fullContent
-  );
 
   const fromPositionRelativeToCommentStart =
     getFromPositionRelativeToCommentStart();
