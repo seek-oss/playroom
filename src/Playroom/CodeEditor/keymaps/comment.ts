@@ -43,6 +43,22 @@ function getCommentStartInfo(commentType: CommentType, fullContent: string) {
   };
 }
 
+function getSelectionPositionRelativeToCommentStart(
+  selectionEndpoint: CodeMirror.Position,
+  commentStartIndex: number,
+  commentStartUsed: string
+): 'before' | 'during' | 'after' {
+  if (selectionEndpoint.ch < commentStartIndex) {
+    return 'before';
+  }
+
+  if (selectionEndpoint.ch > commentStartIndex + commentStartUsed.length) {
+    return 'after';
+  }
+
+  return 'during';
+}
+
 interface GetSelectionFromOffsetOptions {
   commentType: CommentType;
   isAlreadyCommented: boolean;
@@ -74,22 +90,12 @@ function getSelectionFromOffset({
     fullContent
   );
 
-  // Todo - extract this to a function
-  function getFromPositionRelativeToCommentStart():
-    | 'before'
-    | 'during'
-    | 'after' {
-    if (from.ch < commentStartIndex) {
-      return 'before';
-    }
-    if (from.ch > commentStartIndex + commentStartUsed.length) {
-      return 'after';
-    }
-    return 'during';
-  }
-
   const fromPositionRelativeToCommentStart =
-    getFromPositionRelativeToCommentStart();
+    getSelectionPositionRelativeToCommentStart(
+      from,
+      commentStartIndex,
+      commentStartUsed
+    );
 
   switch (fromPositionRelativeToCommentStart) {
     case 'before':
@@ -139,26 +145,13 @@ function getSelectionToOffset({
     commentType,
     fullContent
   );
-  const toPositionBeforeCommentStart = to.ch <= commentStartIndex;
-
-  // Todo - extract this to a function
-  function getToPositionRelativeToCommentStart():
-    | 'before'
-    | 'during'
-    | 'after' {
-    if (toPositionBeforeCommentStart) {
-      return 'before';
-    }
-
-    if (to.ch > commentStartIndex + commentStartUsed.length) {
-      return 'after';
-    }
-
-    return to.ch <= commentStartIndex ? 'before' : 'during';
-  }
 
   const toPositionRelativeToCommentStart =
-    getToPositionRelativeToCommentStart();
+    getSelectionPositionRelativeToCommentStart(
+      to,
+      commentStartIndex,
+      commentStartUsed
+    );
 
   switch (toPositionRelativeToCommentStart) {
     case 'before':
