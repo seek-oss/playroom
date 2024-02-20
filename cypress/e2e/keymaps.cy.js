@@ -508,7 +508,8 @@ describe('Keymaps', () => {
           moveBy(0, 1);
           moveToEndOfLine();
 
-          // todo - refactor
+          // Todo - (1/2) Solve issue where Ubuntu does not select to the start of line
+          // Todo - (2/2) with one trigger of the keybinding
           selectToStartOfLine();
           selectToStartOfLine();
 
