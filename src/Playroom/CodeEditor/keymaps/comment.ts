@@ -170,7 +170,11 @@ const determineCommentType = (
     return 'line';
   }
 
-  if ((!isJavaScriptMode && !containsAttribute) || containsTag) {
+  if (
+    (!isJavaScriptMode && !containsAttribute) ||
+    containsTag ||
+    isJavaScriptMode
+  ) {
     return 'block';
   }
 
