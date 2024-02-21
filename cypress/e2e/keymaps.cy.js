@@ -401,6 +401,34 @@ describe('Keymaps', () => {
           <div>Third line</div>
         `);
       });
+
+      it('line in callback', () => {
+        loadPlayroom(`
+          <button
+            onClick={() =>
+              getState("activeStep") > 1 &&
+              setState("activeStep", getState("activeStep") - 1)
+            }
+          >
+            Text
+          </button>
+          `);
+
+        moveBy(0, 2);
+
+        typeComment();
+
+        assertCodePaneContains(dedent`
+          <button
+            onClick={() =>
+              // getState("activeStep") > 1 &&
+              setState("activeStep", getState("activeStep") - 1)
+            }
+          >
+            Text
+          </button>
+        `);
+      });
     });
 
     describe('should wrap a single line selection in a comment', () => {
