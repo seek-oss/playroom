@@ -775,7 +775,7 @@ describe('Keymaps', () => {
 
     describe('should uncomment', () => {
       describe('a single line comment', () => {
-        describe.only('with no selection', () => {
+        describe('with no selection', () => {
           describe('with the cursor proceeding the comment', () => {
             it('block', () => {
               loadPlayroom(`
