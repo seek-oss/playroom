@@ -196,7 +196,7 @@ const determineCommentType = (
     return 'line';
   }
 
-  if (isJavaScriptMode && !isBlockComment) {
+  if (isJavaScriptMode && !isBlockComment && !containsTag) {
     return 'line';
   }
 
