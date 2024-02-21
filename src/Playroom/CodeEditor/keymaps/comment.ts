@@ -187,10 +187,13 @@ const determineCommentType = (
   );
 
   const isJavaScriptMode = cm.getModeAt(from).name === 'javascript';
-  const isInlineComment = cm.getLine(from.line).trimStart().startsWith('//');
+  const isInlineComment = cm
+    .getLine(from.line)
+    .trimStart()
+    .startsWith(LINE_COMMENT_START);
   const isBlockComment =
-    cm.getLine(from.line).trimStart().startsWith('{/*') &&
-    cm.getLine(to.line).trimEnd().endsWith('*/}');
+    cm.getLine(from.line).trimStart().startsWith(BLOCK_COMMENT_START) &&
+    cm.getLine(to.line).trimEnd().endsWith(BLOCK_COMMENT_END);
 
   if (isInlineComment) {
     return 'line';
