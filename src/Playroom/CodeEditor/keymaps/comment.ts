@@ -176,7 +176,8 @@ interface TagRange {
 
 const determineCommentType = (
   cm: Editor,
-  from: CodeMirror.Position
+  from: CodeMirror.Position,
+  to: CodeMirror.Position
 ): CommentType => {
   const lineTokens = cm.getLineTokens(from.line);
 
@@ -187,8 +188,15 @@ const determineCommentType = (
 
   const isJavaScriptMode = cm.getModeAt(from).name === 'javascript';
   const isInlineComment = cm.getLine(from.line).trimStart().startsWith('//');
+  const isBlockComment =
+    cm.getLine(from.line).trimStart().startsWith('{/*') &&
+    cm.getLine(to.line).trimEnd().endsWith('*/}');
 
   if (isInlineComment) {
+    return 'line';
+  }
+
+  if (isJavaScriptMode && !isBlockComment) {
     return 'line';
   }
 
@@ -215,7 +223,7 @@ export const toggleComment = (cm: Editor) => {
       to = new Pos(to.line - 1);
     }
 
-    const commentType = determineCommentType(cm, from);
+    const commentType = determineCommentType(cm, from, to);
 
     const fullContent = cm.getRange(new Pos(from.line, 0), new Pos(to.line));
     const existingIndent = fullContent.length - fullContent.trimStart().length;
