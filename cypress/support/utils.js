@@ -1,5 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="cypress" />
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-iframe" />
+import 'cypress-iframe';
 import dedent from 'dedent';
 
 import { createUrl } from '../../utils';
@@ -9,22 +12,16 @@ const WAIT_FOR_FRAME_TO_RENDER = 1000;
 
 const getCodeEditor = () => cy.get('.CodeMirror-code');
 
-export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
+const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
-export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
-
-export const getFirstFrame = () => getPreviewFrames().first();
+export const getFirstFrame = () =>
+  cy.frameLoaded('[data-testid="previewFrame"]:first');
 
 export const visit = (url) =>
   cy
     .visit(url)
     .reload()
-    .then(() => {
-      getFirstFrame().then(
-        ($iframe) =>
-          new Cypress.Promise((resolve) => $iframe.on('load', resolve))
-      );
-    });
+    .then(() => getFirstFrame());
 
 export const typeCode = (code, { delay = 200 } = {}) =>
   getCodeEditor()
@@ -153,24 +150,23 @@ export const assertPreviewContains = (text) =>
       expect(el.get(0).innerText).to.eq(text);
     });
 
+export const cleanUp = () =>
+  cy
+    .window()
+    .then((win) => {
+      const { storageKey } = win.__playroomConfig__;
+      indexedDB.deleteDatabase(storageKey);
+    })
+    .reload();
+
 export const loadPlayroom = (initialCode) => {
   const baseUrl = 'http://localhost:9000';
   const visitUrl = initialCode
     ? createUrl({ baseUrl, code: dedent(initialCode) })
     : baseUrl;
 
-  return cy
-    .visit(visitUrl)
-    .window()
-    .then((win) => {
-      const { storageKey } = win.__playroomConfig__;
-      indexedDB.deleteDatabase(storageKey);
-    })
-    .reload()
-    .then(() =>
-      getFirstFrame().then(
-        ($iframe) =>
-          new Cypress.Promise((resolve) => $iframe.on('load', resolve))
-      )
-    );
+  cy.visit(visitUrl);
+  cleanUp();
+
+  return getFirstFrame();
 };
