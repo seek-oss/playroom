@@ -368,12 +368,12 @@ describe('Keymaps', () => {
       <div>Third line</div>`;
 
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
-    const typeComment = () => typeCode(`{${modifierKey}+/}`);
+    const executeToggleCommentCommand = () => typeCode(`{${modifierKey}+/}`);
 
     describe('should wrap a single line in a comment when there is no selection', () => {
       it('block', () => {
         loadPlayroom(blockStarter);
-        typeComment();
+        executeToggleCommentCommand();
 
         assertCodePaneContains(dedent`
           {/* <div>First line</div> */}
@@ -387,7 +387,7 @@ describe('Keymaps', () => {
 
         moveBy(0, 1);
 
-        typeComment();
+        executeToggleCommentCommand();
 
         assertCodePaneContains(dedent`
           <div
@@ -416,7 +416,7 @@ describe('Keymaps', () => {
 
         moveBy(0, 2);
 
-        typeComment();
+        executeToggleCommentCommand();
 
         assertCodePaneContains(dedent`
           <button
@@ -437,7 +437,7 @@ describe('Keymaps', () => {
           loadPlayroom(blockStarter);
           selectToEndOfLine();
 
-          typeComment();
+          executeToggleCommentCommand();
 
           assertCodePaneContains(dedent`
             {/* <div>First line</div> */}
@@ -452,7 +452,7 @@ describe('Keymaps', () => {
           moveBy(0, 1);
           selectToEndOfLine();
 
-          typeComment();
+          executeToggleCommentCommand();
 
           assertCodePaneContains(dedent`
             <div
@@ -473,7 +473,7 @@ describe('Keymaps', () => {
           loadPlayroom(blockStarter);
           selectToEndOfLine();
 
-          typeComment();
+          executeToggleCommentCommand();
 
           typeCode(`{shift+leftArrow}`);
           typeCode('c');
@@ -492,7 +492,7 @@ describe('Keymaps', () => {
           moveByWords(1);
           selectToEndOfLine();
 
-          typeComment();
+          executeToggleCommentCommand();
 
           typeCode(`{shift+leftArrow}`);
           typeCode('c');
@@ -518,7 +518,7 @@ describe('Keymaps', () => {
           moveToEndOfLine();
           selectToStartOfLine();
 
-          typeComment();
+          executeToggleCommentCommand();
 
           typeCode(`{shift+rightArrow}`);
           typeCode('c');
@@ -541,7 +541,7 @@ describe('Keymaps', () => {
           selectToStartOfLine();
           selectToStartOfLine();
 
-          typeComment();
+          executeToggleCommentCommand();
 
           typeCode(`{shift+rightArrow}`);
           typeCode('c');
@@ -567,7 +567,7 @@ describe('Keymaps', () => {
           moveByWords(3);
           selectNextWords(2);
 
-          typeComment();
+          executeToggleCommentCommand();
 
           assertCodePaneContains(dedent`
             {/* <div>First line</div> */}
@@ -592,7 +592,7 @@ describe('Keymaps', () => {
 
           selectNextWords(2);
 
-          typeComment();
+          executeToggleCommentCommand();
 
           assertCodePaneContains(dedent`
             <div
@@ -636,7 +636,7 @@ describe('Keymaps', () => {
           moveByWords(1);
           selectToEndOfLine();
 
-          typeComment();
+          executeToggleCommentCommand();
           typeCode('c');
 
           assertCodePaneContains(dedent`
@@ -655,7 +655,7 @@ describe('Keymaps', () => {
           moveByWords(1);
           selectToEndOfLine();
 
-          typeComment();
+          executeToggleCommentCommand();
           typeCode('c');
 
           assertCodePaneContains(dedent`
@@ -680,7 +680,7 @@ describe('Keymaps', () => {
 
           selectNextLines(3);
 
-          typeComment();
+          executeToggleCommentCommand();
 
           assertCodePaneContains(dedent`
             {/* <div>First line</div>
@@ -695,7 +695,7 @@ describe('Keymaps', () => {
           moveBy(0, 1);
           selectNextLines(3);
 
-          typeComment();
+          executeToggleCommentCommand();
 
           assertCodePaneContains(dedent`
             <div
@@ -718,7 +718,7 @@ describe('Keymaps', () => {
           moveByWords(3);
           selectNextLines(1);
 
-          typeComment();
+          executeToggleCommentCommand();
 
           assertCodePaneContains(dedent`
             {/* <div>First line</div>
@@ -734,7 +734,7 @@ describe('Keymaps', () => {
           moveByWords(4);
           selectNextLines(1);
 
-          typeComment();
+          executeToggleCommentCommand();
 
           assertCodePaneContains(dedent`
             <div
@@ -765,7 +765,7 @@ describe('Keymaps', () => {
           selectNextLines(1);
           selectNextWords(1);
 
-          typeComment();
+          executeToggleCommentCommand();
           typeCode('c');
 
           assertCodePaneContains(dedent`
@@ -784,7 +784,7 @@ describe('Keymaps', () => {
           selectNextLines(1);
           selectNextWords(1);
 
-          typeComment();
+          executeToggleCommentCommand();
           typeCode('c');
 
           assertCodePaneContains(dedent`
@@ -811,7 +811,7 @@ describe('Keymaps', () => {
                 <div>Second line</div>
                 <div>Third line</div>
               `);
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div>First line</div>
@@ -824,7 +824,7 @@ describe('Keymaps', () => {
               loadPlayroom(lineStarter);
 
               moveBy(0, 1);
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div
@@ -868,7 +868,7 @@ describe('Keymaps', () => {
               moveByWords(1);
               moveBy(1);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div>
@@ -906,7 +906,7 @@ describe('Keymaps', () => {
               moveByWords(1);
               moveBy(1);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div
@@ -946,7 +946,7 @@ describe('Keymaps', () => {
 
               moveByWords(5);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div>First line</div>
@@ -979,7 +979,7 @@ describe('Keymaps', () => {
               moveBy(0, 1);
               moveByWords(5);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div
@@ -1020,7 +1020,7 @@ describe('Keymaps', () => {
 
             moveByWords(4);
             selectNextWords(2);
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div>First line</div>
@@ -1053,7 +1053,7 @@ describe('Keymaps', () => {
             moveBy(0, 1);
             moveByWords(4);
             selectNextWords(2);
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div
@@ -1092,7 +1092,7 @@ describe('Keymaps', () => {
             `);
 
             selectToEndOfLine();
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div>First line</div>
@@ -1124,7 +1124,7 @@ describe('Keymaps', () => {
 
             moveBy(0, 1);
             selectToEndOfLine();
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div
@@ -1163,7 +1163,7 @@ describe('Keymaps', () => {
             `);
 
             selectNextWords(5);
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div>First line</div>
@@ -1195,7 +1195,7 @@ describe('Keymaps', () => {
 
             moveBy(0, 1);
             selectNextWords(5);
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div
@@ -1240,7 +1240,7 @@ describe('Keymaps', () => {
               moveByWords(1);
               selectNextWords(4);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div>
@@ -1279,7 +1279,7 @@ describe('Keymaps', () => {
 
               selectNextWords(3);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div
@@ -1323,7 +1323,7 @@ describe('Keymaps', () => {
               moveByWords(5);
               selectNextWords(2);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div>
@@ -1361,7 +1361,7 @@ describe('Keymaps', () => {
               moveByWords(4);
               selectNextWords(5);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div
@@ -1406,7 +1406,7 @@ describe('Keymaps', () => {
               moveBy(1);
               selectNextWords(4);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div>
@@ -1445,7 +1445,7 @@ describe('Keymaps', () => {
               moveBy(1);
               selectNextWords(3);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div
@@ -1488,7 +1488,7 @@ describe('Keymaps', () => {
               moveBy(0, 1);
               moveByWords(1);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div>
@@ -1525,7 +1525,7 @@ describe('Keymaps', () => {
               moveBy(0, 1);
               moveByWords(1);
 
-              typeComment();
+              executeToggleCommentCommand();
 
               assertCodePaneContains(dedent`
                 <div
@@ -1572,7 +1572,7 @@ describe('Keymaps', () => {
 
             moveBy(0, 1);
 
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div
@@ -1586,7 +1586,7 @@ describe('Keymaps', () => {
               <div>Third line</div>
             `);
 
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div
@@ -1614,7 +1614,7 @@ describe('Keymaps', () => {
 
             moveByWords(4);
             selectNextLines(2);
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div>First line</div>
@@ -1645,7 +1645,7 @@ describe('Keymaps', () => {
             moveBy(0, 1);
             moveByWords(4);
             selectNextLines(2);
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div
@@ -1682,7 +1682,7 @@ describe('Keymaps', () => {
             `);
 
             selectNextLines(3);
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div>First line</div>
@@ -1706,7 +1706,7 @@ describe('Keymaps', () => {
 
             moveBy(0, 1);
             selectNextLines(3);
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div
@@ -1733,7 +1733,7 @@ describe('Keymaps', () => {
             selectNextWords(5);
             selectNextLines(2);
 
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div>First line</div>
@@ -1765,7 +1765,7 @@ describe('Keymaps', () => {
             selectNextWords(5);
             selectNextLines(2);
 
-            typeComment();
+            executeToggleCommentCommand();
 
             assertCodePaneContains(dedent`
               <div
