@@ -10,6 +10,10 @@ const LINE_COMMENT_START = '//';
 const BLOCK_COMMENT_OFFSET = BLOCK_COMMENT_START.length + 1;
 const LINE_COMMENT_OFFSET = LINE_COMMENT_START.length + 1;
 
+const OPENING_AND_CLOSING_BLOCK_COMMENT_SYNTAX = /\{\/\*\s?|\s?\*\/\}/g;
+const OPENING_LINE_COMMENT_SYNTAX_WITH_LEADING_WHITESPACE = /^(\s*)\/\/\s?/gm;
+const LINE_COMMENT_LEADING_WHITESPACE = '$1';
+
 interface IsReverseSelectionOptions {
   anchor: CodeMirror.Position;
   head: CodeMirror.Position;
@@ -290,9 +294,9 @@ export const toggleComment = (cm: Editor) => {
 
         const existingContentWithoutComment = existingContent.replace(
           uncommentType === 'block'
-            ? /\{\/\*\s?|\s?\*\/\}/g
-            : /^(\s*)\/\/\s?/gm,
-          uncommentType === 'block' ? '' : '$1'
+            ? OPENING_AND_CLOSING_BLOCK_COMMENT_SYNTAX
+            : OPENING_LINE_COMMENT_SYNTAX_WITH_LEADING_WHITESPACE,
+          uncommentType === 'block' ? '' : LINE_COMMENT_LEADING_WHITESPACE
         );
         cm.replaceRange(
           existingContentWithoutComment,
