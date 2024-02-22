@@ -26,7 +26,10 @@ export const visit = (url) =>
       );
     });
 
-export const typeCode = (code, { delay = 200 } = {}) =>
+export const typeCode = (code) =>
+  getCodeEditor().focused().type(code, { force: true });
+
+export const typeCodeWithDelay = (code, { delay = 200 } = {}) =>
   getCodeEditor()
     .focused()
     .type(code, { force: true, delay })
@@ -35,8 +38,8 @@ export const typeCode = (code, { delay = 200 } = {}) =>
 export const formatCode = () =>
   getCodeEditor()
     .focused()
-    .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`)
-    .wait(WAIT_FOR_FRAME_TO_RENDER);
+    .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`);
+// .wait(WAIT_FOR_FRAME_TO_RENDER);
 
 export const selectWidthPreferenceByIndex = (index) =>
   cy
@@ -60,8 +63,9 @@ export const toggleSnippets = () =>
 
 export const filterSnippets = (search) => {
   cy.get('[data-testid="filterSnippets"]').type(search, { force: true });
+  // Todo - check if this wait necessary
   // eslint-disable-next-line @finsit/cypress/no-unnecessary-waiting
-  cy.wait(200);
+  // cy.wait(200);
 };
 
 export const assertSnippetsListIsVisible = () =>

@@ -1,6 +1,7 @@
 import dedent from 'dedent';
 import {
   typeCode,
+  typeCodeWithDelay,
   assertFirstFrameContains,
   assertCodePaneContains,
   assertCodePaneLineCount,
@@ -55,7 +56,7 @@ describe('Snippets', () => {
           </span>
         </div>\n
       `);
-    typeCode('cursor position');
+    typeCodeWithDelay('cursor position');
     assertCodePaneContains(dedent`
         <div>
           Initial{" "}
@@ -68,12 +69,12 @@ describe('Snippets', () => {
 
   it('driven with keyboard', () => {
     // Open and format for insertion point
-    typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
+    typeCodeWithDelay(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
     assertSnippetsListIsVisible();
     assertCodePaneLineCount(8);
     filterSnippets('{esc}');
     assertCodePaneLineCount(1);
-    typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
+    typeCodeWithDelay(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
     assertSnippetsListIsVisible();
     assertCodePaneLineCount(8);
 
@@ -92,7 +93,7 @@ describe('Snippets', () => {
     assertCodePaneLineCount(1);
 
     // Re-open and persist
-    typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
+    typeCodeWithDelay(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
     filterSnippets('{downarrow}{downarrow}{downarrow}{downarrow}{enter}');
     assertFirstFrameContains('Initial code\nBar\nBlue Bar');
     assertCodePaneLineCount(7);
@@ -104,7 +105,7 @@ describe('Snippets', () => {
           </span>
         </div>\n
       `);
-    typeCode('cursor position');
+    typeCodeWithDelay('cursor position');
     assertCodePaneContains(dedent`
         <div>
           Initial{" "}
