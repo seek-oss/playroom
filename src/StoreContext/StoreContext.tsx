@@ -388,7 +388,6 @@ const createReducer =
 
       case 'updateTitle': {
         const { title } = action.payload;
-        store.setItem('title', title);
 
         return {
           ...state,
