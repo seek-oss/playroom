@@ -1,5 +1,5 @@
 import {
-  typeCode,
+  typeCodeWithDelay,
   assertFirstFrameContains,
   loadPlayroom,
 } from '../support/utils';
@@ -10,7 +10,7 @@ describe('useScope', () => {
   });
 
   it('works', () => {
-    typeCode('{{}hello()} {{}world()}', { delay: 0 });
+    typeCodeWithDelay('{{}hello()} {{}world()}');
     assertFirstFrameContains('HELLO WORLD');
   });
 });
