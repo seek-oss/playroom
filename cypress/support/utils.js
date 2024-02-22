@@ -39,7 +39,6 @@ export const formatCode = () =>
   getCodeEditor()
     .focused()
     .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`);
-// .wait(WAIT_FOR_FRAME_TO_RENDER);
 
 export const selectWidthPreferenceByIndex = (index) =>
   cy
@@ -63,7 +62,6 @@ export const toggleSnippets = () =>
 
 export const filterSnippets = (search) => {
   cy.get('[data-testid="filterSnippets"]').type(search, { force: true });
-  // Todo - check if this wait necessary
   // eslint-disable-next-line @finsit/cypress/no-unnecessary-waiting
   cy.wait(200);
 };
