@@ -39,6 +39,7 @@ export const formatCode = () =>
   getCodeEditor()
     .focused()
     .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`);
+// test
 
 export const selectWidthPreferenceByIndex = (index) =>
   cy
