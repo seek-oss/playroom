@@ -1,6 +1,7 @@
 import {
   formatCode,
   typeCode,
+  typeCodeWithDelay,
   assertFirstFrameContains,
   assertCodePaneContains,
   assertCodePaneLineCount,
@@ -21,7 +22,7 @@ describe('Editor', () => {
   });
 
   it('autocompletes', () => {
-    typeCode('<F{enter} c{enter}={downarrow}{enter} />');
+    typeCodeWithDelay('<F{enter} c{enter}={downarrow}{enter} />');
     assertFirstFrameContains('Foo');
     assertCodePaneContains('<Foo color="blue" />');
   });
