@@ -388,7 +388,6 @@ const createReducer =
 
       case 'updateTitle': {
         const { title } = action.payload;
-        store.setItem('title', title);
 
         return {
           ...state,
@@ -478,7 +477,6 @@ export const StoreProvider = ({
       store.getItem<number[]>('visibleWidths'),
       store.getItem<string[]>('visibleThemes'),
       store.getItem<ColorScheme>('colorScheme'),
-      store.getItem<string | undefined>('title'),
     ]).then(
       ([
         storedCode,
@@ -488,7 +486,6 @@ export const StoreProvider = ({
         storedVisibleWidths,
         storedVisibleThemes,
         storedColorScheme,
-        storedTitle,
       ]) => {
         const code = codeFromQuery || storedCode || exampleCode;
         const editorPosition = storedPosition;
@@ -515,7 +512,7 @@ export const StoreProvider = ({
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
-            title: titleFromQuery ?? storedTitle ?? undefined,
+            title: titleFromQuery,
             ready: true,
           },
         });
