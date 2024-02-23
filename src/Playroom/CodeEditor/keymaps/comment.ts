@@ -167,6 +167,35 @@ function getSelectionToOffset({
   }
 }
 
+function getUpdatedContent(existingContent: string, range: TagRange) {
+  if (range.isAlreadyCommented) {
+    const uncommentType: CommentType = existingContent
+      .trimStart()
+      .startsWith(BLOCK_COMMENT_START)
+      ? 'block'
+      : 'line';
+
+    const existingContentWithoutComment = existingContent.replace(
+      uncommentType === 'block'
+        ? OPENING_AND_CLOSING_BLOCK_COMMENT_SYNTAX
+        : OPENING_LINE_COMMENT_SYNTAX_WITH_LEADING_WHITESPACE,
+      uncommentType === 'block' ? '' : LINE_COMMENT_LEADING_WHITESPACE
+    );
+
+    return existingContentWithoutComment;
+  }
+
+  if (range.commentType === 'block') {
+    return `${BLOCK_COMMENT_START} ${existingContent} ${BLOCK_COMMENT_END}`;
+  }
+
+  if (range.multiLine) {
+    return existingContent.replace(/^(\s*)/gm, `$1${LINE_COMMENT_START} `);
+  }
+
+  return `${LINE_COMMENT_START} ${existingContent}`;
+}
+
 type CommentType = 'line' | 'block';
 
 interface TagRange {
@@ -285,43 +314,11 @@ export const toggleComment = (cm: Editor) => {
 
       const existingContent = cm.getRange(newRangeFrom, newRangeTo);
 
-      if (range.isAlreadyCommented) {
-        const uncommentType: CommentType = existingContent
-          .trimStart()
-          .startsWith(BLOCK_COMMENT_START)
-          ? 'block'
-          : 'line';
-
-        const existingContentWithoutComment = existingContent.replace(
-          uncommentType === 'block'
-            ? OPENING_AND_CLOSING_BLOCK_COMMENT_SYNTAX
-            : OPENING_LINE_COMMENT_SYNTAX_WITH_LEADING_WHITESPACE,
-          uncommentType === 'block' ? '' : LINE_COMMENT_LEADING_WHITESPACE
-        );
-        cm.replaceRange(
-          existingContentWithoutComment,
-          newRangeFrom,
-          newRangeTo
-        );
-      } else if (range.commentType === 'block') {
-        cm.replaceRange(
-          `${BLOCK_COMMENT_START} ${existingContent} ${BLOCK_COMMENT_END}`,
-          newRangeFrom,
-          newRangeTo
-        );
-      } else if (range.multiLine) {
-        const updatedContent = existingContent.replace(
-          /^(\s*)/gm,
-          `$1${LINE_COMMENT_START} `
-        );
-        cm.replaceRange(updatedContent, newRangeFrom, newRangeTo);
-      } else {
-        cm.replaceRange(
-          `${LINE_COMMENT_START} ${existingContent}`,
-          newRangeFrom,
-          newRangeTo
-        );
-      }
+      cm.replaceRange(
+        getUpdatedContent(existingContent, range),
+        newRangeFrom,
+        newRangeTo
+      );
     }
 
     cm.setSelections(newSelections);
