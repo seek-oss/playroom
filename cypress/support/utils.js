@@ -93,17 +93,55 @@ export const assertFirstFrameContains = (text) => {
   );
 };
 
+/**
+ * @param {number} numCharacters
+ */
 export const selectNextCharacters = (numCharacters) => {
   typeCode('{shift+rightArrow}'.repeat(numCharacters));
 };
 
+/**
+ * @param {number} numWords
+ */
 export const selectNextWords = (numWords) => {
   const modifier = isMac() ? 'alt' : 'ctrl';
   typeCode(`{shift+${modifier}+rightArrow}`.repeat(numWords));
 };
 
+export const selectToStartOfLine = () => {
+  typeCode(isMac() ? '{shift+cmd+leftArrow}' : '{shift+home}');
+};
+
 export const selectToEndOfLine = () => {
   typeCode(isMac() ? '{shift+cmd+rightArrow}' : '{shift+end}');
+};
+
+/**
+ * @param {number} x;
+ * @param {number | undefined} y
+ */
+export const moveBy = (x, y = 0) => {
+  if (x) {
+    const xDirection = x >= 0 ? '{rightArrow}' : '{leftArrow}';
+    typeCode(xDirection.repeat(x));
+  }
+
+  if (y) {
+    const yDirection = y >= 0 ? '{downArrow}' : '{upArrow}';
+    typeCode(yDirection.repeat(y));
+  }
+};
+
+/**
+ * @param {number} numWords
+ */
+export const moveByWords = (numWords) => {
+  const modifier = isMac() ? 'alt' : 'ctrl';
+  typeCode(`{${modifier}+rightArrow}`.repeat(numWords));
+};
+
+export const moveToEndOfLine = () => {
+  typeCode(isMac() ? '{cmd+rightArrow}' : '{end}');
 };
 
 /**
@@ -113,7 +151,7 @@ export const selectToEndOfLine = () => {
  * @param {number}    numLines
  * @param {Direction} direction
  */
-export const selectLines = (numLines, direction = 'down') => {
+export const selectNextLines = (numLines, direction = 'down') => {
   const arrowCode = direction === 'down' ? 'downArrow' : 'upArrow';
   typeCode(`{shift+${arrowCode}}`.repeat(numLines));
 };
