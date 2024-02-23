@@ -36,6 +36,7 @@ import {
   selectNextOccurrence,
 } from './keymaps/cursors';
 import { wrapInTag } from './keymaps/wrap';
+import { toggleComment } from './keymaps/comment';
 
 const validateCodeInEditor = (editorInstance: Editor, code: string) => {
   const maybeValid = validateCode(code);
@@ -257,6 +258,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           [`${keymapModifierKey}-Alt-Down`]: addCursorToNextLine,
           [`${keymapModifierKey}-D`]: selectNextOccurrence,
           [`Shift-${keymapModifierKey}-,`]: wrapInTag,
+          [`${keymapModifierKey}-/`]: toggleComment,
         },
       }}
     />
