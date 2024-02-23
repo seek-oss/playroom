@@ -4,9 +4,13 @@ import {
   assertCodePaneContains,
   loadPlayroom,
   selectNextWords,
-  selectLines,
+  selectNextLines,
   selectNextCharacters,
+  selectToStartOfLine,
   selectToEndOfLine,
+  moveToEndOfLine,
+  moveBy,
+  moveByWords,
 } from '../support/utils';
 import { isMac } from '../../src/utils/formatting';
 
@@ -16,15 +20,15 @@ const cmdPlus = (keyCombo) => {
 };
 
 describe('Keymaps', () => {
-  beforeEach(() => {
-    loadPlayroom(`
-      <div>First line</div>
-      <div>Second line</div>
-      <div>Third line</div>
-    `);
-  });
-
   describe('swapLine', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
     it('should swap single lines up and down without a selection', () => {
       // Move the first line down
       typeCode('{alt+downArrow}');
@@ -67,7 +71,7 @@ describe('Keymaps', () => {
 
     it('should swap multiple lines up and down with a selection', () => {
       typeCode('{rightArrow}');
-      selectLines(1);
+      selectNextLines(1);
       selectNextCharacters(3);
 
       typeCode('{alt+downArrow}');
@@ -89,6 +93,14 @@ describe('Keymaps', () => {
   });
 
   describe('duplicateLine', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
     it('should duplicate single lines up and down', () => {
       // Duplicate the first line down
       typeCode('{shift+alt+downArrow}a');
@@ -113,6 +125,14 @@ describe('Keymaps', () => {
   });
 
   describe('selectNextOccurrence', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
     const cmdPlusD = cmdPlus('D');
 
     it('should select the current word on one use', () => {
@@ -169,6 +189,14 @@ describe('Keymaps', () => {
   });
 
   describe('addCursor', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
     it('should add a cursor on the next line', () => {
       typeCode(`{${cmdPlus('alt+downArrow')}}a`);
       assertCodePaneContains(dedent`
@@ -190,6 +218,13 @@ describe('Keymaps', () => {
   });
 
   describe('wrapTag', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
 
     it("should insert a fragment with cursors when there's no selection", () => {
@@ -295,7 +330,7 @@ describe('Keymaps', () => {
       typeCode(`{${modifierKey}+alt+downArrow}`);
       typeCode('{shift+alt+downArrow}{upArrow}');
 
-      selectLines(1);
+      selectNextLines(1);
       selectToEndOfLine();
 
       typeCode(`{shift+${modifierKey}+,}`);
@@ -312,6 +347,1452 @@ describe('Keymaps', () => {
         </span>
         <div>Third line</div>
       `);
+    });
+  });
+
+  describe('toggleComment', () => {
+    const blockStarter = `
+      <div>First line</div>
+      <div>Second line</div>
+      <div>Third line</div>`;
+
+    const lineStarter = `
+      <div
+        prop1="This is the first prop"
+        prop2="This is the second prop"
+        prop3="This is the third prop"
+      >
+        First line
+      </div>
+      <div>Second line</div>
+      <div>Third line</div>`;
+
+    const modifierKey = isMac() ? 'cmd' : 'ctrl';
+    const executeToggleCommentCommand = () => typeCode(`{${modifierKey}+/}`);
+
+    describe('should wrap a single line in a comment when there is no selection', () => {
+      it('block', () => {
+        loadPlayroom(blockStarter);
+        executeToggleCommentCommand();
+
+        assertCodePaneContains(dedent`
+          {/* <div>First line</div> */}
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+      });
+
+      it('line', () => {
+        loadPlayroom(lineStarter);
+
+        moveBy(0, 1);
+
+        executeToggleCommentCommand();
+
+        assertCodePaneContains(dedent`
+          <div
+            // prop1="This is the first prop"
+            prop2="This is the second prop"
+            prop3="This is the third prop"
+          >
+            First line
+          </div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+      });
+
+      it('line in callback', () => {
+        loadPlayroom(`
+          <button
+            onClick={() =>
+              getState("activeStep") > 1 &&
+              setState("activeStep", getState("activeStep") - 1)
+            }
+          >
+            Text
+          </button>
+          `);
+
+        moveBy(0, 2);
+
+        executeToggleCommentCommand();
+
+        assertCodePaneContains(dedent`
+          <button
+            onClick={() =>
+              // getState("activeStep") > 1 &&
+              setState("activeStep", getState("activeStep") - 1)
+            }
+          >
+            Text
+          </button>
+        `);
+      });
+    });
+
+    describe('should wrap a single line selection in a comment', () => {
+      describe('standard', () => {
+        it('block', () => {
+          loadPlayroom(blockStarter);
+          selectToEndOfLine();
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            {/* <div>First line</div> */}
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+
+        it('line', () => {
+          loadPlayroom(lineStarter);
+
+          moveBy(0, 1);
+          selectToEndOfLine();
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            <div
+              // prop1="This is the first prop"
+              prop2="This is the second prop"
+              prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+      });
+
+      describe('without shifting selection position for a forward selection', () => {
+        it('block', () => {
+          loadPlayroom(blockStarter);
+          selectToEndOfLine();
+
+          executeToggleCommentCommand();
+
+          typeCode(`{shift+leftArrow}`);
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            {/* c> */}
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+
+        it('line', () => {
+          loadPlayroom(lineStarter);
+
+          moveBy(0, 1);
+          moveByWords(1);
+          selectToEndOfLine();
+
+          executeToggleCommentCommand();
+
+          typeCode(`{shift+leftArrow}`);
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            <div
+              // c"
+              prop2="This is the second prop"
+              prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+      });
+
+      describe('without shifting selection position for a backward selection', () => {
+        it('block', () => {
+          loadPlayroom(blockStarter);
+
+          moveToEndOfLine();
+          selectToStartOfLine();
+
+          executeToggleCommentCommand();
+
+          typeCode(`{shift+rightArrow}`);
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            {/* <c */}
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+
+        it('line', () => {
+          loadPlayroom(lineStarter);
+
+          moveBy(0, 1);
+          moveToEndOfLine();
+
+          // Todo - (1/2) Solve issue where Ubuntu does not select to the start of line
+          // Todo - (2/2) with one trigger of the keybinding
+          selectToStartOfLine();
+          selectToStartOfLine();
+
+          executeToggleCommentCommand();
+
+          typeCode(`{shift+rightArrow}`);
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            <div
+             c
+              prop2="This is the second prop"
+              prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+      });
+
+      describe('when the line is only partially selected', () => {
+        it('block', () => {
+          loadPlayroom(blockStarter);
+
+          moveByWords(3);
+          selectNextWords(2);
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            {/* <div>First line</div> */}
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            {/* <div>c</div> */}
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+
+        it('line', () => {
+          loadPlayroom(lineStarter);
+
+          moveBy(0, 1);
+          moveByWords(3);
+
+          selectNextWords(2);
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            <div
+              // prop1="This is the first prop"
+              prop2="This is the second prop"
+              prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            <div
+              // prop1="c the first prop"
+              prop2="This is the second prop"
+              prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+      });
+
+      describe('and respect indent levels', () => {
+        it('block', () => {
+          loadPlayroom(`
+            <div>
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+
+          moveBy(0, 1);
+          moveByWords(1);
+          selectToEndOfLine();
+
+          executeToggleCommentCommand();
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            <div>
+              {/* c */}
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+        });
+
+        it('line', () => {
+          loadPlayroom(lineStarter);
+
+          moveBy(0, 1);
+          moveByWords(1);
+          selectToEndOfLine();
+
+          executeToggleCommentCommand();
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            <div
+              // c
+              prop2="This is the second prop"
+              prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+      });
+    });
+
+    describe('should wrap a multi line selection in a comment', () => {
+      describe('standard', () => {
+        it('block', () => {
+          loadPlayroom(blockStarter);
+
+          selectNextLines(3);
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            {/* <div>First line</div>
+            <div>Second line</div>
+            <div>Third line</div> */}
+          `);
+        });
+
+        it('line', () => {
+          loadPlayroom(lineStarter);
+
+          moveBy(0, 1);
+          selectNextLines(3);
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            <div
+              // prop1="This is the first prop"
+              // prop2="This is the second prop"
+              // prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+      });
+
+      describe('when the lines are only partially selected', () => {
+        it('block', () => {
+          loadPlayroom(blockStarter);
+
+          moveByWords(3);
+          selectNextLines(1);
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            {/* <div>First line</div>
+            <div>Second line</div> */}
+            <div>Third line</div>
+          `);
+        });
+
+        it('line', () => {
+          loadPlayroom(lineStarter);
+
+          moveBy(0, 1);
+          moveByWords(4);
+          selectNextLines(1);
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            <div
+              // prop1="This is the first prop"
+              // prop2="This is the second prop"
+              prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+      });
+
+      describe('and respect indent levels', () => {
+        it('block', () => {
+          loadPlayroom(`
+            <div>
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+
+          moveBy(0, 1);
+          moveByWords(4);
+          selectNextLines(1);
+          selectNextWords(1);
+
+          executeToggleCommentCommand();
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            <div>
+              {/* <div>c line</div> */}
+              <div>Third line</div>
+            </div>
+          `);
+        });
+
+        it('line', () => {
+          loadPlayroom(lineStarter);
+
+          moveBy(0, 1);
+          moveByWords(4);
+          selectNextLines(1);
+          selectNextWords(1);
+
+          executeToggleCommentCommand();
+          typeCode('c');
+
+          assertCodePaneContains(dedent`
+            <div
+              // prop1="Thisc the second prop"
+              prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+      });
+    });
+
+    describe('should uncomment', () => {
+      describe('a single line comment', () => {
+        describe('with no selection', () => {
+          describe('with the cursor proceeding the comment', () => {
+            it('block', () => {
+              loadPlayroom(`
+                {/* <div>First line</div> */}
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div>First line</div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
+
+            it('line', () => {
+              loadPlayroom(lineStarter);
+
+              moveBy(0, 1);
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div
+                  // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                c  // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
+          });
+
+          describe('with the cursor during the opening comment syntax', () => {
+            it('block', () => {
+              loadPlayroom(`
+                <div>
+                  {/* <div>First line</div> */}
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+              moveBy(1);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div>
+                  <div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div>
+                  c<div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+            });
+
+            it('line', () => {
+              loadPlayroom(`
+                <div
+                  // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+              moveBy(1);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div
+                  prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                  cprop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
+          });
+
+          describe('with the cursor within the comment', () => {
+            it('block', () => {
+              loadPlayroom(`
+                {/* <div>First line</div> */}
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveByWords(5);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div>First line</div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div>Firstc line</div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
+
+            it('line', () => {
+              loadPlayroom(`
+                <div
+                  // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(5);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div
+                  prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                  prop1="Thisc is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
+          });
+        });
+
+        describe('with partial internal selection', () => {
+          it('block', () => {
+            loadPlayroom(`
+              {/* <div>First line</div> */}
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            moveByWords(4);
+            selectNextWords(2);
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              <div>c</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+
+          it('line', () => {
+            loadPlayroom(`
+              <div
+                // prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            moveBy(0, 1);
+            moveByWords(4);
+            selectNextWords(2);
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="c the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+        });
+
+        describe('with full external selection', () => {
+          it('block', () => {
+            loadPlayroom(`
+              {/* <div>First line</div> */}
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            selectToEndOfLine();
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              c
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+
+          it('line', () => {
+            loadPlayroom(`
+              <div
+                // prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            moveBy(0, 1);
+            selectToEndOfLine();
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              <div
+              c
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+        });
+
+        describe('with an external to internal selection', () => {
+          it('block', () => {
+            loadPlayroom(`
+              {/* <div>First line</div> */}
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            selectNextWords(5);
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              c line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+
+          it('line', () => {
+            loadPlayroom(`
+              <div
+                // prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            moveBy(0, 1);
+            selectNextWords(5);
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              <div
+              c is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+        });
+
+        describe('should respect indentation', () => {
+          describe('for an external, partial selection', () => {
+            it('block', () => {
+              loadPlayroom(`
+                <div>
+                    {/* <div>First line</div> */}
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+              selectNextWords(4);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div>
+                    <div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div>
+                    cFirst line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+            });
+
+            it('line', () => {
+              loadPlayroom(`
+                <div
+                    // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+
+              selectNextWords(3);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div
+                    prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                    cThis is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
+          });
+
+          describe('for an internal, partial selection', () => {
+            it('block', () => {
+              loadPlayroom(`
+                <div>
+                    {/* <div>First line</div> */}
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(5);
+              selectNextWords(2);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div>
+                    <div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div>
+                    <div>c</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+            });
+
+            it('line', () => {
+              loadPlayroom(`
+                <div
+                    // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(4);
+              selectNextWords(5);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div
+                    prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                    prop1="c"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
+          });
+
+          describe('for an selection beginning during opening comment syntax', () => {
+            it('block', () => {
+              loadPlayroom(`
+                <div>
+                    {/* <div>First line</div> */}
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+              moveBy(1);
+              selectNextWords(4);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div>
+                    <div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div>
+                    cFirst line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+            });
+
+            it('line', () => {
+              loadPlayroom(`
+                <div
+                    // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+              moveBy(1);
+              selectNextWords(3);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div
+                    prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                    cThis is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
+          });
+
+          describe('for no selection', () => {
+            it('block', () => {
+              loadPlayroom(`
+                <div>
+                  {/* <div>First line</div> */}
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div>
+                  <div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div>
+                  c<div>First line</div>
+                  <div>Second line</div>
+                  <div>Third line</div>
+                </div>
+              `);
+            });
+
+            it('line', () => {
+              loadPlayroom(`
+                <div
+                  // prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              moveBy(0, 1);
+              moveByWords(1);
+
+              executeToggleCommentCommand();
+
+              assertCodePaneContains(dedent`
+                <div
+                  prop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+
+              typeCode('c');
+
+              assertCodePaneContains(dedent`
+                <div
+                  cprop1="This is the first prop"
+                  prop2="This is the second prop"
+                  prop3="This is the third prop"
+                >
+                  First line
+                </div>
+                <div>Second line</div>
+                <div>Third line</div>
+              `);
+            });
+          });
+        });
+
+        describe('should preserve secondary comments at the end of the line', () => {
+          it('line', () => {
+            loadPlayroom(`
+              <div
+                prop1="This is the first prop" // Prop1
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            moveBy(0, 1);
+
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div
+                // prop1="This is the first prop" // Prop1
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop" // Prop1
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+        });
+      });
+
+      describe('a multi line comment', () => {
+        describe('with partial internal selection that spans all lines of the comment', () => {
+          it('block', () => {
+            loadPlayroom(`
+              {/* <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div> */}
+            `);
+
+            moveByWords(4);
+            selectNextLines(2);
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              <div>cd line</div>
+            `);
+          });
+
+          it('line', () => {
+            loadPlayroom(`
+              <div
+                // prop1="This is the first prop"
+                // prop2="This is the second prop"
+                // prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            moveBy(0, 1);
+            moveByWords(4);
+            selectNextLines(2);
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="cThis is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+        });
+
+        describe('with full external selection that spans all lines of the comment', () => {
+          it('block', () => {
+            loadPlayroom(`
+              {/* <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div> */}
+            `);
+
+            selectNextLines(3);
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+
+          it('line', () => {
+            loadPlayroom(`
+              <div
+                // prop1="This is the first prop"
+                // prop2="This is the second prop"
+                // prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            moveBy(0, 1);
+            selectNextLines(3);
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+        });
+
+        describe('with an external to internal selection that spans all lines of the comment', () => {
+          it('block', () => {
+            loadPlayroom(`
+            {/* <div>First line</div>
+            <div>Second line</div>
+            <div>Third line</div> */}
+          `);
+
+            selectNextWords(5);
+            selectNextLines(2);
+
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              ce</div>
+            `);
+          });
+
+          it('line', () => {
+            loadPlayroom(`
+            <div
+              // prop1="This is the first prop"
+              // prop2="This is the second prop"
+              // prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+
+            moveBy(0, 1);
+            selectNextWords(5);
+            selectNextLines(2);
+
+            executeToggleCommentCommand();
+
+            assertCodePaneContains(dedent`
+              <div
+                prop1="This is the first prop"
+                prop2="This is the second prop"
+                prop3="This is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+
+            typeCode('c');
+
+            assertCodePaneContains(dedent`
+              <div
+              c is the third prop"
+              >
+                First line
+              </div>
+              <div>Second line</div>
+              <div>Third line</div>
+            `);
+          });
+        });
+      });
     });
   });
 });
