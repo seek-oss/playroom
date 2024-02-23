@@ -1,13 +1,13 @@
 import {
   assertPreviewContains,
-  getFirstFrame,
+  getPreviewFrames,
   loadPlayroom,
 } from '../support/utils';
 
 describe('Smoke', () => {
   it('frames are interactive', () => {
     loadPlayroom();
-    getFirstFrame().click('center');
+    getPreviewFrames().first().click('center');
   });
 
   it('preview mode loads correctly', () => {
