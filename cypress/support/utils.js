@@ -135,7 +135,7 @@ export const assertCodePaneContains = (text) => {
     const lines = [];
     cy.get('.CodeMirror-line').each(($el) => lines.push($el.text()));
 
-    cy.then(() => {
+    cy.should(() => {
       // removes code mirrors invisible last line character placeholder
       // which is inserted to preserve prettier's new line at end of string.
       const code = lines.join('\n').replace(/[\u200b]$/, '');
