@@ -2,13 +2,12 @@ import {
   assertFirstFrameContains,
   assertCodePaneContains,
   assertFramesMatch,
-  visit,
 } from '../support/utils';
 
 describe('URL handling', () => {
   describe('where paramType is hash', () => {
     it('code', () => {
-      visit(
+      cy.visit(
         'http://localhost:9000/#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
       );
 
@@ -17,7 +16,7 @@ describe('URL handling', () => {
     });
 
     it('widths', () => {
-      visit(
+      cy.visit(
         'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
 
@@ -27,7 +26,7 @@ describe('URL handling', () => {
 
   describe('where paramType is search', () => {
     it('code', () => {
-      visit(
+      cy.visit(
         'http://localhost:9001/index.html?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
       );
 
@@ -36,7 +35,7 @@ describe('URL handling', () => {
     });
 
     it('widths', () => {
-      visit(
+      cy.visit(
         'http://localhost:9001/index.html?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
 
