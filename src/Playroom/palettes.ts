@@ -49,7 +49,8 @@ export const light = {
     neutral: originalPalette.gray2,
     surface: originalPalette.white,
     body: originalPalette.gray1,
-    selection: originalPalette.blue0,
+    selection: transparentize(0.85, originalPalette.blue1),
+    search: darken(0.15, originalPalette.blue0),
   },
   border: {
     standard: originalPalette.gray2,
@@ -143,14 +144,15 @@ export const dark = {
     positive: seekPalette.mint[500],
   },
   background: {
-    transparent: 'rgba(0, 0, 0, .15)',
+    transparent: 'rgba(255, 255, 255, .07)',
     accent: seekPalette.blue[500],
     positive: mix(0.6, seekPalette.grey[900], seekPalette.mint[500]),
     critical: mix(0.7, seekPalette.grey[900], seekPalette.red[600]),
     neutral: seekPalette.grey[800],
     surface: seekPalette.grey[900],
     body: darken(0.03, seekPalette.grey[900]),
-    selection: transparentize(0.85, seekPalette.blue[600]),
+    selection: transparentize(0.75, seekPalette.blue[600]),
+    search: transparentize(0.25, seekPalette.blue[600]),
   },
   border: {
     standard: seekPalette.grey[800],

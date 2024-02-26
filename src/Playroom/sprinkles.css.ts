@@ -75,6 +75,7 @@ export const colorPaletteVars = createThemeContract({
     surface: null,
     body: null,
     selection: null,
+    search: null,
   },
   border: {
     standard: null,

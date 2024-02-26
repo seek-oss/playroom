@@ -224,3 +224,82 @@ globalStyle('.cm-s-neo .cm-variable', {
 globalStyle('.cm-s-neo .cm-number', {
   color: colorPaletteVars.code.number,
 });
+
+globalStyle('.CodeMirror-dialog', {
+  paddingLeft: vars.space.xlarge,
+  paddingRight: vars.space.xlarge,
+  background: colorPaletteVars.background.body,
+  margin: vars.space.large,
+  borderRadius: vars.radii.large,
+  display: 'flex',
+  alignItems: 'center',
+});
+
+globalStyle('.CodeMirror-dialog input', {
+  font: vars.font.scale.large,
+  fontFamily: vars.font.family.code,
+  height: vars.touchableSize,
+  flexGrow: 1,
+});
+
+globalStyle('.CodeMirror-search-hint', {
+  display: 'none',
+});
+
+globalStyle('.CodeMirror-search-label', {
+  display: 'flex',
+  alignItems: 'center',
+  minHeight: vars.touchableSize,
+  font: vars.font.scale.large,
+  fontFamily: vars.font.family.code,
+});
+
+globalStyle('.CodeMirror-search-field', {
+  paddingLeft: vars.space.xlarge,
+});
+
+globalStyle('label.CodeMirror-search-label', {
+  flexGrow: 1,
+});
+
+globalStyle('.dialog-opened.cm-s-neo .CodeMirror-selected', {
+  background: colorPaletteVars.background.search,
+});
+
+globalStyle('.cm-overlay.cm-searching', {
+  paddingTop: 2,
+  paddingBottom: 2,
+  background: colorPaletteVars.background.selection,
+});
+
+globalStyle('.CodeMirror-dialog-top', {
+  border: 0,
+});
+
+globalStyle('.CodeMirror-dialog button:first-of-type', {
+  marginLeft: vars.space.xlarge,
+});
+
+globalStyle('.CodeMirror-dialog button', {
+  appearance: 'none',
+  font: vars.font.scale.standard,
+  fontFamily: vars.font.family.standard,
+  marginLeft: vars.space.medium,
+  padding: vars.space.large,
+  alignSelf: 'center',
+  display: 'block',
+  background: 'none',
+  borderRadius: vars.radii.large,
+  cursor: 'pointer',
+  border: '1px solid transparent',
+});
+
+globalStyle('.CodeMirror-dialog button:focus', {
+  color: colorPaletteVars.foreground.accent,
+  borderColor: 'currentcolor',
+  outline: 'none',
+});
+
+globalStyle('.CodeMirror-dialog button:hover', {
+  background: colorPaletteVars.background.transparent,
+});
