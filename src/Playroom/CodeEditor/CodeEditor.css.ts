@@ -1,5 +1,6 @@
-import { style, globalStyle, keyframes } from '@vanilla-extract/css';
+import { style, globalStyle, keyframes, createVar } from '@vanilla-extract/css';
 import { vars, colorPaletteVars, sprinkles } from '../sprinkles.css';
+import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
 const minimumLineNumberWidth = '50px';
 
@@ -228,11 +229,26 @@ globalStyle('.cm-s-neo .cm-number', {
 globalStyle('.CodeMirror-dialog', {
   paddingLeft: vars.space.xlarge,
   paddingRight: vars.space.xlarge,
-  background: colorPaletteVars.background.body,
-  margin: vars.space.large,
-  borderRadius: vars.radii.large,
+  minHeight: toolbarItemSize,
+  borderBottom: `1px solid ${colorPaletteVars.border.standard}`,
   display: 'flex',
   alignItems: 'center',
+});
+
+const searchOffset = createVar();
+globalStyle('.CodeMirror-scroll', {
+  transform: `translateY(${searchOffset})`,
+  transition: vars.transition.fast,
+});
+
+globalStyle('.dialog-opened .CodeMirror-scroll', {
+  vars: {
+    [searchOffset]: `${toolbarItemSize}px`,
+  },
+});
+
+globalStyle('.dialog-opened .CodeMirror-lines', {
+  paddingBottom: searchOffset,
 });
 
 globalStyle('.CodeMirror-dialog input', {
@@ -272,10 +288,6 @@ globalStyle('.cm-overlay.cm-searching', {
   background: colorPaletteVars.background.selection,
 });
 
-globalStyle('.CodeMirror-dialog-top', {
-  border: 0,
-});
-
 globalStyle('.CodeMirror-dialog button:first-of-type', {
   marginLeft: vars.space.xlarge,
 });
@@ -285,19 +297,26 @@ globalStyle('.CodeMirror-dialog button', {
   font: vars.font.scale.standard,
   fontFamily: vars.font.family.standard,
   marginLeft: vars.space.medium,
-  padding: vars.space.large,
+  paddingTop: vars.space.medium,
+  paddingBottom: vars.space.medium,
+  paddingLeft: vars.space.large,
+  paddingRight: vars.space.large,
   alignSelf: 'center',
   display: 'block',
   background: 'none',
   borderRadius: vars.radii.large,
   cursor: 'pointer',
-  border: '1px solid transparent',
+  border: '1px solid currentColor',
 });
 
 globalStyle('.CodeMirror-dialog button:focus', {
   color: colorPaletteVars.foreground.accent,
-  borderColor: 'currentcolor',
+  boxShadow: colorPaletteVars.shadows.focus,
   outline: 'none',
+});
+
+globalStyle('.CodeMirror-dialog button:focus:hover', {
+  background: colorPaletteVars.background.selection,
 });
 
 globalStyle('.CodeMirror-dialog button:hover', {
