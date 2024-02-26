@@ -122,6 +122,17 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           e.preventDefault();
           dispatch({ type: 'toggleToolbar', payload: { panel: 'snippets' } });
         }
+
+        // Prevent browser keyboard shortcuts when the search/replace input is focused
+        if (
+          cmdOrCtrl &&
+          document.activeElement?.classList.contains(
+            'CodeMirror-search-field'
+          ) &&
+          (e.key === 'r' || e.key === 'f')
+        ) {
+          e.preventDefault();
+        }
       }
     };
 
