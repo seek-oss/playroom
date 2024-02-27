@@ -11,6 +11,9 @@ import {
   moveToEndOfLine,
   moveBy,
   moveByWords,
+  typeSearchTerm,
+  assertCodePaneSearchMatchesCount,
+  assertCodePaneHasFocus,
 } from '../support/utils';
 import { isMac } from '../../src/utils/formatting';
 
@@ -1793,6 +1796,151 @@ describe('Keymaps', () => {
           });
         });
       });
+    });
+  });
+
+  describe('find and replace', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should find all occurrences of search term', () => {
+      typeCode(`{${cmdPlus('f')}}`);
+
+      typeSearchTerm('div');
+
+      assertCodePaneSearchMatchesCount(6);
+
+      typeCode('{esc}');
+
+      assertCodePaneHasFocus();
+    });
+
+    it('should replace and skip occurrences of search term correctly', () => {
+      typeCode(`{${cmdPlus('r')}}`);
+
+      // search for term to replace
+      typeSearchTerm('div');
+
+      // provide replacement term
+      typeSearchTerm('span');
+
+      // replace occurrence
+      cy.get('.CodeMirror-dialog button').contains('Yes').click();
+
+      assertCodePaneContains(dedent`
+        <span>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+
+      // ignore occurrence
+      cy.get('.CodeMirror-dialog button').contains('No').click();
+
+      assertCodePaneContains(dedent`
+        <span>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+
+      // replace occurrence
+      cy.get('.CodeMirror-dialog button').contains('Yes').click();
+
+      assertCodePaneContains(dedent`
+        <span>First line</div>
+        <span>Second line</div>
+        <div>Third line</div>
+      `);
+
+      // replace all remaining occurrences
+      cy.get('.CodeMirror-dialog button').contains('All').click();
+
+      assertCodePaneContains(dedent`
+        <span>First line</span>
+        <span>Second line</span>
+        <span>Third line</span>
+      `);
+
+      assertCodePaneHasFocus();
+    });
+
+    it('should back out of replace correctly', () => {
+      typeCode(`{${cmdPlus('r')}}`);
+
+      typeSearchTerm('div');
+
+      typeCode('{esc}');
+
+      assertCodePaneContains(dedent`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+
+      assertCodePaneHasFocus();
+    });
+  });
+
+  describe('jump to line', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+        <div>Forth line</div>
+        <div>Fifth line</div>
+        <div>Sixth line</div>
+        <div>Seventh line</div>
+      `);
+    });
+
+    it('should jump to line number correctly', () => {
+      typeCode(`{${cmdPlus('g')}}`);
+
+      const line = 6;
+      typeSearchTerm(line);
+
+      cy.get(`.CodeMirror-code > div:nth-child(${line})`).should(
+        'have.class',
+        'CodeMirror-activeline'
+      );
+
+      assertCodePaneHasFocus();
+
+      typeCode(`{${cmdPlus('g')}}`);
+
+      const nextLine = 2;
+      typeSearchTerm(nextLine);
+
+      cy.get(`.CodeMirror-code > div:nth-child(${nextLine})`).should(
+        'have.class',
+        'CodeMirror-activeline'
+      );
+
+      assertCodePaneHasFocus();
+    });
+
+    it('should jump to line and column number correctly', () => {
+      typeCode(`{${cmdPlus('g')}}`);
+
+      typeSearchTerm('6:10');
+      typeCode('a');
+
+      assertCodePaneContains(dedent`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+        <div>Forth line</div>
+        <div>Fifth line</div>
+        <div>Sixtha line</div>
+        <div>Seventh line</div>
+      `);
+
+      assertCodePaneHasFocus();
     });
   });
 });

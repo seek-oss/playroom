@@ -182,3 +182,27 @@ export const loadPlayroom = (initialCode) => {
       indexedDB.deleteDatabase(storageKey);
     });
 };
+
+/**
+ * @param {string} term
+ */
+export const typeSearchTerm = (term) => {
+  cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
+};
+
+/**
+ * @param {number} lines
+ */
+export const assertCodePaneSearchMatchesCount = (lines) => {
+  getCodeEditor().within(() =>
+    cy.get('.cm-searching').should('have.length', lines)
+  );
+};
+
+export const assertCodePaneHasFocus = () => {
+  cy.focused().then((focusedEl) => {
+    cy.get('.CodeMirror textarea').should((codeTextarea) => {
+      expect(codeTextarea.get(0)).to.equal(focusedEl.get(0));
+    });
+  });
+};
