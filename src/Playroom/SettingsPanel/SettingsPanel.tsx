@@ -35,6 +35,7 @@ const getKeyBindings = () => {
     'Select next occurrence': [metaKeySymbol, 'D'],
     'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
     'Toggle comment': [metaKeySymbol, '/'],
+    'Copy link to clipboard': [metaKeySymbol, '⇧', 'C'],
   };
 };
 
