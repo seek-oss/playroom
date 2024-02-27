@@ -259,6 +259,15 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           [`${keymapModifierKey}-D`]: selectNextOccurrence,
           [`Shift-${keymapModifierKey}-,`]: wrapInTag,
           [`${keymapModifierKey}-/`]: toggleComment,
+          [`Shift-${keymapModifierKey}-C`]: () => {
+            dispatch({
+              type: 'copyToClipboard',
+              payload: {
+                url: window.location.href,
+                trigger: 'toolbarItem',
+              },
+            });
+          },
         },
       }}
     />
