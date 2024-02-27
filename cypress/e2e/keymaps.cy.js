@@ -1809,6 +1809,8 @@ describe('Keymaps', () => {
     });
 
     it('should find all occurrences of search term', () => {
+      assertCodePaneHasFocus();
+
       typeCode(`{${cmdPlus('f')}}`);
 
       typeSearchTerm('div');
@@ -1821,6 +1823,8 @@ describe('Keymaps', () => {
     });
 
     it('should replace and skip occurrences of search term correctly', () => {
+      assertCodePaneHasFocus();
+
       typeCode(`{${cmdPlus('r')}}`);
 
       // search for term to replace
@@ -1869,6 +1873,8 @@ describe('Keymaps', () => {
     });
 
     it('should back out of replace correctly', () => {
+      assertCodePaneHasFocus();
+
       typeCode(`{${cmdPlus('r')}}`);
 
       typeSearchTerm('div');
@@ -1899,6 +1905,8 @@ describe('Keymaps', () => {
     });
 
     it('should jump to line number correctly', () => {
+      assertCodePaneHasFocus();
+
       typeCode(`{${cmdPlus('g')}}`);
 
       const line = 6;
@@ -1925,6 +1933,8 @@ describe('Keymaps', () => {
     });
 
     it('should jump to line and column number correctly', () => {
+      assertCodePaneHasFocus();
+
       typeCode(`{${cmdPlus('g')}}`);
 
       typeSearchTerm('6:10');
