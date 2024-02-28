@@ -37,13 +37,11 @@ const getKeyBindings = () => {
     'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
   };
 
-  const compareKeysAlphabetically = (
-    [keyA]: [string, any],
-    [keyB]: [string, any]
-  ) => keyA.localeCompare(keyB);
+  const compareKeysAscending = ([keyA]: [string, any], [keyB]: [string, any]) =>
+    keyA.localeCompare(keyB);
 
   const sortedKeyboardShortcuts = Object.fromEntries(
-    Object.entries(keyboardShortcuts).sort(compareKeysAlphabetically)
+    Object.entries(keyboardShortcuts).sort(compareKeysAscending)
   );
 
   return sortedKeyboardShortcuts;
