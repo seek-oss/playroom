@@ -24,7 +24,9 @@ const getKeyBindings = () => {
   const metaKeySymbol = isMac() ? '⌘' : 'Ctrl';
   const altKeySymbol = isMac() ? '⌥' : 'Alt';
 
-  const keyboardShortcuts = {
+  // Sort shortcuts alphabetically
+  /* eslint sort-keys: "error" */
+  return {
     'Add cursor to next line': [metaKeySymbol, altKeySymbol, '↓'],
     'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
     'Duplicate line down': ['⇧', altKeySymbol, '↓'],
@@ -36,15 +38,7 @@ const getKeyBindings = () => {
     'Toggle comment': [metaKeySymbol, '/'],
     'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
   };
-
-  const compareKeysAscending = ([keyA]: [string, any], [keyB]: [string, any]) =>
-    keyA.localeCompare(keyB);
-
-  const sortedKeyboardShortcuts = Object.fromEntries(
-    Object.entries(keyboardShortcuts).sort(compareKeysAscending)
-  );
-
-  return sortedKeyboardShortcuts;
+  /* eslint-disable sort-keys */
 };
 
 const positionIcon: Record<EditorPosition, ReactChild> = {
