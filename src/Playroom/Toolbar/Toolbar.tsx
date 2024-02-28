@@ -127,7 +127,9 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
 
           <div>
             <ToolbarItem
-              title={`Copy link to clipboard (${isMac() ? '⌘' : '^'}⇧C)`}
+              title={`Copy link to clipboard (${
+                isMac() ? '⌘⇧C' : 'Ctrl+Shift+C'
+              })`}
               success={copying}
               onClick={copyHandler}
               data-testid="copyToClipboard"
