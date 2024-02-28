@@ -24,18 +24,29 @@ const getKeyBindings = () => {
   const metaKeySymbol = isMac() ? '⌘' : 'Ctrl';
   const altKeySymbol = isMac() ? '⌥' : 'Alt';
 
-  return {
-    'Format code': [metaKeySymbol, 'S'],
-    'Swap line up': [altKeySymbol, '↑'],
-    'Swap line down': [altKeySymbol, '↓'],
-    'Duplicate line up': ['⇧', altKeySymbol, '↑'],
-    'Duplicate line down': ['⇧', altKeySymbol, '↓'],
-    'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
+  const keyboardShortcuts = {
     'Add cursor to next line': [metaKeySymbol, altKeySymbol, '↓'],
+    'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
+    'Duplicate line down': ['⇧', altKeySymbol, '↓'],
+    'Duplicate line up': ['⇧', altKeySymbol, '↑'],
+    'Format code': [metaKeySymbol, 'S'],
     'Select next occurrence': [metaKeySymbol, 'D'],
-    'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
+    'Swap line down': [altKeySymbol, '↓'],
+    'Swap line up': [altKeySymbol, '↑'],
     'Toggle comment': [metaKeySymbol, '/'],
+    'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
   };
+
+  const compareKeysAlphabetically = (
+    [keyA]: [string, any],
+    [keyB]: [string, any]
+  ) => keyA.localeCompare(keyB);
+
+  const sortedKeyboardShortcuts = Object.fromEntries(
+    Object.entries(keyboardShortcuts).sort(compareKeysAlphabetically)
+  );
+
+  return sortedKeyboardShortcuts;
 };
 
 const positionIcon: Record<EditorPosition, ReactChild> = {
