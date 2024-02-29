@@ -81,7 +81,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             {hasSnippets && (
               <ToolbarItem
                 active={isSnippetsOpen}
-                title={`Insert snippet (${isMac() ? '\u2318' : 'Ctrl + '}K)`}
+                title={`Insert snippet (${isMac() ? '⌘K' : 'Ctrl+K'})`}
                 disabled={!validCursorPosition}
                 data-testid="toggleSnippets"
                 onClick={() => {
