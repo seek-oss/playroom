@@ -23,16 +23,17 @@ import { isMac } from '../../utils/formatting';
 const getKeyBindings = () => {
   const metaKeySymbol = isMac() ? '⌘' : 'Ctrl';
   const altKeySymbol = isMac() ? '⌥' : 'Alt';
+  const shiftKeySymbol = isMac() ? '⇧' : 'Shift';
 
   return {
     'Toggle comment': [metaKeySymbol, '/'],
-    'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
+    'Wrap selection in tag': [metaKeySymbol, shiftKeySymbol, ','],
     'Format code': [metaKeySymbol, 'S'],
     'Select next occurrence': [metaKeySymbol, 'D'],
     'Swap line up': [altKeySymbol, '↑'],
     'Swap line down': [altKeySymbol, '↓'],
-    'Duplicate line up': ['⇧', altKeySymbol, '↑'],
-    'Duplicate line down': ['⇧', altKeySymbol, '↓'],
+    'Duplicate line up': [shiftKeySymbol, altKeySymbol, '↑'],
+    'Duplicate line down': [shiftKeySymbol, altKeySymbol, '↓'],
     'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
     'Add cursor to next line': [metaKeySymbol, altKeySymbol, '↓'],
   };
