@@ -8,11 +8,9 @@ import {
 const getFirstFrame = () =>
   getPreviewFrames()
     .first()
-    .then(
-      ($iframe) =>
-        new Cypress.Promise((resolve) =>
-          $iframe.on('load', () => resolve($iframe))
-        )
+    .then(cy.wrap)
+    .should(
+      ($frame) => expect($frame.get(0).contentDocument.body).to.not.be.empty
     );
 
 const assertGlobalCounter = (subject = cy.window()) =>
