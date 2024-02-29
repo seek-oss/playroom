@@ -37,6 +37,7 @@ const getKeyBindings = () => {
     'Toggle comment': [metaKeySymbol, '/'],
     'Wrap selection in tag': [metaKeySymbol, shiftKeySymbol, ','],
   };
+  /* eslint-disable sort-keys */
 };
 
 const positionIcon: Record<EditorPosition, ReactChild> = {
