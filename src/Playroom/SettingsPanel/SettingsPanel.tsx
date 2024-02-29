@@ -25,9 +25,9 @@ const getKeyBindings = () => {
   const altKeySymbol = isMac() ? '⌥' : 'Alt';
 
   return {
-    'Format code': [metaKeySymbol, 'S'],
     'Toggle comment': [metaKeySymbol, '/'],
     'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
+    'Format code': [metaKeySymbol, 'S'],
     'Select next occurrence': [metaKeySymbol, 'D'],
     'Swap line up': [altKeySymbol, '↑'],
     'Swap line down': [altKeySymbol, '↓'],
