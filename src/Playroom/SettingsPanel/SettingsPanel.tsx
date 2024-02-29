@@ -24,19 +24,22 @@ const getKeyBindings = () => {
   const metaKeySymbol = isMac() ? '⌘' : 'Ctrl';
   const altKeySymbol = isMac() ? '⌥' : 'Alt';
 
+  // Sort shortcuts alphabetically
+  /* eslint sort-keys: "error" */
   return {
-    'Format code': [metaKeySymbol, 'S'],
-    'Swap line up': [altKeySymbol, '↑'],
-    'Swap line down': [altKeySymbol, '↓'],
-    'Duplicate line up': ['⇧', altKeySymbol, '↑'],
-    'Duplicate line down': ['⇧', altKeySymbol, '↓'],
-    'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
     'Add cursor to next line': [metaKeySymbol, altKeySymbol, '↓'],
-    'Select next occurrence': [metaKeySymbol, 'D'],
-    'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
-    'Toggle comment': [metaKeySymbol, '/'],
+    'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
     'Copy link to clipboard': [metaKeySymbol, '⇧', 'C'],
+    'Duplicate line down': ['⇧', altKeySymbol, '↓'],
+    'Duplicate line up': ['⇧', altKeySymbol, '↑'],
+    'Format code': [metaKeySymbol, 'S'],
+    'Select next occurrence': [metaKeySymbol, 'D'],
+    'Swap line down': [altKeySymbol, '↓'],
+    'Swap line up': [altKeySymbol, '↑'],
+    'Toggle comment': [metaKeySymbol, '/'],
+    'Wrap selection in tag': [metaKeySymbol, '⇧', ','],
   };
+  /* eslint-disable sort-keys */
 };
 
 const positionIcon: Record<EditorPosition, ReactChild> = {
