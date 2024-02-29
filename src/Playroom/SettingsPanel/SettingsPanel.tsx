@@ -29,6 +29,7 @@ const getKeyBindings = () => {
     'Toggle comment': [metaKeySymbol, '/'],
     'Wrap selection in tag': [metaKeySymbol, shiftKeySymbol, ','],
     'Format code': [metaKeySymbol, 'S'],
+    'Insert snippet': [metaKeySymbol, 'K'],
     'Select next occurrence': [metaKeySymbol, 'D'],
     'Swap line up': [altKeySymbol, '↑'],
     'Swap line down': [altKeySymbol, '↓'],
