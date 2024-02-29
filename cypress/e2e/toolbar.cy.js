@@ -4,7 +4,6 @@ import {
   assertPreviewContains,
   typeCode,
   gotoPreview,
-  visit,
   loadPlayroom,
 } from '../support/utils';
 
@@ -33,7 +32,7 @@ describe('Toolbar', () => {
   it('copy to clipboard', () => {
     const copySpy = cy.spy();
 
-    visit(
+    cy.visit(
       'http://localhost:9000/#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
     );
 
