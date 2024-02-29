@@ -33,6 +33,7 @@ const getKeyBindings = () => {
     'Duplicate line up': ['⇧', altKeySymbol, '↑'],
     'Format code': [metaKeySymbol, 'S'],
     'Select next occurrence': [metaKeySymbol, 'D'],
+    'Insert snippet': [metaKeySymbol, 'K'],
     'Swap line down': [altKeySymbol, '↓'],
     'Swap line up': [altKeySymbol, '↑'],
     'Toggle comment': [metaKeySymbol, '/'],
