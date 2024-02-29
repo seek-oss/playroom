@@ -98,22 +98,3 @@ export const label = style([
     },
   },
 ]);
-
-export const textField = style([
-  sprinkles({
-    font: 'large',
-    width: 'full',
-    paddingX: 'large',
-    boxSizing: 'border-box',
-    borderRadius: 'medium',
-  }),
-  {
-    color: colorPaletteVars.foreground.neutral,
-    height: vars.touchableSize,
-    background: colorPaletteVars.background.surface,
-    '::placeholder': {
-      color: colorPaletteVars.foreground.neutralSoft,
-    },
-    border: `1px solid ${colorPaletteVars.border.standard}`,
-  },
-]);
