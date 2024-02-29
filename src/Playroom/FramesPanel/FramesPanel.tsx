@@ -7,6 +7,21 @@ import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 
 import * as styles from './FramesPanel.css';
+import { Helmet } from 'react-helmet';
+
+const getTitle = (title: string | undefined) => {
+  if (title) {
+    return `${title} | Playroom`;
+  }
+
+  const configTitle = window?.__playroomConfig__.title;
+
+  if (configTitle) {
+    return `${configTitle} | Playroom`;
+  }
+
+  return 'Playroom';
+};
 
 interface FramesPanelProps {
   availableWidths: number[];
@@ -77,7 +92,7 @@ function FrameOption<Option>({
 }
 
 export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
-  const [{ visibleWidths = [], visibleThemes = [] }, dispatch] =
+  const [{ visibleWidths = [], visibleThemes = [], title }, dispatch] =
     useContext(StoreContext);
   const hasThemes =
     availableThemes.filter(
@@ -88,69 +103,97 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
   const hasFilteredThemes =
     visibleThemes.length > 0 && visibleThemes.length <= availableThemes.length;
 
+  const displayedTitle = getTitle(title);
+
   return (
-    <ToolbarPanel data-testid="frame-panel">
-      <Stack space="xxxlarge">
-        <div data-testid="widthsPreferences">
-          <FrameHeading
-            showReset={hasFilteredWidths}
-            onReset={() => dispatch({ type: 'resetVisibleWidths' })}
-          >
-            Widths
-          </FrameHeading>
-
-          {availableWidths.map((option) => (
-            <FrameOption
-              key={option}
-              option={option}
-              selected={hasFilteredWidths && visibleWidths.includes(option)}
-              visible={visibleWidths}
-              available={availableWidths}
-              onChange={(newWidths) => {
-                if (newWidths) {
+    <>
+      {title === undefined ? null : (
+        <Helmet>
+          <title>{displayedTitle}</title>
+        </Helmet>
+      )}
+      <ToolbarPanel data-testid="frame-panel">
+        <Stack space="xxxlarge">
+          <label>
+            <Stack space="medium">
+              <Heading level="3">Title</Heading>
+              <input
+                type="text"
+                id="playroomTitleField"
+                placeholder="Enter a title for this Playroom..."
+                className={styles.textField}
+                value={title}
+                onChange={(e) =>
                   dispatch({
-                    type: 'updateVisibleWidths',
-                    payload: { widths: newWidths },
-                  });
-                } else {
-                  dispatch({ type: 'resetVisibleWidths' });
+                    type: 'updateTitle',
+                    payload: { title: e.target.value },
+                  })
                 }
-              }}
-            />
-          ))}
-        </div>
+              />
+            </Stack>
+          </label>
 
-        {hasThemes ? (
-          <div data-testid="themePreferences">
+          <div data-testid="widthsPreferences">
             <FrameHeading
-              showReset={hasFilteredThemes}
-              onReset={() => dispatch({ type: 'resetVisibleThemes' })}
+              showReset={hasFilteredWidths}
+              onReset={() => dispatch({ type: 'resetVisibleWidths' })}
             >
-              Themes
+              Widths
             </FrameHeading>
 
-            {availableThemes.map((option) => (
+            {availableWidths.map((option) => (
               <FrameOption
                 key={option}
                 option={option}
-                selected={hasFilteredThemes && visibleThemes.includes(option)}
-                visible={visibleThemes}
-                available={availableThemes}
-                onChange={(newThemes) => {
-                  if (newThemes) {
+                selected={hasFilteredWidths && visibleWidths.includes(option)}
+                visible={visibleWidths}
+                available={availableWidths}
+                onChange={(newWidths) => {
+                  if (newWidths) {
                     dispatch({
-                      type: 'updateVisibleThemes',
-                      payload: { themes: newThemes },
+                      type: 'updateVisibleWidths',
+                      payload: { widths: newWidths },
                     });
                   } else {
-                    dispatch({ type: 'resetVisibleThemes' });
+                    dispatch({ type: 'resetVisibleWidths' });
                   }
                 }}
               />
             ))}
           </div>
-        ) : null}
-      </Stack>
-    </ToolbarPanel>
+
+          {hasThemes ? (
+            <div data-testid="themePreferences">
+              <FrameHeading
+                showReset={hasFilteredThemes}
+                onReset={() => dispatch({ type: 'resetVisibleThemes' })}
+              >
+                Themes
+              </FrameHeading>
+
+              {availableThemes.map((option) => (
+                <FrameOption
+                  key={option}
+                  option={option}
+                  selected={hasFilteredThemes && visibleThemes.includes(option)}
+                  visible={visibleThemes}
+                  available={availableThemes}
+                  onChange={(newThemes) => {
+                    if (newThemes) {
+                      dispatch({
+                        type: 'updateVisibleThemes',
+                        payload: { themes: newThemes },
+                      });
+                    } else {
+                      dispatch({ type: 'resetVisibleThemes' });
+                    }
+                  }}
+                />
+              ))}
+            </div>
+          ) : null}
+        </Stack>
+      </ToolbarPanel>
+    </>
   );
 };
