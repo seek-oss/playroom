@@ -29,7 +29,7 @@ const getKeyBindings = () => {
     'Toggle comment': [metaKeySymbol, '/'],
     'Wrap selection in tag': [metaKeySymbol, shiftKeySymbol, ','],
     'Format code': [metaKeySymbol, 'S'],
-    'Copy link to clipboard': [metaKeySymbol, '⇧', 'C'],
+    'Copy Playroom link': [metaKeySymbol, '⇧', 'C'],
     'Select next occurrence': [metaKeySymbol, 'D'],
     'Swap line up': [altKeySymbol, '↑'],
     'Swap line down': [altKeySymbol, '↓'],
