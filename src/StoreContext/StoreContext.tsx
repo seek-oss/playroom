@@ -162,7 +162,7 @@ const createReducer =
           statusMessage:
             trigger === 'toolbarItem'
               ? {
-                  message: 'Copied to clipboard',
+                  message: 'Copied Playroom link to clipboard',
                   tone: 'positive',
                 }
               : undefined,

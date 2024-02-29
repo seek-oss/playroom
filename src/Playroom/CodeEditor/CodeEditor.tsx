@@ -283,6 +283,15 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           ['Shift-Ctrl-R']: false, // override default keybinding
           ['Cmd-Option-F']: false, // override default keybinding
           ['Shift-Cmd-Option-F']: false, // override default keybinding
+          [`Shift-${keymapModifierKey}-C`]: () => {
+            dispatch({
+              type: 'copyToClipboard',
+              payload: {
+                url: window.location.href,
+                trigger: 'toolbarItem',
+              },
+            });
+          },
         },
       }}
     />

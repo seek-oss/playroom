@@ -81,7 +81,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             {hasSnippets && (
               <ToolbarItem
                 active={isSnippetsOpen}
-                title={`Insert snippet (${isMac() ? '\u2318' : 'Ctrl + '}K)`}
+                title={`Insert snippet (${isMac() ? '⌘K' : 'Ctrl+K'})`}
                 disabled={!validCursorPosition}
                 data-testid="toggleSnippets"
                 onClick={() => {
@@ -127,7 +127,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
 
           <div>
             <ToolbarItem
-              title="Copy link to clipboard"
+              title={`Copy Playroom link (${isMac() ? '⌘⇧C' : 'Ctrl+Shift+C'})`}
               success={copying}
               onClick={copyHandler}
               data-testid="copyToClipboard"
