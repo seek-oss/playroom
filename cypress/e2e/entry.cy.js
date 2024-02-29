@@ -1,14 +1,22 @@
 import {
   assertPreviewContains,
   cleanUp,
-  getFirstFrame,
+  getPreviewFrames,
   typeCode,
-  visit,
 } from '../support/utils';
 
-const assertGlobalCounter = () => cy.window().its('counter').should('equal', 1);
-const assertGlobalCounterInIframe = ($iframe) =>
-  cy.wrap($iframe[0].contentWindow).its('counter').should('equal', 1);
+const getFirstFrame = () =>
+  getPreviewFrames()
+    .first()
+    .then(
+      ($iframe) =>
+        new Cypress.Promise((resolve) =>
+          $iframe.on('load', () => resolve($iframe))
+        )
+    );
+
+const assertGlobalCounter = (subject = cy.window()) =>
+  subject.its('counter').should('equal', 1);
 
 describe('Entry', () => {
   afterEach(() => {
@@ -26,21 +34,15 @@ describe('Entry', () => {
       });
 
       it('for frames', () => {
-        visit('http://localhost:9002');
+        cy.visit('http://localhost:9002');
         // introduce some delay to make sure everything loads
         typeCode('-');
 
-        getFirstFrame().then(($frame) => {
-          assertGlobalCounterInIframe($frame);
-        });
+        assertGlobalCounter(getFirstFrame().its('0.contentWindow'));
       });
 
       it('for preview', () => {
-        cy.visit(
-          'http://localhost:9002/preview#code=N4Igxg9gJgpiBcIC0IC%2BQ'
-        ).then(() => {
-          cy.get('[data-testid="splashscreen"]').should('not.be.visible');
-        });
+        cy.visit('http://localhost:9002/preview#code=N4Igxg9gJgpiBcIC0IC%2BQ');
         // wait for rendering to finish to make sure everything loads
         assertPreviewContains('-');
 
@@ -51,17 +53,15 @@ describe('Entry', () => {
 
   describe('multiple entries', () => {
     it('loads the entry for frames', () => {
-      visit('http://localhost:9001/index.html');
+      cy.visit('http://localhost:9001/index.html');
       // introduce some delay to make sure everything loads
       typeCode('-');
 
-      getFirstFrame().then(($frame) => {
-        assertGlobalCounterInIframe($frame);
-      });
+      assertGlobalCounter(getFirstFrame().its('0.contentWindow'));
     });
 
     it('does not load the entry for main app', () => {
-      visit('http://localhost:9001/index.html');
+      cy.visit('http://localhost:9001/index.html');
       // introduce some delay to make sure everything loads
       typeCode('-');
 

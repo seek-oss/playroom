@@ -1,8 +1,5 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="cypress" />
-// eslint-disable-next-line spaced-comment
-/// <reference types="cypress-iframe" />
-import 'cypress-iframe';
 import dedent from 'dedent';
 
 import { createUrl } from '../../utils';
@@ -11,10 +8,9 @@ import { isMac } from '../../src/utils/formatting';
 const getCodeEditor = () =>
   cy.get('.CodeMirror-code').then((editor) => cy.wrap(editor));
 
-const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
+export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
 
-export const getFirstFrame = () =>
-  cy.frameLoaded('[data-testid="previewFrame"]:first');
+export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
 export const typeCode = (code, { delay } = {}) =>
   getCodeEditor().focused().type(code, { delay });
@@ -173,12 +169,10 @@ export const assertPreviewContains = (text) =>
     });
 
 export const cleanUp = () =>
-  cy
-    .window()
-    .then((win) => {
-      const { storageKey } = win.__playroomConfig__;
-      indexedDB.deleteDatabase(storageKey);
-    });
+  cy.window().then((win) => {
+    const { storageKey } = win.__playroomConfig__;
+    indexedDB.deleteDatabase(storageKey);
+  });
 
 export const loadPlayroom = (initialCode) => {
   const baseUrl = 'http://localhost:9000';
