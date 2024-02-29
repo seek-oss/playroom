@@ -26,17 +26,16 @@ const getKeyBindings = () => {
   const shiftKeySymbol = isMac() ? '⇧' : 'Shift';
 
   return {
-    'Format code': [metaKeySymbol, 'S'],
-    'Swap line up': [altKeySymbol, '↑'],
-    'Swap line down': [altKeySymbol, '↓'],
-    'Duplicate line up': [shiftKeySymbol, altKeySymbol, '↑'],
-    'Duplicate line down': [shiftKeySymbol, altKeySymbol, '↓'],
-    'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
     'Add cursor to next line': [metaKeySymbol, altKeySymbol, '↓'],
+    'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
+    'Duplicate line down': [shiftKeySymbol, altKeySymbol, '↓'],
+    'Duplicate line up': [shiftKeySymbol, altKeySymbol, '↑'],
+    'Format code': [metaKeySymbol, 'S'],
     'Select next occurrence': [metaKeySymbol, 'D'],
-    'Wrap selection in tag': [metaKeySymbol, shiftKeySymbol, ','],
+    'Swap line down': [altKeySymbol, '↓'],
+    'Swap line up': [altKeySymbol, '↑'],
     'Toggle comment': [metaKeySymbol, '/'],
-    'Copy link to clipboard': [metaKeySymbol, shiftKeySymbol, 'C'],
+    'Wrap selection in tag': [metaKeySymbol, shiftKeySymbol, ','],
   };
 };
 
