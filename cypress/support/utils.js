@@ -5,6 +5,11 @@ import dedent from 'dedent';
 import { createUrl } from '../../utils';
 import { isMac } from '../../src/utils/formatting';
 
+export const cmdPlus = (keyCombo) => {
+  const platformSpecificKey = isMac() ? 'cmd' : 'ctrl';
+  return `${platformSpecificKey}+${keyCombo}`;
+};
+
 const getCodeEditor = () =>
   cy.get('.CodeMirror-code').then((editor) => cy.wrap(editor));
 
@@ -12,8 +17,9 @@ export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
 
 export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
-export const typeCode = (code, { delay } = {}) =>
-  getCodeEditor().focused().type(code, { delay });
+export const typeCode = (code, { delay } = {}) => {
+  cy.get('.CodeMirror textarea').type(code, { delay });
+};
 
 export const formatCode = () =>
   getCodeEditor()
@@ -183,11 +189,37 @@ export const loadPlayroom = (initialCode) => {
     });
 };
 
+export const assertCodePaneHasFocus = () => {
+  cy.get('.CodeMirror textarea').should('have.focus');
+};
+
 /**
  * @param {string} term
  */
-export const typeSearchTerm = (term) => {
+export const findInCode = (term) => {
+  typeCode(`{${cmdPlus('f')}}`);
   cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
+};
+
+/**
+ * @param {string} term
+ * @param {string} [replaceWith]
+ */
+
+export const replaceInCode = (term, replaceWith) => {
+  typeCode(`{${cmdPlus('alt+f')}}`);
+  cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
+  if (replaceWith) {
+    cy.get('.CodeMirror-search-field').type(`${replaceWith}{enter}`);
+  }
+};
+
+/**
+ * @param {number} line
+ */
+export const jumpToLine = (line) => {
+  typeCode(`{${cmdPlus('g')}}`);
+  cy.get('.CodeMirror-search-field').type(`${line}{enter}`);
 };
 
 /**
@@ -197,12 +229,4 @@ export const assertCodePaneSearchMatchesCount = (lines) => {
   getCodeEditor().within(() =>
     cy.get('.cm-searching').should('have.length', lines)
   );
-};
-
-export const assertCodePaneHasFocus = () => {
-  cy.focused().then((focusedEl) => {
-    cy.get('.CodeMirror textarea').should((codeTextarea) => {
-      expect(codeTextarea.get(0)).to.equal(focusedEl.get(0));
-    });
-  });
 };

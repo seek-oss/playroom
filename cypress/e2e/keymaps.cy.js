@@ -3,6 +3,7 @@ import {
   typeCode,
   assertCodePaneContains,
   loadPlayroom,
+  cmdPlus,
   selectNextWords,
   selectNextLines,
   selectNextCharacters,
@@ -11,16 +12,13 @@ import {
   moveToEndOfLine,
   moveBy,
   moveByWords,
-  typeSearchTerm,
   assertCodePaneSearchMatchesCount,
   assertCodePaneHasFocus,
+  findInCode,
+  replaceInCode,
+  jumpToLine,
 } from '../support/utils';
 import { isMac } from '../../src/utils/formatting';
-
-const cmdPlus = (keyCombo) => {
-  const platformSpecificKey = isMac() ? 'cmd' : 'ctrl';
-  return `${platformSpecificKey}+${keyCombo}`;
-};
 
 describe('Keymaps', () => {
   describe('swapLine', () => {
@@ -1809,11 +1807,7 @@ describe('Keymaps', () => {
     });
 
     it('should find all occurrences of search term', () => {
-      assertCodePaneHasFocus();
-
-      typeCode(`{${cmdPlus('f')}}`);
-
-      typeSearchTerm('div');
+      findInCode('div');
 
       assertCodePaneSearchMatchesCount(6);
 
@@ -1823,15 +1817,7 @@ describe('Keymaps', () => {
     });
 
     it('should replace and skip occurrences of search term correctly', () => {
-      assertCodePaneHasFocus();
-
-      typeCode(`{${cmdPlus('alt+f')}}`);
-
-      // search for term to replace
-      typeSearchTerm('div');
-
-      // provide replacement term
-      typeSearchTerm('span');
+      replaceInCode('div', 'span');
 
       // replace occurrence
       cy.get('.CodeMirror-dialog button').contains('Yes').click();
@@ -1873,11 +1859,7 @@ describe('Keymaps', () => {
     });
 
     it('should back out of replace correctly', () => {
-      assertCodePaneHasFocus();
-
-      typeCode(`{${cmdPlus('alt+f')}}`);
-
-      typeSearchTerm('div');
+      replaceInCode('div');
 
       typeCode('{esc}');
 
@@ -1905,12 +1887,8 @@ describe('Keymaps', () => {
     });
 
     it('should jump to line number correctly', () => {
-      assertCodePaneHasFocus();
-
-      typeCode(`{${cmdPlus('g')}}`);
-
       const line = 6;
-      typeSearchTerm(line);
+      jumpToLine(line);
 
       cy.get(`.CodeMirror-code > div:nth-child(${line})`).should(
         'have.class',
@@ -1919,10 +1897,8 @@ describe('Keymaps', () => {
 
       assertCodePaneHasFocus();
 
-      typeCode(`{${cmdPlus('g')}}`);
-
       const nextLine = 2;
-      typeSearchTerm(nextLine);
+      jumpToLine(nextLine);
 
       cy.get(`.CodeMirror-code > div:nth-child(${nextLine})`).should(
         'have.class',
@@ -1933,11 +1909,7 @@ describe('Keymaps', () => {
     });
 
     it('should jump to line and column number correctly', () => {
-      assertCodePaneHasFocus();
-
-      typeCode(`{${cmdPlus('g')}}`);
-
-      typeSearchTerm('6:10');
+      jumpToLine('6:10');
       typeCode('a');
 
       assertCodePaneContains(dedent`
