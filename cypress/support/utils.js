@@ -193,13 +193,21 @@ export const assertCodePaneHasFocus = () => {
   cy.get('.CodeMirror textarea').should('have.focus');
 };
 
+const typeInSearchField = (text, { force }) =>
+  /*
+  force true is required because cypress incorrectly and intermittently
+  reports that search field is covered by another element
+  */
+  cy.get('.CodeMirror-search-field').type(text, { force });
+
 /**
  * @param {string} term
  */
 export const findInCode = (term) => {
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('f')}}`);
-  cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
+
+  typeInSearchField(`${term}{enter}`, { force: true });
 };
 
 /**
@@ -209,11 +217,9 @@ export const findInCode = (term) => {
 export const replaceInCode = (term, replaceWith) => {
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('alt+f')}}`);
-  cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
+  typeInSearchField(`${term}{enter}`, { force: true });
   if (replaceWith) {
-    cy.get('.CodeMirror-search-field').type(`${replaceWith}{enter}`, {
-      force: true,
-    });
+    typeInSearchField(`${replaceWith}{enter}`);
   }
 };
 
@@ -223,7 +229,8 @@ export const replaceInCode = (term, replaceWith) => {
 export const jumpToLine = (line) => {
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
-  cy.get('.CodeMirror-search-field').type(`${line}{enter}`);
+
+  typeInSearchField(`${line}{enter}`);
 };
 
 /**
