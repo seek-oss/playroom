@@ -1811,7 +1811,7 @@ describe('Keymaps', () => {
 
       assertCodePaneSearchMatchesCount(6);
 
-      typeCode('{esc}');
+      cy.focused().type('{esc}');
 
       assertCodePaneHasFocus();
     });
@@ -1861,7 +1861,7 @@ describe('Keymaps', () => {
     it('should back out of replace correctly', () => {
       replaceInCode('div');
 
-      typeCode('{esc}');
+      cy.focused().type('{esc}');
 
       assertCodePaneContains(dedent`
         <div>First line</div>
