@@ -1825,7 +1825,7 @@ describe('Keymaps', () => {
     it('should replace and skip occurrences of search term correctly', () => {
       assertCodePaneHasFocus();
 
-      typeCode(`{${cmdPlus('r')}}`);
+      typeCode(`{${cmdPlus('alt+f')}}`);
 
       // search for term to replace
       typeSearchTerm('div');
@@ -1875,7 +1875,7 @@ describe('Keymaps', () => {
     it('should back out of replace correctly', () => {
       assertCodePaneHasFocus();
 
-      typeCode(`{${cmdPlus('r')}}`);
+      typeCode(`{${cmdPlus('alt+f')}}`);
 
       typeSearchTerm('div');
 

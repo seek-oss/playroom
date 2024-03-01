@@ -129,7 +129,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           document.activeElement?.classList.contains(
             'CodeMirror-search-field'
           ) &&
-          (e.key === 'r' || e.key === 'f')
+          e.key === 'f'
         ) {
           e.preventDefault();
         }
@@ -276,7 +276,7 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           [`Shift-${keymapModifierKey}-,`]: wrapInTag,
           [`${keymapModifierKey}-/`]: toggleComment,
           [`${keymapModifierKey}-F`]: 'findPersistent',
-          [`${keymapModifierKey}-R`]: 'replace',
+          [`${keymapModifierKey}-Alt-F`]: 'replace',
           [`${keymapModifierKey}-G`]: 'jumpToLine',
           ['Alt-G']: false, // override default keybinding
           ['Alt-F']: false, // override default keybinding

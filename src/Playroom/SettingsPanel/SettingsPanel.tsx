@@ -26,7 +26,7 @@ const getKeyBindings = () => {
 
   return {
     Find: [metaKeySymbol, 'F'],
-    Replace: [metaKeySymbol, 'R'],
+    'Find and replace': [metaKeySymbol, altKeySymbol, 'F'],
     'Toggle comment': [metaKeySymbol, '/'],
     'Wrap selection in tag': [metaKeySymbol, shiftKeySymbol, ','],
     'Format code': [metaKeySymbol, 'S'],
