@@ -1,6 +1,5 @@
---
+---
 'playroom': minor
-
 ---
 
 Add find and replace functionality
