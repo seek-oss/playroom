@@ -1521,7 +1521,7 @@ describe('Keymaps', () => {
             });
           });
 
-          describe('for an selection beginning during opening comment syntax', () => {
+          describe('for a selection beginning during opening comment syntax', () => {
             it('block', () => {
               loadPlayroom(`
                 <div>
