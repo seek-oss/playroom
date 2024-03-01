@@ -193,35 +193,75 @@ export const assertCodePaneHasFocus = () => {
   cy.get('.CodeMirror textarea').should('have.focus');
 };
 
+const findErrors = {};
 /**
  * @param {string} term
  */
 export const findInCode = (term) => {
-  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('f')}}`);
-  cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
+
+  cy.on('fail', (e, test) => {
+    if (findErrors[test.title] === 3) {
+      throw e;
+    }
+
+    findErrors[test.title] = findErrors[test.title]
+      ? findErrors[test.title] + 1
+      : 1;
+
+    typeCode(`{${cmdPlus('f')}}`);
+  })
+    .get('.CodeMirror-search-field')
+    .type(`${term}{enter}`);
 };
 
+const replaceErrors = {};
 /**
  * @param {string} term
  * @param {string} [replaceWith]
  */
 export const replaceInCode = (term, replaceWith) => {
-  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('alt+f')}}`);
-  cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
+
+  cy.on('fail', (e, test) => {
+    if (replaceErrors[test.title] === 3) {
+      throw e;
+    }
+
+    replaceErrors[test.title] = replaceErrors[test.title]
+      ? replaceErrors[test.title] + 1
+      : 1;
+
+    typeCode(`{${cmdPlus('alt+f')}}`);
+  })
+    .get('.CodeMirror-search-field')
+    .type(`${term}{enter}`);
+
   if (replaceWith) {
     cy.get('.CodeMirror-search-field').type(`${replaceWith}{enter}`);
   }
 };
 
+const jumpErrors = {};
 /**
  * @param {number} line
  */
 export const jumpToLine = (line) => {
-  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
-  cy.get('.CodeMirror-search-field').type(`${line}{enter}`);
+
+  cy.on('fail', (e, test) => {
+    if (jumpErrors[test.title] === 3) {
+      throw e;
+    }
+
+    jumpErrors[test.title] = jumpErrors[test.title]
+      ? jumpErrors[test.title] + 1
+      : 1;
+
+    typeCode(`{${cmdPlus('g')}}`);
+  })
+    .get('.CodeMirror-search-field')
+    .type(`${line}{enter}`);
 };
 
 /**
