@@ -197,7 +197,7 @@ export const assertCodePaneHasFocus = () => {
  * @param {string} term
  */
 export const findInCode = (term) => {
-  cy.wait(100); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('f')}}`);
   cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
 };
@@ -207,7 +207,7 @@ export const findInCode = (term) => {
  * @param {string} [replaceWith]
  */
 export const replaceInCode = (term, replaceWith) => {
-  cy.wait(100); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('alt+f')}}`);
   cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
   if (replaceWith) {
@@ -219,7 +219,7 @@ export const replaceInCode = (term, replaceWith) => {
  * @param {number} line
  */
 export const jumpToLine = (line) => {
-  cy.wait(100); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
   cy.get('.CodeMirror-search-field').type(`${line}{enter}`);
 };
