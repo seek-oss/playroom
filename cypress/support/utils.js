@@ -206,7 +206,6 @@ export const findInCode = (term) => {
  * @param {string} term
  * @param {string} [replaceWith]
  */
-
 export const replaceInCode = (term, replaceWith) => {
   cy.wait(100); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('alt+f')}}`);
