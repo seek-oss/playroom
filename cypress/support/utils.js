@@ -201,7 +201,7 @@ export const findInCode = (term) => {
   typeCode(`{${cmdPlus('f')}}`);
 
   cy.on('fail', (e, test) => {
-    if (findErrors[test.title] === 3) {
+    if (findErrors[test.title] === 2) {
       throw e;
     }
 
@@ -224,7 +224,7 @@ export const replaceInCode = (term, replaceWith) => {
   typeCode(`{${cmdPlus('alt+f')}}`);
 
   cy.on('fail', (e, test) => {
-    if (replaceErrors[test.title] === 3) {
+    if (replaceErrors[test.title] === 2) {
       throw e;
     }
 
@@ -250,7 +250,7 @@ export const jumpToLine = (line) => {
   typeCode(`{${cmdPlus('g')}}`);
 
   cy.on('fail', (e, test) => {
-    if (jumpErrors[test.title] === 3) {
+    if (jumpErrors[test.title] === 2) {
       throw e;
     }
 
