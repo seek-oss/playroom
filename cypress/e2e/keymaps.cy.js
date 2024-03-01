@@ -351,6 +351,135 @@ describe('Keymaps', () => {
     });
   });
 
+  describe('find and replace', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+    });
+
+    it('should find all occurrences of search term', () => {
+      findInCode('div');
+
+      assertCodePaneSearchMatchesCount(6);
+
+      cy.focused().type('{esc}');
+
+      assertCodePaneHasFocus();
+    });
+
+    it('should replace and skip occurrences of search term correctly', () => {
+      replaceInCode('div', 'span');
+
+      // replace occurrence
+      cy.get('.CodeMirror-dialog button').contains('Yes').click();
+
+      assertCodePaneContains(dedent`
+        <span>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+
+      // ignore occurrence
+      cy.get('.CodeMirror-dialog button').contains('No').click();
+
+      assertCodePaneContains(dedent`
+        <span>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+
+      // replace occurrence
+      cy.get('.CodeMirror-dialog button').contains('Yes').click();
+
+      assertCodePaneContains(dedent`
+        <span>First line</div>
+        <span>Second line</div>
+        <div>Third line</div>
+      `);
+
+      // replace all remaining occurrences
+      cy.get('.CodeMirror-dialog button').contains('All').click();
+
+      assertCodePaneContains(dedent`
+        <span>First line</span>
+        <span>Second line</span>
+        <span>Third line</span>
+      `);
+
+      assertCodePaneHasFocus();
+    });
+
+    it('should back out of replace correctly', () => {
+      replaceInCode('div');
+
+      cy.focused().type('{esc}');
+
+      assertCodePaneContains(dedent`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
+
+      assertCodePaneHasFocus();
+    });
+  });
+
+  describe('jump to line', () => {
+    beforeEach(() => {
+      loadPlayroom(`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+        <div>Forth line</div>
+        <div>Fifth line</div>
+        <div>Sixth line</div>
+        <div>Seventh line</div>
+      `);
+    });
+
+    it('should jump to line number correctly', () => {
+      const line = 6;
+      jumpToLine(line);
+
+      cy.get(`.CodeMirror-code > div:nth-child(${line})`).should(
+        'have.class',
+        'CodeMirror-activeline'
+      );
+
+      assertCodePaneHasFocus();
+
+      const nextLine = 2;
+      jumpToLine(nextLine);
+
+      cy.get(`.CodeMirror-code > div:nth-child(${nextLine})`).should(
+        'have.class',
+        'CodeMirror-activeline'
+      );
+
+      assertCodePaneHasFocus();
+    });
+
+    it('should jump to line and column number correctly', () => {
+      jumpToLine('6:10');
+      typeCode('a');
+
+      assertCodePaneContains(dedent`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+        <div>Forth line</div>
+        <div>Fifth line</div>
+        <div>Sixtha line</div>
+        <div>Seventh line</div>
+      `);
+
+      assertCodePaneHasFocus();
+    });
+  });
+
   describe('toggleComment', () => {
     const blockStarter = `
       <div>First line</div>
@@ -1794,135 +1923,6 @@ describe('Keymaps', () => {
           });
         });
       });
-    });
-  });
-
-  describe('find and replace', () => {
-    beforeEach(() => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-    });
-
-    it('should find all occurrences of search term', () => {
-      findInCode('div');
-
-      assertCodePaneSearchMatchesCount(6);
-
-      cy.focused().type('{esc}');
-
-      assertCodePaneHasFocus();
-    });
-
-    it('should replace and skip occurrences of search term correctly', () => {
-      replaceInCode('div', 'span');
-
-      // replace occurrence
-      cy.get('.CodeMirror-dialog button').contains('Yes').click();
-
-      assertCodePaneContains(dedent`
-        <span>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-
-      // ignore occurrence
-      cy.get('.CodeMirror-dialog button').contains('No').click();
-
-      assertCodePaneContains(dedent`
-        <span>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-
-      // replace occurrence
-      cy.get('.CodeMirror-dialog button').contains('Yes').click();
-
-      assertCodePaneContains(dedent`
-        <span>First line</div>
-        <span>Second line</div>
-        <div>Third line</div>
-      `);
-
-      // replace all remaining occurrences
-      cy.get('.CodeMirror-dialog button').contains('All').click();
-
-      assertCodePaneContains(dedent`
-        <span>First line</span>
-        <span>Second line</span>
-        <span>Third line</span>
-      `);
-
-      assertCodePaneHasFocus();
-    });
-
-    it('should back out of replace correctly', () => {
-      replaceInCode('div');
-
-      cy.focused().type('{esc}');
-
-      assertCodePaneContains(dedent`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-
-      assertCodePaneHasFocus();
-    });
-  });
-
-  describe('jump to line', () => {
-    beforeEach(() => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-        <div>Forth line</div>
-        <div>Fifth line</div>
-        <div>Sixth line</div>
-        <div>Seventh line</div>
-      `);
-    });
-
-    it('should jump to line number correctly', () => {
-      const line = 6;
-      jumpToLine(line);
-
-      cy.get(`.CodeMirror-code > div:nth-child(${line})`).should(
-        'have.class',
-        'CodeMirror-activeline'
-      );
-
-      assertCodePaneHasFocus();
-
-      const nextLine = 2;
-      jumpToLine(nextLine);
-
-      cy.get(`.CodeMirror-code > div:nth-child(${nextLine})`).should(
-        'have.class',
-        'CodeMirror-activeline'
-      );
-
-      assertCodePaneHasFocus();
-    });
-
-    it('should jump to line and column number correctly', () => {
-      jumpToLine('6:10');
-      typeCode('a');
-
-      assertCodePaneContains(dedent`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-        <div>Forth line</div>
-        <div>Fifth line</div>
-        <div>Sixtha line</div>
-        <div>Seventh line</div>
-      `);
-
-      assertCodePaneHasFocus();
     });
   });
 });
