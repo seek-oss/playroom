@@ -199,7 +199,7 @@ export const assertCodePaneHasFocus = () => {
 export const findInCode = (term) => {
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('f')}}`);
-  cy.get('.CodeMirror-search-field').type(`${term}{enter}`, { force: true });
+  cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
 };
 
 /**
@@ -231,6 +231,6 @@ export const jumpToLine = (line) => {
  */
 export const assertCodePaneSearchMatchesCount = (lines) => {
   getCodeEditor().within(() =>
-    cy.get('.cm-searching').should('have.length', lines, { force: true })
+    cy.get('.cm-searching').should('have.length', lines)
   );
 };
