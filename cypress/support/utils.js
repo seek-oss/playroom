@@ -199,7 +199,9 @@ export const assertCodePaneHasFocus = () => {
 export const findInCode = (term) => {
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('f')}}`);
-  cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
+  cy.get('.CodeMirror-dialog')
+    .find('.CodeMirror-search-field')
+    .type(`${term}{enter}`);
 };
 
 /**
@@ -209,9 +211,13 @@ export const findInCode = (term) => {
 export const replaceInCode = (term, replaceWith) => {
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('alt+f')}}`);
-  cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
+  cy.get('.CodeMirror-dialog')
+    .find('.CodeMirror-search-field')
+    .type(`${term}{enter}`);
   if (replaceWith) {
-    cy.get('.CodeMirror-search-field').type(`${replaceWith}{enter}`);
+    cy.get('.CodeMirror-dialog')
+      .find('.CodeMirror-search-field')
+      .type(`${replaceWith}{enter}`);
   }
 };
 
@@ -221,7 +227,9 @@ export const replaceInCode = (term, replaceWith) => {
 export const jumpToLine = (line) => {
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
-  cy.get('.CodeMirror-search-field').type(`${line}{enter}`);
+  cy.get('.CodeMirror-dialog')
+    .find('.CodeMirror-search-field')
+    .type(`${line}{enter}`);
 };
 
 /**
