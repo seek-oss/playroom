@@ -108,7 +108,7 @@
     "typescript": ">=5.0.0",
     "use-debounce": "^10.0.0",
     "webpack": "^5.75.0",
-    "webpack-dev-server": "^4.11.1",
+    "webpack-dev-server": "^5.0.2",
     "webpack-merge": "^5.8.0"
   },
   "devDependencies": {
