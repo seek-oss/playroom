@@ -1,6 +1,5 @@
 import { createBrowserHistory } from 'history';
 import { useState, useEffect } from 'react';
-import queryString, { type ParsedQuery } from 'query-string';
 
 import playroomConfig from '../config';
 
@@ -11,10 +10,8 @@ export function updateUrlCode(code: string) {
 
   const existingQuery = getParamsFromQuery();
 
-  const newQuery = queryString.stringify({
-    ...existingQuery,
-    code,
-  });
+  const newQuery = new URLSearchParams(existingQuery);
+  newQuery.set('code', code);
 
   const params =
     playroomConfig.paramType === 'hash' ? `#?${newQuery}` : `?${newQuery}`;
@@ -24,18 +21,18 @@ export function updateUrlCode(code: string) {
 
 export function getParamsFromQuery(location = history.location) {
   try {
-    return queryString.parse(
+    return new URLSearchParams(
       playroomConfig.paramType === 'hash'
         ? location.hash.replace(/^#/, '')
         : location.search
     );
   } catch (err) {
-    return {};
+    return new URLSearchParams();
   }
 }
 
 export function useParams<ReturnType>(
-  selector: (rawParams: ParsedQuery) => ReturnType
+  selector: (rawParams: URLSearchParams) => ReturnType
 ): ReturnType {
   const [params, setParams] = useState(getParamsFromQuery);
 
