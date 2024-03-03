@@ -225,6 +225,7 @@ export const replaceInCode = (term, replaceWith) => {
  * @param {number} line
  */
 export const jumpToLine = (line) => {
+  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
 
   typeInSearchField(`${line}{enter}`);
