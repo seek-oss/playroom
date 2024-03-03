@@ -10,15 +10,14 @@ export const cmdPlus = (keyCombo) => {
   return `${platformSpecificKey}+${keyCombo}`;
 };
 
-const getCodeEditor = () =>
-  cy.get('.CodeMirror-code').then((editor) => cy.wrap(editor));
+const getCodeEditor = () => cy.get('.CodeMirror-code');
 
 export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
 
 export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
 export const typeCode = (code, { delay } = {}) => {
-  cy.get('.CodeMirror textarea').type(code, { delay });
+  getCodeEditor().type(code, { delay });
 };
 
 export const formatCode = () =>
@@ -193,21 +192,13 @@ export const assertCodePaneHasFocus = () => {
   cy.get('.CodeMirror textarea').should('have.focus');
 };
 
-const typeInSearchField = (text) =>
-  /*
-  force true is required because cypress incorrectly and intermittently
-  reports that search field is covered by another element
-  */
-  cy.get('.CodeMirror-search-field').type(text, { force: true });
-
 /**
  * @param {string} term
  */
 export const findInCode = (term) => {
-  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('f')}}`);
 
-  typeInSearchField(`${term}{enter}`);
+  cy.get('.CodeMirror-search-field').type(term);
 };
 
 /**
@@ -215,11 +206,9 @@ export const findInCode = (term) => {
  * @param {string} [replaceWith]
  */
 export const replaceInCode = (term, replaceWith) => {
-  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
-  typeCode(`{${cmdPlus('alt+f')}}`);
-  typeInSearchField(`${term}{enter}`);
+  cy.get('.CodeMirror-search-field').type(`${term}{enter}`);
   if (replaceWith) {
-    typeInSearchField(`${replaceWith}{enter}`);
+    cy.get('.CodeMirror-search-field').type(`${replaceWith}{enter}`);
   }
 };
 
@@ -227,10 +216,9 @@ export const replaceInCode = (term, replaceWith) => {
  * @param {number} line
  */
 export const jumpToLine = (line) => {
-  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
 
-  typeInSearchField(`${line}{enter}`);
+  cy.get('.CodeMirror-search-field').type(`${line}{enter}`);
 };
 
 /**
