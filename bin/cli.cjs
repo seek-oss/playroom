@@ -4,6 +4,7 @@ const commandLineArgs = require('command-line-args');
 const commandLineUsage = require('command-line-usage');
 const findUp = require('find-up');
 const lib = require('../lib');
+const url = require('url');
 
 const showUsage = () => {
   console.log(
@@ -65,7 +66,7 @@ const showUsage = () => {
     process.exit(1);
   }
 
-  const { default: config } = await import(configPath);
+  const { default: config } = await import(url.pathToFileURL(configPath));
 
   const playroom = lib({
     cwd: path.dirname(configPath),
