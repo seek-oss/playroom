@@ -1,5 +1,33 @@
 # playroom
 
+## 0.36.0
+
+### Minor Changes
+
+- c3f0373: Drop support for Node versions <18.12.0
+- 90edcc8: Add keybinding for copying Playroom link to clipboard with <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>C</kbd> (or, on Windows, <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>).
+- c99cc30: Add keybinding to toggle comment syntax for the current selection.
+
+  Pressing <kbd>Cmd</kbd> + <kbd>/</kbd> (or, on Windows, <kbd>Ctrl</kbd> + <kbd>/</kbd>) will toggle comment syntax for the currently selected text.
+  If no text is selected, the line the cursor is on will toggle comment syntax.
+
+### Patch Changes
+
+- dd95719: Add 'Insert snippet' shortcut to 'Keyboard Shortcuts' list in settings panel for better discoverability.
+- cad1ded: Remove dependency on `current-git-branch` package
+- 0215bb4: Replace `query-string` dependency with `URLSearchParams`
+- 6ad5895: Update shortcut format for Windows users for consistency with standard styling.
+- cb3c427: In the Settings Panel, sort keyboard shortcuts order by most frequently and widely used. Related shortcuts are grouped together.
+- b1766c2: Move Title setting from Settings Panel to Frame Panel to group current playroom settings together and improve discoverability.
+
+  Now, all settings that affect the current playroom tab live in the Frame Panel.
+  Settings affecting all playroom tabs live in the Settings Panel.
+
+- 41e8cfa: Fix an issue where new Playroom tabs without a set title would load a recently used title.
+- 134c5a4: Upgrade `webpack-dev-server` to v5
+- c3f0373: Update dependencies
+- f88a4e6: Fix async import of playroom config on Windows
+
 ## 0.35.0
 
 ### Minor Changes
