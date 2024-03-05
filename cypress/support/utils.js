@@ -17,9 +17,8 @@ export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
 
 export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
-export const typeCode = (code, { delay } = {}) => {
-  cy.get('.CodeMirror textarea').type(code, { delay });
-};
+export const typeCode = (code, { delay } = {}) =>
+  getCodeEditor().focused().type(code, { delay });
 
 export const formatCode = () =>
   getCodeEditor()
