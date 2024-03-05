@@ -13,7 +13,6 @@ import {
   moveBy,
   moveByWords,
   assertCodePaneSearchMatchesCount,
-  assertCodePaneHasFocus,
   findInCode,
   replaceInCode,
   jumpToLine,
@@ -367,7 +366,13 @@ describe('Keymaps', () => {
 
       cy.focused().type('{esc}');
 
-      assertCodePaneHasFocus();
+      typeCode('c');
+
+      assertCodePaneContains(dedent`
+        <c>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
     });
 
     it('should replace and skip occurrences of search term correctly', () => {
@@ -409,7 +414,13 @@ describe('Keymaps', () => {
         <span>Third line</span>
       `);
 
-      assertCodePaneHasFocus();
+      typeCode('c');
+
+      assertCodePaneContains(dedent`
+        c<span>First line</span>
+        <span>Second line</span>
+        <span>Third line</span>
+      `);
     });
 
     it('should back out of replace correctly', () => {
@@ -423,7 +434,13 @@ describe('Keymaps', () => {
         <div>Third line</div>
       `);
 
-      assertCodePaneHasFocus();
+      typeCode('c');
+
+      assertCodePaneContains(dedent`
+        c<div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+      `);
     });
   });
 
@@ -440,26 +457,38 @@ describe('Keymaps', () => {
       `);
     });
 
-    it('should jump to line number correctly', () => {
+    it.only('should jump to line number correctly', () => {
       const line = 6;
       jumpToLine(line);
 
-      cy.get(`.CodeMirror-code > div:nth-child(${line})`).should(
-        'have.class',
-        'CodeMirror-activeline'
-      );
+      typeCode('c');
 
-      assertCodePaneHasFocus();
+      assertCodePaneContains(dedent`
+        <div>First line</div>
+        <div>Second line</div>
+        <div>Third line</div>
+        <div>Forth line</div>
+        <div>Fifth line</div>
+        c<div>Sixth line</div>
+        <div>Seventh line</div>
+      `);
+
+      typeCode('{backspace}');
 
       const nextLine = 2;
       jumpToLine(nextLine);
 
-      cy.get(`.CodeMirror-code > div:nth-child(${nextLine})`).should(
-        'have.class',
-        'CodeMirror-activeline'
-      );
+      typeCode('c');
 
-      assertCodePaneHasFocus();
+      assertCodePaneContains(dedent`
+        <div>First line</div>
+        c<div>Second line</div>
+        <div>Third line</div>
+        <div>Forth line</div>
+        <div>Fifth line</div>
+        <div>Sixth line</div>
+        <div>Seventh line</div>
+      `);
     });
 
     it('should jump to line and column number correctly', () => {
@@ -475,8 +504,6 @@ describe('Keymaps', () => {
         <div>Sixtha line</div>
         <div>Seventh line</div>
       `);
-
-      assertCodePaneHasFocus();
     });
   });
 

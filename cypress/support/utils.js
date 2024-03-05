@@ -188,10 +188,6 @@ export const loadPlayroom = (initialCode) => {
     });
 };
 
-export const assertCodePaneHasFocus = () => {
-  cy.get('.CodeMirror textarea').should('have.focus');
-};
-
 const typeInSearchField = (text) =>
   /*
   force true is required because cypress incorrectly and intermittently
