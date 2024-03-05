@@ -28,9 +28,10 @@ export interface PreviewProps {
 }
 export default ({ themes, components, FrameComponent }: PreviewProps) => {
   const { themeName, code, title } = useParams((rawParams): PreviewState => {
-    if (rawParams.code) {
+    const rawCode = rawParams.get('code');
+    if (rawCode) {
       const result = JSON.parse(
-        lzString.decompressFromEncodedURIComponent(String(rawParams.code)) ?? ''
+        lzString.decompressFromEncodedURIComponent(String(rawCode)) ?? ''
       );
 
       return {

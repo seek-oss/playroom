@@ -19,11 +19,15 @@ export default function Frame({
   components,
   FrameComponent,
 }: FrameProps) {
-  const { themeName, code } = useParams((rawParams) => ({
-    themeName:
-      typeof rawParams.themeName === 'string' ? rawParams.themeName : '',
-    code: typeof rawParams.code === 'string' ? rawParams.code : '',
-  }));
+  const { themeName, code } = useParams((rawParams) => {
+    const rawThemeName = rawParams.get('themeName');
+    const rawCode = rawParams.get('code');
+
+    return {
+      themeName: rawThemeName || '',
+      code: rawCode || '',
+    };
+  });
 
   const resolvedThemeName =
     themeName === '__PLAYROOM__NO_THEME__' ? null : themeName;

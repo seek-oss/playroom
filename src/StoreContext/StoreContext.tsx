@@ -453,14 +453,15 @@ export const StoreProvider = ({
     let widthsFromQuery: State['visibleWidths'];
     let titleFromQuery: State['title'];
 
-    if (params.code) {
+    const paramsCode = params.get('code');
+    if (paramsCode) {
       const {
         code: parsedCode,
         themes: parsedThemes,
         widths: parsedWidths,
         title: parsedTitle,
       } = JSON.parse(
-        lzString.decompressFromEncodedURIComponent(String(params.code)) ?? ''
+        lzString.decompressFromEncodedURIComponent(String(paramsCode)) ?? ''
       );
 
       codeFromQuery = parsedCode;
