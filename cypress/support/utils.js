@@ -57,8 +57,7 @@ const getSnippets = () => cy.get('[data-testid="snippet-list"] li');
 export const selectSnippetByIndex = (index) => getSnippets().eq(index);
 
 export const mouseOverSnippet = (index) =>
-  // force stops cypress scrolling the panel out of the editor
-  selectSnippetByIndex(index).trigger('mousemove', { force: true });
+  selectSnippetByIndex(index).trigger('mousemove');
 
 export const assertSnippetCount = (count) =>
   getSnippets().should('have.length', count);
@@ -189,11 +188,7 @@ export const loadPlayroom = (initialCode) => {
 };
 
 const typeInSearchField = (text) =>
-  /*
-  force true is required because cypress incorrectly and intermittently
-  reports that search field is covered by another element
-  */
-  cy.get('.CodeMirror-search-field').type(text, { force: true });
+  cy.get('.CodeMirror-search-field').type(text);
 
 /**
  * @param {string} term
