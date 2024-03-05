@@ -199,6 +199,7 @@ const typeInSearchField = (text) =>
  * @param {string} term
  */
 export const findInCode = (term) => {
+  // Wait necessary to ensure code pane is focussed
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('f')}}`);
 
@@ -210,6 +211,7 @@ export const findInCode = (term) => {
  * @param {string} [replaceWith]
  */
 export const replaceInCode = (term, replaceWith) => {
+  // Wait necessary to ensure code pane is focussed
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('alt+f')}}`);
   typeInSearchField(`${term}{enter}`);
@@ -222,6 +224,7 @@ export const replaceInCode = (term, replaceWith) => {
  * @param {number} line
  */
 export const jumpToLine = (line) => {
+  // Wait necessary to ensure code pane is focussed
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
 
