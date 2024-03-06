@@ -201,12 +201,12 @@ type CommentType = 'line' | 'block';
 const isOnlyWhitespace = (input: string) => /^\s+$/.test(input);
 
 const isFullExpressionSlot = (tokens: CodeMirror.Token[]) => {
-  const formattedLine = tokens.filter(
+  const formattedLineTokens = tokens.filter(
     (token) => token.type !== 'comment' && !isOnlyWhitespace(token.string)
   );
 
   return (
-    formattedLine.at(0)?.string === '{' && formattedLine.at(-1)?.string === '}'
+    formattedLineTokens.at(0)?.string === '{' && formattedLineTokens.at(-1)?.string === '}'
   );
 };
 
