@@ -242,7 +242,6 @@ const determineCommentType = (
     cm.getLine(from.line).trimStart().startsWith(BLOCK_COMMENT_START) &&
     cm.getLine(to.line).trimEnd().endsWith(BLOCK_COMMENT_END);
 
-  if (isFullExpressionSlot(lineTokens)) {
   if (!isBlockComment && isFullExpressionSlot(lineTokens)) {
     return isJavaScriptMode ? 'block' : 'line';
   }
