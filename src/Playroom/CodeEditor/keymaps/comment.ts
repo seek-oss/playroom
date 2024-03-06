@@ -219,7 +219,9 @@ const determineCommentType = (
     (token) => token.type === 'attribute'
   );
 
-  const isJavaScriptMode = cm.getModeAt(from).name === 'javascript';
+  const isJavaScriptMode =
+    cm.getModeAt(new Pos(from.line, 0)).name === 'javascript';
+
   const isInlineComment = cm
     .getLine(from.line)
     .trimStart()
