@@ -426,7 +426,7 @@ describe('Keymaps', () => {
     it('should back out of replace correctly', () => {
       replaceInCode('div');
 
-      cy.focused().type('{esc}');
+      typeCode('{esc}');
 
       assertCodePaneContains(dedent`
         <div>First line</div>
