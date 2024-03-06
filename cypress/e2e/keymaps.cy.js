@@ -417,8 +417,8 @@ describe('Keymaps', () => {
       typeCode('c');
 
       assertCodePaneContains(dedent`
-        c<span>First line</span>
-        <span>Second line</span>
+        <span>First line</span>
+        <span>Second line</spanc>
         <span>Third line</span>
       `);
     });
@@ -457,7 +457,7 @@ describe('Keymaps', () => {
       `);
     });
 
-    it.only('should jump to line number correctly', () => {
+    it('should jump to line number correctly', () => {
       const line = 6;
       jumpToLine(line);
 
