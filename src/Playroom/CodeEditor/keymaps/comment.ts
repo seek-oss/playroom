@@ -206,7 +206,8 @@ const isFullExpressionSlot = (tokens: CodeMirror.Token[]) => {
   );
 
   return (
-    formattedLineTokens.at(0)?.string === '{' && formattedLineTokens.at(-1)?.string === '}'
+    formattedLineTokens.at(0)?.string === '{' &&
+    formattedLineTokens.at(-1)?.string === '}'
   );
 };
 
