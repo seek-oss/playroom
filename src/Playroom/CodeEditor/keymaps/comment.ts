@@ -198,6 +198,18 @@ function getUpdatedContent(existingContent: string, range: TagRange) {
 
 type CommentType = 'line' | 'block';
 
+const isOnlyWhitespace = (input: string) => /^\s+$/.test(input);
+
+const isFullExpressionSlot = (tokens: CodeMirror.Token[]) => {
+  const formattedLine = tokens.filter(
+    (token) => token.type !== 'comment' && !isOnlyWhitespace(token.string)
+  );
+
+  return (
+    formattedLine.at(0)?.string === '{' && formattedLine.at(-1)?.string === '}'
+  );
+};
+
 interface TagRange {
   from: CodeMirror.Position;
   to: CodeMirror.Position;
@@ -229,6 +241,10 @@ const determineCommentType = (
   const isBlockComment =
     cm.getLine(from.line).trimStart().startsWith(BLOCK_COMMENT_START) &&
     cm.getLine(to.line).trimEnd().endsWith(BLOCK_COMMENT_END);
+
+  if (isFullExpressionSlot(lineTokens)) {
+    return isJavaScriptMode ? 'block' : 'line';
+  }
 
   if (isInlineComment) {
     return 'line';
