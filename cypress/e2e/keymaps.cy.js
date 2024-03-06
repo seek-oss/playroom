@@ -412,7 +412,7 @@ describe('Keymaps', () => {
           >
             Text
           </button>
-          `);
+        `);
 
         moveBy(0, 2);
 
@@ -427,6 +427,76 @@ describe('Keymaps', () => {
           >
             Text
           </button>
+        `);
+      });
+
+      it('block - expression slot outside tags', () => {
+        loadPlayroom(`
+          {testFn('test')}
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+
+        executeToggleCommentCommand();
+
+        assertCodePaneContains(dedent`
+          {/* {testFn('test')} */}
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+      });
+
+      it('line - inside multi-line expression slot outside tags', () => {
+        loadPlayroom(`
+          {
+            testFn('test')
+          }
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+
+        moveBy(0, 1);
+
+        executeToggleCommentCommand();
+
+        assertCodePaneContains(dedent`
+          {
+            // testFn('test')
+          }
+          <div>First line</div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+      });
+
+      it('line - full line expression slot inside tags', () => {
+        loadPlayroom(`
+          <div
+            prop1="prop1"
+            {...props}
+          >
+            First line
+          </div>
+          <div>Second line</div>
+          <div>Third line</div>
+        `);
+
+        moveBy(0, 2);
+
+        executeToggleCommentCommand();
+
+        assertCodePaneContains(dedent`
+          <div
+            prop1="prop1"
+            // {...props}
+          >
+            First line
+          </div>
+          <div>Second line</div>
+          <div>Third line</div>
         `);
       });
     });
