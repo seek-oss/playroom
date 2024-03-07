@@ -1,5 +1,21 @@
 # playroom
 
+## 0.37.0
+
+### Minor Changes
+
+- 94c75f8: Add "Find", "Find and replace", and "Jump to line" functionality.
+
+  Keybindings for these new commands are:
+
+  - `Cmd + F` / `Ctrl + F` - Find
+  - `Cmd + Option + F` / `Ctrl + Alt + F` - Find and replace
+  - `Cmd + G` / `Ctrl + G` - Jump to line
+
+### Patch Changes
+
+- 71f694a: Fix issue with "Toggle comment" command commenting certain code outside JSX tags with incorrect syntax.
+
 ## 0.36.0
 
 ### Minor Changes
