@@ -25,12 +25,15 @@ const getKeyBindings = () => {
   const shiftKeySymbol = isMac() ? '⇧' : 'Shift';
 
   return {
+    Find: [metaKeySymbol, 'F'],
+    'Find and replace': [metaKeySymbol, altKeySymbol, 'F'],
     'Toggle comment': [metaKeySymbol, '/'],
     'Wrap selection in tag': [metaKeySymbol, shiftKeySymbol, ','],
     'Format code': [metaKeySymbol, 'S'],
     'Insert snippet': [metaKeySymbol, 'K'],
     'Copy Playroom link': [metaKeySymbol, shiftKeySymbol, 'C'],
     'Select next occurrence': [metaKeySymbol, 'D'],
+    'Jump to line number': [metaKeySymbol, 'G'],
     'Swap line up': [altKeySymbol, '↑'],
     'Swap line down': [altKeySymbol, '↓'],
     'Duplicate line up': [shiftKeySymbol, altKeySymbol, '↑'],

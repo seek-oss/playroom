@@ -2,6 +2,7 @@ import { useRef, useContext, useEffect, useCallback } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import type { Editor } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
+import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/theme/neo.css';
 
 import {
@@ -26,6 +27,10 @@ import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/xml-hint';
+import 'codemirror/addon/dialog/dialog';
+import 'codemirror/addon/search/jump-to-line';
+import 'codemirror/addon/search/search';
+import 'codemirror/addon/search/searchcursor';
 import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
@@ -116,6 +121,17 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
         if (cmdOrCtrl && e.key === 'k') {
           e.preventDefault();
           dispatch({ type: 'toggleToolbar', payload: { panel: 'snippets' } });
+        }
+
+        // Prevent browser keyboard shortcuts when the search/replace input is focused
+        if (
+          cmdOrCtrl &&
+          document.activeElement?.classList.contains(
+            'CodeMirror-search-field'
+          ) &&
+          e.key === 'f'
+        ) {
+          e.preventDefault();
         }
       }
     };
@@ -259,6 +275,14 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
           [`${keymapModifierKey}-D`]: selectNextOccurrence,
           [`Shift-${keymapModifierKey}-,`]: wrapInTag,
           [`${keymapModifierKey}-/`]: toggleComment,
+          [`${keymapModifierKey}-F`]: 'findPersistent',
+          [`${keymapModifierKey}-Alt-F`]: 'replace',
+          [`${keymapModifierKey}-G`]: 'jumpToLine',
+          ['Alt-G']: false, // override default keybinding
+          ['Alt-F']: false, // override default keybinding
+          ['Shift-Ctrl-R']: false, // override default keybinding
+          ['Cmd-Option-F']: false, // override default keybinding
+          ['Shift-Cmd-Option-F']: false, // override default keybinding
           [`Shift-${keymapModifierKey}-C`]: () => {
             dispatch({
               type: 'copyToClipboard',

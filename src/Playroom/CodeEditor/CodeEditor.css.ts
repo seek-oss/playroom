@@ -1,5 +1,6 @@
-import { style, globalStyle, keyframes } from '@vanilla-extract/css';
+import { style, globalStyle, keyframes, createVar } from '@vanilla-extract/css';
 import { vars, colorPaletteVars, sprinkles } from '../sprinkles.css';
+import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
 const minimumLineNumberWidth = '50px';
 
@@ -223,4 +224,101 @@ globalStyle('.cm-s-neo .cm-variable', {
 
 globalStyle('.cm-s-neo .cm-number', {
   color: colorPaletteVars.code.number,
+});
+
+globalStyle('.CodeMirror-dialog', {
+  paddingLeft: vars.space.xlarge,
+  paddingRight: vars.space.xlarge,
+  minHeight: toolbarItemSize,
+  borderBottom: `1px solid ${colorPaletteVars.border.standard}`,
+  display: 'flex',
+  alignItems: 'center',
+});
+
+const searchOffset = createVar();
+globalStyle('.CodeMirror-scroll', {
+  transform: `translateY(${searchOffset})`,
+  transition: vars.transition.fast,
+});
+
+globalStyle('.dialog-opened .CodeMirror-scroll', {
+  vars: {
+    [searchOffset]: `${toolbarItemSize}px`,
+  },
+});
+
+globalStyle('.dialog-opened .CodeMirror-lines', {
+  paddingBottom: searchOffset,
+});
+
+globalStyle('.CodeMirror-dialog input', {
+  font: vars.font.scale.large,
+  fontFamily: vars.font.family.code,
+  height: vars.touchableSize,
+  flexGrow: 1,
+});
+
+globalStyle('.CodeMirror-search-hint', {
+  display: 'none',
+});
+
+globalStyle('.CodeMirror-search-label', {
+  display: 'flex',
+  alignItems: 'center',
+  minHeight: vars.touchableSize,
+  font: vars.font.scale.large,
+  fontFamily: vars.font.family.code,
+});
+
+globalStyle('.CodeMirror-search-field', {
+  paddingLeft: vars.space.xlarge,
+});
+
+globalStyle('label.CodeMirror-search-label', {
+  flexGrow: 1,
+});
+
+globalStyle('.dialog-opened.cm-s-neo .CodeMirror-selected', {
+  background: colorPaletteVars.background.search,
+});
+
+globalStyle('.cm-overlay.cm-searching', {
+  paddingTop: 2,
+  paddingBottom: 2,
+  background: colorPaletteVars.background.selection,
+});
+
+globalStyle('.CodeMirror-dialog button:first-of-type', {
+  marginLeft: vars.space.xlarge,
+});
+
+globalStyle('.CodeMirror-dialog button', {
+  appearance: 'none',
+  font: vars.font.scale.standard,
+  fontFamily: vars.font.family.standard,
+  marginLeft: vars.space.medium,
+  paddingTop: vars.space.medium,
+  paddingBottom: vars.space.medium,
+  paddingLeft: vars.space.large,
+  paddingRight: vars.space.large,
+  alignSelf: 'center',
+  display: 'block',
+  background: 'none',
+  borderRadius: vars.radii.large,
+  cursor: 'pointer',
+  border: '1px solid currentColor',
+});
+
+globalStyle('.CodeMirror-dialog button:focus', {
+  color: colorPaletteVars.foreground.accent,
+  boxShadow: colorPaletteVars.shadows.focus,
+  outline: 'none',
+});
+
+globalStyle('.CodeMirror-dialog button:focus:hover', {
+  background: colorPaletteVars.background.selection,
+});
+
+globalStyle('.CodeMirror-dialog button:hover', {
+  background: colorPaletteVars.background.transparent,
 });

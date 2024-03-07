@@ -5,6 +5,11 @@ import dedent from 'dedent';
 import { createUrl } from '../../utils';
 import { isMac } from '../../src/utils/formatting';
 
+export const cmdPlus = (keyCombo) => {
+  const platformSpecificKey = isMac() ? 'cmd' : 'ctrl';
+  return `${platformSpecificKey}+${keyCombo}`;
+};
+
 const getCodeEditor = () =>
   cy.get('.CodeMirror-code').then((editor) => cy.wrap(editor));
 
@@ -181,4 +186,55 @@ export const loadPlayroom = (initialCode) => {
       const { storageKey } = win.__playroomConfig__;
       indexedDB.deleteDatabase(storageKey);
     });
+};
+
+const typeInSearchField = (text) =>
+  /*
+  force true is required because cypress incorrectly and intermittently
+  reports that search field is covered by another element
+  */
+  cy.get('.CodeMirror-search-field').type(text, { force: true });
+
+/**
+ * @param {string} term
+ */
+export const findInCode = (term) => {
+  // Wait necessary to ensure code pane is focussed
+  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  typeCode(`{${cmdPlus('f')}}`);
+
+  typeInSearchField(`${term}{enter}`);
+};
+
+/**
+ * @param {string} term
+ * @param {string} [replaceWith]
+ */
+export const replaceInCode = (term, replaceWith) => {
+  // Wait necessary to ensure code pane is focussed
+  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  typeCode(`{${cmdPlus('alt+f')}}`);
+  typeInSearchField(`${term}{enter}`);
+  if (replaceWith) {
+    typeInSearchField(`${replaceWith}{enter}`);
+  }
+};
+
+/**
+ * @param {number} line
+ */
+export const jumpToLine = (line) => {
+  // Wait necessary to ensure code pane is focussed
+  cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  typeCode(`{${cmdPlus('g')}}`);
+  typeCode(`${line}{enter}`);
+};
+
+/**
+ * @param {number} lines
+ */
+export const assertCodePaneSearchMatchesCount = (lines) => {
+  getCodeEditor().within(() =>
+    cy.get('.cm-searching').should('have.length', lines)
+  );
 };
