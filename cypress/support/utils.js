@@ -188,13 +188,6 @@ export const loadPlayroom = (initialCode) => {
     });
 };
 
-const typeInSearchField = (text) =>
-  /*
-  force true is required because cypress incorrectly and intermittently
-  reports that search field is covered by another element
-  */
-  cy.get('.CodeMirror-search-field').type(text, { force: true });
-
 /**
  * @param {string} term
  */
@@ -203,7 +196,7 @@ export const findInCode = (term) => {
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('f')}}`);
 
-  typeInSearchField(`${term}{enter}`);
+  typeCode(`${term}{enter}`);
 };
 
 /**
@@ -214,9 +207,9 @@ export const replaceInCode = (term, replaceWith) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(200); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('alt+f')}}`);
-  typeInSearchField(`${term}{enter}`);
+  typeCode(`${term}{enter}`);
   if (replaceWith) {
-    typeInSearchField(`${replaceWith}{enter}`);
+    typeCode(`${replaceWith}{enter}`);
   }
 };
 
