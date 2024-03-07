@@ -2,7 +2,7 @@
 'playroom': minor
 ---
 
-Add "Find", "Find and replace", and "Jump to line" keyboard shortcuts.
+Add "Find", "Find and replace", and "Jump to line" functionality.
 
 Keybindings for these new commands are:
 
