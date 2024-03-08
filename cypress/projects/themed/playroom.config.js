@@ -1,4 +1,7 @@
 module.exports = {
+  entry: {
+    frame: './entry',
+  },
   components: './components',
   snippets: './snippets',
   themes: './themes',

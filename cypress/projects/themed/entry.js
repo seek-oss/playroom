@@ -1,0 +1,1 @@
+window.counter = 1;

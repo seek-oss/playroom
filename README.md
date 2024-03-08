@@ -62,6 +62,7 @@ module.exports = {
 
   // Optional:
   title: 'My Awesome Library',
+  entry: './src/entry',
   themes: './src/themes',
   snippets: './playroom/snippets.js',
   frameComponent: './playroom/FrameComponent.js',
@@ -156,6 +157,15 @@ export default function useScope() {
   return {
     theme: useTheme(),
   };
+```
+
+## Custom Entry
+
+You can provide a custom entry file via the `entry` option, which is a path to a file that runs some code before everything else. For example, if you wanted to apply a CSS reset or other global styles, polyfills etc.:
+
+```js
+import '../path/to/your/theming-system/reset';
+import '../path/to/your/theming-system/global-styles.css';
 ```
 
 ## Theme Support
