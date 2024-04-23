@@ -9,7 +9,7 @@
   },
   "files": [
     "CHANGELOG.md",
-    ".bablrc",
+    ".babelrc",
     "bin",
     "images",
     "lib",
