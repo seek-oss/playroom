@@ -254,9 +254,10 @@ const determineCommentType = (
   if (isJavaScriptMode && !isBlockComment && !containsTag) {
     return 'line';
   }
+  const lineEmpty = isOnlyWhitespace(cm.getLine(from.line));
 
   if (
-    (!isJavaScriptMode && !containsAttribute) ||
+    (!isJavaScriptMode && !containsAttribute && !lineEmpty) ||
     containsTag ||
     isJavaScriptMode
   ) {
