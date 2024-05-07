@@ -92,20 +92,12 @@ export const panel = style([
     position: 'relative',
     display: 'flex',
     overflow: 'auto',
-    transition: 'slow',
     pointerEvents: 'auto',
   }),
   {
     width: toolbarOpenSize,
     backgroundColor: colorPaletteVars.background.surface,
     borderLeft: `${toolbarBorderThickness} solid ${colorPaletteVars.border.standard}`,
-    selectors: {
-      [`${root}:not(${isOpen}) &`]: {
-        transform: `translateX(${calc(`${toolbarOpenSize}px`).multiply(0.3)})`,
-        opacity: 0,
-        pointerEvents: 'none',
-      },
-    },
   },
 ]);
 
@@ -113,3 +105,38 @@ export const preference = sprinkles({
   position: 'absolute',
   inset: 0,
 });
+
+// Todo - remove pointerEvents none?
+export const transitionStyles = {
+  enter: style({
+    opacity: 0,
+    transform: `translateX(${calc(`${toolbarOpenSize}px`).multiply(0.3)})`,
+  }),
+  enterActive: style([
+    sprinkles({
+      transition: 'slow',
+    }),
+    { opacity: 1 },
+  ]),
+  enterDone: style({
+    opacity: 1,
+  }),
+  exit: style({
+    opacity: 1,
+  }),
+  exitActive: style([
+    sprinkles({
+      transition: 'slow',
+    }),
+    {
+      opacity: 0,
+      transform: `translateX(${calc(`${toolbarOpenSize}px`).multiply(0.3)})`,
+      pointerEvents: 'none',
+    },
+  ]),
+  exitDone: style({
+    opacity: 0,
+    transform: `translateX(${calc(`${toolbarOpenSize}px`).multiply(0.3)})`,
+    pointerEvents: 'none',
+  }),
+};

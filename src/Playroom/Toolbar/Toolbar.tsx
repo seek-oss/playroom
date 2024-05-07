@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react';
+import { useContext, useState, useCallback, useRef, useEffect } from 'react';
 import { useTimeoutFn } from 'react-use';
 import classnames from 'classnames';
 import type { PlayroomProps } from '../Playroom';
@@ -16,6 +16,8 @@ import * as styles from './Toolbar.css';
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import SettingsIcon from '../icons/SettingsIcon';
 import { isMac } from '../../utils/formatting';
+
+import { CSSTransition } from 'react-transition-group';
 
 interface Props {
   themes: PlayroomProps['themes'];
@@ -38,6 +40,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   ] = useContext(StoreContext);
   const [copying, setCopying] = useState(false);
   const [isReady, cancel, reset] = useTimeoutFn(() => setCopying(false), 3000);
+  const nodeRef = useRef(null);
 
   const copyHandler = useCallback(() => {
     dispatch({
@@ -57,6 +60,16 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const isFramesOpen = activeToolbarPanel === 'frames';
   const isSettingsOpen = activeToolbarPanel === 'settings';
   const isPreviewOpen = activeToolbarPanel === 'preview';
+
+  const isPanelOpen = activeToolbarPanel !== undefined;
+
+  const [lastActivePanel, setLastActivePanel] = useState('snippets');
+
+  useEffect(() => {
+    if (activeToolbarPanel) {
+      setLastActivePanel(activeToolbarPanel);
+    }
+  }, [activeToolbarPanel]);
 
   const hasSnippets = snippets && snippets.length > 0;
   const hasFilteredFrames =
@@ -148,58 +161,65 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             </ToolbarItem>
           </div>
         </div>
-
-        <div className={styles.panel}>
-          {isSnippetsOpen && (
-            <div
-              hidden={isSnippetsOpen ? undefined : true}
-              className={styles.preference}
-            >
-              <Snippets
-                snippets={snippets}
-                onHighlight={(snippet) => {
-                  dispatch({
-                    type: 'previewSnippet',
-                    payload: { snippet },
-                  });
-                }}
-                onClose={(snippet) => {
-                  if (snippet) {
+        <CSSTransition
+          // nodeRef={nodeRef}
+          in={isPanelOpen}
+          timeout={300}
+          classNames={styles.transitionStyles}
+          mountOnEnter
+          unmountOnExit
+        >
+          <div
+            className={styles.panel}
+            // ref={nodeRef}
+            id="custom-id"
+          >
+            {lastActivePanel === 'snippets' && (
+              <div className={styles.preference}>
+                <Snippets
+                  snippets={snippets}
+                  onHighlight={(snippet) => {
                     dispatch({
-                      type: 'persistSnippet',
+                      type: 'previewSnippet',
                       payload: { snippet },
                     });
-                  } else {
-                    dispatch({ type: 'closeToolbar' });
-                  }
-                }}
-              />
-            </div>
-          )}
-          <div
-            hidden={isFramesOpen ? undefined : true}
-            className={styles.preference}
-          >
-            <FramesPanel
-              availableWidths={allWidths}
-              availableThemes={allThemes}
-            />
+                  }}
+                  onClose={(snippet) => {
+                    if (snippet) {
+                      dispatch({
+                        type: 'persistSnippet',
+                        payload: { snippet },
+                      });
+                    } else {
+                      dispatch({ type: 'closeToolbar' });
+                    }
+                  }}
+                />
+              </div>
+            )}
+            {lastActivePanel === 'frames' && (
+              <div className={styles.preference}>
+                <FramesPanel
+                  availableWidths={allWidths}
+                  availableThemes={allThemes}
+                />
+              </div>
+            )}
+            {lastActivePanel === 'preview' && (
+              <div className={styles.preference}>
+                <PreviewPanel
+                  themes={allThemes}
+                  visibleThemes={visibleThemes}
+                />
+              </div>
+            )}
+            {lastActivePanel === 'settings' && (
+              <div className={styles.preference}>
+                <SettingsPanel />
+              </div>
+            )}
           </div>
-
-          <div
-            hidden={isPreviewOpen ? undefined : true}
-            className={styles.preference}
-          >
-            <PreviewPanel themes={allThemes} visibleThemes={visibleThemes} />
-          </div>
-
-          <div
-            hidden={isSettingsOpen ? undefined : true}
-            className={styles.preference}
-          >
-            <SettingsPanel />
-          </div>
-        </div>
+        </CSSTransition>
       </div>
     </div>
   );
