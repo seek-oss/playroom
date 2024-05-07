@@ -898,6 +898,47 @@ describe('Keymaps', () => {
           `);
         });
       });
+
+      describe.only('when the line has no code', () => {
+        it('block', () => {
+          loadPlayroom(blockStarter);
+
+          moveToEndOfLine();
+          typeCode('{enter}');
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            <div>First line</div>
+            // 
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+
+        it('line', () => {
+          loadPlayroom(lineStarter);
+
+          moveBy(0, 1);
+          moveToEndOfLine();
+          typeCode('{enter}');
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            <div
+              prop1="This is the first prop"
+              // 
+              prop2="This is the second prop"
+              prop3="This is the third prop"
+            >
+              First line
+            </div>
+            <div>Second line</div>
+            <div>Third line</div>
+          `);
+        });
+      });
     });
 
     describe('should wrap a multi line selection in a comment', () => {
