@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react';
+import { useContext, useState, useCallback, useEffect } from 'react';
 import { useTimeoutFn } from 'react-use';
 import classnames from 'classnames';
 import type { PlayroomProps } from '../Playroom';
@@ -57,6 +57,14 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const isFramesOpen = activeToolbarPanel === 'frames';
   const isSettingsOpen = activeToolbarPanel === 'settings';
   const isPreviewOpen = activeToolbarPanel === 'preview';
+
+  const [lastActivePanel, setLastActivePanel] = useState('snippets');
+
+  useEffect(() => {
+    if (activeToolbarPanel) {
+      setLastActivePanel(activeToolbarPanel);
+    }
+  }, [activeToolbarPanel]);
 
   const hasSnippets = snippets && snippets.length > 0;
   const hasFilteredFrames =
@@ -150,11 +158,8 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
         </div>
 
         <div className={styles.panel}>
-          {isSnippetsOpen && (
-            <div
-              hidden={isSnippetsOpen ? undefined : true}
-              className={styles.preference}
-            >
+          {lastActivePanel === 'snippets' && (
+            <div className={styles.preference}>
               <Snippets
                 snippets={snippets}
                 onHighlight={(snippet) => {
@@ -176,29 +181,26 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               />
             </div>
           )}
-          <div
-            hidden={isFramesOpen ? undefined : true}
-            className={styles.preference}
-          >
-            <FramesPanel
-              availableWidths={allWidths}
-              availableThemes={allThemes}
-            />
-          </div>
+          {lastActivePanel === 'frames' && (
+            <div className={styles.preference}>
+              <FramesPanel
+                availableWidths={allWidths}
+                availableThemes={allThemes}
+              />
+            </div>
+          )}
 
-          <div
-            hidden={isPreviewOpen ? undefined : true}
-            className={styles.preference}
-          >
-            <PreviewPanel themes={allThemes} visibleThemes={visibleThemes} />
-          </div>
+          {lastActivePanel === 'preview' && (
+            <div className={styles.preference}>
+              <PreviewPanel themes={allThemes} visibleThemes={visibleThemes} />
+            </div>
+          )}
 
-          <div
-            hidden={isSettingsOpen ? undefined : true}
-            className={styles.preference}
-          >
-            <SettingsPanel />
-          </div>
+          {lastActivePanel === 'settings' && (
+            <div className={styles.preference}>
+              <SettingsPanel />
+            </div>
+          )}
         </div>
       </div>
     </div>
