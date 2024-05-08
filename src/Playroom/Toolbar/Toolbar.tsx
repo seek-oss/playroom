@@ -60,9 +60,8 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const isSettingsOpen = activeToolbarPanel === 'settings';
   const isPreviewOpen = activeToolbarPanel === 'preview';
 
-  const isPanelOpen = activeToolbarPanel !== undefined;
-
-  const [lastActivePanel, setLastActivePanel] = useState('snippets');
+  const [lastActivePanel, setLastActivePanel] =
+    useState<typeof activeToolbarPanel>(undefined);
 
   useEffect(() => {
     if (activeToolbarPanel) {
@@ -161,11 +160,12 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
           </div>
         </div>
         <CSSTransition
-          in={isPanelOpen}
+          in={isOpen}
           timeout={300}
           classNames={styles.transitionStyles}
           mountOnEnter
           unmountOnExit
+          onExited={() => setLastActivePanel(undefined)}
         >
           <div className={styles.panel} id="custom-id">
             {lastActivePanel === 'snippets' && (
