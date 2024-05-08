@@ -159,6 +159,10 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             </ToolbarItem>
           </div>
         </div>
+        {/* Todo - Fix rerendering issue
+        This component rerenders immediately on open, breaking the smooth open animation.
+        Not sure why it is rerendering.
+        */}
         <CSSTransition
           in={isOpen}
           timeout={300}
@@ -191,6 +195,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                 />
               </div>
             )}
+
             {lastActivePanel === 'frames' && (
               <div className={styles.preference}>
                 <FramesPanel
@@ -199,6 +204,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                 />
               </div>
             )}
+
             {lastActivePanel === 'preview' && (
               <div className={styles.preference}>
                 <PreviewPanel
@@ -207,6 +213,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                 />
               </div>
             )}
+
             {lastActivePanel === 'settings' && (
               <div className={styles.preference}>
                 <SettingsPanel />
