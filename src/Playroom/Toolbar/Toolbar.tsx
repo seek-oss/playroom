@@ -159,10 +159,6 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             </ToolbarItem>
           </div>
         </div>
-        {/* Todo - Fix rerendering issue
-        This component rerenders immediately on open, breaking the smooth open animation.
-        Not sure why it is rerendering.
-        */}
         <CSSTransition
           in={isOpen}
           timeout={300}

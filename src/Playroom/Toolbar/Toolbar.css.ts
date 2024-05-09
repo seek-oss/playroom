@@ -106,7 +106,6 @@ export const preference = sprinkles({
   inset: 0,
 });
 
-// Todo - remove pointerEvents none?
 export const transitionStyles = {
   enter: style({
     opacity: 0,
@@ -116,10 +115,14 @@ export const transitionStyles = {
     sprinkles({
       transition: 'slow',
     }),
-    { opacity: 1 },
+    {
+      opacity: 1,
+      transform: `translateX(0)`,
+    },
   ]),
   enterDone: style({
     opacity: 1,
+    transform: `translateX(0)`,
   }),
   exit: style({
     opacity: 1,
@@ -131,12 +134,10 @@ export const transitionStyles = {
     {
       opacity: 0,
       transform: `translateX(${calc(`${toolbarOpenSize}px`).multiply(0.3)})`,
-      pointerEvents: 'none',
     },
   ]),
   exitDone: style({
     opacity: 0,
     transform: `translateX(${calc(`${toolbarOpenSize}px`).multiply(0.3)})`,
-    pointerEvents: 'none',
   }),
 };
