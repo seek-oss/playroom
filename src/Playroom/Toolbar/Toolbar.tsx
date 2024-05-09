@@ -26,6 +26,7 @@ interface Props {
 }
 
 export const toolbarItemCount = 5;
+const ANIMATION_TIMEOUT = 300;
 
 export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const [
@@ -155,7 +156,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
         </div>
         <CSSTransition
           in={isOpen}
-          timeout={300}
+          timeout={ANIMATION_TIMEOUT}
           classNames={styles.transitionStyles}
           mountOnEnter
           unmountOnExit
