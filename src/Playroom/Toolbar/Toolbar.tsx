@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback, useEffect } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import { useTimeoutFn } from 'react-use';
 import classnames from 'classnames';
 import type { PlayroomProps } from '../Playroom';
@@ -62,12 +62,6 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
 
   const [lastActivePanel, setLastActivePanel] =
     useState<typeof activeToolbarPanel>(undefined);
-
-  useEffect(() => {
-    if (activeToolbarPanel) {
-      setLastActivePanel(activeToolbarPanel);
-    }
-  }, [activeToolbarPanel]);
 
   const hasSnippets = snippets && snippets.length > 0;
   const hasFilteredFrames =
@@ -165,6 +159,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
           classNames={styles.transitionStyles}
           mountOnEnter
           unmountOnExit
+          onEnter={() => setLastActivePanel(activeToolbarPanel)}
           onExited={() => setLastActivePanel(undefined)}
         >
           <div className={styles.panel} id="custom-id">
