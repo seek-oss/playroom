@@ -109,7 +109,7 @@ export const preference = sprinkles({
 export const transitionStyles = {
   enter: style({
     opacity: 0,
-    transform: `translateX(${calc(`${toolbarOpenSize}px`).multiply(0.3)})`,
+    transform: `translateX(30%)`,
   }),
   enterActive: style([
     sprinkles({
@@ -133,11 +133,11 @@ export const transitionStyles = {
     }),
     {
       opacity: 0,
-      transform: `translateX(${calc(`${toolbarOpenSize}px`).multiply(0.3)})`,
+      transform: `translateX(30%)`,
     },
   ]),
   exitDone: style({
     opacity: 0,
-    transform: `translateX(${calc(`${toolbarOpenSize}px`).multiply(0.3)})`,
+    transform: `translateX(30%)`,
   }),
 };
