@@ -169,8 +169,8 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
           onExited={() => setLastActivePanel(undefined)}
         >
           <div className={styles.panel} id="custom-id">
-            {lastActivePanel === 'snippets' && (
-              <div className={styles.preference}>
+            <div className={styles.preference}>
+              {lastActivePanel === 'snippets' && (
                 <Snippets
                   snippets={snippets}
                   onHighlight={(snippet) => {
@@ -190,32 +190,24 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                     }
                   }}
                 />
-              </div>
-            )}
+              )}
 
-            {lastActivePanel === 'frames' && (
-              <div className={styles.preference}>
+              {lastActivePanel === 'frames' && (
                 <FramesPanel
                   availableWidths={allWidths}
                   availableThemes={allThemes}
                 />
-              </div>
-            )}
+              )}
 
-            {lastActivePanel === 'preview' && (
-              <div className={styles.preference}>
+              {lastActivePanel === 'preview' && (
                 <PreviewPanel
                   themes={allThemes}
                   visibleThemes={visibleThemes}
                 />
-              </div>
-            )}
+              )}
 
-            {lastActivePanel === 'settings' && (
-              <div className={styles.preference}>
-                <SettingsPanel />
-              </div>
-            )}
+              {lastActivePanel === 'settings' && <SettingsPanel />}
+            </div>
           </div>
         </CSSTransition>
       </div>
