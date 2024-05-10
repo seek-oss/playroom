@@ -2,4 +2,4 @@
 'playroom': patch
 ---
 
-Fix minor issue in the side panel exit animation, preventing the contents from vanishing abruptly.
+Fixes a bug in the side panel exit animation that was causing the contents to vanish abruptly
