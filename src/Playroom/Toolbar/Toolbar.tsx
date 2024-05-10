@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react';
+import { useContext, useState, useCallback, useEffect } from 'react';
 import { useTimeoutFn } from 'react-use';
 import classnames from 'classnames';
 import type { PlayroomProps } from '../Playroom';
@@ -17,6 +17,8 @@ import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import SettingsIcon from '../icons/SettingsIcon';
 import { isMac } from '../../utils/formatting';
 
+import { CSSTransition } from 'react-transition-group';
+
 interface Props {
   themes: PlayroomProps['themes'];
   widths: PlayroomProps['widths'];
@@ -24,6 +26,7 @@ interface Props {
 }
 
 export const toolbarItemCount = 5;
+const ANIMATION_TIMEOUT = 300;
 
 export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const [
@@ -57,6 +60,15 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const isFramesOpen = activeToolbarPanel === 'frames';
   const isSettingsOpen = activeToolbarPanel === 'settings';
   const isPreviewOpen = activeToolbarPanel === 'preview';
+
+  const [lastActivePanel, setLastActivePanel] =
+    useState<typeof activeToolbarPanel>(undefined);
+
+  useEffect(() => {
+    if (activeToolbarPanel) {
+      setLastActivePanel(activeToolbarPanel);
+    }
+  }, [activeToolbarPanel]);
 
   const hasSnippets = snippets && snippets.length > 0;
   const hasFilteredFrames =
@@ -148,13 +160,16 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             </ToolbarItem>
           </div>
         </div>
-
-        <div className={styles.panel}>
-          {isSnippetsOpen && (
-            <div
-              hidden={isSnippetsOpen ? undefined : true}
-              className={styles.preference}
-            >
+        <CSSTransition
+          in={isOpen}
+          timeout={ANIMATION_TIMEOUT}
+          classNames={styles.transitionStyles}
+          mountOnEnter
+          unmountOnExit
+          onExited={() => setLastActivePanel(undefined)}
+        >
+          <div className={styles.panel} id="custom-id">
+            {lastActivePanel === 'snippets' && (
               <Snippets
                 snippets={snippets}
                 onHighlight={(snippet) => {
@@ -174,32 +189,22 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                   }
                 }}
               />
-            </div>
-          )}
-          <div
-            hidden={isFramesOpen ? undefined : true}
-            className={styles.preference}
-          >
-            <FramesPanel
-              availableWidths={allWidths}
-              availableThemes={allThemes}
-            />
-          </div>
+            )}
 
-          <div
-            hidden={isPreviewOpen ? undefined : true}
-            className={styles.preference}
-          >
-            <PreviewPanel themes={allThemes} visibleThemes={visibleThemes} />
-          </div>
+            {lastActivePanel === 'frames' && (
+              <FramesPanel
+                availableWidths={allWidths}
+                availableThemes={allThemes}
+              />
+            )}
 
-          <div
-            hidden={isSettingsOpen ? undefined : true}
-            className={styles.preference}
-          >
-            <SettingsPanel />
+            {lastActivePanel === 'preview' && (
+              <PreviewPanel themes={allThemes} visibleThemes={visibleThemes} />
+            )}
+
+            {lastActivePanel === 'settings' && <SettingsPanel />}
           </div>
-        </div>
+        </CSSTransition>
       </div>
     </div>
   );
