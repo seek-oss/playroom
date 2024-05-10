@@ -169,45 +169,40 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
           onExited={() => setLastActivePanel(undefined)}
         >
           <div className={styles.panel} id="custom-id">
-            <div className={styles.preference}>
-              {lastActivePanel === 'snippets' && (
-                <Snippets
-                  snippets={snippets}
-                  onHighlight={(snippet) => {
+            {lastActivePanel === 'snippets' && (
+              <Snippets
+                snippets={snippets}
+                onHighlight={(snippet) => {
+                  dispatch({
+                    type: 'previewSnippet',
+                    payload: { snippet },
+                  });
+                }}
+                onClose={(snippet) => {
+                  if (snippet) {
                     dispatch({
-                      type: 'previewSnippet',
+                      type: 'persistSnippet',
                       payload: { snippet },
                     });
-                  }}
-                  onClose={(snippet) => {
-                    if (snippet) {
-                      dispatch({
-                        type: 'persistSnippet',
-                        payload: { snippet },
-                      });
-                    } else {
-                      dispatch({ type: 'closeToolbar' });
-                    }
-                  }}
-                />
-              )}
+                  } else {
+                    dispatch({ type: 'closeToolbar' });
+                  }
+                }}
+              />
+            )}
 
-              {lastActivePanel === 'frames' && (
-                <FramesPanel
-                  availableWidths={allWidths}
-                  availableThemes={allThemes}
-                />
-              )}
+            {lastActivePanel === 'frames' && (
+              <FramesPanel
+                availableWidths={allWidths}
+                availableThemes={allThemes}
+              />
+            )}
 
-              {lastActivePanel === 'preview' && (
-                <PreviewPanel
-                  themes={allThemes}
-                  visibleThemes={visibleThemes}
-                />
-              )}
+            {lastActivePanel === 'preview' && (
+              <PreviewPanel themes={allThemes} visibleThemes={visibleThemes} />
+            )}
 
-              {lastActivePanel === 'settings' && <SettingsPanel />}
-            </div>
+            {lastActivePanel === 'settings' && <SettingsPanel />}
           </div>
         </CSSTransition>
       </div>

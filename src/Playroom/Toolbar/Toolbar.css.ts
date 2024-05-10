@@ -90,7 +90,6 @@ export const buttons = style([
 export const panel = style([
   sprinkles({
     position: 'relative',
-    display: 'flex',
     overflow: 'auto',
     pointerEvents: 'auto',
   }),
@@ -100,11 +99,6 @@ export const panel = style([
     borderLeft: `${toolbarBorderThickness} solid ${colorPaletteVars.border.standard}`,
   },
 ]);
-
-export const preference = sprinkles({
-  position: 'absolute',
-  inset: 0,
-});
 
 export const transitionStyles = {
   enter: style({
