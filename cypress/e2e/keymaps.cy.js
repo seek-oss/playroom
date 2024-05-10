@@ -899,7 +899,7 @@ describe('Keymaps', () => {
         });
       });
 
-      describe.only('when the line has no code', () => {
+      describe('when the line has no code', () => {
         it('block - at top level', () => {
           loadPlayroom(blockStarter);
 
