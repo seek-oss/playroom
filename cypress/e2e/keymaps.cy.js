@@ -900,7 +900,7 @@ describe('Keymaps', () => {
       });
 
       describe.only('when the line has no code', () => {
-        it('block', () => {
+        it('block - at top level', () => {
           loadPlayroom(blockStarter);
 
           moveToEndOfLine();
@@ -910,9 +910,34 @@ describe('Keymaps', () => {
 
           assertCodePaneContains(dedent`
             <div>First line</div>
-            // 
+            {/*  */}
             <div>Second line</div>
             <div>Third line</div>
+          `);
+        });
+
+        it('block - nested', () => {
+          loadPlayroom(`
+            <div>
+              <div>First line</div>
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
+          `);
+
+          moveBy(0, 1);
+          moveToEndOfLine();
+          typeCode('{enter}');
+
+          executeToggleCommentCommand();
+
+          assertCodePaneContains(dedent`
+            <div>
+              <div>First line</div>
+              {/*  */}
+              <div>Second line</div>
+              <div>Third line</div>
+            </div>
           `);
         });
 
