@@ -149,13 +149,15 @@ export const assertCodePaneContains = (text) => {
   });
 };
 
-export const assertCodePaneLineCount = (lines) => {
+export const assertCodePaneLineCount = (lines, { wait } = {}) => {
   getCodeEditor().within(() =>
     cy.get('.CodeMirror-line').should('have.length', lines)
   );
 
   // Wait after check to ensure original focus is restored
-  cy.wait(500); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  if (typeof wait === 'number') {
+    cy.wait(wait);
+  }
 };
 
 export const assertFramesMatch = (matches) =>

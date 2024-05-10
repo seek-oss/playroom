@@ -72,7 +72,7 @@ describe('Snippets', () => {
     assertSnippetsListIsVisible();
     assertCodePaneLineCount(8);
     filterSnippets('{esc}');
-    assertCodePaneLineCount(1);
+    assertCodePaneLineCount(1, { wait: 500 });
     typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
     assertSnippetsListIsVisible();
     assertCodePaneLineCount(8);
@@ -89,7 +89,7 @@ describe('Snippets', () => {
     // Close without persisting
     filterSnippets('{esc}');
     assertCodePaneContains('<div>Initial <span>code</span></div>');
-    assertCodePaneLineCount(1);
+    assertCodePaneLineCount(1, { wait: 500 });
 
     // Re-open and persist
     typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
