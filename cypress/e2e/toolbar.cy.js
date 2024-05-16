@@ -5,6 +5,7 @@ import {
   typeCode,
   gotoPreview,
   loadPlayroom,
+  getResetButton,
 } from '../support/utils';
 
 describe('Toolbar', () => {
@@ -19,6 +20,9 @@ describe('Toolbar', () => {
     assertFramesMatch(frames);
     selectWidthPreferenceByIndex(widthIndexToSelect);
     assertFramesMatch([frames[widthIndexToSelect]]);
+
+    getResetButton().click();
+    assertFramesMatch(frames);
   });
 
   it('preview', () => {

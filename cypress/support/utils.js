@@ -33,6 +33,8 @@ export const selectWidthPreferenceByIndex = (index) =>
     .eq(index)
     .then((el) => el.get(0).click());
 
+export const getResetButton = () => cy.get('[data-testid="resetButton"]');
+
 export const togglePreviewPanel = () =>
   cy.get('[data-testid="togglePreview"]').then((el) => el.get(0).click());
 
