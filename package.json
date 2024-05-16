@@ -10,7 +10,6 @@
   "files": [
     "CHANGELOG.md",
     ".babelrc",
-    "bin",
     "images",
     "lib",
     "src",
