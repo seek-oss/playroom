@@ -47,7 +47,7 @@ interface FrameHeadingProps {
 const FrameHeading = ({ showReset, onReset, children }: FrameHeadingProps) => (
   <div className={styles.title}>
     <Heading level="3">{children}</Heading>
-    {showReset && <ResetButton onClick={onReset}>Clear filters</ResetButton>}
+    {showReset && <ResetButton onClick={onReset}>Clear</ResetButton>}
   </div>
 );
 
