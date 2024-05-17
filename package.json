@@ -7,6 +7,14 @@
   "bin": {
     "playroom": "bin/cli.cjs"
   },
+  "files": [
+    "CHANGELOG.md",
+    ".babelrc",
+    "images",
+    "lib",
+    "src",
+    "utils"
+  ],
   "scripts": {
     "cypress": "start-server-and-test build-and-serve:all '9000|9001|9002' 'cypress run'",
     "cypress:dev": "start-server-and-test start:all '9000|9001|9002' 'cypress open --browser chrome --e2e'",
