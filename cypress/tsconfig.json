@@ -4,6 +4,9 @@
     "types": ["cypress", "@testing-library/cypress"],
     "isolatedModules": false
   },
-  "include": ["**/*"], // override the include from the root tsconfig
+  "include": [
+    "**/*", // override the include from the root tsconfig
+    "../src/index.d.ts" // contains definitions for global variables
+  ],
   "exclude": [] // override the exclude from the root tsconfig
 }
