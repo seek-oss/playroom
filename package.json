@@ -111,7 +111,6 @@
     "read-pkg-up": "^7.0.1",
     "scope-eval": "^1.0.0",
     "sucrase": "^3.34.0",
-    "typescript": ">=5.0.0",
     "use-debounce": "^10.0.0",
     "webpack": "^5.75.0",
     "webpack-dev-server": "^5.0.2",
@@ -136,7 +135,8 @@
     "react-dom": "^18.0.1",
     "serve": "^14.1.2",
     "start-server-and-test": "^1.15.2",
-    "surge": "^0.23.1"
+    "surge": "^0.23.1",
+    "typescript": "^5.0.4"
   },
   "peerDependencies": {
     "react": "^17 || ^18",
