@@ -1,8 +1,8 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "isolatedModules": false,
-    "types": ["cypress"]
+    "types": ["cypress", "@testing-library/cypress"],
+    "isolatedModules": false
   },
   "include": ["**/*"], // override the include from the root tsconfig
   "exclude": [] // override the exclude from the root tsconfig
