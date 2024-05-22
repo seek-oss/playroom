@@ -200,11 +200,12 @@ export const replaceInCode = (term: string, replaceWith?: string) => {
   }
 };
 
-export const jumpToLine = (line: number | string) => {
+export const jumpToLine = (line: number, character?: number) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
-  typeCode(`${line}{enter}`);
+  
+  typeCode(character ? `${line}:${character}{enter}` : `${line}{enter}`);
 };
 
 export const assertCodePaneSearchMatchesCount = (lines: number) => {
