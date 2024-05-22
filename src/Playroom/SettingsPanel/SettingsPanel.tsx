@@ -86,7 +86,7 @@ export default React.memo(() => {
   const keybindings = getKeyBindings();
 
   return (
-    <ToolbarPanel data-testid="settings-panel">
+    <ToolbarPanel>
       <Stack space="xxxlarge">
         <fieldset className={styles.fieldset}>
           <legend>

@@ -8,7 +8,7 @@ import {
   filterSnippets,
   toggleSnippets,
   assertSnippetCount,
-  assertSnippetsListIsVisible,
+  assertSnippetsSearchFieldIsVisible,
   mouseOverSnippet,
   loadPlayroom,
 } from '../support/utils';
@@ -23,7 +23,7 @@ describe('Snippets', () => {
   it('driven with mouse', () => {
     // Open and format for insertion point
     toggleSnippets();
-    assertSnippetsListIsVisible();
+    assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
 
     // Browse snippetlist
@@ -69,12 +69,12 @@ describe('Snippets', () => {
   it('driven with keyboard', () => {
     // Open and format for insertion point
     typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
-    assertSnippetsListIsVisible();
+    assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
     filterSnippets('{esc}');
     assertCodePaneLineCount(1, 500);
     typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
-    assertSnippetsListIsVisible();
+    assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
 
     // Browse snippetlist

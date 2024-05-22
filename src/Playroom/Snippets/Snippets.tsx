@@ -112,7 +112,7 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
   }, [debouncedPreview, filteredSnippets, highlightedIndex]);
 
   return (
-    <div className={styles.root} data-testid="snippets">
+    <div className={styles.root}>
       <div className={styles.fieldContainer}>
         <SearchField
           value={searchTerm}
@@ -121,6 +121,7 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
             setSearchTerm(value);
           }}
           placeholder="Find a snippet..."
+          aria-label="Search snippets"
           onBlur={() => {
             setHighlightedIndex(null);
           }}
@@ -159,14 +160,9 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
               closeHandler(null);
             }
           }}
-          data-testid="filterSnippets"
         />
       </div>
-      <ul
-        className={styles.snippetsContainer}
-        data-testid="snippet-list"
-        ref={listEl}
-      >
+      <ul className={styles.snippetsContainer} ref={listEl}>
         {filteredSnippets.map((snippet, index) => {
           const isHighlighted = highlightedIndex === index;
 

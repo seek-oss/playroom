@@ -26,16 +26,15 @@ export const formatCode = () =>
     .focused()
     .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`);
 
-export const selectWidthPreferenceByIndex = (index: number) =>
-  cy
-    .get('[data-testid="toggleFrames"]')
-    .then((el) => el.get(0).click())
-    .get('[data-testid="widthsPreferences"] label')
-    .eq(index)
-    .then((el) => el.get(0).click());
+export const selectWidthPreference = (width: number) => {
+  cy.findByRole('button', { name: 'Configure visible frames' }).click();
+  // Todo - try do without force
+  // Todo - rewrite force justification comment
+  // Force needed to override 'pointer-events: none' and overlaying label
+  cy.findByRole('checkbox', { name: `${width}` }).click({ force: true });
+};
 
 export const togglePreviewPanel = () =>
-  // cy.get('[data-testid="togglePreview"]').then((el) => el.get(0).click());
   cy.findByRole('button', { name: 'Preview playroom' }).click();
 
 export const gotoPreview = () => {
@@ -47,16 +46,16 @@ export const gotoPreview = () => {
 };
 
 export const toggleSnippets = () =>
-  cy.get('[data-testid="toggleSnippets"]').click();
+  cy.findByRole('button', { name: /Insert snippet/i }).click();
 
 export const filterSnippets = (search: string) => {
-  cy.get('[data-testid="filterSnippets"]').type(search);
+  cy.findByRole('searchbox', { name: 'Search snippets' }).type(search);
 };
 
-export const assertSnippetsListIsVisible = () =>
-  cy.get('[data-testid="snippets"]').should('be.visible');
+export const assertSnippetsSearchFieldIsVisible = () =>
+  cy.findByRole('searchbox', { name: 'Search snippets' }).should('be.visible');
 
-const getSnippets = () => cy.get('[data-testid="snippet-list"] li');
+const getSnippets = () => cy.findByRole('list').find('li');
 
 export const selectSnippetByIndex = (index: number) => getSnippets().eq(index);
 
