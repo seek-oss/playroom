@@ -6,6 +6,8 @@ import { createUrl } from '../../utils';
 import { isMac } from '../../src/utils/formatting';
 import type { Direction } from '../../src/Playroom/CodeEditor/keymaps/types';
 
+const CYPRESS_DEFAULT_WAIT_TIME = 500;
+
 export const cmdPlus = (keyCombo: string) => {
   const platformSpecificKey = isMac() ? 'cmd' : 'ctrl';
   return `${platformSpecificKey}+${keyCombo}`;
@@ -133,14 +135,17 @@ export const assertCodePaneContains = (text: string) => {
   });
 };
 
-export const assertCodePaneLineCount = (lines: number, wait?: number) => {
+export const assertCodePaneLineCount = (
+  lines: number,
+  wait: boolean = false
+) => {
   getCodeEditor().within(() =>
     cy.get('.CodeMirror-line').should('have.length', lines)
   );
 
   // Wait after check to ensure original focus is restored
   if (wait) {
-    cy.wait(wait);
+    cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   }
 };
 
@@ -179,7 +184,7 @@ const typeInSearchField = (text: string) =>
 
 export const findInCode = (term: string) => {
   // Wait necessary to ensure code pane is focussed
-  cy.wait(500); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('f')}}`);
 
   typeInSearchField(`${term}{enter}`);
@@ -187,7 +192,7 @@ export const findInCode = (term: string) => {
 
 export const replaceInCode = (term: string, replaceWith?: string) => {
   // Wait necessary to ensure code pane is focussed
-  cy.wait(500); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('alt+f')}}`);
   typeInSearchField(`${term}{enter}`);
   if (replaceWith) {
@@ -197,7 +202,7 @@ export const replaceInCode = (term: string, replaceWith?: string) => {
 
 export const jumpToLine = (line: number | string) => {
   // Wait necessary to ensure code pane is focussed
-  cy.wait(500); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
   typeCode(`${line}{enter}`);
 };
