@@ -12,7 +12,6 @@ interface Props {
   disabled?: boolean;
   showIndicator?: boolean;
   onClick: () => void;
-  ['data-testid']?: string;
 }
 
 export default ({

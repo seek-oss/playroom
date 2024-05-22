@@ -5,7 +5,6 @@ import * as styles from './ToolbarPanel.css';
 interface Props {
   children: ReactNode;
   as?: ElementType;
-  'data-testid'?: string;
 }
 
 export const ToolbarPanel = ({ as: component = 'aside', children }: Props) =>
