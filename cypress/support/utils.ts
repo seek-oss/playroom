@@ -203,7 +203,7 @@ export const jumpToLine = (line: number, character?: number) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
-  
+
   typeCode(character ? `${line}:${character}{enter}` : `${line}{enter}`);
 };
 
