@@ -40,7 +40,7 @@ export default ({
       onClick();
     }}
   >
-    <span style={{ display: 'block', position: 'relative' }}>{children}</span>
+    {children}
     <span
       className={classnames(styles.indicator, {
         [styles.show]: showIndicator && !success,
