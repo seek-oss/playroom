@@ -30,8 +30,7 @@ export const formatCode = () =>
 
 export const selectWidthPreference = (width: number) => {
   cy.findByRole('button', { name: 'Configure visible frames' }).click();
-  // Force needed as the checkbox is covered by 'Checkmark' svg
-  cy.findByRole('checkbox', { name: `${width}` }).click({ force: true });
+  cy.findByRole('checkbox', { name: `${width}` }).click();
 };
 
 export const togglePreviewPanel = () =>

@@ -84,6 +84,7 @@ export const fakeCheckbox = style([
     borderRadius: 'large',
     marginRight: 'large',
     padding: checkboxPadding,
+    pointerEvents: 'none',
   }),
   {
     flexGrow: 0,
