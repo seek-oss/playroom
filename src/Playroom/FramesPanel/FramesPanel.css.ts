@@ -67,7 +67,6 @@ export const checkbox = style([
     left: 0,
     right: 0,
     opacity: 0,
-    pointerEvents: 'none', // Todo - check if this is needed
   }),
   {
     height: checkboxSize,

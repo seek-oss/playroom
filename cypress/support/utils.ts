@@ -28,9 +28,7 @@ export const formatCode = () =>
 
 export const selectWidthPreference = (width: number) => {
   cy.findByRole('button', { name: 'Configure visible frames' }).click();
-  // Todo - try do without force
-  // Todo - rewrite force justification comment
-  // Force needed to override 'pointer-events: none' and overlaying label
+  // Force needed as the checkbox is covered by 'Checkmark' svg
   cy.findByRole('checkbox', { name: `${width}` }).click({ force: true });
 };
 
