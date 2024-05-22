@@ -8,16 +8,11 @@ interface Props {
   'data-testid'?: string;
 }
 
-export const ToolbarPanel = ({
-  as: component = 'aside',
-  children,
-  'data-testid': dataTestId,
-}: Props) =>
+export const ToolbarPanel = ({ as: component = 'aside', children }: Props) =>
   React.createElement(
     component,
     {
       className: styles.root,
-      'data-testid': dataTestId,
     },
     children
   );

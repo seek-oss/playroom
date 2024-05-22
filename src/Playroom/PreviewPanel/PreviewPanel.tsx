@@ -28,7 +28,7 @@ export default ({ themes, visibleThemes }: PreviewPanelProps) => {
   const prototypeUrl = usePreviewUrl(activeTheme);
 
   return (
-    <ToolbarPanel data-testid="preview-panel">
+    <ToolbarPanel>
       <Stack space="xxlarge">
         <Heading as="h4" level="3">
           Preview
@@ -50,7 +50,6 @@ export default ({ themes, visibleThemes }: PreviewPanelProps) => {
             target="_blank"
             title="Open preview in new window"
             rel="noopener noreferrer"
-            data-testid="view-prototype"
             icon={<PlayIcon size={20} />}
           >
             Open

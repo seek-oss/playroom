@@ -7,24 +7,25 @@ interface Props {
   value: NonNullable<InputProps['value']>;
   onChange: NonNullable<InputProps['onChange']>;
   placeholder?: NonNullable<InputProps['placeholder']>;
+  'aria-label'?: string;
   onBlur?: InputProps['onBlur'];
   onKeyUp?: InputProps['onKeyUp'];
   onKeyDown?: InputProps['onKeyDown'];
-  ['data-testid']?: string;
 }
 
 export default ({
   value,
   placeholder,
+  'aria-label': ariaLabel,
   onChange,
   onBlur,
   onKeyUp,
   onKeyDown,
-  'data-testid': dataTestId,
 }: Props) => (
   <input
     type="search"
     placeholder={placeholder}
+    aria-label={ariaLabel}
     autoFocus
     value={value}
     onChange={onChange}
@@ -32,6 +33,5 @@ export default ({
     onKeyUp={onKeyUp}
     onKeyDown={onKeyDown}
     className={styles.field}
-    data-testid={dataTestId}
   />
 );
