@@ -53,12 +53,6 @@ export const realRadio = style([
   },
 ]);
 
-export const labelText = sprinkles({
-  display: 'block',
-  position: 'relative',
-  zIndex: 1,
-});
-
 export const label = style([
   sprinkles({
     position: 'relative',
