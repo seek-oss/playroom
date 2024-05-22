@@ -2,4 +2,4 @@
 'playroom': patch
 ---
 
-Fix icon centering
+Fix Playroom UI icon centering
