@@ -37,9 +37,8 @@ export const togglePreviewPanel = () =>
 
 export const gotoPreview = () => {
   togglePreviewPanel();
-  cy.findByRole('link', { name: 'Open' }).then(($link) => {
-    const url = $link.prop('href');
-    cy.visit(url);
+  cy.findByRole('link', { name: 'Open' }).then((link) => {
+    cy.visit(link.prop('href'));
   });
 };
 
@@ -53,7 +52,8 @@ export const filterSnippets = (search: string) => {
 export const assertSnippetsSearchFieldIsVisible = () =>
   cy.findByRole('searchbox', { name: 'Search snippets' }).should('be.visible');
 
-const getSnippets = () => cy.findByRole('list').find('li');
+const getSnippets = () =>
+  cy.findByRole('list', { name: 'Filtered snippets list' }).find('li');
 
 export const selectSnippetByIndex = (index: number) => getSnippets().eq(index);
 

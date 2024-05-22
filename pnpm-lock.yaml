@@ -149,6 +149,9 @@ dependencies:
   sucrase:
     specifier: ^3.34.0
     version: 3.34.0
+  typescript:
+    specifier: '>=5.0.0'
+    version: 5.0.4
   use-debounce:
     specifier: ^10.0.0
     version: 10.0.0(react@18.2.0)
@@ -220,9 +223,6 @@ devDependencies:
   surge:
     specifier: ^0.23.1
     version: 0.23.1
-  typescript:
-    specifier: ^5.0.4
-    version: 5.0.4
 
 packages:
 
