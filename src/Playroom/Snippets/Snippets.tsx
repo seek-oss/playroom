@@ -165,7 +165,7 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
       <ul
         className={styles.snippetsContainer}
         ref={listEl}
-        aria-label="Filtered snippets list"
+        aria-label="Filtered snippets"
       >
         {filteredSnippets.map((snippet, index) => {
           const isHighlighted = highlightedIndex === index;
