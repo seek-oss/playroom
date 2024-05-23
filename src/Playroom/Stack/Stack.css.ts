@@ -4,11 +4,9 @@ import { vars } from '../sprinkles.css';
 const size = createVar();
 
 export const gap = style({
-  selectors: {
-    ['&:not(:last-child)']: {
-      paddingBottom: size,
-    },
-  },
+  display: 'flex',
+  flexDirection: 'column',
+  gap: size,
 });
 
 export const spaceScale = styleVariants(vars.space, (space) => ({
