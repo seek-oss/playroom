@@ -151,8 +151,8 @@ export const assertCodePaneLineCount = (
 export const assertFramesMatch = (
   frames: number[] | Array<[frameTheme: string, frameWidth: number]>
 ) => {
-  const formattedFrames = frames.map((match) =>
-    typeof match === 'number' ? `${match}px` : `${match[0]} – ${match[1]}px`
+  const formattedFrames = frames.map((frame) =>
+    typeof frame === 'number' ? `${frame}px` : `${frame[0]} – ${frame[1]}px`
   );
 
   getPreviewFrameNames()
