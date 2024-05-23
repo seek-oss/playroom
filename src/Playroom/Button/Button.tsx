@@ -7,7 +7,6 @@ interface BaseProps {
   as?: ElementType;
   tone?: 'positive';
   icon?: ReactElement;
-  'data-testid'?: string;
 }
 
 interface ButtonProps

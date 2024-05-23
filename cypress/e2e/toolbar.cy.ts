@@ -1,10 +1,10 @@
 import {
   assertFramesMatch,
-  selectWidthPreferenceByIndex,
   assertPreviewContains,
   typeCode,
   gotoPreview,
   loadPlayroom,
+  selectWidthPreference,
 } from '../support/utils';
 
 describe('Toolbar', () => {
@@ -13,11 +13,11 @@ describe('Toolbar', () => {
   });
 
   it('filter widths', () => {
-    const frames = ['320px', '375px', '768px', '1024px'];
+    const frames = [320, 375, 768, 1024];
     const widthIndexToSelect = 1;
 
     assertFramesMatch(frames);
-    selectWidthPreferenceByIndex(widthIndexToSelect);
+    selectWidthPreference(frames[widthIndexToSelect]);
     assertFramesMatch([frames[widthIndexToSelect]]);
   });
 
@@ -45,8 +45,9 @@ describe('Toolbar', () => {
           }
         });
       })
-      .get('[data-testid="copyToClipboard"]')
+      .findByRole('button', { name: /Copy Playroom link/i })
       .click();
+
     cy.then(() => expect(copySpy).to.have.been.called);
   });
 });
