@@ -13,17 +13,11 @@ describe('Toolbar', () => {
   });
 
   it('filter widths', () => {
-    const frames = ['320px', '375px', '768px', '1024px'];
+    const frames = [320, 375, 768, 1024];
     const widthIndexToSelect = 1;
 
     assertFramesMatch(frames);
-
-    const widthSizeToSelectAsNumber = parseInt(
-      frames[widthIndexToSelect].replace('px', ''),
-      10
-    );
-
-    selectWidthPreference(widthSizeToSelectAsNumber);
+    selectWidthPreference(frames[widthIndexToSelect]);
     assertFramesMatch([frames[widthIndexToSelect]]);
   });
 

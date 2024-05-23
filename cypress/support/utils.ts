@@ -148,13 +148,22 @@ export const assertCodePaneLineCount = (
   }
 };
 
-export const assertFramesMatch = (matches: string[]) =>
+export const assertFramesMatch = (
+  frames: number[] | Array<[frameTheme: string, frameWidth: number]>
+) => {
+  const formattedFrames = frames.map((match) =>
+    typeof match === 'number' ? `${match}px` : `${match[0]} – ${match[1]}px`
+  );
+
   getPreviewFrameNames()
-    .should('have.length', matches.length)
-    .should((frames) => {
-      const frameNames = frames.map((_, el) => el.innerText).toArray();
-      return expect(frameNames).to.deep.equal(matches);
+    .should('have.length', frames.length)
+    .should((previewFrames) => {
+      const formattedPreviewFrames = previewFrames
+        .map((_, el) => el.innerText)
+        .toArray();
+      return expect(formattedPreviewFrames).to.deep.equal(formattedFrames);
     });
+};
 
 export const assertPreviewContains = (text: string) =>
   cy
