@@ -34,7 +34,7 @@ interface ResetButtonProps {
 }
 
 const ResetButton = ({ onClick, children }: ResetButtonProps) => (
-  <button className={styles.reset} onClick={onClick} data-testid="resetButton">
+  <button className={styles.reset} onClick={onClick}>
     {children}
   </button>
 );
