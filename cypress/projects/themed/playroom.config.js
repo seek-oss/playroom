@@ -7,5 +7,4 @@ module.exports = {
   paramType: 'search',
   port: 9001,
   storageKey: 'playroom-example-themed',
-  defaultVisibleThemes: ['themeOne'],
 };
