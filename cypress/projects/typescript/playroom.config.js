@@ -1,4 +1,5 @@
 module.exports = {
+  entry: './entry.mjs',
   components: './components.ts',
   snippets: './snippets.ts',
   outputPath: './dist',

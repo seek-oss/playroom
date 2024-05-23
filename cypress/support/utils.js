@@ -178,19 +178,20 @@ export const assertPreviewContains = (text) =>
       expect(el.get(0).innerText).to.eq(text);
     });
 
+export const cleanUp = () =>
+  cy.window().then((win) => {
+    const { storageKey } = win.__playroomConfig__;
+    indexedDB.deleteDatabase(storageKey);
+  });
+
 export const loadPlayroom = (initialCode) => {
   const baseUrl = 'http://localhost:9000';
   const visitUrl = initialCode
     ? createUrl({ baseUrl, code: dedent(initialCode) })
     : baseUrl;
 
-  return cy
-    .visit(visitUrl)
-    .window()
-    .then((win) => {
-      const { storageKey } = win.__playroomConfig__;
-      indexedDB.deleteDatabase(storageKey);
-    });
+  cy.visit(visitUrl);
+  cleanUp();
 };
 
 const typeInSearchField = (text) =>
