@@ -86,7 +86,7 @@ export default React.memo(() => {
   const keybindings = getKeyBindings();
 
   return (
-    <ToolbarPanel data-testid="settings-panel">
+    <ToolbarPanel>
       <Stack space="xxxlarge">
         <fieldset className={styles.fieldset}>
           <legend>
@@ -117,9 +117,7 @@ export default React.memo(() => {
                   className={styles.label}
                   title={option}
                 >
-                  <span className={styles.labelText}>
-                    {positionIcon[option.toLowerCase() as EditorPosition]}
-                  </span>
+                  {positionIcon[option.toLowerCase() as EditorPosition]}
                 </label>
               </div>
             ))}
@@ -155,9 +153,7 @@ export default React.memo(() => {
                   className={styles.label}
                   title={option}
                 >
-                  <span className={styles.labelText}>
-                    {colorModeIcon[option.toLowerCase() as ColorScheme]}
-                  </span>
+                  {colorModeIcon[option.toLowerCase() as ColorScheme]}
                 </label>
               </div>
             ))}

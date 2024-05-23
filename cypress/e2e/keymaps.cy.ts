@@ -492,7 +492,7 @@ describe('Keymaps', () => {
     });
 
     it('should jump to line and column number correctly', () => {
-      jumpToLine('6:10');
+      jumpToLine(6, 10);
       typeCode('a');
 
       assertCodePaneContains(dedent`

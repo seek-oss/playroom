@@ -4,8 +4,11 @@ import dedent from 'dedent';
 
 import { createUrl } from '../../utils';
 import { isMac } from '../../src/utils/formatting';
+import type { Direction } from '../../src/Playroom/CodeEditor/keymaps/types';
 
-export const cmdPlus = (keyCombo) => {
+const CYPRESS_DEFAULT_WAIT_TIME = 500;
+
+export const cmdPlus = (keyCombo: string) => {
   const platformSpecificKey = isMac() ? 'cmd' : 'ctrl';
   return `${platformSpecificKey}+${keyCombo}`;
 };
@@ -17,7 +20,7 @@ export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
 
 export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
 
-export const typeCode = (code, { delay } = {}) =>
+export const typeCode = (code: string, delay?: number) =>
   getCodeEditor().focused().type(code, { delay });
 
 export const formatCode = () =>
@@ -25,47 +28,46 @@ export const formatCode = () =>
     .focused()
     .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`);
 
-export const selectWidthPreferenceByIndex = (index) =>
-  cy
-    .get('[data-testid="toggleFrames"]')
-    .then((el) => el.get(0).click())
-    .get('[data-testid="widthsPreferences"] label')
-    .eq(index)
-    .then((el) => el.get(0).click());
+export const selectWidthPreference = (width: number) => {
+  cy.findByRole('button', { name: 'Configure visible frames' }).click();
+  cy.findByRole('checkbox', { name: `${width}` }).click();
+};
 
 export const getResetButton = () => cy.get('[data-testid="resetButton"]');
 
 export const togglePreviewPanel = () =>
-  cy.get('[data-testid="togglePreview"]').then((el) => el.get(0).click());
+  cy.findByRole('button', { name: 'Preview playroom' }).click();
 
 export const gotoPreview = () => {
-  togglePreviewPanel()
-    .get('[data-testid="view-prototype"]')
-    .then((el) => cy.visit(el.get(0).href));
+  togglePreviewPanel();
+  cy.findByRole('link', { name: 'Open' }).then((link) => {
+    cy.visit(link.prop('href'));
+  });
 };
 
 export const toggleSnippets = () =>
-  cy.get('[data-testid="toggleSnippets"]').click();
+  cy.findByRole('button', { name: /Insert snippet/i }).click();
 
-export const filterSnippets = (search) => {
-  cy.get('[data-testid="filterSnippets"]').type(search);
+export const filterSnippets = (search: string) => {
+  cy.findByRole('searchbox', { name: 'Search snippets' }).type(search);
 };
 
-export const assertSnippetsListIsVisible = () =>
-  cy.get('[data-testid="snippets"]').should('be.visible');
+export const assertSnippetsSearchFieldIsVisible = () =>
+  cy.findByRole('searchbox', { name: 'Search snippets' }).should('be.visible');
 
-const getSnippets = () => cy.get('[data-testid="snippet-list"] li');
+const getSnippets = () =>
+  cy.findByRole('list', { name: 'Filtered snippets' }).find('li');
 
-export const selectSnippetByIndex = (index) => getSnippets().eq(index);
+export const selectSnippetByIndex = (index: number) => getSnippets().eq(index);
 
-export const mouseOverSnippet = (index) =>
+export const mouseOverSnippet = (index: number) =>
   // force stops cypress scrolling the panel out of the editor
   selectSnippetByIndex(index).trigger('mousemove', { force: true });
 
-export const assertSnippetCount = (count) =>
+export const assertSnippetCount = (count: number) =>
   getSnippets().should('have.length', count);
 
-export const assertFirstFrameContains = (text) =>
+export const assertFirstFrameContains = (text: string) =>
   getPreviewFrames()
     .first()
     .its('0.contentDocument.body')
@@ -73,17 +75,11 @@ export const assertFirstFrameContains = (text) =>
       expect(frameBody.innerText).to.eq(text);
     });
 
-/**
- * @param {number} numCharacters
- */
-export const selectNextCharacters = (numCharacters) => {
+export const selectNextCharacters = (numCharacters: number) => {
   typeCode('{shift+rightArrow}'.repeat(numCharacters));
 };
 
-/**
- * @param {number} numWords
- */
-export const selectNextWords = (numWords) => {
+export const selectNextWords = (numWords: number) => {
   const modifier = isMac() ? 'alt' : 'ctrl';
   typeCode(`{shift+${modifier}+rightArrow}`.repeat(numWords));
 };
@@ -96,11 +92,7 @@ export const selectToEndOfLine = () => {
   typeCode(isMac() ? '{shift+cmd+rightArrow}' : '{shift+end}');
 };
 
-/**
- * @param {number} x;
- * @param {number | undefined} y
- */
-export const moveBy = (x, y = 0) => {
+export const moveBy = (x: number, y: number | undefined = 0) => {
   if (x) {
     const xDirection = x >= 0 ? '{rightArrow}' : '{leftArrow}';
     typeCode(xDirection.repeat(x));
@@ -112,10 +104,7 @@ export const moveBy = (x, y = 0) => {
   }
 };
 
-/**
- * @param {number} numWords
- */
-export const moveByWords = (numWords) => {
+export const moveByWords = (numWords: number) => {
   const modifier = isMac() ? 'alt' : 'ctrl';
   typeCode(`{${modifier}+rightArrow}`.repeat(numWords));
 };
@@ -124,22 +113,18 @@ export const moveToEndOfLine = () => {
   typeCode(isMac() ? '{cmd+rightArrow}' : '{end}');
 };
 
-/**
- * @typedef {import('../../src/Playroom/CodeEditor/keymaps/types').Direction} Direction
- */
-/**
- * @param {number}    numLines
- * @param {Direction} direction
- */
-export const selectNextLines = (numLines, direction = 'down') => {
+export const selectNextLines = (
+  numLines: number,
+  direction: Direction = 'down'
+) => {
   const arrowCode = direction === 'down' ? 'downArrow' : 'upArrow';
   typeCode(`{shift+${arrowCode}}`.repeat(numLines));
 };
 
-export const assertCodePaneContains = (text) => {
+export const assertCodePaneContains = (text: string) => {
   getCodeEditor().within(() => {
     // Accumulate text from individual line elements as they don't include line numbers
-    const lines = [];
+    const lines: string[] = [];
     cy.get('.CodeMirror-line').each(($el) => lines.push($el.text()));
 
     cy.then(() => {
@@ -151,26 +136,38 @@ export const assertCodePaneContains = (text) => {
   });
 };
 
-export const assertCodePaneLineCount = (lines, { wait } = {}) => {
+export const assertCodePaneLineCount = (
+  lines: number,
+  wait: boolean = false
+) => {
   getCodeEditor().within(() =>
     cy.get('.CodeMirror-line').should('have.length', lines)
   );
 
   // Wait after check to ensure original focus is restored
-  if (typeof wait === 'number') {
-    cy.wait(wait);
+  if (wait) {
+    cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   }
 };
 
-export const assertFramesMatch = (matches) =>
-  getPreviewFrameNames()
-    .should('have.length', matches.length)
-    .should((frames) => {
-      const frameNames = frames.map((_, el) => el.innerText).toArray();
-      return expect(frameNames).to.deep.equal(matches);
-    });
+export const assertFramesMatch = (
+  frames: number[] | Array<[frameTheme: string, frameWidth: number]>
+) => {
+  const formattedFrames = frames.map((frame) =>
+    typeof frame === 'number' ? `${frame}px` : `${frame[0]} – ${frame[1]}px`
+  );
 
-export const assertPreviewContains = (text) =>
+  getPreviewFrameNames()
+    .should('have.length', frames.length)
+    .should((previewFrames) => {
+      const formattedPreviewFrames = previewFrames
+        .map((_, el) => el.innerText)
+        .toArray();
+      return expect(formattedPreviewFrames).to.deep.equal(formattedFrames);
+    });
+};
+
+export const assertPreviewContains = (text: string) =>
   cy
     .then(() => {
       cy.get('[data-testid="splashscreen"]').should('not.be.visible');
@@ -180,42 +177,32 @@ export const assertPreviewContains = (text) =>
       expect(el.get(0).innerText).to.eq(text);
     });
 
-export const loadPlayroom = (initialCode) => {
+export const loadPlayroom = (initialCode?: string) => {
   const baseUrl = 'http://localhost:9000';
   const visitUrl = initialCode
     ? createUrl({ baseUrl, code: dedent(initialCode) })
     : baseUrl;
 
-  return cy
-    .visit(visitUrl)
-    .window()
-    .then((win) => {
-      const { storageKey } = win.__playroomConfig__;
-      indexedDB.deleteDatabase(storageKey);
-    });
+  return cy.visit(visitUrl).then((window) => {
+    const { storageKey } = window.__playroomConfig__;
+    indexedDB.deleteDatabase(storageKey);
+  });
 };
 
-const typeInSearchField = (text) =>
+const typeInSearchField = (text: string) =>
   cy.get('.CodeMirror-search-field').type(text);
 
-/**
- * @param {string} term
- */
-export const findInCode = (term) => {
+export const findInCode = (term: string) => {
   // Wait necessary to ensure code pane is focussed
-  cy.wait(500); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('f')}}`);
 
   typeInSearchField(`${term}{enter}`);
 };
 
-/**
- * @param {string} term
- * @param {string} [replaceWith]
- */
-export const replaceInCode = (term, replaceWith) => {
+export const replaceInCode = (term: string, replaceWith?: string) => {
   // Wait necessary to ensure code pane is focussed
-  cy.wait(500); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('alt+f')}}`);
   typeInSearchField(`${term}{enter}`);
   if (replaceWith) {
@@ -223,20 +210,15 @@ export const replaceInCode = (term, replaceWith) => {
   }
 };
 
-/**
- * @param {number} line
- */
-export const jumpToLine = (line) => {
+export const jumpToLine = (line: number, character?: number) => {
   // Wait necessary to ensure code pane is focussed
-  cy.wait(500); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
+  cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line @finsit/cypress/no-unnecessary-waiting
   typeCode(`{${cmdPlus('g')}}`);
-  typeCode(`${line}{enter}`);
+
+  typeCode(character ? `${line}:${character}{enter}` : `${line}{enter}`);
 };
 
-/**
- * @param {number} lines
- */
-export const assertCodePaneSearchMatchesCount = (lines) => {
+export const assertCodePaneSearchMatchesCount = (lines: number) => {
   getCodeEditor().within(() =>
     cy.get('.cm-searching').should('have.length', lines)
   );

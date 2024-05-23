@@ -107,7 +107,7 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
           <title>{displayedTitle}</title>
         </Helmet>
       )}
-      <ToolbarPanel data-testid="frame-panel">
+      <ToolbarPanel>
         <Stack space="xxxlarge">
           <label>
             <Stack space="medium">
@@ -128,14 +128,13 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
             </Stack>
           </label>
 
-          <div data-testid="widthsPreferences">
+          <Stack space="none">
             <FrameHeading
               showReset={hasFilteredWidths}
               onReset={() => dispatch({ type: 'resetVisibleWidths' })}
             >
               Widths
             </FrameHeading>
-
             {availableWidths.map((option) => (
               <FrameOption
                 key={option}
@@ -154,17 +153,16 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
                 }}
               />
             ))}
-          </div>
+          </Stack>
 
           {hasThemes ? (
-            <div data-testid="themePreferences">
+            <Stack space="none">
               <FrameHeading
                 showReset={hasFilteredThemes}
                 onReset={() => dispatch({ type: 'resetVisibleThemes' })}
               >
                 Themes
               </FrameHeading>
-
               {availableThemes.map((option) => (
                 <FrameOption
                   key={option}
@@ -183,7 +181,7 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
                   }}
                 />
               ))}
-            </div>
+            </Stack>
           ) : null}
         </Stack>
       </ToolbarPanel>

@@ -95,7 +95,6 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                 active={isSnippetsOpen}
                 title={`Insert snippet (${isMac() ? '⌘K' : 'Ctrl+K'})`}
                 disabled={!validCursorPosition}
-                data-testid="toggleSnippets"
                 onClick={() => {
                   dispatch({
                     type: 'toggleToolbar',
@@ -116,7 +115,6 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                   payload: { panel: 'frames' },
                 });
               }}
-              data-testid="toggleFrames"
             >
               <FramesIcon />
             </ToolbarItem>
@@ -131,7 +129,6 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
                   payload: { panel: 'preview' },
                 });
               }}
-              data-testid="togglePreview"
             >
               <PlayIcon />
             </ToolbarItem>
@@ -142,7 +139,6 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               title={`Copy Playroom link (${isMac() ? '⌘⇧C' : 'Ctrl+Shift+C'})`}
               success={copying}
               onClick={copyHandler}
-              data-testid="copyToClipboard"
             >
               <ShareIcon />
             </ToolbarItem>
