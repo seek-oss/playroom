@@ -33,6 +33,8 @@ export const selectWidthPreference = (width: number) => {
   cy.findByRole('checkbox', { name: `${width}` }).click();
 };
 
+export const getResetButton = () => cy.findByRole('button', { name: 'Clear' });
+
 export const togglePreviewPanel = () =>
   cy.findByRole('button', { name: 'Preview playroom' }).click();
 

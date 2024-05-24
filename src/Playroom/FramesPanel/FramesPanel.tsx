@@ -47,7 +47,7 @@ interface FrameHeadingProps {
 const FrameHeading = ({ showReset, onReset, children }: FrameHeadingProps) => (
   <div className={styles.title}>
     <Heading level="3">{children}</Heading>
-    {showReset && <ResetButton onClick={onReset}>Show all</ResetButton>}
+    {showReset && <ResetButton onClick={onReset}>Clear</ResetButton>}
   </div>
 );
 
@@ -55,14 +55,12 @@ interface FrameOptionProps<Option> {
   option: Option;
   selected: boolean;
   visible: Option[];
-  available: Option[];
   onChange: (options?: Option[]) => void;
 }
 function FrameOption<Option>({
   option,
   selected,
   visible,
-  available,
   onChange,
 }: FrameOptionProps<Option>) {
   return (
@@ -71,13 +69,10 @@ function FrameOption<Option>({
         type="checkbox"
         checked={selected}
         className={styles.checkbox}
-        onChange={(ev) => {
-          if (ev.target.checked) {
+        onChange={(event) => {
+          if (event.target.checked) {
             const newVisiblePreference = [...visible, option];
-            const isOriginalList =
-              JSON.stringify(newVisiblePreference.sort()) ===
-              JSON.stringify([...available].sort());
-            onChange(isOriginalList ? undefined : newVisiblePreference);
+            onChange(newVisiblePreference);
           } else {
             onChange(visible.filter((p) => p !== option));
           }
@@ -146,7 +141,6 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
                 option={option}
                 selected={hasFilteredWidths && visibleWidths.includes(option)}
                 visible={visibleWidths}
-                available={availableWidths}
                 onChange={(newWidths) => {
                   if (newWidths) {
                     dispatch({
@@ -175,7 +169,6 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
                   option={option}
                   selected={hasFilteredThemes && visibleThemes.includes(option)}
                   visible={visibleThemes}
-                  available={availableThemes}
                   onChange={(newThemes) => {
                     if (newThemes) {
                       dispatch({
