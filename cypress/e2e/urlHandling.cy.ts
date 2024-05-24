@@ -20,7 +20,7 @@ describe('URL handling', () => {
         'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
 
-      assertFramesMatch(['375px', '768px']);
+      assertFramesMatch([375, 768]);
     });
   });
 
@@ -40,10 +40,10 @@ describe('URL handling', () => {
       );
 
       assertFramesMatch([
-        'themeOne – 375px',
-        'themeTwo – 375px',
-        'themeOne – 768px',
-        'themeTwo – 768px',
+        ['themeOne', 375],
+        ['themeTwo', 375],
+        ['themeOne', 768],
+        ['themeTwo', 768],
       ]);
     });
   });

@@ -12,7 +12,6 @@ interface Props {
   disabled?: boolean;
   showIndicator?: boolean;
   onClick: () => void;
-  ['data-testid']?: string;
 }
 
 export default ({
@@ -23,10 +22,8 @@ export default ({
   showIndicator = false,
   success = false,
   onClick,
-  ['data-testid']: dataTestId,
 }: Props) => (
   <button
-    data-testid={dataTestId}
     className={classnames(styles.button, {
       [styles.button_isActive]: active,
       [styles.showIndicator]: showIndicator,

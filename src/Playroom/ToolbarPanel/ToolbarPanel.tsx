@@ -5,19 +5,13 @@ import * as styles from './ToolbarPanel.css';
 interface Props {
   children: ReactNode;
   as?: ElementType;
-  'data-testid'?: string;
 }
 
-export const ToolbarPanel = ({
-  as: component = 'aside',
-  children,
-  'data-testid': dataTestId,
-}: Props) =>
+export const ToolbarPanel = ({ as: component = 'aside', children }: Props) =>
   React.createElement(
     component,
     {
       className: styles.root,
-      'data-testid': dataTestId,
     },
     children
   );

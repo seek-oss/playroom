@@ -67,7 +67,6 @@ export const checkbox = style([
     left: 0,
     right: 0,
     opacity: 0,
-    pointerEvents: 'none',
   }),
   {
     height: checkboxSize,
@@ -85,6 +84,7 @@ export const fakeCheckbox = style([
     borderRadius: 'large',
     marginRight: 'large',
     padding: checkboxPadding,
+    pointerEvents: 'none',
   }),
   {
     flexGrow: 0,
