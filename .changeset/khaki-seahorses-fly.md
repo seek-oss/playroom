@@ -2,4 +2,4 @@
 'playroom': minor
 ---
 
-Optimise Playroom UI performance.
+Use CSS gap for layout spacing in Playroom UI.
