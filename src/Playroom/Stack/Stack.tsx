@@ -1,7 +1,5 @@
-import { type ReactElement, Children } from 'react';
+import type { ReactElement } from 'react';
 import classnames from 'classnames';
-
-import { Divider } from '../Divider/Divider';
 
 import * as styles from './Stack.css';
 
@@ -16,23 +14,10 @@ type ReactNodeNoStrings =
 interface Props {
   children: ReactNodeNoStrings;
   space: keyof typeof styles.spaceScale;
-  dividers?: boolean;
 }
 
-export const Stack = ({ children, space, dividers = false }: Props) => (
-  <div>
-    {Children.toArray(children).map((item, index) => (
-      <div
-        key={index}
-        className={classnames(styles.gap, styles.spaceScale[space])}
-      >
-        {dividers && index > 0 ? (
-          <div className={styles.gap}>
-            <Divider />
-          </div>
-        ) : null}
-        {item}
-      </div>
-    ))}
+export const Stack = ({ children, space }: Props) => (
+  <div className={classnames(styles.gap, styles.spaceScale[space])}>
+    {children}
   </div>
 );

@@ -208,6 +208,10 @@ Playroom supports loading [ESM](https://nodejs.org/api/esm.html#introduction) co
 
 If you are interested in integrating Playroom into Storybook, check out [storybook-addon-playroom](https://github.com/rbardini/storybook-addon-playroom).
 
+## Browser Support
+
+Playroom is built to work on the latest stable versions of all major browsers. Some features may not work as expected in older browsers.
+
 ## License
 
 MIT.
