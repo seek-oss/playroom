@@ -71,10 +71,11 @@ const KeyboardShortcut = ({
   ));
 
   return (
+    // Todo - fix this div
     <div className={styles.keyboardShortcutRow}>
       <Text>{description}</Text>
       <Text size={isMac() ? 'large' : 'standard'}>
-        <Inline space="xxsmall">{shortcutSegments}</Inline>
+        <Inline space="xsmall">{shortcutSegments}</Inline>
       </Text>
     </div>
   );
@@ -89,75 +90,79 @@ export default React.memo(() => {
     <ToolbarPanel>
       <Stack space="xxxlarge">
         <fieldset className={styles.fieldset}>
-          <legend>
-            <Heading level="3">Editor Position</Heading>
-          </legend>
-          <div className={styles.radioContainer}>
-            {['Bottom', 'Right'].map((option) => (
-              <div key={option}>
-                <input
-                  type="radio"
-                  name="editorPosition"
-                  id={`editorPosition${option}`}
-                  value={option.toLowerCase()}
-                  title={option}
-                  checked={option.toLowerCase() === editorPosition}
-                  onChange={() =>
-                    dispatch({
-                      type: 'updateEditorPosition',
-                      payload: {
-                        position: option.toLowerCase() as EditorPosition,
-                      },
-                    })
-                  }
-                  className={styles.realRadio}
-                />
-                <label
-                  htmlFor={`editorPosition${option}`}
-                  className={styles.label}
-                  title={option}
-                >
-                  {positionIcon[option.toLowerCase() as EditorPosition]}
-                </label>
-              </div>
-            ))}
-          </div>
+          <Stack space="small">
+            <legend>
+              <Heading level="3">Editor Position</Heading>
+            </legend>
+            <Inline space="none">
+              {['Bottom', 'Right'].map((option) => (
+                <div key={option}>
+                  <input
+                    type="radio"
+                    name="editorPosition"
+                    id={`editorPosition${option}`}
+                    value={option.toLowerCase()}
+                    title={option}
+                    checked={option.toLowerCase() === editorPosition}
+                    onChange={() =>
+                      dispatch({
+                        type: 'updateEditorPosition',
+                        payload: {
+                          position: option.toLowerCase() as EditorPosition,
+                        },
+                      })
+                    }
+                    className={styles.realRadio}
+                  />
+                  <label
+                    htmlFor={`editorPosition${option}`}
+                    className={styles.label}
+                    title={option}
+                  >
+                    {positionIcon[option.toLowerCase() as EditorPosition]}
+                  </label>
+                </div>
+              ))}
+            </Inline>
+          </Stack>
         </fieldset>
 
         <fieldset className={styles.fieldset}>
-          <legend>
-            <Heading level="3">Color Scheme</Heading>
-          </legend>
-          <div className={styles.radioContainer}>
-            {['Light', 'Dark', 'System'].map((option) => (
-              <div key={option}>
-                <input
-                  type="radio"
-                  name="colorScheme"
-                  id={`colorScheme${option}`}
-                  value={option.toLowerCase()}
-                  title={option}
-                  checked={option.toLowerCase() === colorScheme}
-                  onChange={() =>
-                    dispatch({
-                      type: 'updateColorScheme',
-                      payload: {
-                        colorScheme: option.toLowerCase() as ColorScheme,
-                      },
-                    })
-                  }
-                  className={styles.realRadio}
-                />
-                <label
-                  htmlFor={`colorScheme${option}`}
-                  className={styles.label}
-                  title={option}
-                >
-                  {colorModeIcon[option.toLowerCase() as ColorScheme]}
-                </label>
-              </div>
-            ))}
-          </div>
+          <Stack space="small">
+            <legend>
+              <Heading level="3">Color Scheme</Heading>
+            </legend>
+            <Inline space="none">
+              {['Light', 'Dark', 'System'].map((option) => (
+                <div key={option}>
+                  <input
+                    type="radio"
+                    name="colorScheme"
+                    id={`colorScheme${option}`}
+                    value={option.toLowerCase()}
+                    title={option}
+                    checked={option.toLowerCase() === colorScheme}
+                    onChange={() =>
+                      dispatch({
+                        type: 'updateColorScheme',
+                        payload: {
+                          colorScheme: option.toLowerCase() as ColorScheme,
+                        },
+                      })
+                    }
+                    className={styles.realRadio}
+                  />
+                  <label
+                    htmlFor={`colorScheme${option}`}
+                    className={styles.label}
+                    title={option}
+                  >
+                    {colorModeIcon[option.toLowerCase() as ColorScheme]}
+                  </label>
+                </div>
+              ))}
+            </Inline>
+          </Stack>
         </fieldset>
 
         <Stack space="xlarge">

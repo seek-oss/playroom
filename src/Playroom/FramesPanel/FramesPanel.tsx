@@ -110,7 +110,7 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
       <ToolbarPanel>
         <Stack space="xxxlarge">
           <label>
-            <Stack space="medium">
+            <Stack space="small">
               <Heading level="3">Title</Heading>
               <input
                 type="text"

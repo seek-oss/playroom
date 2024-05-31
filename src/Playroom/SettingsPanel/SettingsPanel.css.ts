@@ -7,14 +7,8 @@ export const fieldset = sprinkles({
   padding: 'none',
 });
 
-export const radioContainer = sprinkles({
-  display: 'flex',
-  paddingTop: 'medium',
-});
-
 export const keyboardShortcutRow = style({
   display: 'flex',
-  alignItems: 'center',
 });
 
 globalStyle(`${keyboardShortcutRow} > *:first-child`, {

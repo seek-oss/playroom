@@ -1,4 +1,4 @@
-import { type ReactElement, Children } from 'react';
+import type { ReactElement } from 'react';
 import classnames from 'classnames';
 
 import * as styles from './Inline.css';
@@ -13,22 +13,11 @@ type ReactNodeNoStrings =
 
 interface Props {
   children: ReactNodeNoStrings;
-  space:
-    | 'none'
-    | 'xxsmall'
-    | 'xsmall'
-    | 'small'
-    | 'medium'
-    | 'large'
-    | 'xlarge';
+  space: keyof typeof styles.spaceScale;
 }
 
 export const Inline = ({ children, space }: Props) => (
-  <div className={classnames(styles.root, space !== 'none' && styles[space])}>
-    {Children.toArray(children).map((item, index) => (
-      <div key={index} className={styles.item}>
-        {item}
-      </div>
-    ))}
+  <div className={classnames(styles.gap, styles.spaceScale[space])}>
+    {children}
   </div>
 );

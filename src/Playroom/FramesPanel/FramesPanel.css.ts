@@ -6,7 +6,7 @@ export const title = sprinkles({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  marginBottom: 'medium',
+  marginBottom: 'small',
 });
 
 export const reset = style([
@@ -14,7 +14,7 @@ export const reset = style([
     position: 'relative',
     font: 'small',
     border: 0,
-    padding: 'medium',
+    padding: 'small',
     appearance: 'none',
   }),
   {
@@ -22,7 +22,7 @@ export const reset = style([
     backgroundColor: 'transparent',
     outline: 'none',
     textDecoration: 'underline',
-    margin: calc(vars.space.medium).negate().toString(),
+    margin: calc(vars.space.small).negate().toString(),
     '::before': {
       content: '""',
       position: 'absolute',
