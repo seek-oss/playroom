@@ -4,26 +4,21 @@ import { sprinkles } from '../sprinkles.css';
 export const root = style([
   sprinkles({
     height: 'full',
-    width: 'full',
-    whiteSpace: 'nowrap',
-    display: 'flex',
     boxSizing: 'border-box',
-    paddingY: 'gutter',
-    paddingLeft: 'gutter',
+    display: 'flex',
+    padding: 'gutter',
     textAlign: 'center',
+    overflow: 'auto',
+  }),
+]);
+
+export const framesContainer = style([
+  sprinkles({
+    display: 'flex',
+    gap: 'gutter',
   }),
   {
-    overflowX: 'auto',
-    overflowY: 'hidden',
-    // // Simulate centering when fewer frames than viewport width.
-    '::before': {
-      content: '""',
-      flex: 1,
-    },
-    '::after': {
-      content: '""',
-      flex: 1,
-    },
+    marginInline: 'auto',
   },
 ]);
 
@@ -34,7 +29,6 @@ export const frameContainer = style([
     textAlign: 'left',
     display: 'flex',
     flexDirection: 'column',
-    paddingRight: 'gutter',
   }),
   {},
 ]);
