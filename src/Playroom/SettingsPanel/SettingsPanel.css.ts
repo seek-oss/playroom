@@ -1,5 +1,5 @@
 import { colorPaletteVars, sprinkles, vars } from '../sprinkles.css';
-import { globalStyle, style } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
 
 export const fieldset = sprinkles({
   border: 0,
@@ -7,17 +7,23 @@ export const fieldset = sprinkles({
   padding: 'none',
 });
 
-export const keyboardShortcutRow = style({
-  display: 'flex',
+export const keyboardShortcutsRow = sprinkles({
+  alignItems: 'center',
 });
 
-globalStyle(`${keyboardShortcutRow} > *:first-child`, {
+export const keyboardShortcutTitle = style({
   flex: 1,
 });
 
-globalStyle(`${keyboardShortcutRow} > *:nth-child(2)`, {
-  flex: '0 0 43%',
-});
+export const keyboardShortcutKeys = style([
+  {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+  },
+  sprinkles({
+    gap: 'xsmall',
+  }),
+]);
 
 export const kbd = style([
   sprinkles({

@@ -71,13 +71,14 @@ const KeyboardShortcut = ({
   ));
 
   return (
-    // Todo - fix this div
-    <div className={styles.keyboardShortcutRow}>
-      <Text>{description}</Text>
+    <Inline space="xsmall" alignY="center">
+      <div className={styles.keyboardShortcutTitle}>
+        <Text>{description}</Text>
+      </div>
       <Text size={isMac() ? 'large' : 'standard'}>
-        <Inline space="xsmall">{shortcutSegments}</Inline>
+        <div className={styles.keyboardShortcutKeys}>{shortcutSegments}</div>
       </Text>
-    </div>
+    </Inline>
   );
 };
 

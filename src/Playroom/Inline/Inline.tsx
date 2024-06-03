@@ -14,10 +14,17 @@ type ReactNodeNoStrings =
 interface Props {
   children: ReactNodeNoStrings;
   space: keyof typeof styles.spaceScale;
+  alignY?: keyof typeof styles.horizontalAlignmentScale;
 }
 
-export const Inline = ({ children, space }: Props) => (
-  <div className={classnames(styles.gap, styles.spaceScale[space])}>
+export const Inline = ({ children, space, alignY }: Props) => (
+  <div
+    className={classnames(
+      styles.gap,
+      styles.spaceScale[space],
+      alignY ? styles.horizontalAlignmentScale[alignY] : undefined
+    )}
+  >
     {children}
   </div>
 );
