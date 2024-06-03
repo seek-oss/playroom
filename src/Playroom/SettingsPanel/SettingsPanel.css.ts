@@ -12,7 +12,7 @@ export const keyboardShortcutsRow = sprinkles({
 });
 
 export const keyboardShortcutTitle = style({
-  flex: 1,
+  marginRight: 'auto',
 });
 
 export const keyboardShortcutKeys = style([

@@ -46,10 +46,12 @@ interface FrameHeadingProps {
   children: ReactNode;
 }
 const FrameHeading = ({ showReset, onReset, children }: FrameHeadingProps) => (
-  <div className={styles.title}>
-    <Heading level="3">{children}</Heading>
+  <Inline space="none" alignY="center">
+    <div className={styles.title}>
+      <Heading level="3">{children}</Heading>
+    </div>
     {showReset && <ResetButton onClick={onReset}>Clear</ResetButton>}
-  </div>
+  </Inline>
 );
 
 interface FrameOptionProps<Option> {
