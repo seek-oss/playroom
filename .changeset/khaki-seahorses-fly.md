@@ -2,4 +2,4 @@
 'playroom': minor
 ---
 
-Use CSS gap for layout spacing in Playroom UI.
+Use CSS gap and grid for layout spacing in Playroom UI.
