@@ -27,7 +27,7 @@ describe('URL handling', () => {
   describe('where paramType is search', () => {
     it('code', () => {
       cy.visit(
-        'http://localhost:9001/index.html?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
+        'http://localhost:9001/?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
       );
 
       assertFirstFrameContains('Foo\nFoo\nBar');
@@ -36,7 +36,7 @@ describe('URL handling', () => {
 
     it('widths', () => {
       cy.visit(
-        'http://localhost:9001/index.html?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
+        'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
 
       assertFramesMatch([
