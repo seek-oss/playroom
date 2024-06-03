@@ -6,7 +6,6 @@ export const title = sprinkles({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  marginBottom: 'small',
 });
 
 export const reset = style([
@@ -48,15 +47,8 @@ export const reset = style([
 
 export const label = style([
   sprinkles({
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
     cursor: 'pointer',
-    userSelect: 'none',
   }),
-  {
-    height: calc(vars.grid).multiply(9).toString(),
-  },
 ]);
 
 const checkboxSize = '20px';
@@ -82,7 +74,6 @@ export const fakeCheckbox = style([
     justifyContent: 'center',
     position: 'relative',
     borderRadius: 'large',
-    marginRight: 'large',
     padding: checkboxPadding,
     pointerEvents: 'none',
   }),

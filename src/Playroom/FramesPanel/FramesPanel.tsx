@@ -8,6 +8,7 @@ import { Text } from '../Text/Text';
 
 import * as styles from './FramesPanel.css';
 import { Helmet } from 'react-helmet';
+import { Inline } from '../Inline/Inline';
 
 const getTitle = (title: string | undefined) => {
   if (title) {
@@ -65,23 +66,25 @@ function FrameOption<Option>({
 }: FrameOptionProps<Option>) {
   return (
     <label className={styles.label}>
-      <input
-        type="checkbox"
-        checked={selected}
-        className={styles.checkbox}
-        onChange={(event) => {
-          if (event.target.checked) {
-            const newVisiblePreference = [...visible, option];
-            onChange(newVisiblePreference);
-          } else {
-            onChange(visible.filter((p) => p !== option));
-          }
-        }}
-      />
-      <div className={styles.fakeCheckbox}>
-        <Checkmark />
-      </div>
-      <Text truncate>{String(option)}</Text>
+      <Inline space="large" alignY="center">
+        <input
+          type="checkbox"
+          checked={selected}
+          className={styles.checkbox}
+          onChange={(event) => {
+            if (event.target.checked) {
+              const newVisiblePreference = [...visible, option];
+              onChange(newVisiblePreference);
+            } else {
+              onChange(visible.filter((p) => p !== option));
+            }
+          }}
+        />
+        <div className={styles.fakeCheckbox}>
+          <Checkmark />
+        </div>
+        <Text truncate>{String(option)}</Text>
+      </Inline>
     </label>
   );
 }
@@ -128,7 +131,7 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
             </Stack>
           </label>
 
-          <Stack space="none">
+          <Stack space="xlarge">
             <FrameHeading
               showReset={hasFilteredWidths}
               onReset={() => dispatch({ type: 'resetVisibleWidths' })}
@@ -156,7 +159,7 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
           </Stack>
 
           {hasThemes ? (
-            <Stack space="none">
+            <Stack space="xlarge">
               <FrameHeading
                 showReset={hasFilteredThemes}
                 onReset={() => dispatch({ type: 'resetVisibleThemes' })}
