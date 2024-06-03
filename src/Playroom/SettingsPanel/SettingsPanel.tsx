@@ -71,7 +71,7 @@ const KeyboardShortcut = ({
   ));
 
   return (
-    <Inline space="xsmall" alignY="center">
+    <Inline space="small" alignY="center">
       <div className={styles.keyboardShortcutTitle}>
         <Text>{description}</Text>
       </div>
