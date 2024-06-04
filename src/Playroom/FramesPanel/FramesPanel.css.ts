@@ -2,11 +2,8 @@ import { calc } from '@vanilla-extract/css-utils';
 import { globalStyle, style } from '@vanilla-extract/css';
 import { colorPaletteVars, sprinkles, vars } from '../sprinkles.css';
 
-export const title = sprinkles({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  marginBottom: 'medium',
+export const title = style({
+  marginRight: 'auto',
 });
 
 export const reset = style([
@@ -14,7 +11,7 @@ export const reset = style([
     position: 'relative',
     font: 'small',
     border: 0,
-    padding: 'medium',
+    padding: 'small',
     appearance: 'none',
   }),
   {
@@ -22,7 +19,7 @@ export const reset = style([
     backgroundColor: 'transparent',
     outline: 'none',
     textDecoration: 'underline',
-    margin: calc(vars.space.medium).negate().toString(),
+    margin: calc(vars.space.small).negate().toString(),
     '::before': {
       content: '""',
       position: 'absolute',
@@ -46,18 +43,9 @@ export const reset = style([
   },
 ]);
 
-export const label = style([
-  sprinkles({
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
-    cursor: 'pointer',
-    userSelect: 'none',
-  }),
-  {
-    height: calc(vars.grid).multiply(9).toString(),
-  },
-]);
+export const label = sprinkles({
+  cursor: 'pointer',
+});
 
 const checkboxSize = '20px';
 export const checkbox = style([
@@ -82,7 +70,6 @@ export const fakeCheckbox = style([
     justifyContent: 'center',
     position: 'relative',
     borderRadius: 'large',
-    marginRight: 'large',
     padding: checkboxPadding,
     pointerEvents: 'none',
   }),
