@@ -16,7 +16,7 @@ export const fieldContainer = style([
     right: 0,
     display: 'flex',
     alignItems: 'center',
-    paddingX: 'medium',
+    paddingX: 'small',
   }),
   {
     height: toolbarItemSize,
@@ -32,7 +32,7 @@ export const snippetsContainer = style([
     right: 0,
     overflow: 'auto',
     padding: 'none',
-    margin: 'medium',
+    margin: 'small',
   }),
   {
     top: toolbarItemSize,

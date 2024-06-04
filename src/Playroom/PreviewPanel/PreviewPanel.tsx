@@ -43,7 +43,7 @@ export default ({ themes, visibleThemes }: PreviewPanelProps) => {
           />
         ) : null}
 
-        <Inline space="small">
+        <Inline space="large">
           <Button
             as="a"
             href={prototypeUrl}

@@ -34,36 +34,38 @@ export default function Frames({ code, themes, widths }: FramesProps) {
 
   return (
     <div ref={scrollingPanelRef} className={styles.root}>
-      {frames.map((frame) => (
-        <div
-          key={`${frame.theme}_${frame.width}`}
-          className={styles.frameContainer}
-        >
-          <div className={styles.frame}>
-            <div className={styles.frameBorder} />
-            <Iframe
-              intersectionRootRef={scrollingPanelRef}
-              src={frameSrc(
-                { themeName: frame.theme, code: renderCode.current },
-                playroomConfig
+      <div className={styles.framesContainer}>
+        {frames.map((frame) => (
+          <div
+            key={`${frame.theme}_${frame.width}`}
+            className={styles.frameContainer}
+          >
+            <div className={styles.frame}>
+              <div className={styles.frameBorder} />
+              <Iframe
+                intersectionRootRef={scrollingPanelRef}
+                src={frameSrc(
+                  { themeName: frame.theme, code: renderCode.current },
+                  playroomConfig
+                )}
+                className={styles.frame}
+                style={{ width: frame.width }}
+                data-testid="previewFrame"
+              />
+            </div>
+            <div className={styles.frameName} data-testid="frameName">
+              {frame.theme === '__PLAYROOM__NO_THEME__' ? (
+                <Text weight="strong">{frame.widthName}</Text>
+              ) : (
+                <Text>
+                  <Strong>{frame.theme}</Strong>
+                  {` \u2013 ${frame.widthName}`}
+                </Text>
               )}
-              className={styles.frame}
-              style={{ width: frame.width }}
-              data-testid="previewFrame"
-            />
+            </div>
           </div>
-          <div className={styles.frameName} data-testid="frameName">
-            {frame.theme === '__PLAYROOM__NO_THEME__' ? (
-              <Text weight="strong">{frame.widthName}</Text>
-            ) : (
-              <Text>
-                <Strong>{frame.theme}</Strong>
-                {` \u2013 ${frame.widthName}`}
-              </Text>
-            )}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

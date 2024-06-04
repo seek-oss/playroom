@@ -78,7 +78,7 @@ export const positive = style({
 });
 
 export const iconContainer = style([
-  sprinkles({ position: 'relative', paddingLeft: 'medium' }),
+  sprinkles({ position: 'relative', paddingLeft: 'small' }),
   {
     top: '1px',
   },
