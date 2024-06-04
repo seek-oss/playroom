@@ -43,11 +43,9 @@ export const reset = style([
   },
 ]);
 
-export const label = style([
-  sprinkles({
-    cursor: 'pointer',
-  }),
-]);
+export const label = sprinkles({
+  cursor: 'pointer',
+});
 
 const checkboxSize = '20px';
 export const checkbox = style([
