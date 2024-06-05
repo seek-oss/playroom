@@ -26,10 +26,7 @@ export const Box = ({
     }
   }
 
-  const userClasses = clsx(className);
-  const atomClasses = clsx(sprinkles({ ...atomProps }));
-  const classes = clsx(userClasses, atomClasses);
-
+  const classes = clsx(className, sprinkles({ ...atomProps }));
   const Component = component;
 
   return <Component className={classes} {...restProps} />;
