@@ -3,10 +3,6 @@ import { globalStyle, style } from '@vanilla-extract/css';
 import { colorPaletteVars, sprinkles } from '../sprinkles.css';
 import { vars } from '../vars.css';
 
-export const title = style({
-  marginRight: 'auto',
-});
-
 export const reset = style([
   sprinkles({
     position: 'relative',

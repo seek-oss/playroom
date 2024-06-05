@@ -18,6 +18,7 @@ import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
 import { Text } from '../Text/Text';
 import { Inline } from '../Inline/Inline';
 import { isMac } from '../../utils/formatting';
+import { Box } from '../Box/Box';
 
 const getKeyBindings = () => {
   const metaKeySymbol = isMac() ? '⌘' : 'Ctrl';
@@ -72,9 +73,9 @@ const KeyboardShortcut = ({
 
   return (
     <Inline space="small" alignY="center">
-      <div className={styles.keyboardShortcutTitle}>
+      <Box flexGrow={1}>
         <Text>{description}</Text>
-      </div>
+      </Box>
       <Text size={isMac() ? 'large' : 'standard'}>
         <div className={styles.keyboardShortcutKeys}>{shortcutSegments}</div>
       </Text>

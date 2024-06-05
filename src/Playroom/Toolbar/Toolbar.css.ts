@@ -42,10 +42,6 @@ export const sidebar = sprinkles({
   overflow: 'hidden',
 });
 
-export const topButtons = sprinkles({
-  transition: 'medium',
-});
-
 export const positions_isOpen = style({});
 export const positionContainer = style([
   sprinkles({

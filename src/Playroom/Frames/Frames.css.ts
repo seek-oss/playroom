@@ -12,33 +12,20 @@ export const root = style([
   }),
 ]);
 
-export const framesContainer = style([
-  sprinkles({
-    display: 'flex',
-    gap: 'gutter',
-  }),
-  {
-    marginInline: 'auto',
-  },
-]);
+export const frameContainer = sprinkles({
+  position: 'relative',
+  height: 'full',
+  textAlign: 'left',
+  display: 'flex',
+  flexDirection: 'column',
+});
 
-export const frameContainer = style([
-  sprinkles({
-    position: 'relative',
-    height: 'full',
-    textAlign: 'left',
-    display: 'flex',
-    flexDirection: 'column',
-  }),
-  {},
-]);
-
-export const frame = style([
-  sprinkles({ position: 'relative', height: 'full', border: 0 }),
-  {
-    flexGrow: 1,
-  },
-]);
+export const frame = sprinkles({
+  position: 'relative',
+  height: 'full',
+  border: 0,
+  flexGrow: 1,
+});
 
 export const frameBorder = style([
   sprinkles({

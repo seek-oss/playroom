@@ -8,14 +8,6 @@ export const fieldset = sprinkles({
   padding: 'none',
 });
 
-export const keyboardShortcutsRow = sprinkles({
-  alignItems: 'center',
-});
-
-export const keyboardShortcutTitle = style({
-  marginRight: 'auto',
-});
-
 export const keyboardShortcutKeys = style([
   {
     display: 'grid',
