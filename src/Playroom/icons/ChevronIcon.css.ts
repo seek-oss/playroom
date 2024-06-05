@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../sprinkles.css';
+import { vars } from '../vars.css';
 
 export const root = style({
   transition: vars.transition.medium,

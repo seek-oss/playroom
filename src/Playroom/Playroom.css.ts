@@ -1,5 +1,6 @@
 import { style, globalStyle } from '@vanilla-extract/css';
-import { sprinkles, vars, colorPaletteVars } from './sprinkles.css';
+import { sprinkles, colorPaletteVars } from './sprinkles.css';
+import { vars } from './vars.css';
 import { toolbarItemSize } from './ToolbarItem/ToolbarItem.css';
 
 globalStyle('html', {

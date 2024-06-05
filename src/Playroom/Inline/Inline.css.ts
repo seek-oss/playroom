@@ -1,5 +1,5 @@
 import { style, createVar, styleVariants } from '@vanilla-extract/css';
-import { vars } from '../sprinkles.css';
+import { vars } from '../vars.css';
 
 const size = createVar();
 const horizontalAlignment = createVar();

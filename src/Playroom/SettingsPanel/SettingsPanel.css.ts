@@ -1,4 +1,5 @@
-import { colorPaletteVars, sprinkles, vars } from '../sprinkles.css';
+import { colorPaletteVars, sprinkles } from '../sprinkles.css';
+import { vars } from '../vars.css';
 import { style } from '@vanilla-extract/css';
 
 export const fieldset = sprinkles({
