@@ -9,6 +9,7 @@ import playroomConfig from '../../config';
 import frameSrc from './frameSrc';
 
 import * as styles from './Frames.css';
+import { Box } from '../Box/Box';
 
 interface FramesProps {
   code: string;
@@ -34,7 +35,7 @@ export default function Frames({ code, themes, widths }: FramesProps) {
 
   return (
     <div ref={scrollingPanelRef} className={styles.root}>
-      <div className={styles.framesContainer}>
+      <Box display="flex" gap="gutter" marginX="auto">
         {frames.map((frame) => (
           <div
             key={`${frame.theme}_${frame.width}`}
@@ -65,7 +66,7 @@ export default function Frames({ code, themes, widths }: FramesProps) {
             </div>
           </div>
         ))}
-      </div>
+      </Box>
     </div>
   );
 }

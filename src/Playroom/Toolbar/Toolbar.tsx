@@ -89,7 +89,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
       )}
       <div className={styles.sidebar}>
         <div className={styles.buttons}>
-          <div className={styles.topButtons}>
+          <div>
             {hasSnippets && (
               <ToolbarItem
                 active={isSnippetsOpen}

@@ -1,18 +1,11 @@
-import { colorPaletteVars, sprinkles, vars } from '../sprinkles.css';
+import { colorPaletteVars, sprinkles } from '../sprinkles.css';
+import { vars } from '../vars.css';
 import { style } from '@vanilla-extract/css';
 
 export const fieldset = sprinkles({
   border: 0,
   margin: 'none',
   padding: 'none',
-});
-
-export const keyboardShortcutsRow = sprinkles({
-  alignItems: 'center',
-});
-
-export const keyboardShortcutTitle = style({
-  marginRight: 'auto',
 });
 
 export const keyboardShortcutKeys = style([

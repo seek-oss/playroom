@@ -5,10 +5,11 @@ import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import { StoreContext } from '../../StoreContext/StoreContext';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
-
-import * as styles from './FramesPanel.css';
 import { Helmet } from 'react-helmet';
 import { Inline } from '../Inline/Inline';
+import { Box } from '../Box/Box';
+
+import * as styles from './FramesPanel.css';
 
 const getTitle = (title: string | undefined) => {
   if (title) {
@@ -47,9 +48,9 @@ interface FrameHeadingProps {
 }
 const FrameHeading = ({ showReset, onReset, children }: FrameHeadingProps) => (
   <Inline space="none" alignY="center">
-    <div className={styles.title}>
+    <Box flexGrow={1}>
       <Heading level="3">{children}</Heading>
-    </div>
+    </Box>
     {showReset && <ResetButton onClick={onReset}>Clear</ResetButton>}
   </Inline>
 );

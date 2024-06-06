@@ -1,10 +1,7 @@
 import { calc } from '@vanilla-extract/css-utils';
 import { globalStyle, style } from '@vanilla-extract/css';
-import { colorPaletteVars, sprinkles, vars } from '../sprinkles.css';
-
-export const title = style({
-  marginRight: 'auto',
-});
+import { colorPaletteVars, sprinkles } from '../sprinkles.css';
+import { vars } from '../vars.css';
 
 export const reset = style([
   sprinkles({

@@ -42,34 +42,6 @@ export const sidebar = sprinkles({
   overflow: 'hidden',
 });
 
-export const topButtons = sprinkles({
-  transition: 'medium',
-});
-
-export const positions_isOpen = style({});
-export const positionContainer = style([
-  sprinkles({
-    position: 'absolute',
-    top: 0,
-    width: 'full',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    transition: 'medium',
-  }),
-  {
-    bottom: toolbarItemSize,
-    selectors: {
-      [`&:not(${positions_isOpen})`]: {
-        opacity: 0,
-        pointerEvents: 'none',
-        transform: 'translateY(20px)',
-      },
-    },
-  },
-]);
-
 export const buttons = style([
   sprinkles({
     display: 'flex',
