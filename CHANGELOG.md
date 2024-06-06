@@ -1,5 +1,23 @@
 # playroom
 
+## 0.38.0
+
+### Minor Changes
+
+- 7df36e3: Improve frame filtering UX.
+
+  - Allow users to select all checkboxes in a frame filter section, rather than automatically unselecting all checkboxes when all are selected.
+  - Rename the "Show all" button to "Clear" to reinforce the filtering pattern.
+
+- 384810e: Use CSS gap and grid for layout spacing in Playroom UI.
+
+### Patch Changes
+
+- a0724d2: Fixes a bug in the side panel exit animation that was causing the contents to vanish abruptly
+- 934a017: Exclude irrelevant files from published package
+- 92a0039: Fix Playroom UI icon centering
+- 422a259: Remove `data-testid` attributes from UI elements
+
 ## 0.37.1
 
 ### Patch Changes
