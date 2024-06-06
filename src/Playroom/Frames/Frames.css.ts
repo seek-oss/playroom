@@ -1,16 +1,14 @@
 import { style } from '@vanilla-extract/css';
 import { sprinkles } from '../sprinkles.css';
 
-export const root = style([
-  sprinkles({
-    height: 'full',
-    boxSizing: 'border-box',
-    display: 'flex',
-    padding: 'gutter',
-    textAlign: 'center',
-    overflow: 'auto',
-  }),
-]);
+export const root = sprinkles({
+  height: 'full',
+  boxSizing: 'border-box',
+  display: 'flex',
+  padding: 'gutter',
+  textAlign: 'center',
+  overflow: 'auto',
+});
 
 export const frameContainer = sprinkles({
   position: 'relative',
