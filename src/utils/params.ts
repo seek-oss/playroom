@@ -21,11 +21,7 @@ export function updateUrlCode(code: string) {
 
 export function getParamsFromQuery(location = history.location) {
   try {
-    return new URLSearchParams(
-      playroomConfig.paramType === 'hash'
-        ? location.hash.replace(/^#/, '')
-        : location.search
-    );
+    return new URLSearchParams(location.hash.slice(1));
   } catch (err) {
     return new URLSearchParams();
   }
