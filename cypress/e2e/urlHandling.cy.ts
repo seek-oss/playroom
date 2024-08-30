@@ -22,6 +22,14 @@ describe('URL handling', () => {
 
       assertFramesMatch([375, 768]);
     });
+
+    it('title', () => {
+      cy.visit(
+        'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA'
+      );
+
+      cy.title().should('eq', 'Test | Playroom');
+    });
   });
 
   describe('where paramType is search', () => {
@@ -34,7 +42,7 @@ describe('URL handling', () => {
       assertCodePaneContains('<Foo><Foo><Bar/></Foo></Foo>');
     });
 
-    it('widths', () => {
+    it('widths and themes', () => {
       cy.visit(
         'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
@@ -45,6 +53,14 @@ describe('URL handling', () => {
         ['themeOne', 768],
         ['themeTwo', 768],
       ]);
+    });
+
+    it('title', () => {
+      cy.visit(
+        'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA'
+      );
+
+      cy.title().should('eq', 'Test | Playroom');
     });
   });
 });

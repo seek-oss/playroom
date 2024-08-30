@@ -1,4 +1,5 @@
 import { useContext, type ComponentType, Fragment } from 'react';
+import { Helmet } from 'react-helmet';
 import classnames from 'classnames';
 import { useDebouncedCallback } from 'use-debounce';
 import { Resizable } from 're-resizable';
@@ -45,6 +46,20 @@ const resolveDirection = (
   return editorHidden ? 'up' : 'down';
 };
 
+const getTitle = (title: string | undefined) => {
+  if (title) {
+    return `${title} | Playroom`;
+  }
+
+  const configTitle = window?.__playroomConfig__.title;
+
+  if (configTitle) {
+    return `${configTitle} | Playroom`;
+  }
+
+  return 'Playroom';
+};
+
 export interface PlayroomProps {
   components: Record<string, ComponentType>;
   themes: string[];
@@ -65,9 +80,11 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       previewRenderCode,
       previewEditorCode,
       ready,
+      title,
     },
     dispatch,
   ] = useContext(StoreContext);
+  const displayedTitle = getTitle(title);
 
   const updateEditorSize = useDebouncedCallback(
     ({
@@ -154,6 +171,11 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
 
   return (
     <div className={styles.root}>
+      {title === undefined ? null : (
+        <Helmet>
+          <title>{displayedTitle}</title>
+        </Helmet>
+      )}
       <div
         className={styles.previewContainer}
         style={
