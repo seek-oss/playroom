@@ -1,5 +1,19 @@
 # playroom
 
+## 0.38.1
+
+### Patch Changes
+
+- a62002d: Apply `title` from url on page load
+
+  Previously the document `title` would only update when the frames panel is open.
+  The title is now correctly reflected from the url on page load.
+
+- cf0fa9e: start: Disable webpack error overlay
+
+  Prevent the default webpack dev server error overlay from blocking the preview frames in `start` mode.
+  Playroom handles its own errors, and this would block the preview frames and need to be dismissed manually.
+
 ## 0.38.0
 
 ### Minor Changes
