@@ -65,8 +65,8 @@ interface State {
   cursorPosition: CursorPosition;
   editorHidden: boolean;
   editorPosition: EditorPosition;
-  editorHeight: number;
-  editorWidth: number;
+  editorHeightPercentage: number;
+  editorWidthPercentage: number;
   statusMessage?: StatusMessage;
   visibleThemes?: string[];
   visibleWidths?: number[];
@@ -328,21 +328,25 @@ const createReducer =
 
       case 'updateEditorHeight': {
         const { size } = action.payload;
-        store.setItem('editorHeight', size);
+        const viewportHeight = window.innerHeight;
+        const heightPercentage = (size / viewportHeight) * 100;
+        store.setItem('editorHeightPercentage', heightPercentage);
 
         return {
           ...state,
-          editorHeight: size,
+          editorHeightPercentage: heightPercentage,
         };
       }
 
       case 'updateEditorWidth': {
         const { size } = action.payload;
-        store.setItem('editorWidth', size);
+        const viewportWidth = window.innerWidth;
+        const widthPercentage = (size / viewportWidth) * 100;
+        store.setItem('editorWidthPercentage', widthPercentage);
 
         return {
           ...state,
-          editorWidth: size,
+          editorWidthPercentage: widthPercentage,
         };
       }
 
@@ -408,8 +412,8 @@ const initialState: State = {
   cursorPosition: { line: 0, ch: 0 },
   editorHidden: false,
   editorPosition: defaultPosition,
-  editorHeight: 300,
-  editorWidth: 360,
+  editorHeightPercentage: 40,
+  editorWidthPercentage: 40,
   ready: false,
   colorScheme: 'light',
 };
@@ -473,8 +477,8 @@ export const StoreProvider = ({
     Promise.all([
       store.getItem<string>('code'),
       store.getItem<EditorPosition>('editorPosition'),
-      store.getItem<number>('editorHeight'),
-      store.getItem<number>('editorWidth'),
+      store.getItem<number>('editorHeightPercentage'),
+      store.getItem<number>('editorWidthPercentage'),
       store.getItem<number[]>('visibleWidths'),
       store.getItem<string[]>('visibleThemes'),
       store.getItem<ColorScheme>('colorScheme'),
@@ -490,8 +494,8 @@ export const StoreProvider = ({
       ]) => {
         const code = codeFromQuery || storedCode || exampleCode;
         const editorPosition = storedPosition;
-        const editorHeight = storedHeight;
-        const editorWidth = storedWidth;
+        const editorHeightPercentage = storedHeight;
+        const editorWidthPercentage = storedWidth;
         const visibleWidths =
           widthsFromQuery ||
           storedVisibleWidths ||
@@ -508,8 +512,8 @@ export const StoreProvider = ({
           payload: {
             ...(code ? { code } : {}),
             ...(editorPosition ? { editorPosition } : {}),
-            ...(editorHeight ? { editorHeight } : {}),
-            ...(editorWidth ? { editorWidth } : {}),
+            ...(editorHeightPercentage ? { editorHeightPercentage } : {}),
+            ...(editorWidthPercentage ? { editorWidthPercentage } : {}),
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
