@@ -33,12 +33,16 @@ export const snippetsContainer = style([
     right: 0,
     overflow: 'auto',
     padding: 'none',
-    margin: 'small',
+    margin: 'none',
   }),
   {
     top: toolbarItemSize,
   },
 ]);
+
+export const snippetPadding = sprinkles({
+  padding: 'small',
+});
 
 export const snippet = style([
   sprinkles({
@@ -46,6 +50,7 @@ export const snippet = style([
     cursor: 'pointer',
     paddingY: 'large',
     paddingX: 'xlarge',
+    margin: 'none',
   }),
   {
     color: colorPaletteVars.foreground.neutral,
@@ -60,7 +65,6 @@ export const snippet = style([
       backgroundColor: colorPaletteVars.background.selection,
       borderRadius: vars.radii.medium,
       opacity: 0,
-      transition: vars.transition.slow,
       pointerEvents: 'none',
     },
   },
