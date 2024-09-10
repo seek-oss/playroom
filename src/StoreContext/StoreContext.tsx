@@ -515,10 +515,8 @@ export const StoreProvider = ({
           payload: {
             ...(code ? { code } : {}),
             ...(editorPosition ? { editorPosition } : {}),
-            ...(editorHeightPercentage
-              ? { editorHeightPercentage }
-              : undefined),
-            ...(editorWidthPercentage ? { editorWidthPercentage } : undefined),
+            ...(editorHeightPercentage ? { editorHeightPercentage } : {}),
+            ...(editorWidthPercentage ? { editorWidthPercentage } : {}),
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
