@@ -9,7 +9,6 @@ import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 
 import * as styles from './Snippets.css';
-import { useScrollIntoView } from './useScrollIntoView';
 
 type HighlightIndex = number | null;
 type ReturnedSnippet = Snippet | null;
@@ -20,6 +19,10 @@ interface Props {
 }
 
 const getLabel = (snippet: Snippet) => `${snippet.group}\n${snippet.name}`;
+
+function getSnippetId(group: string, name: string, index: number) {
+  return `${group}_${name}_${index}`;
+}
 
 const filterSnippetsForTerm = (snippets: Props['snippets'], term: string) =>
   term
@@ -55,14 +58,20 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
     [searchTerm, snippets]
   );
 
-  const highlightedItem =
+  const highlightedItemId =
     typeof highlightedIndex === 'number'
-      ? document.getElementById(
-          `${filteredSnippets[highlightedIndex].group}_${filteredSnippets[highlightedIndex].name}_${highlightedIndex}`
+      ? getSnippetId(
+          filteredSnippets[highlightedIndex].group,
+          filteredSnippets[highlightedIndex].name,
+          highlightedIndex
         )
       : null;
 
-  useScrollIntoView(highlightedItem, listEl.current);
+  const highlightedItem = highlightedItemId
+    ? document.getElementById(highlightedItemId)
+    : null;
+
+  highlightedItem?.scrollIntoView({ block: 'nearest' });
 
   useEffect(() => {
     debouncedPreview(
@@ -131,27 +140,23 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
           return (
             <li
               ref={isHighlighted ? highlightedEl : undefined}
-              id={`${snippet.group}_${snippet.name}_${index}`}
+              id={getSnippetId(snippet.group, snippet.name, index)}
               key={`${snippet.group}_${snippet.name}_${index}`}
-              className={styles.snippetPadding}
+              className={classnames(styles.snippet, {
+                [styles.highlight]: isHighlighted,
+              })}
               onMouseMove={
                 isHighlighted ? undefined : () => setHighlightedIndex(index)
               }
               onMouseDown={() => closeHandler(filteredSnippets[index])}
               title={getLabel(snippet)}
             >
-              <div
-                className={classnames(styles.snippet, {
-                  [styles.highlight]: isHighlighted,
-                })}
-              >
-                <span style={{ display: 'block', position: 'relative' }}>
-                  <Text size="large">
-                    <Strong>{snippet.group}</Strong>
-                    <span className={styles.snippetName}>{snippet.name}</span>
-                  </Text>
-                </span>
-              </div>
+              <span style={{ display: 'block', position: 'relative' }}>
+                <Text size="large">
+                  <Strong>{snippet.group}</Strong>
+                  <span className={styles.snippetName}>{snippet.name}</span>
+                </Text>
+              </span>
             </li>
           );
         })}

@@ -25,6 +25,8 @@ export const fieldContainer = style([
   },
 ]);
 
+const snippetsBorderSpace = vars.space.small;
+
 export const snippetsContainer = style([
   sprinkles({
     position: 'absolute',
@@ -32,17 +34,15 @@ export const snippetsContainer = style([
     bottom: 0,
     right: 0,
     overflow: 'auto',
-    padding: 'none',
+    paddingX: 'none',
     margin: 'none',
   }),
   {
+    listStyle: 'none',
     top: toolbarItemSize,
+    paddingBlock: snippetsBorderSpace,
   },
 ]);
-
-export const snippetPadding = sprinkles({
-  padding: 'small',
-});
 
 export const snippet = style([
   sprinkles({
@@ -50,9 +50,10 @@ export const snippet = style([
     cursor: 'pointer',
     paddingY: 'large',
     paddingX: 'xlarge',
-    margin: 'none',
   }),
   {
+    marginInline: snippetsBorderSpace,
+    scrollMarginBlock: snippetsBorderSpace,
     color: colorPaletteVars.foreground.neutral,
     backgroundColor: colorPaletteVars.background.surface,
     '::before': {
