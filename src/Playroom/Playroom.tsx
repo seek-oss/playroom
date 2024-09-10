@@ -133,18 +133,11 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
     </Fragment>
   );
 
-  if (editorHeightPercentage < 0 || editorHeightPercentage > 100) {
-    throw new Error('editorHeightPercentage must be a value between 0 and 100');
-  }
-  if (editorWidthPercentage < 0 || editorWidthPercentage > 100) {
-    throw new Error('editorWidthPercentage must be a value between 0 and 100');
-  }
-
   const isVerticalEditor = editorPosition === 'right';
   const isHorizontalEditor = editorPosition === 'bottom';
   const sizeStyles = {
-    height: isHorizontalEditor ? `${editorHeightPercentage}%` : 'auto', // issue in ff & safari when not a string
-    width: isVerticalEditor ? `${editorWidthPercentage}%` : 'auto',
+    height: isHorizontalEditor ? editorHeightPercentage : 'auto', // issue in ff & safari when not a string
+    width: isVerticalEditor ? editorWidthPercentage : 'auto',
   };
   const editorContainer =
     editorPosition === 'undocked' ? (
@@ -189,8 +182,8 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           editorHidden
             ? undefined
             : {
-                right: { right: `${editorWidthPercentage}%` },
-                bottom: { bottom: `${editorHeightPercentage}%` },
+                right: { right: editorWidthPercentage },
+                bottom: { bottom: editorHeightPercentage },
                 undocked: undefined,
               }[editorPosition]
         }

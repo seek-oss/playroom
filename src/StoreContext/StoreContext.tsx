@@ -65,8 +65,8 @@ interface State {
   cursorPosition: CursorPosition;
   editorHidden: boolean;
   editorPosition: EditorPosition;
-  editorHeightPercentage: number;
-  editorWidthPercentage: number;
+  editorHeightPercentage: string;
+  editorWidthPercentage: string;
   statusMessage?: StatusMessage;
   visibleThemes?: string[];
   visibleWidths?: number[];
@@ -329,7 +329,10 @@ const createReducer =
       case 'updateEditorHeight': {
         const { size } = action.payload;
         const viewportHeight = window.innerHeight;
-        const heightPercentage = (size / viewportHeight) * 100;
+        const heightPercentage = `${Math.round(
+          (size / viewportHeight) * 100
+        )}%`;
+
         store.setItem('editorHeightPercentage', heightPercentage);
 
         return {
@@ -341,7 +344,7 @@ const createReducer =
       case 'updateEditorWidth': {
         const { size } = action.payload;
         const viewportWidth = window.innerWidth;
-        const widthPercentage = (size / viewportWidth) * 100;
+        const widthPercentage = `${Math.round((size / viewportWidth) * 100)}%`;
         store.setItem('editorWidthPercentage', widthPercentage);
 
         return {
@@ -412,8 +415,8 @@ const initialState: State = {
   cursorPosition: { line: 0, ch: 0 },
   editorHidden: false,
   editorPosition: defaultPosition,
-  editorHeightPercentage: 40,
-  editorWidthPercentage: 40,
+  editorHeightPercentage: '40%',
+  editorWidthPercentage: '40%',
   ready: false,
   colorScheme: 'light',
 };
@@ -477,8 +480,8 @@ export const StoreProvider = ({
     Promise.all([
       store.getItem<string>('code'),
       store.getItem<EditorPosition>('editorPosition'),
-      store.getItem<number>('editorHeightPercentage'),
-      store.getItem<number>('editorWidthPercentage'),
+      store.getItem<string>('editorHeightPercentage'),
+      store.getItem<string>('editorWidthPercentage'),
       store.getItem<number[]>('visibleWidths'),
       store.getItem<string[]>('visibleThemes'),
       store.getItem<ColorScheme>('colorScheme'),
@@ -512,8 +515,10 @@ export const StoreProvider = ({
           payload: {
             ...(code ? { code } : {}),
             ...(editorPosition ? { editorPosition } : {}),
-            ...(editorHeightPercentage ? { editorHeightPercentage } : {}),
-            ...(editorWidthPercentage ? { editorWidthPercentage } : {}),
+            ...(editorHeightPercentage
+              ? { editorHeightPercentage }
+              : undefined),
+            ...(editorWidthPercentage ? { editorWidthPercentage } : undefined),
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
