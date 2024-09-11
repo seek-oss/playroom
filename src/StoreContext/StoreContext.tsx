@@ -25,6 +25,7 @@ const store = localforage.createInstance({
   version: 1,
 });
 
+const defaultEditorSizePercentage = '40%';
 const defaultPosition = 'bottom';
 
 export type EditorPosition = 'bottom' | 'right' | 'undocked';
@@ -415,8 +416,8 @@ const initialState: State = {
   cursorPosition: { line: 0, ch: 0 },
   editorHidden: false,
   editorPosition: defaultPosition,
-  editorHeightPercentage: '40%',
-  editorWidthPercentage: '40%',
+  editorHeightPercentage: defaultEditorSizePercentage,
+  editorWidthPercentage: defaultEditorSizePercentage,
   ready: false,
   colorScheme: 'light',
 };
@@ -497,8 +498,10 @@ export const StoreProvider = ({
       ]) => {
         const code = codeFromQuery || storedCode || exampleCode;
         const editorPosition = storedPosition;
-        const editorHeightPercentage = storedHeight;
-        const editorWidthPercentage = storedWidth;
+        const editorHeightPercentage =
+          storedHeight || defaultEditorSizePercentage;
+        const editorWidthPercentage =
+          storedWidth || defaultEditorSizePercentage;
         const visibleWidths =
           widthsFromQuery ||
           storedVisibleWidths ||

@@ -1,7 +1,16 @@
-import { style, globalStyle } from '@vanilla-extract/css';
+import {
+  style,
+  globalStyle,
+  styleVariants,
+  createVar,
+} from '@vanilla-extract/css';
 import { sprinkles, colorPaletteVars } from './sprinkles.css';
 import { vars } from './vars.css';
 import { toolbarItemSize } from './ToolbarItem/ToolbarItem.css';
+import { toolbarItemCount, toolbarOpenSize } from './toolbarConstants';
+
+export const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
+export const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;
 
 globalStyle('html', {
   width: '100%',
@@ -26,6 +35,18 @@ export const root = sprinkles({
 export const previewContainer = sprinkles({
   position: 'absolute',
   inset: 0,
+});
+
+export const editorSizePercentage = createVar();
+
+export const previewContainerPosition = styleVariants({
+  right: {
+    right: `max(${editorSizePercentage}, ${MIN_WIDTH}px)`,
+  },
+  bottom: {
+    bottom: `max(${editorSizePercentage}, ${MIN_HEIGHT}px)`,
+  },
+  undocked: {},
 });
 
 export const resizeableContainer = style([

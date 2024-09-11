@@ -7,7 +7,7 @@ import Frames from './Frames/Frames';
 import { WindowPortal } from './WindowPortal';
 import type { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
-import Toolbar, { toolbarItemCount } from './Toolbar/Toolbar';
+import Toolbar from './Toolbar/Toolbar';
 import ChevronIcon from './icons/ChevronIcon';
 import { StatusMessage } from './StatusMessage/StatusMessage';
 import {
@@ -15,14 +15,13 @@ import {
   type EditorPosition,
 } from '../StoreContext/StoreContext';
 
-const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
-const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;
-
 import { CodeEditor } from './CodeEditor/CodeEditor';
 
 import * as styles from './Playroom.css';
-import { toolbarOpenSize } from './Toolbar/Toolbar.css';
-import { toolbarItemSize } from './ToolbarItem/ToolbarItem.css';
+import { Box } from './Box/Box';
+
+import { assignInlineVars } from '@vanilla-extract/dynamic';
+import { editorSizePercentage } from './Playroom.css';
 
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
@@ -158,8 +157,8 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         })}
         defaultSize={sizeStyles}
         size={sizeStyles}
-        minWidth={isVerticalEditor ? MIN_WIDTH : undefined}
-        minHeight={MIN_HEIGHT}
+        minWidth={isVerticalEditor ? styles.MIN_WIDTH : undefined}
+        minHeight={styles.MIN_HEIGHT}
         onResize={(_event, _direction, { offsetWidth, offsetHeight }) => {
           updateEditorSize({ isVerticalEditor, offsetWidth, offsetHeight });
         }}
@@ -176,17 +175,20 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           <title>{displayedTitle}</title>
         </Helmet>
       )}
-      <div
-        className={styles.previewContainer}
-        style={
+      <Box
+        id="preview"
+        className={[
+          styles.previewContainer,
           editorHidden
             ? undefined
-            : {
-                right: { right: editorWidthPercentage },
-                bottom: { bottom: editorHeightPercentage },
-                undocked: undefined,
-              }[editorPosition]
-        }
+            : styles.previewContainerPosition[editorPosition],
+        ]}
+        style={assignInlineVars({
+          [editorSizePercentage]:
+            editorPosition === 'right'
+              ? editorWidthPercentage
+              : editorHeightPercentage,
+        })}
       >
         <Frames
           code={previewRenderCode || code}
@@ -215,7 +217,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             />
           </button>
         </div>
-      </div>
+      </Box>
       {editorContainer}
     </div>
   );
