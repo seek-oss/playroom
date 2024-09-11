@@ -481,6 +481,8 @@ export const StoreProvider = ({
     Promise.all([
       store.getItem<string>('code'),
       store.getItem<EditorPosition>('editorPosition'),
+      store.getItem<number>('editorHeight'), // Deprecated
+      store.getItem<number>('editorWidth'), // Deprecated
       store.getItem<string>('editorHeightPercentage'),
       store.getItem<string>('editorWidthPercentage'),
       store.getItem<number[]>('visibleWidths'),
@@ -490,27 +492,37 @@ export const StoreProvider = ({
       ([
         storedCode,
         storedPosition,
-        storedHeight,
-        storedWidth,
+        storedHeight, // Deprecated
+        storedWidth, // Deprecated
+        storedHeightPercentage,
+        storedWidthPercentage,
         storedVisibleWidths,
         storedVisibleThemes,
         storedColorScheme,
       ]) => {
         const code = codeFromQuery || storedCode || exampleCode;
         const editorPosition = storedPosition;
+
         const editorHeightPercentage =
-          storedHeight || defaultEditorSizePercentage;
+          storedHeightPercentage ||
+          (storedHeight ? `${storedHeight}px` : null) ||
+          defaultEditorSizePercentage;
+
         const editorWidthPercentage =
-          storedWidth || defaultEditorSizePercentage;
+          storedWidthPercentage ||
+          (storedWidth ? `${storedWidth}px` : null) ||
+          defaultEditorSizePercentage;
         const visibleWidths =
           widthsFromQuery ||
           storedVisibleWidths ||
           playroomConfig?.defaultVisibleWidths;
+
         const visibleThemes =
           hasThemesConfigured &&
           (themesFromQuery ||
             storedVisibleThemes ||
             playroomConfig?.defaultVisibleThemes);
+
         const colorScheme = storedColorScheme;
 
         dispatch({
