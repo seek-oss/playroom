@@ -13,6 +13,10 @@ export const critical = style({
   color: colorPaletteVars.foreground.critical,
 });
 
+export const secondary = style({
+  color: colorPaletteVars.foreground.secondary,
+});
+
 export const xsmall = sprinkles({
   font: 'xsmall',
 });

@@ -47,6 +47,7 @@ export const snippetsContainer = style([
 export const snippet = style([
   sprinkles({
     position: 'relative',
+    display: 'block',
     cursor: 'pointer',
     paddingY: 'large',
     paddingX: 'xlarge',
@@ -57,7 +58,7 @@ export const snippet = style([
     color: colorPaletteVars.foreground.neutral,
     backgroundColor: colorPaletteVars.background.surface,
     '::before': {
-      content: '""',
+      content: '',
       position: 'absolute',
       top: 0,
       bottom: 0,

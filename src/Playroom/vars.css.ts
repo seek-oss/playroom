@@ -11,7 +11,7 @@ export const vars = createGlobalTheme(':root', {
       xsmall: `normal 10px ${fontFamily}`,
       small: `normal 12px ${fontFamily}`,
       standard: `normal 14px ${fontFamily}`,
-      large: `normal 16px/1.3em ${fontFamily}`,
+      large: `normal 16px/20px ${fontFamily}`,
     },
     weight: {
       weak: '100',
