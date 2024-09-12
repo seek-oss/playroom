@@ -37,14 +37,14 @@ export const previewContainer = sprinkles({
   inset: 0,
 });
 
-export const editorSizePercentage = createVar();
+export const editorSize = createVar();
 
 export const previewContainerPosition = styleVariants({
   right: {
-    right: `max(${editorSizePercentage}, ${MIN_WIDTH}px)`,
+    right: `max(${editorSize}, ${MIN_WIDTH}px)`,
   },
   bottom: {
-    bottom: `max(${editorSizePercentage}, ${MIN_HEIGHT}px)`,
+    bottom: `max(${editorSize}, ${MIN_HEIGHT}px)`,
   },
   undocked: {},
 });

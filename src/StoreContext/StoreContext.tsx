@@ -25,7 +25,7 @@ const store = localforage.createInstance({
   version: 1,
 });
 
-const defaultEditorSizePercentage = '40%';
+const defaultEditorSize = '40%';
 const defaultPosition = 'bottom';
 
 export type EditorPosition = 'bottom' | 'right' | 'undocked';
@@ -36,6 +36,22 @@ const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
     colorScheme === 'dark' ? 'setAttribute' : 'removeAttribute'
   ]('data-playroom-dark', '');
 };
+
+function convertAndStoreSizeAsPercentage(
+  mode: 'height' | 'width',
+  size: number
+): string {
+  const viewportSize =
+    mode === 'height' ? window.innerHeight : window.innerWidth;
+  const sizePercentage = `${Math.round((size / viewportSize) * 100)}%`;
+
+  store.setItem(
+    `${mode === 'height' ? 'editorHeight' : 'editorWidth'}`,
+    sizePercentage
+  );
+
+  return sizePercentage;
+}
 
 interface DebounceUpdateUrl {
   code?: string;
@@ -66,8 +82,8 @@ interface State {
   cursorPosition: CursorPosition;
   editorHidden: boolean;
   editorPosition: EditorPosition;
-  editorHeightPercentage: string;
-  editorWidthPercentage: string;
+  editorHeight: string;
+  editorWidth: string;
   statusMessage?: StatusMessage;
   visibleThemes?: string[];
   visibleWidths?: number[];
@@ -329,28 +345,28 @@ const createReducer =
 
       case 'updateEditorHeight': {
         const { size } = action.payload;
-        const viewportHeight = window.innerHeight;
-        const heightPercentage = `${Math.round(
-          (size / viewportHeight) * 100
-        )}%`;
 
-        store.setItem('editorHeightPercentage', heightPercentage);
+        const updatedHeightPercentage = convertAndStoreSizeAsPercentage(
+          'height',
+          size
+        );
 
         return {
           ...state,
-          editorHeightPercentage: heightPercentage,
+          editorHeight: updatedHeightPercentage,
         };
       }
 
       case 'updateEditorWidth': {
         const { size } = action.payload;
-        const viewportWidth = window.innerWidth;
-        const widthPercentage = `${Math.round((size / viewportWidth) * 100)}%`;
-        store.setItem('editorWidthPercentage', widthPercentage);
+        const updatedWidthPercentage = convertAndStoreSizeAsPercentage(
+          'width',
+          size
+        );
 
         return {
           ...state,
-          editorWidthPercentage: widthPercentage,
+          editorWidth: updatedWidthPercentage,
         };
       }
 
@@ -416,8 +432,8 @@ const initialState: State = {
   cursorPosition: { line: 0, ch: 0 },
   editorHidden: false,
   editorPosition: defaultPosition,
-  editorHeightPercentage: defaultEditorSizePercentage,
-  editorWidthPercentage: defaultEditorSizePercentage,
+  editorHeight: defaultEditorSize,
+  editorWidth: defaultEditorSize,
   ready: false,
   colorScheme: 'light',
 };
@@ -481,10 +497,8 @@ export const StoreProvider = ({
     Promise.all([
       store.getItem<string>('code'),
       store.getItem<EditorPosition>('editorPosition'),
-      store.getItem<number>('editorHeight'), // Deprecated
-      store.getItem<number>('editorWidth'), // Deprecated
-      store.getItem<string>('editorHeightPercentage'),
-      store.getItem<string>('editorWidthPercentage'),
+      store.getItem<number | string>('editorHeight'), // Number type deprecated
+      store.getItem<number | string>('editorWidth'), // Number type deprecated
       store.getItem<number[]>('visibleWidths'),
       store.getItem<string[]>('visibleThemes'),
       store.getItem<ColorScheme>('colorScheme'),
@@ -492,10 +506,8 @@ export const StoreProvider = ({
       ([
         storedCode,
         storedPosition,
-        storedHeight, // Deprecated
-        storedWidth, // Deprecated
-        storedHeightPercentage,
-        storedWidthPercentage,
+        storedHeight,
+        storedWidth,
         storedVisibleWidths,
         storedVisibleThemes,
         storedColorScheme,
@@ -503,15 +515,16 @@ export const StoreProvider = ({
         const code = codeFromQuery || storedCode || exampleCode;
         const editorPosition = storedPosition;
 
-        const editorHeightPercentage =
-          storedHeightPercentage ||
-          (storedHeight ? `${storedHeight}px` : null) ||
-          defaultEditorSizePercentage;
+        const editorHeight =
+          (typeof storedHeight === 'string' ? storedHeight : null) ||
+          (typeof storedHeight === 'number' ? `${storedHeight}px` : null) ||
+          defaultEditorSize;
 
-        const editorWidthPercentage =
-          storedWidthPercentage ||
-          (storedWidth ? `${storedWidth}px` : null) ||
-          defaultEditorSizePercentage;
+        const editorWidth =
+          (typeof storedWidth === 'string' ? storedWidth : null) ||
+          (typeof storedWidth === 'number' ? `${storedWidth}px` : null) ||
+          defaultEditorSize;
+
         const visibleWidths =
           widthsFromQuery ||
           storedVisibleWidths ||
@@ -530,8 +543,8 @@ export const StoreProvider = ({
           payload: {
             ...(code ? { code } : {}),
             ...(editorPosition ? { editorPosition } : {}),
-            ...(editorHeightPercentage ? { editorHeightPercentage } : {}),
-            ...(editorWidthPercentage ? { editorWidthPercentage } : {}),
+            ...(editorHeight ? { editorHeight } : {}),
+            ...(editorWidth ? { editorWidth } : {}),
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
@@ -539,6 +552,14 @@ export const StoreProvider = ({
             ready: true,
           },
         });
+
+        // Converted deprecated pixel size preferences to percentage
+        if (typeof storedHeight === 'number') {
+          convertAndStoreSizeAsPercentage('height', storedHeight);
+        }
+        if (typeof storedWidth === 'number') {
+          convertAndStoreSizeAsPercentage('width', storedWidth);
+        }
       }
     );
   }, [hasThemesConfigured]);

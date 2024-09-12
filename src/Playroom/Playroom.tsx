@@ -21,7 +21,7 @@ import * as styles from './Playroom.css';
 import { Box } from './Box/Box';
 
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { editorSizePercentage } from './Playroom.css';
+import { editorSize as editorSize } from './Playroom.css';
 
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
@@ -70,8 +70,8 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
   const [
     {
       editorPosition,
-      editorHeightPercentage,
-      editorWidthPercentage,
+      editorHeight,
+      editorWidth,
       editorHidden,
       visibleThemes,
       visibleWidths,
@@ -135,8 +135,8 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
   const isVerticalEditor = editorPosition === 'right';
   const isHorizontalEditor = editorPosition === 'bottom';
   const sizeStyles = {
-    height: isHorizontalEditor ? editorHeightPercentage : 'auto', // issue in ff & safari when not a string
-    width: isVerticalEditor ? editorWidthPercentage : 'auto',
+    height: isHorizontalEditor ? editorHeight : 'auto', // issue in ff & safari when not a string
+    width: isVerticalEditor ? editorWidth : 'auto',
   };
   const editorContainer =
     editorPosition === 'undocked' ? (
@@ -184,10 +184,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             : styles.previewContainerPosition[editorPosition],
         ]}
         style={assignInlineVars({
-          [editorSizePercentage]:
-            editorPosition === 'right'
-              ? editorWidthPercentage
-              : editorHeightPercentage,
+          [editorSize]: editorPosition === 'right' ? editorWidth : editorHeight,
         })}
       >
         <Frames
