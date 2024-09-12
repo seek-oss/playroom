@@ -6,9 +6,9 @@ import type { PlayroomProps } from '../Playroom';
 import type { Snippet } from '../../../utils';
 import SearchField from './SearchField/SearchField';
 import { Text } from '../Text/Text';
+import { Stack } from '../Stack/Stack';
 
 import * as styles from './Snippets.css';
-import { Stack } from '../Stack/Stack';
 
 type HighlightIndex = number | null;
 type ReturnedSnippet = Snippet | null;
@@ -20,8 +20,8 @@ interface Props {
 
 const getLabel = (snippet: Snippet) => `${snippet.group}\n${snippet.name}`;
 
-function getSnippetId(group: string, name: string, index: number) {
-  return `${group}_${name}_${index}`;
+function getSnippetId(snippet: Snippet, index: number) {
+  return `${snippet.group}_${snippet.name}_${index}`;
 }
 
 const filterSnippetsForTerm = (snippets: Props['snippets'], term: string) =>
@@ -58,20 +58,16 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
     [searchTerm, snippets]
   );
 
-  const highlightedItemId =
-    typeof highlightedIndex === 'number'
-      ? getSnippetId(
-          filteredSnippets[highlightedIndex].group,
-          filteredSnippets[highlightedIndex].name,
-          highlightedIndex
-        )
-      : null;
+  if (
+    typeof highlightedIndex === 'number' &&
+    filteredSnippets[highlightedIndex]
+  ) {
+    const highlightedItem = document.getElementById(
+      getSnippetId(filteredSnippets[highlightedIndex], highlightedIndex)
+    );
 
-  const highlightedItem = highlightedItemId
-    ? document.getElementById(highlightedItemId)
-    : null;
-
-  highlightedItem?.scrollIntoView({ block: 'nearest' });
+    highlightedItem?.scrollIntoView({ block: 'nearest' });
+  }
 
   useEffect(() => {
     debouncedPreview(
@@ -140,7 +136,7 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
           return (
             <li
               ref={isHighlighted ? highlightedEl : undefined}
-              id={getSnippetId(snippet.group, snippet.name, index)}
+              id={getSnippetId(snippet, index)}
               key={`${snippet.group}_${snippet.name}_${index}`}
               className={classnames(styles.snippet, {
                 [styles.highlight]: isHighlighted,

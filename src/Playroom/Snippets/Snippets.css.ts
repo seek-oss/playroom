@@ -41,6 +41,28 @@ export const snippetsContainer = style([
   {
     listStyle: 'none',
     top: toolbarItemSize,
+    /*
+      These pseudo-elements create a buffer area at the top and bottom of the list, the same size as the scroll margin.
+      This prevents auto-scrolling when the cursor enters a snippet in the scroll margin, by preventing the element from being selected.
+    */
+    '::before': {
+      content: '',
+      position: 'fixed',
+      top: toolbarItemSize,
+      left: 0,
+      right: 0,
+      height: vars.space[snippetsBorderSpace],
+      zIndex: 1,
+    },
+    '::after': {
+      content: '',
+      position: 'fixed',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: vars.space[snippetsBorderSpace],
+      zIndex: 1,
+    },
   },
 ]);
 
