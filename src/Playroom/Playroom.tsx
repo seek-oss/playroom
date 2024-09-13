@@ -21,7 +21,7 @@ import * as styles from './Playroom.css';
 import { Box } from './Box/Box';
 
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { editorSize as editorSize } from './Playroom.css';
+import { editorSize } from './Playroom.css';
 
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
@@ -135,7 +135,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
   const isVerticalEditor = editorPosition === 'right';
   const isHorizontalEditor = editorPosition === 'bottom';
   const sizeStyles = {
-    height: isHorizontalEditor ? editorHeight : 'auto', // issue in ff & safari when not a string
+    height: isHorizontalEditor ? editorHeight : 'auto',
     width: isVerticalEditor ? editorWidth : 'auto',
   };
   const editorContainer =
@@ -176,7 +176,6 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         </Helmet>
       )}
       <Box
-        id="preview"
         className={[
           styles.previewContainer,
           editorHidden

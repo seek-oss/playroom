@@ -37,6 +37,19 @@ const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
   ]('data-playroom-dark', '');
 };
 
+function getSizeAsPercentage(
+  mode: 'height' | 'width',
+  size: string | undefined
+): string | undefined {
+  if (!size || !size.endsWith('px')) {
+    return;
+  }
+
+  const storedSizeAsNumber = parseInt(size.split('px')[0], 10);
+
+  return convertAndStoreSizeAsPercentage(mode, storedSizeAsNumber);
+}
+
 function convertAndStoreSizeAsPercentage(
   mode: 'height' | 'width',
   size: number
@@ -145,9 +158,17 @@ const createReducer =
   (state: State, action: Action): State => {
     switch (action.type) {
       case 'initialLoad': {
+        const { editorHeight, editorWidth } = action.payload;
+
+        // If the stored size is in pixels, convert it to a percentage
+        const updatedEditorWidth = getSizeAsPercentage('width', editorWidth);
+        const updatedEditorHeight = getSizeAsPercentage('height', editorHeight);
+
         return {
           ...state,
           ...action.payload,
+          editorWidth: updatedEditorWidth || state.editorWidth,
+          editorHeight: updatedEditorHeight || state.editorHeight,
         };
       }
 
@@ -497,8 +518,8 @@ export const StoreProvider = ({
     Promise.all([
       store.getItem<string>('code'),
       store.getItem<EditorPosition>('editorPosition'),
-      store.getItem<number | string>('editorHeight'), // Number type deprecated
-      store.getItem<number | string>('editorWidth'), // Number type deprecated
+      store.getItem<string | number>('editorHeight'), // Number type deprecated
+      store.getItem<string | number>('editorWidth'), // Number type deprecated
       store.getItem<number[]>('visibleWidths'),
       store.getItem<string[]>('visibleThemes'),
       store.getItem<ColorScheme>('colorScheme'),
@@ -516,14 +537,14 @@ export const StoreProvider = ({
         const editorPosition = storedPosition;
 
         const editorHeight =
-          (typeof storedHeight === 'string' ? storedHeight : null) ||
-          (typeof storedHeight === 'number' ? `${storedHeight}px` : null) ||
-          defaultEditorSize;
+          (typeof storedHeight === 'number'
+            ? `${storedHeight}px`
+            : storedHeight) || defaultEditorSize;
 
         const editorWidth =
-          (typeof storedWidth === 'string' ? storedWidth : null) ||
-          (typeof storedWidth === 'number' ? `${storedWidth}px` : null) ||
-          defaultEditorSize;
+          (typeof storedWidth === 'number'
+            ? `${storedWidth}px`
+            : storedWidth) || defaultEditorSize;
 
         const visibleWidths =
           widthsFromQuery ||
@@ -552,14 +573,6 @@ export const StoreProvider = ({
             ready: true,
           },
         });
-
-        // Converted deprecated pixel size preferences to percentage
-        if (typeof storedHeight === 'number') {
-          convertAndStoreSizeAsPercentage('height', storedHeight);
-        }
-        if (typeof storedWidth === 'number') {
-          convertAndStoreSizeAsPercentage('width', storedWidth);
-        }
       }
     );
   }, [hasThemesConfigured]);
