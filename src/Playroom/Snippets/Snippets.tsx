@@ -5,8 +5,8 @@ import { useDebouncedCallback } from 'use-debounce';
 import type { PlayroomProps } from '../Playroom';
 import type { Snippet } from '../../../utils';
 import SearchField from './SearchField/SearchField';
-import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
+import { Stack } from '../Stack/Stack';
 
 import * as styles from './Snippets.css';
 
@@ -20,6 +20,10 @@ interface Props {
 
 const getLabel = (snippet: Snippet) => `${snippet.group}\n${snippet.name}`;
 
+function getSnippetId(snippet: Snippet, index: number) {
+  return `${snippet.group}_${snippet.name}_${index}`;
+}
+
 const filterSnippetsForTerm = (snippets: Props['snippets'], term: string) =>
   term
     ? fuzzy
@@ -28,52 +32,6 @@ const filterSnippetsForTerm = (snippets: Props['snippets'], term: string) =>
         })
         .map(({ original, score }) => ({ ...original, score }))
     : snippets;
-
-const scrollToHighlightedSnippet = (
-  listEl: HTMLUListElement | null,
-  highlightedEl: HTMLLIElement | null
-) => {
-  if (highlightedEl && listEl) {
-    const scrollStep = Math.max(
-      Math.ceil(listEl.offsetHeight * 0.25),
-      highlightedEl.offsetHeight * 2
-    );
-    const currentListTop = listEl.scrollTop + scrollStep;
-    const currentListBottom =
-      listEl.offsetHeight + listEl.scrollTop - scrollStep;
-    let top = 0;
-
-    if (
-      highlightedEl === listEl.firstChild ||
-      highlightedEl === listEl.lastChild
-    ) {
-      highlightedEl.scrollIntoView(false);
-      return;
-    }
-
-    if (highlightedEl.offsetTop >= currentListBottom) {
-      top =
-        highlightedEl.offsetTop -
-        listEl.offsetHeight +
-        highlightedEl.offsetHeight +
-        scrollStep;
-    } else if (highlightedEl.offsetTop <= currentListTop) {
-      top = highlightedEl.offsetTop - scrollStep;
-    } else {
-      return;
-    }
-
-    if ('scrollBehavior' in window.document.documentElement.style) {
-      listEl.scrollTo({
-        left: 0,
-        top,
-        behavior: 'smooth',
-      });
-    } else {
-      listEl.scrollTo(0, top);
-    }
-  }
-};
 
 export default ({ snippets, onHighlight, onClose }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -94,14 +52,22 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
     },
     50
   );
-  const debounceScrollToHighlighted = useDebouncedCallback(
-    scrollToHighlightedSnippet,
-    50
-  );
+
   const filteredSnippets = useMemo(
     () => filterSnippetsForTerm(snippets, searchTerm),
     [searchTerm, snippets]
   );
+
+  if (
+    typeof highlightedIndex === 'number' &&
+    filteredSnippets[highlightedIndex]
+  ) {
+    const highlightedItem = document.getElementById(
+      getSnippetId(filteredSnippets[highlightedIndex], highlightedIndex)
+    );
+
+    highlightedItem?.scrollIntoView({ block: 'nearest' });
+  }
 
   useEffect(() => {
     debouncedPreview(
@@ -124,9 +90,6 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
           aria-label="Search snippets"
           onBlur={() => {
             setHighlightedIndex(null);
-          }}
-          onKeyUp={() => {
-            debounceScrollToHighlighted(listEl.current, highlightedEl.current);
           }}
           onKeyDown={(event) => {
             if (/^(?:Arrow)?Down$/.test(event.key)) {
@@ -173,6 +136,7 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
           return (
             <li
               ref={isHighlighted ? highlightedEl : undefined}
+              id={getSnippetId(snippet, index)}
               key={`${snippet.group}_${snippet.name}_${index}`}
               className={classnames(styles.snippet, {
                 [styles.highlight]: isHighlighted,
@@ -183,12 +147,14 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
               onMouseDown={() => closeHandler(filteredSnippets[index])}
               title={getLabel(snippet)}
             >
-              <span style={{ display: 'block', position: 'relative' }}>
-                <Text size="large">
-                  <Strong>{snippet.group}</Strong>
-                  <span className={styles.snippetName}>{snippet.name}</span>
+              <Stack space="none">
+                <Text size="large" weight="strong">
+                  {snippet.group}
                 </Text>
-              </span>
+                <Text size="large" tone="secondary">
+                  {snippet.name}
+                </Text>
+              </Stack>
             </li>
           );
         })}

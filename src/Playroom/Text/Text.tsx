@@ -6,7 +6,7 @@ import * as styles from './Text.css';
 interface Props {
   size?: 'xsmall' | 'small' | 'standard' | 'large';
   weight?: 'regular' | 'strong';
-  tone?: 'neutral' | 'critical';
+  tone?: 'neutral' | 'secondary' | 'critical';
   as?: ElementType;
   truncate?: boolean;
   children: ReactNode;
