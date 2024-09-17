@@ -37,19 +37,6 @@ const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
   ]('data-playroom-dark', '');
 };
 
-function getSizeAsPercentage(
-  mode: 'height' | 'width',
-  size: string | undefined
-): string | undefined {
-  if (!size || !size.endsWith('px')) {
-    return;
-  }
-
-  const storedSizeAsNumber = parseInt(size.split('px')[0], 10);
-
-  return convertAndStoreSizeAsPercentage(mode, storedSizeAsNumber);
-}
-
 function convertAndStoreSizeAsPercentage(
   mode: 'height' | 'width',
   size: number
@@ -158,17 +145,9 @@ const createReducer =
   (state: State, action: Action): State => {
     switch (action.type) {
       case 'initialLoad': {
-        const { editorHeight, editorWidth } = action.payload;
-
-        // If the stored size is in pixels, convert it to a percentage
-        const updatedEditorWidth = getSizeAsPercentage('width', editorWidth);
-        const updatedEditorHeight = getSizeAsPercentage('height', editorHeight);
-
         return {
           ...state,
           ...action.payload,
-          editorWidth: updatedEditorWidth || state.editorWidth,
-          editorHeight: updatedEditorHeight || state.editorHeight,
         };
       }
 
@@ -538,12 +517,12 @@ export const StoreProvider = ({
 
         const editorHeight =
           (typeof storedHeight === 'number'
-            ? `${storedHeight}px`
+            ? convertAndStoreSizeAsPercentage('height', storedHeight)
             : storedHeight) || defaultEditorSize;
 
         const editorWidth =
           (typeof storedWidth === 'number'
-            ? `${storedWidth}px`
+            ? convertAndStoreSizeAsPercentage('width', storedWidth)
             : storedWidth) || defaultEditorSize;
 
         const visibleWidths =

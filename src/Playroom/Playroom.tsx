@@ -21,7 +21,6 @@ import * as styles from './Playroom.css';
 import { Box } from './Box/Box';
 
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { editorSize } from './Playroom.css';
 
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
@@ -183,7 +182,8 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             : styles.previewContainerPosition[editorPosition],
         ]}
         style={assignInlineVars({
-          [editorSize]: editorPosition === 'right' ? editorWidth : editorHeight,
+          [styles.editorSize]:
+            editorPosition === 'right' ? editorWidth : editorHeight,
         })}
       >
         <Frames
