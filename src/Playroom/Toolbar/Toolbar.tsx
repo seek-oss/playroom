@@ -25,7 +25,6 @@ interface Props {
   snippets: PlayroomProps['snippets'];
 }
 
-export const toolbarItemCount = 5;
 const ANIMATION_TIMEOUT = 300;
 
 export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {

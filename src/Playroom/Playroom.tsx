@@ -7,7 +7,7 @@ import Frames from './Frames/Frames';
 import { WindowPortal } from './WindowPortal';
 import type { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
-import Toolbar, { toolbarItemCount } from './Toolbar/Toolbar';
+import Toolbar from './Toolbar/Toolbar';
 import ChevronIcon from './icons/ChevronIcon';
 import { StatusMessage } from './StatusMessage/StatusMessage';
 import {
@@ -15,14 +15,12 @@ import {
   type EditorPosition,
 } from '../StoreContext/StoreContext';
 
-const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
-const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;
-
 import { CodeEditor } from './CodeEditor/CodeEditor';
 
 import * as styles from './Playroom.css';
-import { toolbarOpenSize } from './Toolbar/Toolbar.css';
-import { toolbarItemSize } from './ToolbarItem/ToolbarItem.css';
+import { Box } from './Box/Box';
+
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
@@ -136,8 +134,8 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
   const isVerticalEditor = editorPosition === 'right';
   const isHorizontalEditor = editorPosition === 'bottom';
   const sizeStyles = {
-    height: isHorizontalEditor ? `${editorHeight}px` : 'auto', // issue in ff & safari when not a string
-    width: isVerticalEditor ? `${editorWidth}px` : 'auto',
+    height: isHorizontalEditor ? editorHeight : 'auto',
+    width: isVerticalEditor ? editorWidth : 'auto',
   };
   const editorContainer =
     editorPosition === 'undocked' ? (
@@ -151,15 +149,15 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       </WindowPortal>
     ) : (
       <Resizable
-        className={classnames(styles.resizeableContainer, {
-          [styles.resizeableContainer_isRight]: isVerticalEditor,
-          [styles.resizeableContainer_isBottom]: isHorizontalEditor,
-          [styles.resizeableContainer_isHidden]: editorHidden,
+        className={classnames(styles.resizableContainer, {
+          [styles.resizableContainer_isRight]: isVerticalEditor,
+          [styles.resizableContainer_isBottom]: isHorizontalEditor,
+          [styles.resizableContainer_isHidden]: editorHidden,
         })}
         defaultSize={sizeStyles}
         size={sizeStyles}
-        minWidth={isVerticalEditor ? MIN_WIDTH : undefined}
-        minHeight={MIN_HEIGHT}
+        minWidth={isVerticalEditor ? styles.MIN_WIDTH : undefined}
+        minHeight={styles.MIN_HEIGHT}
         onResize={(_event, _direction, { offsetWidth, offsetHeight }) => {
           updateEditorSize({ isVerticalEditor, offsetWidth, offsetHeight });
         }}
@@ -176,17 +174,17 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           <title>{displayedTitle}</title>
         </Helmet>
       )}
-      <div
-        className={styles.previewContainer}
-        style={
+      <Box
+        className={[
+          styles.previewContainer,
           editorHidden
             ? undefined
-            : {
-                right: { right: editorWidth },
-                bottom: { bottom: editorHeight },
-                undocked: undefined,
-              }[editorPosition]
-        }
+            : styles.previewContainerPosition[editorPosition],
+        ]}
+        style={assignInlineVars({
+          [styles.editorSize]:
+            editorPosition === 'right' ? editorWidth : editorHeight,
+        })}
       >
         <Frames
           code={previewRenderCode || code}
@@ -215,7 +213,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             />
           </button>
         </div>
-      </div>
+      </Box>
       {editorContainer}
     </div>
   );
