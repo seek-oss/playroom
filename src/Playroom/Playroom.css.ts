@@ -49,7 +49,7 @@ export const previewContainerPosition = styleVariants({
   undocked: {},
 });
 
-export const resizeableContainer = style([
+export const resizableContainer = style([
   sprinkles({
     bottom: 0,
     right: 0,
@@ -59,34 +59,34 @@ export const resizeableContainer = style([
   }),
   // @ts-expect-error Shouldnt need to but types do not like `!important`
   {
-    position: 'absolute !important', // override re-resizeable's inline style
+    position: 'absolute !important', // override re-resizable's inline style
   },
 ]);
 
-export const resizeableContainer_isHidden = style({});
+export const resizableContainer_isHidden = style({});
 
-export const resizeableContainer_isRight = style([
+export const resizableContainer_isRight = style([
   sprinkles({
     top: 0,
   }),
   {
     maxWidth: '90vw',
     selectors: {
-      [`&${resizeableContainer_isHidden}`]: {
+      [`&${resizableContainer_isHidden}`]: {
         transform: 'translateX(100%)',
       },
     },
   },
 ]);
 
-export const resizeableContainer_isBottom = style([
+export const resizableContainer_isBottom = style([
   sprinkles({
     left: 0,
   }),
   {
     maxHeight: '90vh',
     selectors: {
-      [`&${resizeableContainer_isHidden}`]: {
+      [`&${resizableContainer_isHidden}`]: {
         transform: 'translateY(100%)',
       },
     },

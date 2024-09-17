@@ -149,10 +149,10 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       </WindowPortal>
     ) : (
       <Resizable
-        className={classnames(styles.resizeableContainer, {
-          [styles.resizeableContainer_isRight]: isVerticalEditor,
-          [styles.resizeableContainer_isBottom]: isHorizontalEditor,
-          [styles.resizeableContainer_isHidden]: editorHidden,
+        className={classnames(styles.resizableContainer, {
+          [styles.resizableContainer_isRight]: isVerticalEditor,
+          [styles.resizableContainer_isBottom]: isHorizontalEditor,
+          [styles.resizableContainer_isHidden]: editorHidden,
         })}
         defaultSize={sizeStyles}
         size={sizeStyles}
