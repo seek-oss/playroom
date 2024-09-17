@@ -43,14 +43,16 @@ function convertAndStoreSizeAsPercentage(
 ): string {
   const viewportSize =
     mode === 'height' ? window.innerHeight : window.innerWidth;
-  const sizePercentage = `${Math.round((size / viewportSize) * 100)}%`;
+
+  const sizePercentage = (size / viewportSize) * 100;
+  const roundedSizePercentage = `${Math.round(sizePercentage)}%`;
 
   store.setItem(
     `${mode === 'height' ? 'editorHeight' : 'editorWidth'}`,
-    sizePercentage
+    roundedSizePercentage
   );
 
-  return sizePercentage;
+  return `${sizePercentage}%`;
 }
 
 interface DebounceUpdateUrl {
