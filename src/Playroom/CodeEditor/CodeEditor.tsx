@@ -6,8 +6,8 @@ import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/theme/neo.css';
 
 import {
-  StoreContext,
   type CursorPosition,
+  StoreContext,
 } from '../../StoreContext/StoreContext';
 import { formatCode as format, isMac } from '../../utils/formatting';
 import { validateCode } from '../../utils/compileJsx';
@@ -69,11 +69,18 @@ interface Hint {
 interface Props {
   code: string;
   onChange: (code: string) => void;
+  editorHidden: boolean;
   previewCode?: string;
   hints?: Record<string, Hint>;
 }
 
-export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
+export const CodeEditor = ({
+  code,
+  editorHidden,
+  onChange,
+  previewCode,
+  hints,
+}: Props) => {
   const editorInstanceRef = useRef<Editor | null>(null);
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
     null
@@ -168,17 +175,23 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
       ) {
         return;
       }
-
       editorInstanceRef.current.setValue(code);
       validateCodeInEditor(editorInstanceRef.current, code);
     }
   }, [code, previewCode]);
 
+  const mounted = useRef(false);
+
   useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+
     if (editorInstanceRef.current && !editorInstanceRef.current.hasFocus()) {
       setCursorPosition(cursorPosition);
     }
-  }, [cursorPosition, setCursorPosition]);
+  }, [cursorPosition, previewCode, setCursorPosition]);
 
   useEffect(() => {
     if (editorInstanceRef.current) {
@@ -212,7 +225,9 @@ export const CodeEditor = ({ code, onChange, previewCode, hints }: Props) => {
       editorDidMount={(editorInstance) => {
         editorInstanceRef.current = editorInstance;
         validateCodeInEditor(editorInstance, code);
-        setCursorPosition(cursorPosition);
+        if (!editorHidden) {
+          setCursorPosition(cursorPosition);
+        }
       }}
       onChange={(editorInstance, data, newCode) => {
         if (editorInstance.hasFocus() && !previewCode) {

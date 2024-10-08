@@ -2,6 +2,7 @@ interface PlayroomConfig {
   components: string;
   outputPath: string;
   title?: string;
+  editorHidden?: boolean;
   themes?: string;
   widths?: number[];
   snippets?: Snippet[];

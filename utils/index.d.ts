@@ -14,6 +14,7 @@ interface CompressParamsOptions {
   widths?: number[];
   theme?: string;
   title?: string;
+  editorHidden?: boolean;
 }
 export const compressParams: (options: CompressParamsOptions) => string;
 
@@ -24,6 +25,7 @@ interface CreateUrlOptions {
   widths?: number[];
   paramType?: ParamType;
   title?: string;
+  editorHidden?: boolean;
 }
 
 export const createUrl: (options: CreateUrlOptions) => string;
@@ -34,6 +36,7 @@ interface CreatePreviewUrlOptions {
   theme?: string;
   paramType?: ParamType;
   title?: string;
+  editorHidden?: boolean;
 }
 
 export const createPreviewUrl: (options: CreatePreviewUrlOptions) => string;

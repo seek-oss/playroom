@@ -60,6 +60,7 @@ interface DebounceUpdateUrl {
   themes?: string[];
   widths?: number[];
   title?: string;
+  editorHidden?: boolean;
 }
 
 export interface CursorPosition {
@@ -478,6 +479,7 @@ export const StoreProvider = ({
     let themesFromQuery: State['visibleThemes'];
     let widthsFromQuery: State['visibleWidths'];
     let titleFromQuery: State['title'];
+    let editorHiddenFromQuery: State['editorHidden'];
 
     const paramsCode = params.get('code');
     if (paramsCode) {
@@ -486,11 +488,13 @@ export const StoreProvider = ({
         themes: parsedThemes,
         widths: parsedWidths,
         title: parsedTitle,
+        editorHidden: parsedEditorHidden,
       } = JSON.parse(
         lzString.decompressFromEncodedURIComponent(String(paramsCode)) ?? ''
       );
 
       codeFromQuery = parsedCode;
+      editorHiddenFromQuery = parsedEditorHidden;
       themesFromQuery = parsedThemes;
       widthsFromQuery = parsedWidths;
       titleFromQuery = parsedTitle;
@@ -527,6 +531,8 @@ export const StoreProvider = ({
             ? convertAndStoreSizeAsPercentage('width', storedWidth)
             : storedWidth) || defaultEditorSize;
 
+        const editorHidden = editorHiddenFromQuery === true;
+
         const visibleWidths =
           widthsFromQuery ||
           storedVisibleWidths ||
@@ -547,6 +553,7 @@ export const StoreProvider = ({
             ...(editorPosition ? { editorPosition } : {}),
             ...(editorHeight ? { editorHeight } : {}),
             ...(editorWidth ? { editorWidth } : {}),
+            ...(editorHidden ? { editorHidden } : {}),
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
@@ -582,12 +589,14 @@ export const StoreProvider = ({
       themes: state.visibleThemes,
       widths: state.visibleWidths,
       title: state.title,
+      editorHidden: state.editorHidden,
     });
   }, [
     state.code,
     state.visibleThemes,
     state.visibleWidths,
     state.title,
+    state.editorHidden,
     debouncedCodeUpdate,
   ]);
 
