@@ -4,5 +4,6 @@ module.exports = {
   snippets: './snippets',
   outputPath: './dist',
   openBrowser: false,
+  port: 9000,
   storageKey: 'playroom-example-basic',
 };

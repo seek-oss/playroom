@@ -3,6 +3,7 @@ module.exports = {
   snippets: './snippets.ts',
   outputPath: './dist',
   openBrowser: false,
+  port: 9002,
   storageKey: 'playroom-example-typescript',
   webpackConfig: () => ({
     module: {
