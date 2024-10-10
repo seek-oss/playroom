@@ -166,6 +166,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
           <div className={styles.panel} id="custom-id">
             {lastActivePanel === 'snippets' && (
               <Snippets
+                isOpen={isOpen}
                 snippets={snippets}
                 onHighlight={(snippet) => {
                   dispatch({

@@ -114,4 +114,26 @@ describe('Snippets', () => {
         </div>\n
       `);
   });
+
+  it('snippets preview code is disabled while snippet pane is closing', () => {
+    toggleSnippets();
+    toggleSnippets();
+
+    // Mouse over snippet while snippet panel is closing
+    mouseOverSnippet(0);
+
+    assertCodePaneContains(dedent`
+      <div>Initial <span>code</span></div>
+    `);
+
+    assertFirstFrameContains('Initial code');
+
+    typeCode('<div>test');
+
+    assertCodePaneContains(dedent`
+      <div>Initial <span>code<div>test</div></span></div>
+    `);
+
+    assertFirstFrameContains('Initial code\ntest');
+  });
 });
