@@ -149,9 +149,7 @@ export default ({ isOpen, snippets, onHighlight, onClose }: Props) => {
                     }
                   : undefined
               }
-              onMouseDown={() => {
-                closeHandler(filteredSnippets[index]);
-              }}
+              onMouseDown={() => closeHandler(filteredSnippets[index])}
               title={getLabel(snippet)}
             >
               <Stack space="none">

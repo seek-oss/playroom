@@ -2,7 +2,4 @@
 'playroom': patch
 ---
 
-Disable snippet previews while the snippets panel is closing.
-
-Previously, snippet previews could be triggered while the snippet panel was closing, causing preview frames to enter an invalid state.
-Previewing a snippet will now only work when the snippet panel is open.
+Fixes a bug that was causing erroneous snippet previews and broken preview updates when moving the cursor in the snippets panel while the snippets panel was closing.
