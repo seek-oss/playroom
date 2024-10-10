@@ -13,6 +13,7 @@ import * as styles from './Snippets.css';
 type HighlightIndex = number | null;
 type ReturnedSnippet = Snippet | null;
 interface Props {
+  isOpen: boolean;
   snippets: PlayroomProps['snippets'];
   onHighlight?: (snippet: ReturnedSnippet) => void;
   onClose?: (snippet: ReturnedSnippet) => void;
@@ -33,7 +34,7 @@ const filterSnippetsForTerm = (snippets: Props['snippets'], term: string) =>
         .map(({ original, score }) => ({ ...original, score }))
     : snippets;
 
-export default ({ snippets, onHighlight, onClose }: Props) => {
+export default ({ isOpen, snippets, onHighlight, onClose }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [highlightedIndex, setHighlightedIndex] =
     useState<HighlightIndex>(null);
@@ -142,9 +143,15 @@ export default ({ snippets, onHighlight, onClose }: Props) => {
                 [styles.highlight]: isHighlighted,
               })}
               onMouseMove={
-                isHighlighted ? undefined : () => setHighlightedIndex(index)
+                isOpen && !isHighlighted
+                  ? () => {
+                      setHighlightedIndex(index);
+                    }
+                  : undefined
               }
-              onMouseDown={() => closeHandler(filteredSnippets[index])}
+              onMouseDown={() => {
+                closeHandler(filteredSnippets[index]);
+              }}
               title={getLabel(snippet)}
             >
               <Stack space="none">
