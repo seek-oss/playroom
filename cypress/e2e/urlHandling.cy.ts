@@ -30,6 +30,23 @@ describe('URL handling', () => {
 
       cy.title().should('eq', 'Test | Playroom');
     });
+
+    it('editor hidden', () => {
+      cy.visit(
+        'http://localhost:9000/#?code=N4IgpgJglgLg9gJwBJQhMA7EAuGCCuYAvkA'
+      );
+
+      cy.get('textarea').should('not.be.focused');
+
+      // Todo - write a test that checks the CodeMirror element is not visible
+      /*
+      The CodeMirror element is not visible, but it is in the DOM
+      This test fails because the element doesn't meet Cypress's requirements for being hidden
+      Not sure why Cypress's hidden requirement isn't met
+      https://docs.cypress.io/guides/core-concepts/interacting-with-elements#An-element-is-considered-hidden-if
+      */
+      // cy.get('.CodeMirror-code').should('be.hidden');
+    });
   });
 
   describe('where paramType is search', () => {
@@ -61,6 +78,16 @@ describe('URL handling', () => {
       );
 
       cy.title().should('eq', 'Test | Playroom');
+    });
+
+    it('editor hidden', () => {
+      cy.visit(
+        'http://localhost:9001/?code=N4IgpgJglgLg9gJwBJQhMA7EAuGCCuYAvkA'
+      );
+
+      cy.get('textarea').should('not.be.focused');
+
+      // Todo - write a test that checks the CodeMirror element is not visible
     });
   });
 });

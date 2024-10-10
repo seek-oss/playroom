@@ -117,6 +117,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       <div className={styles.editorContainer}>
         <CodeEditor
           code={code}
+          editorHidden={editorHidden}
           onChange={(newCode: string) =>
             dispatch({ type: 'updateCode', payload: { code: newCode } })
           }
