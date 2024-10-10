@@ -42,6 +42,7 @@ describe('URL handling', () => {
       /*
       The CodeMirror element is not visible, but it is in the DOM
       This test fails because the element doesn't meet Cypress's requirements for being hidden
+      Not sure why Cypress's hidden requirement isn't met
       https://docs.cypress.io/guides/core-concepts/interacting-with-elements#An-element-is-considered-hidden-if
       */
       // cy.get('.CodeMirror-code').should('be.hidden');
@@ -87,12 +88,6 @@ describe('URL handling', () => {
       cy.get('textarea').should('not.be.focused');
 
       // Todo - write a test that checks the CodeMirror element is not visible
-      /*
-      The CodeMirror element is not visible, but it is in the DOM
-      This test fails because the element doesn't meet Cypress's requirements for being hidden
-      https://docs.cypress.io/guides/core-concepts/interacting-with-elements#An-element-is-considered-hidden-if
-      */
-      // cy.get('.CodeMirror-code').should('be.hidden');
     });
   });
 });
