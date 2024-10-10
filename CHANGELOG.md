@@ -1,5 +1,22 @@
 # playroom
 
+## 0.39.0
+
+### Minor Changes
+
+- d902e17: Save editor height and width preferences as a percentage of the viewport size, rather than a fixed pixel value.
+  This prevents the editor from obscuring preview panels when toggling the browser tools on/off or resizing the window.
+- 7aaa6d0: Save the state of the editor visibility to the Playroom URL.
+
+  This allows you to share a Playroom link with the editor either open or closed on load.
+
+- ee73b75: Update snippets behaviour to instantly navigate and scroll to the currently selected snippet.
+  This eliminates sluggish feeling caused by smooth scroll.
+
+### Patch Changes
+
+- c5d5808: Fixes a bug that was causing erroneous snippet previews and broken preview updates when moving the cursor in the snippets panel while the snippets panel was closing.
+
 ## 0.38.1
 
 ### Patch Changes
