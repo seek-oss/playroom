@@ -163,6 +163,16 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           updateEditorSize({ isVerticalEditor, offsetWidth, offsetHeight });
         }}
         enable={resizableConfig(editorPosition)}
+        /*
+         * Ensures resizable handles are stacked above the `codeEditor` component.
+         * By default, handles are stacked below the editor as introduced in:
+         * https://github.com/bokuweb/re-resizable/pull/827
+         */
+        handleStyles={
+          editorPosition === 'bottom'
+            ? { top: { zIndex: 1 } }
+            : { left: { zIndex: 1 } }
+        }
       >
         {codeEditor}
       </Resizable>

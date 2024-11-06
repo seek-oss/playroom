@@ -106,7 +106,7 @@
     "portfinder": "^1.0.32",
     "prettier": "^2.8.1",
     "prop-types": "^15.8.1",
-    "re-resizable": "^6.9.9",
+    "re-resizable": "^6.10.0",
     "react-docgen-typescript": "^2.2.2",
     "react-helmet": "^6.1.0",
     "react-transition-group": "^4.4.5",
