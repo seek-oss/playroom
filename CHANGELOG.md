@@ -1,5 +1,13 @@
 # playroom
 
+## 0.39.1
+
+### Patch Changes
+
+- dbf3310: Update `re-resizable` dependency.
+
+  Fix issue where resizable handles were stacked below the editor panel and could not be selected.
+
 ## 0.39.0
 
 ### Minor Changes
