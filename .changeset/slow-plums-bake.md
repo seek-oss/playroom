@@ -2,4 +2,4 @@
 'playroom': patch
 ---
 
-Restrict VanillaExtract plugin to playroom's source `.css.ts` files only
+Restrict `playroom`'s Vanilla Extract plugin to only process playroom's `.css.ts` files
