@@ -1,5 +1,11 @@
 # playroom
 
+## 0.39.2
+
+### Patch Changes
+
+- fb14616: Restrict `playroom`'s Vanilla Extract plugin to only process playroom's `.css.ts` files
+
 ## 0.39.1
 
 ### Patch Changes
