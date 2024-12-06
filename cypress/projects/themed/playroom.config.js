@@ -2,6 +2,7 @@ module.exports = {
   components: './components',
   snippets: './snippets',
   themes: './themes',
+  scope: './scope',
   outputPath: './dist',
   openBrowser: false,
   paramType: 'search',

@@ -1,5 +1,6 @@
 import prettier from 'prettier/standalone';
 import babel from 'prettier/parser-babel';
+import postcss from 'prettier/parser-postcss';
 import type { CursorPosition } from '../StoreContext/StoreContext';
 import { insertAtCursor } from './cursor';
 
@@ -21,7 +22,7 @@ export const runPrettier = ({
     return prettier.formatWithCursor(code, {
       cursorOffset,
       parser: 'babel',
-      plugins: [babel],
+      plugins: [babel, postcss],
     });
   } catch (e) {
     // Just a formatting error so we pass
