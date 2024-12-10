@@ -98,9 +98,6 @@ dependencies:
   html-webpack-plugin:
     specifier: ^5.5.0
     version: 5.5.0(webpack@5.75.0)
-  intersection-observer:
-    specifier: ^0.12.2
-    version: 0.12.2
   localforage:
     specifier: ^1.10.0
     version: 1.10.0
@@ -6425,10 +6422,6 @@ packages:
       hasown: 2.0.2
       side-channel: 1.0.4
     dev: true
-
-  /intersection-observer@0.12.2:
-    resolution: {integrity: sha512-7m1vEcPCxXYI8HqnL8CKI6siDyD+eIWSwgB3DZA+ZTogxk9I4CDnj4wilt9x/+/QbHI4YG5YZNmC6458/e9Ktg==}
-    dev: false
 
   /ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
