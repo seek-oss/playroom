@@ -41,7 +41,7 @@
     "format": "prettier --write '**/*.{js,md,ts,tsx}'",
     "version": "changeset version",
     "release": "changeset publish",
-    "test": "jest src",
+    "test": "jest src lib",
     "post-commit-status": "node scripts/postCommitStatus.js",
     "deploy-preview": "surge -p ./cypress/projects/themed/dist"
   },
@@ -125,6 +125,7 @@
     "@octokit/rest": "^19.0.5",
     "@testing-library/cypress": "^10.0.1",
     "@types/jest": "^29.2.4",
+    "@types/node": "^18.11.9",
     "@types/react-helmet": "^6.1.6",
     "@types/react-transition-group": "^4.4.10",
     "concurrently": "^7.6.0",
