@@ -42,7 +42,7 @@ export const light = {
     positive: originalPalette.green2,
   },
   background: {
-    transparent: 'rgba(0, 0, 0, .05)',
+    transparent: 'rgb(0, 0, 0, .05)',
     accent: originalPalette.blue2,
     positive: originalPalette.green1,
     critical: originalPalette.red1,
@@ -56,7 +56,7 @@ export const light = {
     standard: originalPalette.gray2,
   },
   shadows: {
-    small: '0 2px 8px rgba(18, 21, 26, 0.3)',
+    small: '0 2px 8px rgb(18, 21, 26, 0.3)',
     focus: `0 0 0 5px ${originalPalette.blue0}`,
   },
 };
@@ -144,7 +144,7 @@ export const dark = {
     positive: seekPalette.mint[500],
   },
   background: {
-    transparent: 'rgba(255, 255, 255, .07)',
+    transparent: 'rgb(255, 255, 255, .07)',
     accent: seekPalette.blue[500],
     positive: mix(0.6, seekPalette.grey[900], seekPalette.mint[500]),
     critical: mix(0.7, seekPalette.grey[900], seekPalette.red[600]),
