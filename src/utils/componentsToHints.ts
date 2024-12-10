@@ -1,4 +1,3 @@
-import omit from 'lodash/omit';
 // @ts-expect-error
 import parsePropTypes from 'parse-prop-types';
 import type { PlayroomProps } from '../Playroom/Playroom';
@@ -24,8 +23,9 @@ export default (
         };
       }
 
-      const parsedPropTypes = parsePropTypes(components[componentName]);
-      const filteredPropTypes = omit(parsedPropTypes, 'children');
+      const { children, ...filteredPropTypes } = parsePropTypes(
+        components[componentName]
+      );
       const propNames = Object.keys(filteredPropTypes);
 
       return {

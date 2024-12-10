@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import flatMap from 'lodash/flatMap';
 import Iframe from './Iframe';
 import { compileJsx } from '../../utils/compileJsx';
 import type { PlayroomProps } from '../Playroom';
@@ -21,7 +20,7 @@ export default function Frames({ code, themes, widths }: FramesProps) {
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
   const renderCode = useRef<string>('');
 
-  const frames = flatMap(widths, (width) =>
+  const frames = widths.flatMap((width) =>
     themes.map((theme) => ({
       theme,
       width,
