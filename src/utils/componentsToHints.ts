@@ -3,9 +3,10 @@ import omit from 'lodash/omit';
 import parsePropTypes from 'parse-prop-types';
 import type { PlayroomProps } from '../Playroom/Playroom';
 
-const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
-
-export default (components: PlayroomProps['components']) => {
+export default (
+  components: PlayroomProps['components'],
+  staticTypes: typeof __PLAYROOM_GLOBAL__STATIC_TYPES__ = {}
+) => {
   const componentNames = Object.keys(components).sort();
 
   return Object.assign(
