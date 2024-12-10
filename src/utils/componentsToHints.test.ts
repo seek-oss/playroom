@@ -6,8 +6,8 @@ import * as TypeScriptComponents from '../../cypress/projects/typescript/compone
 describe('componentsToHints', () => {
   it('should support javascript components with proptypes', () => {
     const result = componentsToHints({
-      Foo: PropTypeComponents.Foo,
       Bar: PropTypeComponents.Bar,
+      Foo: PropTypeComponents.Foo,
     });
 
     expect(result).toMatchInlineSnapshot(`
@@ -35,12 +35,12 @@ describe('componentsToHints', () => {
   it('should support typescript components when provided with type data', () => {
     const result = componentsToHints(
       {
-        Foo: TypeScriptComponents.Foo,
         Bar: TypeScriptComponents.Bar,
+        Foo: TypeScriptComponents.Foo,
       },
       {
-        Foo: { color: ['red', 'blue', 'black'] },
         Bar: { color: ['red', 'blue', 'black'] },
+        Foo: { color: ['red', 'blue', 'black'] },
       }
     );
 
