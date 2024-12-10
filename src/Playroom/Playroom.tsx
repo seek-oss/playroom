@@ -22,6 +22,8 @@ import { Box } from './Box/Box';
 
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 
+const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
+
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
   right: false,
@@ -59,7 +61,7 @@ const getTitle = (title: string | undefined) => {
 };
 
 export interface PlayroomProps {
-  components: Record<string, ComponentType>;
+  components: Record<string, ComponentType<any>>;
   themes: string[];
   widths: number[];
   snippets: Snippets;
@@ -122,7 +124,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             dispatch({ type: 'updateCode', payload: { code: newCode } })
           }
           previewCode={previewEditorCode}
-          hints={componentsToHints(components)}
+          hints={componentsToHints(components, staticTypes)}
         />
         <StatusMessage />
       </div>
