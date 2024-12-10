@@ -5,7 +5,7 @@ import type { PlayroomProps } from '../Playroom/Playroom';
 
 export default (
   components: PlayroomProps['components'],
-  staticTypes: Record<string, Record<string, unknown>> = {}
+  staticTypes: typeof __PLAYROOM_GLOBAL__STATIC_TYPES__ = {}
 ) => {
   const componentNames = Object.keys(components).sort();
 
