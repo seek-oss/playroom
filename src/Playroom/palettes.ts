@@ -1,5 +1,3 @@
-import { transparentize, mix, darken } from 'polished';
-
 const originalPalette = {
   blue0: '#e5f3ff',
   blue1: '#0088ff',
@@ -21,6 +19,35 @@ const originalPalette = {
   gray6: '#1e1e1e',
   black: '#000',
 };
+
+const guard = (amount: number) => {
+  if (amount > 1 || amount < 0) {
+    throw new Error('Amount must be between 0 and 1 inclusive');
+  }
+
+  return amount;
+};
+
+/**
+ * Implementation of `transparentize` from polished but using native CSS
+ * @see https://polished.js.org/docs/#transparentize
+ */
+const transparentize = (amount: number, color: string) =>
+  `rgb(from ${color} r g b / calc(alpha - ${guard(amount)}))`;
+
+/**
+ * Implementation of `darken` from polished but using native CSS
+ * @see https://polished.js.org/docs/#darken
+ */
+const darken = (amount: number, color: string) =>
+  `hsl(from ${color} h s calc(l - ${guard(amount) * 100}))`;
+
+/**
+ * Implementation of `mix` from polished but using native CSS
+ * @see https://polished.js.org/docs/#mix
+ */
+const mix = (amount: number, color1: string, color2: string) =>
+  `color-mix(in srgb, ${color1} ${guard(amount) * 100}%, ${color2})`;
 
 export const light = {
   code: {
