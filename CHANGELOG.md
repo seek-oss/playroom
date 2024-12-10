@@ -1,5 +1,20 @@
 # playroom
 
+## 0.40.0
+
+### Minor Changes
+
+- fab7863: Drop support for browser versions that do not support the `IntersectionObserver` API
+
+  Playroom no longer provides a polyfill for [`IntersectionObserver`].
+
+  [`intersectionobserver`]: https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
+
+### Patch Changes
+
+- fb14616: Restrict `playroom`'s Vanilla Extract plugin to only process playroom's `.css.ts` files
+- 719c957: Remove `lodash` dependency
+
 ## 0.39.1
 
 ### Patch Changes
