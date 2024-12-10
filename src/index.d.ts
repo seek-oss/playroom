@@ -34,5 +34,5 @@ interface Window {
 declare const __PLAYROOM_GLOBAL__CONFIG__: InternalPlayroomConfig;
 declare const __PLAYROOM_GLOBAL__STATIC_TYPES__: Record<
   string,
-  Record<string, unknown>
+  Record<string, string[]>
 >;
