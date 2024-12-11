@@ -29,21 +29,30 @@ const guard = (amount: number) => {
 };
 
 /**
- * Implementation of `transparentize` from polished but using native CSS
+ * Subtracts `amount` from the alpha channel of `color`.
+ * Amount must be between 0 and 1 inclusive.
+ *
+ * Similar to `transparentize` from polished but uses CSS
  * @see https://polished.js.org/docs/#transparentize
  */
 const transparentize = (amount: number, color: string) =>
   `rgb(from ${color} r g b / calc(alpha - ${guard(amount)}))`;
 
 /**
- * Implementation of `darken` from polished but using native CSS
+ * Subtracts `amount` from the lightness of `color`.
+ * Amount must be between 0 and 1 inclusive.
+ *
+ * Similar to `darken` from polished but uses CSS
  * @see https://polished.js.org/docs/#darken
  */
 const darken = (amount: number, color: string) =>
   `hsl(from ${color} h s calc(l - ${guard(amount) * 100}))`;
 
 /**
- * Implementation of `mix` from polished but using native CSS
+ * Mixes `amount` of `color1` into `color2`.
+ * Amount must be between 0 and 1 inclusive.
+ *
+ * Similar to `mix` from polished but uses CSS
  * @see https://polished.js.org/docs/#mix
  */
 const mix = (amount: number, color1: string, color2: string) =>
