@@ -99,7 +99,6 @@
     "memoize-one": "^6.0.0",
     "mini-css-extract-plugin": "^2.7.2",
     "parse-prop-types": "^0.3.0",
-    "polished": "^4.2.2",
     "portfinder": "^1.0.32",
     "prettier": "^2.8.1",
     "prop-types": "^15.8.1",
