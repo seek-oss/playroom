@@ -1,8 +1,21 @@
 import { renderElement } from './render';
 import Preview from './Playroom/Preview';
+import faviconPath from '../images/favicon.png';
+import faviconInvertedPath from '../images/favicon-inverted.png';
 
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);
+
+const selectedElement = document.head.querySelector('link[rel="icon"]');
+const favicon = window.matchMedia('(prefers-color-scheme: dark)').matches
+  ? faviconInvertedPath
+  : faviconPath;
+
+const formattedFavicon = `../${favicon}`;
+
+if (selectedElement) {
+  selectedElement.setAttribute('href', formattedFavicon);
+}
 
 const renderPreview = ({
   themes = require('./themes'),
