@@ -1,5 +1,3 @@
-import { transparentize, mix, darken } from 'polished';
-
 const originalPalette = {
   blue0: '#e5f3ff',
   blue1: '#0088ff',
@@ -22,6 +20,44 @@ const originalPalette = {
   black: '#000',
 };
 
+const guard = (amount: number) => {
+  if (amount > 1 || amount < 0) {
+    throw new Error('Amount must be between 0 and 1 inclusive');
+  }
+
+  return amount;
+};
+
+/**
+ * Subtracts `amount` from the alpha channel of `color`.
+ * Amount must be between 0 and 1 inclusive.
+ *
+ * Similar to `transparentize` from polished but uses CSS
+ * @see https://polished.js.org/docs/#transparentize
+ */
+const transparentize = (amount: number, color: string) =>
+  `rgb(from ${color} r g b / calc(alpha - ${guard(amount)}))`;
+
+/**
+ * Subtracts `amount` from the lightness of `color`.
+ * Amount must be between 0 and 1 inclusive.
+ *
+ * Similar to `darken` from polished but uses CSS
+ * @see https://polished.js.org/docs/#darken
+ */
+const darken = (amount: number, color: string) =>
+  `hsl(from ${color} h s calc(l - ${guard(amount) * 100}))`;
+
+/**
+ * Mixes `amount` of `color1` into `color2`.
+ * Amount must be between 0 and 1 inclusive.
+ *
+ * Similar to `mix` from polished but uses CSS
+ * @see https://polished.js.org/docs/#mix
+ */
+const mix = (amount: number, color1: string, color2: string) =>
+  `color-mix(in srgb, ${color1} ${guard(amount) * 100}%, ${color2})`;
+
 export const light = {
   code: {
     text: originalPalette.black,
@@ -42,7 +78,7 @@ export const light = {
     positive: originalPalette.green2,
   },
   background: {
-    transparent: 'rgba(0, 0, 0, .05)',
+    transparent: 'rgb(0, 0, 0, .05)',
     accent: originalPalette.blue2,
     positive: originalPalette.green1,
     critical: originalPalette.red1,
@@ -56,7 +92,7 @@ export const light = {
     standard: originalPalette.gray2,
   },
   shadows: {
-    small: '0 2px 8px rgba(18, 21, 26, 0.3)',
+    small: '0 2px 8px rgb(18, 21, 26, 0.3)',
     focus: `0 0 0 5px ${originalPalette.blue0}`,
   },
 };
@@ -144,7 +180,7 @@ export const dark = {
     positive: seekPalette.mint[500],
   },
   background: {
-    transparent: 'rgba(255, 255, 255, .07)',
+    transparent: 'rgb(255, 255, 255, .07)',
     accent: seekPalette.blue[500],
     positive: mix(0.6, seekPalette.grey[900], seekPalette.mint[500]),
     critical: mix(0.7, seekPalette.grey[900], seekPalette.red[600]),
