@@ -348,6 +348,27 @@ describe('Keymaps', () => {
         <div>Third line</div>
       `);
     });
+
+    it('should wrap a two-line multi-line selection when the last selected line is empty', () => {
+      loadPlayroom(`
+        <div>First line</div>
+      `);
+
+      moveToEndOfLine();
+      typeCode(`{enter}`);
+
+      // Select all
+      typeCode(`{${modifierKey}+a}`);
+
+      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode('a');
+
+      assertCodePaneContains(dedent`
+        <a>
+          <div>First line</div>
+        </a>\n
+      `);
+    });
   });
 
   describe('find and replace', () => {
