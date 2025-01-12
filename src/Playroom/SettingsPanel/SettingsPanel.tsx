@@ -32,7 +32,6 @@ const getKeyBindings = () => {
     'Wrap selection in tag': [metaKeySymbol, shiftKeySymbol, ','],
     'Format code': [metaKeySymbol, 'S'],
     'Insert snippet': [metaKeySymbol, 'K'],
-    'Copy Playroom link': [metaKeySymbol, shiftKeySymbol, 'C'],
     'Select next occurrence': [metaKeySymbol, 'D'],
     'Jump to line number': [metaKeySymbol, 'G'],
     'Swap line up': [altKeySymbol, '↑'],
