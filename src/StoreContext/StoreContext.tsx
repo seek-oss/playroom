@@ -438,7 +438,7 @@ const initialState: State = {
   editorHeight: defaultEditorSize,
   editorWidth: defaultEditorSize,
   ready: false,
-  colorScheme: 'light',
+  colorScheme: 'system',
 };
 
 export const StoreContext = createContext<StoreContextValues>([
