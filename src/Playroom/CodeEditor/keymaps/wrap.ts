@@ -19,6 +19,8 @@ export const wrapInTag = (cm: Editor) => {
     const from = range.from();
     let to = range.to();
 
+    const isMultiLineSelection = to.line !== from.line;
+
     if (to.line !== from.line && to.ch === 0) {
       to = new Pos(to.line - 1);
     }
@@ -26,8 +28,6 @@ export const wrapInTag = (cm: Editor) => {
     const existingContent = cm.getRange(from, to);
     const existingIndent =
       existingContent.length - existingContent.trimStart().length;
-
-    const isMultiLineSelection = to.line !== from.line;
 
     tagRanges.push({
       from,
