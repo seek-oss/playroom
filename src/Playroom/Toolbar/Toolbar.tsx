@@ -135,7 +135,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
 
           <div>
             <ToolbarItem
-              title={`Copy Playroom link (${isMac() ? '⌘⇧C' : 'Ctrl+Shift+C'})`}
+              title="Copy Playroom link"
               success={copying}
               onClick={copyHandler}
             >
