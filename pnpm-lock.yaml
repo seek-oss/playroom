@@ -120,8 +120,8 @@ dependencies:
     specifier: ^15.8.1
     version: 15.8.1
   re-resizable:
-    specifier: ^6.10.0
-    version: 6.10.0(react-dom@19.0.0)(react@19.0.0)
+    specifier: ^6.10.3
+    version: 6.10.3(react-dom@19.0.0)(react@19.0.0)
   react-docgen-typescript:
     specifier: ^2.2.2
     version: 2.2.2(typescript@5.0.4)
@@ -8468,11 +8468,11 @@ packages:
       strip-json-comments: 2.0.1
     dev: true
 
-  /re-resizable@6.10.0(react-dom@19.0.0)(react@19.0.0):
-    resolution: {integrity: sha512-hysSK0xmA5nz24HBVztlk4yCqCLCvS32E6ZpWxVKop9x3tqCa4yAj1++facrmkOf62JsJHjmjABdKxXofYioCw==}
+  /re-resizable@6.10.3(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-zvWb7X3RJMA4cuSrqoxgs3KR+D+pEXnGrD2FAD6BMYAULnZsSF4b7AOVyG6pC3VVNVOtlagGDCDmZSwWLjjBBw==}
     peerDependencies:
-      react: ^16.13.1 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
+      react: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
