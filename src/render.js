@@ -5,7 +5,7 @@ import ReactDOM, { version as reactDomVersion } from 'react-dom';
 // versions of React is removed.
 const canUseNewReactRootApi =
   reactDomVersion &&
-  (reactDomVersion.startsWith('18') || reactDomVersion.startsWith('0.0.0'));
+  (reactDomVersion.startsWith('18') || reactDomVersion.startsWith('19') || reactDomVersion.startsWith('0.0.0'));
 
 export const renderElement = (node, outlet) => {
   if (canUseNewReactRootApi) {
