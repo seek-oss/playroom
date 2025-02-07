@@ -106,7 +106,6 @@
     "react-docgen-typescript": "^2.2.2",
     "react-helmet": "^6.1.0",
     "react-transition-group": "^4.4.5",
-    "react-use": "^17.4.0",
     "read-pkg-up": "^7.0.1",
     "scope-eval": "^1.0.0",
     "sucrase": "^3.34.0",
@@ -148,10 +147,5 @@
   "packageManager": "pnpm@8.15.3",
   "volta": {
     "node": "18.19.1"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "react-use@17.4.0": "patches/react-use@17.4.0.patch"
-    }
   }
 }
