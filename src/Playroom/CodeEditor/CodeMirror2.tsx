@@ -743,6 +743,13 @@ export class UnControlled extends React.Component<
       ? `react-codemirror2 ${this.props.className}`
       : 'react-codemirror2';
 
-    return <div className={className} ref={(self) => (this.ref = self!)} />;
+    return (
+      <div
+        className={className}
+        ref={(self) => {
+          this.ref = self!;
+        }}
+      />
+    );
   }
 }

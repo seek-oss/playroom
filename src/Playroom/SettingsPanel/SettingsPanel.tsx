@@ -1,4 +1,4 @@
-import React, { useContext, type ReactChild } from 'react';
+import React, { useContext, type ReactElement } from 'react';
 import { Heading } from '../Heading/Heading';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import {
@@ -43,13 +43,13 @@ const getKeyBindings = () => {
   };
 };
 
-const positionIcon: Record<EditorPosition, ReactChild> = {
+const positionIcon: Record<EditorPosition, ReactElement | string | number> = {
   undocked: <EditorUndockedIcon />,
   right: <EditorRightIcon />,
   bottom: <EditorBottomIcon />,
 };
 
-const colorModeIcon: Record<ColorScheme, ReactChild> = {
+const colorModeIcon: Record<ColorScheme, ReactElement | string | number> = {
   light: <ColorModeLightIcon />,
   dark: <ColorModeDarkIcon />,
   system: <ColorModeSystemIcon />,

@@ -1,11 +1,11 @@
-import type { ReactChild } from 'react';
+import type { ReactElement } from 'react';
 import classnames from 'classnames';
 import TickIcon from '../icons/TickIcon';
 
 import * as styles from './ToolbarItem.css';
 
 interface Props {
-  children: ReactChild;
+  children: ReactElement | string | number;
   title: string;
   active?: boolean;
   success?: boolean;
