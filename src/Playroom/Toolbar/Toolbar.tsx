@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback, useEffect } from 'react';
+import { useRef, useContext, useState, useCallback, useEffect } from 'react';
 import { useTimeoutFn } from 'react-use';
 import classnames from 'classnames';
 import type { PlayroomProps } from '../Playroom';
@@ -40,6 +40,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   ] = useContext(StoreContext);
   const [copying, setCopying] = useState(false);
   const [isReady, cancel, reset] = useTimeoutFn(() => setCopying(false), 3000);
+  const nodeRef = useRef(null);
 
   const copyHandler = useCallback(() => {
     dispatch({
@@ -157,13 +158,14 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
         </div>
         <CSSTransition
           in={isOpen}
+          nodeRef={nodeRef}
           timeout={ANIMATION_TIMEOUT}
           classNames={styles.transitionStyles}
           mountOnEnter
           unmountOnExit
           onExited={() => setLastActivePanel(undefined)}
         >
-          <div className={styles.panel} id="custom-id">
+          <div ref={nodeRef} className={styles.panel} id="custom-id">
             {lastActivePanel === 'snippets' && (
               <Snippets
                 isOpen={isOpen}

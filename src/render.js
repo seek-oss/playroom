@@ -3,9 +3,11 @@ import ReactDOM, { version as reactDomVersion } from 'react-dom';
 // Uses the correct render API based on the available version of
 // `react-dom`. This hack can be removed when support for older
 // versions of React is removed.
+
+const mainVersion = Number(reactDomVersion.split('.')[0]);
 const canUseNewReactRootApi =
   reactDomVersion &&
-  (reactDomVersion.startsWith('18') || reactDomVersion.startsWith('0.0.0'));
+  (mainVersion >= 18 || reactDomVersion.startsWith('0.0.0'));
 
 export const renderElement = (node, outlet) => {
   if (canUseNewReactRootApi) {
