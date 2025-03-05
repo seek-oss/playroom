@@ -125,7 +125,7 @@
     "@types/react-helmet": "^6.1.6",
     "@types/react-transition-group": "^4.4.10",
     "concurrently": "^7.6.0",
-    "cypress": "^14.1.0",
+    "cypress": "^13.6.6",
     "eslint": "^8.56.0",
     "eslint-config-seek": "^11.3.1",
     "husky": "^8.0.2",
