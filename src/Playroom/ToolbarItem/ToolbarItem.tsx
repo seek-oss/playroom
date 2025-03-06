@@ -5,7 +5,7 @@ import TickIcon from '../icons/TickIcon';
 import * as styles from './ToolbarItem.css';
 
 interface Props {
-  children: ReactElement | string | number;
+  children: ReactElement;
   title: string;
   active?: boolean;
   success?: boolean;

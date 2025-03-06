@@ -73,7 +73,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
     visibleThemes.length > 0 || visibleWidths.length > 0;
   const isOpen = Boolean(activeToolbarPanel);
 
-  const nodeRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
@@ -158,14 +158,14 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
         </div>
         <CSSTransition
           in={isOpen}
-          nodeRef={nodeRef}
+          nodeRef={panelRef}
           timeout={ANIMATION_TIMEOUT}
           classNames={styles.transitionStyles}
           mountOnEnter
           unmountOnExit
           onExited={() => setLastActivePanel(undefined)}
         >
-          <div className={styles.panel} id="custom-id" ref={nodeRef}>
+          <div className={styles.panel} id="custom-id" ref={panelRef}>
             {lastActivePanel === 'snippets' && (
               <Snippets
                 isOpen={isOpen}

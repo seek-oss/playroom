@@ -43,13 +43,13 @@ const getKeyBindings = () => {
   };
 };
 
-const positionIcon: Record<EditorPosition, ReactElement | string | number> = {
+const positionIcon: Record<EditorPosition, ReactElement> = {
   undocked: <EditorUndockedIcon />,
   right: <EditorRightIcon />,
   bottom: <EditorBottomIcon />,
 };
 
-const colorModeIcon: Record<ColorScheme, ReactElement | string | number> = {
+const colorModeIcon: Record<ColorScheme, ReactElement> = {
   light: <ColorModeLightIcon />,
   dark: <ColorModeDarkIcon />,
   system: <ColorModeSystemIcon />,
