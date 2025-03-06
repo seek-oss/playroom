@@ -2,4 +2,4 @@
 'playroom': minor
 ---
 
-React 19 support
+Update `react` and `react-dom` peer dependency ranges to include `^19`
