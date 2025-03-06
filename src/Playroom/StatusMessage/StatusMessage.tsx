@@ -14,8 +14,12 @@ interface Props {
 }
 export const StatusMessage = ({ dismissable = false }: Props) => {
   const [{ statusMessage }, dispatch] = useContext(StoreContext);
-  const cleanupTimerRef = useRef<ReturnType<typeof setTimeout>>();
-  const showStatusTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
+  const showStatusTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
 
   const [show, setShow] = useState(false);
   const [internalMessage, setInternalMessage] = useState(statusMessage);

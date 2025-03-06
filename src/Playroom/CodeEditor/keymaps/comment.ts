@@ -1,4 +1,3 @@
-import type CodeMirror from 'codemirror';
 import { type Editor, Pos } from 'codemirror';
 import type { Selection } from './types';
 

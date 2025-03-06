@@ -1,4 +1,3 @@
-import type React from 'react';
 import type { ReactNode } from 'react';
 import { useParams } from '../utils/params';
 import CatchErrors from './CatchErrors/CatchErrors';
