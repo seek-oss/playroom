@@ -4,8 +4,8 @@ import {
   useRef,
   type AllHTMLAttributes,
   type MutableRefObject,
+  type RefObject,
 } from 'react';
-import { useIntersection } from 'react-use';
 
 import playroomConfig from '../../config';
 
@@ -69,4 +69,35 @@ export default function Iframe({
       {...restProps}
     />
   );
+}
+
+// copied directly from `react-use`
+// https://github.com/streamich/react-use/blob/d2028ae44c79628475f0ef1736c4a48ca310247a/src/useIntersection.ts#L3-L28
+function useIntersection(
+  ref: RefObject<HTMLElement | null>,
+  options: IntersectionObserverInit
+): IntersectionObserverEntry | null {
+  const [intersectionObserverEntry, setIntersectionObserverEntry] =
+    useState<IntersectionObserverEntry | null>(null);
+
+  useEffect(() => {
+    if (ref.current && typeof IntersectionObserver === 'function') {
+      const handler = (entries: IntersectionObserverEntry[]) => {
+        setIntersectionObserverEntry(entries[0]);
+      };
+
+      const observer = new IntersectionObserver(handler, options);
+      observer.observe(ref.current);
+
+      return () => {
+        setIntersectionObserverEntry(null);
+        observer.disconnect();
+      };
+    }
+    return () => {};
+    // disabled in the original implementation
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref.current, options.threshold, options.root, options.rootMargin]);
+
+  return intersectionObserverEntry;
 }

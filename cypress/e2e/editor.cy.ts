@@ -21,7 +21,7 @@ describe('Editor', () => {
   });
 
   it('autocompletes', () => {
-    typeCode('<F{enter} c{enter}={downarrow}{enter} />', 100);
+    typeCode('<F{enter} c{enter}={downarrow}{enter} />', 150);
     assertFirstFrameContains('Foo');
     assertCodePaneContains('<Foo color="blue" />');
   });
