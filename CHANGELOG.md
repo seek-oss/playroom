@@ -1,5 +1,27 @@
 # playroom
 
+## 0.40.0
+
+### Minor Changes
+
+- b8f89d2: Set default colour scheme to 'system'.
+- 16ec1e7: Update `react` and `react-dom` peer dependency ranges to include `^19`
+- 857feab: Remove keybinding for copying Playroom link to clipboard.
+- fab7863: Drop support for browser versions that do not support the `IntersectionObserver` API
+
+  Playroom no longer provides a polyfill for [`IntersectionObserver`].
+
+  [`intersectionobserver`]: https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
+
+### Patch Changes
+
+- 4412ef1: Ensure favicon is displayed on Preview links.
+- 6095dc4: Replace `polished` dependency with CSS relative color syntax and `color-mix`
+- 16ec1e7: Remove `react-use` dependency
+- 67006f0: Fix bug in "Wrap selection in tag" command that caused the start cursor to sometimes be in the wrong position when selecting an empty line.
+- fb14616: Restrict `playroom`'s Vanilla Extract plugin to only process playroom's `.css.ts` files
+- 719c957: Remove `lodash` dependency
+
 ## 0.39.1
 
 ### Patch Changes
