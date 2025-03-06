@@ -209,6 +209,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
 };
 
 // copied directly from `react-use`
+// https://github.com/streamich/react-use/blob/db07ab65bfa48a399e7fd83f172653eb342882b1/src/useTimeoutFn.ts#L3-L40
 type UseTimeoutFnReturn = [() => boolean | null, () => void, () => void];
 
 function useTimeoutFn<T extends () => void>(

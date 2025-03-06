@@ -72,6 +72,7 @@ export default function Iframe({
 }
 
 // copied directly from `react-use`
+// https://github.com/streamich/react-use/blob/d2028ae44c79628475f0ef1736c4a48ca310247a/src/useIntersection.ts#L3-L28
 function useIntersection(
   ref: RefObject<HTMLElement | null>,
   options: IntersectionObserverInit
