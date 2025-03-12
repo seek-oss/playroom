@@ -1,11 +1,12 @@
 {
-  "$schema": "https://unpkg.com/@changesets/config@2.2.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
+  "$schema": "https://unpkg.com/@changesets/config@3.0.3/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "seek-oss/playroom" }
+  ],
   "commit": false,
-  "fixed": [],
-  "linked": [],
   "access": "public",
   "baseBranch": "master",
-  "updateInternalDependencies": "patch",
-  "ignore": []
+  "privatePackages": { "version": false, "tag": false },
+  "snapshot": { "useCalculatedVersion": true }
 }
