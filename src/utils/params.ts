@@ -22,14 +22,10 @@ export function updateUrlCode(code: string) {
 export function getParamsFromQuery(location = history.location) {
   try {
     // Prefer checking `hash`, fall back to `search` in case the user has configured a custom
-    // `frameSrc` function that sets search params instead of the hash
-    const isParamsInHash = location.hash.startsWith('#?');
-
-    if (isParamsInHash) {
-      return new URLSearchParams(location.hash.slice(1));
-    }
-
-    return new URLSearchParams(location.search);
+    // `frameSrc` function that uses search params instead of the hash
+    return new URLSearchParams(
+      location.hash.startsWith('#?') ? location.hash.slice(1) : location.search
+    );
   } catch {
     return new URLSearchParams();
   }
