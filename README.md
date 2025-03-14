@@ -150,13 +150,44 @@ export default function FrameComponent({ theme, children }) {
 You can provide extra variables within the scope of your JSX via the `scope` option, which is a path to a file that exports a `useScope` Hook that returns a scope object. For example, if you wanted to expose a context-based `theme` variable to consumers of your Playroom:
 
 ```js
+// scope.js
+
 import { useTheme } from '../path/to/your/theming-system';
 
 export default function useScope() {
   return {
     theme: useTheme(),
   };
+}
 ```
+
+### Embedded CSS Formatting
+
+By injecting a `css` template literal tag into your playroom scope, embedded CSS can be formatted on save thanks to [prettier's embedded language formatting capabilities]:
+
+```js
+// scope.js
+
+export default function useScope() {
+  return {
+    css: (css) => css,
+  };
+}
+```
+
+The `css` function can then be used as a template literal tag to format CSS authored inside `style` tags:
+
+```jsx
+<style>
+  {css`
+    .foo {
+      color: red;
+    }
+  `}
+</style>
+```
+
+[prettier's embedded language formatting capabilities]: https://prettier.io/docs/options#embedded-language-formatting
 
 ## Theme Support
 
