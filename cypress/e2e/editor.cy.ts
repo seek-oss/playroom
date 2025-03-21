@@ -34,7 +34,7 @@ describe('Editor', () => {
     assertCodePaneLineCount(6);
   });
 
-  it.only('formats css in a style block', () => {
+  it('formats css in a style block', () => {
     typeCode(
       '<style>{{}css`html {{} border: 1px solid red; {}}`{rightarrow}{backspace}{}}'
     );
