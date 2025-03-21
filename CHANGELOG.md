@@ -1,5 +1,21 @@
 # playroom
 
+## 0.41.0
+
+### Minor Changes
+
+- [#396](https://github.com/seek-oss/playroom/pull/396) [`3ceb0af`](https://github.com/seek-oss/playroom/commit/3ceb0af613bb7f190b34371cacafee7928287ac7) Thanks [@askoufis](https://github.com/askoufis)! - Drop support for React 17
+
+  BREAKING CHANGE: React 17 is no longer supported. Playroom now requires React 18 or later.
+
+### Patch Changes
+
+- [#396](https://github.com/seek-oss/playroom/pull/396) [`3ceb0af`](https://github.com/seek-oss/playroom/commit/3ceb0af613bb7f190b34371cacafee7928287ac7) Thanks [@askoufis](https://github.com/askoufis)! - Loosen `@types/react` and `@types/react-dom` dependencies to include `^18.0.0`
+
+- [#393](https://github.com/seek-oss/playroom/pull/393) [`199c1e0`](https://github.com/seek-oss/playroom/commit/199c1e0c3341a0cc26a37ce2825a1e9bf1e8aa2a) Thanks [@askoufis](https://github.com/askoufis)! - Use the URL hash for passing params to each playroom iframe even when `paramType: 'search'` is configured
+
+  This change prevents a full React re-render from occurring whenever code is changed in a playroom in projects that configure `paramType: 'search'`, resulting in a much smoother prototyping experience.
+
 ## 0.40.0
 
 ### Minor Changes

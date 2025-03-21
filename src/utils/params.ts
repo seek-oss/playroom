@@ -21,12 +21,12 @@ export function updateUrlCode(code: string) {
 
 export function getParamsFromQuery(location = history.location) {
   try {
+    // Prefer checking `hash`, fall back to `search` in case the user has configured a custom
+    // `frameSrc` function that uses search params instead of the hash
     return new URLSearchParams(
-      playroomConfig.paramType === 'hash'
-        ? location.hash.replace(/^#/, '')
-        : location.search
+      location.hash.startsWith('#?') ? location.hash.slice(1) : location.search
     );
-  } catch (err) {
+  } catch {
     return new URLSearchParams();
   }
 }
