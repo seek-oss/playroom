@@ -161,25 +161,15 @@ export default function useScope() {
 }
 ```
 
-### Embedded CSS Formatting
+## Embedded CSS Formatting
 
-By injecting a `css` template literal tag into your playroom scope, embedded CSS can be formatted on save thanks to [prettier's embedded language formatting capabilities]:
+CSS authored inside `style` tags with a `jsx` attribute will be formatted as CSS. This takes advantage of [prettier's embedded language formatting capabilities].
 
-```js
-// scope.js
-
-export default function useScope() {
-  return {
-    css: (css) => css,
-  };
-}
-```
-
-The `css` function can then be used as a template literal tag to format CSS authored inside `style` tags:
+For example:
 
 ```jsx
-<style>
-  {css`
+<style jsx>
+  {`
     .foo {
       color: red;
     }
