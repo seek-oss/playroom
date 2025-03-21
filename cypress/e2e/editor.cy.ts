@@ -36,12 +36,12 @@ describe('Editor', () => {
 
   it('formats css in a style block', () => {
     typeCode(
-      '<style>{{}css`html {{} border: 1px solid red; {}}`{rightarrow}{backspace}{}}'
+      '<style jsx>{{}`html {{} border: 1px solid red; {}}`{rightarrow}{backspace}{}}'
     );
     assertCodePaneLineCount(1);
     formatCode();
     assertCodePaneContains(dedent`
-      <style>{css\`
+      <style jsx>{\`
         html {
           border: 1px solid red;
         }
