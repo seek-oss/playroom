@@ -23,7 +23,7 @@ export const runPrettier = ({
       parser: 'babel',
       plugins: [babel],
     });
-  } catch (e) {
+  } catch {
     // Just a formatting error so we pass
     return null;
   }
