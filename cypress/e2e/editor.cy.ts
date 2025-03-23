@@ -1,3 +1,4 @@
+import dedent from 'dedent';
 import {
   formatCode,
   typeCode,
@@ -31,5 +32,20 @@ describe('Editor', () => {
     assertCodePaneLineCount(1);
     formatCode();
     assertCodePaneLineCount(6);
+  });
+
+  it('formats css in a style block', () => {
+    typeCode(
+      '<style jsx>{{}`html {{} border: 1px solid red; {}}{rightarrow}{}}'
+    );
+    assertCodePaneLineCount(1);
+    formatCode();
+    assertCodePaneContains(dedent`
+      <style jsx>{\`
+        html {
+          border: 1px solid red;
+        }
+      \`}</style>\n
+    `);
   });
 });

@@ -30,7 +30,7 @@ export default function Frames({ code, themes, widths }: FramesProps) {
 
   try {
     renderCode.current = compileJsx(code);
-  } catch (e) {}
+  } catch {}
 
   return (
     <div ref={scrollingPanelRef} className={styles.root}>

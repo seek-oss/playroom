@@ -1,4 +1,0 @@
-cypress/plugins/
-cypress/fixtures/
-node_modules
-dist

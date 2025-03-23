@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { createElement, Fragment } from 'react';
 import scopeEval from 'scope-eval';
 
-// eslint-disable-next-line import/no-unresolved
+// eslint-disable-next-line import-x/no-unresolved
 import useScope from '__PLAYROOM_ALIAS__USE_SCOPE__';
 
 import {
@@ -29,7 +29,7 @@ export default function RenderCode({ code, scope }) {
   return scopeEval(code, {
     ...userScope,
     React,
-    [ReactCreateElementPragma]: React.createElement,
-    [ReactFragmentPragma]: React.Fragment,
+    [ReactCreateElementPragma]: createElement,
+    [ReactFragmentPragma]: Fragment,
   });
 }

@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import * as styles from './Inline.css';
 
-interface ReactNodeArray extends Array<ReactNodeNoStrings> {}
+type ReactNodeArray = ReactNodeNoStrings[];
 type ReactNodeNoStrings =
   | ReactElement
   | ReactNodeArray
