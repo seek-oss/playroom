@@ -2,7 +2,7 @@
 'playroom': minor
 ---
 
-Replace `fast-glob` dependency with [`tinyglobby`], removing 15 transitive dependencies
+Replace `fast-glob` dependency with [`tinyglobby`], removing 6 transitive dependencies
 
 BREAKING CHANGE:
 
