@@ -150,13 +150,34 @@ export default function FrameComponent({ theme, children }) {
 You can provide extra variables within the scope of your JSX via the `scope` option, which is a path to a file that exports a `useScope` Hook that returns a scope object. For example, if you wanted to expose a context-based `theme` variable to consumers of your Playroom:
 
 ```js
+// scope.js
+
 import { useTheme } from '../path/to/your/theming-system';
 
 export default function useScope() {
   return {
     theme: useTheme(),
   };
+}
 ```
+
+## Embedded CSS Formatting
+
+CSS authored inside `style` tags with a `jsx` attribute will be formatted as CSS. This takes advantage of [prettier's embedded language formatting capabilities].
+
+For example:
+
+```jsx
+<style jsx>
+  {`
+    .foo {
+      color: red;
+    }
+  `}
+</style>
+```
+
+[prettier's embedded language formatting capabilities]: https://prettier.io/docs/options#embedded-language-formatting
 
 ## Theme Support
 
@@ -174,9 +195,11 @@ export { themeB } from './themeB';
 
 If a `tsconfig.json` file is present in your project, static prop types are parsed using [react-docgen-typescript](https://github.com/styleguidist/react-docgen-typescript) to provide better autocompletion in the Playroom editor.
 
-**By default, all `.ts` and `.tsx` files in the current working directory are included, excluding `node_modules`.**
+> [!NOTE]
+> By default, all `.ts` and `.tsx` files in the current working directory are included, excluding `node_modules`.
 
-If you need to customise this behaviour, you can provide a `typeScriptFiles` option in `playroom.config.js`, which is an array of globs.
+If you need to customise this behaviour, you set the `typeScriptFiles` property in your `playroom.config.js`.
+This property accepts an array of [`tinyglobby`]-compatible globs.
 
 ```js
 module.exports = {
@@ -185,7 +208,7 @@ module.exports = {
 };
 ```
 
-If you need to customise the [parser options](https://github.com/styleguidist/react-docgen-typescript#options), you can provide a `reactDocgenTypescriptConfig` option in `playroom.config.js`.
+If you need to customise the [parser options](https://github.com/styleguidist/react-docgen-typescript#options), you can set the `reactDocgenTypescriptConfig` property in your `playroom.config.js`.
 
 For example:
 
@@ -199,6 +222,8 @@ module.exports = {
   },
 };
 ```
+
+[`tinyglobby`]: https://github.com/SuperchupuDev/tinyglobby
 
 ## ESM Support
 

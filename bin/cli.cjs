@@ -39,7 +39,6 @@ const showUsage = () => {
   );
 };
 
-/* eslint-disable consistent-return */
 (async () => {
   const args = commandLineArgs([
     { name: 'command', defaultOption: true, defaultValue: 'start' },

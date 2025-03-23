@@ -6,7 +6,7 @@ import RenderCode from './RenderCode/RenderCode';
 
 interface FrameProps {
   themes: Record<string, any>;
-  components: Array<any>;
+  components: any[];
   FrameComponent: React.ComponentType<{
     themeName: string | null;
     theme: string;
