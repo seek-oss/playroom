@@ -1,5 +1,35 @@
 # playroom
 
+## 0.42.0
+
+### Minor Changes
+
+- [#397](https://github.com/seek-oss/playroom/pull/397) [`15a44bb`](https://github.com/seek-oss/playroom/commit/15a44bb679c113fda49732fcb47038137e641a97) Thanks [@askoufis](https://github.com/askoufis)! - Replace `fast-glob` dependency with [`tinyglobby`], removing 6 transitive dependencies
+
+  BREAKING CHANGE:
+
+  While `tinyglobby` aims to mimic `fast-glob`'s behaviour, not all behavior is guaranteed to be the same. The `typescriptFiles` property in your playroom config is the only property that is affected by this change. Please ensure any custom globs are functioning as expected.
+
+  [`tinyglobby`]: https://github.com/SuperchupuDev/tinyglobby
+
+- [#392](https://github.com/seek-oss/playroom/pull/392) [`dc14423`](https://github.com/seek-oss/playroom/commit/dc14423c137a604fb38b76b5b518588af391a69c) Thanks [@askoufis](https://github.com/askoufis)! - Enable embedded CSS formatting on save
+
+  CSS authored inside `style` tags with a `jsx` attribute will now be formatted as CSS. This takes advantage of [prettier's embedded language formatting capabilities].
+
+  For example:
+
+  ```jsx
+  <style jsx>
+    {`
+      .foo {
+        color: red;
+      }
+    `}
+  </style>
+  ```
+
+  [prettier's embedded language formatting capabilities]: https://prettier.io/docs/options#embedded-language-formatting
+
 ## 0.41.0
 
 ### Minor Changes
