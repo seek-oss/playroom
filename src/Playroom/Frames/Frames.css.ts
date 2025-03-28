@@ -1,28 +1,43 @@
-import { style } from '@vanilla-extract/css';
+import { createVar, style } from '@vanilla-extract/css';
 import { sprinkles } from '../sprinkles.css';
 
-export const root = sprinkles({
-  height: 'full',
-  boxSizing: 'border-box',
-  display: 'flex',
-  padding: 'gutter',
-  textAlign: 'center',
-  overflow: 'auto',
-});
+export const root = style([
+  sprinkles({
+    height: 'full',
+    width: 'full',
+    boxSizing: 'border-box',
+    display: 'flex',
+    gap: 'gutter',
+    padding: 'gutter',
+    textAlign: 'center',
+    overflow: 'auto',
+  }),
+  {
+    justifyContent: 'safe center',
+  },
+]);
 
-export const frameContainer = sprinkles({
-  position: 'relative',
-  height: 'full',
-  textAlign: 'left',
-  display: 'flex',
-  flexDirection: 'column',
-});
+export const frameWidth = createVar();
+
+export const frameContainer = style([
+  sprinkles({
+    position: 'relative',
+    height: 'full',
+    textAlign: 'left',
+    display: 'flex',
+    flexDirection: 'column',
+  }),
+  {
+    flexShrink: 0,
+    width: frameWidth,
+  },
+]);
 
 export const frame = sprinkles({
-  position: 'relative',
-  height: 'full',
   border: 0,
   flexGrow: 1,
+  width: 'full',
+  height: 'full',
 });
 
 export const frameBorder = style([

@@ -5,6 +5,7 @@ import dedent from 'dedent';
 import { createUrl } from '../../utils';
 import { isMac } from '../../src/utils/formatting';
 import type { Direction } from '../../src/Playroom/CodeEditor/keymaps/types';
+import type { PlayroomProps } from '../../src/Playroom/Playroom';
 
 const CYPRESS_DEFAULT_WAIT_TIME = 500;
 
@@ -28,7 +29,9 @@ export const formatCode = () =>
     .focused()
     .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`);
 
-export const selectWidthPreference = (width: number) => {
+export const selectWidthPreference = (
+  width: PlayroomProps['widths'][number]
+) => {
   cy.findByRole('button', { name: 'Configure visible frames' }).click();
   cy.findByRole('checkbox', { name: `${width}` }).click();
 };
@@ -151,11 +154,19 @@ export const assertCodePaneLineCount = (
 };
 
 export const assertFramesMatch = (
-  frames: number[] | Array<[frameTheme: string, frameWidth: number]>
+  frames:
+    | PlayroomProps['widths']
+    | Array<[frameTheme: string, frameWidth: PlayroomProps['widths'][number]]>
 ) => {
-  const formattedFrames = frames.map((frame) =>
-    typeof frame === 'number' ? `${frame}px` : `${frame[0]} – ${frame[1]}px`
-  );
+  const formattedFrames = frames.map((frame) => {
+    if (frame === 'Fit to window') {
+      return frame;
+    }
+
+    return typeof frame === 'number'
+      ? `${frame}px`
+      : `${frame[0]} – ${frame[1]}px`;
+  });
 
   getPreviewFrameNames()
     .should('have.length', frames.length)

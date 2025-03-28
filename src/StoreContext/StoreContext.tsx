@@ -58,7 +58,7 @@ function convertAndStoreSizeAsPercentage(
 interface DebounceUpdateUrl {
   code?: string;
   themes?: string[];
-  widths?: number[];
+  widths?: PlayroomProps['widths'];
   title?: string;
   editorHidden?: boolean;
 }
@@ -89,7 +89,7 @@ interface State {
   editorWidth: string;
   statusMessage?: StatusMessage;
   visibleThemes?: string[];
-  visibleWidths?: number[];
+  visibleWidths?: PlayroomProps['widths'];
   ready: boolean;
   colorScheme: ColorScheme;
 }
@@ -125,7 +125,10 @@ type Action =
   | { type: 'updateEditorWidth'; payload: { size: number } }
   | { type: 'updateVisibleThemes'; payload: { themes: string[] } }
   | { type: 'resetVisibleThemes' }
-  | { type: 'updateVisibleWidths'; payload: { widths: number[] } }
+  | {
+      type: 'updateVisibleWidths';
+      payload: { widths: PlayroomProps['widths'] };
+    }
   | { type: 'resetVisibleWidths' }
   | { type: 'updateTitle'; payload: { title: string } };
 
