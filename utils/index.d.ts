@@ -1,3 +1,5 @@
+import type PlayroomProps from '../src/Playroom/Playroom';
+
 interface Snippet {
   group: string;
   name: string;
@@ -11,7 +13,7 @@ type ParamType = 'hash' | 'search';
 interface CompressParamsOptions {
   code?: string;
   themes?: string[];
-  widths?: number[];
+  widths?: PlayroomProps['widths'];
   theme?: string;
   title?: string;
   editorHidden?: boolean;
@@ -22,7 +24,7 @@ interface CreateUrlOptions {
   baseUrl?: string;
   code?: string;
   themes?: string[];
-  widths?: number[];
+  widths?: PlayroomProps['widths'];
   paramType?: ParamType;
   title?: string;
   editorHidden?: boolean;

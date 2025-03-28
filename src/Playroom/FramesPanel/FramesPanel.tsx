@@ -7,11 +7,12 @@ import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 import { Inline } from '../Inline/Inline';
 import { Box } from '../Box/Box';
+import type { PlayroomProps } from '../Playroom';
 
 import * as styles from './FramesPanel.css';
 
 interface FramesPanelProps {
-  availableWidths: number[];
+  availableWidths: PlayroomProps['widths'];
   availableThemes: string[];
 }
 

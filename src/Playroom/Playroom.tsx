@@ -63,7 +63,7 @@ const getTitle = (title: string | undefined) => {
 export interface PlayroomProps {
   components: Record<string, ComponentType<any>>;
   themes: string[];
-  widths: number[];
+  widths: Array<number | 'Fit to window'>;
   snippets: Snippets;
 }
 

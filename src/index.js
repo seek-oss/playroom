@@ -5,7 +5,8 @@ import playroomConfig from './config';
 import faviconPath from '../images/favicon.png';
 import faviconInvertedPath from '../images/favicon-inverted.png';
 
-const widths = playroomConfig.widths || [320, 375, 768, 1024];
+const suppliedWidths = playroomConfig.widths || [320, 375, 768, 1024];
+const widths = [...suppliedWidths, 'Fit to window'];
 
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);

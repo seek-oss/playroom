@@ -4,11 +4,12 @@ import { compileJsx } from '../../utils/compileJsx';
 import type { PlayroomProps } from '../Playroom';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
+import { Box } from '../Box/Box';
 import playroomConfig from '../../config';
 import frameSrc from './frameSrc';
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 
 import * as styles from './Frames.css';
-import { Box } from '../Box/Box';
 
 interface FramesProps {
   code: string;
@@ -34,38 +35,39 @@ export default function Frames({ code, themes, widths }: FramesProps) {
 
   return (
     <div ref={scrollingPanelRef} className={styles.root}>
-      <Box display="flex" gap="gutter" marginX="auto">
-        {frames.map((frame) => (
-          <div
-            key={`${frame.theme}_${frame.width}`}
-            className={styles.frameContainer}
-          >
-            <div className={styles.frame}>
-              <div className={styles.frameBorder} />
-              <Iframe
-                intersectionRootRef={scrollingPanelRef}
-                src={frameSrc(
-                  { themeName: frame.theme, code: renderCode.current },
-                  playroomConfig
-                )}
-                className={styles.frame}
-                style={{ width: frame.width }}
-                data-testid="previewFrame"
-              />
-            </div>
-            <div className={styles.frameName} data-testid="frameName">
-              {frame.theme === '__PLAYROOM__NO_THEME__' ? (
-                <Text weight="strong">{frame.widthName}</Text>
-              ) : (
-                <Text>
-                  <Strong>{frame.theme}</Strong>
-                  {` \u2013 ${frame.widthName}`}
-                </Text>
+      {frames.map((frame) => (
+        <div
+          key={`${frame.theme}_${frame.width}`}
+          className={styles.frameContainer}
+          style={assignInlineVars({
+            [styles.frameWidth]:
+              frame.width === 'Fit to window' ? '100%' : `${frame.width}px`,
+          })}
+        >
+          <Box height="full" position="relative">
+            <Iframe
+              intersectionRootRef={scrollingPanelRef}
+              src={frameSrc(
+                { themeName: frame.theme, code: renderCode.current },
+                playroomConfig
               )}
-            </div>
+              data-testid="previewFrame"
+              className={styles.frame}
+            />
+            <div className={styles.frameBorder} />
+          </Box>
+          <div className={styles.frameName} data-testid="frameName">
+            {frame.theme === '__PLAYROOM__NO_THEME__' ? (
+              <Text weight="strong">{frame.widthName}</Text>
+            ) : (
+              <Text>
+                <Strong>{frame.theme}</Strong>
+                {` \u2013 ${frame.widthName}`}
+              </Text>
+            )}
           </div>
-        ))}
-      </Box>
+        </div>
+      ))}
     </div>
   );
 }
