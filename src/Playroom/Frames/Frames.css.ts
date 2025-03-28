@@ -50,7 +50,7 @@ export const frameBorder = style([
   }),
   {
     selectors: {
-      [`&:not(:hover)`]: {
+      [`${frameContainer}:not(:hover) &`]: {
         opacity: 0.8,
       },
     },
