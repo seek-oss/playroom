@@ -1,5 +1,17 @@
 # playroom
 
+## 0.43.0
+
+### Minor Changes
+
+- [#402](https://github.com/seek-oss/playroom/pull/402) [`6f30915`](https://github.com/seek-oss/playroom/commit/6f30915af90fded17cbad2351c7655dbceaa5d8c) Thanks [@felixhabib](https://github.com/felixhabib)! - Add 'Fit to window' frame width option
+
+  Introduces a width option that dynamically sizes to use the maximum available frame space. This option will be available in addition to the existing supplied or default widths.
+
+### Patch Changes
+
+- [#402](https://github.com/seek-oss/playroom/pull/402) [`6f30915`](https://github.com/seek-oss/playroom/commit/6f30915af90fded17cbad2351c7655dbceaa5d8c) Thanks [@felixhabib](https://github.com/felixhabib)! - Fix styling issue, ensuring frame names and shadows show at a dimmed opacity except on hover
+
 ## 0.42.0
 
 ### Minor Changes
