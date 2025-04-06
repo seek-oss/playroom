@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { type Message, useChat } from '@ai-sdk/react';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import { StoreContext } from '../../StoreContext/StoreContext';
@@ -8,7 +8,6 @@ import { Text } from '../Text/Text';
 import { Button } from '../Button/Button';
 import { Box } from '../Box/Box';
 import * as styles from './AIPanel.css';
-
 import type { PlayroomProps } from '../Playroom';
 
 export default ({
@@ -21,6 +20,8 @@ export default ({
   const [state, dispatch] = useContext(StoreContext);
   const [error, setError] = useState('');
   const [loadingMessage, setLoadingMessage] = useState('Generating...');
+  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const systemPrompt = `
 You are an expert React developer specializing in UI component composition. Your task is to help users create UI layouts using only the components provided.
@@ -104,6 +105,13 @@ ${code}
     },
   ];
 
+  const clearImageInput = () => {
+    setImageDataUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const {
     messages,
     input,
@@ -131,6 +139,7 @@ ${code}
   const displayMessages = messages.filter((msg) => msg.role !== 'system');
   const clearConversation = () => {
     setMessages(preprompt);
+    clearImageInput();
   };
 
   useEffect(() => {
@@ -160,7 +169,40 @@ ${code}
     }
   }, [status]);
 
+  useEffect(() => {
+    const fileInput = fileInputRef.current;
+    if (!fileInput) return undefined;
+
+    const handleFileChange = () => {
+      const file = fileInput.files?.[0];
+      if (!file) {
+        setImageDataUrl(null);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImageDataUrl(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    };
+
+    fileInput.addEventListener('change', handleFileChange);
+    return () => fileInput.removeEventListener('change', handleFileChange);
+  }, []);
+
   const loading = status === 'streaming' || status === 'submitted';
+
+  const getImageAttachment = () => {
+    if (!imageDataUrl) return [];
+
+    return [
+      {
+        url: imageDataUrl,
+        contentType: 'image/*',
+      },
+    ];
+  };
 
   return (
     <ToolbarPanel>
@@ -190,17 +232,31 @@ ${code}
                         msg.content.length
                       )}...`}
                 </Text>
+                {msg.experimental_attachments?.[0] ? (
+                  <Box className={styles.imageAttachment}>
+                    <img
+                      src={msg.experimental_attachments[0].url}
+                      className={styles.attachmentImage}
+                      alt="Uploaded"
+                    />
+                  </Box>
+                ) : null}
               </Box>
             ))}
           </Box>
         )}
 
         <form
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            handleSubmit(e, { experimental_attachments: getImageAttachment() });
+            clearImageInput();
+          }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              handleSubmit(e);
+              handleSubmit(e, {
+                experimental_attachments: getImageAttachment(),
+              });
+              clearImageInput();
             }
           }}
         >
@@ -220,7 +276,7 @@ ${code}
           </Box>
 
           <Stack space="small">
-            <Button type="submit" disabled={loading || !input.trim()}>
+            <Button type="submit" disabled={loading}>
               {loading ? (
                 <span>
                   <span className={styles.spinningAnimation}>🐢</span>
@@ -230,8 +286,29 @@ ${code}
                 'Generate UI'
               )}
             </Button>
+            <Box className={styles.imageUploadContainer}>
+              <input
+                type="file"
+                id="image-upload"
+                className={styles.imageInput}
+                ref={fileInputRef}
+                accept="image/*"
+              />
+              <Button as="label" htmlFor="image-upload">
+                Upload Image
+              </Button>
+              {imageDataUrl && (
+                <Box className={styles.imageAttachment}>
+                  <img
+                    src={imageDataUrl}
+                    className={styles.attachmentImage}
+                    alt="Uploaded"
+                  />
+                </Box>
+              )}
+            </Box>
 
-            {displayMessages.length > 0 && (
+            {displayMessages.length > 1 && (
               <Button onClick={clearConversation}>Reset</Button>
             )}
           </Stack>

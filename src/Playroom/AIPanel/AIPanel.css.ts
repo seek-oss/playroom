@@ -140,9 +140,9 @@ export const spinningAnimation = style({
 
 export const imageUploadContainer = style([
   sprinkles({
-    display: 'flex',
-    alignItems: 'center',
-    gap: 'small',
+    // display: 'flex',
+    // alignItems: 'center',
+    // gap: 'small',
   }),
 ]);
 
