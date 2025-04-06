@@ -147,7 +147,7 @@ ${code}
     if (status === 'streaming' || status === 'submitted') {
       const loadingMessages = [
         'Pondering...',
-        'Hacking...',
+        'Vibe coding...',
         'Procrastinating...',
         'Fiddling...',
         'Overthinking...',
