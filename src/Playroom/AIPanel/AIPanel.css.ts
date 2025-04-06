@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, keyframes } from '@vanilla-extract/css';
 import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 import { vars } from '../vars.css';
 
@@ -62,8 +62,6 @@ export const conversationContainer = style([
   {
     backgroundColor: colorPaletteVars.background.surface,
     border: `1px solid ${colorPaletteVars.border.standard}`,
-    maxHeight: '200px',
-    overflowY: 'auto',
   },
 ]);
 
@@ -122,3 +120,73 @@ export const textArea = style([
     border: `1px solid ${colorPaletteVars.border.standard}`,
   },
 ]);
+
+const spinAndPulse = keyframes({
+  '0%': {
+    transform: 'rotate(0deg) scale(1)',
+  },
+  '50%': {
+    transform: 'rotate(180deg) scale(1.5)',
+  },
+  '100%': {
+    transform: 'rotate(360deg) scale(1)',
+  },
+});
+
+export const spinningAnimation = style({
+  display: 'inline-block',
+  animation: `${spinAndPulse} 1.5s ease-in-out infinite`,
+});
+
+export const imageUploadContainer = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'small',
+  }),
+]);
+
+export const imageInput = style({
+  position: 'absolute',
+  width: '0.1px',
+  height: '0.1px',
+  opacity: 0,
+  overflow: 'hidden',
+  zIndex: -1,
+});
+
+export const imageInputLabel = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingX: 'medium',
+    borderRadius: 'medium',
+    cursor: 'pointer',
+    fontWeight: 'strong',
+  }),
+  {
+    backgroundColor: colorPaletteVars.background.neutral,
+    color: colorPaletteVars.foreground.neutral,
+    height: vars.touchableSize,
+    transition: 'background-color 0.2s ease',
+    ':hover': {
+      backgroundColor: colorPaletteVars.background.neutral,
+    },
+  },
+]);
+
+export const imageAttachment = style([
+  sprinkles({
+    marginTop: 'small',
+    borderRadius: 'small',
+    overflow: 'hidden',
+  }),
+]);
+
+export const attachmentImage = style({
+  maxWidth: '100%',
+  height: 'auto',
+  maxHeight: '200px',
+  objectFit: 'contain',
+});

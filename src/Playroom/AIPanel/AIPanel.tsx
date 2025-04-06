@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { type Message, useChat } from '@ai-sdk/react';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import { StoreContext } from '../../StoreContext/StoreContext';
@@ -20,6 +20,7 @@ export default ({
 }) => {
   const [state, dispatch] = useContext(StoreContext);
   const [error, setError] = useState('');
+  const [loadingMessage, setLoadingMessage] = useState('Generating...');
 
   const systemPrompt = `
 You are an expert React developer specializing in UI component composition. Your task is to help users create UI layouts using only the components provided.
@@ -98,8 +99,8 @@ ${code}
       id: 'welcome',
       role: 'assistant',
       content: state.code
-        ? 'I can help you modify the existing UI. What changes would you like to make?'
-        : "I can help create UI components for you. Describe what you'd like to build!",
+        ? 'What changes would you like to make?'
+        : "Describe what you'd like to build!",
     },
   ];
 
@@ -128,10 +129,38 @@ ${code}
   });
 
   const displayMessages = messages.filter((msg) => msg.role !== 'system');
-
   const clearConversation = () => {
     setMessages(preprompt);
   };
+
+  useEffect(() => {
+    if (status === 'streaming' || status === 'submitted') {
+      const loadingMessages = [
+        'Pondering...',
+        'Hacking...',
+        'Procrastinating...',
+        'Fiddling...',
+        'Overthinking...',
+        'Daydreaming...',
+        'Turtle-coding...',
+        'Shell-scripting...',
+        'Considering...',
+        'Contemplating...',
+      ];
+
+      const intervalId = setInterval(() => {
+        const randomIndex = Math.floor(Math.random() * loadingMessages.length);
+        setLoadingMessage(loadingMessages[randomIndex]);
+      }, 2000);
+
+      const randomIndex = Math.floor(Math.random() * loadingMessages.length);
+      setLoadingMessage(loadingMessages[randomIndex]);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [status]);
+
+  const loading = status === 'streaming' || status === 'submitted';
 
   return (
     <ToolbarPanel>
@@ -153,8 +182,13 @@ ${code}
                   tone={msg.role === 'user' ? 'neutral' : 'secondary'}
                   weight={msg.role === 'user' ? 'regular' : 'strong'}
                 >
-                  {msg.role === 'user' ? '🧑 You: ' : '🤖 AI: '}
-                  {/* {msg.role === 'user' ? msg. : ''} */}
+                  {msg.role === 'user' ? `🧑 You: ` : `🤖 AI: `}
+                  {msg.role === 'user' || msg.id === 'welcome'
+                    ? msg.content
+                    : `${msg.content.slice(
+                        msg.content.length - 100,
+                        msg.content.length
+                      )}...`}
                 </Text>
               </Box>
             ))}
@@ -186,15 +220,19 @@ ${code}
           </Box>
 
           <Stack space="small">
-            <Button
-              type="submit"
-              disabled={status === 'streaming' || !input.trim()}
-            >
-              {status === 'streaming' ? 'Generating...' : 'Generate UI'}
+            <Button type="submit" disabled={loading || !input.trim()}>
+              {loading ? (
+                <span>
+                  <span className={styles.spinningAnimation}>🐢</span>
+                  <span style={{ paddingLeft: 10 }}>{loadingMessage}</span>
+                </span>
+              ) : (
+                'Generate UI'
+              )}
             </Button>
 
             {displayMessages.length > 0 && (
-              <Button onClick={clearConversation}>Clear Conversation</Button>
+              <Button onClick={clearConversation}>Reset</Button>
             )}
           </Stack>
         </form>
