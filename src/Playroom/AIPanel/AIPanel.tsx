@@ -118,6 +118,7 @@ ${code}
     handleInputChange,
     handleSubmit,
     status,
+    setInput,
     setMessages,
     error: chatError,
   } = useChat({
@@ -177,19 +178,21 @@ ${code}
       const file = fileInput.files?.[0];
       if (!file) {
         setImageDataUrl(null);
+        setInput('');
         return;
       }
 
       const reader = new FileReader();
       reader.onload = (e) => {
         setImageDataUrl(e.target?.result as string);
+        setInput('Clone this image as code');
       };
       reader.readAsDataURL(file);
     };
 
     fileInput.addEventListener('change', handleFileChange);
     return () => fileInput.removeEventListener('change', handleFileChange);
-  }, []);
+  }, [setInput]);
 
   const loading = status === 'streaming' || status === 'submitted';
 
