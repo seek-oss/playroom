@@ -5,11 +5,13 @@ import { StoreContext } from '../../StoreContext/StoreContext';
 import FramesPanel from '../FramesPanel/FramesPanel';
 import PreviewPanel from '../PreviewPanel/PreviewPanel';
 import Snippets from '../Snippets/Snippets';
+import AIPanel from '../AIPanel/AIPanel';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
 import AddIcon from '../icons/AddIcon';
 import FramesIcon from '../icons/FramesIcon';
 import ShareIcon from '../icons/ShareIcon';
 import PlayIcon from '../icons/PlayIcon';
+import AIIcon from '../icons/AIIcon';
 
 import * as styles from './Toolbar.css';
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
@@ -58,6 +60,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const isFramesOpen = activeToolbarPanel === 'frames';
   const isSettingsOpen = activeToolbarPanel === 'settings';
   const isPreviewOpen = activeToolbarPanel === 'preview';
+  const isAIOpen = activeToolbarPanel === 'ai';
 
   const [lastActivePanel, setLastActivePanel] =
     useState<typeof activeToolbarPanel>(undefined);
@@ -132,6 +135,19 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             >
               <PlayIcon />
             </ToolbarItem>
+
+            <ToolbarItem
+              active={isAIOpen}
+              title="AI Assistant"
+              onClick={() => {
+                dispatch({
+                  type: 'toggleToolbar',
+                  payload: { panel: 'ai' },
+                });
+              }}
+            >
+              <AIIcon />
+            </ToolbarItem>
           </div>
 
           <div>
@@ -201,6 +217,8 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             )}
 
             {lastActivePanel === 'settings' && <SettingsPanel />}
+
+            {lastActivePanel === 'ai' && <AIPanel snippets={snippets} />}
           </div>
         </CSSTransition>
       </div>

@@ -65,6 +65,8 @@
   },
   "homepage": "https://github.com/seek-oss/playroom#readme",
   "dependencies": {
+    "@ai-sdk/react": "^1.2.6",
+    "@anthropic-ai/sdk": "^0.39.0",
     "@babel/core": "^7.20.5",
     "@babel/parser": "^7.23.4",
     "@babel/preset-env": "^7.20.2",
