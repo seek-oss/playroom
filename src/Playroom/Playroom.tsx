@@ -129,7 +129,12 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         <StatusMessage />
       </div>
       <div className={styles.toolbarContainer}>
-        <Toolbar widths={widths} themes={themes} snippets={snippets} />
+        <Toolbar
+          widths={widths}
+          themes={themes}
+          snippets={snippets}
+          components={components}
+        />
       </div>
     </Fragment>
   );

@@ -116,9 +116,6 @@ importers:
       parse-prop-types:
         specifier: ^0.3.0
         version: 0.3.0(prop-types@15.8.1)
-      playroom:
-        specifier: link:../../../Library/pnpm/global/5/node_modules/playroom
-        version: link:../../../Library/pnpm/global/5/node_modules/playroom
       portfinder:
         specifier: ^1.0.32
         version: 1.0.35

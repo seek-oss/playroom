@@ -11,13 +11,24 @@ import * as styles from './AIPanel.css';
 
 import type { PlayroomProps } from '../Playroom';
 
-export default ({ snippets }: { snippets: PlayroomProps['snippets'] }) => {
+export default ({
+  snippets,
+  components,
+}: {
+  snippets: PlayroomProps['snippets'];
+  components: PlayroomProps['components'];
+}) => {
   const [state, dispatch] = useContext(StoreContext);
   const [error, setError] = useState('');
 
-  const systemPrompt = `You are an expert React developer specializing in UI component composition. Your task is to help users create UI layouts using only the components provided.
+  const systemPrompt = `
+You are an expert React developer specializing in UI component composition. Your task is to help users create UI layouts using only the components provided.
 
 ## Available Components
+
+${Object.keys(components)}
+
+## Component Snippets
 
 ${snippets.map(
   ({ name, code, group }) =>
@@ -35,7 +46,7 @@ ${code}
 3. Use props as shown in the component definitions.
 4. When modifying existing code, preserve the structure while making requested changes.
 5. If the user asks for a component you don't have, use the closest available alternative.
-6. For icons or images, suggest using emoji as placeholders if appropriate.
+6. MUST follow snippets examples and syntax. For example, if a component is nested in a provider, you must always add the provider.
 
 ${
   state.aiExamples && state.aiExamples.length > 0
@@ -58,9 +69,9 @@ ${code}
     : ''
 }
 
-## Response Format
+## Response Format (VERY IMPORTANT)
 
-- RETURN ONLY VALID JSX CODE - no explanations, no markdown, no code blocks.
+- RETURN ONLY RAW AND VALID JSX CODE - no explanations, no markdown, no code blocks (.e.g \`\`\`JSX).
 - Your code will be directly rendered in the UI.
 - Ensure all opening tags have matching closing tags.
 - Include appropriate whitespace for readability.
@@ -143,30 +154,7 @@ ${code}
                   weight={msg.role === 'user' ? 'regular' : 'strong'}
                 >
                   {msg.role === 'user' ? '🧑 You: ' : '🤖 AI: '}
-                  {msg.parts.map((part, index) => {
-                    if (part.type === 'text') {
-                      return <div key={index}>{part.text}</div>;
-                    }
-
-                    if (part.type === 'reasoning') {
-                      return (
-                        <pre key={index}>
-                          {part.details.map((detail) =>
-                            detail.type === 'text' ? detail.text : '<redacted>'
-                          )}
-                        </pre>
-                      );
-                    }
-                  })}
-
-                  {/* {(() => {
-                    if (msg.role !== 'system') {
-                      return msg.content;
-                    }
-                    return msg.content.length > 50
-                      ? 'Generated code successfully'
-                      : msg.content;
-                  })()} */}
+                  {/* {msg.role === 'user' ? msg. : ''} */}
                 </Text>
               </Box>
             ))}
