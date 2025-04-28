@@ -80,7 +80,10 @@ function FrameOption<Option>({
   );
 }
 
-export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
+export const FramesPanel = ({
+  availableWidths,
+  availableThemes,
+}: FramesPanelProps) => {
   const [{ visibleWidths = [], visibleThemes = [], title }, dispatch] =
     useContext(StoreContext);
   const hasThemes =

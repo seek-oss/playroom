@@ -3,6 +3,7 @@ import React, { useContext, type ReactElement } from 'react';
 import {
   type ColorScheme,
   type EditorPosition,
+  editorPositions,
   StoreContext,
 } from '../../StoreContext/StoreContext';
 import { isMac } from '../../utils/formatting';
@@ -16,8 +17,7 @@ import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
 import ColorModeLightIcon from '../icons/ColorModeLightIcon';
 import ColorModeSystemIcon from '../icons/ColorModeSystemIcon';
 import EditorBottomIcon from '../icons/EditorBottomIcon';
-import EditorRightIcon from '../icons/EditorRightIcon';
-import EditorUndockedIcon from '../icons/EditorUndockedIcon';
+import { EditorLeftIcon, EditorRightIcon } from '../icons/EditorHorizontalIcon';
 
 import * as styles from './SettingsPanel.css';
 
@@ -45,9 +45,9 @@ const getKeyBindings = () => {
 };
 
 const positionIcon: Record<EditorPosition, ReactElement> = {
-  undocked: <EditorUndockedIcon />,
-  right: <EditorRightIcon />,
+  left: <EditorLeftIcon />,
   bottom: <EditorBottomIcon />,
+  right: <EditorRightIcon />,
 };
 
 const colorModeIcon: Record<ColorScheme, ReactElement> = {
@@ -97,34 +97,39 @@ export default React.memo(() => {
               <Heading level="3">Editor Position</Heading>
             </legend>
             <Inline space="none">
-              {['Bottom', 'Right'].map((option) => (
-                <div key={option}>
-                  <input
-                    type="radio"
-                    name="editorPosition"
-                    id={`editorPosition${option}`}
-                    value={option.toLowerCase()}
-                    title={option}
-                    checked={option.toLowerCase() === editorPosition}
-                    onChange={() =>
-                      dispatch({
-                        type: 'updateEditorPosition',
-                        payload: {
-                          position: option.toLowerCase() as EditorPosition,
-                        },
-                      })
-                    }
-                    className={styles.realRadio}
-                  />
-                  <label
-                    htmlFor={`editorPosition${option}`}
-                    className={styles.label}
-                    title={option}
-                  >
-                    {positionIcon[option.toLowerCase() as EditorPosition]}
-                  </label>
-                </div>
-              ))}
+              {editorPositions.map((name) => {
+                const nameInTitleCase =
+                  name.charAt(0).toUpperCase() + name.slice(1);
+
+                return (
+                  <div key={nameInTitleCase}>
+                    <input
+                      type="radio"
+                      name="editorPosition"
+                      id={`editorPosition${nameInTitleCase}`}
+                      value={name}
+                      title={nameInTitleCase}
+                      checked={name === editorPosition}
+                      onChange={() =>
+                        dispatch({
+                          type: 'updateEditorPosition',
+                          payload: {
+                            position: name,
+                          },
+                        })
+                      }
+                      className={styles.realRadio}
+                    />
+                    <label
+                      htmlFor={`editorPosition${nameInTitleCase}`}
+                      className={styles.label}
+                      title={nameInTitleCase}
+                    >
+                      {positionIcon[name]}
+                    </label>
+                  </div>
+                );
+              })}
             </Inline>
           </Stack>
         </fieldset>

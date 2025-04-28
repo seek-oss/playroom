@@ -13,6 +13,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { type Snippet, compressParams } from '../../utils';
 import type { PlayroomProps } from '../Playroom/Playroom';
+import { toolbarItemSize } from '../Playroom/constants';
 import playroomConfig from '../config';
 import { isValidLocation } from '../utils/cursor';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
@@ -28,7 +29,9 @@ const store = localforage.createInstance({
 const defaultEditorSize = '40%';
 const defaultPosition = 'bottom';
 
-export type EditorPosition = 'bottom' | 'right' | 'undocked';
+export const editorPositions = ['left', 'bottom', 'right'] as const;
+export type EditorPosition = (typeof editorPositions)[number];
+
 export type ColorScheme = 'light' | 'dark' | 'system';
 
 const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
@@ -41,14 +44,16 @@ function convertAndStoreSizeAsPercentage(
   mode: 'height' | 'width',
   size: number
 ): string {
-  const viewportSize =
-    mode === 'height' ? window.innerHeight : window.innerWidth;
+  const editorAndFrameSize =
+    mode === 'height'
+      ? window.innerHeight
+      : window.innerWidth - toolbarItemSize;
 
-  const sizePercentage = (size / viewportSize) * 100;
+  const sizePercentage = (size / editorAndFrameSize) * 100;
   const roundedSizePercentage = `${Math.round(sizePercentage)}%`;
 
   store.setItem(
-    `${mode === 'height' ? 'editorHeight' : 'editorWidth'}`,
+    mode === 'height' ? 'editorHeight' : 'editorWidth',
     roundedSizePercentage
   );
 

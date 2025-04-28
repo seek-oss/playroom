@@ -1,16 +1,15 @@
-import classnames from 'classnames';
 import { useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import { StoreContext } from '../../StoreContext/StoreContext';
 import { isMac } from '../../utils/formatting';
-import FramesPanel from '../FramesPanel/FramesPanel';
+import { Box } from '../Box/Box';
+import { FramesPanel } from '../FramesPanel/FramesPanel';
 import type { PlayroomProps } from '../Playroom';
 import PreviewPanel from '../PreviewPanel/PreviewPanel';
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import Snippets from '../Snippets/Snippets';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
-import { ANIMATION_TIMEOUT } from '../constants';
 import AddIcon from '../icons/AddIcon';
 import FramesIcon from '../icons/FramesIcon';
 import PlayIcon from '../icons/PlayIcon';
@@ -24,6 +23,8 @@ interface Props {
   widths: PlayroomProps['widths'];
   snippets: PlayroomProps['snippets'];
 }
+
+const ANIMATION_TIMEOUT = 300;
 
 export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const [
@@ -75,135 +76,153 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const panelRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div
-      className={classnames(styles.root, {
-        [styles.isOpen]: isOpen,
-      })}
-    >
-      {isOpen && (
-        <div
-          className={styles.backdrop}
-          onClick={() => dispatch({ type: 'closeToolbar' })}
-        />
-      )}
-      <div className={styles.sidebar}>
-        <div className={styles.buttons}>
-          <div>
-            {hasSnippets && (
+    <Box position="relative">
+      <Box
+        position="absolute"
+        inset={0}
+        boxShadow="small"
+        className={styles.shadow}
+      />
+
+      <Box
+        position="relative"
+        height="full"
+        display="flex"
+        zIndex={1}
+        className={styles.root}
+      >
+        {isOpen && (
+          <div
+            className={styles.backdrop}
+            onClick={() => dispatch({ type: 'closeToolbar' })}
+          />
+        )}
+        <div className={styles.sidebar}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            pointerEvents="auto"
+            justifyContent="space-between"
+            position="relative"
+            zIndex={1}
+            className={styles.buttons}
+          >
+            <div>
+              {hasSnippets && (
+                <ToolbarItem
+                  active={isSnippetsOpen}
+                  title={`Insert snippet (${isMac() ? '⌘K' : 'Ctrl+K'})`}
+                  disabled={!validCursorPosition}
+                  onClick={() => {
+                    dispatch({
+                      type: 'toggleToolbar',
+                      payload: { panel: 'snippets' },
+                    });
+                  }}
+                >
+                  <AddIcon />
+                </ToolbarItem>
+              )}
               <ToolbarItem
-                active={isSnippetsOpen}
-                title={`Insert snippet (${isMac() ? '⌘K' : 'Ctrl+K'})`}
-                disabled={!validCursorPosition}
+                active={isFramesOpen}
+                showIndicator={hasFilteredFrames}
+                title="Configure visible frames"
                 onClick={() => {
                   dispatch({
                     type: 'toggleToolbar',
-                    payload: { panel: 'snippets' },
+                    payload: { panel: 'frames' },
                   });
                 }}
               >
-                <AddIcon />
+                <FramesIcon />
               </ToolbarItem>
-            )}
-            <ToolbarItem
-              active={isFramesOpen}
-              showIndicator={hasFilteredFrames}
-              title="Configure visible frames"
-              onClick={() => {
-                dispatch({
-                  type: 'toggleToolbar',
-                  payload: { panel: 'frames' },
-                });
-              }}
-            >
-              <FramesIcon />
-            </ToolbarItem>
-
-            <ToolbarItem
-              active={isPreviewOpen}
-              title="Preview playroom"
-              disabled={code.trim().length === 0}
-              onClick={() => {
-                dispatch({
-                  type: 'toggleToolbar',
-                  payload: { panel: 'preview' },
-                });
-              }}
-            >
-              <PlayIcon />
-            </ToolbarItem>
-          </div>
-
-          <div>
-            <ToolbarItem
-              title="Copy Playroom link"
-              success={copying}
-              onClick={copyHandler}
-            >
-              <ShareIcon />
-            </ToolbarItem>
-            <ToolbarItem
-              active={isSettingsOpen}
-              title="Edit settings"
-              onClick={() =>
-                dispatch({
-                  type: 'toggleToolbar',
-                  payload: { panel: 'settings' },
-                })
-              }
-            >
-              <SettingsIcon />
-            </ToolbarItem>
-          </div>
-        </div>
-        <CSSTransition
-          in={isOpen}
-          nodeRef={panelRef}
-          timeout={ANIMATION_TIMEOUT}
-          classNames={styles.transitionStyles}
-          mountOnEnter
-          unmountOnExit
-          onExited={() => setLastActivePanel(undefined)}
-        >
-          <div className={styles.panel} id="custom-id" ref={panelRef}>
-            {lastActivePanel === 'snippets' && (
-              <Snippets
-                isOpen={isOpen}
-                snippets={snippets}
-                onHighlight={(snippet) => {
+              <ToolbarItem
+                active={isPreviewOpen}
+                title="Preview playroom"
+                disabled={code.trim().length === 0}
+                onClick={() => {
                   dispatch({
-                    type: 'previewSnippet',
-                    payload: { snippet },
+                    type: 'toggleToolbar',
+                    payload: { panel: 'preview' },
                   });
                 }}
-                onClose={(snippet) => {
-                  if (snippet) {
+              >
+                <PlayIcon />
+              </ToolbarItem>
+            </div>
+            <div>
+              <ToolbarItem
+                title="Copy Playroom link"
+                success={copying}
+                onClick={copyHandler}
+              >
+                <ShareIcon />
+              </ToolbarItem>
+              <ToolbarItem
+                active={isSettingsOpen}
+                title="Edit settings"
+                onClick={() =>
+                  dispatch({
+                    type: 'toggleToolbar',
+                    payload: { panel: 'settings' },
+                  })
+                }
+              >
+                <SettingsIcon />
+              </ToolbarItem>
+            </div>
+          </Box>
+          <CSSTransition
+            in={isOpen}
+            nodeRef={panelRef}
+            timeout={ANIMATION_TIMEOUT}
+            classNames={styles.transitionStyles}
+            mountOnEnter
+            unmountOnExit
+            onExited={() => setLastActivePanel(undefined)}
+          >
+            <div className={styles.panel} id="custom-id" ref={panelRef}>
+              {lastActivePanel === 'snippets' && (
+                <Snippets
+                  isOpen={isOpen}
+                  snippets={snippets}
+                  onHighlight={(snippet) => {
                     dispatch({
-                      type: 'persistSnippet',
+                      type: 'previewSnippet',
                       payload: { snippet },
                     });
-                  } else {
-                    dispatch({ type: 'closeToolbar' });
-                  }
-                }}
-              />
-            )}
-
-            {lastActivePanel === 'frames' && (
-              <FramesPanel
-                availableWidths={allWidths}
-                availableThemes={allThemes}
-              />
-            )}
-
-            {lastActivePanel === 'preview' && (
-              <PreviewPanel themes={allThemes} visibleThemes={visibleThemes} />
-            )}
-
-            {lastActivePanel === 'settings' && <SettingsPanel />}
-          </div>
-        </CSSTransition>
-      </div>
-    </div>
+                  }}
+                  onClose={(snippet) => {
+                    if (snippet) {
+                      dispatch({
+                        type: 'persistSnippet',
+                        payload: { snippet },
+                      });
+                    } else {
+                      dispatch({ type: 'closeToolbar' });
+                    }
+                  }}
+                />
+              )}
+              {lastActivePanel === 'frames' && (
+                <FramesPanel
+                  availableWidths={allWidths}
+                  availableThemes={allThemes}
+                />
+              )}
+              {lastActivePanel === 'preview' && (
+                <PreviewPanel
+                  themes={allThemes}
+                  visibleThemes={visibleThemes}
+                />
+              )}
+              {lastActivePanel === 'settings' && <SettingsPanel />}
+            </div>
+          </CSSTransition>
+        </div>
+      </Box>
+    </Box>
   );
 };
 

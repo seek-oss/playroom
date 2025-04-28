@@ -8,58 +8,36 @@ import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 
 const toolbarBorderThickness = '1px';
 
-export const isOpen = style({});
-export const root = style([
-  sprinkles({
-    position: 'relative',
-    height: 'full',
-    display: 'flex',
-    flexDirection: 'row-reverse',
-  }),
-  {
-    color: colorPaletteVars.foreground.neutral,
-    minWidth: calc(`${toolbarItemSize}px`)
-      .add(toolbarBorderThickness)
-      .toString(),
-    selectors: {
-      [`&${isOpen}`]: {
-        width: '100vw',
-      },
-    },
-  },
-]);
-
-export const backdrop = sprinkles({
-  position: 'absolute',
-  height: 'viewport',
-  width: 'viewport',
+export const root = style({
+  color: colorPaletteVars.foreground.neutral,
+  minWidth: calc(`${toolbarItemSize}px`).add(toolbarBorderThickness).toString(),
 });
+
+export const shadow = style({
+  zIndex: -1,
+});
+
+export const backdrop = style([
+  sprinkles({
+    position: 'absolute',
+    height: 'viewport',
+    width: 'viewport',
+  }),
+]);
 
 export const sidebar = sprinkles({
   position: 'absolute',
   display: 'flex',
   pointerEvents: 'none',
   height: 'full',
-  flexDirection: 'row-reverse',
   overflow: 'hidden',
 });
 
-export const buttons = style([
-  sprinkles({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    pointerEvents: 'auto',
-    justifyContent: 'space-between',
-    position: 'relative',
-    zIndex: 1,
-  }),
-  {
-    width: toolbarItemSize,
-    backgroundColor: colorPaletteVars.background.surface,
-    borderLeft: `${toolbarBorderThickness} solid ${colorPaletteVars.border.standard}`,
-  },
-]);
+export const buttons = style({
+  width: toolbarItemSize,
+  backgroundColor: colorPaletteVars.background.surface,
+  borderRight: `${toolbarBorderThickness} solid ${colorPaletteVars.border.standard}`,
+});
 
 export const panel = style([
   sprinkles({
@@ -70,14 +48,16 @@ export const panel = style([
   {
     width: toolbarOpenSize,
     backgroundColor: colorPaletteVars.background.surface,
-    borderLeft: `${toolbarBorderThickness} solid ${colorPaletteVars.border.standard}`,
+    borderRight: `${toolbarBorderThickness} solid ${colorPaletteVars.border.standard}`,
   },
 ]);
+
+const panelTransitionOffset = '-30%';
 
 export const transitionStyles = {
   enter: style({
     opacity: 0,
-    transform: `translateX(30%)`,
+    transform: `translateX(${panelTransitionOffset})`,
   }),
   enterActive: style([
     sprinkles({
@@ -101,11 +81,11 @@ export const transitionStyles = {
     }),
     {
       opacity: 0,
-      transform: `translateX(30%)`,
+      transform: `translateX(${panelTransitionOffset})`,
     },
   ]),
   exitDone: style({
     opacity: 0,
-    transform: `translateX(30%)`,
+    transform: `translateX(${panelTransitionOffset})`,
   }),
 };

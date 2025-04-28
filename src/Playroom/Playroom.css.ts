@@ -37,13 +37,15 @@ globalStyle('body', {
 });
 
 export const root = styleVariants({
+  left: {
+    flexDirection: 'row-reverse',
+  },
   right: {
     flexDirection: 'row',
   },
   bottom: {
     flexDirection: 'column',
   },
-  undocked: {},
 });
 
 // Prevents the editor growing off screen
@@ -55,8 +57,22 @@ export const previewContainer = style({
 
 export const editorSize = createVar();
 
+export const previewContainerPosition = styleVariants({
+  left: {
+    left: `max(${editorSize}, ${MIN_WIDTH}px)`,
+  },
+  bottom: {
+    bottom: `max(${editorSize}, ${MIN_HEIGHT}px)`,
+  },
+  right: {
+    right: `max(${editorSize}, ${MIN_WIDTH}px)`,
+  },
+});
+
 export const resizable = style([
   sprinkles({
+    bottom: 0,
+    right: 0,
     overflow: 'hidden',
     boxShadow: 'small',
   }),
@@ -71,20 +87,20 @@ Resizable's `size` prop would instead transition to `editorSize`,
 so `!important` is used to override this.
 */
 export const resizableSize = styleVariants({
-  right: {
+  vertical: {
     width: `clamp(${MIN_WIDTH}, ${editorSize}, ${MAX_WIDTH}) !important`,
   },
-  bottom: {
+  horizontal: {
     height: `clamp(${MIN_HEIGHT}, ${editorSize}, ${MAX_HEIGHT}) !important`,
   },
 });
 
 export const resizableAvailable = styleVariants({
-  right: {
+  vertical: {
     minWidth: `${MIN_WIDTH}`,
     maxWidth: MAX_WIDTH,
   },
-  bottom: {
+  horizontal: {
     minHeight: `${MIN_HEIGHT}`,
     maxHeight: MAX_HEIGHT,
   },
@@ -98,33 +114,11 @@ export const resizableUnavailable = style({
 
 export const isBottom = style({});
 
-export const toggleEditorContainer = style([
-  sprinkles({
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    display: 'flex',
-    justifyContent: 'center',
-  }),
-  {
-    selectors: {
-      [`&${isBottom}`]: {
-        width: toolbarItemSize,
-      },
-    },
-  },
-]);
+export const bottomToggleEditorContainer = style({
+  width: toolbarItemSize,
+});
 
 export const toggleEditorButton = style([
-  sprinkles({
-    position: 'relative',
-    borderRadius: 'large',
-    padding: 'none',
-    cursor: 'pointer',
-    width: 'full',
-    appearance: 'none',
-    border: 0,
-  }),
   {
     background: 'transparent',
     WebkitTapHighlightColor: 'transparent',
@@ -152,18 +146,6 @@ export const toggleEditorButton = style([
       borderRadius: vars.radii.large,
       transition: vars.transition.slow,
     },
-  },
-]);
-
-export const editorContainer = style([
-  sprinkles({
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-  }),
-  {
-    right: toolbarItemSize,
   },
 ]);
 
