@@ -7,10 +7,17 @@ import {
 import { sprinkles, colorPaletteVars } from './sprinkles.css';
 import { vars } from './vars.css';
 import { toolbarItemSize } from './ToolbarItem/ToolbarItem.css';
-import { toolbarItemCount, toolbarOpenSize } from './toolbarConstants';
+import {
+  ANIMATION_TIMEOUT,
+  toolbarItemCount,
+  toolbarOpenSize,
+} from './constants';
 
 export const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
 export const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;
+
+const MAX_HEIGHT = '90vh';
+const MAX_WIDTH = '90vw';
 
 globalStyle('html', {
   width: '100%',
@@ -27,71 +34,60 @@ globalStyle('body', {
   margin: 0,
 });
 
-export const root = sprinkles({
-  height: 'viewport',
-  width: 'viewport',
-});
-
-export const previewContainer = sprinkles({
-  position: 'absolute',
-  inset: 0,
-});
-
-export const editorSize = createVar();
-
-export const previewContainerPosition = styleVariants({
+export const root = styleVariants({
   right: {
-    right: `max(${editorSize}, ${MIN_WIDTH}px)`,
+    flexDirection: 'row',
   },
   bottom: {
-    bottom: `max(${editorSize}, ${MIN_HEIGHT}px)`,
+    flexDirection: 'column',
   },
   undocked: {},
 });
 
-export const resizableContainer = style([
+// Prevents the editor growing off screen
+// when resizable value increases past maximum size
+export const previewContainer = style({
+  minWidth: 0,
+  minHeight: 0,
+});
+
+export const editorSize = createVar();
+
+export const resizable = style([
   sprinkles({
-    bottom: 0,
-    right: 0,
     overflow: 'hidden',
     boxShadow: 'small',
-    transition: 'slow',
   }),
-  // @ts-expect-error Shouldnt need to but types do not like `!important`
-  {
-    position: 'absolute !important', // override re-resizable's inline style
-  },
 ]);
 
-export const resizableContainer_isHidden = style({});
-
-export const resizableContainer_isRight = style([
-  sprinkles({
-    top: 0,
-  }),
-  {
-    maxWidth: '90vw',
-    selectors: {
-      [`&${resizableContainer_isHidden}`]: {
-        transform: 'translateX(100%)',
-      },
-    },
+// override re-resizable's inline style
+// clamp ensures editor transitioning to correct size
+// before applying minimum and maximum sizes
+export const resizableSize = styleVariants({
+  right: {
+    width: `clamp(${[`${MIN_WIDTH}px`, editorSize, MAX_WIDTH].join(
+      ', '
+    )}) !important`,
   },
-]);
-
-export const resizableContainer_isBottom = style([
-  sprinkles({
-    left: 0,
-  }),
-  {
-    maxHeight: '90vh',
-    selectors: {
-      [`&${resizableContainer_isHidden}`]: {
-        transform: 'translateY(100%)',
-      },
-    },
+  bottom: {
+    height: `clamp(${[`${MIN_HEIGHT}px`, editorSize, MAX_HEIGHT].join(
+      ', '
+    )}) !important`,
   },
-]);
+});
+
+export const resizableAvailable = styleVariants({
+  right: {
+    maxWidth: MAX_WIDTH,
+  },
+  bottom: {
+    maxHeight: MAX_HEIGHT,
+  },
+});
+
+export const resizableUnavailable = style({
+  transition: `width ${ANIMATION_TIMEOUT}ms ease, height ${ANIMATION_TIMEOUT}ms ease`,
+});
 
 export const isBottom = style({});
 
