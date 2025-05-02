@@ -15,6 +15,7 @@ import * as styles from './Toolbar.css';
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import SettingsIcon from '../icons/SettingsIcon';
 import { isMac } from '../../utils/formatting';
+import { ANIMATION_TIMEOUT } from '../constants';
 
 import { CSSTransition } from 'react-transition-group';
 
@@ -23,8 +24,6 @@ interface Props {
   widths: PlayroomProps['widths'];
   snippets: PlayroomProps['snippets'];
 }
-
-const ANIMATION_TIMEOUT = 300;
 
 export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
   const [

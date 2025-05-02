@@ -1,4 +1,10 @@
-import { useContext, type ComponentType, Fragment } from 'react';
+import {
+  useContext,
+  type ComponentType,
+  Fragment,
+  useState,
+  useEffect,
+} from 'react';
 import { Helmet } from 'react-helmet';
 import classnames from 'classnames';
 import { useDebouncedCallback } from 'use-debounce';
@@ -19,7 +25,7 @@ import { CodeEditor } from './CodeEditor/CodeEditor';
 
 import * as styles from './Playroom.css';
 import { Box } from './Box/Box';
-
+import { ANIMATION_TIMEOUT } from './constants';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
@@ -84,6 +90,22 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
     },
     dispatch,
   ] = useContext(StoreContext);
+
+  // This is necessary because this updates slightly after editorHidden updates,
+  // not at the same time
+  const [editorVisibilityAfterTransition, setEditorVisibilityAfterTransition] =
+    useState<boolean>(editorHidden);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setEditorVisibilityAfterTransition(editorHidden);
+    }, ANIMATION_TIMEOUT);
+
+    return () => clearTimeout(timeoutId);
+  }, [editorHidden]);
+
+  const editorAvailable = !editorHidden && !editorVisibilityAfterTransition;
+
   const displayedTitle = getTitle(title);
 
   const updateEditorSize = useDebouncedCallback(
@@ -116,7 +138,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
 
   const codeEditor = (
     <Fragment>
-      <div className={styles.editorContainer}>
+      <div inert={editorHidden} className={styles.editorContainer}>
         <CodeEditor
           code={code}
           editorHidden={editorHidden}
@@ -136,10 +158,16 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
 
   const isVerticalEditor = editorPosition === 'right';
   const isHorizontalEditor = editorPosition === 'bottom';
+
   const sizeStyles = {
     height: isHorizontalEditor ? editorHeight : 'auto',
     width: isVerticalEditor ? editorWidth : 'auto',
   };
+  const hiddenSizeStyles = {
+    height: isHorizontalEditor ? 0 : 'auto',
+    width: isVerticalEditor ? 0 : 'auto',
+  };
+
   const editorContainer =
     editorPosition === 'undocked' ? (
       <WindowPortal
@@ -152,17 +180,28 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       </WindowPortal>
     ) : (
       <Resizable
-        className={classnames(styles.resizableContainer, {
-          [styles.resizableContainer_isRight]: isVerticalEditor,
-          [styles.resizableContainer_isBottom]: isHorizontalEditor,
-          [styles.resizableContainer_isHidden]: editorHidden,
+        style={assignInlineVars({
+          [styles.editorSize]:
+            editorPosition === 'right' ? editorWidth : editorHeight,
+        })}
+        className={classnames({
+          [styles.resizable]: true,
+          [styles.resizableSize[editorPosition]]: !editorHidden,
+          [styles.resizableUnavailable]: !editorAvailable,
+          [styles.resizableAvailable[editorPosition]]: editorAvailable,
         })}
         defaultSize={sizeStyles}
-        size={sizeStyles}
-        minWidth={isVerticalEditor ? styles.MIN_WIDTH : undefined}
-        minHeight={styles.MIN_HEIGHT}
+        size={editorHidden ? hiddenSizeStyles : sizeStyles}
+        minWidth={editorAvailable ? styles.MIN_WIDTH : undefined}
+        minHeight={editorAvailable ? styles.MIN_HEIGHT : undefined}
         onResize={(_event, _direction, { offsetWidth, offsetHeight }) => {
           updateEditorSize({ isVerticalEditor, offsetWidth, offsetHeight });
+        }}
+        onResizeStart={(_event, _direction, _refToElement) => {
+          _refToElement.classList.remove(styles.resizableSize[editorPosition]);
+        }}
+        onResizeStop={(_event, _direction, _refToElement) => {
+          _refToElement.classList.add(styles.resizableSize[editorPosition]);
         }}
         enable={resizableConfig(editorPosition)}
         /*
@@ -181,24 +220,19 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
     );
 
   return (
-    <div className={styles.root}>
+    <Box
+      display="flex"
+      height="viewport"
+      width="viewport"
+      className={styles.root[editorPosition]}
+    >
       {title === undefined ? null : (
         <Helmet>
           <title>{displayedTitle}</title>
         </Helmet>
       )}
-      <Box
-        className={[
-          styles.previewContainer,
-          editorHidden
-            ? undefined
-            : styles.previewContainerPosition[editorPosition],
-        ]}
-        style={assignInlineVars({
-          [styles.editorSize]:
-            editorPosition === 'right' ? editorWidth : editorHeight,
-        })}
-      >
+
+      <Box position="relative" flexGrow={1} className={styles.previewContainer}>
         <Frames
           code={previewRenderCode || code}
           themes={
@@ -228,6 +262,6 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         </div>
       </Box>
       {editorContainer}
-    </div>
+    </Box>
   );
 };
