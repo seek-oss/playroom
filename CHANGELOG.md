@@ -1,5 +1,11 @@
 # playroom
 
+## 0.43.1
+
+### Patch Changes
+
+- [#408](https://github.com/seek-oss/playroom/pull/408) [`059e9c7`](https://github.com/seek-oss/playroom/commit/059e9c7fa837e04198e612704320c94bb8d25b1f) Thanks [@askoufis](https://github.com/askoufis)! - CLI: Only require modules that are relevant to the CLI command being executed
+
 ## 0.43.0
 
 ### Minor Changes
