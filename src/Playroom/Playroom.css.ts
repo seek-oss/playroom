@@ -65,14 +65,10 @@ export const resizable = style([
 // before applying minimum and maximum sizes
 export const resizableSize = styleVariants({
   right: {
-    width: `clamp(${[`${MIN_WIDTH}px`, editorSize, MAX_WIDTH].join(
-      ', '
-    )}) !important`,
+    width: `clamp(${MIN_WIDTH}px, ${editorSize}, ${MAX_WIDTH}) !important`,
   },
   bottom: {
-    height: `clamp(${[`${MIN_HEIGHT}px`, editorSize, MAX_HEIGHT].join(
-      ', '
-    )}) !important`,
+    height: `clamp(${MIN_HEIGHT}px, ${editorSize}, ${MAX_HEIGHT}}) !important`,
   },
 });
 
@@ -86,7 +82,9 @@ export const resizableAvailable = styleVariants({
 });
 
 export const resizableUnavailable = style({
-  transition: `width ${ANIMATION_TIMEOUT}ms ease, height ${ANIMATION_TIMEOUT}ms ease`,
+  transitionProperty: 'width, height',
+  transitionDuration: `${ANIMATION_TIMEOUT}ms`,
+  transitionTimingFunction: 'ease',
 });
 
 export const isBottom = style({});
