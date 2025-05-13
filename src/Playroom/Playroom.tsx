@@ -192,8 +192,6 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         })}
         defaultSize={sizeStyles}
         size={editorHidden ? hiddenSizeStyles : sizeStyles}
-        minWidth={editorAvailable ? styles.MIN_WIDTH : undefined}
-        minHeight={editorAvailable ? styles.MIN_HEIGHT : undefined}
         onResize={(_event, _direction, { offsetWidth, offsetHeight }) => {
           updateEditorSize({ isVerticalEditor, offsetWidth, offsetHeight });
         }}
