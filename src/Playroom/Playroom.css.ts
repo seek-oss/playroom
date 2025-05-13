@@ -16,7 +16,7 @@ import {
 export const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
 export const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;
 
-const MAX_HEIGHT = '90vh';
+const MAX_HEIGHT = '80vh';
 const MAX_WIDTH = '90vw';
 
 globalStyle('html', {
