@@ -186,23 +186,23 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         })}
         className={classnames({
           [styles.resizable]: true,
-          [styles.resizableSize[editorPosition]]: !editorHidden,
+          // [styles.resizableSize[editorPosition]]: !editorHidden,
           [styles.resizableUnavailable]: !editorAvailable,
           [styles.resizableAvailable[editorPosition]]: editorAvailable,
         })}
         defaultSize={sizeStyles}
         size={editorHidden ? hiddenSizeStyles : sizeStyles}
-        minWidth={editorAvailable ? styles.MIN_WIDTH : undefined}
-        minHeight={editorAvailable ? styles.MIN_HEIGHT : undefined}
+        // minWidth={editorAvailable ? styles.MIN_WIDTH : undefined}
+        // minHeight={editorAvailable ? styles.MIN_HEIGHT : undefined}
         onResize={(_event, _direction, { offsetWidth, offsetHeight }) => {
           updateEditorSize({ isVerticalEditor, offsetWidth, offsetHeight });
         }}
-        onResizeStart={(_event, _direction, _refToElement) => {
-          _refToElement.classList.remove(styles.resizableSize[editorPosition]);
-        }}
-        onResizeStop={(_event, _direction, _refToElement) => {
-          _refToElement.classList.add(styles.resizableSize[editorPosition]);
-        }}
+        // onResizeStart={(_event, _direction, _refToElement) => {
+        //   _refToElement.classList.remove(styles.resizableSize[editorPosition]);
+        // }}
+        // onResizeStop={(_event, _direction, _refToElement) => {
+        //   _refToElement.classList.add(styles.resizableSize[editorPosition]);
+        // }}
         enable={resizableConfig(editorPosition)}
         /*
          * Ensures resizable handles are stacked above the `codeEditor` component.

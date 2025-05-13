@@ -60,25 +60,24 @@ export const resizable = style([
   }),
 ]);
 
-// override re-resizable's inline style
-// clamp ensures editor transitioning to correct size
-// before applying minimum and maximum sizes
-export const resizableSize = styleVariants({
-  right: {
-    width: `clamp(${MIN_WIDTH}px, ${editorSize}, ${MAX_WIDTH}) !important`,
-  },
-  bottom: {
-    height: `clamp(${MIN_HEIGHT}px, ${editorSize}, ${MAX_HEIGHT}}) !important`,
-  },
+const resizeMinLimits = style({
+  minWidth: MIN_WIDTH,
+  minHeight: MIN_HEIGHT,
 });
 
 export const resizableAvailable = styleVariants({
-  right: {
-    maxWidth: MAX_WIDTH,
-  },
-  bottom: {
-    maxHeight: MAX_HEIGHT,
-  },
+  right: [
+    resizeMinLimits,
+    {
+      maxWidth: MAX_WIDTH,
+    },
+  ],
+  bottom: [
+    resizeMinLimits,
+    {
+      maxHeight: MAX_HEIGHT,
+    },
+  ],
 });
 
 export const resizableUnavailable = style({
