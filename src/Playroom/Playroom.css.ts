@@ -60,9 +60,14 @@ export const resizable = style([
   }),
 ]);
 
-// override re-resizable's inline style
-// clamp ensures editor transitioning to correct size
-// before applying minimum and maximum sizes
+/*
+Min/max values are disabled during transitions to allow zero height.
+This class ensures the open editor transition uses the correct size,
+rather than `editorSize`, before min/max values are applied.
+
+Resizable's `size` prop would instead transition to `editorSize`,
+so `!important` is used to override this.
+*/
 export const resizableSize = styleVariants({
   right: {
     width: `clamp(${MIN_WIDTH}px, ${editorSize}, ${MAX_WIDTH}) !important`,
