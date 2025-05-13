@@ -13,8 +13,8 @@ import {
   toolbarOpenSize,
 } from './constants';
 
-export const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
-export const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;
+const MIN_HEIGHT = `${toolbarItemSize * toolbarItemCount}px`;
+const MIN_WIDTH = `${toolbarOpenSize + toolbarItemSize + 80}px`;
 
 const MAX_HEIGHT = '80vh';
 const MAX_WIDTH = '90vw';
@@ -70,18 +70,20 @@ so `!important` is used to override this.
 */
 export const resizableSize = styleVariants({
   right: {
-    width: `clamp(${MIN_WIDTH}px, ${editorSize}, ${MAX_WIDTH}) !important`,
+    width: `clamp(${MIN_WIDTH}, ${editorSize}, ${MAX_WIDTH}) !important`,
   },
   bottom: {
-    height: `clamp(${MIN_HEIGHT}px, ${editorSize}, ${MAX_HEIGHT}) !important`,
+    height: `clamp(${MIN_HEIGHT}, ${editorSize}, ${MAX_HEIGHT}) !important`,
   },
 });
 
 export const resizableAvailable = styleVariants({
   right: {
+    minWidth: `${MIN_WIDTH}`,
     maxWidth: MAX_WIDTH,
   },
   bottom: {
+    minHeight: `${MIN_HEIGHT}`,
     maxHeight: MAX_HEIGHT,
   },
 });
