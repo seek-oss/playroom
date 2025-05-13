@@ -68,7 +68,7 @@ export const resizableSize = styleVariants({
     width: `clamp(${MIN_WIDTH}px, ${editorSize}, ${MAX_WIDTH}) !important`,
   },
   bottom: {
-    height: `clamp(${MIN_HEIGHT}px, ${editorSize}, ${MAX_HEIGHT}}) !important`,
+    height: `clamp(${MIN_HEIGHT}px, ${editorSize}, ${MAX_HEIGHT}) !important`,
   },
 });
 
