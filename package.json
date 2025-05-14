@@ -44,7 +44,8 @@
     "test": "jest src lib",
     "post-commit-status": "node scripts/postCommitStatus.js",
     "deploy-preview": "surge -p ./cypress/projects/themed/dist",
-    "prepare": "husky"
+    "prepare": "husky",
+    "changeset": "changeset"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [
