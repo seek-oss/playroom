@@ -1,4 +1,4 @@
-// Isolating these constants from React files so they can be used in Vanilla Extract styles
+export const ANIMATION_TIMEOUT = 300;
 
 export const toolbarItemCount = 5;
 export const toolbarItemSize = 60;
