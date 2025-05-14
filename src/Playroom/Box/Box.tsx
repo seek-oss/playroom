@@ -1,5 +1,5 @@
 import clsx, { type ClassValue } from 'clsx';
-import type { AllHTMLAttributes, ElementType } from 'react';
+import { forwardRef, type AllHTMLAttributes, type ElementType } from 'react';
 import { sprinkles, type Sprinkles } from '../sprinkles.css';
 
 interface BoxProps
@@ -12,22 +12,20 @@ interface BoxProps
   component?: ElementType;
 }
 
-export const Box = ({
-  component = 'div',
-  className,
-  ...restProps
-}: BoxProps) => {
-  const atomProps: Record<string, unknown> = {};
+export const Box = forwardRef<HTMLElement, BoxProps>(
+  ({ component = 'div', className, ...restProps }, ref) => {
+    const atomProps: Record<string, unknown> = {};
 
-  for (const key in restProps) {
-    if (sprinkles.properties.has(key as keyof Sprinkles)) {
-      atomProps[key] = restProps[key as keyof typeof restProps];
-      delete restProps[key as keyof typeof restProps];
+    for (const key in restProps) {
+      if (sprinkles.properties.has(key as keyof Sprinkles)) {
+        atomProps[key] = restProps[key as keyof typeof restProps];
+        delete restProps[key as keyof typeof restProps];
+      }
     }
+
+    const classes = clsx(className, sprinkles({ ...atomProps }));
+    const Component = component;
+
+    return <Component ref={ref} className={classes} {...restProps} />;
   }
-
-  const classes = clsx(className, sprinkles({ ...atomProps }));
-  const Component = component;
-
-  return <Component className={classes} {...restProps} />;
-};
+);
