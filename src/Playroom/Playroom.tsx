@@ -21,6 +21,16 @@ import * as styles from './Playroom.css';
 import { Box } from './Box/Box';
 
 import { assignInlineVars } from '@vanilla-extract/dynamic';
+import { Text } from './Text/Text';
+import EditorBottomIcon from './icons/EditorBottomIcon';
+import EditorRightIcon from './icons/EditorRightIcon';
+import ShareIcon from './icons/ShareIcon';
+import PlayIcon from './icons/PlayIcon';
+import ColorModeLightIcon from './icons/ColorModeLightIcon';
+import { Logo } from './Logo/Logo';
+import FramesIcon from './icons/FramesIcon';
+import AddIcon from './icons/AddIcon';
+import SettingsIcon from './icons/SettingsIcon';
 
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
 
@@ -117,6 +127,43 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
   const codeEditor = (
     <Fragment>
       <div className={styles.editorContainer}>
+        <Box
+          className={styles.editorToolbar}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          paddingY="xxsmall"
+          paddingX="large"
+        >
+          <Box display="flex" gap="large">
+            <button className={styles.navButton}>
+              <AddIcon height={24} width={24} />
+            </button>
+          </Box>
+          <Box display="flex" gap="xxsmall">
+            <button
+              className={styles.navButton}
+              title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
+              onClick={() =>
+                dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
+              }
+            >
+              <ChevronIcon
+                size={16}
+                direction={resolveDirection(editorPosition, editorHidden)}
+              />
+            </button>
+            <button className={styles.navButton}>
+              <EditorBottomIcon height={16} width={16} />
+            </button>
+            <button className={styles.navButton}>
+              <EditorRightIcon height={16} width={16} />
+            </button>
+            <button className={styles.navButton}>
+              <SettingsIcon size={16} />
+            </button>
+          </Box>
+        </Box>
         <CodeEditor
           code={code}
           editorHidden={editorHidden}
@@ -128,9 +175,9 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         />
         <StatusMessage />
       </div>
-      <div className={styles.toolbarContainer}>
+      {/* <div className={styles.toolbarContainer}>
         <Toolbar widths={widths} themes={themes} snippets={snippets} />
-      </div>
+      </div> */}
     </Fragment>
   );
 
@@ -188,6 +235,46 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         </Helmet>
       )}
       <Box
+        className={styles.navbar}
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        paddingY="xxsmall"
+        paddingX="large"
+      >
+        <Box display="flex" gap="large">
+          <Logo size={24} />
+          <input
+            type="text"
+            id="playroomTitleField"
+            placeholder="Untitled Playroom"
+            className={styles.titleField}
+            aria-label="Edit Title"
+            value={title}
+            onChange={(e) =>
+              dispatch({
+                type: 'updateTitle',
+                payload: { title: e.target.value },
+              })
+            }
+          />
+        </Box>
+        <Box display="flex" gap="small">
+          <button className={styles.navButton}>
+            <FramesIcon height={16} width={16} />
+          </button>
+          <button className={styles.navButton}>
+            <PlayIcon size={16} />
+          </button>
+          <button className={styles.navButton}>
+            <ShareIcon size={16} />
+          </button>
+          <button className={styles.navButton}>
+            <ColorModeLightIcon size={16} />
+          </button>
+        </Box>
+      </Box>
+      <Box
         className={[
           styles.previewContainer,
           editorHidden
@@ -208,24 +295,6 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             visibleWidths && visibleWidths.length > 0 ? visibleWidths : widths
           }
         />
-        <div
-          className={classnames(styles.toggleEditorContainer, {
-            [styles.isBottom]: isHorizontalEditor,
-          })}
-        >
-          <button
-            className={styles.toggleEditorButton}
-            title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
-            onClick={() =>
-              dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
-            }
-          >
-            <ChevronIcon
-              size={16}
-              direction={resolveDirection(editorPosition, editorHidden)}
-            />
-          </button>
-        </div>
       </Box>
       {editorContainer}
     </div>

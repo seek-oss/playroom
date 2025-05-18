@@ -32,10 +32,89 @@ export const root = sprinkles({
   width: 'viewport',
 });
 
-export const previewContainer = sprinkles({
-  position: 'absolute',
-  inset: 0,
-});
+export const titleField = style([
+  sprinkles({
+    font: 'standard',
+    paddingX: 'small',
+    boxSizing: 'border-box',
+    borderRadius: 'medium',
+  }),
+  {
+    color: colorPaletteVars.foreground.neutral,
+    height: 36,
+    background: colorPaletteVars.background.surface,
+    '::placeholder': {
+      color: colorPaletteVars.foreground.neutralSoft,
+    },
+    border: `0`,
+  },
+]);
+
+export const navbar = style([
+  {
+    height: vars.touchableSize,
+    background: colorPaletteVars.background.surface,
+    border: `1px solid ${colorPaletteVars.border.standard}`,
+  },
+  sprinkles({
+    //   position: 'absolute',
+    //   left: 0,
+    //   right: 0,
+  }),
+]);
+
+export const navButton = style([
+  sprinkles({
+    position: 'relative',
+    borderRadius: 'large',
+    padding: 'none',
+    cursor: 'pointer',
+    width: 'full',
+    appearance: 'none',
+    border: 0,
+  }),
+  {
+    background: 'transparent',
+    WebkitTapHighlightColor: 'transparent',
+    outline: 'none',
+    minWidth: vars.touchableSize,
+    height: vars.touchableSize,
+    margin: -6,
+    selectors: {
+      [`&:not(:hover):not(:focus)`]: {
+        opacity: 0.3,
+      },
+      [`&:hover::before, &:focus::before`]: {
+        opacity: 0.05,
+      },
+    },
+    '::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      backgroundColor: 'currentColor',
+      opacity: 0,
+      pointerEvents: 'none',
+      borderRadius: vars.radii.large,
+      transition: vars.transition.slow,
+    },
+  },
+]);
+
+export const previewContainer = style([
+  {
+    top: vars.touchableSize,
+  },
+  sprinkles({
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  }),
+]);
 
 export const editorSize = createVar();
 
@@ -54,12 +133,12 @@ export const resizableContainer = style([
     bottom: 0,
     right: 0,
     overflow: 'hidden',
-    boxShadow: 'small',
     transition: 'slow',
   }),
   // @ts-expect-error Shouldnt need to but types do not like `!important`
   {
     position: 'absolute !important', // override re-resizable's inline style
+    border: `1px solid ${colorPaletteVars.border.standard}`,
   },
 ]);
 
@@ -87,7 +166,7 @@ export const resizableContainer_isBottom = style([
     maxHeight: '90vh',
     selectors: {
       [`&${resizableContainer_isHidden}`]: {
-        transform: 'translateY(100%)',
+        transform: 'translateY(calc(100% - 42px))',
       },
     },
   },
@@ -158,10 +237,24 @@ export const editorContainer = style([
     top: 0,
     bottom: 0,
     left: 0,
+    right: 0,
   }),
+  // {
+  //   right: toolbarItemSize,
+  // },
+]);
+
+export const editorToolbar = style([
   {
-    right: toolbarItemSize,
+    height: 36,
+    background: colorPaletteVars.background.surface,
+    border: `1px solid ${colorPaletteVars.border.standard}`,
   },
+  sprinkles({
+    //   position: 'absolute',
+    //   left: 0,
+    //   right: 0,
+  }),
 ]);
 
 export const toolbarContainer = sprinkles({

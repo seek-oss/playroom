@@ -79,7 +79,7 @@ function FrameOption<Option>({
 }
 
 export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
-  const [{ visibleWidths = [], visibleThemes = [], title }, dispatch] =
+  const [{ visibleWidths = [], visibleThemes = [] }, dispatch] =
     useContext(StoreContext);
   const hasThemes =
     availableThemes.filter(
@@ -93,25 +93,6 @@ export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
   return (
     <ToolbarPanel>
       <Stack space="xxxlarge">
-        <label>
-          <Stack space="small">
-            <Heading level="3">Title</Heading>
-            <input
-              type="text"
-              id="playroomTitleField"
-              placeholder="Enter a title for this Playroom..."
-              className={styles.textField}
-              value={title}
-              onChange={(e) =>
-                dispatch({
-                  type: 'updateTitle',
-                  payload: { title: e.target.value },
-                })
-              }
-            />
-          </Stack>
-        </label>
-
         <Stack space="xlarge">
           <FrameHeading
             showReset={hasFilteredWidths}

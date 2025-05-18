@@ -9,6 +9,7 @@ export const root = style([
     display: 'flex',
     gap: 'gutter',
     padding: 'gutter',
+    paddingTop: 'xxxlarge',
     textAlign: 'center',
     overflow: 'auto',
   }),
@@ -25,9 +26,10 @@ export const frameContainer = style([
     height: 'full',
     textAlign: 'left',
     display: 'flex',
-    flexDirection: 'column',
+    gap: 'medium',
   }),
   {
+    flexDirection: 'column-reverse',
     flexShrink: 0,
     width: frameWidth,
   },
@@ -57,17 +59,17 @@ export const frameBorder = style([
   },
 ]);
 
-const frameNameHeight = '30px';
+// const frameNameHeight = '30px';
 export const frameName = style([
   sprinkles({
     display: 'flex',
-    alignItems: 'center',
+    // alignItems: 'center',
     transition: 'medium',
   }),
   {
-    flex: `0 0 ${frameNameHeight}`,
-    height: frameNameHeight,
-    marginBottom: '-10px',
+    // flex: `0 0 ${frameNameHeight}`,
+    // height: frameNameHeight,
+    // marginBottom: '-10px',
     selectors: {
       [`${frameContainer}:not(:hover) &`]: {
         opacity: 0.3,
