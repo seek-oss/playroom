@@ -9,7 +9,8 @@ const toolbarBorderThickness = '1px';
 export const isOpen = style({});
 export const root = style([
   sprinkles({
-    position: 'relative',
+    position: 'absolute',
+    top: 0,
     height: 'full',
     display: 'flex',
     flexDirection: 'row-reverse',

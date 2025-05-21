@@ -1,8 +1,9 @@
 interface Props {
   size?: number | string;
+  strokeWidth?: number | string;
 }
 
-export const Logo = ({ size = 100 }: Props) => (
+export const Logo = ({ size = 100, strokeWidth = 4 }: Props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 390 290"
@@ -14,7 +15,7 @@ export const Logo = ({ size = 100 }: Props) => (
       fill="none"
       stroke="currentColor"
       strokeLinecap="round"
-      strokeWidth="4"
+      strokeWidth={strokeWidth}
     />
   </svg>
 );

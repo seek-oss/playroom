@@ -8,6 +8,7 @@ import { sprinkles, colorPaletteVars } from './sprinkles.css';
 import { vars } from './vars.css';
 import { toolbarItemSize } from './ToolbarItem/ToolbarItem.css';
 import { toolbarItemCount, toolbarOpenSize } from './toolbarConstants';
+import { calc } from '@vanilla-extract/css-utils';
 
 export const MIN_HEIGHT = toolbarItemSize * toolbarItemCount;
 export const MIN_WIDTH = toolbarOpenSize + toolbarItemSize + 80;
@@ -34,7 +35,7 @@ export const root = sprinkles({
 
 export const titleField = style([
   sprinkles({
-    font: 'standard',
+    font: 'large',
     paddingX: 'small',
     boxSizing: 'border-box',
     borderRadius: 'medium',
@@ -50,11 +51,12 @@ export const titleField = style([
   },
 ]);
 
+const navBorderThickness = '1px';
 export const navbar = style([
   {
     height: vars.touchableSize,
     background: colorPaletteVars.background.surface,
-    border: `1px solid ${colorPaletteVars.border.standard}`,
+    borderBottom: `${navBorderThickness} solid ${colorPaletteVars.border.standard}`,
   },
   sprinkles({
     //   position: 'absolute',
@@ -77,12 +79,11 @@ export const navButton = style([
     background: 'transparent',
     WebkitTapHighlightColor: 'transparent',
     outline: 'none',
-    minWidth: vars.touchableSize,
-    height: vars.touchableSize,
-    margin: -6,
+    minWidth: 32,
+    height: 32,
     selectors: {
       [`&:not(:hover):not(:focus)`]: {
-        opacity: 0.3,
+        // opacity: 0.3,
       },
       [`&:hover::before, &:focus::before`]: {
         opacity: 0.05,
@@ -106,7 +107,7 @@ export const navButton = style([
 
 export const previewContainer = style([
   {
-    top: vars.touchableSize,
+    top: calc(vars.touchableSize).add(navBorderThickness).toString(),
   },
   sprinkles({
     position: 'absolute',
@@ -133,7 +134,7 @@ export const resizableContainer = style([
     bottom: 0,
     right: 0,
     overflow: 'hidden',
-    transition: 'slow',
+    transition: 'fast',
   }),
   // @ts-expect-error Shouldnt need to but types do not like `!important`
   {
@@ -205,11 +206,11 @@ export const toggleEditorButton = style([
     background: 'transparent',
     WebkitTapHighlightColor: 'transparent',
     outline: 'none',
-    minWidth: vars.touchableSize,
-    height: vars.touchableSize,
+    minWidth: 24,
+    height: 24,
     selectors: {
       [`&:not(:hover):not(:focus)`]: {
-        opacity: 0.3,
+        // opacity: 0.3,
       },
       [`&:hover::before, &:focus::before`]: {
         opacity: 0.05,

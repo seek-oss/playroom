@@ -1,4 +1,10 @@
-import { useContext, type ComponentType, Fragment } from 'react';
+import {
+  useContext,
+  type ComponentType,
+  Fragment,
+  useState,
+  useCallback,
+} from 'react';
 import { Helmet } from 'react-helmet';
 import classnames from 'classnames';
 import { useDebouncedCallback } from 'use-debounce';
@@ -7,7 +13,7 @@ import Frames from './Frames/Frames';
 import { WindowPortal } from './WindowPortal';
 import type { Snippets } from '../../utils';
 import componentsToHints from '../utils/componentsToHints';
-import Toolbar from './Toolbar/Toolbar';
+import Toolbar, { useTimeoutFn } from './Toolbar/Toolbar';
 import ChevronIcon from './icons/ChevronIcon';
 import { StatusMessage } from './StatusMessage/StatusMessage';
 import {
@@ -31,6 +37,8 @@ import { Logo } from './Logo/Logo';
 import FramesIcon from './icons/FramesIcon';
 import AddIcon from './icons/AddIcon';
 import SettingsIcon from './icons/SettingsIcon';
+import { isMac } from '../utils/formatting';
+import ToolbarItem from './ToolbarItem/ToolbarItem';
 
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
 
@@ -84,17 +92,37 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       editorHeight,
       editorWidth,
       editorHidden,
-      visibleThemes,
-      visibleWidths,
+      visibleThemes = [],
+      visibleWidths = [],
       code,
       previewRenderCode,
       previewEditorCode,
       ready,
       title,
+      validCursorPosition,
+      activeToolbarPanel,
     },
     dispatch,
   ] = useContext(StoreContext);
   const displayedTitle = getTitle(title);
+  const hasFilteredFrames =
+    visibleThemes.length > 0 || visibleWidths.length > 0;
+  const [copying, setCopying] = useState(false);
+  const [isReady, cancel, reset] = useTimeoutFn(() => setCopying(false), 3000);
+
+  const copyHandler = useCallback(() => {
+    dispatch({
+      type: 'copyToClipboard',
+      payload: { url: window.location.href, trigger: 'toolbarItem' },
+    });
+    setCopying(true);
+
+    if (isReady() === false) {
+      cancel();
+    }
+
+    reset();
+  }, [cancel, dispatch, isReady, reset]);
 
   const updateEditorSize = useDebouncedCallback(
     ({
@@ -136,7 +164,17 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           paddingX="large"
         >
           <Box display="flex" gap="large">
-            <button className={styles.navButton}>
+            <button
+              className={styles.navButton}
+              title={`Insert snippet (${isMac() ? '⌘K' : 'Ctrl+K'})`}
+              disabled={!validCursorPosition}
+              onClick={() => {
+                dispatch({
+                  type: 'toggleToolbar',
+                  payload: { panel: 'snippets' },
+                });
+              }}
+            >
               <AddIcon height={24} width={24} />
             </button>
           </Box>
@@ -176,7 +214,6 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         <StatusMessage />
       </div>
       {/* <div className={styles.toolbarContainer}>
-        <Toolbar widths={widths} themes={themes} snippets={snippets} />
       </div> */}
     </Fragment>
   );
@@ -239,11 +276,10 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        paddingY="xxsmall"
         paddingX="large"
       >
         <Box display="flex" gap="large">
-          <Logo size={24} />
+          <Logo size={24} strokeWidth={9} />
           <input
             type="text"
             id="playroomTitleField"
@@ -259,18 +295,41 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             }
           />
         </Box>
-        <Box display="flex" gap="small">
+        <Box display="flex" gap="large">
+          <ToolbarItem
+            active={activeToolbarPanel === 'frames'}
+            showIndicator={hasFilteredFrames}
+            title="Configure visible frames"
+            onClick={() => {
+              dispatch({
+                type: 'toggleToolbar',
+                payload: { panel: 'frames' },
+              });
+            }}
+          >
+            <FramesIcon height={20} width={20} />
+          </ToolbarItem>
+          <ToolbarItem
+            title="Preview playroom"
+            disabled={code.trim().length === 0}
+            onClick={() => {
+              dispatch({
+                type: 'toggleToolbar',
+                payload: { panel: 'preview' },
+              });
+            }}
+          >
+            <PlayIcon size={20} />
+          </ToolbarItem>
+          <ToolbarItem
+            title="Copy Playroom link"
+            success={copying}
+            onClick={copyHandler}
+          >
+            <ShareIcon size={20} />
+          </ToolbarItem>
           <button className={styles.navButton}>
-            <FramesIcon height={16} width={16} />
-          </button>
-          <button className={styles.navButton}>
-            <PlayIcon size={16} />
-          </button>
-          <button className={styles.navButton}>
-            <ShareIcon size={16} />
-          </button>
-          <button className={styles.navButton}>
-            <ColorModeLightIcon size={16} />
+            <ColorModeLightIcon size={20} />
           </button>
         </Box>
       </Box>
@@ -295,6 +354,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
             visibleWidths && visibleWidths.length > 0 ? visibleWidths : widths
           }
         />
+        <Toolbar widths={widths} themes={themes} snippets={snippets} />
       </Box>
       {editorContainer}
     </div>

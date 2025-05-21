@@ -88,7 +88,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
         />
       )}
       <div className={styles.sidebar}>
-        <div className={styles.buttons}>
+        {/* <div className={styles.buttons}>
           <div>
             {hasSnippets && (
               <ToolbarItem
@@ -155,7 +155,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
               <SettingsIcon />
             </ToolbarItem>
           </div>
-        </div>
+        </div> */}
         <CSSTransition
           in={isOpen}
           nodeRef={panelRef}
@@ -212,7 +212,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
 // https://github.com/streamich/react-use/blob/db07ab65bfa48a399e7fd83f172653eb342882b1/src/useTimeoutFn.ts#L3-L40
 type UseTimeoutFnReturn = [() => boolean | null, () => void, () => void];
 
-function useTimeoutFn<T extends () => void>(
+export function useTimeoutFn<T extends () => void>(
   fn: T,
   ms: number = 0
 ): UseTimeoutFnReturn {

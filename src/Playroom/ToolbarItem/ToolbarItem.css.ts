@@ -2,7 +2,7 @@ import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 import { vars } from '../vars.css';
 import { style, globalStyle } from '@vanilla-extract/css';
 
-export const toolbarItemSize = 60;
+export const toolbarItemSize = 32;
 
 export const success = style({});
 export const disabled = style({});
@@ -25,6 +25,7 @@ export const button = style([
     color: 'currentColor',
     backgroundColor: colorPaletteVars.background.surface,
     WebkitTapHighlightColor: 'transparent',
+    flexShrink: 0,
 
     // Background
     '::before': {
@@ -38,18 +39,7 @@ export const button = style([
       opacity: 0,
       transition: vars.transition.slow,
       pointerEvents: 'none',
-    },
-
-    // Side strip
-    '::after': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      right: 0,
-      width: '5px',
-      backgroundColor: 'currentColor',
-      transition: vars.transition.slow,
+      borderRadius: 4,
     },
 
     selectors: {
@@ -100,10 +90,10 @@ export const indicator = style([
     transition: 'fast',
   }),
   {
-    top: '12px',
-    right: '12px',
-    height: '10px',
-    width: '10px',
+    top: '2px',
+    right: '2px',
+    height: '6px',
+    width: '6px',
     backgroundColor: colorPaletteVars.background.accent,
     border: `2px solid ${colorPaletteVars.background.surface}`,
     selectors: {
