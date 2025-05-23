@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 const path = require('path');
+const url = require('url');
+
 const commandLineArgs = require('command-line-args');
 const commandLineUsage = require('command-line-usage');
 const findUp = require('find-up');
+
 const lib = require('../lib');
-const url = require('url');
 
 const showUsage = () => {
   console.log(
