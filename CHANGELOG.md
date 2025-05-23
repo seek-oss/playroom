@@ -1,5 +1,14 @@
 # playroom
 
+## 0.44.0
+
+### Minor Changes
+
+- [#410](https://github.com/seek-oss/playroom/pull/410) [`6b5eaa3`](https://github.com/seek-oss/playroom/commit/6b5eaa33b8e6c32591da9e4d6a3ed90c526c61a2) Thanks [@felixhabib](https://github.com/felixhabib)! - Refactor layout.
+
+  Improve the code editor show/hide animation.
+  Prevent code contents from being searchable when the editor is hidden.
+
 ## 0.43.1
 
 ### Patch Changes
