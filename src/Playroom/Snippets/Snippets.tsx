@@ -50,17 +50,13 @@ export default ({ isOpen, snippets, onHighlight, onClose }: Props) => {
   const highlightedEl = useRef<HTMLLIElement | null>(null);
 
   const fuse = useMemo(() => new Fuse(snippets, options), [snippets]);
-  const fuseResults = useMemo(
-    () => (searchTerm ? fuse.search(searchTerm) : []),
-    [fuse, searchTerm]
-  );
 
   const filteredSnippets = useMemo(
     () =>
-      fuseResults.length > 0
-        ? fuseResults.map((result) => result.item)
+      searchTerm
+        ? fuse.search(searchTerm).map((result) => result.item)
         : snippets,
-    [fuseResults, snippets]
+    [fuse, searchTerm, snippets]
   );
 
   const closeHandler = (returnValue: ReturnedSnippet) => {
