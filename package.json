@@ -38,7 +38,7 @@
     "lint:prettier": "prettier --list-different '**/*.{js,md,ts,tsx}'",
     "lint:tsc": "tsc --noEmit",
     "lint:cypress": "tsc --project cypress/tsconfig.json",
-    "format": "prettier --write '**/*.{js,md,ts,tsx}'",
+    "format": "pnpm lint:eslint --fix && prettier --write '**/*.{js,md,ts,tsx}'",
     "version": "changeset version",
     "release": "changeset publish",
     "test": "jest src lib",
