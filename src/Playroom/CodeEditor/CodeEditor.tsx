@@ -1,6 +1,6 @@
+import type { Editor } from 'codemirror';
 import { useRef, useContext, useEffect, useCallback } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import type { Editor } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/theme/neo.css';
@@ -9,18 +9,25 @@ import {
   type CursorPosition,
   StoreContext,
 } from '../../StoreContext/StoreContext';
-import { formatCode as format, isMac } from '../../utils/formatting';
 import { validateCode } from '../../utils/compileJsx';
-
-import * as styles from './CodeEditor.css';
+import { formatCode as format, isMac } from '../../utils/formatting';
 
 import { UnControlled as ReactCodeMirror } from './CodeMirror2';
+import { toggleComment } from './keymaps/comment';
 import {
   completeAfter,
   completeIfAfterLt,
   completeIfInTag,
 } from './keymaps/complete';
+import {
+  addCursorToNextLine,
+  addCursorToPrevLine,
+  selectNextOccurrence,
+} from './keymaps/cursors';
 import { duplicateLine, swapLineDown, swapLineUp } from './keymaps/lines';
+import { wrapInTag } from './keymaps/wrap';
+
+import * as styles from './CodeEditor.css';
 
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/addon/edit/closetag';
@@ -35,13 +42,6 @@ import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
-import {
-  addCursorToNextLine,
-  addCursorToPrevLine,
-  selectNextOccurrence,
-} from './keymaps/cursors';
-import { wrapInTag } from './keymaps/wrap';
-import { toggleComment } from './keymaps/comment';
 
 const validateCodeInEditor = (editorInstance: Editor, code: string) => {
   const maybeValid = validateCode(code);

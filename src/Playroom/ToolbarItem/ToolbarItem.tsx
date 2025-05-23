@@ -1,5 +1,6 @@
-import type { ReactElement } from 'react';
 import classnames from 'classnames';
+import type { ReactElement } from 'react';
+
 import TickIcon from '../icons/TickIcon';
 
 import * as styles from './ToolbarItem.css';

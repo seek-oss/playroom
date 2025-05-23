@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+
 import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 
 export const base = sprinkles({

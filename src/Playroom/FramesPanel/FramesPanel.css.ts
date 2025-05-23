@@ -1,5 +1,6 @@
-import { calc } from '@vanilla-extract/css-utils';
 import { globalStyle, style } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
+
 import { colorPaletteVars, sprinkles } from '../sprinkles.css';
 import { vars } from '../vars.css';
 

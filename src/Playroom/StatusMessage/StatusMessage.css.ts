@@ -1,8 +1,9 @@
-import { calc } from '@vanilla-extract/css-utils';
 import { style } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
+
+import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 import { vars } from '../vars.css';
-import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
 const statusGutter = '15px';
 const icon = '16px';

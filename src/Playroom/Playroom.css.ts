@@ -4,14 +4,16 @@ import {
   styleVariants,
   createVar,
 } from '@vanilla-extract/css';
-import { sprinkles, colorPaletteVars } from './sprinkles.css';
-import { vars } from './vars.css';
-import { toolbarItemSize } from './ToolbarItem/ToolbarItem.css';
+
 import {
   ANIMATION_TIMEOUT,
   toolbarItemCount,
   toolbarOpenSize,
 } from './constants';
+
+import { toolbarItemSize } from './ToolbarItem/ToolbarItem.css';
+import { sprinkles, colorPaletteVars } from './sprinkles.css';
+import { vars } from './vars.css';
 
 const MIN_HEIGHT = `${toolbarItemSize * toolbarItemCount}px`;
 const MIN_WIDTH = `${toolbarOpenSize + toolbarItemSize + 80}px`;

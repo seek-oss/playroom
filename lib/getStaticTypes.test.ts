@@ -1,6 +1,7 @@
+import { resolve } from 'node:path';
+
 // @ts-expect-error No types
 import getStaticTypes from './getStaticTypes';
-import { resolve } from 'node:path';
 
 describe('getStaticTypes', () => {
   it('should get static types from typescript components', async () => {

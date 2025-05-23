@@ -1,4 +1,5 @@
 import dedent from 'dedent';
+
 import { type ErrorWithLocation, compileJsx, validateCode } from './compileJsx';
 
 describe('compileJsx', () => {

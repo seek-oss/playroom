@@ -1,5 +1,5 @@
-import React, { type ElementType, type ReactNode } from 'react';
 import classnames from 'classnames';
+import React, { type ElementType, type ReactNode } from 'react';
 
 import * as styles from './Heading.css';
 

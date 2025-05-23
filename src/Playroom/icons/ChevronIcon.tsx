@@ -1,5 +1,5 @@
-import type { SVGProps } from 'react';
 import classnames from 'classnames';
+import type { SVGProps } from 'react';
 
 import * as styles from './ChevronIcon.css';
 

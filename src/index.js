@@ -1,9 +1,10 @@
-import { renderElement } from './render';
+import faviconInvertedPath from '../images/favicon-inverted.png';
+import faviconPath from '../images/favicon.png';
+
 import Playroom from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';
 import playroomConfig from './config';
-import faviconPath from '../images/favicon.png';
-import faviconInvertedPath from '../images/favicon-inverted.png';
+import { renderElement } from './render';
 
 const suppliedWidths = playroomConfig.widths || [320, 375, 768, 1024];
 const widths = [...suppliedWidths, 'Fit to window'];

@@ -1,4 +1,6 @@
 import dedent from 'dedent';
+
+import { isMac } from '../../src/utils/formatting';
 import {
   typeCode,
   assertFirstFrameContains,
@@ -12,7 +14,6 @@ import {
   mouseOverSnippet,
   loadPlayroom,
 } from '../support/utils';
-import { isMac } from '../../src/utils/formatting';
 
 describe('Snippets', () => {
   beforeEach(() => {

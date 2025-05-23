@@ -1,4 +1,5 @@
 import dedent from 'dedent';
+
 import { isValidLocation } from './cursor';
 
 const code = dedent`

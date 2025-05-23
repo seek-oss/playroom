@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { Text } from '../Text/Text';
+
 import { Strong } from '../Strong/Strong';
+import { Text } from '../Text/Text';
 
 import * as styles from './CatchErrors.css';
 

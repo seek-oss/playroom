@@ -4,10 +4,7 @@ import eslintConfigSeek from 'eslint-config-seek';
 export default defineConfig([
   ...eslintConfigSeek,
   {
-    files: ['bin/**/*.cjs', 'lib/**/*.js'],
     rules: {
-      'no-console': 0,
-      'no-process-exit': 0,
       'import-x/order': [
         'error',
         {
@@ -31,6 +28,13 @@ export default defineConfig([
           ],
         },
       ],
+    },
+  },
+  {
+    files: ['bin/**/*.cjs', 'lib/**/*.js'],
+    rules: {
+      'no-console': 0,
+      'no-process-exit': 0,
     },
   },
   {

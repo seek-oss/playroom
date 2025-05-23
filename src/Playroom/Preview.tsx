@@ -1,15 +1,16 @@
-import type { ComponentType, ReactNode } from 'react';
 import lzString from 'lz-string';
+import type { ComponentType, ReactNode } from 'react';
+import { Helmet } from 'react-helmet';
 
-import { useParams } from '../utils/params';
 import { compileJsx } from '../utils/compileJsx';
-import SplashScreen from './SplashScreen/SplashScreen';
+import { useParams } from '../utils/params';
+
 import CatchErrors from './CatchErrors/CatchErrors';
 // @ts-expect-error
 import RenderCode from './RenderCode/RenderCode';
+import SplashScreen from './SplashScreen/SplashScreen';
 
 import * as styles from './Preview.css';
-import { Helmet } from 'react-helmet';
 
 interface PreviewState {
   code?: string;

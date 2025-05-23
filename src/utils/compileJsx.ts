@@ -1,6 +1,6 @@
-import { transform } from 'sucrase';
 import { parseExpression } from '@babel/parser';
 import memoizeOne from 'memoize-one';
+import { transform } from 'sucrase';
 
 export const ReactFragmentPragma = 'R_F';
 export const ReactCreateElementPragma = 'R_cE';
