@@ -1,4 +1,13 @@
+/*
+componentsToHints uses parsePropTypes,
+which has side effects that break tests if they are not imported first
+
+Todo - revisit componentsToHints to optimise
+*/
+
+// eslint-disable-next-line import-x/order
 import componentsToHints from './componentsToHints';
+
 // @ts-expect-error
 import * as PropTypeComponents from '../../cypress/projects/themed/components';
 import * as TypeScriptComponents from '../../cypress/projects/typescript/components';
