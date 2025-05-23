@@ -1,4 +1,6 @@
 import dedent from 'dedent';
+
+import { isMac } from '../../src/utils/formatting';
 import {
   typeCode,
   assertCodePaneContains,
@@ -17,7 +19,6 @@ import {
   replaceInCode,
   jumpToLine,
 } from '../support/utils';
-import { isMac } from '../../src/utils/formatting';
 
 describe('Keymaps', () => {
   describe('swapLine', () => {

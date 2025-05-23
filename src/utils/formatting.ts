@@ -1,7 +1,9 @@
-import prettier from 'prettier/standalone';
 import babel from 'prettier/parser-babel';
 import postcss from 'prettier/parser-postcss';
+import prettier from 'prettier/standalone';
+
 import type { CursorPosition } from '../StoreContext/StoreContext';
+
 import { insertAtCursor } from './cursor';
 
 export interface CodeWithCursor {

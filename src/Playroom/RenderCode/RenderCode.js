@@ -1,8 +1,7 @@
-import React, { createElement, Fragment } from 'react';
-import scopeEval from 'scope-eval';
-
 // eslint-disable-next-line import-x/no-unresolved
 import useScope from '__PLAYROOM_ALIAS__USE_SCOPE__';
+import React, { createElement, Fragment } from 'react';
+import scopeEval from 'scope-eval';
 
 import {
   ReactCreateElementPragma,

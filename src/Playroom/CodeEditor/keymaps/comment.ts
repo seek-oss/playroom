@@ -1,4 +1,5 @@
 import { type Editor, Pos } from 'codemirror';
+
 import type { Selection } from './types';
 
 const BLOCK_COMMENT_START = '{/*';

@@ -1,3 +1,6 @@
+import { assignInlineVars } from '@vanilla-extract/dynamic';
+import classnames from 'classnames';
+import { Resizable } from 're-resizable';
 import {
   useContext,
   type ComponentType,
@@ -6,27 +9,25 @@ import {
   useEffect,
 } from 'react';
 import { Helmet } from 'react-helmet';
-import classnames from 'classnames';
 import { useDebouncedCallback } from 'use-debounce';
-import { Resizable } from 're-resizable';
-import Frames from './Frames/Frames';
-import { WindowPortal } from './WindowPortal';
+
 import type { Snippets } from '../../utils';
-import componentsToHints from '../utils/componentsToHints';
-import Toolbar from './Toolbar/Toolbar';
-import ChevronIcon from './icons/ChevronIcon';
-import { StatusMessage } from './StatusMessage/StatusMessage';
 import {
   StoreContext,
   type EditorPosition,
 } from '../StoreContext/StoreContext';
+import componentsToHints from '../utils/componentsToHints';
 
+import { Box } from './Box/Box';
 import { CodeEditor } from './CodeEditor/CodeEditor';
+import Frames from './Frames/Frames';
+import { StatusMessage } from './StatusMessage/StatusMessage';
+import Toolbar from './Toolbar/Toolbar';
+import { WindowPortal } from './WindowPortal';
+import { ANIMATION_TIMEOUT } from './constants';
+import ChevronIcon from './icons/ChevronIcon';
 
 import * as styles from './Playroom.css';
-import { Box } from './Box/Box';
-import { ANIMATION_TIMEOUT } from './constants';
-import { assignInlineVars } from '@vanilla-extract/dynamic';
 
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
 

@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
+
 import { useParams } from '../utils/params';
+
 import CatchErrors from './CatchErrors/CatchErrors';
 // @ts-expect-error
 import RenderCode from './RenderCode/RenderCode';

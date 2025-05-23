@@ -1,5 +1,5 @@
-import { renderElement } from './render';
 import Frame from './Playroom/Frame';
+import { renderElement } from './render';
 
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);

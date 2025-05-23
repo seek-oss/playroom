@@ -1,5 +1,6 @@
 import clsx, { type ClassValue } from 'clsx';
 import { forwardRef, type AllHTMLAttributes, type ElementType } from 'react';
+
 import { sprinkles, type Sprinkles } from '../sprinkles.css';
 
 interface BoxProps

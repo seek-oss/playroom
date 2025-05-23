@@ -1,24 +1,25 @@
 import React, { useContext, type ReactElement } from 'react';
-import { Heading } from '../Heading/Heading';
-import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
+
 import {
   type ColorScheme,
   type EditorPosition,
   StoreContext,
 } from '../../StoreContext/StoreContext';
+import { isMac } from '../../utils/formatting';
+import { Box } from '../Box/Box';
+import { Heading } from '../Heading/Heading';
+import { Inline } from '../Inline/Inline';
 import { Stack } from '../Stack/Stack';
-import EditorRightIcon from '../icons/EditorRightIcon';
+import { Text } from '../Text/Text';
+import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
+import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
+import ColorModeLightIcon from '../icons/ColorModeLightIcon';
+import ColorModeSystemIcon from '../icons/ColorModeSystemIcon';
 import EditorBottomIcon from '../icons/EditorBottomIcon';
+import EditorRightIcon from '../icons/EditorRightIcon';
 import EditorUndockedIcon from '../icons/EditorUndockedIcon';
 
 import * as styles from './SettingsPanel.css';
-import ColorModeSystemIcon from '../icons/ColorModeSystemIcon';
-import ColorModeLightIcon from '../icons/ColorModeLightIcon';
-import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
-import { Text } from '../Text/Text';
-import { Inline } from '../Inline/Inline';
-import { isMac } from '../../utils/formatting';
-import { Box } from '../Box/Box';
 
 const getKeyBindings = () => {
   const metaKeySymbol = isMac() ? '⌘' : 'Ctrl';

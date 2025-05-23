@@ -1,4 +1,5 @@
 import dedent from 'dedent';
+
 import {
   formatCode,
   typeCode,

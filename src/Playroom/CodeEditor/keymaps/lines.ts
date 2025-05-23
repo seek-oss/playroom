@@ -1,4 +1,5 @@
 import CodeMirror, { type Editor, Pos } from 'codemirror';
+
 import type { Direction, Selection } from './types';
 type RangeMethod = Extract<keyof CodeMirror.Range, 'from' | 'to'>;
 

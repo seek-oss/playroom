@@ -1,3 +1,7 @@
+import copy from 'copy-to-clipboard';
+import dedent from 'dedent';
+import localforage from 'localforage';
+import lzString from 'lz-string';
 import {
   useEffect,
   createContext,
@@ -5,18 +9,14 @@ import {
   type ReactNode,
   type Dispatch,
 } from 'react';
-import copy from 'copy-to-clipboard';
-import localforage from 'localforage';
-import lzString from 'lz-string';
-import dedent from 'dedent';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { type Snippet, compressParams } from '../../utils';
+import type { PlayroomProps } from '../Playroom/Playroom';
+import playroomConfig from '../config';
+import { isValidLocation } from '../utils/cursor';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
 import { getParamsFromQuery, updateUrlCode } from '../utils/params';
-import type { PlayroomProps } from '../Playroom/Playroom';
-import { isValidLocation } from '../utils/cursor';
-import playroomConfig from '../config';
 
 const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
 

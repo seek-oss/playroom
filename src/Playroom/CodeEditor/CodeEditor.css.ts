@@ -1,7 +1,8 @@
 import { style, globalStyle, keyframes, createVar } from '@vanilla-extract/css';
+
+import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 import { colorPaletteVars, sprinkles } from '../sprinkles.css';
 import { vars } from '../vars.css';
-import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
 const minimumLineNumberWidth = '50px';
 

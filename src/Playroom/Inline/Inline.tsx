@@ -1,5 +1,5 @@
-import type { ReactElement } from 'react';
 import classnames from 'classnames';
+import type { ReactElement } from 'react';
 
 import * as styles from './Inline.css';
 

@@ -1,6 +1,8 @@
 import { createGlobalTheme, createThemeContract } from '@vanilla-extract/css';
 import { defineProperties, createSprinkles } from '@vanilla-extract/sprinkles';
+
 import { dark, light } from './palettes';
+
 import { vars } from './vars.css';
 
 export const colorPaletteVars = createThemeContract({

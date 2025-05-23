@@ -1,6 +1,7 @@
+import { style, globalStyle } from '@vanilla-extract/css';
+
 import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 import { vars } from '../vars.css';
-import { style, globalStyle } from '@vanilla-extract/css';
 
 export const toolbarItemSize = 60;
 

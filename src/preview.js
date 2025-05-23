@@ -1,7 +1,8 @@
-import { renderElement } from './render';
-import Preview from './Playroom/Preview';
-import faviconPath from '../images/favicon.png';
 import faviconInvertedPath from '../images/favicon-inverted.png';
+import faviconPath from '../images/favicon.png';
+
+import Preview from './Playroom/Preview';
+import { renderElement } from './render';
 
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);

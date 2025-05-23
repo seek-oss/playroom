@@ -1,12 +1,14 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
 import classnames from 'classnames';
 import fuzzy from 'fuzzy';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import type { PlayroomProps } from '../Playroom';
+
 import type { Snippet } from '../../../utils';
-import SearchField from './SearchField/SearchField';
-import { Text } from '../Text/Text';
+import type { PlayroomProps } from '../Playroom';
 import { Stack } from '../Stack/Stack';
+import { Text } from '../Text/Text';
+
+import SearchField from './SearchField/SearchField';
 
 import * as styles from './Snippets.css';
 

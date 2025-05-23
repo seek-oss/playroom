@@ -1,13 +1,15 @@
 import { useContext, type ReactNode } from 'react';
-import Checkmark from './CheckmarkSvg';
-import { Heading } from '../Heading/Heading';
-import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
+
 import { StoreContext } from '../../StoreContext/StoreContext';
+import { Box } from '../Box/Box';
+import { Heading } from '../Heading/Heading';
+import { Inline } from '../Inline/Inline';
+import type { PlayroomProps } from '../Playroom';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
-import { Inline } from '../Inline/Inline';
-import { Box } from '../Box/Box';
-import type { PlayroomProps } from '../Playroom';
+import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
+
+import Checkmark from './CheckmarkSvg';
 
 import * as styles from './FramesPanel.css';
 

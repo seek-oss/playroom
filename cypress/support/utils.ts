@@ -2,10 +2,10 @@
 /// <reference types="cypress" />
 import dedent from 'dedent';
 
-import { createUrl } from '../../utils';
-import { isMac } from '../../src/utils/formatting';
 import type { Direction } from '../../src/Playroom/CodeEditor/keymaps/types';
 import type { PlayroomProps } from '../../src/Playroom/Playroom';
+import { isMac } from '../../src/utils/formatting';
+import { createUrl } from '../../utils';
 
 const CYPRESS_DEFAULT_WAIT_TIME = 500;
 

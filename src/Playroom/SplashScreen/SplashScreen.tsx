@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
 import classnames from 'classnames';
+import { useState, useEffect } from 'react';
+
 import { Logo } from '../Logo/Logo';
 
 import * as stylesheet from './SplashScreen.css';

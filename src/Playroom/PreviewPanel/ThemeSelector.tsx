@@ -1,8 +1,8 @@
-import { Fragment } from 'react';
 import classnames from 'classnames';
+import { Fragment } from 'react';
 
-import ChevronIcon from '../icons/ChevronIcon';
 import { Text } from '../Text/Text';
+import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './ThemeSelector.css';
 

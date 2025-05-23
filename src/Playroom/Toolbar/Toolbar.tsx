@@ -1,23 +1,23 @@
-import { useContext, useState, useCallback, useEffect, useRef } from 'react';
 import classnames from 'classnames';
-import type { PlayroomProps } from '../Playroom';
+import { useContext, useState, useCallback, useEffect, useRef } from 'react';
+import { CSSTransition } from 'react-transition-group';
+
 import { StoreContext } from '../../StoreContext/StoreContext';
+import { isMac } from '../../utils/formatting';
 import FramesPanel from '../FramesPanel/FramesPanel';
+import type { PlayroomProps } from '../Playroom';
 import PreviewPanel from '../PreviewPanel/PreviewPanel';
+import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import Snippets from '../Snippets/Snippets';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
+import { ANIMATION_TIMEOUT } from '../constants';
 import AddIcon from '../icons/AddIcon';
 import FramesIcon from '../icons/FramesIcon';
-import ShareIcon from '../icons/ShareIcon';
 import PlayIcon from '../icons/PlayIcon';
+import SettingsIcon from '../icons/SettingsIcon';
+import ShareIcon from '../icons/ShareIcon';
 
 import * as styles from './Toolbar.css';
-import SettingsPanel from '../SettingsPanel/SettingsPanel';
-import SettingsIcon from '../icons/SettingsIcon';
-import { isMac } from '../../utils/formatting';
-import { ANIMATION_TIMEOUT } from '../constants';
-
-import { CSSTransition } from 'react-transition-group';
 
 interface Props {
   themes: PlayroomProps['themes'];

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
 import copy from 'copy-to-clipboard';
+import { useEffect, useRef, useState } from 'react';
 
-import TickIcon from '../icons/TickIcon';
-import ShareIcon from '../icons/ShareIcon';
 import { Button } from '../Button/Button';
+import ShareIcon from '../icons/ShareIcon';
+import TickIcon from '../icons/TickIcon';
 
 interface CopyButtonProps {
   copyContent: string;
