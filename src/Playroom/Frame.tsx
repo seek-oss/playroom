@@ -1,15 +1,14 @@
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 
 import { useParams } from '../utils/params';
 
 import CatchErrors from './CatchErrors/CatchErrors';
-// @ts-expect-error
 import RenderCode from './RenderCode/RenderCode';
 
 interface FrameProps {
   themes: Record<string, any>;
-  components: any[];
-  FrameComponent: React.ComponentType<{
+  components: Record<string, ComponentType>;
+  FrameComponent: ComponentType<{
     themeName: string | null;
     theme: string;
     children?: ReactNode;
@@ -37,7 +36,7 @@ export default function Frame({
   return (
     <CatchErrors code={code}>
       <FrameComponent themeName={resolvedThemeName} theme={resolvedTheme}>
-        <RenderCode code={code} scope={components} />
+        <RenderCode code={code} components={components} />
       </FrameComponent>
     </CatchErrors>
   );

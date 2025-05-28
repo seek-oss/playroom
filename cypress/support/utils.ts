@@ -70,12 +70,37 @@ export const mouseOverSnippet = (index: number) =>
 export const assertSnippetCount = (count: number) =>
   getSnippets().should('have.length', count);
 
+const getPlayroomRenderError = (element: HTMLElement) =>
+  element.querySelector('[data-playroom-error]')?.textContent || '';
+
 export const assertFirstFrameContains = (text: string) =>
   getPreviewFrames()
     .first()
     .its('0.contentDocument.body')
     .should((frameBody) => {
-      expect(frameBody.innerText).to.eq(text);
+      const playroomError = getPlayroomRenderError(frameBody);
+      const content =
+        playroomError.length > 0
+          ? frameBody.innerText.replace(`\n${playroomError}`, '')
+          : frameBody.innerText;
+
+      expect(content).to.eq(text);
+    });
+
+export const assertFirstFrameError = (error: string) =>
+  getPreviewFrames()
+    .first()
+    .its('0.contentDocument.body')
+    .should((frameBody) => {
+      expect(getPlayroomRenderError(frameBody)).to.eq(error);
+    });
+
+export const assertFirstFrameNoError = () =>
+  getPreviewFrames()
+    .first()
+    .its('0.contentDocument.body')
+    .should((frameBody) => {
+      expect(getPlayroomRenderError(frameBody)).to.eq('');
     });
 
 export const selectNextCharacters = (numCharacters: number) => {

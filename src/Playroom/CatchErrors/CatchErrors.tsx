@@ -1,9 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 
-import { Strong } from '../Strong/Strong';
-import { Text } from '../Text/Text';
-
-import * as styles from './CatchErrors.css';
+import { ErrorMessage } from '../RenderError/RenderError';
 
 interface Props {
   code?: string;
@@ -45,14 +42,12 @@ export default class CatchErrors extends Component<Props, State> {
     const lines = componentStack.slice(0, componentStack.length - 1);
 
     return (
-      <div className={styles.root}>
-        <Text size="large" tone="critical">
-          <Strong>{error.message}</Strong>
-          {lines.map((line, i) => (
-            <span key={i}>{line}</span>
-          ))}
-        </Text>
-      </div>
+      <ErrorMessage>
+        {error.message}
+        {lines.map((line, i) => (
+          <span key={i}>{line}</span>
+        ))}
+      </ErrorMessage>
     );
   }
 }
