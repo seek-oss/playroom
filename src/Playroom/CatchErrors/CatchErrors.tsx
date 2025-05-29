@@ -1,9 +1,6 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Component, type ReactNode } from 'react';
 
-import { Strong } from '../Strong/Strong';
-import { Text } from '../Text/Text';
-
-import * as styles from './CatchErrors.css';
+import { ErrorMessage } from '../RenderError/RenderError';
 
 interface Props {
   code?: string;
@@ -11,48 +8,27 @@ interface Props {
 }
 interface State {
   invalidCode: string | null;
-  error: Error | null;
-  errorInfo: ErrorInfo | null;
+  errorMessage: string | null;
 }
 export default class CatchErrors extends Component<Props, State> {
   state: State = {
-    error: null,
+    errorMessage: null,
     invalidCode: null,
-    errorInfo: null,
   };
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error) {
     const { code = null } = this.props;
-    this.setState({ invalidCode: code, error, errorInfo });
+    this.setState({ invalidCode: code, errorMessage: error.message });
   }
 
   render() {
-    const { invalidCode, error, errorInfo } = this.state;
+    const { invalidCode, errorMessage } = this.state;
     const { code, children } = this.props;
 
-    if (code !== invalidCode || !error) {
+    if (code !== invalidCode || !errorMessage) {
       return children;
     }
 
-    // Ensure the stack only contains user-provided components
-    const componentStack =
-      errorInfo?.componentStack
-        ?.split('\n')
-        .filter((line: string) => /RenderCode/.test(line))
-        .map((line: string) => line.replace(/ \(created by .*/g, '')) ?? [];
-
-    // Ignore the RenderCode container component
-    const lines = componentStack.slice(0, componentStack.length - 1);
-
-    return (
-      <div className={styles.root}>
-        <Text size="large" tone="critical">
-          <Strong>{error.message}</Strong>
-          {lines.map((line, i) => (
-            <span key={i}>{line}</span>
-          ))}
-        </Text>
-      </div>
-    );
+    return <ErrorMessage>{errorMessage}</ErrorMessage>;
   }
 }

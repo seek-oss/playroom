@@ -6,14 +6,13 @@ import { compileJsx } from '../utils/compileJsx';
 import { useParams } from '../utils/params';
 
 import CatchErrors from './CatchErrors/CatchErrors';
-// @ts-expect-error
 import RenderCode from './RenderCode/RenderCode';
 import SplashScreen from './SplashScreen/SplashScreen';
 
 import * as styles from './Preview.css';
 
 interface PreviewState {
-  code?: string;
+  code: string;
   themeName?: string;
   title?: string;
 }
@@ -42,7 +41,9 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
       };
     }
 
-    return {};
+    return {
+      code: '',
+    };
   });
 
   const resolvedTheme = themeName ? themes[themeName] : null;
@@ -59,7 +60,7 @@ export default ({ themes, components, FrameComponent }: PreviewProps) => {
           themeName={themeName || '__PLAYROOM__NO_THEME__'}
           theme={resolvedTheme}
         >
-          <RenderCode code={code} scope={components} />
+          <RenderCode code={code} components={components} />
         </FrameComponent>
       </div>
       <div className={styles.splashScreenContainer}>
