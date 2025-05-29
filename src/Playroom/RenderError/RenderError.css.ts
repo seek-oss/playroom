@@ -28,6 +28,9 @@ export const errorMessage = style({
     '0'
   )})`,
   left: halfWidth,
+  wordBreak: 'break-word',
+  whiteSpace: 'pre-line',
+  maxWidth: '80ex',
   marginRight: calc(halfWidth)
     .negate()
     .add(calc(gutter).multiply(2))
@@ -42,6 +45,7 @@ export const errorMessage = style({
       },
       opacity: 0,
       transitionDelay: '0ms',
+      transition: 'none',
     },
   },
 });
