@@ -186,6 +186,9 @@ importers:
       '@types/react-transition-group':
         specifier: ^4.4.10
         version: 4.4.12(@types/react@19.0.12)
+      '@types/webpack-env':
+        specifier: ^1.18.8
+        version: 1.18.8
       concurrently:
         specifier: ^9.1.2
         version: 9.1.2
@@ -1548,6 +1551,9 @@ packages:
 
   '@types/tern@0.23.9':
     resolution: {integrity: sha512-ypzHFE/wBzh+BlH6rrBgS5I/Z7RD21pGhZ2rltb/+ZrVM1awdZwjx7hE5XfuYgHWk9uvV5HLZN3SloevCAp3Bw==}
+
+  '@types/webpack-env@1.18.8':
+    resolution: {integrity: sha512-G9eAoJRMLjcvN4I08wB5I7YofOb/kaJNd5uoCMX+LbKXTPCF+ZIHuqTnFaK9Jz1rgs035f9JUPUhNFtqgucy/A==}
 
   '@types/ws@8.18.0':
     resolution: {integrity: sha512-8svvI3hMyvN0kKCJMvTJP/x6Y/EoQbepff882wL+Sn5QsXb3etnamgrJq4isrBxSJj5L2AuXcI0+bgkoAXGUJw==}
@@ -7306,6 +7312,8 @@ snapshots:
   '@types/tern@0.23.9':
     dependencies:
       '@types/estree': 1.0.6
+
+  '@types/webpack-env@1.18.8': {}
 
   '@types/ws@8.18.0':
     dependencies:

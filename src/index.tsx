@@ -1,13 +1,17 @@
 import faviconInvertedPath from '../images/favicon-inverted.png';
 import faviconPath from '../images/favicon.png';
 
-import Playroom from './Playroom/Playroom';
+import Playroom, { type PlayroomProps } from './Playroom/Playroom';
 import { StoreProvider } from './StoreContext/StoreContext';
+import playroomComponents from './components';
 import playroomConfig from './config';
 import { renderElement } from './render';
+import playroomSnippets from './snippets';
+import playroomThemes from './themes';
+import { hmrAccept } from './utils/hmr';
 
 const suppliedWidths = playroomConfig.widths || [320, 375, 768, 1024];
-const widths = [...suppliedWidths, 'Fit to window'];
+const widths: PlayroomProps['widths'] = [...suppliedWidths, 'Fit to window'];
 
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);
@@ -22,9 +26,9 @@ if (selectedElement) {
 }
 
 const renderPlayroom = ({
-  themes = require('./themes'),
-  components = require('./components'),
-  snippets = require('./snippets'),
+  themes = playroomThemes,
+  components = playroomComponents,
+  snippets = playroomSnippets,
 } = {}) => {
   const themeNames = Object.keys(themes);
 
@@ -39,9 +43,7 @@ const renderPlayroom = ({
         components={filteredComponents}
         widths={widths}
         themes={themeNames}
-        snippets={
-          typeof snippets.default !== 'undefined' ? snippets.default : snippets
-        }
+        snippets={snippets}
       />
     </StoreProvider>,
     outlet
@@ -49,16 +51,16 @@ const renderPlayroom = ({
 };
 renderPlayroom();
 
-if (module.hot) {
-  module.hot.accept('./components', () => {
-    renderPlayroom({ components: require('./components') });
+hmrAccept((accept) => {
+  accept('./components', () => {
+    renderPlayroom({ components: playroomComponents });
   });
 
-  module.hot.accept('./themes', () => {
-    renderPlayroom({ themes: require('./themes') });
+  accept('./themes', () => {
+    renderPlayroom({ themes: playroomThemes });
   });
 
-  module.hot.accept('./snippets', () => {
-    renderPlayroom({ snippets: require('./snippets') });
+  accept('./snippets', () => {
+    renderPlayroom({ snippets: playroomSnippets });
   });
-}
+});

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 
 import { useParams } from '../utils/params';
 
@@ -8,7 +8,7 @@ import RenderCode from './RenderCode/RenderCode';
 
 interface FrameProps {
   themes: Record<string, any>;
-  components: any[];
+  components: Record<string, ComponentType>;
   FrameComponent: React.ComponentType<{
     themeName: string | null;
     theme: string;
