@@ -17,9 +17,11 @@ export const cmdPlus = (keyCombo: string) => {
 const getCodeEditor = () =>
   cy.get('.CodeMirror-code').then((editor) => cy.wrap(editor));
 
-export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
+export const getFrames = () => cy.get('[data-testid="frameIframe"]');
 
-export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
+const getFrameNames = () => cy.get('[data-testid="frameName"]');
+
+const getFrameErrors = () => cy.get('[data-testid="errorMessage"]');
 
 export const typeCode = (code: string, delay?: number) =>
   getCodeEditor().focused().type(code, { delay });
@@ -70,37 +72,26 @@ export const mouseOverSnippet = (index: number) =>
 export const assertSnippetCount = (count: number) =>
   getSnippets().should('have.length', count);
 
-const getPlayroomRenderError = (element: HTMLElement) =>
-  element.querySelector('[data-playroom-error]')?.textContent || '';
-
 export const assertFirstFrameContains = (text: string) =>
-  getPreviewFrames()
+  getFrames()
     .first()
     .its('0.contentDocument.body')
     .should((frameBody) => {
-      const playroomError = getPlayroomRenderError(frameBody);
-      const content =
-        playroomError.length > 0
-          ? frameBody.innerText.replace(`\n${playroomError}`, '')
-          : frameBody.innerText;
-
-      expect(content).to.eq(text);
+      expect(frameBody.innerText).to.eq(text);
     });
 
 export const assertFirstFrameError = (error: string) =>
-  getPreviewFrames()
+  getFrameErrors()
     .first()
-    .its('0.contentDocument.body')
-    .should((frameBody) => {
-      expect(getPlayroomRenderError(frameBody)).to.eq(error);
+    .should((el) => {
+      expect(el[0].innerText).to.eq(error);
     });
 
 export const assertFirstFrameNoError = () =>
-  getPreviewFrames()
+  getFrameErrors()
     .first()
-    .its('0.contentDocument.body')
-    .should((frameBody) => {
-      expect(getPlayroomRenderError(frameBody)).to.eq('');
+    .should((el) => {
+      expect(el[0].innerText).to.eq('');
     });
 
 export const selectNextCharacters = (numCharacters: number) => {
@@ -193,13 +184,13 @@ export const assertFramesMatch = (
       : `${frame[0]} – ${frame[1]}px`;
   });
 
-  getPreviewFrameNames()
+  getFrameNames()
     .should('have.length', frames.length)
-    .should((previewFrames) => {
-      const formattedPreviewFrames = previewFrames
+    .should((frameEls) => {
+      const formattedFrameNames = frameEls
         .map((_, el) => el.innerText)
         .toArray();
-      return expect(formattedPreviewFrames).to.deep.equal(formattedFrames);
+      return expect(formattedFrameNames).to.deep.equal(formattedFrames);
     });
 };
 

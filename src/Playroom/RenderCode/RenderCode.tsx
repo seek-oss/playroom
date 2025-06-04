@@ -2,7 +2,6 @@
 import userScopeFromConfig from '__PLAYROOM_ALIAS__USE_SCOPE__';
 import React, {
   useRef,
-  useState,
   useLayoutEffect,
   type ComponentType,
   createElement,
@@ -16,11 +15,11 @@ import {
   ReactCreateElementPragma,
   ReactFragmentPragma,
 } from '../../utils/compileJsx';
-import { ErrorMessage } from '../RenderError/RenderError';
 
 interface Props {
   code: string;
   components: Record<string, ComponentType>;
+  onError: (error: string) => void;
 }
 
 const buildScope = (components: Props['components']) => {
@@ -66,9 +65,8 @@ const EvalCode = ({
   return scopeEval(code, scope);
 };
 
-export default function RenderCode({ code, components }: Props) {
+export default function RenderCode({ code, components, onError }: Props) {
   const lastCode = useRef('');
-  const [error, setError] = useState('');
 
   const onSuccess = () => {
     lastCode.current = code || '';
@@ -77,22 +75,17 @@ export default function RenderCode({ code, components }: Props) {
   const scope = buildScope(components);
 
   return (
-    <>
-      <ErrorBoundary
-        fallbackRender={() => (
-          <EvalCode scope={scope} code={lastCode.current} />
-        )}
-        resetKeys={[code]}
-        onError={(e) => {
-          setError(e.message);
-        }}
-        onReset={() => {
-          setError('');
-        }}
-      >
-        <EvalCode scope={scope} code={code} onSuccess={onSuccess} />
-      </ErrorBoundary>
-      <ErrorMessage>{error}</ErrorMessage>
-    </>
+    <ErrorBoundary
+      fallbackRender={() => <EvalCode scope={scope} code={lastCode.current} />}
+      resetKeys={[code]}
+      onError={(e) => {
+        onError(e.message);
+      }}
+      onReset={() => {
+        onError('');
+      }}
+    >
+      <EvalCode scope={scope} code={code} onSuccess={onSuccess} />
+    </ErrorBoundary>
   );
 }

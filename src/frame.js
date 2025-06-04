@@ -1,4 +1,5 @@
 import Frame from './Playroom/Frame';
+import { SendErrorMessage } from './Playroom/Frames/frameMessaging';
 import { renderElement } from './render';
 
 const outlet = document.createElement('div');
@@ -14,6 +15,7 @@ const renderFrame = ({
       components={components}
       themes={themes}
       FrameComponent={FrameComponent}
+      ErrorComponent={SendErrorMessage}
     />,
     outlet
   );

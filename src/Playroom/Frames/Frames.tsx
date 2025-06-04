@@ -9,6 +9,7 @@ import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 
 import Iframe from './Iframe';
+import { ReceiveErrorMessage } from './frameMessaging';
 import frameSrc from './frameSrc';
 
 import * as styles from './Frames.css';
@@ -53,9 +54,10 @@ export default function Frames({ code, themes, widths }: FramesProps) {
                 { themeName: frame.theme, code: renderCode.current },
                 playroomConfig
               )}
-              data-testid="previewFrame"
+              data-testid="frameIframe"
               className={styles.frame}
             />
+            <ReceiveErrorMessage />
             <div className={styles.frameBorder} />
           </Box>
           <div className={styles.frameName} data-testid="frameName">

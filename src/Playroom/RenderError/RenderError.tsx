@@ -3,14 +3,24 @@ import type { ReactNode } from 'react';
 
 import * as styles from './RenderError.css';
 
-export const ErrorMessage = ({ children }: { children: ReactNode }) => (
+export const ErrorMessage = ({
+  errorMessage,
+  delayVisibility,
+  size = 'small',
+}: {
+  errorMessage: ReactNode;
+  delayVisibility?: boolean;
+  size?: keyof typeof styles.size;
+}) => (
   <div
-    data-playroom-error
+    data-testid="errorMessage"
     className={clsx({
       [styles.errorMessage]: true,
-      [styles.showError]: children,
+      [styles.size[size || 'small']]: true,
+      [styles.showError]: errorMessage,
+      [styles.delay]: delayVisibility,
     })}
   >
-    {children}
+    {errorMessage}
   </div>
 );

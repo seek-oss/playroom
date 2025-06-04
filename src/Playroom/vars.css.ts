@@ -1,7 +1,7 @@
 import { createGlobalTheme } from '@vanilla-extract/css';
 
 const fontFamily = 'Helvetica, arial, sans-serif';
-export const rawValues = {
+export const vars = createGlobalTheme(':root', {
   font: {
     family: {
       standard: fontFamily,
@@ -44,6 +44,4 @@ export const rawValues = {
     xxxlarge: '28px',
     gutter: '40px',
   },
-};
-
-export const vars = createGlobalTheme(':root', rawValues);
+});
