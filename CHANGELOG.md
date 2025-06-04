@@ -1,5 +1,26 @@
 # playroom
 
+## 0.44.0
+
+### Minor Changes
+
+- [#414](https://github.com/seek-oss/playroom/pull/414) [`e69f698`](https://github.com/seek-oss/playroom/commit/e69f69896cf6c57a5a45a61330d9f4ea6c99bc97) Thanks [@felixhabib](https://github.com/felixhabib)! - Improve snippets search ranking algorithm.
+  Results are now sorted primarily by the `group` property over the `name` property, making it easier to see related snippets together.
+
+  Replace [`fuzzy`] dependency with [`fuse.js`] to enable result sorting.
+
+  [`fuzzy`]: https://github.com/mattyork/fuzzy?tab=readme-ov-file
+  [`fuse.js`]: https://github.com/krisk/fuse
+
+- [#410](https://github.com/seek-oss/playroom/pull/410) [`6b5eaa3`](https://github.com/seek-oss/playroom/commit/6b5eaa33b8e6c32591da9e4d6a3ed90c526c61a2) Thanks [@felixhabib](https://github.com/felixhabib)! - Refactor layout.
+
+  Improve the code editor show/hide animation.
+  Prevent code contents from being searchable when the editor is hidden.
+
+### Patch Changes
+
+- [#418](https://github.com/seek-oss/playroom/pull/418) [`1d59ba3`](https://github.com/seek-oss/playroom/commit/1d59ba345f800eaf94cc6747efc34608228dfcb6) Thanks [@felixhabib](https://github.com/felixhabib)! - Migrate some internal files from Javascript to Typescript.
+
 ## 0.43.1
 
 ### Patch Changes
