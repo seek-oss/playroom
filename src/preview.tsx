@@ -1,12 +1,15 @@
 import faviconInvertedPath from '../images/favicon-inverted.png';
 import faviconPath from '../images/favicon.png';
 
-import Preview from './Playroom/Preview';
+import Frame from './Playroom/Frame/Frame';
+import Preview from './Playroom/Preview/Preview';
+import { PreviewError } from './Playroom/Preview/PreviewError';
 import playroomComponents from './components';
 import frameComponent from './frameComponent';
 import { renderElement } from './render';
 import playroomThemes from './themes';
 import { hmrAccept } from './utils/hmr';
+import { UrlParams } from './utils/params';
 
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);
@@ -28,11 +31,21 @@ const renderPreview = ({
   FrameComponent = frameComponent,
 } = {}) => {
   renderElement(
-    <Preview
-      components={components}
-      themes={themes}
-      FrameComponent={FrameComponent}
-    />,
+    <UrlParams themes={themes}>
+      {({ code, themeName, theme, title }) => (
+        <Preview title={title}>
+          <Frame
+            code={code}
+            components={components}
+            themeName={themeName}
+            theme={theme}
+            FrameComponent={FrameComponent}
+            ErrorComponent={PreviewError}
+            decodeUrl
+          />
+        </Preview>
+      )}
+    </UrlParams>,
     outlet
   );
 };
