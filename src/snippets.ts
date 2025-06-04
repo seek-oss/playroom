@@ -1,3 +1,1 @@
-import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
-
-export default snippets;
+export { default } from '__PLAYROOM_ALIAS__SNIPPETS__';
