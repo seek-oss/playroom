@@ -15,6 +15,8 @@ export const SendErrorMessage = ({
       message: errorMessage,
     });
   }, [errorMessage]);
+
+  return null;
 };
 
 export const ReceiveErrorMessage = () => {

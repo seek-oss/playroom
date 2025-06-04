@@ -1,5 +1,3 @@
-// @ts-expect-error virtual module
-import userScopeFromConfig from '__PLAYROOM_ALIAS__USE_SCOPE__';
 import React, {
   useRef,
   useLayoutEffect,
@@ -11,6 +9,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 // @ts-expect-error no types
 import scopeEval from 'scope-eval';
 
+import userScopeFromConfig from '../../useScope';
 import {
   ReactCreateElementPragma,
   ReactFragmentPragma,

@@ -9,6 +9,9 @@ import { createUrl } from '../../utils';
 
 const CYPRESS_DEFAULT_WAIT_TIME = 500;
 
+const selectModifier = isMac() ? 'cmd' : 'ctrl';
+const navigationModifier = isMac() ? 'alt' : 'ctrl';
+
 export const cmdPlus = (keyCombo: string) => {
   const platformSpecificKey = isMac() ? 'cmd' : 'ctrl';
   return `${platformSpecificKey}+${keyCombo}`;
@@ -22,6 +25,11 @@ export const getFrames = () => cy.get('[data-testid="frameIframe"]');
 const getFrameNames = () => cy.get('[data-testid="frameName"]');
 
 const getFrameErrors = () => cy.get('[data-testid="errorMessage"]');
+
+const clearCode = () => {
+  typeCode(`{${selectModifier}+a}`);
+  typeCode('{backspace}');
+};
 
 export const typeCode = (code: string, delay?: number) =>
   getCodeEditor().focused().type(code, { delay });
@@ -99,8 +107,7 @@ export const selectNextCharacters = (numCharacters: number) => {
 };
 
 export const selectNextWords = (numWords: number) => {
-  const modifier = isMac() ? 'alt' : 'ctrl';
-  typeCode(`{shift+${modifier}+rightArrow}`.repeat(numWords));
+  typeCode(`{shift+${navigationModifier}+rightArrow}`.repeat(numWords));
 };
 
 export const selectToStartOfLine = () => {
@@ -124,8 +131,7 @@ export const moveBy = (x: number, y: number | undefined = 0) => {
 };
 
 export const moveByWords = (numWords: number) => {
-  const modifier = isMac() ? 'alt' : 'ctrl';
-  typeCode(`{${modifier}+rightArrow}`.repeat(numWords));
+  typeCode(`{${navigationModifier}+rightArrow}`.repeat(numWords));
 };
 
 export const moveToEndOfLine = () => {
@@ -211,6 +217,10 @@ export const loadPlayroom = (initialCode?: string) => {
     : baseUrl;
 
   return cy.visit(visitUrl).then((window) => {
+    if (!initialCode) {
+      clearCode();
+    }
+
     const { storageKey } = window.__playroomConfig__;
     indexedDB.deleteDatabase(storageKey);
   });
