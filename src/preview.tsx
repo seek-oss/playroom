@@ -2,7 +2,11 @@ import faviconInvertedPath from '../images/favicon-inverted.png';
 import faviconPath from '../images/favicon.png';
 
 import Preview from './Playroom/Preview';
+import playroomComponents from './components';
+import frameComponent from './frameComponent';
 import { renderElement } from './render';
+import playroomThemes from './themes';
+import { hmrAccept } from './utils/hmr';
 
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);
@@ -19,9 +23,9 @@ if (selectedElement) {
 }
 
 const renderPreview = ({
-  themes = require('./themes'),
-  components = require('./components'),
-  FrameComponent = require('./frameComponent'),
+  themes = playroomThemes,
+  components = playroomComponents,
+  FrameComponent = frameComponent,
 } = {}) => {
   renderElement(
     <Preview
@@ -34,16 +38,16 @@ const renderPreview = ({
 };
 renderPreview();
 
-if (module.hot) {
-  module.hot.accept('./components', () => {
-    renderPreview({ components: require('./components') });
+hmrAccept((accept) => {
+  accept('./components', () => {
+    renderPreview({ components: playroomComponents });
   });
 
-  module.hot.accept('./themes', () => {
-    renderPreview({ themes: require('./themes') });
+  accept('./themes', () => {
+    renderPreview({ themes: playroomThemes });
   });
 
-  module.hot.accept('./frameComponent', () => {
-    renderPreview({ FrameComponent: require('./frameComponent') });
+  accept('./frameComponent', () => {
+    renderPreview({ FrameComponent: frameComponent });
   });
-}
+});
