@@ -7,7 +7,7 @@
   "include": [
     "**/*", // override the include from the root tsconfig
     "../src/internalTypes.d.ts", // contains definitions for global variables
-    "../src/playroomModuelAliases.d.ts"
+    "../src/playroomModuleAliases.d.ts"
   ],
   "exclude": [] // override the exclude from the root tsconfig
 }
