@@ -15,7 +15,7 @@ describe('Handling rendering errors', () => {
   it('show error when variable does not exist', () => {
     loadPlayroom();
 
-    typeCode('<div style={{}{{} background {}}{}}>', 150);
+    typeCode('<div style={{}{{} background {}}{}}>');
 
     assertFirstFrameError('background is not defined');
   });
@@ -23,7 +23,7 @@ describe('Handling rendering errors', () => {
   it('show error when component does not exist', () => {
     loadPlayroom();
 
-    typeCode('<Fake />', 150);
+    typeCode('<Fake />');
 
     assertFirstFrameError('Fake is not defined');
   });
