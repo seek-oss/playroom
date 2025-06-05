@@ -1,7 +1,10 @@
 import { createBrowserHistory } from 'history';
-import { useState, useEffect } from 'react';
+import lzString from 'lz-string';
+import { useState, useEffect, type ReactNode } from 'react';
 
 import playroomConfig from '../config';
+
+import { compileJsx } from './compileJsx';
 
 const history = createBrowserHistory();
 
@@ -31,7 +34,7 @@ export function getParamsFromQuery(location = history.location) {
   }
 }
 
-export function useParams<ReturnType>(
+function useParams<ReturnType>(
   selector: (rawParams: URLSearchParams) => ReturnType
 ): ReturnType {
   const [params, setParams] = useState(getParamsFromQuery);
@@ -46,3 +49,51 @@ export function useParams<ReturnType>(
 
   return selector(params);
 }
+
+export const UrlParams = ({
+  children,
+  themes,
+  decodeUrl,
+}: {
+  themes: Record<string, any>;
+  children: (params: {
+    themeName: string;
+    theme: any;
+    code: string;
+    title: string;
+  }) => ReactNode;
+  decodeUrl?: boolean;
+}) => {
+  const { themeName, code, title } = useParams((rawParams) => {
+    const rawThemeName = rawParams.get('themeName');
+    const rawCode = rawParams.get('code');
+
+    if (decodeUrl && rawCode) {
+      const result = JSON.parse(
+        lzString.decompressFromEncodedURIComponent(String(rawCode)) ?? ''
+      );
+
+      return {
+        code: compileJsx(result.code),
+        themeName: result.theme,
+        title: result.title,
+      };
+    }
+
+    return {
+      themeName: rawThemeName || '',
+      code: rawCode || '',
+    };
+  });
+
+  const resolvedThemeName =
+    themeName === '__PLAYROOM__NO_THEME__' ? null : themeName;
+  const resolvedTheme = resolvedThemeName ? themes[resolvedThemeName] : null;
+
+  return children({
+    themeName,
+    code,
+    theme: resolvedTheme,
+    title,
+  });
+};

@@ -3,7 +3,6 @@ import {
   useEffect,
   useRef,
   type AllHTMLAttributes,
-  type MutableRefObject,
   type RefObject,
 } from 'react';
 
@@ -11,7 +10,7 @@ import playroomConfig from '../../config';
 
 interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
   src: string;
-  intersectionRootRef: MutableRefObject<Element | null>;
+  intersectionRootRef: RefObject<Element | null>;
 }
 
 export default function Iframe({
