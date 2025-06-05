@@ -6,10 +6,10 @@ import { light, dark } from '../palettes';
 import { sprinkles } from '../sprinkles.css';
 import { vars } from '../vars.css';
 
-export const showError = style({});
+export const show = style({});
 
 const gutter = vars.space.medium;
-export const errorMessage = style([
+export const message = style([
   sprinkles({
     position: 'absolute',
     fontWeight: 'strong',
@@ -28,7 +28,7 @@ export const errorMessage = style([
     wordBreak: 'break-word',
     whiteSpace: 'pre-line',
     selectors: {
-      [`&:not(${showError})`]: {
+      [`&:not(${show})`]: {
         transform: `translateY(${calc(gutter).negate()})`,
         transition: 'none',
         opacity: 0,
@@ -37,7 +37,7 @@ export const errorMessage = style([
   },
 ]);
 
-globalStyle(`${errorMessage} a`, {
+globalStyle(`${message} a`, {
   color: 'inherit',
 });
 

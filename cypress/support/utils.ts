@@ -24,7 +24,7 @@ export const getFrames = () => cy.get('[data-testid="frameIframe"]');
 
 const getFrameNames = () => cy.get('[data-testid="frameName"]');
 
-const getFrameErrors = () => cy.get('[data-testid="errorMessage"]');
+const getFrameErrors = () => cy.get('[data-testid="frameError"]');
 
 const clearCode = () => {
   typeCode(`{${selectModifier}+a}`);

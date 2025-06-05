@@ -1,26 +1,26 @@
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
-import * as styles from './RenderError.css';
+import * as styles from './FrameError.css';
 
-export const ErrorMessage = ({
-  errorMessage,
+export const FrameError = ({
+  message,
   delayVisibility,
   size = 'small',
 }: {
-  errorMessage: ReactNode;
+  message: ReactNode;
   delayVisibility?: boolean;
   size?: keyof typeof styles.size;
 }) => (
   <div
-    data-testid="errorMessage"
+    data-testid="frameError"
     className={clsx({
-      [styles.errorMessage]: true,
+      [styles.message]: true,
       [styles.size[size || 'small']]: true,
-      [styles.showError]: errorMessage,
+      [styles.show]: Boolean(message),
       [styles.delay]: delayVisibility,
     })}
   >
-    {errorMessage}
+    {message}
   </div>
 );

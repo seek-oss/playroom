@@ -1,20 +1,18 @@
 import type { ComponentProps } from 'react';
 
 import type Frame from '../Frame/Frame';
-import { ErrorMessage } from '../RenderError/RenderError';
+import { FrameError } from '../Frame/FrameError';
 import { Stack } from '../Stack/Stack';
 
 type FrameProps = ComponentProps<typeof Frame>;
 
-export const PreviewError: FrameProps['ErrorComponent'] = ({
-  errorMessage,
-}) => (
-  <ErrorMessage
+export const PreviewError: FrameProps['ErrorComponent'] = ({ message }) => (
+  <FrameError
     size="large"
-    errorMessage={
-      errorMessage ? (
+    message={
+      message ? (
         <Stack space="xlarge">
-          <>{errorMessage}</>
+          <>{message}</>
           <a href={window.location.href.replace('/preview', '')}>
             Edit Playroom
           </a>

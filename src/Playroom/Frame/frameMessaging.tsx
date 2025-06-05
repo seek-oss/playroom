@@ -1,32 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { ErrorMessage } from '../RenderError/RenderError';
+import { FrameError } from './FrameError';
 
 const PlayroomErrorSource = 'Playroom Frame Error';
 
 export const SendErrorMessage = ({
-  errorMessage,
+  message,
+  delayVisibility,
 }: {
-  errorMessage: string;
+  message: string;
+  delayVisibility?: boolean;
 }) => {
   useEffect(() => {
     window.parent.postMessage({
       source: PlayroomErrorSource,
-      message: errorMessage,
+      message,
+      delayVisibility,
     });
-  }, [errorMessage]);
+  }, [message, delayVisibility]);
 
   return null;
 };
 
 export const ReceiveErrorMessage = () => {
+  const shouldDelay = useRef(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const errorMessageHandler = (event: MessageEvent) => {
-      const { source, message } = event.data;
+      const { source, message, delayVisibility } = event.data;
       if (source === PlayroomErrorSource) {
         setError(message);
+        shouldDelay.current = delayVisibility;
       }
     };
 
@@ -37,5 +42,5 @@ export const ReceiveErrorMessage = () => {
     };
   }, []);
 
-  return <ErrorMessage errorMessage={error} delayVisibility />;
+  return <FrameError message={error} delayVisibility={shouldDelay.current} />;
 };
