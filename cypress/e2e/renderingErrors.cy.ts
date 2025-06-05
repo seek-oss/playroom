@@ -6,10 +6,8 @@ import {
   typeCode,
   assertFirstFrameNoError,
   loadPlayroom,
+  moveByWords,
 } from '../support/utils';
-
-const repeat = (key: string, times: number) =>
-  new Array(times).fill(key).join('');
 
 describe('Handling rendering errors', () => {
   it('show error when variable does not exist', () => {
@@ -36,7 +34,8 @@ describe('Handling rendering errors', () => {
     assertFirstFrameContains('Foo\nFoo\nBar');
     assertFirstFrameError('background is not defined');
 
-    typeCode(`${repeat('{leftArrow}', 9)}: 'blue'`, 150);
+    moveByWords(-2);
+    typeCode(`: 'blue'`, 150);
 
     assertFirstFrameContains('Foo\nFoo\nBar\nVALID');
     assertFirstFrameNoError();

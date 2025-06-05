@@ -131,7 +131,12 @@ export const moveBy = (x: number, y: number | undefined = 0) => {
 };
 
 export const moveByWords = (numWords: number) => {
-  typeCode(`{${navigationModifier}+rightArrow}`.repeat(numWords));
+  const arrowDirection = numWords >= 0 ? 'rightArrow' : 'leftArrow';
+  const absoluteNumWords = Math.abs(numWords);
+
+  typeCode(
+    `{${navigationModifier}+${arrowDirection}}`.repeat(absoluteNumWords)
+  );
 };
 
 export const moveToEndOfLine = () => {
