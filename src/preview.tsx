@@ -31,7 +31,7 @@ const renderPreview = ({
   FrameComponent = frameComponent,
 } = {}) => {
   renderElement(
-    <UrlParams themes={themes}>
+    <UrlParams themes={themes} decodeUrl>
       {({ code, themeName, theme, title }) => (
         <Preview title={title}>
           <Frame
