@@ -4,12 +4,12 @@ import { useRef } from 'react';
 import playroomConfig from '../../config';
 import { compileJsx } from '../../utils/compileJsx';
 import { Box } from '../Box/Box';
+import { ReceiveErrorMessage } from '../Frame/frameMessaging';
 import type { PlayroomProps } from '../Playroom';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 
 import Iframe from './Iframe';
-import { ReceiveErrorMessage } from './frameMessaging';
 import frameSrc from './frameSrc';
 
 import * as styles from './Frames.css';
