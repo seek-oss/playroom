@@ -41,7 +41,6 @@ const renderPreview = ({
             theme={theme}
             FrameComponent={FrameComponent}
             ErrorComponent={PreviewError}
-            decodeUrl
           />
         </Preview>
       )}

@@ -21,7 +21,6 @@ interface FrameProps extends Pick<RenderCodeProps, 'code' | 'components'> {
   theme: FrameComponentProps['theme'];
   FrameComponent: ComponentType<FrameComponentProps>;
   ErrorComponent: ComponentType<{ message: string; delayVisibility?: boolean }>;
-  decodeUrl?: boolean;
 }
 export default function Frame({
   code,
