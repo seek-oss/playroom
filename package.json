@@ -2,10 +2,18 @@
   "name": "playroom",
   "version": "0.43.1",
   "description": "Design with code, powered by your own component library",
-  "main": "utils/index.js",
-  "types": "utils/index.d.ts",
   "bin": {
     "playroom": "bin/cli.cjs"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "CHANGELOG.md",
@@ -13,7 +21,8 @@
     "images",
     "lib",
     "src",
-    "utils"
+    "utils",
+    "dist"
   ],
   "scripts": {
     "cypress": "start-server-and-test build-and-serve:all '9000|9001|9002' 'cypress run'",
@@ -40,7 +49,8 @@
     "lint:cypress": "tsc --project cypress/tsconfig.json",
     "format": "pnpm lint:eslint --fix && prettier --write '**/*.{js,md,ts,tsx}'",
     "version": "changeset version",
-    "release": "changeset publish",
+    "release": "pnpm package && changeset publish",
+    "package": "tsdown",
     "test": "jest src lib",
     "post-commit-status": "node scripts/postCommitStatus.js",
     "deploy-preview": "surge -p ./cypress/projects/themed/dist",
@@ -124,10 +134,10 @@
     "@octokit/rest": "^19.0.5",
     "@testing-library/cypress": "^10.0.3",
     "@types/jest": "^29.2.4",
-    "@types/webpack-env": "^1.18.8",
     "@types/node": "^18.11.9",
     "@types/react-helmet": "^6.1.6",
     "@types/react-transition-group": "^4.4.10",
+    "@types/webpack-env": "^1.18.8",
     "concurrently": "^9.1.2",
     "cypress": "^13.6.6",
     "eslint": "^9.23.0",
@@ -139,7 +149,8 @@
     "react-dom": "^19.0.0",
     "serve": "^14.1.2",
     "start-server-and-test": "^2.0.11",
-    "surge": "^0.24.6"
+    "surge": "^0.24.6",
+    "tsdown": "^0.12.7"
   },
   "peerDependencies": {
     "react": "^18 || ^19",

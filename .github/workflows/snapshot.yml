@@ -30,6 +30,8 @@ jobs:
 
       - name: Publish
         uses: seek-oss/changesets-snapshot@v0
+        with:
+          pre-publish: pnpm package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
