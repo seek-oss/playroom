@@ -4,6 +4,29 @@
 
 ### Minor Changes
 
+- [#421](https://github.com/seek-oss/playroom/pull/421) [`6fd2aab`](https://github.com/seek-oss/playroom/commit/6fd2aabd4cb910972d9280a4707af361d35926ec) Thanks [@askoufis](https://github.com/askoufis)! - Playroom's utility API is now bundled for both ESM and CJS
+
+  **BREAKING CHANGE:**
+
+  Migrating the utils entries to TypeScript has necessitated an internal build step to produce both ESM and CJS versions.
+  As a result, these APIs are now exposed as named exports at the top level of the `playroom` package.
+
+  **MIGRATION GUIDE:**
+
+  For ESM imports:
+
+  ```diff
+  -import { createUrl } from 'playroom/utils';
+  +import { createUrl } from 'playroom';
+  ```
+
+  or for CJS usage:
+
+  ```diff
+  -const { createUrl } = require('playroom/utils');
+  +const { createUrl } = require('playroom');
+  ```
+
 - [#417](https://github.com/seek-oss/playroom/pull/417) [`03d145d`](https://github.com/seek-oss/playroom/commit/03d145d755d9f431df632618604a807fcf181d21) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Improved handling of rendering errors
 
   Errors occurring during render no longer replace the frame contents with a red error message.
@@ -23,18 +46,6 @@
   Prevent code contents from being searchable when the editor is hidden.
 
 ### Patch Changes
-
-- [#421](https://github.com/seek-oss/playroom/pull/421) [`6fd2aab`](https://github.com/seek-oss/playroom/commit/6fd2aabd4cb910972d9280a4707af361d35926ec) Thanks [@askoufis](https://github.com/askoufis)! - Playroom's utility API is now bundled for both ESM and CJS
-
-  **EXAMPLE USAGE:**
-
-  ```js
-  // ESM import
-  import { createUrl } from 'playroom';
-
-  // CJS require
-  const { createUrl } = require('playroom');
-  ```
 
 - [#424](https://github.com/seek-oss/playroom/pull/424) [`8795fde`](https://github.com/seek-oss/playroom/commit/8795fdeab1383886bc1adfdf417b600391a512ba) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Use `clsx` consistently for building class lists
 
