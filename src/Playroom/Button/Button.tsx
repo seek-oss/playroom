@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import type { ElementType, AllHTMLAttributes, ReactElement } from 'react';
 
 import * as styles from './Button.css';
@@ -27,7 +27,7 @@ export const Button = ({
   ...props
 }: Props) => (
   <ButtonComponent
-    className={classnames(styles.reset, styles.base, {
+    className={clsx(styles.reset, styles.base, {
       [styles.positive]: tone === 'positive',
     })}
     disabled={tone === 'positive'}

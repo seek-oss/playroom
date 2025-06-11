@@ -1,5 +1,5 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { Resizable } from 're-resizable';
 import {
   useContext,
@@ -189,7 +189,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           [styles.editorSize]:
             editorPosition === 'right' ? editorWidth : editorHeight,
         })}
-        className={classnames({
+        className={clsx({
           [styles.resizable]: true,
           [styles.resizableSize[editorPosition]]: !editorHidden,
           [styles.resizableUnavailable]: !editorAvailable,
@@ -246,7 +246,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           }
         />
         <div
-          className={classnames(styles.toggleEditorContainer, {
+          className={clsx(styles.toggleEditorContainer, {
             [styles.isBottom]: isHorizontalEditor,
           })}
         >

@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import Fuse from 'fuse.js';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
@@ -154,7 +154,7 @@ export default ({ isOpen, snippets, onHighlight, onClose }: Props) => {
               ref={isHighlighted ? highlightedEl : undefined}
               id={getSnippetId(snippet, index)}
               key={`${snippet.group}_${snippet.name}_${index}`}
-              className={classnames(styles.snippet, {
+              className={clsx(styles.snippet, {
                 [styles.highlight]: isHighlighted,
               })}
               onMouseMove={

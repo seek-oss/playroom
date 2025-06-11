@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import type { ReactElement } from 'react';
 
 import TickIcon from '../icons/TickIcon';
@@ -25,7 +25,7 @@ export default ({
   onClick,
 }: Props) => (
   <button
-    className={classnames(styles.button, {
+    className={clsx(styles.button, {
       [styles.button_isActive]: active,
       [styles.showIndicator]: showIndicator,
       [styles.disabled]: disabled,
@@ -40,12 +40,12 @@ export default ({
   >
     {children}
     <span
-      className={classnames(styles.indicator, {
+      className={clsx(styles.indicator, {
         [styles.show]: showIndicator && !success,
       })}
     />
     <span
-      className={classnames(styles.successIndicator, {
+      className={clsx(styles.successIndicator, {
         [styles.show]: success,
       })}
     >

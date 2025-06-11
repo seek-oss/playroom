@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import React, { type ElementType, type ReactNode } from 'react';
 
 import * as styles from './Heading.css';
@@ -21,7 +21,7 @@ export const Heading = ({ as: component, level, weight, children }: Props) =>
   React.createElement(
     component || resolveComponentFromLevel(level),
     {
-      className: classnames(styles.base, {
+      className: clsx(styles.base, {
         [styles.level1]: level === '1',
         [styles.level2]: level === '2',
         [styles.level3]: level === '3',
