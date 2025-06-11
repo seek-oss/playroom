@@ -1,39 +1,19 @@
 import classnames from 'classnames';
-import { useState, useEffect } from 'react';
 
 import { Logo } from '../../Logo/Logo';
 
-import * as stylesheet from './SplashScreen.css';
+import * as styles from './SplashScreen.css';
 
-const {
-  animationDuration,
-  animationDelay,
-  animationIterationCount,
-  ...styles
-} = stylesheet;
-
-export default () => {
-  const [hide, setHide] = useState(false);
-
-  useEffect(() => {
-    const hideSplash = setTimeout(
-      () => setHide(true),
-      animationDelay + animationDuration * animationIterationCount
-    );
-
-    return () => clearTimeout(hideSplash);
-  }, []);
-
-  return (
-    <div
-      className={classnames(styles.root, {
-        [styles.hideSplash]: hide,
-      })}
-      data-testid="splashscreen"
-    >
-      <div className={classnames(styles.trace, styles.size)}>
-        <Logo size="100%" />
-      </div>
+export default ({ hide }: { hide?: boolean }) => (
+  <div
+    className={classnames(styles.root, {
+      [styles.hideSplash]: hide,
+    })}
+    data-testid="splashscreen"
+    aria-hidden={hide || undefined}
+  >
+    <div className={classnames(styles.trace, styles.size)}>
+      <Logo size="100%" title="Loading Playroom Preview" />
     </div>
-  );
-};
+  </div>
+);
