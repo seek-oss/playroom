@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { Fragment } from 'react';
 
 import { Text } from '../Text/Text';
@@ -43,11 +43,8 @@ export const ThemeSelector = ({
 
   return (
     <div className={styles.root}>
-      <label
-        htmlFor="theme-select"
-        className={classnames(styles.label, styles.row)}
-      >
-        <span className={classnames(styles.column, styles.minColumn)}>
+      <label htmlFor="theme-select" className={clsx(styles.label, styles.row)}>
+        <span className={clsx(styles.column, styles.minColumn)}>
           <Text>Theme:&nbsp;</Text>
         </span>
         <span className={styles.column}>
@@ -55,7 +52,7 @@ export const ThemeSelector = ({
             {activeTheme}
           </Text>
         </span>
-        <span className={classnames(styles.column, styles.minColumn)}>
+        <span className={clsx(styles.column, styles.minColumn)}>
           &nbsp;
           <span style={{ position: 'relative', top: 2 }}>
             <ChevronIcon size={16} />

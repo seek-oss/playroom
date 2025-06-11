@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
@@ -76,7 +76,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
 
   return (
     <div
-      className={classnames(styles.root, {
+      className={clsx(styles.root, {
         [styles.isOpen]: isOpen,
       })}
     >

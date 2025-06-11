@@ -83,7 +83,6 @@
     "@vanilla-extract/sprinkles": "^1.5.1",
     "@vanilla-extract/webpack-plugin": "^2.3.6",
     "babel-loader": "^9.1.0",
-    "classnames": "^2.3.2",
     "clsx": "^2.1.1",
     "codemirror": "^5.65.10",
     "command-line-args": "^5.2.1",

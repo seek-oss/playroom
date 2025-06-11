@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import React, { type ElementType, type ReactNode } from 'react';
 
 import * as styles from './Text.css';
@@ -23,7 +23,7 @@ export const Text = ({
   React.createElement(
     component,
     {
-      className: classnames(styles.base, styles[size], styles[tone], {
+      className: clsx(styles.base, styles[size], styles[tone], {
         [styles.strong]: weight === 'strong',
         [styles.truncate]: truncate,
       }),

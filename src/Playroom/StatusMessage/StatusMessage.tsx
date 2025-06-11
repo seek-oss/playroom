@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useContext, useState, useEffect, useRef, useCallback } from 'react';
 
 import { StoreContext } from '../../StoreContext/StoreContext';
@@ -59,7 +59,7 @@ export const StatusMessage = ({ dismissable = false }: Props) => {
   return (
     <div
       onClick={dismissable ? closeHandler : undefined}
-      className={classnames(styles.status, {
+      className={clsx(styles.status, {
         [styles.positive]: tone === 'positive',
         [styles.critical]: tone === 'critical',
         [styles.dismissable]: dismissable,
