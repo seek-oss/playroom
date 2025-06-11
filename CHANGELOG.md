@@ -1,5 +1,49 @@
 # playroom
 
+## 0.44.0
+
+### Minor Changes
+
+- [#417](https://github.com/seek-oss/playroom/pull/417) [`03d145d`](https://github.com/seek-oss/playroom/commit/03d145d755d9f431df632618604a807fcf181d21) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Improved handling of rendering errors
+
+  Errors occurring during render no longer replace the frame contents with a red error message.
+  Instead, the error is caught and overlaid on top of the last successful render result (when possible).
+
+- [#414](https://github.com/seek-oss/playroom/pull/414) [`e69f698`](https://github.com/seek-oss/playroom/commit/e69f69896cf6c57a5a45a61330d9f4ea6c99bc97) Thanks [@felixhabib](https://github.com/felixhabib)! - Improve snippets search ranking algorithm.
+  Results are now sorted primarily by the `group` property over the `name` property, making it easier to see related snippets together.
+
+  Replace [`fuzzy`] dependency with [`fuse.js`] to enable result sorting.
+
+  [`fuzzy`]: https://github.com/mattyork/fuzzy?tab=readme-ov-file
+  [`fuse.js`]: https://github.com/krisk/fuse
+
+- [#410](https://github.com/seek-oss/playroom/pull/410) [`6b5eaa3`](https://github.com/seek-oss/playroom/commit/6b5eaa33b8e6c32591da9e4d6a3ed90c526c61a2) Thanks [@felixhabib](https://github.com/felixhabib)! - Refactor layout.
+
+  Improve the code editor show/hide animation.
+  Prevent code contents from being searchable when the editor is hidden.
+
+### Patch Changes
+
+- [#421](https://github.com/seek-oss/playroom/pull/421) [`6fd2aab`](https://github.com/seek-oss/playroom/commit/6fd2aabd4cb910972d9280a4707af361d35926ec) Thanks [@askoufis](https://github.com/askoufis)! - Playroom's utility API is now bundled for both ESM and CJS
+
+  **EXAMPLE USAGE:**
+
+  ```js
+  // ESM import
+  import { createUrl } from 'playroom';
+
+  // CJS require
+  const { createUrl } = require('playroom');
+  ```
+
+- [#424](https://github.com/seek-oss/playroom/pull/424) [`8795fde`](https://github.com/seek-oss/playroom/commit/8795fdeab1383886bc1adfdf417b600391a512ba) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Use `clsx` consistently for building class lists
+
+  Remove `classnames` in favor of `clsx` for building class lists in the Playroom codebase.
+
+- [#423](https://github.com/seek-oss/playroom/pull/423) [`4640ca1`](https://github.com/seek-oss/playroom/commit/4640ca1d93b044b932c2f5357369b65b3a65d1a6) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Preview: Improve accessibility of loading screen
+
+- [#418](https://github.com/seek-oss/playroom/pull/418) [`1d59ba3`](https://github.com/seek-oss/playroom/commit/1d59ba345f800eaf94cc6747efc34608228dfcb6) Thanks [@felixhabib](https://github.com/felixhabib)! - Migrate some internal files from Javascript to Typescript.
+
 ## 0.43.1
 
 ### Patch Changes
