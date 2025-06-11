@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import { Logo } from '../../Logo/Logo';
 
@@ -6,13 +6,13 @@ import * as styles from './SplashScreen.css';
 
 export default ({ hide }: { hide?: boolean }) => (
   <div
-    className={classnames(styles.root, {
+    className={clsx(styles.root, {
       [styles.hideSplash]: hide,
     })}
     data-testid="splashscreen"
     aria-hidden={hide || undefined}
   >
-    <div className={classnames(styles.trace, styles.size)}>
+    <div className={clsx(styles.trace, styles.size)}>
       <Logo size="100%" title="Loading Playroom Preview" />
     </div>
   </div>
