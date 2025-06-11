@@ -105,6 +105,7 @@
     "prop-types": "^15.8.1",
     "re-resizable": "^6.11.2",
     "react-docgen-typescript": "^2.2.2",
+    "react-error-boundary": "^4.0.13",
     "react-helmet": "^6.1.0",
     "react-transition-group": "^4.4.5",
     "read-pkg-up": "^7.0.1",

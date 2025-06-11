@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import playroomConfig from '../../config';
 import { compileJsx } from '../../utils/compileJsx';
 import { Box } from '../Box/Box';
+import { ReceiveErrorMessage } from '../Frame/frameMessaging';
 import type { PlayroomProps } from '../Playroom';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
@@ -53,9 +54,10 @@ export default function Frames({ code, themes, widths }: FramesProps) {
                 { themeName: frame.theme, code: renderCode.current },
                 playroomConfig
               )}
-              data-testid="previewFrame"
+              data-testid="frameIframe"
               className={styles.frame}
             />
+            <ReceiveErrorMessage />
             <div className={styles.frameBorder} />
           </Box>
           <div className={styles.frameName} data-testid="frameName">

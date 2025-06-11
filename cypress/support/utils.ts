@@ -20,9 +20,11 @@ export const cmdPlus = (keyCombo: string) => {
 const getCodeEditor = () =>
   cy.get('.CodeMirror-code').then((editor) => cy.wrap(editor));
 
-export const getPreviewFrames = () => cy.get('[data-testid="previewFrame"]');
+export const getFrames = () => cy.get('[data-testid="frameIframe"]');
 
-export const getPreviewFrameNames = () => cy.get('[data-testid="frameName"]');
+const getFrameNames = () => cy.get('[data-testid="frameName"]');
+
+const getFrameErrors = () => cy.get('[data-testid="frameError"]');
 
 const clearCode = () => {
   typeCode(`{${selectModifier}+a}`);
@@ -79,11 +81,25 @@ export const assertSnippetCount = (count: number) =>
   getSnippets().should('have.length', count);
 
 export const assertFirstFrameContains = (text: string) =>
-  getPreviewFrames()
+  getFrames()
     .first()
     .its('0.contentDocument.body')
     .should((frameBody) => {
       expect(frameBody.innerText).to.eq(text);
+    });
+
+export const assertFirstFrameError = (error: string) =>
+  getFrameErrors()
+    .first()
+    .should((el) => {
+      expect(el[0].innerText).to.eq(error);
+    });
+
+export const assertFirstFrameNoError = () =>
+  getFrameErrors()
+    .first()
+    .should((el) => {
+      expect(el[0].innerText).to.eq('');
     });
 
 export const selectNextCharacters = (numCharacters: number) => {
@@ -115,7 +131,12 @@ export const moveBy = (x: number, y: number | undefined = 0) => {
 };
 
 export const moveByWords = (numWords: number) => {
-  typeCode(`{${navigationModifier}+rightArrow}`.repeat(numWords));
+  const arrowDirection = numWords >= 0 ? 'rightArrow' : 'leftArrow';
+  const absoluteNumWords = Math.abs(numWords);
+
+  typeCode(
+    `{${navigationModifier}+${arrowDirection}}`.repeat(absoluteNumWords)
+  );
 };
 
 export const moveToEndOfLine = () => {
@@ -174,13 +195,13 @@ export const assertFramesMatch = (
       : `${frame[0]} – ${frame[1]}px`;
   });
 
-  getPreviewFrameNames()
+  getFrameNames()
     .should('have.length', frames.length)
-    .should((previewFrames) => {
-      const formattedPreviewFrames = previewFrames
+    .should((frameEls) => {
+      const formattedFrameNames = frameEls
         .map((_, el) => el.innerText)
         .toArray();
-      return expect(formattedPreviewFrames).to.deep.equal(formattedFrames);
+      return expect(formattedFrameNames).to.deep.equal(formattedFrames);
     });
 };
 
