@@ -1,13 +1,32 @@
-const lzString = require('lz-string');
+import { compressToEncodedURIComponent } from 'lz-string';
 
-const compressParams = ({
+import type { Widths } from '../src/Playroom/Playroom';
+
+export interface Snippet {
+  group: string;
+  name: string;
+  code: string;
+}
+
+export type Snippets = Snippet[];
+
+export interface CompressParamsOptions {
+  code?: string;
+  themes?: string[];
+  widths?: Widths;
+  theme?: string;
+  title?: string;
+  editorHidden?: boolean;
+}
+
+export const compressParams = ({
   code,
   themes,
   widths,
   theme,
   title,
   editorHidden,
-}) => {
+}: CompressParamsOptions): string => {
   const data = JSON.stringify({
     ...(code ? { code } : {}),
     ...(themes ? { themes } : {}),
@@ -17,10 +36,22 @@ const compressParams = ({
     ...(editorHidden ? { editorHidden } : {}),
   });
 
-  return lzString.compressToEncodedURIComponent(data);
+  return compressToEncodedURIComponent(data);
 };
 
-const createUrl = ({
+export type ParamType = 'hash' | 'search';
+
+export interface CreateUrlOptions {
+  baseUrl?: string;
+  code?: string;
+  themes?: string[];
+  widths?: Widths;
+  paramType?: ParamType;
+  title?: string;
+  editorHidden?: boolean;
+}
+
+export const createUrl = ({
   baseUrl,
   code,
   themes,
@@ -28,7 +59,7 @@ const createUrl = ({
   title,
   editorHidden,
   paramType = 'hash',
-}) => {
+}: CreateUrlOptions): string => {
   let path = '';
 
   if (code || themes || widths || title || editorHidden) {
@@ -52,14 +83,23 @@ const createUrl = ({
   return path;
 };
 
-const createPreviewUrl = ({
+export interface CreatePreviewUrlOptions {
+  baseUrl?: string;
+  code?: string;
+  theme?: string;
+  paramType?: ParamType;
+  title?: string;
+  editorHidden?: boolean;
+}
+
+export const createPreviewUrl = ({
   baseUrl,
   code,
   theme,
   title,
   editorHidden,
   paramType = 'hash',
-}) => {
+}: CreatePreviewUrlOptions): string => {
   let path = '';
 
   if (code || theme || title || editorHidden) {
@@ -75,10 +115,4 @@ const createPreviewUrl = ({
   }
 
   return path;
-};
-
-module.exports = {
-  compressParams,
-  createUrl,
-  createPreviewUrl,
 };
