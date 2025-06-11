@@ -67,10 +67,14 @@ const getTitle = (title: string | undefined) => {
   return 'Playroom';
 };
 
+// Separating out `Widths` to prevent `PlayroomProps` from being bundled in the `utils` type
+// definitions
+export type Widths = Array<number | 'Fit to window'>;
+
 export interface PlayroomProps {
   components: Record<string, ComponentType<any>>;
   themes: string[];
-  widths: Array<number | 'Fit to window'>;
+  widths: Widths;
   snippets: Snippets;
 }
 

@@ -19,7 +19,11 @@ export const root = style([
     transition: 'slow',
   }),
   {
-    zIndex: 100,
+    /**
+     * Attempt to elevate above portal'd elements that are
+     * attached to the `body` element.
+     */
+    zIndex: 99999,
     background: dark.background.neutral,
     color: colorPaletteVars.foreground.neutralInverted,
   },
