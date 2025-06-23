@@ -1,11 +1,11 @@
-import Frame from './Playroom/Frame/Frame';
-import { SendErrorMessage } from './Playroom/Frame/frameMessaging';
-import playroomComponents from './components';
-import PlayroomFrameComponent from './frameComponent';
-import { renderElement } from './render';
-import playroomThemes from './themes';
-import { hmrAccept } from './utils/hmr';
-import { UrlParams } from './utils/params';
+import Frame from '../Playroom/Frame/Frame';
+import { SendErrorMessage } from '../Playroom/Frame/frameMessaging';
+import playroomComponents from '../components';
+import PlayroomFrameComponent from '../frameComponent';
+import { renderElement } from '../render';
+import playroomThemes from '../themes';
+import { hmrAccept } from '../utils/hmr';
+import { UrlParams } from '../utils/params';
 
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);

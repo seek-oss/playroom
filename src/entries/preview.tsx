@@ -1,15 +1,14 @@
-import faviconInvertedPath from '../images/favicon-inverted.png';
-import faviconPath from '../images/favicon.png';
-
-import Frame from './Playroom/Frame/Frame';
-import Preview from './Playroom/Preview/Preview';
-import { PreviewError } from './Playroom/Preview/PreviewError';
-import playroomComponents from './components';
-import frameComponent from './frameComponent';
-import { renderElement } from './render';
-import playroomThemes from './themes';
-import { hmrAccept } from './utils/hmr';
-import { UrlParams } from './utils/params';
+import faviconInvertedPath from '../../images/favicon-inverted.png';
+import faviconPath from '../../images/favicon.png';
+import Frame from '../Playroom/Frame/Frame';
+import Preview from '../Playroom/Preview/Preview';
+import { PreviewError } from '../Playroom/Preview/PreviewError';
+import playroomComponents from '../components';
+import frameComponent from '../frameComponent';
+import { renderElement } from '../render';
+import playroomThemes from '../themes';
+import { hmrAccept } from '../utils/hmr';
+import { UrlParams } from '../utils/params';
 
 const outlet = document.createElement('div');
 document.body.appendChild(outlet);
