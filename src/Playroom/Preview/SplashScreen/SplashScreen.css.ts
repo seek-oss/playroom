@@ -1,8 +1,8 @@
 import { style, globalStyle, keyframes } from '@vanilla-extract/css';
 
-import { dark } from '../../palettes';
+import { dark } from '../../../css/palettes';
 
-import { sprinkles, colorPaletteVars } from '../../sprinkles.css';
+import { sprinkles, colorPaletteVars } from '../../../css/sprinkles.css';
 
 export const animationDuration = 1300;
 export const animationDelay = 500;

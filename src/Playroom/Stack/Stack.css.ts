@@ -1,6 +1,6 @@
 import { style, createVar, styleVariants } from '@vanilla-extract/css';
 
-import { vars } from '../vars.css';
+import { vars } from '../../css/vars.css';
 
 const size = createVar();
 

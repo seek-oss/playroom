@@ -12,8 +12,8 @@ import {
 } from './constants';
 
 import { toolbarItemSize } from './ToolbarItem/ToolbarItem.css';
-import { sprinkles, colorPaletteVars } from './sprinkles.css';
-import { vars } from './vars.css';
+import { sprinkles, colorPaletteVars } from '../css/sprinkles.css';
+import { vars } from '../css/vars.css';
 
 const MIN_HEIGHT = `${toolbarItemSize * toolbarItemCount}px`;
 const MIN_WIDTH = `${toolbarOpenSize + toolbarItemSize + 80}px`;

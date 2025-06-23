@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
-import { sprinkles } from '../sprinkles.css';
+import { sprinkles } from '../../css/sprinkles.css';
 
 export const root = sprinkles({
   position: 'relative',

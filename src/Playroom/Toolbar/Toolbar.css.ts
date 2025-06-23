@@ -3,8 +3,8 @@ import { calc } from '@vanilla-extract/css-utils';
 
 import { toolbarOpenSize } from '../constants';
 
+import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
-import { sprinkles, colorPaletteVars } from '../sprinkles.css';
 
 const toolbarBorderThickness = '1px';
 

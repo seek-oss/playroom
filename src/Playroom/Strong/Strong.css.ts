@@ -1,4 +1,4 @@
-import { sprinkles } from '../sprinkles.css';
+import { sprinkles } from '../../css/sprinkles.css';
 
 export const strong = sprinkles({
   display: 'inline',
