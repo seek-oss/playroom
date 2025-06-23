@@ -1,58 +1,20 @@
-import React, {
-  useRef,
-  useLayoutEffect,
-  type ComponentType,
-  createElement,
-  Fragment,
-} from 'react';
+import { useRef, useLayoutEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 // @ts-expect-error no types
 import scopeEval from 'scope-eval';
 
-import userScopeFromConfig from '../../useScope';
-import {
-  ReactCreateElementPragma,
-  ReactFragmentPragma,
-} from '../../utils/compileJsx';
+import scope from '../../configModules/useScope';
 
 interface Props {
   code: string;
-  components: Record<string, ComponentType>;
   onError: (error: string) => void;
 }
 
-const buildScope = (components: Props['components']) => {
-  const userScope = {
-    ...(userScopeFromConfig() ?? {}),
-    ...components,
-  };
-
-  if (ReactCreateElementPragma in userScope) {
-    throw new Error(
-      `'${ReactCreateElementPragma}' is used internally by Playroom and is not allowed in scope`
-    );
-  }
-  if (ReactFragmentPragma in userScope) {
-    throw new Error(
-      `'${ReactFragmentPragma}' is used internally by Playroom and is not allowed in scope`
-    );
-  }
-
-  return {
-    ...userScope,
-    React,
-    [ReactCreateElementPragma]: createElement,
-    [ReactFragmentPragma]: Fragment,
-  };
-};
-
 const EvalCode = ({
   code,
-  scope,
   onSuccess,
 }: {
   code: string;
-  scope: Record<string, any>;
   onSuccess?: () => void;
 }) => {
   useLayoutEffect(() => {
@@ -64,18 +26,16 @@ const EvalCode = ({
   return scopeEval(code, scope);
 };
 
-export default function RenderCode({ code, components, onError }: Props) {
+export default function RenderCode({ code, onError }: Props) {
   const lastCode = useRef('');
 
   const onSuccess = () => {
     lastCode.current = code || '';
   };
 
-  const scope = buildScope(components);
-
   return (
     <ErrorBoundary
-      fallbackRender={() => <EvalCode scope={scope} code={lastCode.current} />}
+      fallbackRender={() => <EvalCode code={lastCode.current} />}
       resetKeys={[code]}
       onError={(e) => {
         onError(e.message);
@@ -84,7 +44,7 @@ export default function RenderCode({ code, components, onError }: Props) {
         onError('');
       }}
     >
-      <EvalCode scope={scope} code={code} onSuccess={onSuccess} />
+      <EvalCode code={code} onSuccess={onSuccess} />
     </ErrorBoundary>
   );
 }
