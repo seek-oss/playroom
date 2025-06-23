@@ -3,6 +3,7 @@ import lzString from 'lz-string';
 import { useState, useEffect, type ReactNode } from 'react';
 
 import playroomConfig from '../config';
+import themes from '../configModules/themes';
 
 import { compileJsx } from './compileJsx';
 
@@ -52,10 +53,8 @@ function useParams<ReturnType>(
 
 export const UrlParams = ({
   children,
-  themes,
   decodeUrl,
 }: {
-  themes: Record<string, any>;
   children: (params: {
     themeName: string;
     theme: any;

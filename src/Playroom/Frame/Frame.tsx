@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
+import FrameComponent from '../../configModules/frameComponent';
 import RenderCode from '../RenderCode/RenderCode';
 
 type RenderCodeProps = ComponentProps<typeof RenderCode>;
@@ -16,18 +17,15 @@ type FrameComponentProps = {
   children?: ReactNode;
 };
 
-interface FrameProps extends Pick<RenderCodeProps, 'code' | 'components'> {
+interface FrameProps extends Pick<RenderCodeProps, 'code'> {
   themeName: FrameComponentProps['themeName'];
   theme: FrameComponentProps['theme'];
-  FrameComponent: ComponentType<FrameComponentProps>;
   ErrorComponent: ComponentType<{ message: string; delayVisibility?: boolean }>;
 }
 export default function Frame({
   code,
-  components,
   themeName,
   theme,
-  FrameComponent,
   ErrorComponent,
 }: FrameProps) {
   const [error, setError] = useState('');
@@ -57,7 +55,7 @@ export default function Frame({
         }}
       >
         <FrameComponent themeName={themeName} theme={theme}>
-          <RenderCode code={code} components={components} onError={setError} />
+          <RenderCode code={code} onError={setError} />
         </FrameComponent>
       </ErrorBoundary>
       <ErrorComponent message={error} delayVisibility={delay.current} />

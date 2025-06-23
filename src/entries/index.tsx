@@ -1,13 +1,12 @@
 import faviconInvertedPath from '../../images/favicon-inverted.png';
 import faviconPath from '../../images/favicon.png';
 import Playroom, { type PlayroomProps } from '../Playroom/Playroom/Playroom';
-import playroomComponents from '../components';
 import playroomConfig from '../config';
+import components from '../configModules/components';
+import snippets from '../configModules/snippets';
+import themes from '../configModules/themes';
 import { StoreProvider } from '../contexts/StoreContext';
 import { renderElement } from '../render';
-import playroomSnippets from '../snippets';
-import playroomThemes from '../themes';
-import { hmrAccept } from '../utils/hmr';
 
 const suppliedWidths = playroomConfig.widths || [320, 375, 768, 1024];
 const widths: PlayroomProps['widths'] = [...suppliedWidths, 'Fit to window'];
@@ -24,42 +23,16 @@ if (selectedElement) {
   selectedElement.setAttribute('href', favicon);
 }
 
-const renderPlayroom = ({
-  themes = playroomThemes,
-  components = playroomComponents,
-  snippets = playroomSnippets,
-} = {}) => {
-  const themeNames = Object.keys(themes);
+const themeNames = Object.keys(themes);
 
-  // Exclude undefined components, e.g. an exported TypeScript type.
-  const filteredComponents = Object.fromEntries(
-    Object.entries(components).filter(([_, value]) => value)
-  );
-
-  renderElement(
-    <StoreProvider themes={themeNames} widths={widths}>
-      <Playroom
-        components={filteredComponents}
-        widths={widths}
-        themes={themeNames}
-        snippets={snippets}
-      />
-    </StoreProvider>,
-    outlet
-  );
-};
-renderPlayroom();
-
-hmrAccept((accept) => {
-  accept('./components', () => {
-    renderPlayroom({ components: playroomComponents });
-  });
-
-  accept('./themes', () => {
-    renderPlayroom({ themes: playroomThemes });
-  });
-
-  accept('./snippets', () => {
-    renderPlayroom({ snippets: playroomSnippets });
-  });
-});
+renderElement(
+  <StoreProvider themes={themeNames} widths={widths}>
+    <Playroom
+      components={components}
+      widths={widths}
+      themes={themeNames}
+      snippets={snippets}
+    />
+  </StoreProvider>,
+  outlet
+);
