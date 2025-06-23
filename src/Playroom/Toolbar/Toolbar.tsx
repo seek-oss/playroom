@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { StoreContext } from '../../StoreContext/StoreContext';
+import { StoreContext } from '../../contexts/StoreContext';
 import { isMac } from '../../utils/formatting';
 import FramesPanel from '../FramesPanel/FramesPanel';
 import type { PlayroomProps } from '../Playroom';

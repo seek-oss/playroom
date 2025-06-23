@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useContext, useState, useEffect, useRef, useCallback } from 'react';
 
-import { StoreContext } from '../../StoreContext/StoreContext';
+import { StoreContext } from '../../contexts/StoreContext';
 import { Text } from '../Text/Text';
 import DismissIcon from '../icons/DismissIcon';
 

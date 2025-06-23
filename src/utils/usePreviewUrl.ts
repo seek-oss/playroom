@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 
 import { createPreviewUrl } from '../../utils';
-import { StoreContext } from '../StoreContext/StoreContext';
 import playroomConfig from '../config';
+import { StoreContext } from '../contexts/StoreContext';
 
 const baseUrl = window.location.href
   .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]

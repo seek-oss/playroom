@@ -1,4 +1,4 @@
-import type { CursorPosition } from '../StoreContext/StoreContext';
+import type { CursorPosition } from '../contexts/StoreContext';
 
 import { validateCode } from './compileJsx';
 

@@ -1,6 +1,6 @@
 import { useContext, type ReactNode } from 'react';
 
-import { StoreContext } from '../../StoreContext/StoreContext';
+import { StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { Heading } from '../Heading/Heading';
 import { Inline } from '../Inline/Inline';

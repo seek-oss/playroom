@@ -2,7 +2,7 @@ import babel from 'prettier/parser-babel';
 import postcss from 'prettier/parser-postcss';
 import prettier from 'prettier/standalone';
 
-import type { CursorPosition } from '../StoreContext/StoreContext';
+import type { CursorPosition } from '../contexts/StoreContext';
 
 import { insertAtCursor } from './cursor';
 

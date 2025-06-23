@@ -12,10 +12,7 @@ import { Helmet } from 'react-helmet';
 import { useDebouncedCallback } from 'use-debounce';
 
 import type { Snippets } from '../../utils';
-import {
-  StoreContext,
-  type EditorPosition,
-} from '../StoreContext/StoreContext';
+import { StoreContext, type EditorPosition } from '../contexts/StoreContext';
 import componentsToHints from '../utils/componentsToHints';
 
 import { Box } from './Box/Box';

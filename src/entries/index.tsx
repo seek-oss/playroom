@@ -1,9 +1,9 @@
 import faviconInvertedPath from '../../images/favicon-inverted.png';
 import faviconPath from '../../images/favicon.png';
 import Playroom, { type PlayroomProps } from '../Playroom/Playroom';
-import { StoreProvider } from '../StoreContext/StoreContext';
 import playroomComponents from '../components';
 import playroomConfig from '../config';
+import { StoreProvider } from '../contexts/StoreContext';
 import { renderElement } from '../render';
 import playroomSnippets from '../snippets';
 import playroomThemes from '../themes';
