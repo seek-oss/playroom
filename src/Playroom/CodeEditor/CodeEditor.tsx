@@ -5,10 +5,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/theme/neo.css';
 
-import {
-  type CursorPosition,
-  StoreContext,
-} from '../../StoreContext/StoreContext';
+import { type CursorPosition, StoreContext } from '../../contexts/StoreContext';
 import { validateCode } from '../../utils/compileJsx';
 import { formatCode as format, isMac } from '../../utils/formatting';
 

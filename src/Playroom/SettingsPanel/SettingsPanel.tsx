@@ -4,7 +4,7 @@ import {
   type ColorScheme,
   type EditorPosition,
   StoreContext,
-} from '../../StoreContext/StoreContext';
+} from '../../contexts/StoreContext';
 import { isMac } from '../../utils/formatting';
 import { Box } from '../Box/Box';
 import { Heading } from '../Heading/Heading';
