@@ -1,8 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
+import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
-import { sprinkles, colorPaletteVars } from '../sprinkles.css';
-import { vars } from '../vars.css';
 
 export const root = sprinkles({
   position: 'relative',

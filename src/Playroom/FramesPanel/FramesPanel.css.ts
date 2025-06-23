@@ -1,8 +1,8 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
 
-import { colorPaletteVars, sprinkles } from '../sprinkles.css';
-import { vars } from '../vars.css';
+import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
 export const reset = style([
   sprinkles({

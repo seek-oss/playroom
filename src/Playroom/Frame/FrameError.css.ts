@@ -1,10 +1,10 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
 
-import { light, dark } from '../palettes';
+import { light, dark } from '../../css/palettes';
 
-import { sprinkles } from '../sprinkles.css';
-import { vars } from '../vars.css';
+import { sprinkles } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
 export const show = style({});
 
