@@ -4,7 +4,7 @@ import { StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { Heading } from '../Heading/Heading';
 import { Inline } from '../Inline/Inline';
-import type { PlayroomProps } from '../Playroom';
+import type { PlayroomProps } from '../Playroom/Playroom';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';

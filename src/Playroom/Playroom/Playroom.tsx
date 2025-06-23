@@ -11,18 +11,17 @@ import {
 import { Helmet } from 'react-helmet';
 import { useDebouncedCallback } from 'use-debounce';
 
-import type { Snippets } from '../../utils';
-import { StoreContext, type EditorPosition } from '../contexts/StoreContext';
-import componentsToHints from '../utils/componentsToHints';
-
-import { Box } from './Box/Box';
-import { CodeEditor } from './CodeEditor/CodeEditor';
-import Frames from './Frames/Frames';
-import { StatusMessage } from './StatusMessage/StatusMessage';
-import Toolbar from './Toolbar/Toolbar';
-import { WindowPortal } from './WindowPortal';
-import { ANIMATION_TIMEOUT } from './constants';
-import ChevronIcon from './icons/ChevronIcon';
+import type { Snippets } from '../../../utils';
+import { StoreContext, type EditorPosition } from '../../contexts/StoreContext';
+import componentsToHints from '../../utils/componentsToHints';
+import { Box } from '../Box/Box';
+import { CodeEditor } from '../CodeEditor/CodeEditor';
+import Frames from '../Frames/Frames';
+import { StatusMessage } from '../StatusMessage/StatusMessage';
+import Toolbar from '../Toolbar/Toolbar';
+import { WindowPortal } from '../WindowPortal';
+import { ANIMATION_TIMEOUT } from '../constants';
+import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Playroom.css';
 
