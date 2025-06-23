@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 import type { Snippet } from '../../../utils';
-import type { PlayroomProps } from '../Playroom';
+import type { PlayroomProps } from '../Playroom/Playroom';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 

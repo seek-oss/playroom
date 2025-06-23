@@ -3,7 +3,7 @@
 import dedent from 'dedent';
 
 import type { Direction } from '../../src/Playroom/CodeEditor/keymaps/types';
-import type { PlayroomProps } from '../../src/Playroom/Playroom';
+import type { PlayroomProps } from '../../src/Playroom/Playroom/Playroom';
 import { isMac } from '../../src/utils/formatting';
 import { createUrl } from '../../utils';
 

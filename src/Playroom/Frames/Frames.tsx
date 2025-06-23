@@ -5,7 +5,7 @@ import playroomConfig from '../../config';
 import { compileJsx } from '../../utils/compileJsx';
 import { Box } from '../Box/Box';
 import { ReceiveErrorMessage } from '../Frame/frameMessaging';
-import type { PlayroomProps } from '../Playroom';
+import type { PlayroomProps } from '../Playroom/Playroom';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 

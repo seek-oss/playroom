@@ -5,7 +5,7 @@ import { CSSTransition } from 'react-transition-group';
 import { StoreContext } from '../../contexts/StoreContext';
 import { isMac } from '../../utils/formatting';
 import FramesPanel from '../FramesPanel/FramesPanel';
-import type { PlayroomProps } from '../Playroom';
+import type { PlayroomProps } from '../Playroom/Playroom';
 import PreviewPanel from '../PreviewPanel/PreviewPanel';
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import Snippets from '../Snippets/Snippets';
