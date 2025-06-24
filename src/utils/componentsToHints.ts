@@ -1,51 +1,59 @@
 // @ts-expect-error
 import parsePropTypes from 'parse-prop-types';
 
-import type { PlayroomProps } from '../components/Playroom/Playroom';
+import configComponents from '../configModules/components';
 
-export default (
-  components: PlayroomProps['components'],
-  staticTypes: typeof __PLAYROOM_GLOBAL__STATIC_TYPES__ = {}
+const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
+
+type Hints = Record<
+  string,
+  {
+    attrs: Record<string, any>;
+  }
+>;
+
+export const __private_create_hints = (
+  components: typeof configComponents,
+  types: typeof staticTypes = {}
 ) => {
   const componentNames = Object.keys(components).sort();
 
-  return Object.assign(
-    {},
-    ...componentNames.map((componentName) => {
-      const staticTypesForComponent = staticTypes[componentName];
-      if (
-        staticTypesForComponent &&
-        Object.keys(staticTypesForComponent).length > 0
-      ) {
-        return {
-          [componentName]: {
-            attrs: staticTypesForComponent,
-          },
-        };
-      }
-
-      const { children, ...filteredPropTypes } = parsePropTypes(
-        components[componentName]
-      );
-      const propNames = Object.keys(filteredPropTypes);
-
+  return componentNames.reduce((componentAcc, componentName) => {
+    const staticTypesForComponent = types[componentName];
+    if (
+      staticTypesForComponent &&
+      Object.keys(staticTypesForComponent).length > 0
+    ) {
       return {
+        ...componentAcc,
         [componentName]: {
-          attrs: Object.assign(
-            {},
-            ...propNames.map((propName) => {
-              const propType = filteredPropTypes[propName].type;
-
-              return {
-                [propName]:
-                  propType.name === 'oneOf'
-                    ? propType.value.filter((x: any) => typeof x === 'string')
-                    : null,
-              };
-            })
-          ),
+          attrs: staticTypesForComponent,
         },
       };
-    })
-  );
+    }
+
+    const { children, ...filteredPropTypes } = parsePropTypes(
+      components[componentName]
+    );
+    const propNames = Object.keys(filteredPropTypes);
+
+    return {
+      ...componentAcc,
+      [componentName]: {
+        attrs: propNames.reduce((propAcc, propName) => {
+          const propType = filteredPropTypes[propName].type;
+
+          return {
+            ...propAcc,
+            [propName]:
+              propType.name === 'oneOf'
+                ? propType.value.filter((x: any) => typeof x === 'string')
+                : null,
+          };
+        }, {} as Hints[string]['attrs']),
+      },
+    };
+  }, {} as Hints);
 };
+
+export const hints = __private_create_hints(configComponents, staticTypes);

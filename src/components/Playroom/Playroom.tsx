@@ -1,18 +1,11 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import clsx from 'clsx';
 import { Resizable } from 're-resizable';
-import {
-  useContext,
-  type ComponentType,
-  Fragment,
-  useState,
-  useEffect,
-} from 'react';
+import { useContext, Fragment, useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { StoreContext, type EditorPosition } from '../../contexts/StoreContext';
-import componentsToHints from '../../utils/componentsToHints';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
 import Frames from '../Frames/Frames';
@@ -23,8 +16,6 @@ import { ANIMATION_TIMEOUT } from '../constants';
 import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Playroom.css';
-
-const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
 
 const resizableConfig = (position: EditorPosition = 'bottom') => ({
   top: position === 'bottom',
@@ -62,11 +53,7 @@ const getTitle = (title: string | undefined) => {
   return 'Playroom';
 };
 
-export interface PlayroomProps {
-  components: Record<string, ComponentType<any>>;
-}
-
-export default ({ components }: PlayroomProps) => {
+export default () => {
   const [
     {
       editorPosition,
@@ -137,7 +124,6 @@ export default ({ components }: PlayroomProps) => {
             dispatch({ type: 'updateCode', payload: { code: newCode } })
           }
           previewCode={previewEditorCode}
-          hints={componentsToHints(components, staticTypes)}
         />
         <StatusMessage />
       </div>

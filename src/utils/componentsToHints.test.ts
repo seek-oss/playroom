@@ -6,7 +6,7 @@ Todo - revisit componentsToHints to optimise
 */
 
 // eslint-disable-next-line import-x/order
-import componentsToHints from './componentsToHints';
+import { __private_create_hints } from './componentsToHints';
 
 // @ts-expect-error
 import * as PropTypeComponents from '../../cypress/projects/themed/components';
@@ -14,7 +14,7 @@ import * as TypeScriptComponents from '../../cypress/projects/typescript/compone
 
 describe('componentsToHints', () => {
   it('should support javascript components with proptypes', () => {
-    const result = componentsToHints({
+    const result = __private_create_hints({
       Bar: PropTypeComponents.Bar,
       Foo: PropTypeComponents.Foo,
     });
@@ -42,7 +42,7 @@ describe('componentsToHints', () => {
   });
 
   it('should support typescript components when provided with type data', () => {
-    const result = componentsToHints(
+    const result = __private_create_hints(
       {
         Bar: TypeScriptComponents.Bar,
         Foo: TypeScriptComponents.Foo,
