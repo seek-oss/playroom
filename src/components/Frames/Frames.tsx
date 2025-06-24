@@ -2,12 +2,12 @@ import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { useContext, useRef } from 'react';
 
 import playroomConfig from '../../config';
+import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
 import { compileJsx } from '../../utils/compileJsx';
 import { Box } from '../Box/Box';
 import { ReceiveErrorMessage } from '../Frame/frameMessaging';
-import type { PlayroomProps } from '../Playroom/Playroom';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 
@@ -18,11 +18,12 @@ import * as styles from './Frames.css';
 
 interface FramesProps {
   code: string;
-  themes: PlayroomProps['themes'];
 }
 
-export default function Frames({ code, themes }: FramesProps) {
-  const [{ visibleWidths }] = useContext(StoreContext);
+export default function Frames({ code }: FramesProps) {
+  const [{ visibleWidths, visibleThemes }] = useContext(StoreContext);
+  const themes =
+    visibleThemes && visibleThemes.length > 0 ? visibleThemes : availableThemes;
   const widths =
     visibleWidths && visibleWidths.length > 0 ? visibleWidths : availableWidths;
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);

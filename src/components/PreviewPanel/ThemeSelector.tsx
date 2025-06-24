@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import { Fragment } from 'react';
 
+import { themeNames } from '../../configModules/themes';
 import { Text } from '../Text/Text';
 import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './ThemeSelector.css';
 
 interface ThemeSelectorProps {
-  themes: string[];
   visibleThemes: string[] | undefined;
   activeTheme: string;
   onChange: (theme: string) => void;
@@ -20,7 +20,6 @@ const themeOption = (theme: string) => (
 );
 
 export const ThemeSelector = ({
-  themes,
   activeTheme,
   onChange,
   visibleThemes,
@@ -32,13 +31,13 @@ export const ThemeSelector = ({
           {visibleThemes.map(themeOption)}
         </optgroup>
         <optgroup label="Available themes">
-          {themes
+          {themeNames
             .filter((theme) => !visibleThemes.some((t) => t === theme))
             .map(themeOption)}
         </optgroup>
       </Fragment>
     ) : (
-      themes.map(themeOption)
+      themeNames.map(themeOption)
     );
 
   return (
