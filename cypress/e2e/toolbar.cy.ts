@@ -1,4 +1,4 @@
-import type { PlayroomProps } from '../../src/components/Playroom/Playroom';
+import type { Widths } from '../../src/configModules/widths';
 import {
   assertFramesMatch,
   assertPreviewContains,
@@ -15,13 +15,7 @@ describe('Toolbar', () => {
   });
 
   it('filter widths', () => {
-    const frames: PlayroomProps['widths'] = [
-      320,
-      375,
-      768,
-      1024,
-      'Fit to window',
-    ];
+    const frames: Widths = [320, 375, 768, 1024, 'Fit to window'];
     const widthIndexToSelect = 1;
 
     assertFramesMatch(frames);

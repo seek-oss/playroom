@@ -63,18 +63,13 @@ const getTitle = (title: string | undefined) => {
   return 'Playroom';
 };
 
-// Separating out `Widths` to prevent `PlayroomProps` from being bundled in the `utils` type
-// definitions
-export type Widths = Array<number | 'Fit to window'>;
-
 export interface PlayroomProps {
   components: Record<string, ComponentType<any>>;
   themes: string[];
-  widths: Widths;
   snippets: Snippets;
 }
 
-export default ({ components, themes, widths, snippets }: PlayroomProps) => {
+export default ({ components, themes, snippets }: PlayroomProps) => {
   const [
     {
       editorPosition,
@@ -82,7 +77,6 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
       editorWidth,
       editorHidden,
       visibleThemes,
-      visibleWidths,
       code,
       previewRenderCode,
       previewEditorCode,
@@ -152,7 +146,7 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
         <StatusMessage />
       </div>
       <div className={styles.toolbarContainer}>
-        <Toolbar widths={widths} themes={themes} snippets={snippets} />
+        <Toolbar themes={themes} snippets={snippets} />
       </div>
     </Fragment>
   );
@@ -236,9 +230,6 @@ export default ({ components, themes, widths, snippets }: PlayroomProps) => {
           code={previewRenderCode || code}
           themes={
             visibleThemes && visibleThemes.length > 0 ? visibleThemes : themes
-          }
-          widths={
-            visibleWidths && visibleWidths.length > 0 ? visibleWidths : widths
           }
         />
         <div

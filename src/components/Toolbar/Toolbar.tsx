@@ -21,11 +21,10 @@ import * as styles from './Toolbar.css';
 
 interface Props {
   themes: PlayroomProps['themes'];
-  widths: PlayroomProps['widths'];
   snippets: PlayroomProps['snippets'];
 }
 
-export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
+export default ({ themes: allThemes, snippets }: Props) => {
   const [
     {
       visibleThemes = [],
@@ -189,10 +188,7 @@ export default ({ themes: allThemes, widths: allWidths, snippets }: Props) => {
             )}
 
             {lastActivePanel === 'frames' && (
-              <FramesPanel
-                availableWidths={allWidths}
-                availableThemes={allThemes}
-              />
+              <FramesPanel availableThemes={allThemes} />
             )}
 
             {lastActivePanel === 'preview' && (

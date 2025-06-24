@@ -1,10 +1,10 @@
 import { useContext, type ReactNode } from 'react';
 
+import availableWidths from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { Heading } from '../Heading/Heading';
 import { Inline } from '../Inline/Inline';
-import type { PlayroomProps } from '../Playroom/Playroom';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
@@ -14,7 +14,6 @@ import Checkmark from './CheckmarkSvg';
 import * as styles from './FramesPanel.css';
 
 interface FramesPanelProps {
-  availableWidths: PlayroomProps['widths'];
   availableThemes: string[];
 }
 
@@ -80,7 +79,7 @@ function FrameOption<Option>({
   );
 }
 
-export default ({ availableWidths, availableThemes }: FramesPanelProps) => {
+export default ({ availableThemes }: FramesPanelProps) => {
   const [{ visibleWidths = [], visibleThemes = [], title }, dispatch] =
     useContext(StoreContext);
   const hasThemes =
