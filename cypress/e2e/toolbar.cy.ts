@@ -1,4 +1,4 @@
-import type { PlayroomProps } from '../../src/Playroom/Playroom/Playroom';
+import type { PlayroomProps } from '../../src/components/Playroom/Playroom';
 import {
   assertFramesMatch,
   assertPreviewContains,

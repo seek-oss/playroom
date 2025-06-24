@@ -1,7 +1,7 @@
 // @ts-expect-error
 import parsePropTypes from 'parse-prop-types';
 
-import type { PlayroomProps } from '../Playroom/Playroom/Playroom';
+import type { PlayroomProps } from '../components/Playroom/Playroom';
 
 export default (
   components: PlayroomProps['components'],

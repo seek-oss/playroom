@@ -12,7 +12,7 @@ import {
 import { useDebouncedCallback } from 'use-debounce';
 
 import { type Snippet, compressParams } from '../../utils';
-import type { PlayroomProps } from '../Playroom/Playroom/Playroom';
+import type { PlayroomProps } from '../components/Playroom/Playroom';
 import playroomConfig from '../config';
 import { isValidLocation } from '../utils/cursor';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';

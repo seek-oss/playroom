@@ -1,6 +1,6 @@
 import { compressToEncodedURIComponent } from 'lz-string';
 
-import type { Widths } from '../src/Playroom/Playroom/Playroom';
+import type { Widths } from '../src/components/Playroom/Playroom';
 
 export interface Snippet {
   group: string;

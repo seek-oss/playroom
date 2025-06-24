@@ -1,5 +1,5 @@
-import Frame from '../Playroom/Frame/Frame';
-import { SendErrorMessage } from '../Playroom/Frame/frameMessaging';
+import Frame from '../components/Frame/Frame';
+import { SendErrorMessage } from '../components/Frame/frameMessaging';
 import { renderElement } from '../render';
 import { UrlParams } from '../utils/params';
 

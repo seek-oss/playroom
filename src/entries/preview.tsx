@@ -1,8 +1,8 @@
 import faviconInvertedPath from '../../images/favicon-inverted.png';
 import faviconPath from '../../images/favicon.png';
-import Frame from '../Playroom/Frame/Frame';
-import Preview from '../Playroom/Preview/Preview';
-import { PreviewError } from '../Playroom/Preview/PreviewError';
+import Frame from '../components/Frame/Frame';
+import Preview from '../components/Preview/Preview';
+import { PreviewError } from '../components/Preview/PreviewError';
 import { renderElement } from '../render';
 import { UrlParams } from '../utils/params';
 
