@@ -11,7 +11,6 @@ import {
 import { Helmet } from 'react-helmet';
 import { useDebouncedCallback } from 'use-debounce';
 
-import type { Snippets } from '../../../utils';
 import { StoreContext, type EditorPosition } from '../../contexts/StoreContext';
 import componentsToHints from '../../utils/componentsToHints';
 import { Box } from '../Box/Box';
@@ -65,10 +64,9 @@ const getTitle = (title: string | undefined) => {
 
 export interface PlayroomProps {
   components: Record<string, ComponentType<any>>;
-  snippets: Snippets;
 }
 
-export default ({ components, snippets }: PlayroomProps) => {
+export default ({ components }: PlayroomProps) => {
   const [
     {
       editorPosition,
@@ -144,7 +142,7 @@ export default ({ components, snippets }: PlayroomProps) => {
         <StatusMessage />
       </div>
       <div className={styles.toolbarContainer}>
-        <Toolbar snippets={snippets} />
+        <Toolbar />
       </div>
     </Fragment>
   );

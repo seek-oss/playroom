@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import { useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
+import snippets from '../../configModules/snippets';
 import { StoreContext } from '../../contexts/StoreContext';
 import { isMac } from '../../utils/formatting';
 import FramesPanel from '../FramesPanel/FramesPanel';
-import type { PlayroomProps } from '../Playroom/Playroom';
 import PreviewPanel from '../PreviewPanel/PreviewPanel';
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import Snippets from '../Snippets/Snippets';
@@ -19,11 +19,7 @@ import ShareIcon from '../icons/ShareIcon';
 
 import * as styles from './Toolbar.css';
 
-interface Props {
-  snippets: PlayroomProps['snippets'];
-}
-
-export default ({ snippets }: Props) => {
+export default () => {
   const [
     {
       visibleThemes = [],
@@ -166,7 +162,6 @@ export default ({ snippets }: Props) => {
             {lastActivePanel === 'snippets' && (
               <Snippets
                 isOpen={isOpen}
-                snippets={snippets}
                 onHighlight={(snippet) => {
                   dispatch({
                     type: 'previewSnippet',
