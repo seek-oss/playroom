@@ -2,8 +2,8 @@
 /// <reference types="cypress" />
 import dedent from 'dedent';
 
-import type { Direction } from '../../src/Playroom/CodeEditor/keymaps/types';
-import type { PlayroomProps } from '../../src/Playroom/Playroom/Playroom';
+import type { Direction } from '../../src/components/CodeEditor/keymaps/types';
+import type { PlayroomProps } from '../../src/components/Playroom/Playroom';
 import { isMac } from '../../src/utils/formatting';
 import { createUrl } from '../../utils';
 
