@@ -3,7 +3,7 @@
 import dedent from 'dedent';
 
 import type { Direction } from '../../src/components/CodeEditor/keymaps/types';
-import type { PlayroomProps } from '../../src/components/Playroom/Playroom';
+import type { Widths } from '../../src/configModules/widths';
 import { isMac } from '../../src/utils/formatting';
 import { createUrl } from '../../utils';
 
@@ -39,9 +39,7 @@ export const formatCode = () =>
     .focused()
     .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`);
 
-export const selectWidthPreference = (
-  width: PlayroomProps['widths'][number]
-) => {
+export const selectWidthPreference = (width: Widths[number]) => {
   cy.findByRole('button', { name: 'Configure visible frames' }).click();
   cy.findByRole('checkbox', { name: `${width}` }).click();
 };
@@ -181,9 +179,7 @@ export const assertCodePaneLineCount = (
 };
 
 export const assertFramesMatch = (
-  frames:
-    | PlayroomProps['widths']
-    | Array<[frameTheme: string, frameWidth: PlayroomProps['widths'][number]]>
+  frames: Widths | Array<[frameTheme: string, frameWidth: Widths[number]]>
 ) => {
   const formattedFrames = frames.map((frame) => {
     if (frame === 'Fit to window') {

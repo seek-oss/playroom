@@ -14,6 +14,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { type Snippet, compressParams } from '../../utils';
 import type { PlayroomProps } from '../components/Playroom/Playroom';
 import playroomConfig from '../config';
+import availableWidths, { type Widths } from '../configModules/widths';
 import { isValidLocation } from '../utils/cursor';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
 import { getParamsFromQuery, updateUrlCode } from '../utils/params';
@@ -58,7 +59,7 @@ function convertAndStoreSizeAsPercentage(
 interface DebounceUpdateUrl {
   code?: string;
   themes?: string[];
-  widths?: PlayroomProps['widths'];
+  widths?: Widths;
   title?: string;
   editorHidden?: boolean;
 }
@@ -89,7 +90,7 @@ interface State {
   editorWidth: string;
   statusMessage?: StatusMessage;
   visibleThemes?: string[];
-  visibleWidths?: PlayroomProps['widths'];
+  visibleWidths?: Widths;
   ready: boolean;
   colorScheme: ColorScheme;
 }
@@ -127,7 +128,7 @@ type Action =
   | { type: 'resetVisibleThemes' }
   | {
       type: 'updateVisibleWidths';
-      payload: { widths: PlayroomProps['widths'] };
+      payload: { widths: Widths };
     }
   | { type: 'resetVisibleWidths' }
   | { type: 'updateTitle'; payload: { title: string } };
@@ -141,13 +142,9 @@ const resetPreview = ({
 
 interface CreateReducerParams {
   themes: PlayroomProps['themes'];
-  widths: PlayroomProps['widths'];
 }
 const createReducer =
-  ({
-    themes: configuredThemes,
-    widths: configuredWidths,
-  }: CreateReducerParams) =>
+  ({ themes: configuredThemes }: CreateReducerParams) =>
   (state: State, action: Action): State => {
     switch (action.type) {
       case 'initialLoad': {
@@ -398,9 +395,7 @@ const createReducer =
 
       case 'updateVisibleWidths': {
         const { widths } = action.payload;
-        const visibleWidths = configuredWidths.filter((w) =>
-          widths.includes(w)
-        );
+        const visibleWidths = availableWidths.filter((w) => widths.includes(w));
         store.setItem('visibleWidths', visibleWidths);
 
         return {
@@ -452,16 +447,11 @@ export const StoreContext = createContext<StoreContextValues>([
 export const StoreProvider = ({
   children,
   themes,
-  widths,
 }: {
   children: ReactNode;
   themes: PlayroomProps['themes'];
-  widths: PlayroomProps['widths'];
 }) => {
-  const [state, dispatch] = useReducer(
-    createReducer({ themes, widths }),
-    initialState
-  );
+  const [state, dispatch] = useReducer(createReducer({ themes }), initialState);
   const debouncedCodeUpdate = useDebouncedCallback(
     (params: DebounceUpdateUrl) => {
       // Ensure that when removing theme/width preferences
