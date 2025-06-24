@@ -30,7 +30,7 @@ export const status = style([
     transform: `translateX(-${offset})`,
     top: calc(vars.grid).multiply(5).toString(),
     height: calc(vars.grid).multiply(8).toString(),
-    maxWidth: calc('100vw')
+    maxWidth: calc('100dvw')
       .subtract(`${toolbarItemSize}px`)
       .subtract(calc(vars.codeGutterSize).multiply(2))
       .toString(),

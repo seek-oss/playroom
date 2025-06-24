@@ -38,7 +38,7 @@ interface Props {
 
 const createWindow = ({ width, height }: { width: number; height: number }) => {
   const containerDiv = document.createElement('div');
-  containerDiv.style.height = '100vh';
+  containerDiv.style.height = '100dvh';
   const newWindow = window.open(
     '',
     `${playroomConfig.storageKey}_editor`,
