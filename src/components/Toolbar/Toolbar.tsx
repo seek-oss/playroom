@@ -20,11 +20,10 @@ import ShareIcon from '../icons/ShareIcon';
 import * as styles from './Toolbar.css';
 
 interface Props {
-  themes: PlayroomProps['themes'];
   snippets: PlayroomProps['snippets'];
 }
 
-export default ({ themes: allThemes, snippets }: Props) => {
+export default ({ snippets }: Props) => {
   const [
     {
       visibleThemes = [],
@@ -187,13 +186,9 @@ export default ({ themes: allThemes, snippets }: Props) => {
               />
             )}
 
-            {lastActivePanel === 'frames' && (
-              <FramesPanel availableThemes={allThemes} />
-            )}
+            {lastActivePanel === 'frames' && <FramesPanel />}
 
-            {lastActivePanel === 'preview' && (
-              <PreviewPanel themes={allThemes} visibleThemes={visibleThemes} />
-            )}
+            {lastActivePanel === 'preview' && <PreviewPanel />}
 
             {lastActivePanel === 'settings' && <SettingsPanel />}
           </div>

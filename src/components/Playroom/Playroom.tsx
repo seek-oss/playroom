@@ -65,18 +65,16 @@ const getTitle = (title: string | undefined) => {
 
 export interface PlayroomProps {
   components: Record<string, ComponentType<any>>;
-  themes: string[];
   snippets: Snippets;
 }
 
-export default ({ components, themes, snippets }: PlayroomProps) => {
+export default ({ components, snippets }: PlayroomProps) => {
   const [
     {
       editorPosition,
       editorHeight,
       editorWidth,
       editorHidden,
-      visibleThemes,
       code,
       previewRenderCode,
       previewEditorCode,
@@ -146,7 +144,7 @@ export default ({ components, themes, snippets }: PlayroomProps) => {
         <StatusMessage />
       </div>
       <div className={styles.toolbarContainer}>
-        <Toolbar themes={themes} snippets={snippets} />
+        <Toolbar snippets={snippets} />
       </div>
     </Fragment>
   );
@@ -226,12 +224,7 @@ export default ({ components, themes, snippets }: PlayroomProps) => {
       )}
 
       <Box position="relative" flexGrow={1} className={styles.previewContainer}>
-        <Frames
-          code={previewRenderCode || code}
-          themes={
-            visibleThemes && visibleThemes.length > 0 ? visibleThemes : themes
-          }
-        />
+        <Frames code={previewRenderCode || code} />
         <div
           className={clsx(styles.toggleEditorContainer, {
             [styles.isBottom]: isHorizontalEditor,

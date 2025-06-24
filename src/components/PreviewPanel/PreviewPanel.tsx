@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
+import { themeNames } from '../../configModules/themes';
+import { StoreContext } from '../../contexts/StoreContext';
 import usePreviewUrl from '../../utils/usePreviewUrl';
 import { Button } from '../Button/Button';
 import { Heading } from '../Heading/Heading';
@@ -11,20 +13,19 @@ import PlayIcon from '../icons/PlayIcon';
 import { CopyButton } from './CopyButton';
 import { ThemeSelector } from './ThemeSelector';
 
-interface PreviewPanelProps {
-  themes: string[];
-  visibleThemes: string[] | undefined;
-}
-export default ({ themes, visibleThemes }: PreviewPanelProps) => {
+export default () => {
+  const [{ visibleThemes = [] }] = useContext(StoreContext);
   const defaultTheme =
-    visibleThemes && visibleThemes.length > 0 ? visibleThemes[0] : themes[0];
+    visibleThemes && visibleThemes.length > 0
+      ? visibleThemes[0]
+      : themeNames[0];
   const [userSelectedTheme, setUserSelectedTheme] = useState<
     string | undefined
   >();
 
   const activeTheme = userSelectedTheme || defaultTheme;
 
-  const isThemed = themes.length > 1;
+  const isThemed = themeNames.length > 1;
 
   const prototypeUrl = usePreviewUrl(activeTheme);
 
@@ -37,7 +38,6 @@ export default ({ themes, visibleThemes }: PreviewPanelProps) => {
 
         {isThemed ? (
           <ThemeSelector
-            themes={themes}
             visibleThemes={visibleThemes}
             activeTheme={activeTheme}
             onChange={setUserSelectedTheme}

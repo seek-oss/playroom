@@ -1,5 +1,6 @@
 import { useContext, type ReactNode } from 'react';
 
+import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
@@ -12,10 +13,6 @@ import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import Checkmark from './CheckmarkSvg';
 
 import * as styles from './FramesPanel.css';
-
-interface FramesPanelProps {
-  availableThemes: string[];
-}
 
 interface ResetButtonProps {
   onClick: () => void;
@@ -79,7 +76,7 @@ function FrameOption<Option>({
   );
 }
 
-export default ({ availableThemes }: FramesPanelProps) => {
+export default () => {
   const [{ visibleWidths = [], visibleThemes = [], title }, dispatch] =
     useContext(StoreContext);
   const hasThemes =
