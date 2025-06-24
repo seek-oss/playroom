@@ -23,7 +23,7 @@ export const root = style([
       .toString(),
     selectors: {
       [`&${isOpen}`]: {
-        width: '100vw',
+        width: '100dvw',
       },
     },
   },
