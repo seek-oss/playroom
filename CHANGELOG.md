@@ -1,5 +1,15 @@
 # playroom
 
+## 0.44.1
+
+### Patch Changes
+
+- [#426](https://github.com/seek-oss/playroom/pull/426) [`934992c`](https://github.com/seek-oss/playroom/commit/934992c6c9bb1b265375996e3971cc58a22ef3b3) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - refactor: Improve internal structure enable UI flexibility
+
+- [#435](https://github.com/seek-oss/playroom/pull/435) [`f1f7869`](https://github.com/seek-oss/playroom/commit/f1f7869605640886a514f9511e10504c0ebe7a7d) Thanks [@felixhabib](https://github.com/felixhabib)! - Ensure UI size adapts to mobile browser toolbars that appear and disappear.
+
+  Use dynamic viewport units to ensure the UI remains responsive across different devices.
+
 ## 0.44.0
 
 ### Minor Changes
