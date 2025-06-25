@@ -7,6 +7,7 @@ import 'codemirror/theme/neo.css';
 
 import { type CursorPosition, StoreContext } from '../../contexts/StoreContext';
 import { validateCode } from '../../utils/compileJsx';
+import { hints } from '../../utils/componentsToHints';
 import { formatCode as format, isMac } from '../../utils/formatting';
 
 import { UnControlled as ReactCodeMirror } from './CodeMirror2';
@@ -59,16 +60,11 @@ const validateCodeInEditor = (editorInstance: Editor, code: string) => {
   }
 };
 
-interface Hint {
-  attrs: Record<string, any>;
-}
-
 interface Props {
   code: string;
   onChange: (code: string) => void;
   editorHidden: boolean;
   previewCode?: string;
-  hints?: Record<string, Hint>;
 }
 
 export const CodeEditor = ({
@@ -76,7 +72,6 @@ export const CodeEditor = ({
   editorHidden,
   onChange,
   previewCode,
-  hints,
 }: Props) => {
   const editorInstanceRef = useRef<Editor | null>(null);
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
