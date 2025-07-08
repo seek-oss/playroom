@@ -116,7 +116,10 @@ export default () => {
 
   const codeEditor = (
     <Fragment>
-      <div inert={editorHidden} className={styles.editorContainer}>
+      <div
+        inert={!editorHidden ? false : undefined}
+        className={styles.editorContainer}
+      >
         <CodeEditor
           code={code}
           editorHidden={editorHidden}
