@@ -3,9 +3,6 @@ import { SendErrorMessage } from '../components/Frame/frameMessaging';
 import { renderElement } from '../render';
 import { UrlParams } from '../utils/params';
 
-const outlet = document.createElement('div');
-document.body.appendChild(outlet);
-
 renderElement(
   <UrlParams>
     {({ code, themeName, theme }) => (
@@ -17,5 +14,5 @@ renderElement(
       />
     )}
   </UrlParams>,
-  outlet
+  document.body
 );

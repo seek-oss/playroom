@@ -1,15 +1,13 @@
 import {
   style,
   globalStyle,
-  styleVariants,
   createVar,
+  fallbackVar,
+  styleVariants,
 } from '@vanilla-extract/css';
 
-import {
-  ANIMATION_TIMEOUT,
-  toolbarItemCount,
-  toolbarOpenSize,
-} from '../constants';
+import { space, comma, newline } from '../../css/delimiters';
+import { toolbarItemCount, toolbarOpenSize } from '../constants';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
@@ -21,9 +19,9 @@ const MIN_WIDTH = `${toolbarOpenSize + toolbarItemSize + 80}px`;
 const MAX_HEIGHT = '80vh';
 const MAX_WIDTH = '90vw';
 
-globalStyle('html', {
-  width: '100%',
-  height: '100%',
+globalStyle('html, body', {
+  margin: 0,
+  padding: 0,
   overflow: 'hidden',
   backgroundColor: colorPaletteVars.background.body,
 });
@@ -32,70 +30,68 @@ globalStyle('html[data-playroom-dark]', {
   colorScheme: 'dark',
 });
 
-globalStyle('body', {
-  margin: 0,
+export const resizing = style({
+  pointerEvents: 'none',
+  userSelect: 'none',
 });
 
-export const root = styleVariants({
-  right: {
-    flexDirection: 'row',
-  },
-  bottom: {
-    flexDirection: 'column',
-  },
-});
-
-// Prevents the editor growing off screen
-// when resizable value increases past maximum size
-export const previewContainer = style({
-  minWidth: 0,
-  minHeight: 0,
-});
-
+const bottomEditorHeight = createVar();
+const rightEditorWidth = createVar();
 export const editorSize = createVar();
+export const assistantWidth = createVar();
+export const root = style([
+  sprinkles({
+    height: 'viewport',
+    width: 'viewport',
+  }),
+  {
+    display: 'grid',
+    gridTemplateColumns: space('1fr', fallbackVar(rightEditorWidth, '0px')),
+    gridTemplateRows: space('auto', fallbackVar(bottomEditorHeight, '0px')),
+    willChange: comma('grid-template-columns', 'grid-template-rows'),
+    selectors: {
+      [`&:not(${resizing})`]: {
+        transition: comma(
+          'grid-template-columns 300ms ease',
+          'grid-template-rows 300ms ease'
+        ),
+      },
+    },
+  },
+]);
 
-export const resizable = style([
+export const editorPosition = styleVariants({
+  bottom: [
+    {
+      vars: {
+        [bottomEditorHeight]: `clamp(${MIN_HEIGHT}, ${editorSize}, ${MAX_HEIGHT})`,
+      },
+      gridTemplateAreas: newline('"frames frames"', '"editor editor"'),
+    },
+  ],
+  right: [
+    {
+      vars: {
+        [rightEditorWidth]: `clamp(${MIN_WIDTH}, ${editorSize}, ${MAX_WIDTH})`,
+      },
+      gridTemplateAreas: newline('"frames editor"', '"frames editor"'),
+    },
+  ],
+});
+
+export const frames = style({
+  gridArea: 'frames',
+});
+
+export const editor = style([
+  {
+    gridArea: 'editor',
+  },
   sprinkles({
     overflow: 'hidden',
     boxShadow: 'small',
   }),
 ]);
-
-/*
-Min/max values are disabled during transitions to allow zero height.
-This class ensures the open editor transition uses the correct size,
-rather than `editorSize`, before min/max values are applied.
-
-Resizable's `size` prop would instead transition to `editorSize`,
-so `!important` is used to override this.
-*/
-export const resizableSize = styleVariants({
-  right: {
-    width: `clamp(${MIN_WIDTH}, ${editorSize}, ${MAX_WIDTH}) !important`,
-  },
-  bottom: {
-    height: `clamp(${MIN_HEIGHT}, ${editorSize}, ${MAX_HEIGHT}) !important`,
-  },
-});
-
-export const resizableAvailable = styleVariants({
-  right: {
-    minWidth: `${MIN_WIDTH}`,
-    maxWidth: MAX_WIDTH,
-  },
-  bottom: {
-    minHeight: `${MIN_HEIGHT}`,
-    maxHeight: MAX_HEIGHT,
-  },
-});
-
-export const resizableUnavailable = style({
-  transitionProperty: 'width, height',
-  transitionDuration: `${ANIMATION_TIMEOUT}ms`,
-  transitionTimingFunction: 'ease',
-});
-
-export const isBottom = style({});
 
 export const toggleEditorContainer = style([
   sprinkles({
@@ -107,7 +103,7 @@ export const toggleEditorContainer = style([
   }),
   {
     selectors: {
-      [`&${isBottom}`]: {
+      [`${editorPosition.bottom} &`]: {
         width: toolbarItemSize,
       },
     },
@@ -154,17 +150,15 @@ export const toggleEditorButton = style([
   },
 ]);
 
-export const editorContainer = style([
-  sprinkles({
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-  }),
-  {
-    right: toolbarItemSize,
-  },
-]);
+export const framesContainer = sprinkles({
+  position: 'absolute',
+  inset: 0,
+});
+
+export const editorContainer = sprinkles({
+  position: 'absolute',
+  inset: 0,
+});
 
 export const toolbarContainer = sprinkles({
   position: 'absolute',
