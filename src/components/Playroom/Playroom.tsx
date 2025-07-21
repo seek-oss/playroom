@@ -11,7 +11,6 @@ import { CodeEditor } from '../CodeEditor/CodeEditor';
 import Frames from '../Frames/Frames';
 import { StatusMessage } from '../StatusMessage/StatusMessage';
 import Toolbar from '../Toolbar/Toolbar';
-import { WindowPortal } from '../WindowPortal';
 import { ANIMATION_TIMEOUT } from '../constants';
 import ChevronIcon from '../icons/ChevronIcon';
 
@@ -104,12 +103,6 @@ export default () => {
     1
   );
 
-  const resetEditorPosition = useDebouncedCallback(() => {
-    if (editorPosition === 'undocked') {
-      dispatch({ type: 'resetEditorPosition' });
-    }
-  }, 1);
-
   if (!ready) {
     return null;
   }
@@ -145,17 +138,40 @@ export default () => {
     width: isVerticalEditor ? 0 : 'auto',
   };
 
-  const editorContainer =
-    editorPosition === 'undocked' ? (
-      <WindowPortal
-        height={window.outerHeight}
-        width={window.outerWidth}
-        onUnload={resetEditorPosition}
-        onError={resetEditorPosition}
-      >
-        {codeEditor}
-      </WindowPortal>
-    ) : (
+  return (
+    <Box
+      display="flex"
+      height="viewport"
+      width="viewport"
+      className={styles.root[editorPosition]}
+    >
+      {title === undefined ? null : (
+        <Helmet>
+          <title>{displayedTitle}</title>
+        </Helmet>
+      )}
+
+      <Box position="relative" flexGrow={1} className={styles.previewContainer}>
+        <Frames code={previewRenderCode || code} />
+        <div
+          className={clsx(styles.toggleEditorContainer, {
+            [styles.isBottom]: isHorizontalEditor,
+          })}
+        >
+          <button
+            className={styles.toggleEditorButton}
+            title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
+            onClick={() =>
+              dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
+            }
+          >
+            <ChevronIcon
+              size={16}
+              direction={resolveDirection(editorPosition, editorHidden)}
+            />
+          </button>
+        </div>
+      </Box>
       <Resizable
         style={assignInlineVars({
           [styles.editorSize]:
@@ -192,43 +208,6 @@ export default () => {
       >
         {codeEditor}
       </Resizable>
-    );
-
-  return (
-    <Box
-      display="flex"
-      height="viewport"
-      width="viewport"
-      className={styles.root[editorPosition]}
-    >
-      {title === undefined ? null : (
-        <Helmet>
-          <title>{displayedTitle}</title>
-        </Helmet>
-      )}
-
-      <Box position="relative" flexGrow={1} className={styles.previewContainer}>
-        <Frames code={previewRenderCode || code} />
-        <div
-          className={clsx(styles.toggleEditorContainer, {
-            [styles.isBottom]: isHorizontalEditor,
-          })}
-        >
-          <button
-            className={styles.toggleEditorButton}
-            title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
-            onClick={() =>
-              dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
-            }
-          >
-            <ChevronIcon
-              size={16}
-              direction={resolveDirection(editorPosition, editorHidden)}
-            />
-          </button>
-        </div>
-      </Box>
-      {editorContainer}
     </Box>
   );
 };

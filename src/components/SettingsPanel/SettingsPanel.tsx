@@ -17,7 +17,6 @@ import ColorModeLightIcon from '../icons/ColorModeLightIcon';
 import ColorModeSystemIcon from '../icons/ColorModeSystemIcon';
 import EditorBottomIcon from '../icons/EditorBottomIcon';
 import EditorRightIcon from '../icons/EditorRightIcon';
-import EditorUndockedIcon from '../icons/EditorUndockedIcon';
 
 import * as styles from './SettingsPanel.css';
 
@@ -45,7 +44,6 @@ const getKeyBindings = () => {
 };
 
 const positionIcon: Record<EditorPosition, ReactElement> = {
-  undocked: <EditorUndockedIcon />,
   right: <EditorRightIcon />,
   bottom: <EditorBottomIcon />,
 };
