@@ -43,7 +43,6 @@ export const root = styleVariants({
   bottom: {
     flexDirection: 'column',
   },
-  undocked: {},
 });
 
 // Prevents the editor growing off screen

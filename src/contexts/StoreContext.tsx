@@ -29,7 +29,7 @@ const store = localforage.createInstance({
 const defaultEditorSize = '40%';
 const defaultPosition = 'bottom';
 
-export type EditorPosition = 'bottom' | 'right' | 'undocked';
+export type EditorPosition = 'bottom' | 'right';
 export type ColorScheme = 'light' | 'dark' | 'system';
 
 const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
@@ -121,7 +121,6 @@ type Action =
       type: 'updateEditorPosition';
       payload: { position: EditorPosition };
     }
-  | { type: 'resetEditorPosition' }
   | { type: 'updateEditorHeight'; payload: { size: number } }
   | { type: 'updateEditorWidth'; payload: { size: number } }
   | { type: 'updateVisibleThemes'; payload: { themes: typeof availableThemes } }
@@ -329,15 +328,6 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         editorPosition: position,
-      };
-    }
-
-    case 'resetEditorPosition': {
-      store.setItem('editorPosition', defaultPosition);
-
-      return {
-        ...state,
-        editorPosition: defaultPosition,
       };
     }
 
