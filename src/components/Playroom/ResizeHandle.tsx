@@ -82,7 +82,12 @@ export const ResizeHandle = ({
   return (
     <Box
       onTouchStart={startHandler}
-      onMouseDown={startHandler}
+      onMouseDown={(event) => {
+        // Only initiate resize on left click
+        if (event.button === 0) {
+          startHandler(event);
+        }
+      }}
       className={{
         [styles.resizeContainer[direction]]: true,
         [styles.right]: position === 'right',
