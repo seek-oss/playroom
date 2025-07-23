@@ -14,6 +14,7 @@ import { CodeEditor } from '../CodeEditor/CodeEditor';
 import Frames from '../Frames/Frames';
 import { StatusMessage } from '../StatusMessage/StatusMessage';
 import Toolbar from '../Toolbar/Toolbar';
+import { ANIMATION_DURATION_SLOW } from '../constants';
 import ChevronIcon from '../icons/ChevronIcon';
 
 import { ResizeHandle } from './ResizeHandle';
@@ -76,7 +77,7 @@ export default () => {
   useEffect(() => {
     transitionTimeoutRef.current = setTimeout(
       () => setLastEditorHidden(editorHidden),
-      styles.toggleEditorDuration
+      ANIMATION_DURATION_SLOW
     );
 
     return () => {

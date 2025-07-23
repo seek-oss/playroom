@@ -1,4 +1,4 @@
-export const ANIMATION_TIMEOUT = 300;
+export const ANIMATION_DURATION_SLOW = 300;
 
 export const toolbarItemCount = 5;
 export const toolbarItemSize = 60;

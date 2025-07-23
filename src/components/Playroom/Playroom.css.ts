@@ -7,7 +7,11 @@ import {
 } from '@vanilla-extract/css';
 
 import { space, comma, newline } from '../../css/delimiters';
-import { toolbarItemCount, toolbarOpenSize } from '../constants';
+import {
+  ANIMATION_DURATION_SLOW,
+  toolbarItemCount,
+  toolbarOpenSize,
+} from '../constants';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
@@ -52,11 +56,10 @@ export const root = style([
   },
 ]);
 
-export const toggleEditorDuration = 300;
 export const editorTransition = style({
   transition: comma(
-    `grid-template-columns ${toggleEditorDuration}ms ease`,
-    `grid-template-rows ${toggleEditorDuration}ms ease`
+    `grid-template-columns ${ANIMATION_DURATION_SLOW}ms ease`,
+    `grid-template-rows ${ANIMATION_DURATION_SLOW}ms ease`
   ),
 });
 
