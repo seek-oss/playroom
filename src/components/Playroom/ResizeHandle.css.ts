@@ -2,7 +2,7 @@ import { style, styleVariants } from '@vanilla-extract/css';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 
-const thickness = 8;
+const thickness = 4;
 const length = 70;
 
 // Separate style applied to the container AND the body during resize.
