@@ -49,16 +49,16 @@ export const root = style([
     gridTemplateColumns: space('1fr', fallbackVar(rightEditorWidth, '0px')),
     gridTemplateRows: space('auto', fallbackVar(bottomEditorHeight, '0px')),
     willChange: comma('grid-template-columns', 'grid-template-rows'),
-    selectors: {
-      [`&:not(${resizing})`]: {
-        transition: comma(
-          'grid-template-columns 300ms ease',
-          'grid-template-rows 300ms ease'
-        ),
-      },
-    },
   },
 ]);
+
+export const toggleEditorDuration = 300;
+export const editorTransition = style({
+  transition: comma(
+    `grid-template-columns ${toggleEditorDuration}ms ease`,
+    `grid-template-rows ${toggleEditorDuration}ms ease`
+  ),
+});
 
 export const editorPosition = styleVariants({
   bottom: [

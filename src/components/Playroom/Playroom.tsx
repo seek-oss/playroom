@@ -1,5 +1,11 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { type ComponentProps, useContext, useRef, useState } from 'react';
+import {
+  type ComponentProps,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Helmet } from 'react-helmet';
 
 import { StoreContext, type EditorPosition } from '../../contexts/StoreContext';
@@ -62,24 +68,36 @@ export default () => {
     },
     dispatch,
   ] = useContext(StoreContext);
-  const [resizing, setResizing] = useState(false);
   const editorRef = useRef<HTMLElement | null>(null);
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const [resizing, setResizing] = useState(false);
+  const [lastEditorHidden, setLastEditorHidden] = useState(editorHidden);
 
-  if (!ready) {
-    return null;
-  }
+  useEffect(() => {
+    transitionTimeoutRef.current = setTimeout(
+      () => setLastEditorHidden(editorHidden),
+      styles.toggleEditorDuration
+    );
+
+    return () => {
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+        transitionTimeoutRef.current = null;
+      }
+    };
+  }, [editorHidden]);
 
   const isVerticalEditor = editorPosition === 'right';
   const editorSize = isVerticalEditor ? editorWidth : editorHeight;
-  const displayedTitle = getTitle(title);
 
-  return (
+  return !ready ? null : (
     <Box
       component="main"
       className={{
         [styles.root]: true,
-        [styles.editorPosition[editorPosition]]: true,
         [styles.resizing]: resizing,
+        [styles.editorPosition[editorPosition]]: true,
+        [styles.editorTransition]: lastEditorHidden !== editorHidden,
       }}
       style={assignInlineVars({
         [styles.editorSize]: editorHidden ? undefined : editorSize,
@@ -87,7 +105,7 @@ export default () => {
     >
       {title === undefined ? null : (
         <Helmet>
-          <title>{displayedTitle}</title>
+          <title>{getTitle(title)}</title>
         </Helmet>
       )}
 
