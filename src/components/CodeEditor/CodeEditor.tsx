@@ -215,7 +215,11 @@ export const CodeEditor = ({
         if (!editorHidden) {
           setCursorPosition(cursorPosition);
         }
-        // Set mounted flag on next tick
+        /**
+         * This workaround delays the setting of the mounted flag. It allows
+         * the behaviours wired up via `useEffect` to complete without being
+         * interrupted by change or focus events.
+         */
         setTimeout(() => {
           mounted.current = true;
         }, 1);
