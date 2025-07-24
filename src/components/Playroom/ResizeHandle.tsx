@@ -49,9 +49,7 @@ export const ResizeHandle = ({
     const startPosition = resolvePosition(event.nativeEvent, pagePos);
     const startSize = ref.current?.[elementSize] ?? 0;
 
-    if (typeof onResizeStart === 'function') {
-      onResizeStart(startSize);
-    }
+    onResizeStart?.(startSize);
     document.body.classList.add(styles.resizeCursor[direction]);
 
     const moveHandler: NativeTouchOrMouseMove = (moveEvent) => {
@@ -61,10 +59,8 @@ export const ResizeHandle = ({
     };
 
     const stopHandler = () => {
-      if (typeof onResizeEnd === 'function') {
-        const endSize = ref.current?.[elementSize] ?? 0;
-        onResizeEnd(endSize);
-      }
+      const endSize = ref.current?.[elementSize] ?? 0;
+      onResizeEnd?.(endSize);
       document.body.classList.remove(styles.resizeCursor[direction]);
 
       window.removeEventListener('mousemove', moveHandler);
