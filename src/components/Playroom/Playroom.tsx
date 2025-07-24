@@ -1,9 +1,12 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import clsx from 'clsx';
-import { Resizable } from 're-resizable';
-import { useContext, Fragment, useState, useEffect } from 'react';
+import {
+  type ComponentProps,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Helmet } from 'react-helmet';
-import { useDebouncedCallback } from 'use-debounce';
 
 import { StoreContext, type EditorPosition } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
@@ -11,21 +14,12 @@ import { CodeEditor } from '../CodeEditor/CodeEditor';
 import Frames from '../Frames/Frames';
 import { StatusMessage } from '../StatusMessage/StatusMessage';
 import Toolbar from '../Toolbar/Toolbar';
-import { ANIMATION_TIMEOUT } from '../constants';
+import { ANIMATION_DURATION_SLOW } from '../constants';
 import ChevronIcon from '../icons/ChevronIcon';
 
-import * as styles from './Playroom.css';
+import { ResizeHandle } from './ResizeHandle';
 
-const resizableConfig = (position: EditorPosition = 'bottom') => ({
-  top: position === 'bottom',
-  right: false,
-  bottom: false,
-  left: position === 'right',
-  topRight: false,
-  bottomRight: false,
-  bottomLeft: false,
-  topLeft: false,
-});
+import * as styles from './Playroom.css';
 
 const resolveDirection = (
   editorPosition: EditorPosition,
@@ -52,6 +46,14 @@ const getTitle = (title: string | undefined) => {
   return 'Playroom';
 };
 
+const resizeHandlePosition: Record<
+  EditorPosition,
+  ComponentProps<typeof ResizeHandle>['position']
+> = {
+  bottom: 'top',
+  right: 'left',
+} as const;
+
 export default () => {
   const [
     {
@@ -67,97 +69,52 @@ export default () => {
     },
     dispatch,
   ] = useContext(StoreContext);
-
-  // This is necessary because this updates slightly after editorHidden updates,
-  // not at the same time
-  const [editorVisibilityAfterTransition, setEditorVisibilityAfterTransition] =
-    useState<boolean>(editorHidden);
+  const editorRef = useRef<HTMLElement | null>(null);
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const [resizing, setResizing] = useState(false);
+  const [lastEditorHidden, setLastEditorHidden] = useState(editorHidden);
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setEditorVisibilityAfterTransition(editorHidden);
-    }, ANIMATION_TIMEOUT);
+    transitionTimeoutRef.current = setTimeout(
+      () => setLastEditorHidden(editorHidden),
+      ANIMATION_DURATION_SLOW
+    );
 
-    return () => clearTimeout(timeoutId);
+    return () => {
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+        transitionTimeoutRef.current = null;
+      }
+    };
   }, [editorHidden]);
 
-  const editorAvailable = !editorHidden && !editorVisibilityAfterTransition;
-
-  const displayedTitle = getTitle(title);
-
-  const updateEditorSize = useDebouncedCallback(
-    ({
-      isVerticalEditor,
-      offsetWidth,
-      offsetHeight,
-    }: {
-      isVerticalEditor: boolean;
-      offsetHeight: number;
-      offsetWidth: number;
-    }) => {
-      dispatch({
-        type: isVerticalEditor ? 'updateEditorWidth' : 'updateEditorHeight',
-        payload: { size: isVerticalEditor ? offsetWidth : offsetHeight },
-      });
-    },
-    1
-  );
-
-  if (!ready) {
-    return null;
-  }
-
-  const codeEditor = (
-    <Fragment>
-      <div inert={editorHidden} className={styles.editorContainer}>
-        <CodeEditor
-          code={code}
-          editorHidden={editorHidden}
-          onChange={(newCode: string) =>
-            dispatch({ type: 'updateCode', payload: { code: newCode } })
-          }
-          previewCode={previewEditorCode}
-        />
-        <StatusMessage />
-      </div>
-      <div className={styles.toolbarContainer}>
-        <Toolbar />
-      </div>
-    </Fragment>
-  );
-
   const isVerticalEditor = editorPosition === 'right';
-  const isHorizontalEditor = editorPosition === 'bottom';
+  const editorSize = isVerticalEditor ? editorWidth : editorHeight;
 
-  const sizeStyles = {
-    height: isHorizontalEditor ? editorHeight : 'auto',
-    width: isVerticalEditor ? editorWidth : 'auto',
-  };
-  const hiddenSizeStyles = {
-    height: isHorizontalEditor ? 0 : 'auto',
-    width: isVerticalEditor ? 0 : 'auto',
-  };
-
-  return (
+  return !ready ? null : (
     <Box
-      display="flex"
-      height="viewport"
-      width="viewport"
-      className={styles.root[editorPosition]}
+      component="main"
+      className={{
+        [styles.root]: true,
+        [styles.resizing]: resizing,
+        [styles.editorPosition[editorPosition]]: true,
+        [styles.editorTransition]: lastEditorHidden !== editorHidden,
+      }}
+      style={assignInlineVars({
+        [styles.editorSize]: editorHidden ? undefined : editorSize,
+      })}
     >
       {title === undefined ? null : (
         <Helmet>
-          <title>{displayedTitle}</title>
+          <title>{getTitle(title)}</title>
         </Helmet>
       )}
 
-      <Box position="relative" flexGrow={1} className={styles.previewContainer}>
-        <Frames code={previewRenderCode || code} />
-        <div
-          className={clsx(styles.toggleEditorContainer, {
-            [styles.isBottom]: isHorizontalEditor,
-          })}
-        >
+      <Box position="relative" className={styles.frames}>
+        <Box className={styles.framesContainer}>
+          <Frames code={previewRenderCode || code} />
+        </Box>
+        <Box className={styles.toggleEditorContainer}>
           <button
             className={styles.toggleEditorButton}
             title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
@@ -170,44 +127,52 @@ export default () => {
               direction={resolveDirection(editorPosition, editorHidden)}
             />
           </button>
+        </Box>
+      </Box>
+
+      <Box
+        position="relative"
+        className={styles.editor}
+        inert={editorHidden}
+        ref={editorRef}
+      >
+        <div className={styles.editorContainer}>
+          <ResizeHandle
+            ref={editorRef}
+            position={resizeHandlePosition[editorPosition]}
+            onResize={(newValue) => {
+              dispatch({
+                type: isVerticalEditor
+                  ? 'updateEditorWidth'
+                  : 'updateEditorHeight',
+                payload: { size: newValue },
+              });
+            }}
+            onResizeStart={() => setResizing(true)}
+            onResizeEnd={(endValue) => {
+              setResizing(false);
+              dispatch({
+                type: isVerticalEditor
+                  ? 'updateEditorWidth'
+                  : 'updateEditorHeight',
+                payload: { size: endValue },
+              });
+            }}
+          />
+          <CodeEditor
+            code={code}
+            editorHidden={editorHidden}
+            onChange={(newCode: string) =>
+              dispatch({ type: 'updateCode', payload: { code: newCode } })
+            }
+            previewCode={previewEditorCode}
+          />
+          <StatusMessage />
+          <div className={styles.toolbarContainer}>
+            <Toolbar />
+          </div>
         </div>
       </Box>
-      <Resizable
-        style={assignInlineVars({
-          [styles.editorSize]:
-            editorPosition === 'right' ? editorWidth : editorHeight,
-        })}
-        className={clsx({
-          [styles.resizable]: true,
-          [styles.resizableSize[editorPosition]]: !editorHidden,
-          [styles.resizableUnavailable]: !editorAvailable,
-          [styles.resizableAvailable[editorPosition]]: editorAvailable,
-        })}
-        defaultSize={sizeStyles}
-        size={editorHidden ? hiddenSizeStyles : sizeStyles}
-        onResize={(_event, _direction, { offsetWidth, offsetHeight }) => {
-          updateEditorSize({ isVerticalEditor, offsetWidth, offsetHeight });
-        }}
-        onResizeStart={(_event, _direction, _refToElement) => {
-          _refToElement.classList.remove(styles.resizableSize[editorPosition]);
-        }}
-        onResizeStop={(_event, _direction, _refToElement) => {
-          _refToElement.classList.add(styles.resizableSize[editorPosition]);
-        }}
-        enable={resizableConfig(editorPosition)}
-        /*
-         * Ensures resizable handles are stacked above the `codeEditor` component.
-         * By default, handles are stacked below the editor as introduced in:
-         * https://github.com/bokuweb/re-resizable/pull/827
-         */
-        handleStyles={
-          editorPosition === 'bottom'
-            ? { top: { zIndex: 1 } }
-            : { left: { zIndex: 1 } }
-        }
-      >
-        {codeEditor}
-      </Resizable>
     </Box>
   );
 };

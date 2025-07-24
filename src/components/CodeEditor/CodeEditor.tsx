@@ -73,6 +73,7 @@ export const CodeEditor = ({
   onChange,
   previewCode,
 }: Props) => {
+  const mounted = useRef(false);
   const editorInstanceRef = useRef<Editor | null>(null);
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
     null
@@ -161,9 +162,10 @@ export const CodeEditor = ({
   useEffect(() => {
     if (editorInstanceRef.current) {
       if (
-        editorInstanceRef.current.hasFocus() ||
-        code === editorInstanceRef.current.getValue() ||
-        previewCode
+        mounted.current &&
+        (editorInstanceRef.current.hasFocus() ||
+          code === editorInstanceRef.current.getValue() ||
+          previewCode)
       ) {
         return;
       }
@@ -172,14 +174,7 @@ export const CodeEditor = ({
     }
   }, [code, previewCode]);
 
-  const mounted = useRef(false);
-
   useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-      return;
-    }
-
     if (editorInstanceRef.current && !editorInstanceRef.current.hasFocus()) {
       setCursorPosition(cursorPosition);
     }
@@ -220,6 +215,14 @@ export const CodeEditor = ({
         if (!editorHidden) {
           setCursorPosition(cursorPosition);
         }
+        /**
+         * This workaround delays the setting of the mounted flag. It allows
+         * the behaviours wired up via `useEffect` to complete without being
+         * interrupted by change or focus events.
+         */
+        setTimeout(() => {
+          mounted.current = true;
+        }, 1);
       }}
       onChange={(editorInstance, data, newCode) => {
         if (editorInstance.hasFocus() && !previewCode) {

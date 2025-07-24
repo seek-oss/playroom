@@ -10,7 +10,7 @@ import PreviewPanel from '../PreviewPanel/PreviewPanel';
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import Snippets from '../Snippets/Snippets';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
-import { ANIMATION_TIMEOUT } from '../constants';
+import { ANIMATION_DURATION_SLOW } from '../constants';
 import AddIcon from '../icons/AddIcon';
 import FramesIcon from '../icons/FramesIcon';
 import PlayIcon from '../icons/PlayIcon';
@@ -152,7 +152,7 @@ export default () => {
         <CSSTransition
           in={isOpen}
           nodeRef={panelRef}
-          timeout={ANIMATION_TIMEOUT}
+          timeout={ANIMATION_DURATION_SLOW}
           classNames={styles.transitionStyles}
           mountOnEnter
           unmountOnExit

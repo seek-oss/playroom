@@ -6,9 +6,6 @@ import { PreviewError } from '../components/Preview/PreviewError';
 import { renderElement } from '../render';
 import { UrlParams } from '../utils/params';
 
-const outlet = document.createElement('div');
-document.body.appendChild(outlet);
-
 const selectedElement = document.head.querySelector('link[rel="icon"]');
 const favicon = window.matchMedia('(prefers-color-scheme: dark)').matches
   ? faviconInvertedPath
@@ -33,5 +30,5 @@ renderElement(
       </Preview>
     )}
   </UrlParams>,
-  outlet
+  document.body
 );
