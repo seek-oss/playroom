@@ -15,21 +15,20 @@ export const keyboardShortcutKeys = style([
     gridTemplateColumns: 'repeat(3, 1fr)',
   },
   sprinkles({
-    gap: 'xsmall',
+    gap: 'xxsmall',
   }),
 ]);
 
 export const kbd = style([
   sprinkles({
-    borderRadius: 'large',
-    paddingY: 'xsmall',
+    borderRadius: 'medium',
+    paddingY: 'xxsmall',
+    paddingX: 'xsmall',
     textAlign: 'center',
   }),
   {
     display: 'inline-block',
     background: colorPaletteVars.background.neutral,
-    paddingLeft: 8,
-    paddingRight: 8,
     fontFamily: 'system-ui',
     minWidth: 16,
   },
@@ -54,7 +53,6 @@ export const label = style([
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
-    marginRight: 'xxsmall',
   }),
   {
     height: vars.touchableSize,
@@ -67,7 +65,7 @@ export const label = style([
       left: 0,
       right: 0,
       backgroundColor: colorPaletteVars.background.selection,
-      borderRadius: vars.radii.large,
+      borderRadius: vars.radii.medium,
       transition: vars.transition.medium,
       opacity: 0,
       transform: 'scale(0.8)',

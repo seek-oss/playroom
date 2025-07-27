@@ -8,7 +8,7 @@ import { vars } from '../../css/vars.css';
 
 export const show = style({});
 
-const gutter = vars.space.medium;
+const gutter = vars.space.xsmall;
 export const message = style([
   sprinkles({
     position: 'absolute',
@@ -48,12 +48,12 @@ export const delay = style({
 export const size = {
   small: sprinkles({
     font: 'small',
-    padding: 'medium',
-    borderRadius: 'medium',
+    padding: 'xsmall',
+    borderRadius: 'small',
   }),
   large: sprinkles({
     font: 'large',
-    padding: 'xlarge',
-    borderRadius: 'large',
+    padding: 'medium',
+    borderRadius: 'medium',
   }),
 };

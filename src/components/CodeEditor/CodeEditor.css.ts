@@ -20,9 +20,11 @@ const fadeIn = keyframes({
 });
 export const errorMarker = style([
   sprinkles({
-    borderRadius: 'large',
+    borderRadius: 'medium',
     position: 'relative',
     textAlign: 'right',
+    marginRight: 'xxsmall',
+    paddingRight: 'xsmall',
     opacity: 0,
   }),
   {
@@ -32,8 +34,6 @@ export const errorMarker = style([
     backgroundColor: colorPaletteVars.background.critical,
     color: colorPaletteVars.foreground.critical,
     minWidth: minimumLineNumberWidth,
-    marginRight: '4px',
-    paddingRight: '8px',
     animationName: fadeIn,
     animationDuration: '1s',
     animationTimingFunction: 'ease',
@@ -42,10 +42,15 @@ export const errorMarker = style([
   },
 ]);
 
-export const foldGutter = style({
-  width: '1em',
-  padding: '0 8px',
-});
+export const foldGutter = style([
+  sprinkles({
+    paddingY: 'none',
+    paddingX: 'xsmall',
+  }),
+  {
+    width: '1em',
+  },
+]);
 
 export const foldOpen = style([
   sprinkles({ cursor: 'pointer' }),
@@ -82,7 +87,7 @@ globalStyle('.CodeMirror', {
 globalStyle('.CodeMirror-gutters', {
   minWidth: vars.codeGutterSize,
   boxSizing: 'border-box',
-  paddingLeft: '8px',
+  paddingLeft: vars.space.xsmall,
 });
 
 globalStyle('.CodeMirror pre, .CodeMirror-linenumber', {
@@ -90,7 +95,7 @@ globalStyle('.CodeMirror pre, .CodeMirror-linenumber', {
 });
 
 globalStyle('.CodeMirror-lines', {
-  padding: '16px 0',
+  padding: `${vars.space.medium} 0`,
 });
 
 globalStyle('.CodeMirror-hints', {
@@ -101,7 +106,7 @@ globalStyle('.CodeMirror-hints', {
   margin: 0,
   padding: 0,
   boxShadow: colorPaletteVars.shadows.small,
-  borderRadius: vars.radii.medium,
+  borderRadius: vars.radii.small,
   backgroundColor: colorPaletteVars.background.surface,
   fontSize: '90%',
   lineHeight: '150%',
@@ -115,7 +120,7 @@ globalStyle('[data-playroom-dark] .CodeMirror-hints', {
 
 globalStyle('.CodeMirror-hint', {
   margin: 0,
-  padding: '4px 8px',
+  padding: `${vars.space.xxsmall} ${vars.space.xsmall}`,
   borderRadius: vars.radii.small,
   whiteSpace: 'pre',
   color: colorPaletteVars.code.text,
@@ -135,7 +140,7 @@ globalStyle('.CodeMirror-foldmarker', {
   color: colorPaletteVars.foreground.accent,
   fontFamily: 'arial',
   cursor: 'pointer',
-  padding: `0 ${vars.grid}`,
+  padding: `0 ${vars.space.xxsmall}`,
 });
 
 globalStyle('.cm-s-neo.CodeMirror', {
@@ -157,7 +162,7 @@ globalStyle('.cm-s-neo .CodeMirror-gutters::after', {
   content: '""',
   backgroundColor: colorPaletteVars.background.surface,
   position: 'absolute',
-  right: '2px',
+  right: vars.space.xxxsmall,
   height: '100%',
   boxShadow: `0 0 10px 5px ${colorPaletteVars.background.surface}`,
 });
@@ -229,8 +234,8 @@ globalStyle('.cm-s-neo .cm-number', {
 });
 
 globalStyle('.CodeMirror-dialog', {
-  paddingLeft: vars.space.xlarge,
-  paddingRight: vars.space.xlarge,
+  paddingLeft: vars.space.medium,
+  paddingRight: vars.space.medium,
   minHeight: toolbarItemSize,
   borderBottom: `1px solid ${colorPaletteVars.border.standard}`,
   display: 'flex',
@@ -273,7 +278,7 @@ globalStyle('.CodeMirror-search-label', {
 });
 
 globalStyle('.CodeMirror-search-field', {
-  paddingLeft: vars.space.xlarge,
+  paddingLeft: vars.space.medium,
 });
 
 globalStyle('label.CodeMirror-search-label', {
@@ -285,28 +290,28 @@ globalStyle('.dialog-opened.cm-s-neo .CodeMirror-selected', {
 });
 
 globalStyle('.cm-overlay.cm-searching', {
-  paddingTop: 2,
-  paddingBottom: 2,
+  paddingTop: vars.space.xxxsmall,
+  paddingBottom: vars.space.xxxsmall,
   background: colorPaletteVars.background.selection,
 });
 
 globalStyle('.CodeMirror-dialog button:first-of-type', {
-  marginLeft: vars.space.xlarge,
+  marginLeft: vars.space.medium,
 });
 
 globalStyle('.CodeMirror-dialog button', {
   appearance: 'none',
   font: vars.font.scale.standard,
   fontFamily: vars.font.family.standard,
-  marginLeft: vars.space.small,
-  paddingTop: vars.space.small,
-  paddingBottom: vars.space.small,
-  paddingLeft: vars.space.large,
-  paddingRight: vars.space.large,
+  marginLeft: vars.space.xsmall,
+  paddingTop: vars.space.xxsmall,
+  paddingBottom: vars.space.xxsmall,
+  paddingLeft: vars.space.small,
+  paddingRight: vars.space.small,
   alignSelf: 'center',
   display: 'block',
   background: 'none',
-  borderRadius: vars.radii.large,
+  borderRadius: vars.radii.medium,
   cursor: 'pointer',
   border: '1px solid currentColor',
 });

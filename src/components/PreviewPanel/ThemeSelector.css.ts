@@ -44,7 +44,7 @@ export const focusOverlay = style([
   sprinkles({
     position: 'absolute',
     pointerEvents: 'none',
-    borderRadius: 'large',
+    borderRadius: 'medium',
     opacity: 0,
     transition: 'medium',
     boxShadow: 'focus',

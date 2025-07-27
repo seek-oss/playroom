@@ -1,5 +1,4 @@
 import { style, createVar } from '@vanilla-extract/css';
-import { calc } from '@vanilla-extract/css-utils';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
@@ -23,7 +22,6 @@ export const reset = style([
     textDecoration: 'none',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    height: vars.touchableSize,
     WebkitTapHighlightColor: 'transparent',
   },
 ]);
@@ -32,9 +30,9 @@ const highlightColor = createVar();
 
 export const base = style([
   sprinkles({
-    borderRadius: 'large',
-    paddingY: 'none',
-    paddingX: 'large',
+    borderRadius: 'medium',
+    paddingY: 'xsmall',
+    paddingX: 'small',
     font: 'standard',
   }),
   {
@@ -43,7 +41,6 @@ export const base = style([
     },
     color: highlightColor,
     border: `1px solid ${colorPaletteVars.foreground.neutralSoft}`,
-    height: calc(vars.grid).multiply(9).toString(),
     ':hover': {
       vars: {
         [highlightColor]: colorPaletteVars.foreground.accent,
@@ -59,8 +56,7 @@ export const base = style([
       transform: 'translateY(-50%)',
       minHeight: vars.touchableSize,
       minWidth: vars.touchableSize,
-      left: calc(vars.grid).multiply(2).negate().toString(),
-      right: calc(vars.grid).multiply(2).negate().toString(),
+      width: '100%',
       height: '100%',
       top: '50%',
     },
@@ -80,7 +76,7 @@ export const positive = style({
 });
 
 export const iconContainer = style([
-  sprinkles({ position: 'relative', paddingLeft: 'small' }),
+  sprinkles({ position: 'relative', paddingLeft: 'xxsmall' }),
   {
     top: '1px',
   },

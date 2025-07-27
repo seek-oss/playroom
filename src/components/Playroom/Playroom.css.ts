@@ -116,7 +116,7 @@ export const toggleEditorContainer = style([
 export const toggleEditorButton = style([
   sprinkles({
     position: 'relative',
-    borderRadius: 'large',
+    borderRadius: 'medium',
     padding: 'none',
     cursor: 'pointer',
     width: 'full',
@@ -147,7 +147,7 @@ export const toggleEditorButton = style([
       backgroundColor: 'currentColor',
       opacity: 0,
       pointerEvents: 'none',
-      borderRadius: vars.radii.large,
+      borderRadius: vars.radii.medium,
       transition: vars.transition.slow,
     },
   },

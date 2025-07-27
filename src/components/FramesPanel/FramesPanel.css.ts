@@ -4,12 +4,13 @@ import { calc } from '@vanilla-extract/css-utils';
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
+const padding = 'xxsmall';
 export const reset = style([
   sprinkles({
     position: 'relative',
     font: 'small',
     border: 0,
-    padding: 'small',
+    padding,
     appearance: 'none',
   }),
   {
@@ -17,7 +18,7 @@ export const reset = style([
     backgroundColor: 'transparent',
     outline: 'none',
     textDecoration: 'underline',
-    margin: calc(vars.space.small).negate().toString(),
+    margin: calc(vars.space[padding]).negate().toString(),
     '::before': {
       content: '""',
       position: 'absolute',
@@ -25,7 +26,7 @@ export const reset = style([
       bottom: 0,
       left: 0,
       right: 0,
-      borderRadius: vars.radii.large,
+      borderRadius: vars.radii.small,
       boxShadow: colorPaletteVars.shadows.focus,
       cursor: 'pointer',
       opacity: 0,
@@ -60,14 +61,14 @@ export const checkbox = style([
   },
 ]);
 
-const checkboxPadding = 'xxsmall';
+const checkboxPadding = 'xxxsmall';
 export const fakeCheckbox = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    borderRadius: 'large',
+    borderRadius: 'medium',
     padding: checkboxPadding,
     pointerEvents: 'none',
   }),
@@ -87,7 +88,7 @@ export const fakeCheckbox = style([
       bottom: 0,
       left: 0,
       right: 0,
-      borderRadius: vars.radii.medium,
+      borderRadius: vars.radii.small,
       boxShadow: colorPaletteVars.shadows.focus,
       transition: vars.transition.medium,
       opacity: 0,
@@ -100,7 +101,7 @@ export const fakeCheckbox = style([
       bottom: 0,
       left: 0,
       right: 0,
-      borderRadius: vars.radii.medium,
+      borderRadius: vars.radii.small,
       boxShadow: 'inset 0 0 0px 1px currentColor',
       background: colorPaletteVars.background.surface,
     },
@@ -134,7 +135,7 @@ export const textField = style([
   sprinkles({
     font: 'large',
     width: 'full',
-    paddingX: 'large',
+    paddingX: 'small',
     boxSizing: 'border-box',
     borderRadius: 'medium',
   }),
