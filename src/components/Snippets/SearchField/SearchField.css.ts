@@ -8,7 +8,7 @@ export const field = style([
     font: 'large',
     border: 0,
     width: 'full',
-    paddingX: 'xlarge',
+    paddingX: 'medium',
   }),
   {
     color: colorPaletteVars.foreground.neutral,

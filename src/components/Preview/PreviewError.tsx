@@ -11,7 +11,7 @@ export const PreviewError: FrameProps['ErrorComponent'] = ({ message }) => (
     size="large"
     message={
       message ? (
-        <Stack space="xlarge">
+        <Stack space="medium">
           <>{message}</>
           <a href={window.location.href.replace('/preview', '')}>
             Edit Playroom

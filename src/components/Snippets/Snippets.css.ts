@@ -18,7 +18,7 @@ export const fieldContainer = style([
     right: 0,
     display: 'flex',
     alignItems: 'center',
-    paddingX: 'small',
+    paddingX: 'xxsmall',
   }),
   {
     height: toolbarItemSize,
@@ -26,7 +26,7 @@ export const fieldContainer = style([
   },
 ]);
 
-const snippetsBorderSpace = 'small';
+const snippetsBorderSpace = 'xxsmall';
 
 export const snippetsContainer = style([
   sprinkles({
@@ -72,8 +72,8 @@ export const snippet = style([
     position: 'relative',
     display: 'block',
     cursor: 'pointer',
-    paddingY: 'large',
-    paddingX: 'xlarge',
+    paddingY: 'small',
+    paddingX: 'medium',
     marginX: snippetsBorderSpace,
   }),
   {
@@ -88,7 +88,7 @@ export const snippet = style([
       left: 0,
       right: 0,
       backgroundColor: colorPaletteVars.background.selection,
-      borderRadius: vars.radii.medium,
+      borderRadius: vars.radii.small,
       opacity: 0,
       pointerEvents: 'none',
     },

@@ -22,14 +22,14 @@ export const status = style([
     justifyContent: 'center',
     whiteSpace: 'nowrap',
     transition: 'fast',
-    borderRadius: 'large',
+    borderRadius: 'medium',
   }),
   {
     padding: `0 ${statusGutter}`,
     left: offset,
     transform: `translateX(-${offset})`,
-    top: calc(vars.grid).multiply(5).toString(),
-    height: calc(vars.grid).multiply(8).toString(),
+    top: vars.space.large,
+    height: vars.space.xlarge,
     maxWidth: calc('100dvw')
       .subtract(`${toolbarItemSize}px`)
       .subtract(calc(vars.codeGutterSize).multiply(2))

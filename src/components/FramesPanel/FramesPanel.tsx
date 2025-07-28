@@ -53,7 +53,7 @@ function FrameOption<Option>({
 }: FrameOptionProps<Option>) {
   return (
     <label className={styles.label}>
-      <Inline space="large" alignY="center">
+      <Inline space="small" alignY="center">
         <input
           type="checkbox"
           checked={selected}
@@ -90,9 +90,9 @@ export default () => {
 
   return (
     <ToolbarPanel>
-      <Stack space="xxxlarge">
+      <Stack space="xxlarge">
         <label>
-          <Stack space="small">
+          <Stack space="xsmall">
             <Heading level="3">Title</Heading>
             <input
               type="text"
@@ -110,7 +110,7 @@ export default () => {
           </Stack>
         </label>
 
-        <Stack space="xlarge">
+        <Stack space="medium">
           <FrameHeading
             showReset={hasFilteredWidths}
             onReset={() => dispatch({ type: 'resetVisibleWidths' })}
@@ -138,7 +138,7 @@ export default () => {
         </Stack>
 
         {hasThemes ? (
-          <Stack space="xlarge">
+          <Stack space="medium">
             <FrameHeading
               showReset={hasFilteredThemes}
               onReset={() => dispatch({ type: 'resetVisibleThemes' })}

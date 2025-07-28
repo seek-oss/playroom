@@ -70,7 +70,7 @@ const KeyboardShortcut = ({
   ));
 
   return (
-    <Inline space="small" alignY="center">
+    <Inline space="xsmall" alignY="center">
       <Box flexGrow={1}>
         <Text>{description}</Text>
       </Box>
@@ -88,13 +88,13 @@ export default React.memo(() => {
 
   return (
     <ToolbarPanel>
-      <Stack space="xxxlarge">
+      <Stack space="xlarge">
         <fieldset className={styles.fieldset}>
-          <Stack space="small">
+          <Stack space="xxsmall">
             <legend>
               <Heading level="3">Editor Position</Heading>
             </legend>
-            <Inline space="none">
+            <Inline space="xxxsmall">
               {['Bottom', 'Right'].map((option) => (
                 <div key={option}>
                   <input
@@ -128,11 +128,11 @@ export default React.memo(() => {
         </fieldset>
 
         <fieldset className={styles.fieldset}>
-          <Stack space="small">
+          <Stack space="xxsmall">
             <legend>
               <Heading level="3">Color Scheme</Heading>
             </legend>
-            <Inline space="none">
+            <Inline space="xxxsmall">
               {['Light', 'Dark', 'System'].map((option) => (
                 <div key={option}>
                   <input
@@ -165,7 +165,7 @@ export default React.memo(() => {
           </Stack>
         </fieldset>
 
-        <Stack space="xlarge">
+        <Stack space="medium">
           <Heading level="3">Keyboard Shortcuts</Heading>
           {Object.entries(keybindings).map(([description, keybinding]) => (
             <KeyboardShortcut

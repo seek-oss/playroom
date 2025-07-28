@@ -31,7 +31,7 @@ export default () => {
 
   return (
     <ToolbarPanel>
-      <Stack space="xxlarge">
+      <Stack space="large">
         <Heading as="h4" level="3">
           Preview
         </Heading>
@@ -44,7 +44,7 @@ export default () => {
           />
         ) : null}
 
-        <Inline space="large">
+        <Inline space="small">
           <Button
             as="a"
             href={prototypeUrl}

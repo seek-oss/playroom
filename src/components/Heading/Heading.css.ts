@@ -23,7 +23,3 @@ export const level2 = style({
 export const level3 = style({
   fontSize: '16px',
 });
-
-export const weak = sprinkles({
-  fontWeight: 'weak',
-});

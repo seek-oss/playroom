@@ -29,7 +29,7 @@ export const resizeContainer = styleVariants({
     containerCommon,
     sprinkles({
       width: 'full',
-      paddingTop: 'small',
+      paddingTop: 'xxsmall',
     }),
   ],
   vertical: [
@@ -37,7 +37,7 @@ export const resizeContainer = styleVariants({
     containerCommon,
     sprinkles({
       height: 'full',
-      paddingX: 'small',
+      paddingX: 'xxsmall',
     }),
   ],
 });

@@ -194,7 +194,7 @@ export const dark = {
     standard: seekPalette.grey[800],
   },
   shadows: {
-    small: `0 0 10px -2px ${seekPalette.grey[700]}`,
+    small: `0 0 10px -2px ${darken(0.05, seekPalette.grey[900])}`,
     focus: `0 0 0 5px ${transparentize(0.6, seekPalette.blue[400])}`,
   },
 };
