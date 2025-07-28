@@ -1,5 +1,30 @@
 # playroom
 
+## 0.44.1
+
+### Patch Changes
+
+- [#426](https://github.com/seek-oss/playroom/pull/426) [`934992c`](https://github.com/seek-oss/playroom/commit/934992c6c9bb1b265375996e3971cc58a22ef3b3) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - refactor: Improve internal structure enable UI flexibility
+
+- [#435](https://github.com/seek-oss/playroom/pull/435) [`f1f7869`](https://github.com/seek-oss/playroom/commit/f1f7869605640886a514f9511e10504c0ebe7a7d) Thanks [@felixhabib](https://github.com/felixhabib)! - Ensure UI size adapts to mobile browser toolbars that appear and disappear.
+
+  Use dynamic viewport units to ensure the UI remains responsive across different devices.
+
+- [#439](https://github.com/seek-oss/playroom/pull/439) [`61654dc`](https://github.com/seek-oss/playroom/commit/61654dc133809d7b5aafebfd70479dac4d84e62f) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Migrate top-level layout to CSS Grid
+
+  Refactor the top-level layout of Playroom to use CSS Grid in preparation for upcoming UI features.
+
+  Additionally, migrate away from `re-resizable` package for panel resizing in favour of a custom implementation to improve UI performance.
+
+- [#438](https://github.com/seek-oss/playroom/pull/438) [`4ae409a`](https://github.com/seek-oss/playroom/commit/4ae409a96332fbbefb8fdaf89fb3760017dcc87d) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Remove legacy undocked editor mode
+
+  An earlier version of Playroom had support for an undocked editor mode, previously hidden from the UI due to being buggy.
+  Removing this code in preparation for UI uplift work.
+
+- [#440](https://github.com/seek-oss/playroom/pull/440) [`a3e9893`](https://github.com/seek-oss/playroom/commit/a3e9893183830f3c23e46240af89edb256a9a9b1) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Refactor internal space and radius tokens
+
+  Evolve the internal space and radius scales to be more fit for purpose with upcoming UI work.
+
 ## 0.44.0
 
 ### Minor Changes
