@@ -163,7 +163,9 @@ export const CodeEditor = ({
     if (editorInstanceRef.current) {
       if (
         mounted.current &&
-        (code === editorInstanceRef.current.getValue() || previewCode)
+        (editorInstanceRef.current.hasFocus() ||
+          code === editorInstanceRef.current.getValue() ||
+          previewCode)
       ) {
         return;
       }
