@@ -38,6 +38,9 @@ export const colorPaletteVars = createThemeContract({
   border: {
     standard: null,
   },
+  outline: {
+    focus: null,
+  },
   shadows: {
     small: null,
     focus: null,
@@ -85,7 +88,11 @@ const responsiveProperties = defineProperties({
     userSelect: ['none'],
     appearance: ['none'],
     opacity: [0],
-    zIndex: [0, 1],
+    zIndex: {
+      0: 0,
+      1: 1,
+      popup: 100,
+    },
     font: vars.font.scale,
     fontWeight: vars.font.weight,
     width: { full: '100%', viewport: '100dvw' },

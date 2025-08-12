@@ -91,7 +91,7 @@ globalStyle('.CodeMirror-gutters', {
 });
 
 globalStyle('.CodeMirror pre, .CodeMirror-linenumber', {
-  fontSize: '16px',
+  fontSize: '14px !important',
 });
 
 globalStyle('.CodeMirror-lines', {

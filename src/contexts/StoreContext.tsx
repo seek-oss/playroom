@@ -29,7 +29,7 @@ const store = localforage.createInstance({
 const defaultEditorSize = '40%';
 const defaultPosition = 'bottom';
 
-export type EditorPosition = 'bottom' | 'right';
+export type EditorPosition = 'bottom' | 'right' | 'left';
 export type ColorScheme = 'light' | 'dark' | 'system';
 
 const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
@@ -74,7 +74,7 @@ interface StatusMessage {
   tone: 'positive' | 'critical';
 }
 
-type ToolbarPanel = 'snippets' | 'frames' | 'preview' | 'settings';
+type ToolbarPanel = 'snippets' | 'frames' | 'preview';
 interface State {
   code: string;
   title?: string;

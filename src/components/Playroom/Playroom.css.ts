@@ -14,7 +14,6 @@ import {
 } from '../constants';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
-import { vars } from '../../css/vars.css';
 import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
 const MIN_HEIGHT = `${toolbarItemSize * toolbarItemCount}px`;
@@ -40,6 +39,7 @@ export const resizing = style({
 });
 
 const bottomEditorHeight = createVar();
+const leftEditorWidth = createVar();
 const rightEditorWidth = createVar();
 export const editorSize = createVar();
 export const assistantWidth = createVar();
@@ -50,8 +50,17 @@ export const root = style([
   }),
   {
     display: 'grid',
-    gridTemplateColumns: space('1fr', fallbackVar(rightEditorWidth, '0px')),
-    gridTemplateRows: space('auto', fallbackVar(bottomEditorHeight, '0px')),
+    gridTemplateColumns: space(
+      fallbackVar(leftEditorWidth, '0px'),
+      '1fr',
+      fallbackVar(rightEditorWidth, '0px')
+      // fallbackVar(assistantWidth, '0px')
+    ),
+    gridTemplateRows: space(
+      'min-content',
+      'auto',
+      fallbackVar(bottomEditorHeight, '0px')
+    ),
     willChange: comma('grid-template-columns', 'grid-template-rows'),
   },
 ]);
@@ -69,7 +78,11 @@ export const editorPosition = styleVariants({
       vars: {
         [bottomEditorHeight]: `clamp(${MIN_HEIGHT}, ${editorSize}, ${MAX_HEIGHT})`,
       },
-      gridTemplateAreas: newline('"frames frames"', '"editor editor"'),
+      gridTemplateAreas: newline(
+        '"header header header"',
+        '"frames frames frames"',
+        '"editor editor editor"'
+      ),
     },
   ],
   right: [
@@ -77,11 +90,31 @@ export const editorPosition = styleVariants({
       vars: {
         [rightEditorWidth]: `clamp(${MIN_WIDTH}, ${editorSize}, ${MAX_WIDTH})`,
       },
-      gridTemplateAreas: newline('"frames editor"', '"frames editor"'),
+      gridTemplateAreas: newline(
+        '"header header header"',
+        '"frames frames editor"',
+        '"frames frames editor"'
+      ),
+    },
+  ],
+  left: [
+    {
+      vars: {
+        [leftEditorWidth]: `clamp(${MIN_WIDTH}, ${editorSize}, ${MAX_WIDTH})`,
+      },
+      gridTemplateAreas: newline(
+        '"header header header"',
+        '"editor frames frames"',
+        '"editor frames frames"'
+      ),
     },
   ],
 });
 
+export const header = style({
+  gridArea: 'header',
+  zIndex: 1,
+});
 export const frames = style({
   gridArea: 'frames',
 });
@@ -92,66 +125,11 @@ export const editor = style([
   },
   sprinkles({
     overflow: 'hidden',
-    boxShadow: 'small',
   }),
 ]);
-
-export const toggleEditorContainer = style([
-  sprinkles({
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    display: 'flex',
-    justifyContent: 'center',
-  }),
-  {
-    selectors: {
-      [`${editorPosition.bottom} &`]: {
-        width: toolbarItemSize,
-      },
-    },
-  },
-]);
-
-export const toggleEditorButton = style([
-  sprinkles({
-    position: 'relative',
-    borderRadius: 'medium',
-    padding: 'none',
-    cursor: 'pointer',
-    width: 'full',
-    appearance: 'none',
-    border: 0,
-  }),
-  {
-    background: 'transparent',
-    WebkitTapHighlightColor: 'transparent',
-    outline: 'none',
-    minWidth: vars.touchableSize,
-    height: vars.touchableSize,
-    selectors: {
-      [`&:not(:hover):not(:focus)`]: {
-        opacity: 0.3,
-      },
-      [`&:hover::before, &:focus::before`]: {
-        opacity: 0.05,
-      },
-    },
-    '::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      backgroundColor: 'currentColor',
-      opacity: 0,
-      pointerEvents: 'none',
-      borderRadius: vars.radii.medium,
-      transition: vars.transition.slow,
-    },
-  },
-]);
+// export const assistant = style({
+//   gridArea: 'assistant',
+// });
 
 export const framesContainer = sprinkles({
   position: 'absolute',

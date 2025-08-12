@@ -3,12 +3,10 @@ import { useContext, type ReactNode } from 'react';
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
-import { Box } from '../Box/Box';
 import { Heading } from '../Heading/Heading';
 import { Inline } from '../Inline/Inline';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
-import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 
 import Checkmark from './CheckmarkSvg';
 
@@ -31,11 +29,9 @@ interface FrameHeadingProps {
   children: ReactNode;
 }
 const FrameHeading = ({ showReset, onReset, children }: FrameHeadingProps) => (
-  <Inline space="none" alignY="center">
-    <Box flexGrow={1}>
-      <Heading level="3">{children}</Heading>
-    </Box>
-    {showReset && <ResetButton onClick={onReset}>Clear</ResetButton>}
+  <Inline space="small" alignY="center">
+    <Heading level="3">{children}</Heading>
+    {showReset && <ResetButton onClick={onReset}>Reset</ResetButton>}
   </Inline>
 );
 
@@ -77,7 +73,7 @@ function FrameOption<Option>({
 }
 
 export default () => {
-  const [{ visibleWidths = [], visibleThemes = [], title }, dispatch] =
+  const [{ visibleWidths = [], visibleThemes = [] }, dispatch] =
     useContext(StoreContext);
   const hasThemes =
     availableThemes.filter(
@@ -89,83 +85,62 @@ export default () => {
     visibleThemes.length > 0 && visibleThemes.length <= availableThemes.length;
 
   return (
-    <ToolbarPanel>
-      <Stack space="xxlarge">
-        <label>
-          <Stack space="xsmall">
-            <Heading level="3">Title</Heading>
-            <input
-              type="text"
-              id="playroomTitleField"
-              placeholder="Enter a title for this Playroom..."
-              className={styles.textField}
-              value={title}
-              onChange={(e) =>
+    <Inline space="xxxlarge">
+      <Stack space="medium">
+        <FrameHeading
+          showReset={hasFilteredWidths}
+          onReset={() => dispatch({ type: 'resetVisibleWidths' })}
+        >
+          Widths
+        </FrameHeading>
+        {availableWidths.map((option) => (
+          <FrameOption
+            key={option}
+            option={option}
+            selected={hasFilteredWidths && visibleWidths.includes(option)}
+            visible={visibleWidths}
+            onChange={(newWidths) => {
+              if (newWidths) {
                 dispatch({
-                  type: 'updateTitle',
-                  payload: { title: e.target.value },
-                })
+                  type: 'updateVisibleWidths',
+                  payload: { widths: newWidths },
+                });
+              } else {
+                dispatch({ type: 'resetVisibleWidths' });
               }
-            />
-          </Stack>
-        </label>
+            }}
+          />
+        ))}
+      </Stack>
 
+      {hasThemes ? (
         <Stack space="medium">
           <FrameHeading
-            showReset={hasFilteredWidths}
-            onReset={() => dispatch({ type: 'resetVisibleWidths' })}
+            showReset={hasFilteredThemes}
+            onReset={() => dispatch({ type: 'resetVisibleThemes' })}
           >
-            Widths
+            Themes
           </FrameHeading>
-          {availableWidths.map((option) => (
+          {availableThemes.map((option) => (
             <FrameOption
               key={option}
               option={option}
-              selected={hasFilteredWidths && visibleWidths.includes(option)}
-              visible={visibleWidths}
-              onChange={(newWidths) => {
-                if (newWidths) {
+              selected={hasFilteredThemes && visibleThemes.includes(option)}
+              visible={visibleThemes}
+              onChange={(newThemes) => {
+                if (newThemes) {
                   dispatch({
-                    type: 'updateVisibleWidths',
-                    payload: { widths: newWidths },
+                    type: 'updateVisibleThemes',
+                    payload: { themes: newThemes },
                   });
                 } else {
-                  dispatch({ type: 'resetVisibleWidths' });
+                  dispatch({ type: 'resetVisibleThemes' });
                 }
               }}
             />
           ))}
         </Stack>
-
-        {hasThemes ? (
-          <Stack space="medium">
-            <FrameHeading
-              showReset={hasFilteredThemes}
-              onReset={() => dispatch({ type: 'resetVisibleThemes' })}
-            >
-              Themes
-            </FrameHeading>
-            {availableThemes.map((option) => (
-              <FrameOption
-                key={option}
-                option={option}
-                selected={hasFilteredThemes && visibleThemes.includes(option)}
-                visible={visibleThemes}
-                onChange={(newThemes) => {
-                  if (newThemes) {
-                    dispatch({
-                      type: 'updateVisibleThemes',
-                      payload: { themes: newThemes },
-                    });
-                  } else {
-                    dispatch({ type: 'resetVisibleThemes' });
-                  }
-                }}
-              />
-            ))}
-          </Stack>
-        ) : null}
-      </Stack>
-    </ToolbarPanel>
+      ) : null}
+    </Inline>
   );
 };

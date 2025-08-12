@@ -1,6 +1,6 @@
 import { createVar, style } from '@vanilla-extract/css';
 
-import { sprinkles } from '../../css/sprinkles.css';
+import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 
 export const root = style([
   sprinkles({
@@ -9,7 +9,9 @@ export const root = style([
     boxSizing: 'border-box',
     display: 'flex',
     gap: 'xxxlarge',
-    padding: 'xxxlarge',
+    paddingX: 'xxxlarge',
+    paddingBottom: 'xxlarge',
+    paddingTop: 'medium',
     textAlign: 'center',
     overflow: 'auto',
   }),
@@ -34,12 +36,19 @@ export const frameContainer = style([
   },
 ]);
 
-export const frame = sprinkles({
-  border: 0,
-  flexGrow: 1,
-  width: 'full',
-  height: 'full',
-});
+export const frame = style([
+  sprinkles({
+    border: 0,
+    flexGrow: 1,
+    width: 'full',
+    height: 'full',
+    borderRadius: 'medium',
+  }),
+  {
+    outline: `1px solid ${colorPaletteVars.border.standard}`,
+    outlineOffset: -1,
+  },
+]);
 
 export const frameBorder = style([
   sprinkles({
@@ -48,6 +57,7 @@ export const frameBorder = style([
     boxShadow: 'small',
     transition: 'medium',
     pointerEvents: 'none',
+    borderRadius: 'medium',
   }),
   {
     selectors: {
@@ -68,7 +78,6 @@ export const frameName = style([
   {
     flex: `0 0 ${frameNameHeight}`,
     height: frameNameHeight,
-    marginBottom: '-10px',
     selectors: {
       [`${frameContainer}:not(:hover) &`]: {
         opacity: 0.3,

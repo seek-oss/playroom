@@ -40,6 +40,8 @@ import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
+import { Popover } from '../Popover/Popover';
+import Snippets from '../Snippets/Snippets';
 
 const validateCodeInEditor = (editorInstance: Editor, code: string) => {
   const maybeValid = validateCode(code);
@@ -73,13 +75,22 @@ export const CodeEditor = ({
   onChange,
   previewCode,
 }: Props) => {
+  const anchorEl = useRef<HTMLElement>(null);
+  const editorEl = useRef<HTMLElement>(null);
   const mounted = useRef(false);
   const editorInstanceRef = useRef<Editor | null>(null);
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
     null
   );
-  const [{ cursorPosition, highlightLineNumber }, dispatch] =
-    useContext(StoreContext);
+  const [
+    {
+      cursorPosition,
+      highlightLineNumber,
+      validCursorPosition,
+      activeToolbarPanel,
+    },
+    dispatch,
+  ] = useContext(StoreContext);
 
   const debouncedChange = useDebouncedCallback(
     (newCode: string) => onChange(newCode),
@@ -178,7 +189,28 @@ export const CodeEditor = ({
     if (editorInstanceRef.current && !editorInstanceRef.current.hasFocus()) {
       setCursorPosition(cursorPosition);
     }
-  }, [cursorPosition, previewCode, setCursorPosition]);
+
+    if (editorInstanceRef.current) {
+      if (mounted && validCursorPosition && !previewCode) {
+        editorInstanceRef.current?.addWidget(
+          { line: cursorPosition.line, ch: 99999 },
+          editorInstanceRef.current.addSnippetEl,
+          false
+        );
+        if (editorInstanceRef.current?.addSnippetEl) {
+          editorInstanceRef.current.addSnippetEl.style.opacity = '1';
+        }
+      } else if (previewCode) {
+        if (editorInstanceRef.current?.addSnippetEl) {
+          editorInstanceRef.current.addSnippetEl.style.opacity = '0';
+        }
+      } else {
+        editorInstanceRef.current.addSnippetEl?.parentNode?.removeChild(
+          editorInstanceRef.current.addSnippetEl
+        );
+      }
+    }
+  }, [cursorPosition, previewCode, setCursorPosition, validCursorPosition]);
 
   useEffect(() => {
     if (editorInstanceRef.current) {
@@ -208,93 +240,132 @@ export const CodeEditor = ({
   const keymapModifierKey = isMac() ? 'Cmd' : 'Ctrl';
 
   return (
-    <ReactCodeMirror
-      editorDidMount={(editorInstance) => {
-        editorInstanceRef.current = editorInstance;
-        validateCodeInEditor(editorInstance, code);
-        if (!editorHidden) {
-          setCursorPosition(cursorPosition);
-        }
-        /**
-         * This workaround delays the setting of the mounted flag. It allows
-         * the behaviours wired up via `useEffect` to complete without being
-         * interrupted by change or focus events.
-         */
-        setTimeout(() => {
-          mounted.current = true;
-        }, 1);
-      }}
-      onChange={(editorInstance, data, newCode) => {
-        if (editorInstance.hasFocus() && !previewCode) {
-          validateCodeInEditor(editorInstance, newCode);
-          debouncedChange(newCode);
-        }
-      }}
-      onCursorActivity={(editor) => {
-        setTimeout(() => {
-          if (!editor.somethingSelected() && editor.hasFocus()) {
-            const { line, ch } = editor.getCursor();
+    <>
+      <span
+        ref={anchorEl}
+        style={{
+          position: 'absolute',
+          background: 'green',
+          height: 10,
+          width: 10,
+        }}
+      />
+      {/* {editorInstanceRef.current?.addSnippetEl ? ( */}
+      <Popover
+        aria-label="Snippets"
+        open={activeToolbarPanel === 'snippets'}
+        anchor={editorInstanceRef.current?.addSnippetEl}
+      >
+        <Snippets isOpen={true} />
+      </Popover>
+      {/* ) : null} */}
+      <ReactCodeMirror
+        editorDidMount={(editorInstance) => {
+          editorEl.current = editorInstance.getWrapperElement();
 
-            dispatch({
-              type: 'updateCursorPosition',
-              payload: { position: { line, ch }, code: editor.getValue() },
-            });
+          const marker = document.createElement('button');
+          marker.innerText = `Insert Snippet (${isMac() ? '⌘K' : 'Ctrl+K'})`;
+          marker.setAttribute(
+            'style',
+            [
+              'background: transparent',
+              'color: #a7a7a7',
+              'height: 20px',
+              'position: absolute',
+              'border: 0',
+              'left: 0',
+              'top: 50%',
+              'transform: translateY(-100%)',
+            ].join(';')
+          );
+          editorInstance.addSnippetEl = marker;
+
+          editorInstanceRef.current = editorInstance;
+          validateCodeInEditor(editorInstance, code);
+          if (!editorHidden) {
+            setCursorPosition(cursorPosition);
           }
-        });
-      }}
-      options={{
-        mode: 'jsx',
-        autoCloseTags: true,
-        autoCloseBrackets: true,
-        theme: 'neo',
-        gutters: ['errorGutter', 'CodeMirror-linenumbers', styles.foldGutter],
-        hintOptions: { schemaInfo: hints },
-        viewportMargin: 50,
-        lineNumbers: true,
-        styleActiveLine: !previewCode,
-        foldGutter: {
-          gutter: styles.foldGutter,
-          indicatorOpen: styles.foldOpen,
-          indicatorFolded: styles.foldFolded,
-        },
-        foldOptions: {
-          widget: '\u2026',
-          minFoldSize: 1,
-        },
-        extraKeys: {
-          Tab: (cm) => {
-            if (cm.somethingSelected()) {
-              cm.indentSelection('add');
-            } else {
-              const indent = cm.getOption('indentUnit') as number;
-              const spaces = Array(indent + 1).join(' ');
-              cm.replaceSelection(spaces);
+          /**
+           * This workaround delays the setting of the mounted flag. It allows
+           * the behaviours wired up via `useEffect` to complete without being
+           * interrupted by change or focus events.
+           */
+          setTimeout(() => {
+            mounted.current = true;
+          }, 1);
+        }}
+        onChange={(editorInstance, data, newCode) => {
+          if (editorInstance.hasFocus() && !previewCode) {
+            validateCodeInEditor(editorInstance, newCode);
+            debouncedChange(newCode);
+          }
+        }}
+        onCursorActivity={(editor) => {
+          setTimeout(() => {
+            if (!editor.somethingSelected() && editor.hasFocus()) {
+              const { line, ch } = editor.getCursor();
+
+              dispatch({
+                type: 'updateCursorPosition',
+                payload: { position: { line, ch }, code: editor.getValue() },
+              });
             }
+          });
+        }}
+        options={{
+          mode: 'jsx',
+          autoCloseTags: true,
+          autoCloseBrackets: true,
+          theme: 'neo',
+          gutters: ['errorGutter', 'CodeMirror-linenumbers', styles.foldGutter],
+          hintOptions: { schemaInfo: hints },
+          viewportMargin: 50,
+          lineNumbers: true,
+          styleActiveLine: !previewCode,
+          foldGutter: {
+            gutter: styles.foldGutter,
+            indicatorOpen: styles.foldOpen,
+            indicatorFolded: styles.foldFolded,
           },
-          'Ctrl-Space': completeIfInTag,
-          "'<'": completeAfter,
-          "'/'": completeIfAfterLt,
-          "' '": completeIfInTag,
-          "'='": completeIfInTag,
-          'Alt-Up': swapLineUp,
-          'Alt-Down': swapLineDown,
-          'Shift-Alt-Up': duplicateLine('up'),
-          'Shift-Alt-Down': duplicateLine('down'),
-          [`${keymapModifierKey}-Alt-Up`]: addCursorToPrevLine,
-          [`${keymapModifierKey}-Alt-Down`]: addCursorToNextLine,
-          [`${keymapModifierKey}-D`]: selectNextOccurrence,
-          [`Shift-${keymapModifierKey}-,`]: wrapInTag,
-          [`${keymapModifierKey}-/`]: toggleComment,
-          [`${keymapModifierKey}-F`]: 'findPersistent',
-          [`${keymapModifierKey}-Alt-F`]: 'replace',
-          [`${keymapModifierKey}-G`]: 'jumpToLine',
-          ['Alt-G']: false, // override default keybinding
-          ['Alt-F']: false, // override default keybinding
-          ['Shift-Ctrl-R']: false, // override default keybinding
-          ['Cmd-Option-F']: false, // override default keybinding
-          ['Shift-Cmd-Option-F']: false, // override default keybinding
-        },
-      }}
-    />
+          foldOptions: {
+            widget: '\u2026',
+            minFoldSize: 1,
+          },
+          extraKeys: {
+            Tab: (cm) => {
+              if (cm.somethingSelected()) {
+                cm.indentSelection('add');
+              } else {
+                const indent = cm.getOption('indentUnit') as number;
+                const spaces = Array(indent + 1).join(' ');
+                cm.replaceSelection(spaces);
+              }
+            },
+            'Ctrl-Space': completeIfInTag,
+            "'<'": completeAfter,
+            "'/'": completeIfAfterLt,
+            "' '": completeIfInTag,
+            "'='": completeIfInTag,
+            'Alt-Up': swapLineUp,
+            'Alt-Down': swapLineDown,
+            'Shift-Alt-Up': duplicateLine('up'),
+            'Shift-Alt-Down': duplicateLine('down'),
+            [`${keymapModifierKey}-Alt-Up`]: addCursorToPrevLine,
+            [`${keymapModifierKey}-Alt-Down`]: addCursorToNextLine,
+            [`${keymapModifierKey}-D`]: selectNextOccurrence,
+            [`Shift-${keymapModifierKey}-,`]: wrapInTag,
+            [`${keymapModifierKey}-/`]: toggleComment,
+            [`${keymapModifierKey}-F`]: 'findPersistent',
+            [`${keymapModifierKey}-Alt-F`]: 'replace',
+            [`${keymapModifierKey}-G`]: 'jumpToLine',
+            ['Alt-G']: false, // override default keybinding
+            ['Alt-F']: false, // override default keybinding
+            ['Shift-Ctrl-R']: false, // override default keybinding
+            ['Cmd-Option-F']: false, // override default keybinding
+            ['Shift-Cmd-Option-F']: false, // override default keybinding
+          },
+        }}
+      />
+    </>
   );
 };

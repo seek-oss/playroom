@@ -1,3 +1,5 @@
+import { comma } from './delimiters';
+
 const originalPalette = {
   blue0: '#e5f3ff',
   blue1: '#0088ff',
@@ -70,7 +72,7 @@ export const light = {
   },
   foreground: {
     neutralSoft: originalPalette.gray3,
-    neutral: originalPalette.gray5,
+    neutral: originalPalette.gray6,
     neutralInverted: originalPalette.white,
     secondary: originalPalette.gray3,
     critical: originalPalette.red3,
@@ -84,15 +86,22 @@ export const light = {
     critical: originalPalette.red1,
     neutral: originalPalette.gray2,
     surface: originalPalette.white,
-    body: originalPalette.gray1,
+    body: originalPalette.white,
     selection: transparentize(0.85, originalPalette.blue1),
     search: darken(0.15, originalPalette.blue0),
   },
   border: {
     standard: originalPalette.gray2,
   },
+  outline: {
+    focus: originalPalette.blue2,
+  },
   shadows: {
-    small: '0 2px 8px rgb(18, 21, 26, 0.3)',
+    small: comma(
+      '0px 3px 1px -2px rgba(0, 0, 0, 0.2)',
+      '0px 2px 2px 0px rgba(0, 0, 0, 0.07)',
+      '0px 1px 5px 0px rgba(0, 0, 0, 0.12)'
+    ),
     focus: `0 0 0 5px ${originalPalette.blue0}`,
   },
 };
@@ -186,12 +195,15 @@ export const dark = {
     critical: mix(0.7, seekPalette.grey[900], seekPalette.red[600]),
     neutral: seekPalette.grey[800],
     surface: seekPalette.grey[900],
-    body: darken(0.03, seekPalette.grey[900]),
+    body: seekPalette.grey[900],
     selection: transparentize(0.75, seekPalette.blue[600]),
     search: transparentize(0.25, seekPalette.blue[600]),
   },
   border: {
     standard: seekPalette.grey[800],
+  },
+  outline: {
+    focus: seekPalette.blue[400],
   },
   shadows: {
     small: `0 0 10px -2px ${darken(0.05, seekPalette.grey[900])}`,

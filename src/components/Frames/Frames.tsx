@@ -52,6 +52,16 @@ export default function Frames({ code }: FramesProps) {
               frame.width === 'Fit to window' ? '100%' : `${frame.width}px`,
           })}
         >
+          <div className={styles.frameName} data-testid="frameName">
+            {frame.theme === '__PLAYROOM__NO_THEME__' ? (
+              <Text weight="strong">{frame.widthName}</Text>
+            ) : (
+              <Text>
+                {`${frame.widthName} \u2013 `}
+                <Strong>{frame.theme}</Strong>
+              </Text>
+            )}
+          </div>
           <Box height="full" position="relative">
             <Iframe
               intersectionRootRef={scrollingPanelRef}
@@ -65,16 +75,6 @@ export default function Frames({ code }: FramesProps) {
             <ReceiveErrorMessage />
             <div className={styles.frameBorder} />
           </Box>
-          <div className={styles.frameName} data-testid="frameName">
-            {frame.theme === '__PLAYROOM__NO_THEME__' ? (
-              <Text weight="strong">{frame.widthName}</Text>
-            ) : (
-              <Text>
-                <Strong>{frame.theme}</Strong>
-                {` \u2013 ${frame.widthName}`}
-              </Text>
-            )}
-          </div>
         </div>
       ))}
     </div>

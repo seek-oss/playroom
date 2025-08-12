@@ -6,7 +6,7 @@ import ShareIcon from '../icons/ShareIcon';
 import TickIcon from '../icons/TickIcon';
 
 interface CopyButtonProps {
-  copyContent: string;
+  copyContent?: string;
   title?: string;
 }
 export const CopyButton = ({ copyContent, title }: CopyButtonProps) => {
@@ -17,7 +17,7 @@ export const CopyButton = ({ copyContent, title }: CopyButtonProps) => {
     if (copying && !copyLocked.current) {
       copyLocked.current = true;
 
-      copy(copyContent);
+      copy(copyContent || window.location.href);
 
       setTimeout(() => {
         copyLocked.current = false;

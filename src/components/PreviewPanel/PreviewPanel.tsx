@@ -4,17 +4,16 @@ import { themeNames } from '../../configModules/themes';
 import { StoreContext } from '../../contexts/StoreContext';
 import usePreviewUrl from '../../utils/usePreviewUrl';
 import { Button } from '../Button/Button';
-import { Heading } from '../Heading/Heading';
 import { Inline } from '../Inline/Inline';
 import { Stack } from '../Stack/Stack';
-import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
+import { Text } from '../Text/Text';
 import PlayIcon from '../icons/PlayIcon';
 
 import { CopyButton } from './CopyButton';
 import { ThemeSelector } from './ThemeSelector';
 
 export default () => {
-  const [{ visibleThemes = [] }] = useContext(StoreContext);
+  const [{ visibleThemes = [], code }] = useContext(StoreContext);
   const defaultTheme =
     visibleThemes && visibleThemes.length > 0
       ? visibleThemes[0]
@@ -29,38 +28,34 @@ export default () => {
 
   const prototypeUrl = usePreviewUrl(activeTheme);
 
-  return (
-    <ToolbarPanel>
-      <Stack space="large">
-        <Heading as="h4" level="3">
-          Preview
-        </Heading>
+  return code.trim().length === 0 ? (
+    <Text>No preview available.</Text>
+  ) : (
+    <Stack space="large">
+      {isThemed ? (
+        <ThemeSelector
+          visibleThemes={visibleThemes}
+          activeTheme={activeTheme}
+          onChange={setUserSelectedTheme}
+        />
+      ) : null}
 
-        {isThemed ? (
-          <ThemeSelector
-            visibleThemes={visibleThemes}
-            activeTheme={activeTheme}
-            onChange={setUserSelectedTheme}
-          />
-        ) : null}
-
-        <Inline space="small">
-          <Button
-            as="a"
-            href={prototypeUrl}
-            target="_blank"
-            title="Open preview in new window"
-            rel="noopener noreferrer"
-            icon={<PlayIcon size={20} />}
-          >
-            Open
-          </Button>
-          <CopyButton
-            copyContent={prototypeUrl}
-            title="Copy preview link to clipboard"
-          />
-        </Inline>
-      </Stack>
-    </ToolbarPanel>
+      <Inline space="small">
+        <Button
+          as="a"
+          href={prototypeUrl}
+          target="_blank"
+          title="Open preview in new window"
+          rel="noopener noreferrer"
+          icon={<PlayIcon size={20} />}
+        >
+          Open
+        </Button>
+        <CopyButton
+          copyContent={prototypeUrl}
+          title="Copy preview link to clipboard"
+        />
+      </Inline>
+    </Stack>
   );
 };

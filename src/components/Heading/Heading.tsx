@@ -7,6 +7,7 @@ interface Props {
   level: '1' | '2' | '3';
   as?: ElementType;
   children: ReactNode;
+  id?: string;
 }
 
 const resolveComponentFromLevel = (level: Props['level']) =>
@@ -16,10 +17,11 @@ const resolveComponentFromLevel = (level: Props['level']) =>
     3: 'h3' as const,
   }[level]);
 
-export const Heading = ({ as: component, level, children }: Props) =>
+export const Heading = ({ as: component, id, level, children }: Props) =>
   React.createElement(
     component || resolveComponentFromLevel(level),
     {
+      id,
       className: clsx(styles.base, {
         [styles.level1]: level === '1',
         [styles.level2]: level === '2',

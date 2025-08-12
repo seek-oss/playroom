@@ -8,7 +8,7 @@ import { vars } from '../../css/vars.css';
 
 export const show = style({});
 
-const gutter = vars.space.xsmall;
+const gutter = vars.space.small;
 export const message = style([
   sprinkles({
     position: 'absolute',

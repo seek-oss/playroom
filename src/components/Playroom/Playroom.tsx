@@ -12,25 +12,14 @@ import { StoreContext, type EditorPosition } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
 import Frames from '../Frames/Frames';
+import { Header } from '../Header/Header';
 import { StatusMessage } from '../StatusMessage/StatusMessage';
 import Toolbar from '../Toolbar/Toolbar';
 import { ANIMATION_DURATION_SLOW } from '../constants';
-import ChevronIcon from '../icons/ChevronIcon';
 
 import { ResizeHandle } from './ResizeHandle';
 
 import * as styles from './Playroom.css';
-
-const resolveDirection = (
-  editorPosition: EditorPosition,
-  editorHidden: boolean
-) => {
-  if (editorPosition === 'right') {
-    return editorHidden ? 'left' : 'right';
-  }
-
-  return editorHidden ? 'up' : 'down';
-};
 
 const getTitle = (title: string | undefined) => {
   if (title) {
@@ -52,6 +41,7 @@ const resizeHandlePosition: Record<
 > = {
   bottom: 'top',
   right: 'left',
+  left: 'right',
 } as const;
 
 export default () => {
@@ -88,7 +78,8 @@ export default () => {
     };
   }, [editorHidden]);
 
-  const isVerticalEditor = editorPosition === 'right';
+  const isVerticalEditor =
+    editorPosition === 'right' || editorPosition === 'left';
   const editorSize = isVerticalEditor ? editorWidth : editorHeight;
 
   return !ready ? null : (
@@ -110,23 +101,13 @@ export default () => {
         </Helmet>
       )}
 
+      <Box className={styles.header}>
+        <Header />
+      </Box>
+
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
           <Frames code={previewRenderCode || code} />
-        </Box>
-        <Box className={styles.toggleEditorContainer}>
-          <button
-            className={styles.toggleEditorButton}
-            title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
-            onClick={() =>
-              dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
-            }
-          >
-            <ChevronIcon
-              size={16}
-              direction={resolveDirection(editorPosition, editorHidden)}
-            />
-          </button>
         </Box>
       </Box>
 
