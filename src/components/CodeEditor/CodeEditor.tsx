@@ -73,7 +73,7 @@ export const CodeEditor = ({
   onChange,
   previewCode,
 }: Props) => {
-  const mounted = useRef(false);
+  const previewSnippetsCode = useRef(false);
   const editorInstanceRef = useRef<Editor | null>(null);
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
     null
@@ -144,34 +144,40 @@ export const CodeEditor = ({
   }, [dispatch]);
 
   useEffect(() => {
-    if (editorInstanceRef.current) {
-      if (previewCode) {
-        editorInstanceRef.current.setValue(previewCode);
-      } else {
-        editorInstanceRef.current.getDoc().undo();
+    if (!editorInstanceRef.current) {
+      return;
+    }
 
-        // prevent redo after undo'ing preview code.
-        const history = editorInstanceRef.current.getDoc().getHistory();
-        editorInstanceRef.current
-          .getDoc()
-          .setHistory({ ...history, undone: [] });
-      }
+    if (previewCode) {
+      editorInstanceRef.current.setValue(previewCode);
+      previewSnippetsCode.current = true;
+    } else if (previewSnippetsCode.current) {
+      // If existing snippets preview, remove the preview code
+      // from the undo history.
+      editorInstanceRef.current.getDoc().undo();
+
+      // prevent redo after undo'ing preview code.
+      const history = editorInstanceRef.current.getDoc().getHistory();
+      editorInstanceRef.current.getDoc().setHistory({ ...history, undone: [] });
+
+      previewSnippetsCode.current = false;
     }
   }, [previewCode]);
 
   useEffect(() => {
-    if (editorInstanceRef.current) {
-      if (
-        mounted.current &&
-        (editorInstanceRef.current.hasFocus() ||
-          code === editorInstanceRef.current.getValue() ||
-          previewCode)
-      ) {
-        return;
-      }
-      editorInstanceRef.current.setValue(code);
-      validateCodeInEditor(editorInstanceRef.current, code);
+    if (!editorInstanceRef.current) {
+      return;
     }
+
+    if (
+      editorInstanceRef.current.hasFocus() ||
+      code === editorInstanceRef.current.getValue() ||
+      previewCode
+    ) {
+      return;
+    }
+    editorInstanceRef.current.setValue(code);
+    validateCodeInEditor(editorInstanceRef.current, code);
   }, [code, previewCode]);
 
   useEffect(() => {
@@ -181,27 +187,29 @@ export const CodeEditor = ({
   }, [cursorPosition, previewCode, setCursorPosition]);
 
   useEffect(() => {
-    if (editorInstanceRef.current) {
-      if (typeof highlightLineNumber === 'number') {
-        insertionPointRef.current = editorInstanceRef.current.addLineClass(
-          highlightLineNumber,
-          'background',
-          styles.insertionPoint
-        );
-        editorInstanceRef.current.scrollIntoView(
-          {
-            line: highlightLineNumber,
-            ch: 0,
-          },
-          200
-        );
-      } else if (insertionPointRef.current) {
-        editorInstanceRef.current.removeLineClass(
-          insertionPointRef.current,
-          'background'
-        );
-        insertionPointRef.current = null;
-      }
+    if (!editorInstanceRef.current) {
+      return;
+    }
+
+    if (typeof highlightLineNumber === 'number') {
+      insertionPointRef.current = editorInstanceRef.current.addLineClass(
+        highlightLineNumber,
+        'background',
+        styles.insertionPoint
+      );
+      editorInstanceRef.current.scrollIntoView(
+        {
+          line: highlightLineNumber,
+          ch: 0,
+        },
+        200
+      );
+    } else if (insertionPointRef.current) {
+      editorInstanceRef.current.removeLineClass(
+        insertionPointRef.current,
+        'background'
+      );
+      insertionPointRef.current = null;
     }
   }, [highlightLineNumber]);
 
@@ -211,18 +219,11 @@ export const CodeEditor = ({
     <ReactCodeMirror
       editorDidMount={(editorInstance) => {
         editorInstanceRef.current = editorInstance;
+        editorInstanceRef.current.setValue(code);
         validateCodeInEditor(editorInstance, code);
         if (!editorHidden) {
           setCursorPosition(cursorPosition);
         }
-        /**
-         * This workaround delays the setting of the mounted flag. It allows
-         * the behaviours wired up via `useEffect` to complete without being
-         * interrupted by change or focus events.
-         */
-        setTimeout(() => {
-          mounted.current = true;
-        }, 1);
       }}
       onChange={(editorInstance, data, newCode) => {
         if (editorInstance.hasFocus() && !previewCode) {
