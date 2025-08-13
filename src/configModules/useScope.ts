@@ -8,26 +8,28 @@ import {
 
 import components from './components';
 
-const userScope = {
-  ...(userScopeFromConfig() ?? {}),
-  ...components,
-};
+export default () => {
+  const userScope = {
+    ...(userScopeFromConfig() ?? {}),
+    ...components,
+  };
 
-if (ReactCreateElementPragma in userScope) {
-  throw new Error(
-    `'${ReactCreateElementPragma}' is used internally by Playroom and is not allowed in scope`
-  );
-}
+  if (ReactCreateElementPragma in userScope) {
+    throw new Error(
+      `'${ReactCreateElementPragma}' is used internally by Playroom and is not allowed in scope`
+    );
+  }
 
-if (ReactFragmentPragma in userScope) {
-  throw new Error(
-    `'${ReactFragmentPragma}' is used internally by Playroom and is not allowed in scope`
-  );
-}
+  if (ReactFragmentPragma in userScope) {
+    throw new Error(
+      `'${ReactFragmentPragma}' is used internally by Playroom and is not allowed in scope`
+    );
+  }
 
-export default {
-  ...userScope,
-  React,
-  [ReactCreateElementPragma]: createElement,
-  [ReactFragmentPragma]: Fragment,
+  return {
+    ...userScope,
+    React,
+    [ReactCreateElementPragma]: createElement,
+    [ReactFragmentPragma]: Fragment,
+  };
 };

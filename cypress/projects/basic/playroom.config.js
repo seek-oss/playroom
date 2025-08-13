@@ -1,5 +1,6 @@
 module.exports = {
   components: './components',
+  frameComponent: './FrameComponent',
   scope: './useScope',
   snippets: './snippets',
   outputPath: './dist',
