@@ -3,7 +3,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 // @ts-expect-error no types
 import scopeEval from 'scope-eval';
 
-import scope from '../../configModules/useScope';
+import buildScope from '../../configModules/useScope';
 
 interface Props {
   code: string;
@@ -23,7 +23,7 @@ const EvalCode = ({
     }
   }, [onSuccess]);
 
-  return scopeEval(code, scope);
+  return scopeEval(code, buildScope());
 };
 
 export default function RenderCode({ code, onError }: Props) {
