@@ -1,5 +1,18 @@
 # playroom
 
+## 0.44.2
+
+### Patch Changes
+
+- [#442](https://github.com/seek-oss/playroom/pull/442) [`f1f8fbf`](https://github.com/seek-oss/playroom/commit/f1f8fbf64412572fa0bebefffaa04326794c7ccf) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Ensure code populates the editor on page load
+
+  Resolves a timing issue where code would not be populated into the editor on page load in some browsers.
+
+- [#443](https://github.com/seek-oss/playroom/pull/443) [`1a464a1`](https://github.com/seek-oss/playroom/commit/1a464a14ba6dc7d283060cab126a9b755a6c5fd7) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Evaluate `scope` in the context of `FrameComponent`
+
+  Ensure the provided `scope` is evaluated within the context of the provided `FrameComponent`.
+  This was a regression in the recent refactor, and fixing it enables usage of React Context by wrapping a Provider in the `FrameComponent` and retrieving its value via `scope`.
+
 ## 0.44.1
 
 ### Patch Changes
