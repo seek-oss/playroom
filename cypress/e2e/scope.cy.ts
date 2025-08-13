@@ -10,7 +10,7 @@ describe('useScope', () => {
   });
 
   it('works', () => {
-    typeCode('{{}hello()} {{}world()}');
-    assertFirstFrameContains('HELLO WORLD');
+    typeCode('{{}hello()} {{}world()} {{}contextValue}');
+    assertFirstFrameContains('HELLO WORLD CONTEXT_VALUE');
   });
 });
