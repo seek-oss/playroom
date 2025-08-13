@@ -1,5 +1,7 @@
-import { TestContext } from './context';
+import { BasicContext } from './context';
 
 export default ({ children }) => (
-  <TestContext.Provider value="CONTEXT_VALUE">{children}</TestContext.Provider>
+  <BasicContext.Provider value="CONTEXT_VALUE">
+    {children}
+  </BasicContext.Provider>
 );
