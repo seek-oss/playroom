@@ -7,6 +7,7 @@ import {
   assertCodePaneContains,
   assertCodePaneLineCount,
   loadPlayroom,
+  selectHint,
 } from '../support/utils';
 
 describe('Editor', () => {
@@ -23,7 +24,13 @@ describe('Editor', () => {
   });
 
   it('autocompletes', () => {
-    typeCode('<F{enter} c{enter}={downarrow}{enter} />', 150);
+    typeCode('<F');
+    selectHint();
+    typeCode(' c');
+    selectHint();
+    typeCode('=');
+    selectHint(2);
+    typeCode(' />');
     assertFirstFrameContains('Foo');
     assertCodePaneContains('<Foo color="blue" />');
   });

@@ -73,7 +73,7 @@ export const CodeEditor = ({
   onChange,
   previewCode,
 }: Props) => {
-  const mounted = useRef(false);
+  const previewSnippetsCode = useRef(false);
   const editorInstanceRef = useRef<Editor | null>(null);
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
     null
@@ -147,7 +147,10 @@ export const CodeEditor = ({
     if (editorInstanceRef.current) {
       if (previewCode) {
         editorInstanceRef.current.setValue(previewCode);
-      } else {
+        previewSnippetsCode.current = true;
+      } else if (previewSnippetsCode.current) {
+        // If existing snippets preview, remove the preview code
+        // from the undo history.
         editorInstanceRef.current.getDoc().undo();
 
         // prevent redo after undo'ing preview code.
@@ -155,6 +158,8 @@ export const CodeEditor = ({
         editorInstanceRef.current
           .getDoc()
           .setHistory({ ...history, undone: [] });
+
+        previewSnippetsCode.current = false;
       }
     }
   }, [previewCode]);
@@ -162,10 +167,9 @@ export const CodeEditor = ({
   useEffect(() => {
     if (editorInstanceRef.current) {
       if (
-        mounted.current &&
-        (editorInstanceRef.current.hasFocus() ||
-          code === editorInstanceRef.current.getValue() ||
-          previewCode)
+        editorInstanceRef.current.hasFocus() ||
+        code === editorInstanceRef.current.getValue() ||
+        previewCode
       ) {
         return;
       }
@@ -211,18 +215,11 @@ export const CodeEditor = ({
     <ReactCodeMirror
       editorDidMount={(editorInstance) => {
         editorInstanceRef.current = editorInstance;
+        editorInstanceRef.current.setValue(code);
         validateCodeInEditor(editorInstance, code);
         if (!editorHidden) {
           setCursorPosition(cursorPosition);
         }
-        /**
-         * This workaround delays the setting of the mounted flag. It allows
-         * the behaviours wired up via `useEffect` to complete without being
-         * interrupted by change or focus events.
-         */
-        setTimeout(() => {
-          mounted.current = true;
-        }, 1);
       }}
       onChange={(editorInstance, data, newCode) => {
         if (editorInstance.hasFocus() && !previewCode) {

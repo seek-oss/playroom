@@ -34,6 +34,20 @@ const clearCode = () => {
 export const typeCode = (code: string, delay?: number) =>
   getCodeEditor().focused().type(code, { delay });
 
+export const selectHint = (index?: number) => {
+  cy.get('.CodeMirror-hints')
+    .should('be.visible')
+    .then(() => {
+      typeCode(
+        `${
+          typeof index !== 'undefined' && index > 1
+            ? new Array(index - 1).fill('{downarrow}').join('')
+            : ''
+        }{enter}`
+      );
+    });
+};
+
 export const formatCode = () =>
   getCodeEditor()
     .focused()
