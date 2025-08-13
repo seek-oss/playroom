@@ -2,6 +2,6 @@
 'playroom': patch
 ---
 
-Fix code loading on page load in Firefox
+Ensure code populates the editor on page load
 
-Resolves a timing issue where code would not be hydrated into the editor correctly on page load in Firefox.
+Resolves a timing issue where code would not be populated into the editor on page load in some browsers.
