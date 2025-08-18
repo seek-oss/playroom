@@ -57,6 +57,7 @@ export const root = style([
       fallbackVar(bottomEditorHeight, '0px')
     ),
     willChange: comma('grid-template-columns', 'grid-template-rows'),
+    isolation: 'isolate',
   },
 ]);
 

@@ -91,6 +91,9 @@ export const light = {
   border: {
     standard: originalPalette.gray2,
   },
+  outline: {
+    focus: originalPalette.blue2,
+  },
   shadows: {
     small: '0 2px 8px rgb(18, 21, 26, 0.3)',
     focus: `0 0 0 5px ${originalPalette.blue0}`,
@@ -192,6 +195,9 @@ export const dark = {
   },
   border: {
     standard: seekPalette.grey[800],
+  },
+  outline: {
+    focus: seekPalette.blue[400],
   },
   shadows: {
     small: `0 0 10px -2px ${darken(0.05, seekPalette.grey[900])}`,
