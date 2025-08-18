@@ -20,7 +20,7 @@ import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 const MIN_HEIGHT = `${toolbarItemSize * toolbarItemCount}px`;
 const MIN_WIDTH = `${toolbarOpenSize + toolbarItemSize + 80}px`;
 
-const MAX_HEIGHT = '80vh';
+const MAX_HEIGHT = '70vh';
 const MAX_WIDTH = '90vw';
 
 globalStyle('html, body', {
@@ -51,7 +51,11 @@ export const root = style([
   {
     display: 'grid',
     gridTemplateColumns: space('1fr', fallbackVar(rightEditorWidth, '0px')),
-    gridTemplateRows: space('auto', fallbackVar(bottomEditorHeight, '0px')),
+    gridTemplateRows: space(
+      'min-content',
+      'auto',
+      fallbackVar(bottomEditorHeight, '0px')
+    ),
     willChange: comma('grid-template-columns', 'grid-template-rows'),
   },
 ]);
@@ -69,7 +73,11 @@ export const editorPosition = styleVariants({
       vars: {
         [bottomEditorHeight]: `clamp(${MIN_HEIGHT}, ${editorSize}, ${MAX_HEIGHT})`,
       },
-      gridTemplateAreas: newline('"frames frames"', '"editor editor"'),
+      gridTemplateAreas: newline(
+        '"header header"',
+        '"frames frames"',
+        '"editor editor"'
+      ),
     },
   ],
   right: [
@@ -77,11 +85,19 @@ export const editorPosition = styleVariants({
       vars: {
         [rightEditorWidth]: `clamp(${MIN_WIDTH}, ${editorSize}, ${MAX_WIDTH})`,
       },
-      gridTemplateAreas: newline('"frames editor"', '"frames editor"'),
+      gridTemplateAreas: newline(
+        '"header header"',
+        '"frames editor"',
+        '"frames editor"'
+      ),
     },
   ],
 });
 
+export const header = style({
+  gridArea: 'header',
+  zIndex: 1,
+});
 export const frames = style({
   gridArea: 'frames',
 });
