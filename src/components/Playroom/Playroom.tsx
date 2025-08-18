@@ -12,6 +12,7 @@ import { StoreContext, type EditorPosition } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
 import Frames from '../Frames/Frames';
+import { Header } from '../Header/Header';
 import { StatusMessage } from '../StatusMessage/StatusMessage';
 import Toolbar from '../Toolbar/Toolbar';
 import { ANIMATION_DURATION_SLOW } from '../constants';
@@ -109,6 +110,10 @@ export default () => {
           <title>{getTitle(title)}</title>
         </Helmet>
       )}
+
+      <Box className={styles.header}>
+        <Header />
+      </Box>
 
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
