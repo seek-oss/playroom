@@ -12,6 +12,7 @@ import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
 import Frames from '../Frames/Frames';
+import { Header } from '../Header/Header';
 import { StatusMessage } from '../StatusMessage/StatusMessage';
 import Toolbar from '../Toolbar/Toolbar';
 import { ANIMATION_DURATION_SLOW } from '../constants';
@@ -30,6 +31,20 @@ const resolveDirection = (
   }
 
   return editorHidden ? 'up' : 'down';
+};
+
+const getTitle = (title: string | undefined) => {
+  if (title) {
+    return `${title} | Playroom`;
+  }
+
+  const configTitle = window?.__playroomConfig__.title;
+
+  if (configTitle) {
+    return `${configTitle} | Playroom`;
+  }
+
+  return 'Playroom';
 };
 
 const resizeHandlePosition: Record<
@@ -93,6 +108,10 @@ export default () => {
         [styles.editorSize]: editorHidden ? undefined : editorSize,
       })}
     >
+      <Box className={styles.header}>
+        <Header />
+      </Box>
+
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
           <Frames code={previewRenderCode || code} />
