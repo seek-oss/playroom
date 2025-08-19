@@ -61,7 +61,10 @@ export const item = style([
       borderRadius: vars.radii.small,
     },
     selectors: {
-      [comma('&[data-popup-open]::before', '&[data-highlighted]::before')]: {
+      [comma(
+        '&[data-popup-open]:not([aria-disabled])::before',
+        '&[data-highlighted]:not([aria-disabled])::before'
+      )]: {
         backgroundColor: colorPaletteVars.background.selection,
       },
       [`&[aria-disabled]`]: {

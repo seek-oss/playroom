@@ -6,14 +6,12 @@ import snippets from '../../configModules/snippets';
 import { StoreContext } from '../../contexts/StoreContext';
 import { isMac } from '../../utils/formatting';
 import FramesPanel from '../FramesPanel/FramesPanel';
-import PreviewPanel from '../PreviewPanel/PreviewPanel';
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import Snippets from '../Snippets/Snippets';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
 import { ANIMATION_DURATION_SLOW } from '../constants';
 import AddIcon from '../icons/AddIcon';
 import FramesIcon from '../icons/FramesIcon';
-import PlayIcon from '../icons/PlayIcon';
 import SettingsIcon from '../icons/SettingsIcon';
 import ShareIcon from '../icons/ShareIcon';
 
@@ -26,7 +24,6 @@ export default () => {
       visibleWidths = [],
       activeToolbarPanel,
       validCursorPosition,
-      code,
     },
     dispatch,
   ] = useContext(StoreContext);
@@ -50,7 +47,6 @@ export default () => {
   const isSnippetsOpen = activeToolbarPanel === 'snippets';
   const isFramesOpen = activeToolbarPanel === 'frames';
   const isSettingsOpen = activeToolbarPanel === 'settings';
-  const isPreviewOpen = activeToolbarPanel === 'preview';
 
   const [lastActivePanel, setLastActivePanel] =
     useState<typeof activeToolbarPanel>(undefined);
@@ -111,20 +107,6 @@ export default () => {
             >
               <FramesIcon />
             </ToolbarItem>
-
-            <ToolbarItem
-              active={isPreviewOpen}
-              title="Preview playroom"
-              disabled={code.trim().length === 0}
-              onClick={() => {
-                dispatch({
-                  type: 'toggleToolbar',
-                  payload: { panel: 'preview' },
-                });
-              }}
-            >
-              <PlayIcon />
-            </ToolbarItem>
           </div>
 
           <div>
@@ -182,8 +164,6 @@ export default () => {
             )}
 
             {lastActivePanel === 'frames' && <FramesPanel />}
-
-            {lastActivePanel === 'preview' && <PreviewPanel />}
 
             {lastActivePanel === 'settings' && <SettingsPanel />}
           </div>
