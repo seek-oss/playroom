@@ -6,13 +6,11 @@ import snippets from '../../configModules/snippets';
 import { StoreContext } from '../../contexts/StoreContext';
 import { isMac } from '../../utils/formatting';
 import FramesPanel from '../FramesPanel/FramesPanel';
-import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import Snippets from '../Snippets/Snippets';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
 import { ANIMATION_DURATION_SLOW } from '../constants';
 import AddIcon from '../icons/AddIcon';
 import FramesIcon from '../icons/FramesIcon';
-import SettingsIcon from '../icons/SettingsIcon';
 
 import * as styles from './Toolbar.css';
 
@@ -28,7 +26,6 @@ export default () => {
   ] = useContext(StoreContext);
   const isSnippetsOpen = activeToolbarPanel === 'snippets';
   const isFramesOpen = activeToolbarPanel === 'frames';
-  const isSettingsOpen = activeToolbarPanel === 'settings';
 
   const [lastActivePanel, setLastActivePanel] =
     useState<typeof activeToolbarPanel>(undefined);
@@ -90,19 +87,6 @@ export default () => {
               <FramesIcon />
             </ToolbarItem>
           </div>
-
-          <ToolbarItem
-            active={isSettingsOpen}
-            title="Edit settings"
-            onClick={() =>
-              dispatch({
-                type: 'toggleToolbar',
-                payload: { panel: 'settings' },
-              })
-            }
-          >
-            <SettingsIcon />
-          </ToolbarItem>
         </div>
         <CSSTransition
           in={isOpen}
@@ -137,8 +121,6 @@ export default () => {
             )}
 
             {lastActivePanel === 'frames' && <FramesPanel />}
-
-            {lastActivePanel === 'settings' && <SettingsPanel />}
           </div>
         </CSSTransition>
       </div>
