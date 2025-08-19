@@ -9,31 +9,6 @@ export const fieldset = sprinkles({
   padding: 'none',
 });
 
-export const keyboardShortcutKeys = style([
-  {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-  },
-  sprinkles({
-    gap: 'xxsmall',
-  }),
-]);
-
-export const kbd = style([
-  sprinkles({
-    borderRadius: 'medium',
-    paddingY: 'xxsmall',
-    paddingX: 'xsmall',
-    textAlign: 'center',
-  }),
-  {
-    display: 'inline-block',
-    background: colorPaletteVars.background.neutral,
-    fontFamily: 'system-ui',
-    minWidth: 16,
-  },
-]);
-
 export const realRadio = style([
   sprinkles({
     position: 'absolute',
