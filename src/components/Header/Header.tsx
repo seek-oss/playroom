@@ -2,7 +2,11 @@ import { useContext, useRef, useState } from 'react';
 
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
-import { type EditorPosition, StoreContext } from '../../contexts/StoreContext';
+import {
+  type ColorScheme,
+  type EditorPosition,
+  StoreContext,
+} from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { Dialog } from '../Dialog/Dialog';
 import { KeyboardShortcuts } from '../KeyboardShortcuts/KeyboardShortcuts';
@@ -26,7 +30,13 @@ const HeaderMenu = () => {
   const [keyboardShortcutsDialogOpen, setKeyboardShortcutsDialogOpen] =
     useState(false);
   const [
-    { visibleWidths = [], visibleThemes = [], code, editorPosition },
+    {
+      visibleWidths = [],
+      visibleThemes = [],
+      code,
+      editorPosition,
+      colorScheme,
+    },
     dispatch,
   ] = useContext(StoreContext);
 
@@ -49,6 +59,37 @@ const HeaderMenu = () => {
           </span>
         }
       >
+        <Menu trigger="Theme">
+          <MenuRadioGroup
+            value={colorScheme}
+            onValueChange={(value) =>
+              dispatch({
+                type: 'updateColorScheme',
+                payload: { colorScheme: value as ColorScheme },
+              })
+            }
+          >
+            <MenuRadioItem value="system">System</MenuRadioItem>
+            <MenuRadioItem value="light">Light</MenuRadioItem>
+            <MenuRadioItem value="dark">Dark</MenuRadioItem>
+          </MenuRadioGroup>
+        </Menu>
+
+        <Menu trigger="Editor position">
+          <MenuRadioGroup
+            value={editorPosition}
+            onValueChange={(value) =>
+              dispatch({
+                type: 'updateEditorPosition',
+                payload: { position: value as EditorPosition },
+              })
+            }
+          >
+            <MenuRadioItem value="bottom">Bottom</MenuRadioItem>
+            <MenuRadioItem value="right">Right</MenuRadioItem>
+          </MenuRadioGroup>
+        </Menu>
+
         <Menu trigger="Configure frames">
           <MenuGroup label="Widths">
             {availableWidths.map((width) => (
@@ -117,21 +158,6 @@ const HeaderMenu = () => {
               </MenuGroup>
             </>
           ) : null}
-        </Menu>
-
-        <Menu trigger="Editor position">
-          <MenuRadioGroup
-            value={editorPosition}
-            onValueChange={(value) =>
-              dispatch({
-                type: 'updateEditorPosition',
-                payload: { position: value as EditorPosition },
-              })
-            }
-          >
-            <MenuRadioItem value="bottom">Bottom</MenuRadioItem>
-            <MenuRadioItem value="right">Right</MenuRadioItem>
-          </MenuRadioGroup>
         </Menu>
 
         <MenuItem
