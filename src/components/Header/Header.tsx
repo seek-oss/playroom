@@ -141,6 +141,20 @@ const HeaderMenu = () => {
           Preview
         </MenuItem>
 
+        <MenuItem
+          onClick={() => {
+            dispatch({
+              type: 'copyToClipboard',
+              payload: {
+                content: window.location.href,
+                message: 'Copied Playroom link to clipboard',
+              },
+            });
+          }}
+        >
+          Copy link
+        </MenuItem>
+
         <MenuItem onClick={() => setKeyboardShortcutsDialogOpen(true)}>
           Keyboard shortcuts
         </MenuItem>
