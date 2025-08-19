@@ -108,10 +108,7 @@ type Action =
   | { type: 'closeToolbar' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
-  | {
-      type: 'copyToClipboard';
-      payload: { url: string; trigger: 'toolbarItem' | 'previewPanel' };
-    }
+  | { type: 'copyToClipboard'; payload: { content: string; message?: string } }
   | { type: 'dismissMessage' }
   | {
       type: 'updateColorScheme';
@@ -167,19 +164,18 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case 'copyToClipboard': {
-      const { url, trigger } = action.payload;
+      const { content, message } = action.payload;
 
-      copy(url);
+      copy(content);
 
       return {
         ...state,
-        statusMessage:
-          trigger === 'toolbarItem'
-            ? {
-                message: 'Copied Playroom link to clipboard',
-                tone: 'positive',
-              }
-            : undefined,
+        statusMessage: message
+          ? {
+              message,
+              tone: 'positive',
+            }
+          : undefined,
       };
     }
 
