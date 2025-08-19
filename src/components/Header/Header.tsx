@@ -2,7 +2,7 @@ import { useContext, useRef, useState } from 'react';
 
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
-import { StoreContext } from '../../contexts/StoreContext';
+import { type EditorPosition, StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { Dialog } from '../Dialog/Dialog';
 import { KeyboardShortcuts } from '../KeyboardShortcuts/KeyboardShortcuts';
@@ -12,6 +12,8 @@ import {
   MenuCheckboxItem,
   MenuGroup,
   MenuItem,
+  MenuRadioGroup,
+  MenuRadioItem,
   MenuSeparator,
 } from '../Menu/Menu';
 import PreviewPanel from '../PreviewSelection/PreviewDialog';
@@ -23,8 +25,10 @@ const HeaderMenu = () => {
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
   const [keyboardShortcutsDialogOpen, setKeyboardShortcutsDialogOpen] =
     useState(false);
-  const [{ visibleWidths = [], visibleThemes = [], code }, dispatch] =
-    useContext(StoreContext);
+  const [
+    { visibleWidths = [], visibleThemes = [], code, editorPosition },
+    dispatch,
+  ] = useContext(StoreContext);
 
   const hasThemes =
     availableThemes.filter(
@@ -45,7 +49,7 @@ const HeaderMenu = () => {
           </span>
         }
       >
-        <Menu trigger="Configure Frames">
+        <Menu trigger="Configure frames">
           <MenuGroup label="Widths">
             {availableWidths.map((width) => (
               <MenuCheckboxItem
@@ -113,6 +117,21 @@ const HeaderMenu = () => {
               </MenuGroup>
             </>
           ) : null}
+        </Menu>
+
+        <Menu trigger="Editor position">
+          <MenuRadioGroup
+            value={editorPosition}
+            onValueChange={(value) =>
+              dispatch({
+                type: 'updateEditorPosition',
+                payload: { position: value as EditorPosition },
+              })
+            }
+          >
+            <MenuRadioItem value="bottom">Bottom</MenuRadioItem>
+            <MenuRadioItem value="right">Right</MenuRadioItem>
+          </MenuRadioGroup>
         </Menu>
 
         <MenuItem
