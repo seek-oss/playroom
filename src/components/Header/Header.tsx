@@ -5,6 +5,7 @@ import availableWidths from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { Dialog } from '../Dialog/Dialog';
+import { KeyboardShortcuts } from '../KeyboardShortcuts/KeyboardShortcuts';
 import { Logo } from '../Logo/Logo';
 import {
   Menu,
@@ -13,13 +14,15 @@ import {
   MenuItem,
   MenuSeparator,
 } from '../Menu/Menu';
-import PreviewPanel from '../PreviewDialog/PreviewDialog';
+import PreviewPanel from '../PreviewSelection/PreviewDialog';
 
 import * as styles from './Header.css';
 
 const HeaderMenu = () => {
-  const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
+  const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
+  const [keyboardShortcutsDialogOpen, setKeyboardShortcutsDialogOpen] =
+    useState(false);
   const [{ visibleWidths = [], visibleThemes = [], code }, dispatch] =
     useContext(StoreContext);
 
@@ -113,20 +116,33 @@ const HeaderMenu = () => {
         </Menu>
 
         <MenuItem
-          onClick={() => setIsPreviewDialogOpen(true)}
+          onClick={() => setPreviewDialogOpen(true)}
           disabled={code.trim().length === 0}
         >
           Preview
+        </MenuItem>
+
+        <MenuItem onClick={() => setKeyboardShortcutsDialogOpen(true)}>
+          Keyboard shortcuts
         </MenuItem>
       </Menu>
 
       {/* Preview Dialog */}
       <Dialog
         title="Preview"
-        open={isPreviewDialogOpen}
-        onOpenChange={setIsPreviewDialogOpen}
+        open={previewDialogOpen}
+        onOpenChange={setPreviewDialogOpen}
       >
         <PreviewPanel />
+      </Dialog>
+
+      {/* Keyboard shortcuts dialog */}
+      <Dialog
+        title="Keyboard shortcuts"
+        open={keyboardShortcutsDialogOpen}
+        onOpenChange={setKeyboardShortcutsDialogOpen}
+      >
+        <KeyboardShortcuts />
       </Dialog>
     </>
   );
