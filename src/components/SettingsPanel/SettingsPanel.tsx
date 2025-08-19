@@ -5,12 +5,9 @@ import {
   type EditorPosition,
   StoreContext,
 } from '../../contexts/StoreContext';
-import { isMac } from '../../utils/formatting';
-import { Box } from '../Box/Box';
 import { Heading } from '../Heading/Heading';
 import { Inline } from '../Inline/Inline';
 import { Stack } from '../Stack/Stack';
-import { Text } from '../Text/Text';
 import { ToolbarPanel } from '../ToolbarPanel/ToolbarPanel';
 import ColorModeDarkIcon from '../icons/ColorModeDarkIcon';
 import ColorModeLightIcon from '../icons/ColorModeLightIcon';
@@ -19,29 +16,6 @@ import EditorBottomIcon from '../icons/EditorBottomIcon';
 import EditorRightIcon from '../icons/EditorRightIcon';
 
 import * as styles from './SettingsPanel.css';
-
-const getKeyBindings = () => {
-  const metaKeySymbol = isMac() ? '⌘' : 'Ctrl';
-  const altKeySymbol = isMac() ? '⌥' : 'Alt';
-  const shiftKeySymbol = isMac() ? '⇧' : 'Shift';
-
-  return {
-    Find: [metaKeySymbol, 'F'],
-    'Find and replace': [metaKeySymbol, altKeySymbol, 'F'],
-    'Toggle comment': [metaKeySymbol, '/'],
-    'Wrap selection in tag': [metaKeySymbol, shiftKeySymbol, ','],
-    'Format code': [metaKeySymbol, 'S'],
-    'Insert snippet': [metaKeySymbol, 'K'],
-    'Select next occurrence': [metaKeySymbol, 'D'],
-    'Jump to line number': [metaKeySymbol, 'G'],
-    'Swap line up': [altKeySymbol, '↑'],
-    'Swap line down': [altKeySymbol, '↓'],
-    'Duplicate line up': [shiftKeySymbol, altKeySymbol, '↑'],
-    'Duplicate line down': [shiftKeySymbol, altKeySymbol, '↓'],
-    'Add cursor to prev line': [metaKeySymbol, altKeySymbol, '↑'],
-    'Add cursor to next line': [metaKeySymbol, altKeySymbol, '↓'],
-  };
-};
 
 const positionIcon: Record<EditorPosition, ReactElement> = {
   right: <EditorRightIcon />,
@@ -54,37 +28,8 @@ const colorModeIcon: Record<ColorScheme, ReactElement> = {
   system: <ColorModeSystemIcon />,
 };
 
-interface KeyboardShortcutProps {
-  keybinding: string[];
-  description: string;
-}
-
-const KeyboardShortcut = ({
-  keybinding,
-  description,
-}: KeyboardShortcutProps) => {
-  const shortcutSegments = keybinding.map((segment) => (
-    <kbd className={styles.kbd} key={`${keybinding}-${segment}`}>
-      {segment}
-    </kbd>
-  ));
-
-  return (
-    <Inline space="xsmall" alignY="center">
-      <Box flexGrow={1}>
-        <Text>{description}</Text>
-      </Box>
-      <Text size={isMac() ? 'large' : 'standard'}>
-        <div className={styles.keyboardShortcutKeys}>{shortcutSegments}</div>
-      </Text>
-    </Inline>
-  );
-};
-
 export default React.memo(() => {
   const [{ editorPosition, colorScheme }, dispatch] = useContext(StoreContext);
-
-  const keybindings = getKeyBindings();
 
   return (
     <ToolbarPanel>
@@ -164,17 +109,6 @@ export default React.memo(() => {
             </Inline>
           </Stack>
         </fieldset>
-
-        <Stack space="medium">
-          <Heading level="3">Keyboard Shortcuts</Heading>
-          {Object.entries(keybindings).map(([description, keybinding]) => (
-            <KeyboardShortcut
-              description={description}
-              keybinding={keybinding}
-              key={description}
-            />
-          ))}
-        </Stack>
       </Stack>
     </ToolbarPanel>
   );
