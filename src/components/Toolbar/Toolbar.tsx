@@ -5,27 +5,17 @@ import { CSSTransition } from 'react-transition-group';
 import snippets from '../../configModules/snippets';
 import { StoreContext } from '../../contexts/StoreContext';
 import { isMac } from '../../utils/formatting';
-import FramesPanel from '../FramesPanel/FramesPanel';
 import Snippets from '../Snippets/Snippets';
 import ToolbarItem from '../ToolbarItem/ToolbarItem';
 import { ANIMATION_DURATION_SLOW } from '../constants';
 import AddIcon from '../icons/AddIcon';
-import FramesIcon from '../icons/FramesIcon';
 
 import * as styles from './Toolbar.css';
 
 export default () => {
-  const [
-    {
-      visibleThemes = [],
-      visibleWidths = [],
-      activeToolbarPanel,
-      validCursorPosition,
-    },
-    dispatch,
-  ] = useContext(StoreContext);
+  const [{ activeToolbarPanel, validCursorPosition }, dispatch] =
+    useContext(StoreContext);
   const isSnippetsOpen = activeToolbarPanel === 'snippets';
-  const isFramesOpen = activeToolbarPanel === 'frames';
 
   const [lastActivePanel, setLastActivePanel] =
     useState<typeof activeToolbarPanel>(undefined);
@@ -37,8 +27,6 @@ export default () => {
   }, [activeToolbarPanel]);
 
   const hasSnippets = snippets && snippets.length > 0;
-  const hasFilteredFrames =
-    visibleThemes.length > 0 || visibleWidths.length > 0;
   const isOpen = Boolean(activeToolbarPanel);
 
   const panelRef = useRef<HTMLDivElement>(null);
@@ -73,19 +61,6 @@ export default () => {
                 <AddIcon />
               </ToolbarItem>
             )}
-            <ToolbarItem
-              active={isFramesOpen}
-              showIndicator={hasFilteredFrames}
-              title="Configure visible frames"
-              onClick={() => {
-                dispatch({
-                  type: 'toggleToolbar',
-                  payload: { panel: 'frames' },
-                });
-              }}
-            >
-              <FramesIcon />
-            </ToolbarItem>
           </div>
         </div>
         <CSSTransition
@@ -119,8 +94,6 @@ export default () => {
                 }}
               />
             )}
-
-            {lastActivePanel === 'frames' && <FramesPanel />}
           </div>
         </CSSTransition>
       </div>
