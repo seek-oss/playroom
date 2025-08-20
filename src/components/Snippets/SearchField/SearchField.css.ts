@@ -13,9 +13,11 @@ export const field = style([
   {
     color: colorPaletteVars.foreground.neutral,
     height: vars.touchableSize,
-    background: colorPaletteVars.background.surface,
-    ':focus': {
+    background: 'transparent',
+    boxShadow: `inset 0 -1px 0 0 ${colorPaletteVars.border.standard}`,
+    ':focus-visible': {
       outline: 'none',
+      boxShadow: `inset 0 -2px 0 0 ${colorPaletteVars.border.accent}`,
     },
     '::placeholder': {
       color: colorPaletteVars.foreground.neutralSoft,
