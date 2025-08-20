@@ -8,6 +8,7 @@ import {
   useReducer,
   type ReactNode,
   type Dispatch,
+  useState,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -90,7 +91,6 @@ interface State {
   statusMessage?: StatusMessage;
   visibleThemes?: string[];
   visibleWidths?: Widths;
-  ready: boolean;
   colorScheme: ColorScheme;
 }
 
@@ -387,7 +387,6 @@ const initialState: State = {
   editorPosition: defaultPosition,
   editorHeight: defaultEditorSize,
   editorWidth: defaultEditorSize,
-  ready: false,
   colorScheme: 'system',
 };
 
@@ -397,6 +396,7 @@ export const StoreContext = createContext<StoreContextValues>([
 ]);
 
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
+  const [ready, setReady] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedCodeUpdate = useDebouncedCallback(
     (params: DebounceUpdateUrl) => {
@@ -498,9 +498,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
             ...(visibleWidths ? { visibleWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
             title: titleFromQuery,
-            ready: true,
           },
         });
+
+        setReady(true);
       }
     );
   }, [hasThemesConfigured]);
@@ -542,7 +543,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <StoreContext.Provider value={[state, dispatch]}>
-      {children}
+      {ready ? children : null}
     </StoreContext.Provider>
   );
 };
