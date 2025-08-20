@@ -1,8 +1,7 @@
-import { style, globalStyle, keyframes, createVar } from '@vanilla-extract/css';
+import { style, globalStyle, keyframes } from '@vanilla-extract/css';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
-import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
 const minimumLineNumberWidth = '50px';
 
@@ -233,25 +232,22 @@ globalStyle('.cm-s-neo .cm-number', {
   color: colorPaletteVars.code.number,
 });
 
+const searchOffset = vars.touchableSize;
 globalStyle('.CodeMirror-dialog', {
   paddingLeft: vars.space.medium,
   paddingRight: vars.space.medium,
-  minHeight: toolbarItemSize,
+  minHeight: searchOffset,
   borderBottom: `1px solid ${colorPaletteVars.border.standard}`,
   display: 'flex',
   alignItems: 'center',
 });
 
-const searchOffset = createVar();
 globalStyle('.CodeMirror-scroll', {
-  transform: `translateY(${searchOffset})`,
   transition: vars.transition.fast,
 });
 
 globalStyle('.dialog-opened .CodeMirror-scroll', {
-  vars: {
-    [searchOffset]: `${toolbarItemSize}px`,
-  },
+  transform: `translateY(${searchOffset})`,
 });
 
 globalStyle('.dialog-opened .CodeMirror-lines', {

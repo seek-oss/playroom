@@ -14,7 +14,6 @@ import { CodeEditor } from '../CodeEditor/CodeEditor';
 import Frames from '../Frames/Frames';
 import { Header } from '../Header/Header';
 import { StatusMessage } from '../StatusMessage/StatusMessage';
-import Toolbar from '../Toolbar/Toolbar';
 import { ANIMATION_DURATION_SLOW } from '../constants';
 
 import { ResizeHandle } from './ResizeHandle';
@@ -147,9 +146,6 @@ export default () => {
             previewCode={previewEditorCode}
           />
           <StatusMessage />
-          <div className={styles.toolbarContainer}>
-            <Toolbar />
-          </div>
         </div>
       </Box>
     </Box>
