@@ -120,7 +120,7 @@ export const CodeEditor = ({
 
         if (cmdOrCtrl && e.key === 'k') {
           e.preventDefault();
-          dispatch({ type: 'toggleToolbar', payload: { panel: 'snippets' } });
+          dispatch({ type: 'openSnippets' });
         }
 
         // Prevent browser keyboard shortcuts when the search/replace input is focused

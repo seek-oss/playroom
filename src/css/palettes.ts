@@ -90,6 +90,7 @@ export const light = {
   },
   border: {
     standard: originalPalette.gray2,
+    accent: originalPalette.blue2,
   },
   outline: {
     focus: originalPalette.blue2,
@@ -195,6 +196,7 @@ export const dark = {
   },
   border: {
     standard: seekPalette.grey[800],
+    accent: seekPalette.blue[500],
   },
   outline: {
     focus: seekPalette.blue[400],
