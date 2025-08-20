@@ -3,7 +3,6 @@ import { calc } from '@vanilla-extract/css-utils';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
-import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
 const statusGutter = '15px';
 const icon = '16px';
@@ -31,7 +30,6 @@ export const status = style([
     top: vars.space.large,
     height: vars.space.xlarge,
     maxWidth: calc('100dvw')
-      .subtract(`${toolbarItemSize}px`)
       .subtract(calc(vars.codeGutterSize).multiply(2))
       .toString(),
     selectors: {

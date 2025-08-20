@@ -74,7 +74,6 @@ interface StatusMessage {
   tone: 'positive' | 'critical';
 }
 
-type ToolbarPanel = 'snippets' | 'frames' | 'preview' | 'settings';
 interface State {
   code: string;
   title?: string;
@@ -82,7 +81,6 @@ interface State {
   previewEditorCode?: string;
   highlightLineNumber?: number;
   snippetsOpen: boolean;
-  activeToolbarPanel?: ToolbarPanel;
   validCursorPosition: boolean;
   cursorPosition: CursorPosition;
   editorHidden: boolean;
@@ -105,7 +103,6 @@ type Action =
     }
   | { type: 'persistSnippet'; payload: { snippet: Snippet } }
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
-  | { type: 'toggleToolbar'; payload: { panel: ToolbarPanel } }
   | { type: 'openSnippets' }
   | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
@@ -186,7 +183,6 @@ const reducer = (state: State, action: Action): State => {
 
     case 'persistSnippet': {
       const { snippet } = action.payload;
-      const { activeToolbarPanel, ...currentState } = state;
 
       const { code, cursor } = formatAndInsert({
         code: state.code,
@@ -195,7 +191,7 @@ const reducer = (state: State, action: Action): State => {
       });
 
       return {
-        ...resetPreview(currentState),
+        ...resetPreview(state),
         code,
         cursorPosition: cursor,
       };
@@ -232,32 +228,6 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         previewRenderCode,
       };
-    }
-
-    case 'toggleToolbar': {
-      const { panel } = action.payload;
-      const { activeToolbarPanel: currentPanel, ...currentState } = state;
-      const shouldOpen = panel !== currentPanel;
-
-      if (shouldOpen) {
-        if (panel === 'preview' && state.code.trim().length === 0) {
-          return {
-            ...state,
-            statusMessage: {
-              message: 'Must have code to preview',
-              tone: 'critical',
-            },
-          };
-        }
-
-        return {
-          ...resetPreview(currentState),
-          statusMessage: undefined,
-          activeToolbarPanel: panel,
-        };
-      }
-
-      return resetPreview(currentState);
     }
 
     case 'openSnippets': {
@@ -298,7 +268,6 @@ const reducer = (state: State, action: Action): State => {
     case 'hideEditor': {
       return {
         ...state,
-        activeToolbarPanel: undefined,
         editorHidden: true,
       };
     }
