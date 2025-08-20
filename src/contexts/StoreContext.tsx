@@ -28,9 +28,7 @@ const store = localforage.createInstance({
 });
 
 const defaultEditorSize = '40%';
-const defaultPosition = 'bottom';
 
-export type EditorPosition = 'bottom' | 'right';
 export type ColorScheme = 'light' | 'dark' | 'system';
 
 const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
@@ -85,7 +83,6 @@ interface State {
   validCursorPosition: boolean;
   cursorPosition: CursorPosition;
   editorHidden: boolean;
-  editorPosition: EditorPosition;
   editorHeight: string;
   editorWidth: string;
   statusMessage?: StatusMessage;
@@ -112,10 +109,6 @@ type Action =
   | {
       type: 'updateColorScheme';
       payload: { colorScheme: ColorScheme };
-    }
-  | {
-      type: 'updateEditorPosition';
-      payload: { position: EditorPosition };
     }
   | { type: 'updateEditorHeight'; payload: { size: number } }
   | { type: 'updateEditorWidth'; payload: { size: number } }
@@ -289,16 +282,6 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case 'updateEditorPosition': {
-      const { position } = action.payload;
-      store.setItem('editorPosition', position);
-
-      return {
-        ...state,
-        editorPosition: position,
-      };
-    }
-
     case 'updateEditorHeight': {
       const { size } = action.payload;
 
@@ -384,7 +367,6 @@ const initialState: State = {
   cursorPosition: { line: 0, ch: 0 },
   snippetsOpen: false,
   editorHidden: false,
-  editorPosition: defaultPosition,
   editorHeight: defaultEditorSize,
   editorWidth: defaultEditorSize,
   colorScheme: 'system',
@@ -442,7 +424,6 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
     Promise.all([
       store.getItem<string>('code'),
-      store.getItem<EditorPosition>('editorPosition'),
       store.getItem<string | number>('editorHeight'), // Number type deprecated
       store.getItem<string | number>('editorWidth'), // Number type deprecated
       store.getItem<number[]>('visibleWidths'),
@@ -451,7 +432,6 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     ]).then(
       ([
         storedCode,
-        storedPosition,
         storedHeight,
         storedWidth,
         storedVisibleWidths,
@@ -459,7 +439,6 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         storedColorScheme,
       ]) => {
         const code = codeFromQuery || storedCode || exampleCode;
-        const editorPosition = storedPosition;
 
         const editorHeight =
           (typeof storedHeight === 'number'
@@ -490,7 +469,6 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
           type: 'initialLoad',
           payload: {
             ...(code ? { code } : {}),
-            ...(editorPosition ? { editorPosition } : {}),
             ...(editorHeight ? { editorHeight } : {}),
             ...(editorWidth ? { editorWidth } : {}),
             ...(editorHidden ? { editorHidden } : {}),

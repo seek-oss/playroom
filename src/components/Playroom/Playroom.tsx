@@ -7,7 +7,11 @@ import {
   useState,
 } from 'react';
 
-import { StoreContext, type EditorPosition } from '../../contexts/StoreContext';
+import {
+  usePreferences,
+  type EditorOrientation,
+} from '../../contexts/PreferencesContext';
+import { StoreContext } from '../../contexts/StoreContext';
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
@@ -35,17 +39,16 @@ const getTitle = (title: string | undefined) => {
 };
 
 const resizeHandlePosition: Record<
-  EditorPosition,
+  EditorOrientation,
   ComponentProps<typeof ResizeHandle>['position']
 > = {
-  bottom: 'top',
-  right: 'left',
+  horizontal: 'top',
+  vertical: 'right',
 } as const;
 
 export default () => {
   const [
     {
-      editorPosition,
       editorHeight,
       editorWidth,
       editorHidden,
@@ -56,9 +59,9 @@ export default () => {
     },
     dispatch,
   ] = useContext(StoreContext);
-
   useDocumentTitle({ title });
 
+  const { editorOrientation } = usePreferences();
   const editorRef = useRef<HTMLElement | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [resizing, setResizing] = useState(false);
@@ -78,7 +81,7 @@ export default () => {
     };
   }, [editorHidden]);
 
-  const isVerticalEditor = editorPosition === 'right';
+  const isVerticalEditor = editorOrientation === 'vertical';
   const editorSize = isVerticalEditor ? editorWidth : editorHeight;
 
   return (
@@ -87,7 +90,7 @@ export default () => {
       className={{
         [styles.root]: true,
         [styles.resizing]: resizing,
-        [styles.editorPosition[editorPosition]]: true,
+        [styles.editorOrientation[editorOrientation]]: true,
         [styles.editorTransition]: lastEditorHidden !== editorHidden,
       }}
       style={assignInlineVars({
@@ -113,7 +116,7 @@ export default () => {
         <div className={styles.editorContainer}>
           <ResizeHandle
             ref={editorRef}
-            position={resizeHandlePosition[editorPosition]}
+            position={resizeHandlePosition[editorOrientation]}
             onResize={(newValue) => {
               dispatch({
                 type: isVerticalEditor
