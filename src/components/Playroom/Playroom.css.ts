@@ -7,20 +7,9 @@ import {
 } from '@vanilla-extract/css';
 
 import { space, comma, newline } from '../../css/delimiters';
-import {
-  ANIMATION_DURATION_SLOW,
-  toolbarItemCount,
-  toolbarOpenSize,
-} from '../constants';
+import { ANIMATION_DURATION_SLOW } from '../constants';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
-import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
-
-const MIN_HEIGHT = `${toolbarItemSize * toolbarItemCount}px`;
-const MIN_WIDTH = `${toolbarOpenSize + toolbarItemSize + 80}px`;
-
-const MAX_HEIGHT = '70vh';
-const MAX_WIDTH = '90vw';
 
 globalStyle('html, body', {
   margin: 0,
@@ -71,7 +60,7 @@ export const editorPosition = styleVariants({
   bottom: [
     {
       vars: {
-        [bottomEditorHeight]: `clamp(${MIN_HEIGHT}, ${editorSize}, ${MAX_HEIGHT})`,
+        [bottomEditorHeight]: `clamp(150px, ${editorSize}, 70vh)`,
       },
       gridTemplateAreas: newline(
         '"header header"',
@@ -83,7 +72,7 @@ export const editorPosition = styleVariants({
   right: [
     {
       vars: {
-        [rightEditorWidth]: `clamp(${MIN_WIDTH}, ${editorSize}, ${MAX_WIDTH})`,
+        [rightEditorWidth]: `clamp(150px, ${editorSize}, 90vw)`,
       },
       gridTemplateAreas: newline(
         '"header header"',
@@ -120,11 +109,4 @@ export const framesContainer = sprinkles({
 export const editorContainer = sprinkles({
   position: 'absolute',
   inset: 0,
-});
-
-export const toolbarContainer = sprinkles({
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  right: 0,
 });
