@@ -8,14 +8,24 @@ export const root = style([
   sprinkles({
     paddingX: 'xlarge',
     paddingY: 'small',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   }),
   {
+    display: 'grid',
+    gridTemplateColumns: '1fr auto 1fr',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: colorPaletteVars.background.surface,
   },
 ]);
+
+export const menuContainer = style({
+  width: 'fit-content',
+});
+
+export const actionsContainer = style({
+  width: 'fit-content',
+  justifySelf: 'flex-end',
+});
 
 export const menuButton = style([
   {

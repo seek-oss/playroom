@@ -21,6 +21,7 @@ import {
   MenuSeparator,
 } from '../Menu/Menu';
 import PreviewPanel from '../PreviewSelection/PreviewDialog';
+import { Title } from '../Title/Title';
 
 import * as styles from './Header.css';
 
@@ -209,6 +210,13 @@ const HeaderMenu = () => {
 
 export const Header = () => (
   <Box className={styles.root}>
-    <HeaderMenu />
+    <div className={styles.menuContainer}>
+      <HeaderMenu />
+    </div>
+
+    <Title />
+
+    {/* Empty placeholder for now */}
+    <div className={styles.actionsContainer} />
   </Box>
 );
