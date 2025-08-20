@@ -6,34 +6,19 @@ import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
 export const root = sprinkles({
   position: 'relative',
-  overflow: 'hidden',
-  height: 'full',
 });
 
 export const fieldContainer = style([
   sprinkles({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
     display: 'flex',
     alignItems: 'center',
-    paddingX: 'xxsmall',
   }),
-  {
-    height: toolbarItemSize,
-    boxShadow: `inset 0 -1px 0 0 ${colorPaletteVars.border.standard}`,
-  },
 ]);
 
 const snippetsBorderSpace = 'xxsmall';
 
 export const snippetsContainer = style([
   sprinkles({
-    position: 'absolute',
-    left: 0,
-    bottom: 0,
-    right: 0,
     overflow: 'auto',
     paddingX: 'none',
     paddingY: snippetsBorderSpace,
@@ -41,7 +26,7 @@ export const snippetsContainer = style([
   }),
   {
     listStyle: 'none',
-    top: toolbarItemSize,
+    height: 300,
     /*
       These pseudo-elements create a buffer area at the top and bottom of the list, the same size as the scroll margin.
       This prevents auto-scrolling when the cursor enters a snippet in the scroll margin, by preventing the element from being selected.
@@ -74,7 +59,6 @@ export const snippet = style([
     cursor: 'pointer',
     paddingY: 'small',
     paddingX: 'medium',
-    marginX: snippetsBorderSpace,
   }),
   {
     scrollMarginBlock: vars.space[snippetsBorderSpace],

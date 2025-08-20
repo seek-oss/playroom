@@ -37,6 +37,7 @@ export const colorPaletteVars = createThemeContract({
   },
   border: {
     standard: null,
+    accent: null,
   },
   outline: {
     focus: null,
