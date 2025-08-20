@@ -1,5 +1,6 @@
 import { useContext, useRef, useState } from 'react';
 
+import snippets from '../../configModules/snippets';
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import {
@@ -21,12 +22,14 @@ import {
   MenuSeparator,
 } from '../Menu/Menu';
 import PreviewPanel from '../PreviewSelection/PreviewDialog';
+import Snippets from '../Snippets/Snippets';
 import { Title } from '../Title/Title';
 
 import * as styles from './Header.css';
 
 const HeaderMenu = () => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
+  const snippetsSearchRef = useRef<HTMLInputElement>(null);
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
   const [keyboardShortcutsDialogOpen, setKeyboardShortcutsDialogOpen] =
     useState(false);
@@ -38,10 +41,13 @@ const HeaderMenu = () => {
       editorPosition,
       editorHidden,
       colorScheme,
+      validCursorPosition,
+      snippetsOpen,
     },
     dispatch,
   ] = useContext(StoreContext);
 
+  const hasSnippets = snippets && snippets.length > 0;
   const hasThemes =
     availableThemes.filter(
       (themeName) => themeName !== '__PLAYROOM__NO_THEME__'
@@ -61,6 +67,15 @@ const HeaderMenu = () => {
           </span>
         }
       >
+        {hasSnippets && (
+          <MenuItem
+            onClick={() => dispatch({ type: 'openSnippets' })}
+            disabled={!validCursorPosition}
+          >
+            Insert snippet...
+          </MenuItem>
+        )}
+
         <Menu trigger="Theme">
           <MenuRadioGroup
             value={colorScheme}
@@ -196,6 +211,31 @@ const HeaderMenu = () => {
           Keyboard shortcuts
         </MenuItem>
       </Menu>
+
+      {/* Snippets Dialog */}
+      {hasSnippets && (
+        <Dialog
+          title="Insert snippet"
+          open={snippetsOpen}
+          onOpenChange={() => dispatch({ type: 'closeSnippets' })}
+          initialFocus={snippetsSearchRef}
+          finalFocus={menuTriggerRef}
+        >
+          <Snippets
+            searchRef={snippetsSearchRef}
+            onSelect={(snippet) => {
+              if (snippet) {
+                dispatch({
+                  type: 'persistSnippet',
+                  payload: { snippet },
+                });
+              } else {
+                dispatch({ type: 'closeSnippets' });
+              }
+            }}
+          />
+        </Dialog>
+      )}
 
       {/* Preview Dialog */}
       <Dialog

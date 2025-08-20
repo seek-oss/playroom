@@ -81,6 +81,7 @@ interface State {
   previewRenderCode?: string;
   previewEditorCode?: string;
   highlightLineNumber?: number;
+  snippetsOpen: boolean;
   activeToolbarPanel?: ToolbarPanel;
   validCursorPosition: boolean;
   cursorPosition: CursorPosition;
@@ -105,7 +106,8 @@ type Action =
   | { type: 'persistSnippet'; payload: { snippet: Snippet } }
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
   | { type: 'toggleToolbar'; payload: { panel: ToolbarPanel } }
-  | { type: 'closeToolbar' }
+  | { type: 'openSnippets' }
+  | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
   | { type: 'copyToClipboard'; payload: { content: string; message?: string } }
@@ -134,7 +136,10 @@ const resetPreview = ({
   previewEditorCode,
   highlightLineNumber,
   ...state
-}: State): State => state;
+}: State): State => ({
+  ...state,
+  snippetsOpen: false,
+});
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -245,37 +250,6 @@ const reducer = (state: State, action: Action): State => {
           };
         }
 
-        if (panel === 'snippets') {
-          const validCursorPosition = isValidLocation({
-            code: currentState.code,
-            cursor: currentState.cursorPosition,
-          });
-
-          if (!validCursorPosition) {
-            return {
-              ...currentState,
-              statusMessage: {
-                message: "Can't insert snippet at cursor",
-                tone: 'critical',
-              },
-              validCursorPosition,
-            };
-          }
-
-          const { code, cursor } = formatForInsertion({
-            code: currentState.code,
-            cursor: currentState.cursorPosition,
-          });
-
-          return {
-            ...currentState,
-            statusMessage: undefined,
-            activeToolbarPanel: panel,
-            previewEditorCode: code,
-            highlightLineNumber: cursor.line,
-          };
-        }
-
         return {
           ...resetPreview(currentState),
           statusMessage: undefined,
@@ -286,10 +260,39 @@ const reducer = (state: State, action: Action): State => {
       return resetPreview(currentState);
     }
 
-    case 'closeToolbar': {
-      const { activeToolbarPanel, ...currentState } = state;
+    case 'openSnippets': {
+      const validCursorPosition = isValidLocation({
+        code: state.code,
+        cursor: state.cursorPosition,
+      });
 
-      return resetPreview(currentState);
+      if (!validCursorPosition) {
+        return {
+          ...state,
+          statusMessage: {
+            message: "Can't insert snippet at cursor",
+            tone: 'critical',
+          },
+          validCursorPosition,
+        };
+      }
+
+      const { code, cursor } = formatForInsertion({
+        code: state.code,
+        cursor: state.cursorPosition,
+      });
+
+      return {
+        ...state,
+        snippetsOpen: true,
+        statusMessage: undefined,
+        previewEditorCode: code,
+        highlightLineNumber: cursor.line,
+      };
+    }
+
+    case 'closeSnippets': {
+      return resetPreview(state);
     }
 
     case 'hideEditor': {
@@ -410,6 +413,7 @@ const initialState: State = {
   code: exampleCode,
   validCursorPosition: true,
   cursorPosition: { line: 0, ch: 0 },
+  snippetsOpen: false,
   editorHidden: false,
   editorPosition: defaultPosition,
   editorHeight: defaultEditorSize,

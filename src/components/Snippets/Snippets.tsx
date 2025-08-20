@@ -1,10 +1,18 @@
 import clsx from 'clsx';
 import Fuse from 'fuse.js';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useContext,
+  type RefObject,
+} from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 import type { Snippet } from '../../../utils';
 import snippets from '../../configModules/snippets';
+import { StoreContext } from '../../contexts/StoreContext';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 
@@ -14,11 +22,6 @@ import * as styles from './Snippets.css';
 
 type HighlightIndex = number | null;
 type ReturnedSnippet = Snippet | null;
-interface Props {
-  isOpen: boolean;
-  onHighlight?: (snippet: ReturnedSnippet) => void;
-  onClose?: (snippet: ReturnedSnippet) => void;
-}
 
 const getLabel = (snippet: Snippet) => `${snippet.group}\n${snippet.name}`;
 
@@ -40,10 +43,17 @@ const fuse = new Fuse(snippets, {
   ],
 });
 
-export default ({ isOpen, onHighlight, onClose }: Props) => {
+export default ({
+  onSelect,
+  searchRef,
+}: {
+  onSelect: (snippet: ReturnedSnippet) => void;
+  searchRef?: RefObject<HTMLInputElement | null>;
+}) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [highlightedIndex, setHighlightedIndex] =
     useState<HighlightIndex>(null);
+  const [, dispatch] = useContext(StoreContext);
 
   const listEl = useRef<HTMLUListElement | null>(null);
   const highlightedEl = useRef<HTMLLIElement | null>(null);
@@ -56,20 +66,12 @@ export default ({ isOpen, onHighlight, onClose }: Props) => {
     [searchTerm]
   );
 
-  const closeHandler = (returnValue: ReturnedSnippet) => {
-    if (typeof onClose === 'function') {
-      onClose(returnValue);
-    }
-  };
-
-  const debouncedPreview = useDebouncedCallback(
-    (previewSnippet: ReturnedSnippet) => {
-      if (typeof onHighlight === 'function') {
-        onHighlight(previewSnippet);
-      }
-    },
-    50
-  );
+  const debouncedPreview = useDebouncedCallback((snippet: ReturnedSnippet) => {
+    dispatch({
+      type: 'previewSnippet',
+      payload: { snippet },
+    });
+  }, 50);
 
   if (
     typeof highlightedIndex === 'number' &&
@@ -94,6 +96,7 @@ export default ({ isOpen, onHighlight, onClose }: Props) => {
     <div className={styles.root}>
       <div className={styles.fieldContainer}>
         <SearchField
+          ref={searchRef}
           value={searchTerm}
           onChange={(e) => {
             const { value } = e.currentTarget;
@@ -131,9 +134,9 @@ export default ({ isOpen, onHighlight, onClose }: Props) => {
               // reset index when character typed in field
               setHighlightedIndex(0);
             } else if (event.key === 'Enter' && highlightedIndex !== null) {
-              closeHandler(filteredSnippets[highlightedIndex]);
+              onSelect(filteredSnippets[highlightedIndex]);
             } else if (event.key === 'Escape') {
-              closeHandler(null);
+              onSelect(null);
             }
           }}
         />
@@ -155,13 +158,9 @@ export default ({ isOpen, onHighlight, onClose }: Props) => {
                 [styles.highlight]: isHighlighted,
               })}
               onMouseMove={
-                isOpen && !isHighlighted
-                  ? () => {
-                      setHighlightedIndex(index);
-                    }
-                  : undefined
+                !isHighlighted ? () => setHighlightedIndex(index) : undefined
               }
-              onMouseDown={() => closeHandler(filteredSnippets[index])}
+              onMouseDown={() => onSelect(filteredSnippets[index])}
               title={getLabel(snippet)}
             >
               <Stack space="none">

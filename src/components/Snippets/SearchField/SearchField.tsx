@@ -1,4 +1,4 @@
-import type { AllHTMLAttributes } from 'react';
+import { forwardRef, type AllHTMLAttributes } from 'react';
 
 import * as styles from './SearchField.css';
 
@@ -13,25 +13,30 @@ interface Props {
   onKeyDown?: InputProps['onKeyDown'];
 }
 
-export default ({
-  value,
-  placeholder,
-  'aria-label': ariaLabel,
-  onChange,
-  onBlur,
-  onKeyUp,
-  onKeyDown,
-}: Props) => (
-  <input
-    type="search"
-    placeholder={placeholder}
-    aria-label={ariaLabel}
-    autoFocus
-    value={value}
-    onChange={onChange}
-    onBlur={onBlur}
-    onKeyUp={onKeyUp}
-    onKeyDown={onKeyDown}
-    className={styles.field}
-  />
+export default forwardRef<HTMLInputElement, Props>(
+  (
+    {
+      value,
+      placeholder,
+      'aria-label': ariaLabel,
+      onChange,
+      onBlur,
+      onKeyUp,
+      onKeyDown,
+    },
+    ref
+  ) => (
+    <input
+      ref={ref}
+      type="search"
+      placeholder={placeholder}
+      aria-label={ariaLabel}
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      onKeyUp={onKeyUp}
+      onKeyDown={onKeyDown}
+      className={styles.field}
+    />
+  )
 );

@@ -16,6 +16,7 @@ interface Props {
   title: string;
   open: BaseUIDialogRoot['open'];
   onOpenChange: NonNullable<BaseUIDialogRoot['onOpenChange']>;
+  initialFocus?: BaseUIDialogPopup['initialFocus'];
   finalFocus?: BaseUIDialogPopup['finalFocus'];
   children: BaseUIDialogPopup['children'];
 }
@@ -25,6 +26,7 @@ export const Dialog = ({
   open,
   onOpenChange,
   finalFocus,
+  initialFocus,
   children,
 }: Props) => {
   const titleId = useId();
@@ -36,6 +38,7 @@ export const Dialog = ({
         <BaseUIDialog.Backdrop className={styles.backdrop} />
         <BaseUIDialog.Popup
           className={styles.popup}
+          initialFocus={initialFocus || headingRef}
           aria-labelledby={titleId}
           finalFocus={finalFocus}
         >
@@ -47,8 +50,10 @@ export const Dialog = ({
               gap="small"
               flexGrow={1}
             >
-              <Heading ref={headingRef} level="3" id={titleId}>
-                {title}
+              <Heading level="3">
+                <span ref={headingRef} tabIndex={-1} id={titleId}>
+                  {title}
+                </span>
               </Heading>
               <BaseUIDialog.Close
                 render={
