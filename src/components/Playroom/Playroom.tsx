@@ -52,7 +52,6 @@ export default () => {
       code,
       previewRenderCode,
       previewEditorCode,
-      ready,
       title,
     },
     dispatch,
@@ -79,7 +78,7 @@ export default () => {
   const isVerticalEditor = editorPosition === 'right';
   const editorSize = isVerticalEditor ? editorWidth : editorHeight;
 
-  return !ready ? null : (
+  return (
     <Box
       component="main"
       className={{
