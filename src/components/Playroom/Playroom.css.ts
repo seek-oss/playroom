@@ -14,7 +14,6 @@ import {
 } from '../constants';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
-import { vars } from '../../css/vars.css';
 import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
 
 const MIN_HEIGHT = `${toolbarItemSize * toolbarItemCount}px`;
@@ -111,63 +110,6 @@ export const editor = style([
     overflow: 'hidden',
     boxShadow: 'small',
   }),
-]);
-
-export const toggleEditorContainer = style([
-  sprinkles({
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    display: 'flex',
-    justifyContent: 'center',
-  }),
-  {
-    selectors: {
-      [`${editorPosition.bottom} &`]: {
-        width: toolbarItemSize,
-      },
-    },
-  },
-]);
-
-export const toggleEditorButton = style([
-  sprinkles({
-    position: 'relative',
-    borderRadius: 'medium',
-    padding: 'none',
-    cursor: 'pointer',
-    width: 'full',
-    appearance: 'none',
-    border: 0,
-  }),
-  {
-    background: 'transparent',
-    WebkitTapHighlightColor: 'transparent',
-    outline: 'none',
-    minWidth: vars.touchableSize,
-    height: vars.touchableSize,
-    selectors: {
-      [`&:not(:hover):not(:focus)`]: {
-        opacity: 0.3,
-      },
-      [`&:hover::before, &:focus::before`]: {
-        opacity: 0.05,
-      },
-    },
-    '::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      backgroundColor: 'currentColor',
-      opacity: 0,
-      pointerEvents: 'none',
-      borderRadius: vars.radii.medium,
-      transition: vars.transition.slow,
-    },
-  },
 ]);
 
 export const framesContainer = sprinkles({

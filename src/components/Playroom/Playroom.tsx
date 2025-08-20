@@ -16,22 +16,10 @@ import { Header } from '../Header/Header';
 import { StatusMessage } from '../StatusMessage/StatusMessage';
 import Toolbar from '../Toolbar/Toolbar';
 import { ANIMATION_DURATION_SLOW } from '../constants';
-import ChevronIcon from '../icons/ChevronIcon';
 
 import { ResizeHandle } from './ResizeHandle';
 
 import * as styles from './Playroom.css';
-
-const resolveDirection = (
-  editorPosition: EditorPosition,
-  editorHidden: boolean
-) => {
-  if (editorPosition === 'right') {
-    return editorHidden ? 'left' : 'right';
-  }
-
-  return editorHidden ? 'up' : 'down';
-};
 
 const getTitle = (title: string | undefined) => {
   if (title) {
@@ -115,20 +103,6 @@ export default () => {
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
           <Frames code={previewRenderCode || code} />
-        </Box>
-        <Box className={styles.toggleEditorContainer}>
-          <button
-            className={styles.toggleEditorButton}
-            title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
-            onClick={() =>
-              dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
-            }
-          >
-            <ChevronIcon
-              size={16}
-              direction={resolveDirection(editorPosition, editorHidden)}
-            />
-          </button>
         </Box>
       </Box>
 

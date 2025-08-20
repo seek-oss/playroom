@@ -36,6 +36,7 @@ const HeaderMenu = () => {
       visibleThemes = [],
       code,
       editorPosition,
+      editorHidden,
       colorScheme,
     },
     dispatch,
@@ -90,6 +91,15 @@ const HeaderMenu = () => {
             <MenuRadioItem value="right">Right</MenuRadioItem>
           </MenuRadioGroup>
         </Menu>
+
+        <MenuCheckboxItem
+          checked={editorHidden}
+          onCheckedChange={() =>
+            dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
+          }
+        >
+          Hide editor
+        </MenuCheckboxItem>
 
         <Menu trigger="Configure frames">
           <MenuGroup label="Widths">
