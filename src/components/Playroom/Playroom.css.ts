@@ -27,8 +27,8 @@ export const resizing = style({
   userSelect: 'none',
 });
 
-const bottomEditorHeight = createVar();
-const rightEditorWidth = createVar();
+const editorHeight = createVar();
+const editorWidth = createVar();
 export const editorSize = createVar();
 export const assistantWidth = createVar();
 export const root = style([
@@ -38,11 +38,11 @@ export const root = style([
   }),
   {
     display: 'grid',
-    gridTemplateColumns: space('1fr', fallbackVar(rightEditorWidth, '0px')),
+    gridTemplateColumns: space(fallbackVar(editorWidth, '0px'), '1fr'),
     gridTemplateRows: space(
       'min-content',
       'auto',
-      fallbackVar(bottomEditorHeight, '0px')
+      fallbackVar(editorHeight, '0px')
     ),
     willChange: comma('grid-template-columns', 'grid-template-rows'),
     isolation: 'isolate',
@@ -56,11 +56,11 @@ export const editorTransition = style({
   ),
 });
 
-export const editorPosition = styleVariants({
-  bottom: [
+export const editorOrientation = styleVariants({
+  horizontal: [
     {
       vars: {
-        [bottomEditorHeight]: `clamp(150px, ${editorSize}, 70vh)`,
+        [editorHeight]: `clamp(150px, ${editorSize}, 70vh)`,
       },
       gridTemplateAreas: newline(
         '"header header"',
@@ -69,15 +69,15 @@ export const editorPosition = styleVariants({
       ),
     },
   ],
-  right: [
+  vertical: [
     {
       vars: {
-        [rightEditorWidth]: `clamp(150px, ${editorSize}, 90vw)`,
+        [editorWidth]: `clamp(150px, ${editorSize}, 90vw)`,
       },
       gridTemplateAreas: newline(
         '"header header"',
-        '"frames editor"',
-        '"frames editor"'
+        '"editor frames"',
+        '"editor frames"'
       ),
     },
   ],

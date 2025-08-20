@@ -3,11 +3,8 @@ import { useContext, useRef, useState } from 'react';
 import snippets from '../../configModules/snippets';
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
-import {
-  type ColorScheme,
-  type EditorPosition,
-  StoreContext,
-} from '../../contexts/StoreContext';
+import { usePreferences } from '../../contexts/PreferencesContext';
+import { type ColorScheme, StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { Dialog } from '../Dialog/Dialog';
 import { KeyboardShortcuts } from '../KeyboardShortcuts/KeyboardShortcuts';
@@ -33,12 +30,12 @@ const HeaderMenu = () => {
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
   const [keyboardShortcutsDialogOpen, setKeyboardShortcutsDialogOpen] =
     useState(false);
+  const { editorOrientation, setEditorOrientation } = usePreferences();
   const [
     {
       visibleWidths = [],
       visibleThemes = [],
       code,
-      editorPosition,
       editorHidden,
       colorScheme,
       validCursorPosition,
@@ -94,16 +91,11 @@ const HeaderMenu = () => {
 
         <Menu trigger="Editor position">
           <MenuRadioGroup
-            value={editorPosition}
-            onValueChange={(value) =>
-              dispatch({
-                type: 'updateEditorPosition',
-                payload: { position: value as EditorPosition },
-              })
-            }
+            value={editorOrientation}
+            onValueChange={setEditorOrientation}
           >
-            <MenuRadioItem value="bottom">Bottom</MenuRadioItem>
-            <MenuRadioItem value="right">Right</MenuRadioItem>
+            <MenuRadioItem value="horizontal">Bottom</MenuRadioItem>
+            <MenuRadioItem value="vertical">Left</MenuRadioItem>
           </MenuRadioGroup>
         </Menu>
 

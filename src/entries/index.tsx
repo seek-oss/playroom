@@ -1,6 +1,7 @@
 import faviconInvertedPath from '../../images/favicon-inverted.png';
 import faviconPath from '../../images/favicon.png';
 import Playroom from '../components/Playroom/Playroom';
+import { PreferencesProvider } from '../contexts/PreferencesContext';
 import { StoreProvider } from '../contexts/StoreContext';
 import { renderElement } from '../render';
 
@@ -14,8 +15,10 @@ if (selectedElement) {
 }
 
 renderElement(
-  <StoreProvider>
-    <Playroom />
-  </StoreProvider>,
+  <PreferencesProvider>
+    <StoreProvider>
+      <Playroom />
+    </StoreProvider>
+  </PreferencesProvider>,
   document.body
 );
