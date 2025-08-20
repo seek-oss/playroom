@@ -76,7 +76,7 @@ const HeaderMenu = () => {
           </MenuItem>
         )}
 
-        <Menu trigger="Theme">
+        <Menu trigger="Appearance">
           <MenuRadioGroup
             value={colorScheme}
             onValueChange={(value) =>
