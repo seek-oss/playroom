@@ -4,7 +4,7 @@ import snippets from '../../configModules/snippets';
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import { usePreferences } from '../../contexts/PreferencesContext';
-import { type ColorScheme, StoreContext } from '../../contexts/StoreContext';
+import { StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { Dialog } from '../Dialog/Dialog';
 import { KeyboardShortcuts } from '../KeyboardShortcuts/KeyboardShortcuts';
@@ -30,14 +30,14 @@ const HeaderMenu = () => {
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
   const [keyboardShortcutsDialogOpen, setKeyboardShortcutsDialogOpen] =
     useState(false);
-  const { editorOrientation, setEditorOrientation } = usePreferences();
+  const { editorOrientation, setEditorOrientation, appearance, setAppearance } =
+    usePreferences();
   const [
     {
       visibleWidths = [],
       visibleThemes = [],
       code,
       editorHidden,
-      colorScheme,
       validCursorPosition,
       snippetsOpen,
     },
@@ -75,15 +75,7 @@ const HeaderMenu = () => {
         )}
 
         <Menu trigger="Appearance">
-          <MenuRadioGroup
-            value={colorScheme}
-            onValueChange={(value) =>
-              dispatch({
-                type: 'updateColorScheme',
-                payload: { colorScheme: value as ColorScheme },
-              })
-            }
-          >
+          <MenuRadioGroup value={appearance} onValueChange={setAppearance}>
             <MenuRadioItem value="system">System</MenuRadioItem>
             <MenuRadioItem value="light">Light</MenuRadioItem>
             <MenuRadioItem value="dark">Dark</MenuRadioItem>
