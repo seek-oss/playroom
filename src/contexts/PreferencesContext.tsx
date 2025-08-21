@@ -19,14 +19,17 @@ const store = localforage.createInstance({
 });
 
 export type EditorOrientation = 'horizontal' | 'vertical';
+export type Appearance = 'light' | 'dark' | 'system';
 
 type SetPreference<S> = Dispatch<SetStateAction<S>>;
 type PreferencesContext = {
   editorOrientation: EditorOrientation;
-  setEditorOrientation?: SetPreference<EditorOrientation>;
+  setEditorOrientation: SetPreference<EditorOrientation>;
   editorHeight: string;
   editorWidth: string;
   setEditorSize: (size: number) => void;
+  appearance: Appearance;
+  setAppearance: SetPreference<Appearance>;
 };
 
 export const PreferencesContext = createContext<PreferencesContext | null>(
@@ -68,32 +71,66 @@ function setAndStore<StateValue>(
 }
 
 const defaultEditorSize = '40%';
+const applyAppearance = (appearance: Exclude<Appearance, 'system'>) => {
+  document.documentElement[
+    appearance === 'dark' ? 'setAttribute' : 'removeAttribute'
+  ]('data-playroom-dark', '');
+};
 export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   const [ready, setReady] = useState(false);
   const [editorOrientation, setEditorOrientation] =
     useState<EditorOrientation>('horizontal');
   const [editorHeight, setEditorHeight] = useState<string>(defaultEditorSize);
   const [editorWidth, setEditorWidth] = useState<string>(defaultEditorSize);
+  const [appearance, setAppearance] = useState<Appearance>('system');
 
   useEffect(() => {
     Promise.all([
       store.getItem<EditorOrientation>('editorOrientation'),
       store.getItem<string>('editorHeight'),
       store.getItem<string>('editorWidth'),
-    ]).then(([storedEditorOrientation, storedHeight, storedWidth]) => {
-      if (storedEditorOrientation) {
-        setEditorOrientation(storedEditorOrientation);
-      }
-      if (storedHeight) {
-        setEditorHeight(storedHeight);
-      }
-      if (storedWidth) {
-        setEditorWidth(storedWidth);
-      }
+      store.getItem<Appearance>('appearance'),
+    ]).then(
+      ([
+        storedEditorOrientation,
+        storedHeight,
+        storedWidth,
+        storedAppearance,
+      ]) => {
+        if (storedEditorOrientation) {
+          setEditorOrientation(storedEditorOrientation);
+        }
+        if (storedHeight) {
+          setEditorHeight(storedHeight);
+        }
+        if (storedWidth) {
+          setEditorWidth(storedWidth);
+        }
+        if (storedAppearance) {
+          setAppearance(storedAppearance);
+        }
 
-      setReady(true);
-    });
+        setReady(true);
+      }
+    );
   }, []);
+
+  useEffect(() => {
+    if (appearance === 'system') {
+      const mq = window.matchMedia('(prefers-color-scheme: dark)');
+      const handler = (e: MediaQueryListEvent) => {
+        applyAppearance(e.matches ? 'dark' : 'light');
+      };
+      mq.addEventListener('change', handler);
+      applyAppearance(mq.matches ? 'dark' : 'light');
+
+      return () => {
+        mq.removeEventListener('change', handler);
+      };
+    }
+
+    applyAppearance(appearance);
+  }, [appearance]);
 
   /**
    * Single function for managing the stored editor size per orientation,
@@ -137,8 +174,10 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
       editorHeight,
       editorWidth,
       setEditorSize,
+      appearance,
+      setAppearance: setAndStore<Appearance>(setAppearance, 'appearance'),
     }),
-    [editorOrientation, editorHeight, editorWidth, setEditorSize]
+    [editorOrientation, editorHeight, editorWidth, setEditorSize, appearance]
   );
 
   return ready ? (
