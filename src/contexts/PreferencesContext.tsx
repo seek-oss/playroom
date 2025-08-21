@@ -4,6 +4,7 @@ import {
   type Dispatch,
   type ReactNode,
   type SetStateAction,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -18,9 +19,14 @@ const store = localforage.createInstance({
 });
 
 export type EditorOrientation = 'horizontal' | 'vertical';
+
+type SetPreference<S> = Dispatch<SetStateAction<S>>;
 type PreferencesContext = {
   editorOrientation: EditorOrientation;
-  setEditorOrientation?: Dispatch<SetStateAction<EditorOrientation>>;
+  setEditorOrientation?: SetPreference<EditorOrientation>;
+  editorHeight: string;
+  editorWidth: string;
+  setEditorSize: (size: number) => void;
 };
 
 export const PreferencesContext = createContext<PreferencesContext | null>(
@@ -61,22 +67,65 @@ function setAndStore<StateValue>(
   };
 }
 
+const defaultEditorSize = '40%';
 export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   const [ready, setReady] = useState(false);
   const [editorOrientation, setEditorOrientation] =
     useState<EditorOrientation>('horizontal');
+  const [editorHeight, setEditorHeight] = useState<string>(defaultEditorSize);
+  const [editorWidth, setEditorWidth] = useState<string>(defaultEditorSize);
 
   useEffect(() => {
-    Promise.all([store.getItem<EditorOrientation>('editorOrientation')]).then(
-      ([storedEditorOrientation]) => {
-        if (storedEditorOrientation) {
-          setEditorOrientation(storedEditorOrientation);
-        }
-
-        setReady(true);
+    Promise.all([
+      store.getItem<EditorOrientation>('editorOrientation'),
+      store.getItem<string>('editorHeight'),
+      store.getItem<string>('editorWidth'),
+    ]).then(([storedEditorOrientation, storedHeight, storedWidth]) => {
+      if (storedEditorOrientation) {
+        setEditorOrientation(storedEditorOrientation);
       }
-    );
+      if (storedHeight) {
+        setEditorHeight(storedHeight);
+      }
+      if (storedWidth) {
+        setEditorWidth(storedWidth);
+      }
+
+      setReady(true);
+    });
   }, []);
+
+  /**
+   * Single function for managing the stored editor size per orientation,
+   * responsible for:
+   * - Converting the number from the resize event into a percentage.
+   * - Updating the relevant preference for current orientation.
+   * - Sets the exact preference to prevent movement.
+   * - Stores to rounded preference for simplicity
+   */
+  const setEditorSize = useCallback(
+    (size: number) => {
+      const isHorizontal = editorOrientation === 'horizontal';
+      const viewportSize = isHorizontal
+        ? window.innerHeight
+        : window.innerWidth;
+      const sizePercentage = (size / viewportSize) * 100;
+      const exactSizePercentage = `${sizePercentage}%`;
+      const roundedSizePercentage = `${Math.round(sizePercentage)}%`;
+
+      if (isHorizontal) {
+        setEditorHeight(exactSizePercentage);
+      } else {
+        setEditorWidth(exactSizePercentage);
+      }
+
+      store.setItem(
+        `${isHorizontal ? 'editorHeight' : 'editorWidth'}`,
+        roundedSizePercentage
+      );
+    },
+    [editorOrientation]
+  );
 
   const context = useMemo(
     () => ({
@@ -85,8 +134,11 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
         setEditorOrientation,
         'editorOrientation'
       ),
+      editorHeight,
+      editorWidth,
+      setEditorSize,
     }),
-    [editorOrientation]
+    [editorOrientation, editorHeight, editorWidth, setEditorSize]
   );
 
   return ready ? (
