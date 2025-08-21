@@ -27,8 +27,6 @@ const store = localforage.createInstance({
   version: 1,
 });
 
-const defaultEditorSize = '40%';
-
 export type ColorScheme = 'light' | 'dark' | 'system';
 
 const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
@@ -36,24 +34,6 @@ const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
     colorScheme === 'dark' ? 'setAttribute' : 'removeAttribute'
   ]('data-playroom-dark', '');
 };
-
-function convertAndStoreSizeAsPercentage(
-  mode: 'height' | 'width',
-  size: number
-): string {
-  const viewportSize =
-    mode === 'height' ? window.innerHeight : window.innerWidth;
-
-  const sizePercentage = (size / viewportSize) * 100;
-  const roundedSizePercentage = `${Math.round(sizePercentage)}%`;
-
-  store.setItem(
-    `${mode === 'height' ? 'editorHeight' : 'editorWidth'}`,
-    roundedSizePercentage
-  );
-
-  return `${sizePercentage}%`;
-}
 
 interface DebounceUpdateUrl {
   code?: string;
@@ -83,8 +63,6 @@ interface State {
   validCursorPosition: boolean;
   cursorPosition: CursorPosition;
   editorHidden: boolean;
-  editorHeight: string;
-  editorWidth: string;
   statusMessage?: StatusMessage;
   visibleThemes?: string[];
   visibleWidths?: Widths;
@@ -110,8 +88,6 @@ type Action =
       type: 'updateColorScheme';
       payload: { colorScheme: ColorScheme };
     }
-  | { type: 'updateEditorHeight'; payload: { size: number } }
-  | { type: 'updateEditorWidth'; payload: { size: number } }
   | { type: 'updateVisibleThemes'; payload: { themes: typeof availableThemes } }
   | { type: 'resetVisibleThemes' }
   | {
@@ -282,33 +258,6 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case 'updateEditorHeight': {
-      const { size } = action.payload;
-
-      const updatedHeightPercentage = convertAndStoreSizeAsPercentage(
-        'height',
-        size
-      );
-
-      return {
-        ...state,
-        editorHeight: updatedHeightPercentage,
-      };
-    }
-
-    case 'updateEditorWidth': {
-      const { size } = action.payload;
-      const updatedWidthPercentage = convertAndStoreSizeAsPercentage(
-        'width',
-        size
-      );
-
-      return {
-        ...state,
-        editorWidth: updatedWidthPercentage,
-      };
-    }
-
     case 'updateVisibleThemes': {
       const { themes } = action.payload;
       const visibleThemes = availableThemes.filter((t) => themes.includes(t));
@@ -367,8 +316,6 @@ const initialState: State = {
   cursorPosition: { line: 0, ch: 0 },
   snippetsOpen: false,
   editorHidden: false,
-  editorHeight: defaultEditorSize,
-  editorWidth: defaultEditorSize,
   colorScheme: 'system',
 };
 
@@ -424,31 +371,17 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
     Promise.all([
       store.getItem<string>('code'),
-      store.getItem<string | number>('editorHeight'), // Number type deprecated
-      store.getItem<string | number>('editorWidth'), // Number type deprecated
       store.getItem<number[]>('visibleWidths'),
       store.getItem<string[]>('visibleThemes'),
       store.getItem<ColorScheme>('colorScheme'),
     ]).then(
       ([
         storedCode,
-        storedHeight,
-        storedWidth,
         storedVisibleWidths,
         storedVisibleThemes,
         storedColorScheme,
       ]) => {
         const code = codeFromQuery || storedCode || exampleCode;
-
-        const editorHeight =
-          (typeof storedHeight === 'number'
-            ? convertAndStoreSizeAsPercentage('height', storedHeight)
-            : storedHeight) || defaultEditorSize;
-
-        const editorWidth =
-          (typeof storedWidth === 'number'
-            ? convertAndStoreSizeAsPercentage('width', storedWidth)
-            : storedWidth) || defaultEditorSize;
 
         const editorHidden = editorHiddenFromQuery === true;
 
@@ -469,8 +402,6 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
           type: 'initialLoad',
           payload: {
             ...(code ? { code } : {}),
-            ...(editorHeight ? { editorHeight } : {}),
-            ...(editorWidth ? { editorWidth } : {}),
             ...(editorHidden ? { editorHidden } : {}),
             ...(visibleThemes ? { visibleThemes } : {}),
             ...(visibleWidths ? { visibleWidths } : {}),
