@@ -45,6 +45,8 @@ export const popup = style([
 
 export const item = style([
   sprinkles({
+    display: 'flex',
+    justifyContent: 'space-between',
     position: 'relative',
     userSelect: 'none',
     font: 'standard',
