@@ -27,14 +27,6 @@ const store = localforage.createInstance({
   version: 1,
 });
 
-export type ColorScheme = 'light' | 'dark' | 'system';
-
-const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
-  document.documentElement[
-    colorScheme === 'dark' ? 'setAttribute' : 'removeAttribute'
-  ]('data-playroom-dark', '');
-};
-
 interface DebounceUpdateUrl {
   code?: string;
   themes?: string[];
@@ -66,7 +58,6 @@ interface State {
   statusMessage?: StatusMessage;
   visibleThemes?: string[];
   visibleWidths?: Widths;
-  colorScheme: ColorScheme;
 }
 
 type Action =
@@ -84,10 +75,6 @@ type Action =
   | { type: 'showEditor' }
   | { type: 'copyToClipboard'; payload: { content: string; message?: string } }
   | { type: 'dismissMessage' }
-  | {
-      type: 'updateColorScheme';
-      payload: { colorScheme: ColorScheme };
-    }
   | { type: 'updateVisibleThemes'; payload: { themes: typeof availableThemes } }
   | { type: 'resetVisibleThemes' }
   | {
@@ -248,16 +235,6 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case 'updateColorScheme': {
-      const { colorScheme } = action.payload;
-      store.setItem('colorScheme', colorScheme);
-
-      return {
-        ...state,
-        colorScheme,
-      };
-    }
-
     case 'updateVisibleThemes': {
       const { themes } = action.payload;
       const visibleThemes = availableThemes.filter((t) => themes.includes(t));
@@ -316,7 +293,6 @@ const initialState: State = {
   cursorPosition: { line: 0, ch: 0 },
   snippetsOpen: false,
   editorHidden: false,
-  colorScheme: 'system',
 };
 
 export const StoreContext = createContext<StoreContextValues>([
@@ -373,65 +349,36 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       store.getItem<string>('code'),
       store.getItem<number[]>('visibleWidths'),
       store.getItem<string[]>('visibleThemes'),
-      store.getItem<ColorScheme>('colorScheme'),
-    ]).then(
-      ([
-        storedCode,
-        storedVisibleWidths,
-        storedVisibleThemes,
-        storedColorScheme,
-      ]) => {
-        const code = codeFromQuery || storedCode || exampleCode;
+    ]).then(([storedCode, storedVisibleWidths, storedVisibleThemes]) => {
+      const code = codeFromQuery || storedCode || exampleCode;
 
-        const editorHidden = editorHiddenFromQuery === true;
+      const editorHidden = editorHiddenFromQuery === true;
 
-        const visibleWidths =
-          widthsFromQuery ||
-          storedVisibleWidths ||
-          playroomConfig?.defaultVisibleWidths;
+      const visibleWidths =
+        widthsFromQuery ||
+        storedVisibleWidths ||
+        playroomConfig?.defaultVisibleWidths;
 
-        const visibleThemes =
-          hasThemesConfigured &&
-          (themesFromQuery ||
-            storedVisibleThemes ||
-            playroomConfig?.defaultVisibleThemes);
+      const visibleThemes =
+        hasThemesConfigured &&
+        (themesFromQuery ||
+          storedVisibleThemes ||
+          playroomConfig?.defaultVisibleThemes);
 
-        const colorScheme = storedColorScheme;
+      dispatch({
+        type: 'initialLoad',
+        payload: {
+          ...(code ? { code } : {}),
+          ...(editorHidden ? { editorHidden } : {}),
+          ...(visibleThemes ? { visibleThemes } : {}),
+          ...(visibleWidths ? { visibleWidths } : {}),
+          title: titleFromQuery,
+        },
+      });
 
-        dispatch({
-          type: 'initialLoad',
-          payload: {
-            ...(code ? { code } : {}),
-            ...(editorHidden ? { editorHidden } : {}),
-            ...(visibleThemes ? { visibleThemes } : {}),
-            ...(visibleWidths ? { visibleWidths } : {}),
-            ...(colorScheme ? { colorScheme } : {}),
-            title: titleFromQuery,
-          },
-        });
-
-        setReady(true);
-      }
-    );
+      setReady(true);
+    });
   }, [hasThemesConfigured]);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-
-    if (state.colorScheme === 'system') {
-      const handler = (e: MediaQueryListEvent) => {
-        applyColorScheme(e.matches ? 'dark' : 'light');
-      };
-      mq.addEventListener('change', handler);
-      applyColorScheme(mq.matches ? 'dark' : 'light');
-
-      return () => {
-        mq.removeEventListener('change', handler);
-      };
-    }
-
-    applyColorScheme(state.colorScheme);
-  }, [state.colorScheme]);
 
   useEffect(() => {
     debouncedCodeUpdate({
