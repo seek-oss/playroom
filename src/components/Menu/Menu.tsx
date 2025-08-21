@@ -7,18 +7,39 @@ import {
   useContext,
 } from 'react';
 
+import { isMac } from '../../utils/formatting';
+import { Text } from '../Text/Text';
 import ChevronIcon from '../icons/ChevronIcon';
 import TickIcon from '../icons/TickIcon';
 
 import * as styles from './Menu.css';
 
+export type Shortcut = string[];
+const isMacPlatform = isMac();
+
+const nonMacKeyMap: Record<string, string> = {
+  '⌘': 'Ctrl',
+  '⌥': 'Alt',
+  '⇧': 'Shift',
+};
+
+const convertShortcutForPlatform = (shortcut: Shortcut) => {
+  if (isMacPlatform) {
+    return shortcut;
+  }
+
+  return shortcut.map((key) => nonMacKeyMap[key] || key);
+};
+
 export const MenuItem = ({
   onClick,
+  shortcut,
   children,
   closeOnClick,
   disabled,
 }: {
   onClick: ComponentProps<typeof BaseUIMenu.Item>['onClick'];
+  shortcut?: Shortcut;
   children: ComponentProps<typeof BaseUIMenu.Item>['children'];
   closeOnClick?: ComponentProps<typeof BaseUIMenu.Item>['closeOnClick'];
   disabled?: ComponentProps<typeof BaseUIMenu.Item>['disabled'];
@@ -30,6 +51,11 @@ export const MenuItem = ({
     disabled={disabled}
   >
     {children}
+    {shortcut && (
+      <Text tone="secondary">
+        {convertShortcutForPlatform(shortcut).join('')}
+      </Text>
+    )}
   </BaseUIMenu.Item>
 );
 
