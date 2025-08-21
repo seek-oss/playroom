@@ -48,18 +48,11 @@ const resizeHandlePosition: Record<
 
 export default () => {
   const [
-    {
-      editorHeight,
-      editorWidth,
-      editorHidden,
-      code,
-      previewRenderCode,
-      previewEditorCode,
-      title,
-    },
+    { editorHidden, code, previewRenderCode, previewEditorCode, title },
     dispatch,
   ] = useContext(StoreContext);
-  const { editorOrientation } = usePreferences();
+  const { editorOrientation, editorHeight, editorWidth, setEditorSize } =
+    usePreferences();
   const editorRef = useRef<HTMLElement | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [resizing, setResizing] = useState(false);
@@ -79,8 +72,8 @@ export default () => {
     };
   }, [editorHidden]);
 
-  const isVerticalEditor = editorOrientation === 'vertical';
-  const editorSize = isVerticalEditor ? editorWidth : editorHeight;
+  const editorSize =
+    editorOrientation === 'vertical' ? editorWidth : editorHeight;
 
   return (
     <Box
@@ -121,23 +114,11 @@ export default () => {
           <ResizeHandle
             ref={editorRef}
             position={resizeHandlePosition[editorOrientation]}
-            onResize={(newValue) => {
-              dispatch({
-                type: isVerticalEditor
-                  ? 'updateEditorWidth'
-                  : 'updateEditorHeight',
-                payload: { size: newValue },
-              });
-            }}
+            onResize={setEditorSize}
             onResizeStart={() => setResizing(true)}
             onResizeEnd={(endValue) => {
               setResizing(false);
-              dispatch({
-                type: isVerticalEditor
-                  ? 'updateEditorWidth'
-                  : 'updateEditorHeight',
-                payload: { size: endValue },
-              });
+              setEditorSize(endValue);
             }}
           />
           <CodeEditor
