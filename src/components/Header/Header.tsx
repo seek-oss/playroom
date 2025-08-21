@@ -68,6 +68,7 @@ const HeaderMenu = () => {
           <MenuItem
             onClick={() => dispatch({ type: 'openSnippets' })}
             disabled={!validCursorPosition}
+            shortcut={['⌘', 'K']}
           >
             Insert snippet...
           </MenuItem>
