@@ -2,6 +2,11 @@ import { Popover as BaseUIPopover } from '@base-ui-components/react/popover';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import {
+  BetweenHorizontalStart,
+  BrushCleaningIcon,
+  type LucideIcon,
+} from 'lucide-react';
+import {
   type ComponentProps,
   useContext,
   useEffect,
@@ -43,12 +48,14 @@ interface EditorActionButtonProps
   onClick?: () => void;
   name: string;
   shortcut: string;
+  icon: LucideIcon;
 }
 
 const EditorActionButton = ({
   onClick,
   name,
   shortcut,
+  icon: Icon,
   ...restProps
 }: EditorActionButtonProps) => (
   <button
@@ -56,6 +63,7 @@ const EditorActionButton = ({
     onClick={onClick}
     className={styles.editorActionButton}
   >
+    <Icon size={16} />
     <Text>{name}</Text>
     <Text tone="secondary">{shortcut}</Text>
   </button>
@@ -203,7 +211,11 @@ export default () => {
                   }
                 }}
                 trigger={
-                  <EditorActionButton name="Insert snippet" shortcut="⌘K" />
+                  <EditorActionButton
+                    name="Insert snippet"
+                    shortcut="⌘K"
+                    icon={BetweenHorizontalStart}
+                  />
                 }
               />
             )}
@@ -211,6 +223,7 @@ export default () => {
               onClick={() => runCommand('formatCode')}
               name="Tidy"
               shortcut="⌘S"
+              icon={BrushCleaningIcon}
             />
           </Box>
         </div>

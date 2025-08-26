@@ -1,4 +1,19 @@
-import { CodeXml } from 'lucide-react';
+import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
+import {
+  CodeXml,
+  Sun,
+  Moon,
+  Monitor,
+  PanelLeft,
+  PanelBottom,
+  Frame as FrameIcon,
+  Eraser,
+  Palette,
+  Eye,
+  Link as LinkIcon,
+  MaximizeIcon,
+  BetweenHorizontalStart,
+} from 'lucide-react';
 import { useContext, useRef, useState } from 'react';
 
 import { themeNames as availableThemes } from '../../configModules/themes';
@@ -40,6 +55,7 @@ const HeaderMenu = () => {
     dispatch,
   ] = useContext(StoreContext);
 
+  const hasSnippets = snippets && snippets.length > 0;
   const hasThemes =
     availableThemes.filter(
       (themeName) => themeName !== '__PLAYROOM__NO_THEME__'
@@ -67,9 +83,15 @@ const HeaderMenu = () => {
       >
         <Menu trigger="Appearance">
           <MenuRadioGroup value={appearance} onValueChange={setAppearance}>
-            <MenuRadioItem value="system">System</MenuRadioItem>
-            <MenuRadioItem value="light">Light</MenuRadioItem>
-            <MenuRadioItem value="dark">Dark</MenuRadioItem>
+            <MenuRadioItem icon={<Monitor size={16} />} value="system">
+              System
+            </MenuRadioItem>
+            <MenuRadioItem icon={<Sun size={16} />} value="light">
+              Light
+            </MenuRadioItem>
+            <MenuRadioItem icon={<Moon size={16} />} value="dark">
+              Dark
+            </MenuRadioItem>
           </MenuRadioGroup>
         </Menu>
 
@@ -78,8 +100,12 @@ const HeaderMenu = () => {
             value={editorOrientation}
             onValueChange={setEditorOrientation}
           >
-            <MenuRadioItem value="horizontal">Bottom</MenuRadioItem>
-            <MenuRadioItem value="vertical">Left</MenuRadioItem>
+            <MenuRadioItem icon={<PanelBottom size={16} />} value="horizontal">
+              Bottom
+            </MenuRadioItem>
+            <MenuRadioItem icon={<PanelLeft size={16} />} value="vertical">
+              Left
+            </MenuRadioItem>
           </MenuRadioGroup>
         </Menu>
 
@@ -87,6 +113,13 @@ const HeaderMenu = () => {
           <MenuGroup label="Widths">
             {availableWidths.map((width) => (
               <MenuCheckboxItem
+                icon={
+                  width === 'Fit to window' ? (
+                    <MaximizeIcon size={16} />
+                  ) : (
+                    <FrameIcon size={16} />
+                  )
+                }
                 key={width}
                 checked={hasFilteredWidths && visibleWidths.includes(width)}
                 onCheckedChange={(checked: boolean) => {
@@ -107,6 +140,7 @@ const HeaderMenu = () => {
               </MenuCheckboxItem>
             ))}
             <MenuItem
+              icon={<Eraser size={16} />}
               onClick={() => dispatch({ type: 'resetVisibleWidths' })}
               closeOnClick={false}
               disabled={!hasFilteredWidths}
@@ -122,6 +156,7 @@ const HeaderMenu = () => {
               <MenuGroup label="Themes">
                 {availableThemes.map((theme) => (
                   <MenuCheckboxItem
+                    icon={<Palette size={16} />}
                     key={theme}
                     checked={hasFilteredThemes && visibleThemes.includes(theme)}
                     onCheckedChange={(checked: boolean) => {
@@ -142,6 +177,7 @@ const HeaderMenu = () => {
                   </MenuCheckboxItem>
                 ))}
                 <MenuItem
+                  icon={<Eraser size={16} />}
                   onClick={() => dispatch({ type: 'resetVisibleThemes' })}
                   closeOnClick={false}
                   disabled={!hasFilteredThemes}
@@ -154,6 +190,7 @@ const HeaderMenu = () => {
         </Menu>
 
         <MenuItem
+          icon={<Eye size={16} />}
           onClick={() => setPreviewDialogOpen(true)}
           disabled={code.trim().length === 0}
         >
@@ -161,6 +198,7 @@ const HeaderMenu = () => {
         </MenuItem>
 
         <MenuItem
+          icon={<LinkIcon size={16} />}
           onClick={() => {
             dispatch({
               type: 'copyToClipboard',
@@ -175,22 +213,24 @@ const HeaderMenu = () => {
         </MenuItem>
 
         <Menu trigger="Editor actions" disabled={editorHidden}>
-          <MenuItem
-            shortcut={['Cmd', 'K']}
-            onClick={() => {
-              dispatch({ type: 'openSnippets' });
-            }}
-          >
-            Insert snippet
-          </MenuItem>
-
-          {editorCommandList.map(({ command, label, shortcut }) => (
+          {hasSnippets && (
+            <MenuItem
+              icon={<BetweenHorizontalStart size={16} />}
+              shortcut={['Cmd', 'K']}
+              disabled={editorHidden}
+              onClick={() => dispatch({ type: 'openSnippets' })}
+            >
+              Insert snippet
+            </MenuItem>
+          )}
+          {editorCommandList.map(({ command, label, shortcut, icon: Icon }) => (
             <MenuItem
               key={command}
               shortcut={shortcut}
               onClick={() => {
                 inputCommandRef.current = command;
               }}
+              icon={<Icon size={16} />}
             >
               {label}
             </MenuItem>

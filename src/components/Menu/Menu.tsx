@@ -39,12 +39,14 @@ export const MenuItem = ({
   children,
   closeOnClick,
   disabled,
+  icon,
 }: {
   onClick: ComponentProps<typeof BaseUIMenu.Item>['onClick'];
   shortcut?: Shortcut;
   children: ComponentProps<typeof BaseUIMenu.Item>['children'];
   closeOnClick?: ComponentProps<typeof BaseUIMenu.Item>['closeOnClick'];
   disabled?: ComponentProps<typeof BaseUIMenu.Item>['disabled'];
+  icon?: ReactNode;
 }) => (
   <BaseUIMenu.Item
     className={styles.item}
@@ -52,7 +54,10 @@ export const MenuItem = ({
     closeOnClick={closeOnClick}
     disabled={disabled}
   >
-    {children}
+    <span className={styles.itemLeft}>
+      {icon}
+      {children}
+    </span>
     {shortcut && (
       <span className={styles.shortcut}>
         {convertShortcutForPlatform(shortcut).map((key, index) => (
@@ -70,12 +75,17 @@ export const MenuRadioGroup = BaseUIMenu.RadioGroup;
 export const MenuRadioItem = ({
   value,
   children,
+  icon,
 }: {
   value: ComponentProps<typeof BaseUIMenu.RadioItem>['value'];
   children: ComponentProps<typeof BaseUIMenu.RadioItem>['children'];
+  icon?: ReactNode;
 }) => (
   <BaseUIMenu.RadioItem className={styles.fieldItem} value={value}>
-    {children}
+    <span className={styles.itemLeft}>
+      {icon}
+      {children}
+    </span>
     <BaseUIMenu.RadioItemIndicator className={styles.fieldItemIndicator}>
       <svg
         viewBox="0 0 24 24"
@@ -102,19 +112,24 @@ export const MenuCheckboxItem = ({
   checked,
   onCheckedChange,
   children,
+  icon,
 }: {
   checked: ComponentProps<typeof BaseUIMenu.CheckboxItem>['checked'];
   onCheckedChange: ComponentProps<
     typeof BaseUIMenu.CheckboxItem
   >['onCheckedChange'];
   children: ComponentProps<typeof BaseUIMenu.CheckboxItem>['children'];
+  icon?: ReactNode;
 }) => (
   <BaseUIMenu.CheckboxItem
     checked={checked}
     onCheckedChange={onCheckedChange}
     className={styles.fieldItem}
   >
-    {children}
+    <span className={styles.itemLeft}>
+      {icon}
+      {children}
+    </span>
     <BaseUIMenu.CheckboxItemIndicator className={styles.fieldItemIndicator}>
       <TickIcon />
     </BaseUIMenu.CheckboxItemIndicator>

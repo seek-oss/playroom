@@ -77,6 +77,14 @@ export const item = style([
   },
 ]);
 
+export const itemLeft = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'xsmall',
+  }),
+]);
+
 export const submenuTrigger = style([
   item,
   sprinkles({
