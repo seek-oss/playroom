@@ -3,11 +3,15 @@ import { useContext, useRef, useState } from 'react';
 import snippets from '../../configModules/snippets';
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
+import { useEditor } from '../../contexts/EditorContext';
 import { usePreferences } from '../../contexts/PreferencesContext';
 import { StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
+import {
+  editorCommandList,
+  type EditorCommand,
+} from '../CodeEditor/editorCommands';
 import { Dialog } from '../Dialog/Dialog';
-import { KeyboardShortcuts } from '../KeyboardShortcuts/KeyboardShortcuts';
 import { Logo } from '../Logo/Logo';
 import {
   Menu,
@@ -26,10 +30,10 @@ import * as styles from './Header.css';
 
 const HeaderMenu = () => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
+  const inputCommandRef = useRef<EditorCommand | null>(null);
   const snippetsSearchRef = useRef<HTMLInputElement>(null);
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
-  const [keyboardShortcutsDialogOpen, setKeyboardShortcutsDialogOpen] =
-    useState(false);
+  const { runCommand } = useEditor();
   const { editorOrientation, setEditorOrientation, appearance, setAppearance } =
     usePreferences();
   const [
@@ -57,6 +61,12 @@ const HeaderMenu = () => {
   return (
     <>
       <Menu
+        onClose={() => {
+          if (inputCommandRef.current) {
+            runCommand(inputCommandRef.current);
+            inputCommandRef.current = null;
+          }
+        }}
         ref={menuTriggerRef}
         trigger={
           <span className={styles.menuButton}>
@@ -192,9 +202,19 @@ const HeaderMenu = () => {
           Copy link
         </MenuItem>
 
-        <MenuItem onClick={() => setKeyboardShortcutsDialogOpen(true)}>
-          Keyboard shortcuts
-        </MenuItem>
+        <Menu trigger="Editor actions" disabled={editorHidden}>
+          {editorCommandList.map(({ command, label, shortcut }) => (
+            <MenuItem
+              key={command}
+              shortcut={shortcut}
+              onClick={() => {
+                inputCommandRef.current = command;
+              }}
+            >
+              {label}
+            </MenuItem>
+          ))}
+        </Menu>
       </Menu>
 
       {/* Snippets Dialog */}
@@ -229,15 +249,6 @@ const HeaderMenu = () => {
         onOpenChange={setPreviewDialogOpen}
       >
         <PreviewPanel />
-      </Dialog>
-
-      {/* Keyboard shortcuts dialog */}
-      <Dialog
-        title="Keyboard shortcuts"
-        open={keyboardShortcutsDialogOpen}
-        onOpenChange={setKeyboardShortcutsDialogOpen}
-      >
-        <KeyboardShortcuts />
       </Dialog>
     </>
   );
