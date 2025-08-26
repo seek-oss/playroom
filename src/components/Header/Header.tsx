@@ -1,3 +1,4 @@
+import { CodeXml } from 'lucide-react';
 import { useContext, useRef, useState } from 'react';
 
 import { themeNames as availableThemes } from '../../configModules/themes';
@@ -6,6 +7,7 @@ import { useEditor } from '../../contexts/EditorContext';
 import { usePreferences } from '../../contexts/PreferencesContext';
 import { StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import {
   type EditorCommand,
   editorCommandList,
@@ -80,15 +82,6 @@ const HeaderMenu = () => {
             <MenuRadioItem value="vertical">Left</MenuRadioItem>
           </MenuRadioGroup>
         </Menu>
-
-        <MenuCheckboxItem
-          checked={editorHidden}
-          onCheckedChange={() =>
-            dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
-          }
-        >
-          Hide editor
-        </MenuCheckboxItem>
 
         <Menu trigger="Configure frames">
           <MenuGroup label="Widths">
@@ -217,15 +210,27 @@ const HeaderMenu = () => {
   );
 };
 
-export const Header = () => (
-  <Box className={styles.root}>
-    <div className={styles.menuContainer}>
-      <HeaderMenu />
-    </div>
+export const Header = () => {
+  const [{ editorHidden }, dispatch] = useContext(StoreContext);
 
-    <Title />
+  return (
+    <Box className={styles.root}>
+      <div className={styles.menuContainer}>
+        <HeaderMenu />
+      </div>
 
-    {/* Empty placeholder for now */}
-    <div className={styles.actionsContainer} />
-  </Box>
-);
+      <Title />
+
+      {/* Empty placeholder for now */}
+      <div className={styles.actionsContainer}>
+        <ButtonIcon
+          label={editorHidden ? 'Show code' : 'Hide code'}
+          icon={<CodeXml />}
+          onClick={() =>
+            dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
+          }
+        />
+      </div>
+    </Box>
+  );
+};
