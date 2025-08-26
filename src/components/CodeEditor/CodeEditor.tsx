@@ -5,12 +5,14 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/theme/neo.css';
 
+import { useEditor } from '../../contexts/EditorContext';
 import { type CursorPosition, StoreContext } from '../../contexts/StoreContext';
 import { validateCode } from '../../utils/compileJsx';
 import { hints } from '../../utils/componentsToHints';
 import { isMac } from '../../utils/formatting';
 
 import { UnControlled as ReactCodeMirror } from './CodeMirror2';
+import { editorCommandList } from './editorCommands';
 import {
   completeAfter,
   completeIfAfterLt,
@@ -37,6 +39,14 @@ import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
+
+const editorCommands = editorCommandList.reduce(
+  (acc, { shortcut, command }) => ({
+    ...acc,
+    [shortcut.join('-')]: command,
+  }),
+  {}
+);
 
 const validateCodeInEditor = (editorInstance: Editor, code: string) => {
   const maybeValid = validateCode(code);
@@ -70,6 +80,7 @@ export const CodeEditor = ({
   onChange,
   previewCode,
 }: Props) => {
+  const { registerEditor } = useEditor();
   const previewSnippetsCode = useRef(false);
   const editorInstanceRef = useRef<Editor | null>(null);
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
@@ -195,8 +206,6 @@ export const CodeEditor = ({
     }
   }, [highlightLineNumber]);
 
-  const keymapModifierKey = isMac() ? 'Cmd' : 'Ctrl';
-
   return (
     <ReactCodeMirror
       editorDidMount={(editorInstance) => {
@@ -206,6 +215,7 @@ export const CodeEditor = ({
         if (!editorHidden) {
           setCursorPosition(cursorPosition);
         }
+        registerEditor(editorInstance);
       }}
       onChange={(editorInstance, data, newCode) => {
         if (editorInstance.hasFocus() && !previewCode) {
@@ -259,24 +269,12 @@ export const CodeEditor = ({
           "'/'": completeIfAfterLt,
           "' '": completeIfInTag,
           "'='": completeIfInTag,
-          'Alt-Up': 'swapLineUp',
-          'Alt-Down': 'swapLineDown',
-          'Shift-Alt-Up': 'duplicateLineUp',
-          'Shift-Alt-Down': 'duplicateLineDown',
-          [`${keymapModifierKey}-Alt-Up`]: 'addCursorToPrevLine',
-          [`${keymapModifierKey}-Alt-Down`]: 'addCursorToNextLine',
-          [`${keymapModifierKey}-D`]: 'selectNextOccurrence',
-          [`Shift-${keymapModifierKey}-,`]: 'wrapInTag',
-          [`${keymapModifierKey}-S`]: 'formatCode',
-          [`${keymapModifierKey}-/`]: 'toggleComment',
-          [`${keymapModifierKey}-F`]: 'findPersistent',
-          [`${keymapModifierKey}-Alt-F`]: 'replace',
-          [`${keymapModifierKey}-G`]: 'jumpToLine',
-          ['Alt-G']: false, // override default keybinding
-          ['Alt-F']: false, // override default keybinding
-          ['Shift-Ctrl-R']: false, // override default keybinding
-          ['Cmd-Option-F']: false, // override default keybinding
-          ['Shift-Cmd-Option-F']: false, // override default keybinding
+          'Alt-G': false, // override default keybinding
+          'Alt-F': false, // override default keybinding
+          'Shift-Ctrl-R': false, // override default keybinding
+          'Cmd-Option-F': false, // override default keybinding
+          'Shift-Cmd-Option-F': false, // override default keybinding
+          ...editorCommands,
         },
       }}
     />

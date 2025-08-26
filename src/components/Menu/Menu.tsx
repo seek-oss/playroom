@@ -15,20 +15,22 @@ import TickIcon from '../icons/TickIcon';
 import * as styles from './Menu.css';
 
 export type Shortcut = string[];
-const isMacPlatform = isMac();
+const mac = isMac();
 
-const nonMacKeyMap: Record<string, string> = {
-  '⌘': 'Ctrl',
-  '⌥': 'Alt',
-  '⇧': 'Shift',
+const wordToSymbolMap: Record<string, string> = {
+  Cmd: '⌘',
+  Alt: '⌥',
+  Shift: '⇧',
+  Up: '↑',
+  Down: '↓',
 };
 
 const convertShortcutForPlatform = (shortcut: Shortcut) => {
-  if (isMacPlatform) {
+  if (!mac) {
     return shortcut;
   }
 
-  return shortcut.map((key) => nonMacKeyMap[key] || key);
+  return shortcut.map((key) => wordToSymbolMap[key] || key);
 };
 
 export const MenuItem = ({
@@ -52,9 +54,13 @@ export const MenuItem = ({
   >
     {children}
     {shortcut && (
-      <Text tone="secondary">
-        {convertShortcutForPlatform(shortcut).join('')}
-      </Text>
+      <span className={styles.shortcut}>
+        {convertShortcutForPlatform(shortcut).map((key, index) => (
+          <Text tone="secondary" key={index}>
+            {key}
+          </Text>
+        ))}
+      </span>
     )}
   </BaseUIMenu.Item>
 );
@@ -140,18 +146,31 @@ type Props = {
   trigger: ReactNode;
   align?: ComponentProps<typeof BaseUIMenu.Positioner>['align'];
   children: ComponentProps<typeof BaseUIMenu.Popup>['children'];
+  disabled?: ComponentProps<typeof BaseUIMenu.SubmenuRoot>['disabled'];
+  onClose?: () => void;
 };
 export const Menu = forwardRef<HTMLButtonElement, Props>(
-  ({ trigger, align = 'start', children }, triggerRef) => {
+  ({ trigger, align = 'start', children, onClose, disabled }, triggerRef) => {
     const isSubMenu = useContext(SubMenuContext);
     const MenuRoot = isSubMenu ? BaseUIMenu.SubmenuRoot : BaseUIMenu.Root;
     const MenuTrigger = isSubMenu
       ? BaseUIMenu.SubmenuTrigger
       : BaseUIMenu.Trigger;
 
+    if (disabled && !isSubMenu) {
+      throw new Error("Menu cannot be disabled unless it's a submenu");
+    }
+
     return (
       <SubMenuContext.Provider value={true}>
-        <MenuRoot>
+        <MenuRoot
+          onOpenChangeComplete={(open: boolean) => {
+            if (!open && typeof onClose === 'function') {
+              onClose();
+            }
+          }}
+          disabled={disabled && isSubMenu}
+        >
           <MenuTrigger
             ref={triggerRef}
             className={isSubMenu ? styles.submenuTrigger : styles.trigger}
