@@ -1,6 +1,5 @@
 import { useContext, useRef, useState } from 'react';
 
-import snippets from '../../configModules/snippets';
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import { useEditor } from '../../contexts/EditorContext';
@@ -8,8 +7,8 @@ import { usePreferences } from '../../contexts/PreferencesContext';
 import { StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import {
-  editorCommandList,
   type EditorCommand,
+  editorCommandList,
 } from '../CodeEditor/editorCommands';
 import { Dialog } from '../Dialog/Dialog';
 import { Logo } from '../Logo/Logo';
@@ -23,7 +22,6 @@ import {
   MenuSeparator,
 } from '../Menu/Menu';
 import PreviewPanel from '../PreviewSelection/PreviewDialog';
-import Snippets from '../Snippets/Snippets';
 import { Title } from '../Title/Title';
 
 import * as styles from './Header.css';
@@ -31,24 +29,15 @@ import * as styles from './Header.css';
 const HeaderMenu = () => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const inputCommandRef = useRef<EditorCommand | null>(null);
-  const snippetsSearchRef = useRef<HTMLInputElement>(null);
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
   const { runCommand } = useEditor();
   const { editorOrientation, setEditorOrientation, appearance, setAppearance } =
     usePreferences();
   const [
-    {
-      visibleWidths = [],
-      visibleThemes = [],
-      code,
-      editorHidden,
-      validCursorPosition,
-      snippetsOpen,
-    },
+    { visibleWidths = [], visibleThemes = [], code, editorHidden },
     dispatch,
   ] = useContext(StoreContext);
 
-  const hasSnippets = snippets && snippets.length > 0;
   const hasThemes =
     availableThemes.filter(
       (themeName) => themeName !== '__PLAYROOM__NO_THEME__'
@@ -74,16 +63,6 @@ const HeaderMenu = () => {
           </span>
         }
       >
-        {hasSnippets && (
-          <MenuItem
-            onClick={() => dispatch({ type: 'openSnippets' })}
-            disabled={!validCursorPosition}
-            shortcut={['⌘', 'K']}
-          >
-            Insert snippet...
-          </MenuItem>
-        )}
-
         <Menu trigger="Appearance">
           <MenuRadioGroup value={appearance} onValueChange={setAppearance}>
             <MenuRadioItem value="system">System</MenuRadioItem>
@@ -203,6 +182,15 @@ const HeaderMenu = () => {
         </MenuItem>
 
         <Menu trigger="Editor actions" disabled={editorHidden}>
+          <MenuItem
+            shortcut={['Cmd', 'K']}
+            onClick={() => {
+              dispatch({ type: 'openSnippets' });
+            }}
+          >
+            Insert snippet
+          </MenuItem>
+
           {editorCommandList.map(({ command, label, shortcut }) => (
             <MenuItem
               key={command}
@@ -216,31 +204,6 @@ const HeaderMenu = () => {
           ))}
         </Menu>
       </Menu>
-
-      {/* Snippets Dialog */}
-      {hasSnippets && (
-        <Dialog
-          title="Insert snippet"
-          open={snippetsOpen}
-          onOpenChange={() => dispatch({ type: 'closeSnippets' })}
-          initialFocus={snippetsSearchRef}
-          finalFocus={menuTriggerRef}
-        >
-          <Snippets
-            searchRef={snippetsSearchRef}
-            onSelect={(snippet) => {
-              if (snippet) {
-                dispatch({
-                  type: 'persistSnippet',
-                  payload: { snippet },
-                });
-              } else {
-                dispatch({ type: 'closeSnippets' });
-              }
-            }}
-          />
-        </Dialog>
-      )}
 
       {/* Preview Dialog */}
       <Dialog
