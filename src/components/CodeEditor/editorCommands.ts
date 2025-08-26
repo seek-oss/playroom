@@ -32,6 +32,7 @@ export const editorCommandList: EditorCommandMeta[] = [
     label: 'Find and replace',
     shortcut: [primaryMod, 'Alt', 'F'],
   },
+  { command: 'formatCode', label: 'Tidy code', shortcut: [primaryMod, 'S'] },
   {
     command: 'toggleComment',
     label: 'Toggle comment',
@@ -42,7 +43,6 @@ export const editorCommandList: EditorCommandMeta[] = [
     label: 'Wrap selection in tag',
     shortcut: [primaryMod, 'Shift', ','],
   },
-  { command: 'formatCode', label: 'Format code', shortcut: [primaryMod, 'S'] },
   {
     command: 'selectNextOccurrence',
     label: 'Select next occurrence',
