@@ -39,13 +39,14 @@ const popupGutter = 'xsmall';
 export const popup = style([
   sharedPopupStyles('small'),
   {
-    width: 200,
+    width: 250,
   },
 ]);
 
 export const item = style([
   sprinkles({
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'space-between',
     position: 'relative',
     userSelect: 'none',
@@ -127,3 +128,11 @@ export const separator = style([
     backgroundColor: colorPaletteVars.border.standard,
   },
 ]);
+
+export const shortcut = style({
+  display: 'grid',
+  gridAutoFlow: 'column',
+  gridAutoColumns: '1fr',
+  alignItems: 'baseline',
+  justifyItems: 'center',
+});
