@@ -28,7 +28,7 @@ const moveByLines = (range: CodeMirror.Range, lines: number) => {
   return { anchor, head };
 };
 
-export const duplicateLine = (direction: Direction) => (cm: Editor) => {
+const duplicateLine = (direction: Direction) => (cm: Editor) => {
   const ranges = cm.listSelections();
 
   const contentUpdates: ContentUpdate[] = [];
@@ -77,7 +77,7 @@ export const duplicateLine = (direction: Direction) => (cm: Editor) => {
   });
 };
 
-export const swapLineUp = function (cm: Editor) {
+const swapLineUp = function (cm: Editor) {
   if (cm.isReadOnly()) {
     return CodeMirror.Pass;
   }
@@ -143,7 +143,7 @@ export const swapLineUp = function (cm: Editor) {
   });
 };
 
-export const swapLineDown = function (cm: Editor) {
+const swapLineDown = function (cm: Editor) {
   if (cm.isReadOnly()) {
     return CodeMirror.Pass;
   }
@@ -190,3 +190,13 @@ export const swapLineDown = function (cm: Editor) {
     cm.scrollIntoView(null);
   });
 };
+
+/** @ts-expect-error Register `duplicateLineUp` command */
+CodeMirror.commands.duplicateLineUp = duplicateLine('up');
+/** @ts-expect-error Register `duplicateLineDown` command */
+CodeMirror.commands.duplicateLineDown = duplicateLine('down');
+
+/** @ts-expect-error Register `swapLineUp` command */
+CodeMirror.commands.swapLineUp = swapLineUp;
+/** @ts-expect-error Register `swapLineDown` command */
+CodeMirror.commands.swapLineDown = swapLineDown;

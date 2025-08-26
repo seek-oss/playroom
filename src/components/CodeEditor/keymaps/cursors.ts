@@ -43,7 +43,8 @@ function rangeIsAlreadySelected(
   return false;
 }
 
-export const selectNextOccurrence = (cm: Editor) => {
+/** @ts-expect-error Register `selectNextOccurrence` command */
+CodeMirror.commands.selectNextOccurrence = (cm: Editor) => {
   const from = cm.getCursor('from');
   const to = cm.getCursor('to');
 
@@ -106,8 +107,9 @@ function addCursorToSelection(cm: Editor, dir: Direction) {
 
   cm.setSelections(newRanges);
 }
-
-export const addCursorToPrevLine = (cm: Editor) =>
+/** @ts-expect-error Register `addCursorToPrevLine` command */
+CodeMirror.commands.addCursorToPrevLine = (cm: Editor) =>
   addCursorToSelection(cm, 'up');
-export const addCursorToNextLine = (cm: Editor) =>
+/** @ts-expect-error Register `addCursorToNextLine` command */
+CodeMirror.commands.addCursorToNextLine = (cm: Editor) =>
   addCursorToSelection(cm, 'down');
