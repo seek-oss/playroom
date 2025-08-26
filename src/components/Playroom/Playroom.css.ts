@@ -116,7 +116,7 @@ export const editorContainer = sprinkles({
 export const editorActions = style([
   sprinkles({
     display: 'flex',
-    gap: 'xxsmall',
+    gap: 'xsmall',
     position: 'absolute',
   }),
   {
