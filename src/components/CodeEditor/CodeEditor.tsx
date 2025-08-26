@@ -8,22 +8,19 @@ import 'codemirror/theme/neo.css';
 import { type CursorPosition, StoreContext } from '../../contexts/StoreContext';
 import { validateCode } from '../../utils/compileJsx';
 import { hints } from '../../utils/componentsToHints';
-import { formatCode as format, isMac } from '../../utils/formatting';
+import { isMac } from '../../utils/formatting';
 
 import { UnControlled as ReactCodeMirror } from './CodeMirror2';
-import { toggleComment } from './keymaps/comment';
 import {
   completeAfter,
   completeIfAfterLt,
   completeIfInTag,
 } from './keymaps/complete';
-import {
-  addCursorToNextLine,
-  addCursorToPrevLine,
-  selectNextOccurrence,
-} from './keymaps/cursors';
-import { duplicateLine, swapLineDown, swapLineUp } from './keymaps/lines';
-import { wrapInTag } from './keymaps/wrap';
+import './keymaps/comment';
+import './keymaps/cursors';
+import './keymaps/format';
+import './keymaps/lines';
+import './keymaps/wrap';
 
 import * as styles from './CodeEditor.css';
 
@@ -102,21 +99,6 @@ export const CodeEditor = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (editorInstanceRef && editorInstanceRef.current) {
         const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
-
-        if (cmdOrCtrl && e.key === 's') {
-          e.preventDefault();
-          const { code: formattedCode, cursor: formattedCursor } = format({
-            code: editorInstanceRef.current.getValue(),
-            cursor: editorInstanceRef.current.getCursor(),
-          });
-
-          dispatch({
-            type: 'updateCode',
-            payload: { code: formattedCode, cursor: formattedCursor },
-          });
-          editorInstanceRef.current.setValue(formattedCode);
-          editorInstanceRef.current.setCursor(formattedCursor);
-        }
 
         if (cmdOrCtrl && e.key === 'k') {
           e.preventDefault();
@@ -277,15 +259,16 @@ export const CodeEditor = ({
           "'/'": completeIfAfterLt,
           "' '": completeIfInTag,
           "'='": completeIfInTag,
-          'Alt-Up': swapLineUp,
-          'Alt-Down': swapLineDown,
-          'Shift-Alt-Up': duplicateLine('up'),
-          'Shift-Alt-Down': duplicateLine('down'),
-          [`${keymapModifierKey}-Alt-Up`]: addCursorToPrevLine,
-          [`${keymapModifierKey}-Alt-Down`]: addCursorToNextLine,
-          [`${keymapModifierKey}-D`]: selectNextOccurrence,
-          [`Shift-${keymapModifierKey}-,`]: wrapInTag,
-          [`${keymapModifierKey}-/`]: toggleComment,
+          'Alt-Up': 'swapLineUp',
+          'Alt-Down': 'swapLineDown',
+          'Shift-Alt-Up': 'duplicateLineUp',
+          'Shift-Alt-Down': 'duplicateLineDown',
+          [`${keymapModifierKey}-Alt-Up`]: 'addCursorToPrevLine',
+          [`${keymapModifierKey}-Alt-Down`]: 'addCursorToNextLine',
+          [`${keymapModifierKey}-D`]: 'selectNextOccurrence',
+          [`Shift-${keymapModifierKey}-,`]: 'wrapInTag',
+          [`${keymapModifierKey}-S`]: 'formatCode',
+          [`${keymapModifierKey}-/`]: 'toggleComment',
           [`${keymapModifierKey}-F`]: 'findPersistent',
           [`${keymapModifierKey}-Alt-F`]: 'replace',
           [`${keymapModifierKey}-G`]: 'jumpToLine',

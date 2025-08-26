@@ -1,4 +1,4 @@
-import { type Editor, Pos } from 'codemirror';
+import CodeMirror, { type Editor, Pos } from 'codemirror';
 
 import type { Selection } from './types';
 
@@ -9,7 +9,8 @@ interface TagRange {
   existingIndent: number;
 }
 
-export const wrapInTag = (cm: Editor) => {
+/** @ts-expect-error Register `wrapInTag` command */
+CodeMirror.commands.wrapInTag = (cm: Editor) => {
   const newSelections: Selection[] = [];
   const tagRanges: TagRange[] = [];
 
