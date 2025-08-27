@@ -1,4 +1,5 @@
 import { Menu as BaseUIMenu } from '@base-ui-components/react/menu';
+import type { LucideIcon } from 'lucide-react';
 import {
   type ComponentProps,
   createContext,
@@ -16,6 +17,7 @@ import * as styles from './Menu.css';
 
 export type Shortcut = string[];
 const mac = isMac();
+const iconSize = 16;
 
 const wordToSymbolMap: Record<string, string> = {
   Cmd: '⌘',
@@ -39,14 +41,14 @@ export const MenuItem = ({
   children,
   closeOnClick,
   disabled,
-  icon,
+  icon: Icon,
 }: {
   onClick: ComponentProps<typeof BaseUIMenu.Item>['onClick'];
   shortcut?: Shortcut;
   children: ComponentProps<typeof BaseUIMenu.Item>['children'];
   closeOnClick?: ComponentProps<typeof BaseUIMenu.Item>['closeOnClick'];
   disabled?: ComponentProps<typeof BaseUIMenu.Item>['disabled'];
-  icon?: ReactNode;
+  icon: LucideIcon;
 }) => (
   <BaseUIMenu.Item
     className={styles.item}
@@ -55,7 +57,7 @@ export const MenuItem = ({
     disabled={disabled}
   >
     <span className={styles.itemLeft}>
-      {icon}
+      <Icon size={iconSize} />
       {children}
     </span>
     {shortcut && (
@@ -75,15 +77,15 @@ export const MenuRadioGroup = BaseUIMenu.RadioGroup;
 export const MenuRadioItem = ({
   value,
   children,
-  icon,
+  icon: Icon,
 }: {
   value: ComponentProps<typeof BaseUIMenu.RadioItem>['value'];
   children: ComponentProps<typeof BaseUIMenu.RadioItem>['children'];
-  icon?: ReactNode;
+  icon: LucideIcon;
 }) => (
   <BaseUIMenu.RadioItem className={styles.fieldItem} value={value}>
     <span className={styles.itemLeft}>
-      {icon}
+      <Icon size={iconSize} />
       {children}
     </span>
     <BaseUIMenu.RadioItemIndicator className={styles.fieldItemIndicator}>
@@ -112,14 +114,14 @@ export const MenuCheckboxItem = ({
   checked,
   onCheckedChange,
   children,
-  icon,
+  icon: Icon,
 }: {
   checked: ComponentProps<typeof BaseUIMenu.CheckboxItem>['checked'];
   onCheckedChange: ComponentProps<
     typeof BaseUIMenu.CheckboxItem
   >['onCheckedChange'];
   children: ComponentProps<typeof BaseUIMenu.CheckboxItem>['children'];
-  icon?: ReactNode;
+  icon: LucideIcon;
 }) => (
   <BaseUIMenu.CheckboxItem
     checked={checked}
@@ -127,7 +129,7 @@ export const MenuCheckboxItem = ({
     className={styles.fieldItem}
   >
     <span className={styles.itemLeft}>
-      {icon}
+      <Icon size={iconSize} />
       {children}
     </span>
     <BaseUIMenu.CheckboxItemIndicator className={styles.fieldItemIndicator}>
@@ -163,9 +165,13 @@ type Props = {
   children: ComponentProps<typeof BaseUIMenu.Popup>['children'];
   disabled?: ComponentProps<typeof BaseUIMenu.SubmenuRoot>['disabled'];
   onClose?: () => void;
+  icon?: LucideIcon;
 };
 export const Menu = forwardRef<HTMLButtonElement, Props>(
-  ({ trigger, align = 'start', children, onClose, disabled }, triggerRef) => {
+  (
+    { trigger, align = 'start', children, onClose, disabled, icon: Icon },
+    triggerRef
+  ) => {
     const isSubMenu = useContext(SubMenuContext);
     const MenuRoot = isSubMenu ? BaseUIMenu.SubmenuRoot : BaseUIMenu.Root;
     const MenuTrigger = isSubMenu
@@ -174,6 +180,10 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
 
     if (disabled && !isSubMenu) {
       throw new Error("Menu cannot be disabled unless it's a submenu");
+    }
+
+    if (Icon && !isSubMenu) {
+      throw new Error('Icon is only supported for a submenu');
     }
 
     return (
@@ -190,7 +200,14 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
             ref={triggerRef}
             className={isSubMenu ? styles.submenuTrigger : styles.trigger}
           >
-            {trigger}
+            {isSubMenu ? (
+              <div className={styles.itemLeft}>
+                {Icon ? <Icon size={iconSize} /> : null}
+                {trigger}
+              </div>
+            ) : (
+              trigger
+            )}
             <ChevronIcon direction={isSubMenu ? 'right' : 'down'} size={12} />
           </MenuTrigger>
           <BaseUIMenu.Portal>

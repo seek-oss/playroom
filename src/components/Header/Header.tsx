@@ -81,45 +81,39 @@ const HeaderMenu = () => {
           </span>
         }
       >
-        <Menu trigger="Appearance">
+        <Menu trigger="Appearance" icon={Monitor}>
           <MenuRadioGroup value={appearance} onValueChange={setAppearance}>
-            <MenuRadioItem icon={<Monitor size={16} />} value="system">
+            <MenuRadioItem icon={Monitor} value="system">
               System
             </MenuRadioItem>
-            <MenuRadioItem icon={<Sun size={16} />} value="light">
+            <MenuRadioItem icon={Sun} value="light">
               Light
             </MenuRadioItem>
-            <MenuRadioItem icon={<Moon size={16} />} value="dark">
+            <MenuRadioItem icon={Moon} value="dark">
               Dark
             </MenuRadioItem>
           </MenuRadioGroup>
         </Menu>
 
-        <Menu trigger="Editor position">
+        <Menu trigger="Editor position" icon={CodeXml}>
           <MenuRadioGroup
             value={editorOrientation}
             onValueChange={setEditorOrientation}
           >
-            <MenuRadioItem icon={<PanelBottom size={16} />} value="horizontal">
+            <MenuRadioItem icon={PanelBottom} value="horizontal">
               Bottom
             </MenuRadioItem>
-            <MenuRadioItem icon={<PanelLeft size={16} />} value="vertical">
+            <MenuRadioItem icon={PanelLeft} value="vertical">
               Left
             </MenuRadioItem>
           </MenuRadioGroup>
         </Menu>
 
-        <Menu trigger="Configure frames">
+        <Menu trigger="Configure frames" icon={FrameIcon}>
           <MenuGroup label="Widths">
             {availableWidths.map((width) => (
               <MenuCheckboxItem
-                icon={
-                  width === 'Fit to window' ? (
-                    <MaximizeIcon size={16} />
-                  ) : (
-                    <FrameIcon size={16} />
-                  )
-                }
+                icon={width === 'Fit to window' ? MaximizeIcon : FrameIcon}
                 key={width}
                 checked={hasFilteredWidths && visibleWidths.includes(width)}
                 onCheckedChange={(checked: boolean) => {
@@ -140,7 +134,7 @@ const HeaderMenu = () => {
               </MenuCheckboxItem>
             ))}
             <MenuItem
-              icon={<Eraser size={16} />}
+              icon={Eraser}
               onClick={() => dispatch({ type: 'resetVisibleWidths' })}
               closeOnClick={false}
               disabled={!hasFilteredWidths}
@@ -156,7 +150,7 @@ const HeaderMenu = () => {
               <MenuGroup label="Themes">
                 {availableThemes.map((theme) => (
                   <MenuCheckboxItem
-                    icon={<Palette size={16} />}
+                    icon={Palette}
                     key={theme}
                     checked={hasFilteredThemes && visibleThemes.includes(theme)}
                     onCheckedChange={(checked: boolean) => {
@@ -177,7 +171,7 @@ const HeaderMenu = () => {
                   </MenuCheckboxItem>
                 ))}
                 <MenuItem
-                  icon={<Eraser size={16} />}
+                  icon={Eraser}
                   onClick={() => dispatch({ type: 'resetVisibleThemes' })}
                   closeOnClick={false}
                   disabled={!hasFilteredThemes}
@@ -190,7 +184,7 @@ const HeaderMenu = () => {
         </Menu>
 
         <MenuItem
-          icon={<Eye size={16} />}
+          icon={Eye}
           onClick={() => setPreviewDialogOpen(true)}
           disabled={code.trim().length === 0}
         >
@@ -198,7 +192,7 @@ const HeaderMenu = () => {
         </MenuItem>
 
         <MenuItem
-          icon={<LinkIcon size={16} />}
+          icon={LinkIcon}
           onClick={() => {
             dispatch({
               type: 'copyToClipboard',
@@ -212,10 +206,10 @@ const HeaderMenu = () => {
           Copy link
         </MenuItem>
 
-        <Menu trigger="Editor actions" disabled={editorHidden}>
+        <Menu trigger="Editor actions" icon={CodeXml} disabled={editorHidden}>
           {hasSnippets && (
             <MenuItem
-              icon={<BetweenHorizontalStart size={16} />}
+              icon={BetweenHorizontalStart}
               shortcut={['Cmd', 'K']}
               disabled={editorHidden}
               onClick={() => dispatch({ type: 'openSnippets' })}
@@ -230,7 +224,7 @@ const HeaderMenu = () => {
               onClick={() => {
                 inputCommandRef.current = command;
               }}
-              icon={<Icon size={16} />}
+              icon={Icon}
             >
               {label}
             </MenuItem>
