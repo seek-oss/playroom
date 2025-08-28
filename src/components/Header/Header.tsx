@@ -40,6 +40,7 @@ import {
 } from '../Menu/Menu';
 import PreviewPanel from '../PreviewSelection/PreviewDialog';
 import { Title } from '../Title/Title';
+import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Header.css';
 
@@ -78,6 +79,7 @@ const HeaderMenu = () => {
         trigger={
           <span className={styles.menuButton}>
             <Logo size={24} />
+            <ChevronIcon direction="down" size={12} />
           </span>
         }
       >

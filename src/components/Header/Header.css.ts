@@ -28,6 +28,11 @@ export const actionsContainer = style({
 });
 
 export const menuButton = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'small',
+  }),
   {
     color: colorPaletteVars.foreground.neutral,
     selectors: {
