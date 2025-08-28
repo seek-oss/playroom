@@ -1,5 +1,13 @@
 # playroom
 
+## 0.44.3
+
+### Patch Changes
+
+- [#446](https://github.com/seek-oss/playroom/pull/446) [`aa4ac22`](https://github.com/seek-oss/playroom/commit/aa4ac229ec731b0051b2419982f80e7eaf37c874) Thanks [@felixhabib](https://github.com/felixhabib)! - Update method to manage tab titles
+
+  Remove `react-helmet` dependency.
+
 ## 0.44.2
 
 ### Patch Changes
