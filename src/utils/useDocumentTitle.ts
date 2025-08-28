@@ -10,7 +10,7 @@ interface UseDocumentTitleProps {
 export function useDocumentTitle({
   title,
   suffix,
-}: UseDocumentTitleProps): void {
+}: UseDocumentTitleProps) {
   useEffect(() => {
     if (title !== undefined) {
       document.title = getTitle({ title, suffix });
