@@ -12,9 +12,7 @@ export function useDocumentTitle({
   suffix,
 }: UseDocumentTitleProps) {
   useEffect(() => {
-    if (title !== undefined) {
-      document.title = getTitle({ title, suffix });
-    }
+    document.title = getTitle({ title, suffix });
   }, [title, suffix]);
 }
 
