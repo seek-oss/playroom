@@ -208,7 +208,7 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
             ) : (
               trigger
             )}
-            <ChevronIcon direction={isSubMenu ? 'right' : 'down'} size={12} />
+            {isSubMenu ? <ChevronIcon direction="right" size={12} /> : null}
           </MenuTrigger>
           <BaseUIMenu.Portal>
             <BaseUIMenu.Positioner
