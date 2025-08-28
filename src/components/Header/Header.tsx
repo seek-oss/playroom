@@ -1,4 +1,5 @@
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
+import clsx from 'clsx';
 import {
   CodeXml,
   Sun,
@@ -43,6 +44,7 @@ import { Title } from '../Title/Title';
 import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Header.css';
+import * as buttonStyles from '../ButtonIcon/ButtonIcon.css';
 
 const HeaderMenu = () => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
@@ -51,20 +53,9 @@ const HeaderMenu = () => {
   const { runCommand } = useEditor();
   const { editorOrientation, setEditorOrientation, appearance, setAppearance } =
     usePreferences();
-  const [
-    { visibleWidths = [], visibleThemes = [], code, editorHidden },
-    dispatch,
-  ] = useContext(StoreContext);
+  const [{ code, editorHidden }, dispatch] = useContext(StoreContext);
 
   const hasSnippets = snippets && snippets.length > 0;
-  const hasThemes =
-    availableThemes.filter(
-      (themeName) => themeName !== '__PLAYROOM__NO_THEME__'
-    ).length > 0;
-  const hasFilteredWidths =
-    visibleWidths.length > 0 && visibleWidths.length <= availableWidths.length;
-  const hasFilteredThemes =
-    visibleThemes.length > 0 && visibleThemes.length <= availableThemes.length;
 
   return (
     <>
@@ -111,7 +102,104 @@ const HeaderMenu = () => {
           </MenuRadioGroup>
         </Menu>
 
-        <Menu trigger="Configure frames" icon={FrameIcon}>
+        <MenuItem
+          icon={Eye}
+          onClick={() => setPreviewDialogOpen(true)}
+          disabled={code.trim().length === 0}
+        >
+          Preview
+        </MenuItem>
+
+        <MenuItem
+          icon={LinkIcon}
+          onClick={() => {
+            dispatch({
+              type: 'copyToClipboard',
+              payload: {
+                content: window.location.href,
+                message: 'Copied Playroom link to clipboard',
+              },
+            });
+          }}
+        >
+          Copy link
+        </MenuItem>
+
+        <Menu trigger="Editor actions" icon={CodeXml} disabled={editorHidden}>
+          {hasSnippets && (
+            <MenuItem
+              icon={BetweenHorizontalStart}
+              shortcut={['Cmd', 'K']}
+              disabled={editorHidden}
+              onClick={() => dispatch({ type: 'openSnippets' })}
+            >
+              Insert snippet
+            </MenuItem>
+          )}
+          {editorCommandList.map(({ command, label, shortcut, icon: Icon }) => (
+            <MenuItem
+              key={command}
+              shortcut={shortcut}
+              onClick={() => {
+                inputCommandRef.current = command;
+              }}
+              icon={Icon}
+            >
+              {label}
+            </MenuItem>
+          ))}
+        </Menu>
+      </Menu>
+
+      {/* Preview Dialog */}
+      <Dialog
+        title="Preview"
+        open={previewDialogOpen}
+        onOpenChange={setPreviewDialogOpen}
+      >
+        <PreviewPanel />
+      </Dialog>
+    </>
+  );
+};
+
+const headerButtonIconSize = 'medium';
+
+export const Header = () => {
+  const [{ visibleWidths = [], visibleThemes = [], editorHidden }, dispatch] =
+    useContext(StoreContext);
+
+  const hasThemes =
+    availableThemes.filter((theme) => theme !== '__PLAYROOM__NO_THEME__')
+      .length > 0;
+  const hasFilteredWidths =
+    visibleWidths.length > 0 && visibleWidths.length <= availableWidths.length;
+  const hasFilteredThemes =
+    visibleThemes.length > 0 && visibleThemes.length <= availableThemes.length;
+
+  return (
+    <Box className={styles.root}>
+      <div className={styles.menuContainer}>
+        <HeaderMenu />
+      </div>
+
+      <Title />
+
+      {/* Empty placeholder for now */}
+      <div className={styles.actionsContainer}>
+        <Menu
+          trigger={
+            <span
+              aria-label="Configure frames"
+              className={clsx(
+                buttonStyles.button,
+                buttonStyles.size[headerButtonIconSize]
+              )}
+            >
+              <FrameIcon />
+            </span>
+          }
+        >
           <MenuGroup label="Widths">
             {availableWidths.map((width) => (
               <MenuCheckboxItem
@@ -185,81 +273,8 @@ const HeaderMenu = () => {
           ) : null}
         </Menu>
 
-        <MenuItem
-          icon={Eye}
-          onClick={() => setPreviewDialogOpen(true)}
-          disabled={code.trim().length === 0}
-        >
-          Preview
-        </MenuItem>
-
-        <MenuItem
-          icon={LinkIcon}
-          onClick={() => {
-            dispatch({
-              type: 'copyToClipboard',
-              payload: {
-                content: window.location.href,
-                message: 'Copied Playroom link to clipboard',
-              },
-            });
-          }}
-        >
-          Copy link
-        </MenuItem>
-
-        <Menu trigger="Editor actions" icon={CodeXml} disabled={editorHidden}>
-          {hasSnippets && (
-            <MenuItem
-              icon={BetweenHorizontalStart}
-              shortcut={['Cmd', 'K']}
-              disabled={editorHidden}
-              onClick={() => dispatch({ type: 'openSnippets' })}
-            >
-              Insert snippet
-            </MenuItem>
-          )}
-          {editorCommandList.map(({ command, label, shortcut, icon: Icon }) => (
-            <MenuItem
-              key={command}
-              shortcut={shortcut}
-              onClick={() => {
-                inputCommandRef.current = command;
-              }}
-              icon={Icon}
-            >
-              {label}
-            </MenuItem>
-          ))}
-        </Menu>
-      </Menu>
-
-      {/* Preview Dialog */}
-      <Dialog
-        title="Preview"
-        open={previewDialogOpen}
-        onOpenChange={setPreviewDialogOpen}
-      >
-        <PreviewPanel />
-      </Dialog>
-    </>
-  );
-};
-
-export const Header = () => {
-  const [{ editorHidden }, dispatch] = useContext(StoreContext);
-
-  return (
-    <Box className={styles.root}>
-      <div className={styles.menuContainer}>
-        <HeaderMenu />
-      </div>
-
-      <Title />
-
-      {/* Empty placeholder for now */}
-      <div className={styles.actionsContainer}>
         <ButtonIcon
+          size={headerButtonIconSize}
           label={editorHidden ? 'Show code' : 'Hide code'}
           icon={<CodeXml />}
           onClick={() =>
