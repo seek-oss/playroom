@@ -64,12 +64,20 @@ describe('URL handling', () => {
       ]);
     });
 
-    it('title', () => {
+    it('edit title', () => {
       cy.visit(
         'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA'
       );
 
       cy.title().should('eq', 'Test | Playroom');
+    });
+
+    it('preview title', () => {
+      cy.visit(
+        'http://localhost:9001/preview/?code=N4Igxg9gJgpiBcIA8AxCEB8aJIPTYwB0A7EAGhABcALGAWzkRvpgHli4LKBLSgG0YgAKjADOlEAF8gA'
+      );
+
+      cy.title().should('eq', 'Test | Playroom Preview');
     });
 
     it('editor hidden', () => {

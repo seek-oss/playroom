@@ -58,6 +58,11 @@ export const selectWidthPreference = (width: Widths[number]) => {
   cy.findByRole('checkbox', { name: `${width}` }).click();
 };
 
+export const changeTitle = (title: string) => {
+  cy.findByRole('button', { name: 'Configure visible frames' }).click();
+  cy.findByRole('textbox', { name: 'Title' }).type(title);
+};
+
 export const getResetButton = () => cy.findByRole('button', { name: 'Clear' });
 
 export const togglePreviewPanel = () =>
