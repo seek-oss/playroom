@@ -22,10 +22,17 @@ export const menuContainer = style({
   width: 'fit-content',
 });
 
-export const actionsContainer = style({
-  width: 'fit-content',
-  justifySelf: 'flex-end',
-});
+export const actionsContainer = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'large',
+  }),
+  {
+    width: 'fit-content',
+    justifySelf: 'flex-end',
+  },
+]);
 
 export const menuButton = style([
   sprinkles({
