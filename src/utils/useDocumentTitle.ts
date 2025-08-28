@@ -17,14 +17,10 @@ function getTitle({
   title,
   suffix = 'Playroom',
 }: UseDocumentTitleProps): string {
-  if (title) {
-    return `${title} | ${suffix}`;
-  }
+  const resolvedTitle = title || playroomConfig?.title;
 
-  const configTitle = playroomConfig?.title;
-
-  if (configTitle) {
-    return `${configTitle} | ${suffix}`;
+  if (resolvedTitle) {
+    return `${resolvedTitle} | ${suffix}`;
   }
 
   return suffix;
