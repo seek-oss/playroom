@@ -7,10 +7,7 @@ interface UseDocumentTitleProps {
   suffix?: string;
 }
 
-export function useDocumentTitle({
-  title,
-  suffix,
-}: UseDocumentTitleProps) {
+export function useDocumentTitle({ title, suffix }: UseDocumentTitleProps) {
   useEffect(() => {
     document.title = getTitle({ title, suffix });
   }, [title, suffix]);
