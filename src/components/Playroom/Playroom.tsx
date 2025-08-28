@@ -32,20 +32,6 @@ const resolveDirection = (
   return editorHidden ? 'up' : 'down';
 };
 
-const getTitle = (title: string | undefined) => {
-  if (title) {
-    return `${title} | Playroom`;
-  }
-
-  const configTitle = window?.__playroomConfig__.title;
-
-  if (configTitle) {
-    return `${configTitle} | Playroom`;
-  }
-
-  return 'Playroom';
-};
-
 const resizeHandlePosition: Record<
   EditorPosition,
   ComponentProps<typeof ResizeHandle>['position']
@@ -70,7 +56,7 @@ export default () => {
     dispatch,
   ] = useContext(StoreContext);
 
-  useDocumentTitle(title === undefined ? undefined : getTitle(title));
+  useDocumentTitle({ title, isPreview: false });
 
   const editorRef = useRef<HTMLElement | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
