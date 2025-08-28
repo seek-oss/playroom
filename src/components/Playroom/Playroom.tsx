@@ -6,9 +6,9 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Helmet } from 'react-helmet';
 
 import { StoreContext, type EditorPosition } from '../../contexts/StoreContext';
+import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
 import Frames from '../Frames/Frames';
@@ -69,6 +69,9 @@ export default () => {
     },
     dispatch,
   ] = useContext(StoreContext);
+
+  useDocumentTitle(title === undefined ? undefined : getTitle(title));
+
   const editorRef = useRef<HTMLElement | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [resizing, setResizing] = useState(false);
@@ -104,12 +107,6 @@ export default () => {
         [styles.editorSize]: editorHidden ? undefined : editorSize,
       })}
     >
-      {title === undefined ? null : (
-        <Helmet>
-          <title>{getTitle(title)}</title>
-        </Helmet>
-      )}
-
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
           <Frames code={previewRenderCode || code} />

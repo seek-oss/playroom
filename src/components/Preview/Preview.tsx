@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Helmet } from 'react-helmet';
 
+import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
 
 import SplashScreen from './SplashScreen/SplashScreen';
@@ -16,6 +16,8 @@ interface PreviewProps {
 }
 export default ({ title, children }: PreviewProps) => {
   const [loading, setLoading] = useState(true);
+  const pageTitle = title ? `${title} | Playroom Preview` : 'Playroom Preview';
+  useDocumentTitle(pageTitle);
 
   useEffect(() => {
     const hideSplash = setTimeout(
@@ -28,11 +30,6 @@ export default ({ title, children }: PreviewProps) => {
 
   return (
     <>
-      <Helmet>
-        <title>
-          {title ? `${title} | Playroom Preview` : 'Playroom Preview'}
-        </title>
-      </Helmet>
       <Box position="relative" zIndex={0} aria-hidden={loading || undefined}>
         {children}
       </Box>
