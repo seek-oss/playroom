@@ -1,28 +1,36 @@
 import { useEffect } from 'react';
 
+import playroomConfig from '../config';
+
 interface UseDocumentTitleProps {
   title?: string;
-  isPreview?: boolean;
+  suffix?: string;
 }
 
 export function useDocumentTitle({
   title,
-  isPreview,
+  suffix,
 }: UseDocumentTitleProps): void {
   useEffect(() => {
     if (title !== undefined) {
-      document.title = getTitle({ title, isPreview });
+      document.title = getTitle({ title, suffix });
     }
-  }, [title, isPreview]);
+  }, [title, suffix]);
 }
 
-function getTitle({ title, isPreview }: UseDocumentTitleProps): string {
-  const defaultTitle = isPreview ? 'Playroom Preview' : 'Playroom';
-  const configTitle = window?.__playroomConfig__.title || defaultTitle;
-
+function getTitle({
+  title,
+  suffix = 'Playroom',
+}: UseDocumentTitleProps): string {
   if (title) {
-    return `${title} | ${defaultTitle}`;
+    return `${title} | ${suffix}`;
   }
 
-  return configTitle;
+  const configTitle = playroomConfig?.title;
+
+  if (configTitle) {
+    return `${configTitle} | ${suffix}`;
+  }
+
+  return suffix;
 }

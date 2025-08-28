@@ -56,7 +56,7 @@ export default () => {
     dispatch,
   ] = useContext(StoreContext);
 
-  useDocumentTitle({ title, isPreview: false });
+  useDocumentTitle({ title });
 
   const editorRef = useRef<HTMLElement | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);

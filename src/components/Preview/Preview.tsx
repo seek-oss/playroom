@@ -17,7 +17,7 @@ interface PreviewProps {
 export default ({ title, children }: PreviewProps) => {
   const [loading, setLoading] = useState(true);
 
-  useDocumentTitle({ title, isPreview: true });
+  useDocumentTitle({ title, suffix: 'Playroom Preview' });
 
   useEffect(() => {
     const hideSplash = setTimeout(
