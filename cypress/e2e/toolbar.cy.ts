@@ -7,6 +7,7 @@ import {
   loadPlayroom,
   getResetButton,
   selectWidthPreference,
+  changeTitle,
 } from '../support/utils';
 
 describe('Toolbar', () => {
@@ -24,6 +25,11 @@ describe('Toolbar', () => {
 
     getResetButton().click();
     assertFramesMatch(frames);
+  });
+
+  it('change title', () => {
+    changeTitle('Test');
+    cy.title().should('eq', 'Test | Playroom');
   });
 
   it('preview', () => {
