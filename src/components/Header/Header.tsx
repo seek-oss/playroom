@@ -20,7 +20,6 @@ import { useContext, useRef, useState } from 'react';
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import { useEditor } from '../../contexts/EditorContext';
-import { usePreferences } from '../../contexts/PreferencesContext';
 import { StoreContext } from '../../contexts/StoreContext';
 import { Box } from '../Box/Box';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
@@ -51,9 +50,8 @@ const HeaderMenu = () => {
   const inputCommandRef = useRef<EditorCommand | null>(null);
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
   const { runCommand } = useEditor();
-  const { editorOrientation, setEditorOrientation, appearance, setAppearance } =
-    usePreferences();
-  const [{ code, editorHidden }, dispatch] = useContext(StoreContext);
+  const [{ code, editorOrientation, editorHidden, colorScheme }, dispatch] =
+    useContext(StoreContext);
 
   const hasSnippets = snippets && snippets.length > 0;
 
@@ -75,7 +73,15 @@ const HeaderMenu = () => {
         }
       >
         <Menu trigger="Appearance" icon={Monitor}>
-          <MenuRadioGroup value={appearance} onValueChange={setAppearance}>
+          <MenuRadioGroup
+            value={colorScheme}
+            onValueChange={(value) =>
+              dispatch({
+                type: 'updateColorScheme',
+                payload: { colorScheme: value },
+              })
+            }
+          >
             <MenuRadioItem icon={Monitor} value="system">
               System
             </MenuRadioItem>
@@ -91,7 +97,12 @@ const HeaderMenu = () => {
         <Menu trigger="Editor position" icon={CodeXml}>
           <MenuRadioGroup
             value={editorOrientation}
-            onValueChange={setEditorOrientation}
+            onValueChange={(value) => {
+              dispatch({
+                type: 'updateEditorOrientation',
+                payload: { orientation: value },
+              });
+            }}
           >
             <MenuRadioItem icon={PanelBottom} value="horizontal">
               Bottom

@@ -17,10 +17,9 @@ import {
 import type { Snippet as SnippetType } from '../../../utils';
 import { useEditor } from '../../contexts/EditorContext';
 import {
-  usePreferences,
   type EditorOrientation,
-} from '../../contexts/PreferencesContext';
-import { StoreContext } from '../../contexts/StoreContext';
+  StoreContext,
+} from '../../contexts/StoreContext';
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
@@ -107,6 +106,9 @@ const SnippetPopover = ({
 export default () => {
   const [
     {
+      editorOrientation,
+      editorHeight,
+      editorWidth,
       editorHidden,
       code,
       previewRenderCode,
@@ -119,8 +121,6 @@ export default () => {
   useDocumentTitle({ title });
 
   const { runCommand } = useEditor();
-  const { editorOrientation, editorHeight, editorWidth, setEditorSize } =
-    usePreferences();
   const editorRef = useRef<HTMLElement | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [resizing, setResizing] = useState(false);
@@ -142,8 +142,8 @@ export default () => {
     };
   }, [editorHidden]);
 
-  const editorSize =
-    editorOrientation === 'vertical' ? editorWidth : editorHeight;
+  const isVerticalEditor = editorOrientation === 'vertical';
+  const editorSize = isVerticalEditor ? editorWidth : editorHeight;
 
   return (
     <Box
@@ -178,11 +178,23 @@ export default () => {
           <ResizeHandle
             ref={editorRef}
             position={resizeHandlePosition[editorOrientation]}
-            onResize={setEditorSize}
+            onResize={(newValue) => {
+              dispatch({
+                type: isVerticalEditor
+                  ? 'updateEditorWidth'
+                  : 'updateEditorHeight',
+                payload: { size: newValue },
+              });
+            }}
             onResizeStart={() => setResizing(true)}
             onResizeEnd={(endValue) => {
               setResizing(false);
-              setEditorSize(endValue);
+              dispatch({
+                type: isVerticalEditor
+                  ? 'updateEditorWidth'
+                  : 'updateEditorHeight',
+                payload: { size: endValue },
+              });
             }}
           />
           <CodeEditor
