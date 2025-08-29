@@ -21,11 +21,9 @@ interface FramesProps {
 }
 
 export default function Frames({ code }: FramesProps) {
-  const [{ visibleWidths, visibleThemes }] = useContext(StoreContext);
-  const themes =
-    visibleThemes && visibleThemes.length > 0 ? visibleThemes : availableThemes;
-  const widths =
-    visibleWidths && visibleWidths.length > 0 ? visibleWidths : availableWidths;
+  const [{ selectedWidths, selectedThemes }] = useContext(StoreContext);
+  const themes = selectedThemes.length > 0 ? selectedThemes : availableThemes;
+  const widths = selectedWidths.length > 0 ? selectedWidths : availableWidths;
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
   const renderCode = useRef<string>('');
 

@@ -92,8 +92,8 @@ interface State {
   editorHeight: string;
   editorWidth: string;
   statusMessage?: StatusMessage;
-  visibleThemes?: string[];
-  visibleWidths?: Widths;
+  selectedThemes: typeof availableThemes;
+  selectedWidths: Widths;
   colorScheme: ColorScheme;
 }
 
@@ -122,13 +122,16 @@ type Action =
     }
   | { type: 'updateEditorHeight'; payload: { size: number } }
   | { type: 'updateEditorWidth'; payload: { size: number } }
-  | { type: 'updateVisibleThemes'; payload: { themes: typeof availableThemes } }
-  | { type: 'resetVisibleThemes' }
   | {
-      type: 'updateVisibleWidths';
+      type: 'updateSelectedThemes';
+      payload: { themes: typeof availableThemes };
+    }
+  | { type: 'resetSelectedThemes' }
+  | {
+      type: 'updateSelectedWidths';
       payload: { widths: Widths };
     }
-  | { type: 'resetVisibleWidths' }
+  | { type: 'resetSelectedWidths' }
   | { type: 'updateTitle'; payload: { title: string } };
 
 const resetPreview = ({
@@ -329,40 +332,44 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case 'updateVisibleThemes': {
+    case 'updateSelectedThemes': {
       const { themes } = action.payload;
-      const visibleThemes = availableThemes.filter((t) => themes.includes(t));
-      store.setItem('visibleThemes', visibleThemes);
+      const selectedThemes = availableThemes.filter((t) => themes.includes(t));
+      store.setItem('visibleThemes', selectedThemes);
 
       return {
         ...state,
-        visibleThemes,
+        selectedThemes,
       };
     }
 
-    case 'resetVisibleThemes': {
-      const { visibleThemes, ...restState } = state;
+    case 'resetSelectedThemes': {
       store.removeItem('visibleThemes');
 
-      return restState;
-    }
-
-    case 'updateVisibleWidths': {
-      const { widths } = action.payload;
-      const visibleWidths = availableWidths.filter((w) => widths.includes(w));
-      store.setItem('visibleWidths', visibleWidths);
-
       return {
         ...state,
-        visibleWidths,
+        selectedThemes: [],
       };
     }
 
-    case 'resetVisibleWidths': {
-      const { visibleWidths, ...restState } = state;
+    case 'updateSelectedWidths': {
+      const { widths } = action.payload;
+      const selectedWidths = availableWidths.filter((w) => widths.includes(w));
+      store.setItem('visibleWidths', selectedWidths);
+
+      return {
+        ...state,
+        selectedWidths,
+      };
+    }
+
+    case 'resetSelectedWidths': {
       store.removeItem('visibleWidths');
 
-      return restState;
+      return {
+        ...state,
+        selectedWidths: [],
+      };
     }
 
     case 'updateTitle': {
@@ -390,6 +397,11 @@ const initialState: State = {
   editorOrientation: defaultOrientation,
   editorHeight: defaultEditorSize,
   editorWidth: defaultEditorSize,
+  selectedThemes:
+    themesEnabled && playroomConfig.defaultVisibleThemes
+      ? playroomConfig.defaultVisibleThemes
+      : [],
+  selectedWidths: playroomConfig.defaultVisibleWidths || [],
   colorScheme: 'system',
 };
 
@@ -415,8 +427,8 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const params = getParamsFromQuery();
     let codeFromQuery: State['code'];
-    let themesFromQuery: State['visibleThemes'];
-    let widthsFromQuery: State['visibleWidths'];
+    let themesFromQuery: State['selectedThemes'];
+    let widthsFromQuery: State['selectedWidths'];
     let titleFromQuery: State['title'];
     let editorHiddenFromQuery: State['editorHidden'];
 
@@ -440,47 +452,29 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     }
 
     Promise.all([
-      store.getItem<EditorOrientation>('editorOrientation'),
-      store.getItem<string | number>('editorHeight'), // Number type deprecated
-      store.getItem<string | number>('editorWidth'), // Number type deprecated
-      store.getItem<number[]>('visibleWidths'),
-      store.getItem<string[]>('visibleThemes'),
-      store.getItem<ColorScheme>('colorScheme'),
+      store.getItem<State['editorOrientation']>('editorOrientation'),
+      store.getItem<State['editorHeight']>('editorHeight'),
+      store.getItem<State['editorWidth']>('editorWidth'),
+      store.getItem<State['selectedWidths']>('visibleWidths'),
+      store.getItem<State['selectedThemes']>('visibleThemes'),
+      store.getItem<State['colorScheme']>('colorScheme'),
     ]).then(
       ([
         storedOrientation,
         storedHeight,
         storedWidth,
-        storedVisibleWidths,
-        storedVisibleThemes,
+        storedSelectedWidths,
+        storedSelectedThemes,
         storedColorScheme,
       ]) => {
         const code = codeFromQuery || exampleCode;
         const editorOrientation = storedOrientation;
-
-        const editorHeight =
-          (typeof storedHeight === 'number'
-            ? convertAndStoreSizeAsPercentage('height', storedHeight)
-            : storedHeight) || defaultEditorSize;
-
-        const editorWidth =
-          (typeof storedWidth === 'number'
-            ? convertAndStoreSizeAsPercentage('width', storedWidth)
-            : storedWidth) || defaultEditorSize;
-
+        const editorHeight = storedHeight || defaultEditorSize;
+        const editorWidth = storedWidth || defaultEditorSize;
         const editorHidden = editorHiddenFromQuery === true;
-
-        const visibleWidths =
-          widthsFromQuery ||
-          storedVisibleWidths ||
-          playroomConfig?.defaultVisibleWidths;
-
-        const visibleThemes =
-          themesEnabled &&
-          (themesFromQuery ||
-            storedVisibleThemes ||
-            playroomConfig?.defaultVisibleThemes);
-
+        const selectedWidths = widthsFromQuery || storedSelectedWidths;
+        const selectedThemes =
+          themesEnabled && (themesFromQuery || storedSelectedThemes);
         const colorScheme = storedColorScheme;
 
         dispatch({
@@ -491,8 +485,8 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
             ...(editorHeight ? { editorHeight } : {}),
             ...(editorWidth ? { editorWidth } : {}),
             ...(editorHidden ? { editorHidden } : {}),
-            ...(visibleThemes ? { visibleThemes } : {}),
-            ...(visibleWidths ? { visibleWidths } : {}),
+            ...(selectedThemes ? { selectedThemes } : {}),
+            ...(selectedWidths ? { selectedWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
             title: titleFromQuery,
           },
@@ -524,15 +518,15 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     debouncedCodeUpdate({
       code: state.code,
-      themes: state.visibleThemes,
-      widths: state.visibleWidths,
+      themes: state.selectedThemes,
+      widths: state.selectedWidths,
       title: state.title,
       editorHidden: state.editorHidden,
     });
   }, [
     state.code,
-    state.visibleThemes,
-    state.visibleWidths,
+    state.selectedThemes,
+    state.selectedWidths,
     state.title,
     state.editorHidden,
     debouncedCodeUpdate,
