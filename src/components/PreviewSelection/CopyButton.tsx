@@ -36,11 +36,10 @@ export const CopyButton = ({ copyContent, title }: CopyButtonProps) => {
   return (
     <Button
       onClick={onClick}
-      title={title}
       tone={copying ? 'positive' : undefined}
       icon={copying ? <TickIcon size={18} /> : <ShareIcon size={18} />}
     >
-      {copying ? 'Copied ' : 'Copy link '}
+      {copying ? 'Copied ' : title}
     </Button>
   );
 };
