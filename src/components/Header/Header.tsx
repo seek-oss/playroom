@@ -17,7 +17,10 @@ import {
 } from 'lucide-react';
 import { useContext, useRef } from 'react';
 
-import { themeNames as availableThemes } from '../../configModules/themes';
+import {
+  themeNames as availableThemes,
+  themesEnabled,
+} from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
@@ -162,9 +165,6 @@ export const Header = () => {
   ] = useContext(StoreContext);
 
   const hasCode = code.trim().length > 0;
-  const hasThemes =
-    availableThemes.filter((theme) => theme !== '__PLAYROOM__NO_THEME__')
-      .length > 0;
   const hasFilteredWidths =
     visibleWidths.length > 0 && visibleWidths.length <= availableWidths.length;
   const hasFilteredThemes =
@@ -266,7 +266,7 @@ export const Header = () => {
             </MenuItem>
           </MenuGroup>
 
-          {hasThemes ? (
+          {themesEnabled ? (
             <>
               <MenuSeparator />
 
