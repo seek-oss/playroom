@@ -14,7 +14,10 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { type Snippet, compressParams } from '../../utils';
 import playroomConfig from '../config';
-import { themeNames as availableThemes } from '../configModules/themes';
+import {
+  themeNames as availableThemes,
+  themesEnabled,
+} from '../configModules/themes';
 import availableWidths, { type Widths } from '../configModules/widths';
 import { isValidLocation } from '../utils/cursor';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
@@ -408,10 +411,6 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     },
     500
   );
-  const hasThemesConfigured =
-    availableThemes.filter(
-      (themeName) => themeName !== '__PLAYROOM__NO_THEME__'
-    ).length > 0;
 
   useEffect(() => {
     const params = getParamsFromQuery();
@@ -477,7 +476,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
           playroomConfig?.defaultVisibleWidths;
 
         const visibleThemes =
-          hasThemesConfigured &&
+          themesEnabled &&
           (themesFromQuery ||
             storedVisibleThemes ||
             playroomConfig?.defaultVisibleThemes);
@@ -502,7 +501,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         setReady(true);
       }
     );
-  }, [hasThemesConfigured]);
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
