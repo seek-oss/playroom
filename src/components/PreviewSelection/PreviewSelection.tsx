@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 
-import { themeNames } from '../../configModules/themes';
+import { themeNames, themesEnabled } from '../../configModules/themes';
 import { StoreContext } from '../../contexts/StoreContext';
 import usePreviewUrl from '../../utils/usePreviewUrl';
 import { Button } from '../Button/Button';
@@ -15,18 +15,14 @@ import { ThemeSelector } from './ThemeSelector';
 import * as styles from './PreviewSelection.css';
 
 export const PreviewSelection = () => {
-  const [{ visibleThemes = [] }] = useContext(StoreContext);
+  const [{ selectedThemes }] = useContext(StoreContext);
   const defaultTheme =
-    visibleThemes && visibleThemes.length > 0
-      ? visibleThemes[0]
-      : themeNames[0];
+    selectedThemes.length > 0 ? selectedThemes[0] : themeNames[0];
   const [userSelectedTheme, setUserSelectedTheme] = useState<
     string | undefined
   >();
 
   const activeTheme = userSelectedTheme || defaultTheme;
-
-  const isThemed = themeNames.length > 1;
 
   const prototypeUrl = usePreviewUrl(activeTheme);
 
@@ -37,9 +33,9 @@ export const PreviewSelection = () => {
 
         <Stack space="medium">
           <Heading level="3">Preview</Heading>
-          {isThemed ? (
+          {themesEnabled ? (
             <ThemeSelector
-              visibleThemes={visibleThemes}
+              selectedThemes={selectedThemes}
               activeTheme={activeTheme}
               onChange={setUserSelectedTheme}
             />

@@ -159,16 +159,16 @@ const HeaderMenu = () => {
 const headerButtonIconSize = 'medium';
 
 export const Header = () => {
-  const [
-    { code, visibleWidths = [], visibleThemes = [], editorHidden },
-    dispatch,
-  ] = useContext(StoreContext);
+  const [{ code, selectedWidths, selectedThemes, editorHidden }, dispatch] =
+    useContext(StoreContext);
 
   const hasCode = code.trim().length > 0;
   const hasFilteredWidths =
-    visibleWidths.length > 0 && visibleWidths.length <= availableWidths.length;
+    selectedWidths.length > 0 &&
+    selectedWidths.length <= availableWidths.length;
   const hasFilteredThemes =
-    visibleThemes.length > 0 && visibleThemes.length <= availableThemes.length;
+    selectedThemes.length > 0 &&
+    selectedThemes.length <= availableThemes.length;
 
   return (
     <Box className={styles.root}>
@@ -238,13 +238,13 @@ export const Header = () => {
               <MenuCheckboxItem
                 icon={width === 'Fit to window' ? MaximizeIcon : FrameIcon}
                 key={width}
-                checked={hasFilteredWidths && visibleWidths.includes(width)}
+                checked={hasFilteredWidths && selectedWidths.includes(width)}
                 onCheckedChange={(checked: boolean) => {
                   const newWidths =
-                    visibleWidths.length === 0 ? [width] : visibleWidths;
+                    selectedWidths.length === 0 ? [width] : selectedWidths;
 
                   dispatch({
-                    type: 'updateVisibleWidths',
+                    type: 'updateSelectedWidths',
                     payload: {
                       widths: checked
                         ? [...newWidths, width]
@@ -258,7 +258,7 @@ export const Header = () => {
             ))}
             <MenuItem
               icon={Eraser}
-              onClick={() => dispatch({ type: 'resetVisibleWidths' })}
+              onClick={() => dispatch({ type: 'resetSelectedWidths' })}
               closeOnClick={false}
               disabled={!hasFilteredWidths}
             >
@@ -275,13 +275,15 @@ export const Header = () => {
                   <MenuCheckboxItem
                     icon={Palette}
                     key={theme}
-                    checked={hasFilteredThemes && visibleThemes.includes(theme)}
+                    checked={
+                      hasFilteredThemes && selectedThemes.includes(theme)
+                    }
                     onCheckedChange={(checked: boolean) => {
                       const newThemes =
-                        visibleThemes.length === 0 ? [theme] : visibleThemes;
+                        selectedThemes.length === 0 ? [theme] : selectedThemes;
 
                       dispatch({
-                        type: 'updateVisibleThemes',
+                        type: 'updateSelectedThemes',
                         payload: {
                           themes: checked
                             ? [...newThemes, theme]
@@ -295,7 +297,7 @@ export const Header = () => {
                 ))}
                 <MenuItem
                   icon={Eraser}
-                  onClick={() => dispatch({ type: 'resetVisibleThemes' })}
+                  onClick={() => dispatch({ type: 'resetSelectedThemes' })}
                   closeOnClick={false}
                   disabled={!hasFilteredThemes}
                 >
