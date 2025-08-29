@@ -441,7 +441,6 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     }
 
     Promise.all([
-      store.getItem<string>('code'),
       store.getItem<EditorOrientation>('editorOrientation'),
       store.getItem<string | number>('editorHeight'), // Number type deprecated
       store.getItem<string | number>('editorWidth'), // Number type deprecated
@@ -450,7 +449,6 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       store.getItem<ColorScheme>('colorScheme'),
     ]).then(
       ([
-        storedCode,
         storedOrientation,
         storedHeight,
         storedWidth,
@@ -458,7 +456,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         storedVisibleThemes,
         storedColorScheme,
       ]) => {
-        const code = codeFromQuery || storedCode || exampleCode;
+        const code = codeFromQuery || exampleCode;
         const editorOrientation = storedOrientation;
 
         const editorHeight =

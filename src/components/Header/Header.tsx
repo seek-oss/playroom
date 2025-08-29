@@ -14,6 +14,7 @@ import {
   Link as LinkIcon,
   MaximizeIcon,
   BetweenHorizontalStart,
+  File,
 } from 'lucide-react';
 import { useContext, useRef, useState } from 'react';
 
@@ -72,6 +73,18 @@ const HeaderMenu = () => {
           </span>
         }
       >
+        <MenuItem
+          icon={File}
+          onClick={() => {
+            const { origin, pathname } = window.location;
+            window.open(`${origin}${pathname}`, '_blank');
+          }}
+        >
+          New Playroom
+        </MenuItem>
+
+        <MenuSeparator />
+
         <Menu trigger="Appearance" icon={Monitor}>
           <MenuRadioGroup
             value={colorScheme}
