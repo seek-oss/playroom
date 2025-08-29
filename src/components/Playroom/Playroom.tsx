@@ -1,4 +1,3 @@
-import { Popover as BaseUIPopover } from '@base-ui-components/react/popover';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import {
@@ -14,7 +13,6 @@ import {
   useState,
 } from 'react';
 
-import type { Snippet as SnippetType } from '../../../utils';
 import { useEditor } from '../../contexts/EditorContext';
 import {
   type EditorOrientation,
@@ -25,6 +23,7 @@ import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
 import Frames from '../Frames/Frames';
 import { Header } from '../Header/Header';
+import { Popover, type PopoverTrigger } from '../Popover/Popover';
 import Snippets from '../Snippets/Snippets';
 import { StatusMessage } from '../StatusMessage/StatusMessage';
 import { Text } from '../Text/Text';
@@ -42,8 +41,7 @@ const resizeHandlePosition: Record<
   vertical: 'right',
 } as const;
 
-interface EditorActionButtonProps
-  extends ComponentProps<typeof BaseUIPopover.Trigger> {
+interface EditorActionButtonProps extends PopoverTrigger {
   onClick?: () => void;
   name: string;
   shortcut: string;
@@ -68,41 +66,6 @@ const EditorActionButton = ({
   </button>
 );
 
-interface InsertSnippetPopoverProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSelect: (snippet: SnippetType | null) => void;
-  trigger?: ComponentProps<typeof BaseUIPopover.Trigger>['render'];
-}
-
-const SnippetPopover = ({
-  open,
-  onOpenChange,
-  onSelect,
-  trigger,
-}: InsertSnippetPopoverProps) => {
-  const searchRef = useRef<HTMLInputElement | null>(null);
-
-  return (
-    <BaseUIPopover.Root open={open} onOpenChange={onOpenChange}>
-      <BaseUIPopover.Trigger render={trigger} />
-      <BaseUIPopover.Portal>
-        <BaseUIPopover.Positioner
-          side="top"
-          sideOffset={10 /* Align with Menu -> SubMenu offset */}
-        >
-          <BaseUIPopover.Popup
-            className={styles.snippetsPopup}
-            initialFocus={searchRef}
-          >
-            <Snippets searchRef={searchRef} onSelect={onSelect} />
-          </BaseUIPopover.Popup>
-        </BaseUIPopover.Positioner>
-      </BaseUIPopover.Portal>
-    </BaseUIPopover.Root>
-  );
-};
-
 export default () => {
   const [
     {
@@ -122,6 +85,7 @@ export default () => {
 
   const { runCommand } = useEditor();
   const editorRef = useRef<HTMLElement | null>(null);
+  const searchRef = useRef<HTMLInputElement | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [resizing, setResizing] = useState(false);
   const [lastEditorHidden, setLastEditorHidden] = useState(editorHidden);
@@ -210,18 +174,14 @@ export default () => {
           {/* Todo - fix when minimum width editor */}
           <Box className={styles.editorActions}>
             {hasSnippets && (
-              <SnippetPopover
+              <Popover
+                aria-label="Select a snippet"
+                size="small"
+                side="top"
                 open={snippetsOpen}
                 onOpenChange={(open) =>
                   dispatch({ type: open ? 'openSnippets' : 'closeSnippets' })
                 }
-                onSelect={(snippet) => {
-                  if (snippet) {
-                    dispatch({ type: 'persistSnippet', payload: { snippet } });
-                  } else {
-                    dispatch({ type: 'closeSnippets' });
-                  }
-                }}
                 trigger={
                   <EditorActionButton
                     name="Insert snippet"
@@ -229,7 +189,24 @@ export default () => {
                     icon={BetweenHorizontalStart}
                   />
                 }
-              />
+                initialFocus={searchRef}
+              >
+                <div className={styles.snippetsPopupWidth}>
+                  <Snippets
+                    searchRef={searchRef}
+                    onSelect={(snippet) => {
+                      if (snippet) {
+                        dispatch({
+                          type: 'persistSnippet',
+                          payload: { snippet },
+                        });
+                      } else {
+                        dispatch({ type: 'closeSnippets' });
+                      }
+                    }}
+                  />
+                </div>
+              </Popover>
             )}
             <EditorActionButton
               onClick={() => runCommand('formatCode')}
