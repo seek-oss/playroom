@@ -8,7 +8,7 @@ import ChevronIcon from '../icons/ChevronIcon';
 import * as styles from './ThemeSelector.css';
 
 interface ThemeSelectorProps {
-  visibleThemes: string[] | undefined;
+  selectedThemes: string[];
   activeTheme: string;
   onChange: (theme: string) => void;
 }
@@ -22,17 +22,17 @@ const themeOption = (theme: string) => (
 export const ThemeSelector = ({
   activeTheme,
   onChange,
-  visibleThemes,
+  selectedThemes,
 }: ThemeSelectorProps) => {
   const options =
-    visibleThemes && visibleThemes.length > 0 ? (
+    selectedThemes.length > 0 ? (
       <Fragment>
         <optgroup label="Visible themes">
-          {visibleThemes.map(themeOption)}
+          {selectedThemes.map(themeOption)}
         </optgroup>
         <optgroup label="Available themes">
           {themeNames
-            .filter((theme) => !visibleThemes.some((t) => t === theme))
+            .filter((theme) => !selectedThemes.some((t) => t === theme))
             .map(themeOption)}
         </optgroup>
       </Fragment>
