@@ -1,3 +1,4 @@
+import { Popover as BaseUIPopover } from '@base-ui-components/react/popover';
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import clsx from 'clsx';
 import {
@@ -10,13 +11,11 @@ import {
   Frame as FrameIcon,
   Eraser,
   Palette,
-  Eye,
-  Link as LinkIcon,
   MaximizeIcon,
   BetweenHorizontalStart,
   File,
 } from 'lucide-react';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useRef } from 'react';
 
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
@@ -28,7 +27,6 @@ import {
   type EditorCommand,
   editorCommandList,
 } from '../CodeEditor/editorCommands';
-import { Dialog } from '../Dialog/Dialog';
 import { Logo } from '../Logo/Logo';
 import {
   Menu,
@@ -39,7 +37,8 @@ import {
   MenuRadioItem,
   MenuSeparator,
 } from '../Menu/Menu';
-import PreviewPanel from '../PreviewSelection/PreviewDialog';
+import { PreviewSelection } from '../PreviewSelection/PreviewSelection';
+import { Text } from '../Text/Text';
 import { Title } from '../Title/Title';
 import ChevronIcon from '../icons/ChevronIcon';
 
@@ -49,9 +48,8 @@ import * as buttonStyles from '../ButtonIcon/ButtonIcon.css';
 const HeaderMenu = () => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const inputCommandRef = useRef<EditorCommand | null>(null);
-  const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
   const { runCommand } = useEditor();
-  const [{ code, editorOrientation, editorHidden, colorScheme }, dispatch] =
+  const [{ editorOrientation, editorHidden, colorScheme }, dispatch] =
     useContext(StoreContext);
 
   const hasSnippets = snippets && snippets.length > 0;
@@ -126,29 +124,6 @@ const HeaderMenu = () => {
           </MenuRadioGroup>
         </Menu>
 
-        <MenuItem
-          icon={Eye}
-          onClick={() => setPreviewDialogOpen(true)}
-          disabled={code.trim().length === 0}
-        >
-          Preview
-        </MenuItem>
-
-        <MenuItem
-          icon={LinkIcon}
-          onClick={() => {
-            dispatch({
-              type: 'copyToClipboard',
-              payload: {
-                content: window.location.href,
-                message: 'Copied Playroom link to clipboard',
-              },
-            });
-          }}
-        >
-          Copy link
-        </MenuItem>
-
         <Menu trigger="Editor actions" icon={CodeXml} disabled={editorHidden}>
           {hasSnippets && (
             <MenuItem
@@ -174,15 +149,6 @@ const HeaderMenu = () => {
           ))}
         </Menu>
       </Menu>
-
-      {/* Preview Dialog */}
-      <Dialog
-        title="Preview"
-        open={previewDialogOpen}
-        onOpenChange={setPreviewDialogOpen}
-      >
-        <PreviewPanel />
-      </Dialog>
     </>
   );
 };
@@ -190,9 +156,12 @@ const HeaderMenu = () => {
 const headerButtonIconSize = 'medium';
 
 export const Header = () => {
-  const [{ visibleWidths = [], visibleThemes = [], editorHidden }, dispatch] =
-    useContext(StoreContext);
+  const [
+    { code, visibleWidths = [], visibleThemes = [], editorHidden },
+    dispatch,
+  ] = useContext(StoreContext);
 
+  const hasCode = code.trim().length > 0;
   const hasThemes =
     availableThemes.filter((theme) => theme !== '__PLAYROOM__NO_THEME__')
       .length > 0;
@@ -209,8 +178,48 @@ export const Header = () => {
 
       <Title />
 
-      {/* Empty placeholder for now */}
       <div className={styles.actionsContainer}>
+        {/* Todo - try animate in/out */}
+        {hasCode ? (
+          <div className={styles.segmentedGroup}>
+            <button
+              type="button"
+              className={styles.segmentedTextButton}
+              onClick={() =>
+                dispatch({
+                  type: 'copyToClipboard',
+                  payload: {
+                    content: window.location.href,
+                    message: 'Copied Playroom link to clipboard',
+                  },
+                })
+              }
+            >
+              <Text>Share</Text>
+            </button>
+            <BaseUIPopover.Root>
+              <BaseUIPopover.Trigger
+                render={(triggerProps) => (
+                  <button
+                    type="button"
+                    className={styles.segmentedIconButton}
+                    {...triggerProps}
+                  >
+                    <ChevronIcon direction="down" size={10} />
+                  </button>
+                )}
+              />
+              <BaseUIPopover.Portal>
+                <BaseUIPopover.Positioner side="bottom" sideOffset={10}>
+                  <BaseUIPopover.Popup className={styles.sharePopup}>
+                    <PreviewSelection />
+                  </BaseUIPopover.Popup>
+                </BaseUIPopover.Positioner>
+              </BaseUIPopover.Portal>
+            </BaseUIPopover.Root>
+          </div>
+        ) : null}
+
         <Menu
           trigger={
             <span

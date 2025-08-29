@@ -2,6 +2,10 @@ import { style } from '@vanilla-extract/css';
 
 import { comma } from '../../css/delimiters';
 
+import {
+  minTouchableBeforePseudo,
+  sharedPopupStyles,
+} from '../../css/shared.css';
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 
 export const root = style([
@@ -54,3 +58,65 @@ export const menuButton = style([
     },
   },
 ]);
+
+const segmentedControlBorder = `1px solid ${colorPaletteVars.border.standard}`;
+
+export const segmentedGroup = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'stretch',
+    borderRadius: 'medium',
+  }),
+  {
+    border: segmentedControlBorder,
+    overflow: 'hidden',
+    background: 'transparent',
+  },
+]);
+
+const segmentedButtonBase = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    paddingY: 'xsmall',
+    cursor: 'pointer',
+    transition: 'fast',
+  }),
+  minTouchableBeforePseudo,
+  {
+    appearance: 'none',
+    background: 'transparent',
+    border: 0,
+    outline: 'none',
+    color: colorPaletteVars.foreground.neutral,
+    selectors: {
+      ['&:hover']: {
+        backgroundColor: colorPaletteVars.background.neutral,
+      },
+      ['&:active']: {
+        transform: 'scale(.98)',
+      },
+      ['&:focus-visible']: {
+        outline: `2px solid ${colorPaletteVars.outline.focus}`,
+        outlineOffset: -2,
+      },
+    },
+  },
+]);
+
+export const segmentedTextButton = style([
+  segmentedButtonBase,
+  sprinkles({ paddingX: 'small' }),
+]);
+
+export const segmentedIconButton = style([
+  segmentedButtonBase,
+  sprinkles({ paddingX: 'xsmall' }),
+  {
+    borderLeft: segmentedControlBorder,
+  },
+]);
+
+export const sharePopup = sharedPopupStyles('small');
