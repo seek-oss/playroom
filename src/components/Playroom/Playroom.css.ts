@@ -151,9 +151,6 @@ export const editorActionButton = style([
   },
 ]);
 
-export const snippetsPopup = style([
-  sharedPopupStyles('small'),
-  {
-    width: 'min(300px, 90vw)',
-  },
-]);
+export const snippetsPopupWidth = style({
+  width: 'min(300px, 90vw)',
+});
