@@ -27,6 +27,36 @@ const store = localforage.createInstance({
   version: 1,
 });
 
+const defaultEditorSize = '40%';
+const defaultOrientation = 'horizontal';
+
+export type EditorOrientation = 'horizontal' | 'vertical';
+export type ColorScheme = 'light' | 'dark' | 'system';
+
+const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
+  document.documentElement[
+    colorScheme === 'dark' ? 'setAttribute' : 'removeAttribute'
+  ]('data-playroom-dark', '');
+};
+
+function convertAndStoreSizeAsPercentage(
+  mode: 'height' | 'width',
+  size: number
+): string {
+  const viewportSize =
+    mode === 'height' ? window.innerHeight : window.innerWidth;
+
+  const sizePercentage = (size / viewportSize) * 100;
+  const roundedSizePercentage = `${Math.round(sizePercentage)}%`;
+
+  store.setItem(
+    `${mode === 'height' ? 'editorHeight' : 'editorWidth'}`,
+    roundedSizePercentage
+  );
+
+  return `${sizePercentage}%`;
+}
+
 interface DebounceUpdateUrl {
   code?: string;
   themes?: string[];
@@ -55,9 +85,13 @@ interface State {
   validCursorPosition: boolean;
   cursorPosition: CursorPosition;
   editorHidden: boolean;
+  editorOrientation: EditorOrientation;
+  editorHeight: string;
+  editorWidth: string;
   statusMessage?: StatusMessage;
   visibleThemes?: string[];
   visibleWidths?: Widths;
+  colorScheme: ColorScheme;
 }
 
 type Action =
@@ -75,6 +109,16 @@ type Action =
   | { type: 'showEditor' }
   | { type: 'copyToClipboard'; payload: { content: string; message?: string } }
   | { type: 'dismissMessage' }
+  | {
+      type: 'updateColorScheme';
+      payload: { colorScheme: ColorScheme };
+    }
+  | {
+      type: 'updateEditorOrientation';
+      payload: { orientation: EditorOrientation };
+    }
+  | { type: 'updateEditorHeight'; payload: { size: number } }
+  | { type: 'updateEditorWidth'; payload: { size: number } }
   | { type: 'updateVisibleThemes'; payload: { themes: typeof availableThemes } }
   | { type: 'resetVisibleThemes' }
   | {
@@ -235,6 +279,53 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'updateColorScheme': {
+      const { colorScheme } = action.payload;
+      store.setItem('colorScheme', colorScheme);
+
+      return {
+        ...state,
+        colorScheme,
+      };
+    }
+
+    case 'updateEditorOrientation': {
+      const { orientation } = action.payload;
+      store.setItem('editorOrientation', orientation);
+
+      return {
+        ...state,
+        editorOrientation: orientation,
+      };
+    }
+
+    case 'updateEditorHeight': {
+      const { size } = action.payload;
+
+      const updatedHeightPercentage = convertAndStoreSizeAsPercentage(
+        'height',
+        size
+      );
+
+      return {
+        ...state,
+        editorHeight: updatedHeightPercentage,
+      };
+    }
+
+    case 'updateEditorWidth': {
+      const { size } = action.payload;
+      const updatedWidthPercentage = convertAndStoreSizeAsPercentage(
+        'width',
+        size
+      );
+
+      return {
+        ...state,
+        editorWidth: updatedWidthPercentage,
+      };
+    }
+
     case 'updateVisibleThemes': {
       const { themes } = action.payload;
       const visibleThemes = availableThemes.filter((t) => themes.includes(t));
@@ -293,6 +384,10 @@ const initialState: State = {
   cursorPosition: { line: 0, ch: 0 },
   snippetsOpen: false,
   editorHidden: false,
+  editorOrientation: defaultOrientation,
+  editorHeight: defaultEditorSize,
+  editorWidth: defaultEditorSize,
+  colorScheme: 'system',
 };
 
 export const StoreContext = createContext<StoreContextValues>([
@@ -347,38 +442,87 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
     Promise.all([
       store.getItem<string>('code'),
+      store.getItem<EditorOrientation>('editorOrientation'),
+      store.getItem<string | number>('editorHeight'), // Number type deprecated
+      store.getItem<string | number>('editorWidth'), // Number type deprecated
       store.getItem<number[]>('visibleWidths'),
       store.getItem<string[]>('visibleThemes'),
-    ]).then(([storedCode, storedVisibleWidths, storedVisibleThemes]) => {
-      const code = codeFromQuery || storedCode || exampleCode;
+      store.getItem<ColorScheme>('colorScheme'),
+    ]).then(
+      ([
+        storedCode,
+        storedOrientation,
+        storedHeight,
+        storedWidth,
+        storedVisibleWidths,
+        storedVisibleThemes,
+        storedColorScheme,
+      ]) => {
+        const code = codeFromQuery || storedCode || exampleCode;
+        const editorOrientation = storedOrientation;
 
-      const editorHidden = editorHiddenFromQuery === true;
+        const editorHeight =
+          (typeof storedHeight === 'number'
+            ? convertAndStoreSizeAsPercentage('height', storedHeight)
+            : storedHeight) || defaultEditorSize;
 
-      const visibleWidths =
-        widthsFromQuery ||
-        storedVisibleWidths ||
-        playroomConfig?.defaultVisibleWidths;
+        const editorWidth =
+          (typeof storedWidth === 'number'
+            ? convertAndStoreSizeAsPercentage('width', storedWidth)
+            : storedWidth) || defaultEditorSize;
 
-      const visibleThemes =
-        hasThemesConfigured &&
-        (themesFromQuery ||
-          storedVisibleThemes ||
-          playroomConfig?.defaultVisibleThemes);
+        const editorHidden = editorHiddenFromQuery === true;
 
-      dispatch({
-        type: 'initialLoad',
-        payload: {
-          ...(code ? { code } : {}),
-          ...(editorHidden ? { editorHidden } : {}),
-          ...(visibleThemes ? { visibleThemes } : {}),
-          ...(visibleWidths ? { visibleWidths } : {}),
-          title: titleFromQuery,
-        },
-      });
+        const visibleWidths =
+          widthsFromQuery ||
+          storedVisibleWidths ||
+          playroomConfig?.defaultVisibleWidths;
 
-      setReady(true);
-    });
+        const visibleThemes =
+          hasThemesConfigured &&
+          (themesFromQuery ||
+            storedVisibleThemes ||
+            playroomConfig?.defaultVisibleThemes);
+
+        const colorScheme = storedColorScheme;
+
+        dispatch({
+          type: 'initialLoad',
+          payload: {
+            ...(code ? { code } : {}),
+            ...(editorOrientation ? { editorOrientation } : {}),
+            ...(editorHeight ? { editorHeight } : {}),
+            ...(editorWidth ? { editorWidth } : {}),
+            ...(editorHidden ? { editorHidden } : {}),
+            ...(visibleThemes ? { visibleThemes } : {}),
+            ...(visibleWidths ? { visibleWidths } : {}),
+            ...(colorScheme ? { colorScheme } : {}),
+            title: titleFromQuery,
+          },
+        });
+
+        setReady(true);
+      }
+    );
   }, [hasThemesConfigured]);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+    if (state.colorScheme === 'system') {
+      const handler = (e: MediaQueryListEvent) => {
+        applyColorScheme(e.matches ? 'dark' : 'light');
+      };
+      mq.addEventListener('change', handler);
+      applyColorScheme(mq.matches ? 'dark' : 'light');
+
+      return () => {
+        mq.removeEventListener('change', handler);
+      };
+    }
+
+    applyColorScheme(state.colorScheme);
+  }, [state.colorScheme]);
 
   useEffect(() => {
     debouncedCodeUpdate({
