@@ -1,4 +1,3 @@
-import { Popover as BaseUIPopover } from '@base-ui-components/react/popover';
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import clsx from 'clsx';
 import {
@@ -40,6 +39,7 @@ import {
   MenuRadioItem,
   MenuSeparator,
 } from '../Menu/Menu';
+import { Popover } from '../Popover/Popover';
 import { PreviewSelection } from '../PreviewSelection/PreviewSelection';
 import { Text } from '../Text/Text';
 import { Title } from '../Title/Title';
@@ -197,26 +197,22 @@ export const Header = () => {
             >
               <Text>Share</Text>
             </button>
-            <BaseUIPopover.Root>
-              <BaseUIPopover.Trigger
-                render={(triggerProps) => (
-                  <button
-                    type="button"
-                    className={styles.segmentedIconButton}
-                    {...triggerProps}
-                  >
-                    <ChevronIcon direction="down" size={10} />
-                  </button>
-                )}
-              />
-              <BaseUIPopover.Portal>
-                <BaseUIPopover.Positioner side="bottom" sideOffset={10}>
-                  <BaseUIPopover.Popup className={styles.sharePopup}>
-                    <PreviewSelection />
-                  </BaseUIPopover.Popup>
-                </BaseUIPopover.Positioner>
-              </BaseUIPopover.Portal>
-            </BaseUIPopover.Root>
+            <Popover
+              aria-label="Share options"
+              align="end"
+              side="bottom"
+              trigger={(triggerProps) => (
+                <button
+                  type="button"
+                  className={styles.segmentedIconButton}
+                  {...triggerProps}
+                >
+                  <ChevronIcon direction="down" size={10} />
+                </button>
+              )}
+            >
+              <PreviewSelection />
+            </Popover>
           </div>
         ) : null}
 
