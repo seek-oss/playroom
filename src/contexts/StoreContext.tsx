@@ -1,7 +1,6 @@
 import copy from 'copy-to-clipboard';
 import dedent from 'dedent';
 import localforage from 'localforage';
-import lzString from 'lz-string';
 import {
   useEffect,
   createContext,
@@ -21,7 +20,7 @@ import {
 import availableWidths, { type Widths } from '../configModules/widths';
 import { isValidLocation } from '../utils/cursor';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
-import { getParamsFromQuery, updateUrlCode } from '../utils/params';
+import { resolveDataFromUrl, updateUrlCode } from '../utils/params';
 
 const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
 
@@ -415,41 +414,19 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedCodeUpdate = useDebouncedCallback(
     (params: DebounceUpdateUrl) => {
-      // Ensure that when removing theme/width preferences
-      // they are also removed from the url. Replacing state
-      // with an empty string (returned from `createUrl`)
-      // does not do anything, so replacing with `#`
       updateUrlCode(compressParams(params));
     },
     500
   );
 
   useEffect(() => {
-    const params = getParamsFromQuery();
-    let codeFromQuery: State['code'];
-    let themesFromQuery: State['selectedThemes'];
-    let widthsFromQuery: State['selectedWidths'];
-    let titleFromQuery: State['title'];
-    let editorHiddenFromQuery: State['editorHidden'];
-
-    const paramsCode = params.get('code');
-    if (paramsCode) {
-      const {
-        code: parsedCode,
-        themes: parsedThemes,
-        widths: parsedWidths,
-        title: parsedTitle,
-        editorHidden: parsedEditorHidden,
-      } = JSON.parse(
-        lzString.decompressFromEncodedURIComponent(String(paramsCode)) ?? ''
-      );
-
-      codeFromQuery = parsedCode;
-      editorHiddenFromQuery = parsedEditorHidden;
-      themesFromQuery = parsedThemes;
-      widthsFromQuery = parsedWidths;
-      titleFromQuery = parsedTitle;
-    }
+    const {
+      code,
+      themes: themesFromQuery,
+      widths: widthsFromQuery,
+      title,
+      editorHidden,
+    } = resolveDataFromUrl();
 
     Promise.all([
       store.getItem<State['editorOrientation']>('editorOrientation'),
@@ -460,22 +437,15 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       store.getItem<State['colorScheme']>('colorScheme'),
     ]).then(
       ([
-        storedOrientation,
-        storedHeight,
-        storedWidth,
+        editorOrientation,
+        editorHeight,
+        editorWidth,
         storedSelectedWidths,
         storedSelectedThemes,
-        storedColorScheme,
+        colorScheme,
       ]) => {
-        const code = codeFromQuery || exampleCode;
-        const editorOrientation = storedOrientation;
-        const editorHeight = storedHeight || defaultEditorSize;
-        const editorWidth = storedWidth || defaultEditorSize;
-        const editorHidden = editorHiddenFromQuery === true;
         const selectedWidths = widthsFromQuery || storedSelectedWidths;
-        const selectedThemes =
-          themesEnabled && (themesFromQuery || storedSelectedThemes);
-        const colorScheme = storedColorScheme;
+        const selectedThemes = themesFromQuery || storedSelectedThemes;
 
         dispatch({
           type: 'initialLoad',
@@ -485,10 +455,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
             ...(editorHeight ? { editorHeight } : {}),
             ...(editorWidth ? { editorWidth } : {}),
             ...(editorHidden ? { editorHidden } : {}),
-            ...(selectedThemes ? { selectedThemes } : {}),
+            ...(themesEnabled && selectedThemes ? { selectedThemes } : {}),
             ...(selectedWidths ? { selectedWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
-            title: titleFromQuery,
+            title,
           },
         });
 
