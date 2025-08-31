@@ -52,7 +52,7 @@ export const editorCommandList: EditorCommandMeta[] = [
   {
     command: 'replace',
     label: 'Find and replace',
-    shortcut: [primaryMod, 'Alt', 'F'],
+    shortcut: ['Alt', primaryMod, 'F'],
     icon: SearchIcon,
   },
   {
@@ -70,7 +70,7 @@ export const editorCommandList: EditorCommandMeta[] = [
   {
     command: 'wrapInTag',
     label: 'Wrap selection in tag',
-    shortcut: [primaryMod, 'Shift', ','],
+    shortcut: ['Shift', primaryMod, ','],
     icon: CodeIcon,
   },
   {
@@ -112,13 +112,13 @@ export const editorCommandList: EditorCommandMeta[] = [
   {
     command: 'addCursorToPrevLine',
     label: 'Add cursor to prev line',
-    shortcut: [primaryMod, 'Alt', 'Up'],
+    shortcut: ['Alt', primaryMod, 'Up'],
     icon: ArrowUpFromLineIcon,
   },
   {
     command: 'addCursorToNextLine',
     label: 'Add cursor to next line',
-    shortcut: [primaryMod, 'Alt', 'Down'],
+    shortcut: ['Alt', primaryMod, 'Down'],
     icon: ArrowDownFromLineIcon,
   },
 ];
