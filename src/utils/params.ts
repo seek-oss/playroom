@@ -2,6 +2,7 @@ import { createBrowserHistory } from 'history';
 import lzString from 'lz-string';
 import { useState, useEffect, type ReactNode } from 'react';
 
+import { decompressParams } from '../../utils';
 import playroomConfig from '../config';
 import themes from '../configModules/themes';
 
@@ -50,6 +51,9 @@ function useParams<ReturnType>(
 
   return selector(params);
 }
+
+export const resolveDataFromUrl = (location = history.location) =>
+  decompressParams(getParamsFromQuery(location).get('code'));
 
 export const UrlParams = ({
   children,
