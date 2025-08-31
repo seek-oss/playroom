@@ -1,4 +1,7 @@
-import { compressToEncodedURIComponent } from 'lz-string';
+import {
+  compressToEncodedURIComponent,
+  decompressFromEncodedURIComponent,
+} from 'lz-string';
 
 import type { Widths } from '../src/configModules/widths';
 
@@ -37,6 +40,28 @@ export const compressParams = ({
   });
 
   return compressToEncodedURIComponent(data);
+};
+
+export const decompressParams = (param: string | null) => {
+  const {
+    code,
+    title,
+    widths,
+    themes,
+    theme,
+    editorHidden,
+  }: CompressParamsOptions = param
+    ? JSON.parse(decompressFromEncodedURIComponent(param))
+    : {};
+
+  return {
+    ...(code ? { code } : {}),
+    ...(themes ? { themes } : {}),
+    ...(widths ? { widths } : {}),
+    ...(theme ? { theme } : {}),
+    ...(title ? { title } : {}),
+    ...(editorHidden ? { editorHidden } : {}),
+  };
 };
 
 export type ParamType = 'hash' | 'search';
