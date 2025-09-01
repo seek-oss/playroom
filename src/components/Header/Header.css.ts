@@ -95,9 +95,6 @@ const segmentedButtonBase = style([
       ['&:hover']: {
         backgroundColor: colorPaletteVars.background.neutral,
       },
-      ['&:active']: {
-        transform: 'scale(.98)',
-      },
       ['&:focus-visible']: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
         outlineOffset: -2,
@@ -120,3 +117,24 @@ export const segmentedIconButton = style([
 ]);
 
 export const sharePopup = sharedPopupStyles('small');
+
+export const copyLinkContainer = style({
+  position: 'relative',
+});
+
+export const copyLinkTextHidden = style({
+  opacity: 0,
+  userSelect: 'none',
+});
+
+export const copyLinkSuccess = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+  {
+    position: 'absolute',
+    inset: 0,
+  },
+]);

@@ -1,4 +1,3 @@
-import copy from 'copy-to-clipboard';
 import dedent from 'dedent';
 import localforage from 'localforage';
 import {
@@ -109,7 +108,6 @@ type Action =
   | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
-  | { type: 'copyToClipboard'; payload: { content: string; message?: string } }
   | { type: 'dismissMessage' }
   | {
       type: 'updateColorScheme';
@@ -167,22 +165,6 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         statusMessage: undefined,
-      };
-    }
-
-    case 'copyToClipboard': {
-      const { content, message } = action.payload;
-
-      copy(content);
-
-      return {
-        ...state,
-        statusMessage: message
-          ? {
-              message,
-              tone: 'positive',
-            }
-          : undefined,
       };
     }
 
