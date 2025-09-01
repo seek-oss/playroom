@@ -1,5 +1,6 @@
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import clsx from 'clsx';
+import copy from 'copy-to-clipboard';
 import {
   CodeXml,
   Sun,
@@ -13,8 +14,9 @@ import {
   MaximizeIcon,
   BetweenHorizontalStart,
   File,
+  Check,
 } from 'lucide-react';
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 import {
   themeNames as availableThemes,
@@ -158,11 +160,61 @@ const HeaderMenu = () => {
 
 const headerButtonIconSize = 'medium';
 
+const CopyLinkButton = ({
+  linkCopied,
+  onClick,
+}: {
+  linkCopied: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    type="button"
+    className={styles.segmentedTextButton}
+    disabled={linkCopied}
+    onClick={onClick}
+  >
+    <span className={styles.copyLinkContainer}>
+      {linkCopied ? (
+        <span className={styles.copyLinkSuccess}>
+          <Check size={14} />
+        </span>
+      ) : null}
+      <span
+        className={clsx(linkCopied ? styles.copyLinkTextHidden : undefined)}
+        aria-hidden={linkCopied ? true : undefined}
+      >
+        <Text>Copy link</Text>
+      </span>
+    </span>
+  </button>
+);
+
 export const Header = () => {
   const [{ code, selectedWidths, selectedThemes, editorHidden }, dispatch] =
     useContext(StoreContext);
 
   const hasCode = code.trim().length > 0;
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  const handleShareClick = () => {
+    copy(window.location.href);
+    setLinkCopied(true);
+  };
+
+  useEffect(() => {
+    if (!linkCopied) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setLinkCopied(false);
+    }, 2000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [linkCopied]);
+
   const hasFilteredWidths =
     selectedWidths.length > 0 &&
     selectedWidths.length <= availableWidths.length;
@@ -182,21 +234,10 @@ export const Header = () => {
         {/* Todo - try animate in/out */}
         {hasCode ? (
           <div className={styles.segmentedGroup}>
-            <button
-              type="button"
-              className={styles.segmentedTextButton}
-              onClick={() =>
-                dispatch({
-                  type: 'copyToClipboard',
-                  payload: {
-                    content: window.location.href,
-                    message: 'Copied Playroom link to clipboard',
-                  },
-                })
-              }
-            >
-              <Text>Share</Text>
-            </button>
+            <CopyLinkButton
+              linkCopied={linkCopied}
+              onClick={handleShareClick}
+            />
             <Popover
               aria-label="Share options"
               align="end"
