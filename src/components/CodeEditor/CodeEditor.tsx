@@ -1,12 +1,22 @@
 import type { Editor } from 'codemirror';
-import { useRef, useContext, useEffect, useCallback } from 'react';
+import {
+  useRef,
+  useContext,
+  useEffect,
+  useCallback,
+  type Dispatch,
+} from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/theme/neo.css';
 
 import { useEditor } from '../../contexts/EditorContext';
-import { type CursorPosition, StoreContext } from '../../contexts/StoreContext';
+import {
+  type Action,
+  type CursorPosition,
+  StoreContext,
+} from '../../contexts/StoreContext';
 import { validateCode } from '../../utils/compileJsx';
 import { hints } from '../../utils/componentsToHints';
 import { isMac } from '../../utils/formatting';
@@ -48,14 +58,20 @@ const editorCommands = editorCommandList.reduce(
   {}
 );
 
-const validateCodeInEditor = (editorInstance: Editor, code: string) => {
+const validateCodeInEditor = (
+  editorInstance: Editor,
+  code: string,
+  dispatch: Dispatch<Action>
+) => {
   const maybeValid = validateCode(code);
 
   if (maybeValid === true) {
     editorInstance.clearGutter('errorGutter');
+    dispatch({ type: 'setHasSyntaxError', payload: { value: false } });
   } else {
     const errorMessage = maybeValid.message;
     const lineNumber = maybeValid.loc?.line;
+    dispatch({ type: 'setHasSyntaxError', payload: { value: true } });
 
     if (lineNumber) {
       const marker = document.createElement('div');
@@ -170,8 +186,8 @@ export const CodeEditor = ({
       return;
     }
     editorInstanceRef.current.setValue(code);
-    validateCodeInEditor(editorInstanceRef.current, code);
-  }, [code, previewCode]);
+    validateCodeInEditor(editorInstanceRef.current, code, dispatch);
+  }, [code, previewCode, dispatch]);
 
   useEffect(() => {
     if (editorInstanceRef.current && !editorInstanceRef.current.hasFocus()) {
@@ -211,7 +227,7 @@ export const CodeEditor = ({
       editorDidMount={(editorInstance) => {
         editorInstanceRef.current = editorInstance;
         editorInstanceRef.current.setValue(code);
-        validateCodeInEditor(editorInstance, code);
+        validateCodeInEditor(editorInstance, code, dispatch);
         if (!editorHidden) {
           setCursorPosition(cursorPosition);
         }
@@ -219,7 +235,7 @@ export const CodeEditor = ({
       }}
       onChange={(editorInstance, data, newCode) => {
         if (editorInstance.hasFocus() && !previewCode) {
-          validateCodeInEditor(editorInstance, newCode);
+          validateCodeInEditor(editorInstance, newCode, dispatch);
           debouncedChange(newCode);
         }
       }}
