@@ -54,8 +54,10 @@ const HeaderMenu = () => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const inputCommandRef = useRef<EditorCommand | null>(null);
   const { runCommand } = useEditor();
-  const [{ editorOrientation, editorHidden, colorScheme }, dispatch] =
-    useContext(StoreContext);
+  const [
+    { editorOrientation, editorHidden, colorScheme, hasSyntaxError },
+    dispatch,
+  ] = useContext(StoreContext);
 
   const hasSnippets = snippets && snippets.length > 0;
 
@@ -134,7 +136,7 @@ const HeaderMenu = () => {
             <MenuItem
               icon={BetweenHorizontalStart}
               shortcut={['Cmd', 'K']}
-              disabled={editorHidden}
+              disabled={editorHidden || hasSyntaxError}
               onClick={() => dispatch({ type: 'openSnippets' })}
             >
               Insert snippet
@@ -148,6 +150,7 @@ const HeaderMenu = () => {
                 inputCommandRef.current = command;
               }}
               icon={Icon}
+              disabled={command === 'formatCode' && hasSyntaxError}
             >
               {label}
             </MenuItem>
