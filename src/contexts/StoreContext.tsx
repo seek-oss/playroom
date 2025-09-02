@@ -71,11 +71,6 @@ export interface CursorPosition {
   ch: number;
 }
 
-interface StatusMessage {
-  message: string;
-  tone: 'positive' | 'critical';
-}
-
 interface State {
   code: string;
   title?: string;
@@ -83,19 +78,19 @@ interface State {
   previewEditorCode?: string;
   highlightLineNumber?: number;
   snippetsOpen: boolean;
-  validCursorPosition: boolean;
+  hasSyntaxError?: boolean;
   cursorPosition: CursorPosition;
   editorHidden: boolean;
   editorOrientation: EditorOrientation;
   editorHeight: string;
   editorWidth: string;
-  statusMessage?: StatusMessage;
+  editorErrorMessage?: string;
   selectedThemes: typeof availableThemes;
   selectedWidths: Widths;
   colorScheme: ColorScheme;
 }
 
-type Action =
+export type Action =
   | { type: 'initialLoad'; payload: Partial<State> }
   | { type: 'updateCode'; payload: { code: string; cursor?: CursorPosition } }
   | {
@@ -108,7 +103,8 @@ type Action =
   | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
-  | { type: 'dismissMessage' }
+  | { type: 'resetErrorMessage' }
+  | { type: 'setHasSyntaxError'; payload: { value: boolean } }
   | {
       type: 'updateColorScheme';
       payload: { colorScheme: ColorScheme };
@@ -161,10 +157,18 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case 'dismissMessage': {
+    case 'resetErrorMessage': {
       return {
         ...state,
-        statusMessage: undefined,
+        editorErrorMessage: undefined,
+      };
+    }
+
+    case 'setHasSyntaxError': {
+      const { value } = action.payload;
+      return {
+        ...state,
+        hasSyntaxError: value,
       };
     }
 
@@ -192,11 +196,7 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         code: newCode,
         cursorPosition: position,
-        statusMessage: undefined,
-        validCursorPosition: isValidLocation({
-          code: newCode,
-          cursor: position,
-        }),
+        editorErrorMessage: undefined,
       };
     }
 
@@ -218,6 +218,14 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case 'openSnippets': {
+      if (state.hasSyntaxError) {
+        return {
+          ...state,
+          snippetsOpen: false,
+          editorErrorMessage: undefined,
+        };
+      }
+
       const validCursorPosition = isValidLocation({
         code: state.code,
         cursor: state.cursorPosition,
@@ -226,11 +234,7 @@ const reducer = (state: State, action: Action): State => {
       if (!validCursorPosition) {
         return {
           ...state,
-          statusMessage: {
-            message: "Can't insert snippet at cursor",
-            tone: 'critical',
-          },
-          validCursorPosition,
+          editorErrorMessage: "Can't insert snippet at cursor",
         };
       }
 
@@ -242,7 +246,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         snippetsOpen: true,
-        statusMessage: undefined,
+        editorErrorMessage: undefined,
         previewEditorCode: code,
         highlightLineNumber: cursor.line,
       };
@@ -371,7 +375,6 @@ type StoreContextValues = [State, Dispatch<Action>];
 
 const initialState: State = {
   code: exampleCode,
-  validCursorPosition: true,
   cursorPosition: { line: 0, ch: 0 },
   snippetsOpen: false,
   editorHidden: false,

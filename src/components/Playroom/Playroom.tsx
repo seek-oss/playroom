@@ -21,11 +21,11 @@ import {
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
+import { EditorErrorMessage } from '../EditorErrorMessage/EditorErrorMessage';
 import Frames from '../Frames/Frames';
 import { Header } from '../Header/Header';
 import { Popover, type PopoverTrigger } from '../Popover/Popover';
 import Snippets from '../Snippets/Snippets';
-import { StatusMessage } from '../StatusMessage/StatusMessage';
 import { Text } from '../Text/Text';
 import { ANIMATION_DURATION_SLOW } from '../constants';
 
@@ -66,6 +66,66 @@ const EditorActionButton = ({
   </button>
 );
 
+// Todo - fix when minimum width editor
+const EditorActions = () => {
+  const [{ snippetsOpen, hasSyntaxError }, dispatch] = useContext(StoreContext);
+  const { runCommand } = useEditor();
+  const searchRef = useRef<HTMLInputElement | null>(null);
+  const hasSnippets = snippets && snippets.length > 0;
+
+  return (
+    <div className={styles.editorActions}>
+      {hasSyntaxError ? (
+        <Text>Code has syntax errors. Fix them to use editor actions.</Text>
+      ) : (
+        <>
+          {hasSnippets ? (
+            <Popover
+              aria-label="Select a snippet"
+              size="small"
+              side="top"
+              open={snippetsOpen}
+              onOpenChange={(open) =>
+                dispatch({ type: open ? 'openSnippets' : 'closeSnippets' })
+              }
+              trigger={
+                <EditorActionButton
+                  name="Insert snippet"
+                  shortcut="⌘K"
+                  icon={BetweenHorizontalStart}
+                />
+              }
+              initialFocus={searchRef}
+            >
+              <div className={styles.snippetsPopupWidth}>
+                <Snippets
+                  searchRef={searchRef}
+                  onSelect={(snippet) => {
+                    if (snippet) {
+                      dispatch({
+                        type: 'persistSnippet',
+                        payload: { snippet },
+                      });
+                    } else {
+                      dispatch({ type: 'closeSnippets' });
+                    }
+                  }}
+                />
+              </div>
+            </Popover>
+          ) : null}
+          <EditorActionButton
+            onClick={() => runCommand('formatCode')}
+            name="Tidy"
+            shortcut="⌘S"
+            icon={BrushCleaningIcon}
+          />
+        </>
+      )}
+    </div>
+  );
+};
+
 export default () => {
   const [
     {
@@ -77,20 +137,15 @@ export default () => {
       previewRenderCode,
       previewEditorCode,
       title,
-      snippetsOpen,
     },
     dispatch,
   ] = useContext(StoreContext);
   useDocumentTitle({ title });
 
-  const { runCommand } = useEditor();
   const editorRef = useRef<HTMLElement | null>(null);
-  const searchRef = useRef<HTMLInputElement | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [resizing, setResizing] = useState(false);
   const [lastEditorHidden, setLastEditorHidden] = useState(editorHidden);
-
-  const hasSnippets = snippets && snippets.length > 0;
 
   useEffect(() => {
     transitionTimeoutRef.current = setTimeout(
@@ -169,52 +224,10 @@ export default () => {
             }
             previewCode={previewEditorCode}
           />
-          <StatusMessage />
-
-          {/* Todo - fix when minimum width editor */}
-          <Box className={styles.editorActions}>
-            {hasSnippets && (
-              <Popover
-                aria-label="Select a snippet"
-                size="small"
-                side="top"
-                open={snippetsOpen}
-                onOpenChange={(open) =>
-                  dispatch({ type: open ? 'openSnippets' : 'closeSnippets' })
-                }
-                trigger={
-                  <EditorActionButton
-                    name="Insert snippet"
-                    shortcut="⌘K"
-                    icon={BetweenHorizontalStart}
-                  />
-                }
-                initialFocus={searchRef}
-              >
-                <div className={styles.snippetsPopupWidth}>
-                  <Snippets
-                    searchRef={searchRef}
-                    onSelect={(snippet) => {
-                      if (snippet) {
-                        dispatch({
-                          type: 'persistSnippet',
-                          payload: { snippet },
-                        });
-                      } else {
-                        dispatch({ type: 'closeSnippets' });
-                      }
-                    }}
-                  />
-                </div>
-              </Popover>
-            )}
-            <EditorActionButton
-              onClick={() => runCommand('formatCode')}
-              name="Tidy"
-              shortcut="⌘S"
-              icon={BrushCleaningIcon}
-            />
-          </Box>
+          <div className={styles.editorOverlays}>
+            <EditorErrorMessage />
+            <EditorActions />
+          </div>
         </div>
       </Box>
     </Box>

@@ -113,11 +113,13 @@ export const editorContainer = sprinkles({
   inset: 0,
 });
 
-export const editorActions = style([
+export const editorOverlays = style([
   sprinkles({
-    display: 'flex',
-    gap: 'xsmall',
     position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 'xsmall',
+    alignItems: 'center',
   }),
   {
     left: vars.space.medium,
@@ -126,6 +128,10 @@ export const editorActions = style([
     width: 'fit-content',
     marginInline: 'auto',
   },
+]);
+
+export const editorActions = style([
+  sprinkles({ display: 'flex', gap: 'xsmall' }),
   sharedPopupStyles('small'),
 ]);
 
