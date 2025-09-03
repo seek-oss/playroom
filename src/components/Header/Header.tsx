@@ -15,9 +15,13 @@ import {
   BetweenHorizontalStart,
   File,
   Check,
+  CopyPlus,
+  FolderOpen,
+  PanelsLeftBottom,
 } from 'lucide-react';
 import { useContext, useEffect, useRef, useState } from 'react';
 
+import { compressParams } from '../../../utils';
 import {
   themeNames as availableThemes,
   themesEnabled,
@@ -25,12 +29,15 @@ import {
 import availableWidths from '../../configModules/widths';
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
+import { isMac } from '../../utils/formatting';
+import { createUrlForData, resolveDataFromUrl } from '../../utils/params';
 import { Box } from '../Box/Box';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import {
   type EditorCommand,
   editorCommandList,
 } from '../CodeEditor/editorCommands';
+import { Dialog } from '../Dialog/Dialog';
 import { Logo } from '../Logo/Logo';
 import {
   Menu,
@@ -43,6 +50,7 @@ import {
 } from '../Menu/Menu';
 import { Popover } from '../Popover/Popover';
 import { PreviewSelection } from '../PreviewSelection/PreviewSelection';
+import { PreviewTiles } from '../PreviewTiles/PreviewTiles';
 import { Text } from '../Text/Text';
 import { Title } from '../Title/Title';
 import ChevronIcon from '../icons/ChevronIcon';
@@ -53,13 +61,39 @@ import * as buttonStyles from '../ButtonIcon/ButtonIcon.css';
 const HeaderMenu = () => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const inputCommandRef = useRef<EditorCommand | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
   const { runCommand } = useEditor();
   const [
-    { editorOrientation, editorHidden, colorScheme, hasSyntaxError },
+    {
+      editorOrientation,
+      editorHidden,
+      colorScheme,
+      hasSyntaxError,
+      storedPlayrooms,
+    },
     dispatch,
   ] = useContext(StoreContext);
 
   const hasSnippets = snippets && snippets.length > 0;
+  const hasStoredPlayrooms = Object.entries(storedPlayrooms).length > 0;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
+
+      if (cmdOrCtrl && e.key === 'o') {
+        e.preventDefault();
+        setOpenDialog(true);
+        return;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return (
     <>
@@ -81,11 +115,33 @@ const HeaderMenu = () => {
         <MenuItem
           icon={File}
           onClick={() => {
-            const { origin, pathname } = window.location;
-            window.open(`${origin}${pathname}`, '_blank');
+            window.open(`${window.location.pathname}`, '_blank');
           }}
         >
           New Playroom
+        </MenuItem>
+        <MenuItem
+          icon={FolderOpen}
+          onClick={() => setOpenDialog(true)}
+          disabled={!hasStoredPlayrooms}
+          shortcut={['Cmd', 'O']}
+        >
+          Open...
+        </MenuItem>
+        <MenuItem
+          icon={CopyPlus}
+          onClick={() => {
+            const { title, ...params } = resolveDataFromUrl();
+            const url = createUrlForData(
+              compressParams({
+                ...params,
+                title: `(Copy) ${title}`,
+              })
+            );
+            window.open(url, '_blank');
+          }}
+        >
+          Duplicate
         </MenuItem>
 
         <MenuSeparator />
@@ -112,7 +168,7 @@ const HeaderMenu = () => {
           </MenuRadioGroup>
         </Menu>
 
-        <Menu trigger="Editor position" icon={CodeXml}>
+        <Menu trigger="Editor position" icon={PanelsLeftBottom}>
           <MenuRadioGroup
             value={editorOrientation}
             onValueChange={(value) => {
@@ -157,6 +213,18 @@ const HeaderMenu = () => {
           ))}
         </Menu>
       </Menu>
+
+      {hasStoredPlayrooms ? (
+        <Dialog
+          title="Open Playroom"
+          open={openDialog}
+          onOpenChange={setOpenDialog}
+        >
+          <div className={styles.openDialogContent}>
+            <PreviewTiles onSelect={() => setOpenDialog(false)} />
+          </div>
+        </Dialog>
+      ) : null}
     </>
   );
 };

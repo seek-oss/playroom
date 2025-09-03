@@ -19,7 +19,11 @@ import {
 import availableWidths, { type Widths } from '../configModules/widths';
 import { isValidLocation } from '../utils/cursor';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
-import { resolveDataFromUrl, updateUrlCode } from '../utils/params';
+import {
+  getDataParam,
+  resolveDataFromUrl,
+  updateUrlCode,
+} from '../utils/params';
 
 const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
 
@@ -58,20 +62,17 @@ function convertAndStoreSizeAsPercentage(
   return `${sizePercentage}%`;
 }
 
-interface DebounceUpdateUrl {
-  code?: string;
-  themes?: string[];
-  widths?: Widths;
-  title?: string;
-  editorHidden?: boolean;
-}
-
 export interface CursorPosition {
   line: number;
   ch: number;
 }
 
+type StoredPlayroom = {
+  dataParam: string;
+  lastModifiedDate: Date;
+};
 interface State {
+  id: string;
   code: string;
   title?: string;
   previewRenderCode?: string;
@@ -88,6 +89,7 @@ interface State {
   selectedThemes: typeof availableThemes;
   selectedWidths: Widths;
   colorScheme: ColorScheme;
+  storedPlayrooms: Record<string, StoredPlayroom>;
 }
 
 export type Action =
@@ -125,7 +127,25 @@ export type Action =
       payload: { widths: Widths };
     }
   | { type: 'resetSelectedWidths' }
-  | { type: 'updateTitle'; payload: { title: string } };
+  | { type: 'updateTitle'; payload: { title: string } }
+  | {
+      type: 'openPlayroom';
+      payload: {
+        id: State['id'];
+        code: State['code'];
+        title?: State['title'];
+        selectedThemes?: State['selectedThemes'];
+        selectedWidths?: State['selectedWidths'];
+        editorHidden?: State['editorHidden'];
+      };
+    }
+  | {
+      type: 'storePlayroom';
+      payload: {
+        id: string;
+        dataParam: StoredPlayroom['dataParam'];
+      };
+    };
 
 const resetPreview = ({
   previewRenderCode,
@@ -136,6 +156,8 @@ const resetPreview = ({
   ...state,
   snippetsOpen: false,
 });
+
+const createPlayroomId = () => self.crypto.randomUUID();
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -148,11 +170,11 @@ const reducer = (state: State, action: Action): State => {
 
     case 'updateCode': {
       const { code, cursor } = action.payload;
-      store.setItem('code', code);
 
       return {
         ...state,
         code,
+        id: !state.id && code.trim().length > 0 ? createPlayroomId() : state.id,
         cursorPosition: cursor || state.cursorPosition,
       };
     }
@@ -184,6 +206,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...resetPreview(state),
         code,
+        id: !state.id && code.trim().length > 0 ? createPlayroomId() : state.id,
         cursorPosition: cursor,
       };
     }
@@ -363,6 +386,48 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         title,
+        id:
+          !state.id && title.trim().length > 0 ? createPlayroomId() : state.id,
+      };
+    }
+
+    case 'openPlayroom': {
+      const { id, code, title, selectedThemes, selectedWidths, editorHidden } =
+        action.payload;
+
+      return {
+        ...state,
+        id,
+        code,
+        title,
+        selectedWidths:
+          selectedWidths && selectedWidths?.length > 0
+            ? selectedWidths
+            : state.selectedWidths, // Maintain local preference in favour of config
+        selectedThemes:
+          themesEnabled && selectedThemes && selectedThemes?.length > 0
+            ? selectedThemes
+            : state.selectedThemes, // Maintain local preference in favour of config
+        editorHidden: editorHidden ?? false,
+      };
+    }
+
+    case 'storePlayroom': {
+      const { id, dataParam } = action.payload;
+
+      const updatedPlayrooms = {
+        ...state.storedPlayrooms,
+        [id]: {
+          dataParam,
+          lastModifiedDate: new Date(),
+        },
+      };
+
+      store.setItem('playrooms', updatedPlayrooms);
+
+      return {
+        ...state,
+        storedPlayrooms: updatedPlayrooms,
       };
     }
 
@@ -374,6 +439,7 @@ const reducer = (state: State, action: Action): State => {
 type StoreContextValues = [State, Dispatch<Action>];
 
 const initialState: State = {
+  id: '',
   code: exampleCode,
   cursorPosition: { line: 0, ch: 0 },
   snippetsOpen: false,
@@ -387,6 +453,7 @@ const initialState: State = {
       : [],
   selectedWidths: playroomConfig.defaultVisibleWidths || [],
   colorScheme: 'system',
+  storedPlayrooms: {},
 };
 
 export const StoreContext = createContext<StoreContextValues>([
@@ -398,8 +465,19 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [ready, setReady] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedCodeUpdate = useDebouncedCallback(
-    (params: DebounceUpdateUrl) => {
-      updateUrlCode(compressParams(params));
+    (params: Parameters<typeof compressParams>[0]) => {
+      const newParams = compressParams(params);
+      updateUrlCode(newParams);
+
+      if (state.id) {
+        dispatch({
+          type: 'storePlayroom',
+          payload: {
+            id: state.id,
+            dataParam: newParams,
+          },
+        });
+      }
     },
     500
   );
@@ -407,11 +485,12 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const {
       code,
-      themes: themesFromQuery,
-      widths: widthsFromQuery,
+      themes: themesFromUrl,
+      widths: widthsFromUrl,
       title,
       editorHidden,
     } = resolveDataFromUrl();
+    const dataParamFromUrl = getDataParam();
 
     Promise.all([
       store.getItem<State['editorOrientation']>('editorOrientation'),
@@ -420,6 +499,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       store.getItem<State['selectedWidths']>('visibleWidths'),
       store.getItem<State['selectedThemes']>('visibleThemes'),
       store.getItem<State['colorScheme']>('colorScheme'),
+      store.getItem<State['storedPlayrooms']>('playrooms'),
     ]).then(
       ([
         editorOrientation,
@@ -428,13 +508,29 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         storedSelectedWidths,
         storedSelectedThemes,
         colorScheme,
+        storedPlayrooms,
       ]) => {
-        const selectedWidths = widthsFromQuery || storedSelectedWidths;
-        const selectedThemes = themesFromQuery || storedSelectedThemes;
+        const selectedWidths = widthsFromUrl || storedSelectedWidths;
+        const selectedThemes = themesFromUrl || storedSelectedThemes;
+        const storedPlayroomValues = Object.entries(storedPlayrooms || {});
+        let id = '';
+
+        // If the playroom from the URL matches a storage entry,
+        // assume same id to enable updating to handle refresh case.
+        if (storedPlayrooms) {
+          const matchingPlayroom = storedPlayroomValues.find(
+            ([_, { dataParam }]) => dataParamFromUrl === dataParam
+          );
+
+          if (matchingPlayroom) {
+            id = matchingPlayroom[0];
+          }
+        }
 
         dispatch({
           type: 'initialLoad',
           payload: {
+            ...(id ? { id } : {}),
             ...(code ? { code } : {}),
             ...(editorOrientation ? { editorOrientation } : {}),
             ...(editorHeight ? { editorHeight } : {}),
@@ -443,6 +539,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
             ...(themesEnabled && selectedThemes ? { selectedThemes } : {}),
             ...(selectedWidths ? { selectedWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
+            ...(storedPlayrooms ? { storedPlayrooms } : {}),
             title,
           },
         });

@@ -34,7 +34,6 @@ export const popup = style([
     overflow: 'auto',
   }),
   {
-    width: 400,
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
