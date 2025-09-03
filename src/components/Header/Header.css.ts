@@ -59,6 +59,18 @@ export const menuButton = style([
   },
 ]);
 
+export const openDialogContent = style([
+  sprinkles({
+    overflow: 'auto',
+  }),
+  {
+    height: '60vh',
+    maxHeight: '700px',
+    width: '60vw',
+    maxWidth: '75vw',
+  },
+]);
+
 const segmentedControlBorder = `1px solid ${colorPaletteVars.border.standard}`;
 
 export const segmentedGroup = style([

@@ -1,7 +1,6 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { useContext, useRef } from 'react';
 
-import playroomConfig from '../../config';
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
@@ -53,10 +52,10 @@ export default function Frames({ code }: FramesProps) {
           <Box height="full" position="relative">
             <Iframe
               intersectionRootRef={scrollingPanelRef}
-              src={frameSrc(
-                { themeName: frame.theme, code: renderCode.current },
-                playroomConfig
-              )}
+              src={frameSrc({
+                themeName: frame.theme,
+                code: renderCode.current,
+              })}
               data-testid="frameIframe"
               className={styles.frame}
             />
