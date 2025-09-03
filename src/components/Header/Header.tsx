@@ -64,18 +64,11 @@ const HeaderMenu = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const { runCommand } = useEditor();
   const [
-    {
-      editorOrientation,
-      editorHidden,
-      colorScheme,
-      hasSyntaxError,
-      storedPlayrooms,
-    },
+    { editorOrientation, editorHidden, colorScheme, hasSyntaxError },
     dispatch,
   ] = useContext(StoreContext);
 
   const hasSnippets = snippets && snippets.length > 0;
-  const hasStoredPlayrooms = Object.entries(storedPlayrooms).length > 0;
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -123,7 +116,6 @@ const HeaderMenu = () => {
         <MenuItem
           icon={FolderOpen}
           onClick={() => setOpenDialog(true)}
-          disabled={!hasStoredPlayrooms}
           shortcut={['Cmd', 'O']}
         >
           Open...
@@ -214,17 +206,15 @@ const HeaderMenu = () => {
         </Menu>
       </Menu>
 
-      {hasStoredPlayrooms ? (
-        <Dialog
-          title="Open Playroom"
-          open={openDialog}
-          onOpenChange={setOpenDialog}
-        >
-          <div className={styles.openDialogContent}>
-            <PreviewTiles onSelect={() => setOpenDialog(false)} />
-          </div>
-        </Dialog>
-      ) : null}
+      <Dialog
+        title="Open Playroom"
+        open={openDialog}
+        onOpenChange={setOpenDialog}
+      >
+        <div className={styles.openDialogContent}>
+          <PreviewTiles onSelect={() => setOpenDialog(false)} />
+        </div>
+      </Dialog>
     </>
   );
 };
