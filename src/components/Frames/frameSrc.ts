@@ -1,19 +1,16 @@
 import frameConfig from '__PLAYROOM_ALIAS__FRAME_COMPONENT__';
 
-import type { PlayroomConfig } from '../../publicTypes';
+import playroomConfig from '../../config';
 
 interface FrameParams {
   code: string;
   themeName: string;
 }
 
-type FrameSrcHandler = (
-  frameParams: FrameParams,
-  config: PlayroomConfig
-) => string;
+type FrameSrcHandler = (frameParams: FrameParams) => string;
 
-const defaultFrameSrc: FrameSrcHandler = ({ code, themeName }, { baseUrl }) =>
-  `${baseUrl}frame.html#?themeName=${encodeURIComponent(
+const defaultFrameSrc: FrameSrcHandler = ({ code, themeName }) =>
+  `${playroomConfig.baseUrl}frame.html#?themeName=${encodeURIComponent(
     themeName
   )}&code=${encodeURIComponent(code)}`;
 
