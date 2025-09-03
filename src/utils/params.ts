@@ -10,18 +10,22 @@ import { compileJsx } from './compileJsx';
 
 const history = createBrowserHistory();
 
-export function updateUrlCode(code: string) {
+export function createUrlForData(dataParam: string) {
   const { pathname } = history.location;
 
   const existingQuery = getParamsFromQuery();
 
   const newQuery = new URLSearchParams(existingQuery);
-  newQuery.set('code', code);
+  newQuery.set('code', dataParam);
 
-  const params =
+  const newDataParam =
     playroomConfig.paramType === 'hash' ? `#?${newQuery}` : `?${newQuery}`;
 
-  history.replace(`${pathname}${params}`);
+  return `${pathname}${newDataParam}`;
+}
+
+export function updateUrlCode(code: string) {
+  history.replace(createUrlForData(code));
 }
 
 export function getParamsFromQuery(location = history.location) {
@@ -52,8 +56,11 @@ function useParams<ReturnType>(
   return selector(params);
 }
 
+export const getDataParam = (location = history.location) =>
+  getParamsFromQuery(location).get('code');
+
 export const resolveDataFromUrl = (location = history.location) =>
-  decompressParams(getParamsFromQuery(location).get('code'));
+  decompressParams(getDataParam(location));
 
 export const UrlParams = ({
   children,
