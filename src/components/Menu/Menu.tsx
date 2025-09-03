@@ -1,4 +1,5 @@
 import { Menu as BaseUIMenu } from '@base-ui-components/react/menu';
+import clsx from 'clsx';
 import type { LucideIcon } from 'lucide-react';
 import {
   type ComponentProps,
@@ -17,7 +18,7 @@ import * as styles from './Menu.css';
 
 export type Shortcut = string[];
 const mac = isMac();
-const iconSize = 16;
+export const menuIconSize = 16;
 
 const wordToSymbolMap: Record<string, string> = {
   Cmd: '⌘',
@@ -57,7 +58,7 @@ export const MenuItem = ({
     disabled={disabled}
   >
     <span className={styles.itemLeft}>
-      <Icon size={iconSize} />
+      <Icon size={menuIconSize} />
       {children}
     </span>
     {shortcut && (
@@ -85,7 +86,7 @@ export const MenuRadioItem = ({
 }) => (
   <BaseUIMenu.RadioItem className={styles.fieldItem} value={value}>
     <span className={styles.itemLeft}>
-      <Icon size={iconSize} />
+      <Icon size={menuIconSize} />
       {children}
     </span>
     <BaseUIMenu.RadioItemIndicator className={styles.fieldItemIndicator}>
@@ -129,7 +130,7 @@ export const MenuCheckboxItem = ({
     className={styles.fieldItem}
   >
     <span className={styles.itemLeft}>
-      <Icon size={iconSize} />
+      <Icon size={menuIconSize} />
       {children}
     </span>
     <BaseUIMenu.CheckboxItemIndicator className={styles.fieldItemIndicator}>
@@ -202,7 +203,7 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
           >
             {isSubMenu ? (
               <div className={styles.itemLeft}>
-                {Icon ? <Icon size={iconSize} /> : null}
+                {Icon ? <Icon size={menuIconSize} /> : null}
                 {trigger}
               </div>
             ) : (
@@ -220,7 +221,7 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
                   : 8 /* Double padding size (medium) */
               }
             >
-              <BaseUIMenu.Popup className={styles.popup}>
+              <BaseUIMenu.Popup className={clsx(styles.popup, styles.small)}>
                 {children}
               </BaseUIMenu.Popup>
             </BaseUIMenu.Positioner>

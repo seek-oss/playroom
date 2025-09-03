@@ -75,6 +75,13 @@ export const positive = style({
   borderColor: highlightColor,
 });
 
+export const critical = style({
+  vars: {
+    [highlightColor]: `${colorPaletteVars.foreground.critical} !important`,
+  },
+  borderColor: highlightColor,
+});
+
 export const iconContainer = style([
   sprinkles({ position: 'relative', paddingLeft: 'xxsmall' }),
   {

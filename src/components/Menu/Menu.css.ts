@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { createVar, style } from '@vanilla-extract/css';
 
 import { comma } from '../../css/delimiters';
 
@@ -36,13 +36,13 @@ export const trigger = style([
 ]);
 
 const popupGutter = 'xsmall';
-export const popup = style([
-  sharedPopupStyles('small'),
-  {
-    width: 250,
-  },
-]);
+export const popup = sharedPopupStyles('small');
 
+export const small = style({
+  width: 250,
+});
+
+const highlightColor = createVar();
 export const item = style([
   sprinkles({
     display: 'flex',
@@ -63,12 +63,15 @@ export const item = style([
       insetInline: 0,
       borderRadius: vars.radii.small,
     },
+    vars: {
+      [highlightColor]: colorPaletteVars.background.selection,
+    },
     selectors: {
       [comma(
         '&[data-popup-open]:not([aria-disabled])::before',
         '&[data-highlighted]:not([aria-disabled])::before'
       )]: {
-        backgroundColor: colorPaletteVars.background.selection,
+        backgroundColor: highlightColor,
       },
       [`&[aria-disabled]`]: {
         color: colorPaletteVars.foreground.secondary,
@@ -77,12 +80,23 @@ export const item = style([
   },
 ]);
 
+export const critical = style({
+  vars: {
+    [highlightColor]: colorPaletteVars.background.critical,
+  },
+  color: colorPaletteVars.foreground.critical,
+});
+
 export const itemLeft = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
     gap: 'xsmall',
+    paddingRight: 'xsmall',
   }),
+  {
+    isolation: 'isolate',
+  },
 ]);
 
 export const submenuTrigger = style([

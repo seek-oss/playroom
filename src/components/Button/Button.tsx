@@ -5,7 +5,7 @@ import * as styles from './Button.css';
 
 interface BaseProps {
   as?: ElementType;
-  tone?: 'positive';
+  tone?: 'positive' | 'critical';
   icon?: ReactElement;
 }
 
@@ -29,6 +29,7 @@ export const Button = ({
   <ButtonComponent
     className={clsx(styles.reset, styles.base, {
       [styles.positive]: tone === 'positive',
+      [styles.critical]: tone === 'critical',
     })}
     disabled={tone === 'positive'}
     {...props}

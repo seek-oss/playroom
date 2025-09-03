@@ -145,6 +145,12 @@ export type Action =
         id: string;
         dataParam: StoredPlayroom['dataParam'];
       };
+    }
+  | {
+      type: 'deletePlayroom';
+      payload: {
+        id: string;
+      };
     };
 
 const resetPreview = ({
@@ -428,6 +434,19 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         storedPlayrooms: updatedPlayrooms,
+      };
+    }
+
+    case 'deletePlayroom': {
+      const { id } = action.payload;
+      const { [id]: deletedPlayroom, ...remainingPlayrooms } =
+        state.storedPlayrooms;
+
+      store.setItem('playrooms', remainingPlayrooms);
+
+      return {
+        ...state,
+        storedPlayrooms: remainingPlayrooms,
       };
     }
 
