@@ -40,19 +40,21 @@ export const actionsContainer = style([
 
 export const menuButton = style([
   sprinkles({
+    position: 'relative',
     display: 'flex',
     alignItems: 'center',
     gap: 'small',
+    borderRadius: 'small',
   }),
+  minTouchableBeforePseudo,
   {
     color: colorPaletteVars.foreground.neutral,
+    ':focus-visible': {
+      outline: `2px solid ${colorPaletteVars.outline.focus}`,
+      outlineOffset: 6,
+    },
     selectors: {
-      [comma(
-        '*:hover > &',
-        '*:active > &',
-        '*:focus-visible > &',
-        '*[data-popup-open] > &'
-      )]: {
+      [comma('&:hover', '&:active', '&:focus-visible', '&[data-popup-open]')]: {
         color: colorPaletteVars.foreground.accent,
       },
     },
