@@ -57,7 +57,6 @@ import { Title } from '../Title/Title';
 import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Header.css';
-import * as buttonStyles from '../ButtonIcon/ButtonIcon.css';
 
 const FramesMenu = () => {
   const [{ selectedWidths, selectedThemes }, dispatch] =
@@ -190,6 +189,7 @@ const HeaderMenu = () => {
           }
         }}
         ref={menuTriggerRef}
+        width="small"
         trigger={
           <span className={styles.menuButton}>
             <Logo size={24} />
@@ -230,11 +230,18 @@ const HeaderMenu = () => {
 
         <MenuSeparator />
 
-        <Menu trigger="Frames" icon={FrameIcon}>
+        <Menu
+          trigger={<MenuItem icon={FrameIcon}>Frames</MenuItem>}
+          width="small"
+        >
           <FramesMenu />
         </Menu>
 
-        <Menu trigger="Editor actions" icon={CodeXml} disabled={editorHidden}>
+        <Menu
+          trigger={<MenuItem icon={CodeXml}>Editor actions</MenuItem>}
+          width="small"
+          disabled={editorHidden}
+        >
           {hasSnippets && (
             <MenuItem
               icon={BetweenHorizontalStart}
@@ -262,7 +269,10 @@ const HeaderMenu = () => {
 
         <MenuSeparator />
 
-        <Menu trigger="View" icon={LayoutPanelLeft}>
+        <Menu
+          trigger={<MenuItem icon={LayoutPanelLeft}>View</MenuItem>}
+          width="small"
+        >
           <MenuGroup label="Editor Position">
             <MenuRadioGroup
               value={editorPosition}
@@ -292,7 +302,10 @@ const HeaderMenu = () => {
           </MenuGroup>
         </Menu>
 
-        <Menu trigger="Appearance" icon={Monitor}>
+        <Menu
+          trigger={<MenuItem icon={Monitor}>Appearance</MenuItem>}
+          width="small"
+        >
           <MenuRadioGroup
             value={colorScheme}
             onValueChange={(value) =>
@@ -420,16 +433,13 @@ export const Header = () => {
         ) : null}
 
         <Menu
+          width="small"
           trigger={
-            <span
-              aria-label="Configure frames"
-              className={clsx(
-                buttonStyles.button,
-                buttonStyles.size[headerButtonIconSize]
-              )}
-            >
-              <FrameIcon />
-            </span>
+            <ButtonIcon
+              size={headerButtonIconSize}
+              label="Configure frames"
+              icon={<FrameIcon />}
+            />
           }
         >
           <FramesMenu />
