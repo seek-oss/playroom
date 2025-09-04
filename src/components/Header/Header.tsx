@@ -17,7 +17,12 @@ import {
   Check,
   CopyPlus,
   FolderOpen,
-  PanelsLeftBottom,
+  LayoutPanelLeft,
+  PanelBottomClose,
+  PanelLeftClose,
+  PanelBottomOpen,
+  PanelLeftOpen,
+  type LucideIcon,
 } from 'lucide-react';
 import { useContext, useEffect, useRef, useState } from 'react';
 
@@ -28,7 +33,10 @@ import {
 } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import { useEditor } from '../../contexts/EditorContext';
-import { StoreContext } from '../../contexts/StoreContext';
+import {
+  type EditorOrientation,
+  StoreContext,
+} from '../../contexts/StoreContext';
 import { isMac } from '../../utils/formatting';
 import { createUrlForData, resolveDataFromUrl } from '../../utils/params';
 import { Box } from '../Box/Box';
@@ -57,6 +65,114 @@ import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Header.css';
 import * as buttonStyles from '../ButtonIcon/ButtonIcon.css';
+
+const toggleEditorIcon: Record<
+  EditorOrientation,
+  Record<'show' | 'hide', LucideIcon>
+> = {
+  vertical: {
+    hide: PanelLeftClose,
+    show: PanelLeftOpen,
+  },
+  horizontal: {
+    hide: PanelBottomClose,
+    show: PanelBottomOpen,
+  },
+} as const;
+
+const FramesMenu = ({
+  trailingSeparator = false,
+}: {
+  trailingSeparator?: boolean;
+}) => {
+  const [{ selectedWidths, selectedThemes }, dispatch] =
+    useContext(StoreContext);
+
+  const hasFilteredWidths =
+    selectedWidths.length > 0 &&
+    selectedWidths.length <= availableWidths.length;
+  const hasFilteredThemes =
+    selectedThemes.length > 0 &&
+    selectedThemes.length <= availableThemes.length;
+
+  return (
+    <>
+      <MenuGroup label="Widths">
+        {availableWidths.map((width) => (
+          <MenuCheckboxItem
+            icon={width === 'Fit to window' ? MaximizeIcon : FrameIcon}
+            key={width}
+            checked={hasFilteredWidths && selectedWidths.includes(width)}
+            onCheckedChange={(checked: boolean) => {
+              const newWidths =
+                selectedWidths.length === 0 ? [width] : selectedWidths;
+
+              dispatch({
+                type: 'updateSelectedWidths',
+                payload: {
+                  widths: checked
+                    ? [...newWidths, width]
+                    : newWidths.filter((w) => w !== width),
+                },
+              });
+            }}
+          >
+            {width}
+          </MenuCheckboxItem>
+        ))}
+        <MenuItem
+          icon={Eraser}
+          onClick={() => dispatch({ type: 'resetSelectedWidths' })}
+          closeOnClick={false}
+          disabled={!hasFilteredWidths}
+        >
+          Clear selection
+        </MenuItem>
+      </MenuGroup>
+
+      {themesEnabled ? (
+        <>
+          <MenuSeparator />
+
+          <MenuGroup label="Themes">
+            {availableThemes.map((theme) => (
+              <MenuCheckboxItem
+                icon={Palette}
+                key={theme}
+                checked={hasFilteredThemes && selectedThemes.includes(theme)}
+                onCheckedChange={(checked: boolean) => {
+                  const newThemes =
+                    selectedThemes.length === 0 ? [theme] : selectedThemes;
+
+                  dispatch({
+                    type: 'updateSelectedThemes',
+                    payload: {
+                      themes: checked
+                        ? [...newThemes, theme]
+                        : newThemes.filter((w) => w !== theme),
+                    },
+                  });
+                }}
+              >
+                {theme}
+              </MenuCheckboxItem>
+            ))}
+            <MenuItem
+              icon={Eraser}
+              onClick={() => dispatch({ type: 'resetSelectedThemes' })}
+              closeOnClick={false}
+              disabled={!hasFilteredThemes}
+            >
+              Clear selection
+            </MenuItem>
+          </MenuGroup>
+
+          {trailingSeparator && <MenuSeparator />}
+        </>
+      ) : null}
+    </>
+  );
+};
 
 const HeaderMenu = () => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
@@ -138,45 +254,8 @@ const HeaderMenu = () => {
 
         <MenuSeparator />
 
-        <Menu trigger="Appearance" icon={Monitor}>
-          <MenuRadioGroup
-            value={colorScheme}
-            onValueChange={(value) =>
-              dispatch({
-                type: 'updateColorScheme',
-                payload: { colorScheme: value },
-              })
-            }
-          >
-            <MenuRadioItem icon={Monitor} value="system">
-              System
-            </MenuRadioItem>
-            <MenuRadioItem icon={Sun} value="light">
-              Light
-            </MenuRadioItem>
-            <MenuRadioItem icon={Moon} value="dark">
-              Dark
-            </MenuRadioItem>
-          </MenuRadioGroup>
-        </Menu>
-
-        <Menu trigger="Editor position" icon={PanelsLeftBottom}>
-          <MenuRadioGroup
-            value={editorOrientation}
-            onValueChange={(value) => {
-              dispatch({
-                type: 'updateEditorOrientation',
-                payload: { orientation: value },
-              });
-            }}
-          >
-            <MenuRadioItem icon={PanelBottom} value="horizontal">
-              Bottom
-            </MenuRadioItem>
-            <MenuRadioItem icon={PanelLeft} value="vertical">
-              Left
-            </MenuRadioItem>
-          </MenuRadioGroup>
+        <Menu trigger="Frames" icon={FrameIcon}>
+          <FramesMenu />
         </Menu>
 
         <Menu trigger="Editor actions" icon={CodeXml} disabled={editorHidden}>
@@ -203,6 +282,72 @@ const HeaderMenu = () => {
               {label}
             </MenuItem>
           ))}
+        </Menu>
+
+        <MenuSeparator />
+
+        <Menu trigger="View" icon={LayoutPanelLeft}>
+          <MenuGroup label="Editor Position">
+            <MenuItem
+              icon={PanelLeft}
+              onClick={() =>
+                dispatch({
+                  type: 'updateEditorOrientation',
+                  payload: { orientation: 'vertical' },
+                })
+              }
+              closeOnClick={false}
+            >
+              Left
+            </MenuItem>
+            <MenuItem
+              icon={PanelBottom}
+              onClick={() =>
+                dispatch({
+                  type: 'updateEditorOrientation',
+                  payload: { orientation: 'horizontal' },
+                })
+              }
+              closeOnClick={false}
+            >
+              Bottom
+            </MenuItem>
+            <MenuItem
+              icon={
+                toggleEditorIcon[editorOrientation][
+                  editorHidden ? 'show' : 'hide'
+                ]
+              }
+              onClick={() =>
+                dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
+              }
+              closeOnClick={false}
+            >
+              {editorHidden ? 'Show' : 'Hide'}
+            </MenuItem>
+          </MenuGroup>
+        </Menu>
+
+        <Menu trigger="Appearance" icon={Monitor}>
+          <MenuRadioGroup
+            value={colorScheme}
+            onValueChange={(value) =>
+              dispatch({
+                type: 'updateColorScheme',
+                payload: { colorScheme: value },
+              })
+            }
+          >
+            <MenuRadioItem icon={Monitor} value="system">
+              System
+            </MenuRadioItem>
+            <MenuRadioItem icon={Sun} value="light">
+              Light
+            </MenuRadioItem>
+            <MenuRadioItem icon={Moon} value="dark">
+              Dark
+            </MenuRadioItem>
+          </MenuRadioGroup>
         </Menu>
       </Menu>
 
@@ -251,8 +396,7 @@ const CopyLinkButton = ({
 );
 
 export const Header = () => {
-  const [{ code, selectedWidths, selectedThemes, editorHidden }, dispatch] =
-    useContext(StoreContext);
+  const [{ code, editorHidden }, dispatch] = useContext(StoreContext);
 
   const hasCode = code.trim().length > 0;
   const [linkCopied, setLinkCopied] = useState(false);
@@ -275,13 +419,6 @@ export const Header = () => {
       window.clearTimeout(timeoutId);
     };
   }, [linkCopied]);
-
-  const hasFilteredWidths =
-    selectedWidths.length > 0 &&
-    selectedWidths.length <= availableWidths.length;
-  const hasFilteredThemes =
-    selectedThemes.length > 0 &&
-    selectedThemes.length <= availableThemes.length;
 
   return (
     <Box className={styles.root}>
@@ -331,79 +468,7 @@ export const Header = () => {
             </span>
           }
         >
-          <MenuGroup label="Widths">
-            {availableWidths.map((width) => (
-              <MenuCheckboxItem
-                icon={width === 'Fit to window' ? MaximizeIcon : FrameIcon}
-                key={width}
-                checked={hasFilteredWidths && selectedWidths.includes(width)}
-                onCheckedChange={(checked: boolean) => {
-                  const newWidths =
-                    selectedWidths.length === 0 ? [width] : selectedWidths;
-
-                  dispatch({
-                    type: 'updateSelectedWidths',
-                    payload: {
-                      widths: checked
-                        ? [...newWidths, width]
-                        : newWidths.filter((w) => w !== width),
-                    },
-                  });
-                }}
-              >
-                {width}
-              </MenuCheckboxItem>
-            ))}
-            <MenuItem
-              icon={Eraser}
-              onClick={() => dispatch({ type: 'resetSelectedWidths' })}
-              closeOnClick={false}
-              disabled={!hasFilteredWidths}
-            >
-              Clear selection
-            </MenuItem>
-          </MenuGroup>
-
-          {themesEnabled ? (
-            <>
-              <MenuSeparator />
-
-              <MenuGroup label="Themes">
-                {availableThemes.map((theme) => (
-                  <MenuCheckboxItem
-                    icon={Palette}
-                    key={theme}
-                    checked={
-                      hasFilteredThemes && selectedThemes.includes(theme)
-                    }
-                    onCheckedChange={(checked: boolean) => {
-                      const newThemes =
-                        selectedThemes.length === 0 ? [theme] : selectedThemes;
-
-                      dispatch({
-                        type: 'updateSelectedThemes',
-                        payload: {
-                          themes: checked
-                            ? [...newThemes, theme]
-                            : newThemes.filter((w) => w !== theme),
-                        },
-                      });
-                    }}
-                  >
-                    {theme}
-                  </MenuCheckboxItem>
-                ))}
-                <MenuItem
-                  icon={Eraser}
-                  onClick={() => dispatch({ type: 'resetSelectedThemes' })}
-                  closeOnClick={false}
-                  disabled={!hasFilteredThemes}
-                >
-                  Clear selection
-                </MenuItem>
-              </MenuGroup>
-            </>
-          ) : null}
+          <FramesMenu />
         </Menu>
 
         <ButtonIcon
