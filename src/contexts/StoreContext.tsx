@@ -316,6 +316,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         editorOrientation: orientation,
+        editorHidden: false,
       };
     }
 
