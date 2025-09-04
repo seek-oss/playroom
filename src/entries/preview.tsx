@@ -1,8 +1,6 @@
 import faviconInvertedPath from '../../images/favicon-inverted.png';
 import faviconPath from '../../images/favicon.png';
-import Frame from '../components/Frame/Frame';
 import Preview from '../components/Preview/Preview';
-import { PreviewError } from '../components/Preview/PreviewError';
 import { renderElement } from '../render';
 import { UrlParams } from '../utils/params';
 
@@ -19,15 +17,8 @@ if (selectedElement) {
 
 renderElement(
   <UrlParams decodeUrl>
-    {({ code, themeName, theme, title }) => (
-      <Preview title={title}>
-        <Frame
-          code={code}
-          themeName={themeName}
-          theme={theme}
-          ErrorComponent={PreviewError}
-        />
-      </Preview>
+    {({ code, themeName, title }) => (
+      <Preview title={title} code={code} themeName={themeName} />
     )}
   </UrlParams>,
   document.body
