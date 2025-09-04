@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { type ComponentProps, useEffect, useRef, useState } from 'react';
 
 import { FrameError } from './FrameError';
 
@@ -22,7 +22,11 @@ export const SendErrorMessage = ({
   return null;
 };
 
-export const ReceiveErrorMessage = () => {
+interface ReceiveErrorMessageProps {
+  size?: ComponentProps<typeof FrameError>['size'];
+}
+
+export const ReceiveErrorMessage = ({ size }: ReceiveErrorMessageProps) => {
   const shouldDelay = useRef(true);
   const [error, setError] = useState('');
 
@@ -42,5 +46,11 @@ export const ReceiveErrorMessage = () => {
     };
   }, []);
 
-  return <FrameError message={error} delayVisibility={shouldDelay.current} />;
+  return (
+    <FrameError
+      message={error}
+      size={size}
+      delayVisibility={shouldDelay.current}
+    />
+  );
 };
