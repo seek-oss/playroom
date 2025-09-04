@@ -2,38 +2,9 @@ import { createVar, style } from '@vanilla-extract/css';
 
 import { comma } from '../../css/delimiters';
 
-import {
-  minTouchableBeforePseudo,
-  sharedPopupStyles,
-} from '../../css/shared.css';
+import { sharedPopupStyles } from '../../css/shared.css';
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
-
-export const trigger = style([
-  sprinkles({
-    boxSizing: 'border-box',
-    margin: 'none',
-    padding: 'none',
-    userSelect: 'none',
-    font: 'small',
-    borderRadius: 'small',
-    border: 0,
-    appearance: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 'medium',
-    position: 'relative',
-  }),
-  minTouchableBeforePseudo,
-  {
-    background: 'transparent',
-    ':focus-visible': {
-      outline: `2px solid ${colorPaletteVars.outline.focus}`,
-      outlineOffset: 6,
-    },
-  },
-]);
 
 const popupGutter = 'xsmall';
 export const popup = sharedPopupStyles('small');
@@ -97,16 +68,6 @@ export const itemLeft = style([
   {
     isolation: 'isolate',
   },
-]);
-
-export const submenuTrigger = style([
-  item,
-  sprinkles({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 'xsmall',
-  }),
 ]);
 
 export const fieldItem = style([

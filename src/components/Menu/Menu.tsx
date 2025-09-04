@@ -5,7 +5,6 @@ import {
   type ComponentProps,
   createContext,
   forwardRef,
-  type ReactNode,
   useContext,
 } from 'react';
 
@@ -36,42 +35,42 @@ const convertShortcutForPlatform = (shortcut: Shortcut) => {
   return shortcut.map((key) => wordToSymbolMap[key] || key);
 };
 
-export const MenuItem = ({
-  onClick,
-  shortcut,
-  children,
-  closeOnClick,
-  disabled,
-  icon: Icon,
-}: {
-  onClick: ComponentProps<typeof BaseUIMenu.Item>['onClick'];
+const SubMenuTriggerContext = createContext(false);
+
+type MenuItemProps = Omit<
+  ComponentProps<typeof BaseUIMenu.Item>,
+  'className'
+> & {
   shortcut?: Shortcut;
-  children: ComponentProps<typeof BaseUIMenu.Item>['children'];
-  closeOnClick?: ComponentProps<typeof BaseUIMenu.Item>['closeOnClick'];
-  disabled?: ComponentProps<typeof BaseUIMenu.Item>['disabled'];
   icon: LucideIcon;
-}) => (
-  <BaseUIMenu.Item
-    className={styles.item}
-    onClick={onClick}
-    closeOnClick={closeOnClick}
-    disabled={disabled}
-  >
-    <span className={styles.itemLeft}>
-      <Icon size={menuIconSize} />
-      {children}
-    </span>
-    {shortcut && (
-      <span className={styles.shortcut}>
-        {convertShortcutForPlatform(shortcut).map((key, index) => (
-          <Text tone="secondary" key={index}>
-            {key}
-          </Text>
-        ))}
+};
+export const MenuItem = ({
+  children,
+  shortcut,
+  icon: Icon,
+  ...restProps
+}: MenuItemProps) => {
+  const isSubMenuTrigger = useContext(SubMenuTriggerContext);
+
+  return (
+    <BaseUIMenu.Item className={styles.item} {...restProps}>
+      <span className={styles.itemLeft}>
+        <Icon size={menuIconSize} />
+        {children}
       </span>
-    )}
-  </BaseUIMenu.Item>
-);
+      {shortcut && (
+        <span className={styles.shortcut}>
+          {convertShortcutForPlatform(shortcut).map((key, index) => (
+            <Text tone="secondary" key={index}>
+              {key}
+            </Text>
+          ))}
+        </span>
+      )}
+      {isSubMenuTrigger ? <ChevronIcon direction="right" size={12} /> : null}
+    </BaseUIMenu.Item>
+  );
+};
 
 export const MenuRadioGroup = BaseUIMenu.RadioGroup;
 
@@ -161,16 +160,23 @@ export const MenuGroup = ({
 const SubMenuContext = createContext(false);
 
 type Props = {
-  trigger: ReactNode;
+  trigger: ComponentProps<typeof BaseUIMenu.Trigger>['render'];
+  width: 'content' | 'small';
   align?: ComponentProps<typeof BaseUIMenu.Positioner>['align'];
   children: ComponentProps<typeof BaseUIMenu.Popup>['children'];
   disabled?: ComponentProps<typeof BaseUIMenu.SubmenuRoot>['disabled'];
   onClose?: () => void;
-  icon?: LucideIcon;
 };
 export const Menu = forwardRef<HTMLButtonElement, Props>(
   (
-    { trigger, align = 'start', children, onClose, disabled, icon: Icon },
+    {
+      trigger,
+      align = 'start',
+      width = 'content',
+      children,
+      onClose,
+      disabled,
+    },
     triggerRef
   ) => {
     const isSubMenu = useContext(SubMenuContext);
@@ -183,10 +189,6 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
       throw new Error("Menu cannot be disabled unless it's a submenu");
     }
 
-    if (Icon && !isSubMenu) {
-      throw new Error('Icon is only supported for a submenu');
-    }
-
     return (
       <SubMenuContext.Provider value={true}>
         <MenuRoot
@@ -197,31 +199,27 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
           }}
           disabled={disabled && isSubMenu}
         >
-          <MenuTrigger
-            ref={triggerRef}
-            className={isSubMenu ? styles.submenuTrigger : styles.trigger}
-          >
-            {isSubMenu ? (
-              <div className={styles.itemLeft}>
-                {Icon ? <Icon size={menuIconSize} /> : null}
-                {trigger}
-              </div>
-            ) : (
-              trigger
-            )}
-            {isSubMenu ? <ChevronIcon direction="right" size={12} /> : null}
-          </MenuTrigger>
+          <SubMenuTriggerContext.Provider value={true}>
+            <MenuTrigger ref={triggerRef} render={trigger} />
+          </SubMenuTriggerContext.Provider>
           <BaseUIMenu.Portal>
             <BaseUIMenu.Positioner
               align={align}
-              alignOffset={-8 /* Align with the padding size of the popup */}
+              alignOffset={
+                -4 /* Align with the edge of the popup corner radius (half of medium) */
+              }
               sideOffset={
                 isSubMenu
                   ? 10 /* Align with the padding size of the popup + gap */
                   : 8 /* Double padding size (medium) */
               }
             >
-              <BaseUIMenu.Popup className={clsx(styles.popup, styles.small)}>
+              <BaseUIMenu.Popup
+                className={clsx({
+                  [styles.popup]: true,
+                  [styles.small]: width === 'small',
+                })}
+              >
                 {children}
               </BaseUIMenu.Popup>
             </BaseUIMenu.Positioner>
