@@ -1,6 +1,6 @@
 import { createVar, style } from '@vanilla-extract/css';
 
-import { sprinkles } from '../../css/sprinkles.css';
+import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 
 export const root = style([
   sprinkles({
@@ -8,8 +8,9 @@ export const root = style([
     width: 'full',
     boxSizing: 'border-box',
     display: 'flex',
-    gap: 'xxxlarge',
-    padding: 'xxxlarge',
+    gap: 'xxlarge',
+    paddingY: 'xxlarge',
+    paddingX: 'xlarge',
     textAlign: 'center',
     overflow: 'auto',
   }),
@@ -20,6 +21,8 @@ export const root = style([
 
 export const frameWidth = createVar();
 
+export const frameActive = style({});
+
 export const frameContainer = style([
   sprinkles({
     position: 'relative',
@@ -27,6 +30,7 @@ export const frameContainer = style([
     textAlign: 'left',
     display: 'flex',
     flexDirection: 'column',
+    gap: 'small',
   }),
   {
     flexShrink: 0,
@@ -34,44 +38,90 @@ export const frameContainer = style([
   },
 ]);
 
-export const frame = sprinkles({
-  border: 0,
-  flexGrow: 1,
-  width: 'full',
-  height: 'full',
+export const highlightOnHover = style({
+  selectors: {
+    [`${frameContainer}:hover &, ${frameActive} &`]: {
+      color: `${colorPaletteVars.foreground.accent}`,
+    },
+  },
 });
+
+export const frameWrapper = style([
+  sprinkles({
+    position: 'relative',
+    height: 'full',
+    borderRadius: 'medium',
+  }),
+  {
+    border: `1px solid ${colorPaletteVars.border.standard}`,
+    background: colorPaletteVars.background.surface,
+  },
+]);
+
+export const frame = style([
+  sprinkles({
+    border: 0,
+    flexGrow: 1,
+    width: 'full',
+    height: 'full',
+    borderRadius: 'medium',
+  }),
+  {
+    isolation: 'isolate',
+    background: colorPaletteVars.background.surface,
+  },
+]);
 
 export const frameBorder = style([
   sprinkles({
     position: 'absolute',
     inset: 0,
-    boxShadow: 'small',
     transition: 'medium',
     pointerEvents: 'none',
+    borderRadius: 'medium',
   }),
   {
+    outline: `2px solid ${colorPaletteVars.border.accent}`,
     selectors: {
-      [`${frameContainer}:not(:hover) &`]: {
-        opacity: 0.8,
+      [`${frameContainer}:not(:hover, ${frameActive}) &`]: {
+        opacity: 0,
+        transform: 'scale(0.95)',
       },
     },
   },
 ]);
 
-const frameNameHeight = '30px';
-export const frameName = style([
+export const frameHeadingContainer = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'space-between',
     transition: 'medium',
+    paddingRight: 'xxsmall',
   }),
   {
-    flex: `0 0 ${frameNameHeight}`,
-    height: frameNameHeight,
-    marginBottom: '-10px',
     selectors: {
-      [`${frameContainer}:not(:hover) &`]: {
-        opacity: 0.3,
+      [`${frameContainer}:not(:hover, ${frameActive}) &`]: {
+        opacity: 0.4,
+      },
+    },
+  },
+]);
+
+export const frameActionsContainer = style([
+  sprinkles({
+    transition: 'medium',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'small',
+  }),
+  {
+    transitionDelay: '300ms',
+    selectors: {
+      [`${frameContainer}:not(:hover, ${frameActive}) &`]: {
+        transitionDelay: '0ms',
+        opacity: 0,
+        transform: 'translateY(15%)',
       },
     },
   },
