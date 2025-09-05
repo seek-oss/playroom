@@ -42,6 +42,19 @@ export const ThemeSelector = ({
 
   return (
     <div className={styles.root}>
+      <select
+        className={styles.select}
+        aria-label="Select theme"
+        title="Select theme"
+        value={activeTheme}
+        id="theme-select"
+        onChange={(e) => {
+          onChange(e.target.value);
+        }}
+      >
+        {options}
+      </select>
+
       <label htmlFor="theme-select" className={clsx(styles.label, styles.row)}>
         <span className={clsx(styles.column, styles.minColumn)}>
           <Text>Theme:&nbsp;</Text>
@@ -58,20 +71,6 @@ export const ThemeSelector = ({
           </span>
         </span>
       </label>
-
-      <select
-        className={styles.select}
-        aria-label="Select theme"
-        title="Select theme"
-        value={activeTheme}
-        id="theme-select"
-        onChange={(e) => {
-          onChange(e.target.value);
-        }}
-      >
-        {options}
-      </select>
-      <div className={styles.focusOverlay} />
     </div>
   );
 };

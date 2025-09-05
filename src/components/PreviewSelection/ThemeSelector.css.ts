@@ -1,15 +1,37 @@
 import { style } from '@vanilla-extract/css';
 
-import { sprinkles } from '../../css/sprinkles.css';
+import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 
 export const root = sprinkles({
   position: 'relative',
 });
 
-export const label = sprinkles({
-  userSelect: 'none',
-  pointerEvents: 'none',
-});
+export const select = style([
+  sprinkles({
+    position: 'absolute',
+    inset: 0,
+    width: 'full',
+    opacity: 0,
+    font: 'standard',
+  }),
+  {}, // Required to create a style reference used by label for focus ring
+]);
+
+export const label = style([
+  sprinkles({
+    userSelect: 'none',
+    pointerEvents: 'none',
+    borderRadius: 'small',
+  }),
+  {
+    selectors: {
+      [`${select}:focus-visible ~ &`]: {
+        outline: `2px solid ${colorPaletteVars.outline.focus}`,
+        outlineOffset: 4,
+      },
+    },
+  },
+]);
 
 export const row = sprinkles({
   display: 'flex',
@@ -28,36 +50,3 @@ export const column = style([
 export const minColumn = style({
   flexShrink: 0,
 });
-
-export const select = style([
-  sprinkles({
-    position: 'absolute',
-    inset: 0,
-    width: 'full',
-    opacity: 0,
-    font: 'standard',
-  }),
-  {},
-]);
-
-export const focusOverlay = style([
-  sprinkles({
-    position: 'absolute',
-    pointerEvents: 'none',
-    borderRadius: 'medium',
-    opacity: 0,
-    transition: 'medium',
-    boxShadow: 'focus',
-  }),
-  {
-    top: '-4px',
-    left: '-4px',
-    right: '-4px',
-    bottom: '-4px',
-    selectors: {
-      [`${select}:focus:not(:hover) ~ &`]: {
-        opacity: 1,
-      },
-    },
-  },
-]);
