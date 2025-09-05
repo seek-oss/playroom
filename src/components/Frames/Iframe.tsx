@@ -4,6 +4,7 @@ import {
   useRef,
   type AllHTMLAttributes,
   type RefObject,
+  forwardRef,
 } from 'react';
 
 import playroomConfig from '../../config';
@@ -13,12 +14,10 @@ interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
   intersectionRootRef: RefObject<Element | null>;
 }
 
-export default function Iframe({
-  intersectionRootRef,
-  style,
-  src,
-  ...restProps
-}: IframeProps) {
+export default forwardRef<HTMLIFrameElement, IframeProps>(function Iframe(
+  { intersectionRootRef, style, src, ...restProps },
+  forwardedRef
+) {
   const [loaded, setLoaded] = useState(false);
   const [renderedSrc, setRenderedSrc] = useState<string | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
@@ -52,7 +51,14 @@ export default function Iframe({
 
   return (
     <iframe
-      ref={iframeRef}
+      ref={(el: HTMLIFrameElement | null) => {
+        iframeRef.current = el;
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(el);
+        } else if (forwardedRef && 'current' in forwardedRef) {
+          forwardedRef.current = el;
+        }
+      }}
       sandbox={playroomConfig.iframeSandbox}
       onLoad={() => setLoaded(true)}
       onMouseEnter={() => {
@@ -68,7 +74,7 @@ export default function Iframe({
       {...restProps}
     />
   );
-}
+});
 
 // copied directly from `react-use`
 // https://github.com/streamich/react-use/blob/d2028ae44c79628475f0ef1736c4a48ca310247a/src/useIntersection.ts#L3-L28
