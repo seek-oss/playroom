@@ -2,6 +2,7 @@ import { Menu as BaseUIMenu } from '@base-ui-components/react/menu';
 import clsx from 'clsx';
 import type { LucideIcon } from 'lucide-react';
 import {
+  type AllHTMLAttributes,
   type ComponentProps,
   createContext,
   forwardRef,
@@ -39,7 +40,7 @@ const SubMenuTriggerContext = createContext(false);
 
 type MenuItemProps = Omit<
   ComponentProps<typeof BaseUIMenu.Item>,
-  'className'
+  'render' | 'className'
 > & {
   shortcut?: Shortcut;
   icon: LucideIcon;
@@ -69,6 +70,52 @@ export const MenuItem = ({
       )}
       {isSubMenuTrigger ? <ChevronIcon direction="right" size={12} /> : null}
     </BaseUIMenu.Item>
+  );
+};
+
+type MenuItemLinkProps = MenuItemProps &
+  AllHTMLAttributes<HTMLAnchorElement> & {
+    href: string;
+  };
+export const MenuItemLink = ({
+  children,
+  shortcut,
+  icon: Icon,
+  href,
+  target,
+  ...restProps
+}: MenuItemLinkProps) => {
+  const isSubMenuTrigger = useContext(SubMenuTriggerContext);
+
+  return (
+    <BaseUIMenu.Item
+      render={
+        <a
+          href={href}
+          className={styles.itemLink}
+          target={target}
+          rel={target === '_blank' ? 'noopener,noreferrer' : undefined}
+        >
+          <span className={styles.itemLeft}>
+            <Icon size={menuIconSize} />
+            {children}
+          </span>
+          {shortcut && (
+            <span className={styles.shortcut}>
+              {convertShortcutForPlatform(shortcut).map((key, index) => (
+                <Text tone="secondary" key={index}>
+                  {key}
+                </Text>
+              ))}
+            </span>
+          )}
+          {isSubMenuTrigger ? (
+            <ChevronIcon direction="right" size={12} />
+          ) : null}
+        </a>
+      }
+      {...restProps}
+    />
   );
 };
 
@@ -165,6 +212,7 @@ type Props = {
   align?: ComponentProps<typeof BaseUIMenu.Positioner>['align'];
   children: ComponentProps<typeof BaseUIMenu.Popup>['children'];
   disabled?: ComponentProps<typeof BaseUIMenu.SubmenuRoot>['disabled'];
+  onOpenChange?: ComponentProps<typeof BaseUIMenu.Root>['onOpenChange'];
   onClose?: () => void;
 };
 export const Menu = forwardRef<HTMLButtonElement, Props>(
@@ -175,6 +223,7 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
       width = 'content',
       children,
       onClose,
+      onOpenChange,
       disabled,
     },
     triggerRef
@@ -192,6 +241,7 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
     return (
       <SubMenuContext.Provider value={true}>
         <MenuRoot
+          onOpenChange={onOpenChange}
           onOpenChangeComplete={(open: boolean) => {
             if (!open && typeof onClose === 'function') {
               onClose();
