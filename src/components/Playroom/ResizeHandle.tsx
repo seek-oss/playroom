@@ -1,4 +1,4 @@
-import type { RefObject } from 'react';
+import { useState, type RefObject } from 'react';
 
 import { Box } from '../Box/Box';
 
@@ -37,6 +37,7 @@ export const ResizeHandle = ({
   onResizeStart?: (startValue: number) => void;
   onResizeEnd?: (endValue: number) => void;
 }) => {
+  const [resizing, setResizing] = useState(false);
   const isVertical = position !== 'top';
   const modifier = position === 'right' ? -1 : 1;
   const direction = isVertical ? 'vertical' : 'horizontal';
@@ -49,6 +50,7 @@ export const ResizeHandle = ({
     const startPosition = resolvePosition(event.nativeEvent, pagePos);
     const startSize = ref.current?.[elementSize] ?? 0;
 
+    setResizing(true);
     onResizeStart?.(startSize);
     document.body.classList.add(styles.resizeCursor[direction]);
 
@@ -60,6 +62,7 @@ export const ResizeHandle = ({
 
     const stopHandler = () => {
       const endSize = ref.current?.[elementSize] ?? 0;
+      setResizing(false);
       onResizeEnd?.(endSize);
       document.body.classList.remove(styles.resizeCursor[direction]);
 
@@ -88,6 +91,7 @@ export const ResizeHandle = ({
         [styles.resizeContainer[direction]]: true,
         [styles.right]: position === 'right',
         [styles.left]: position === 'left',
+        [styles.resizing]: resizing,
       }}
     >
       <Box className={styles.handle[direction]} />
