@@ -24,8 +24,10 @@ import { CodeEditor } from '../CodeEditor/CodeEditor';
 import { EditorErrorMessage } from '../EditorErrorMessage/EditorErrorMessage';
 import Frames from '../Frames/Frames';
 import { Header } from '../Header/Header';
+import { Logo } from '../Logo/Logo';
 import { Popover, type PopoverTrigger } from '../Popover/Popover';
 import Snippets from '../Snippets/Snippets';
+import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 import { ANIMATION_DURATION_SLOW } from '../constants';
 
@@ -126,6 +128,41 @@ const EditorActions = () => {
   );
 };
 
+const ZeroState = () => {
+  const hasSnippets = snippets && snippets.length > 0;
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      height="full"
+      textAlign="center"
+      gap="xxxlarge"
+    >
+      <Text size="large" tone="secondary">
+        <Logo size={100} />
+      </Text>
+
+      <Stack space="large">
+        <Text size="large" tone="secondary">
+          Open playroom ⌘O
+        </Text>
+        {hasSnippets ? (
+          <Text size="large" tone="secondary">
+            Insert snippet ⌘K
+          </Text>
+        ) : null}
+      </Stack>
+
+      <Text size="large" tone="secondary">
+        ...or just start coding
+      </Text>
+    </Box>
+  );
+};
+
 export default () => {
   const [
     {
@@ -137,6 +174,7 @@ export default () => {
       previewRenderCode,
       previewEditorCode,
       title,
+      id,
     },
     dispatch,
   ] = useContext(StoreContext);
@@ -183,7 +221,7 @@ export default () => {
 
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
-          <Frames code={previewRenderCode || code} />
+          {id ? <Frames code={previewRenderCode || code} /> : <ZeroState />}
         </Box>
       </Box>
 
