@@ -44,7 +44,6 @@ export const colorPaletteVars = createThemeContract({
   },
   shadows: {
     small: null,
-    focus: null,
   },
 });
 
