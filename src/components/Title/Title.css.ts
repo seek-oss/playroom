@@ -9,15 +9,42 @@ export const textField = style([
     paddingX: 'small',
     boxSizing: 'border-box',
     borderRadius: 'medium',
+    textAlign: 'center',
+    border: 0,
   }),
   {
+    outline: 'none',
     width: 300,
     color: colorPaletteVars.foreground.neutral,
     height: vars.touchableSize,
-    background: colorPaletteVars.background.surface,
+    background: 'transparent',
     '::placeholder': {
       color: colorPaletteVars.foreground.neutralSoft,
     },
-    border: `1px solid ${colorPaletteVars.border.standard}`,
+  },
+]);
+
+export const label = style([
+  sprinkles({
+    position: 'relative',
+  }),
+  {
+    '::after': {
+      content: '',
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 4,
+      height: 2,
+      borderRadius: vars.radii.medium,
+      background: colorPaletteVars.background.accent,
+      transition: vars.transition.medium,
+    },
+    selectors: {
+      '&:not(:focus-within)::after': {
+        opacity: 0,
+        transform: 'scaleX(0.8)',
+      },
+    },
   },
 ]);
