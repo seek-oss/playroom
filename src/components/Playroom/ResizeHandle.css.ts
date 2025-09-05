@@ -1,6 +1,7 @@
 import { style, styleVariants } from '@vanilla-extract/css';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
 const thickness = 4;
 const length = 70;
@@ -23,6 +24,8 @@ const containerCommon = sprinkles({
   zIndex: 1,
 });
 
+export const resizing = style({});
+
 export const resizeContainer = styleVariants({
   horizontal: [
     resizeCursor.horizontal,
@@ -31,6 +34,24 @@ export const resizeContainer = styleVariants({
       width: 'full',
       paddingTop: 'xxsmall',
     }),
+    {
+      '::before': {
+        content: '',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 2,
+        background: colorPaletteVars.background.accent,
+        transition: vars.transition.medium,
+      },
+      selectors: {
+        [`&:not(${resizing})::before`]: {
+          opacity: 0,
+          transform: 'scaleX(0.8)',
+        },
+      },
+    },
   ],
   vertical: [
     resizeCursor.vertical,
@@ -39,6 +60,24 @@ export const resizeContainer = styleVariants({
       height: 'full',
       paddingX: 'xxsmall',
     }),
+    {
+      '::before': {
+        content: '',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        width: 2,
+        background: colorPaletteVars.background.accent,
+        transition: vars.transition.medium,
+      },
+      selectors: {
+        [`&:not(${resizing})::before`]: {
+          opacity: 0,
+          transform: 'scaleY(0.8)',
+        },
+      },
+    },
   ],
 });
 
@@ -52,6 +91,11 @@ const handleCommon = style([
   }),
   {
     background: colorPaletteVars.background.neutral,
+    selectors: {
+      [`${resizing} &`]: {
+        background: colorPaletteVars.background.accent,
+      },
+    },
   },
 ]);
 
