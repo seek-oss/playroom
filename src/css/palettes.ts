@@ -97,7 +97,6 @@ export const light = {
   },
   shadows: {
     small: '0 2px 8px rgb(18, 21, 26, 0.3)',
-    focus: `0 0 0 5px ${originalPalette.blue0}`,
   },
 };
 
@@ -203,6 +202,5 @@ export const dark = {
   },
   shadows: {
     small: `0 0 10px -2px ${darken(0.05, seekPalette.grey[900])}`,
-    focus: `0 0 0 5px ${transparentize(0.6, seekPalette.blue[400])}`,
   },
 };

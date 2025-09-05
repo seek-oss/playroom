@@ -62,7 +62,8 @@ export const base = style([
     },
     selectors: {
       [`&:focus:not(:active):not(:hover):not([disabled])`]: {
-        boxShadow: colorPaletteVars.shadows.focus,
+        outline: `2px solid ${colorPaletteVars.outline.focus}`,
+        outlineOffset: 0,
       },
     },
   },
