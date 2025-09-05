@@ -14,6 +14,8 @@ import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
 const sizeVar = createVar();
+const foreground = createVar();
+
 export const button = style([
   sprinkles({
     boxSizing: 'border-box',
@@ -32,7 +34,7 @@ export const button = style([
   {
     background: 'transparent',
     outline: 'none',
-    color: colorPaletteVars.foreground.neutral,
+    color: foreground,
     height: sizeVar,
     width: sizeVar,
     isolation: 'isolate',
@@ -75,6 +77,24 @@ export const size = styleVariants({
   large: {
     vars: {
       [sizeVar]: '24px',
+    },
+  },
+});
+
+export const tone = styleVariants({
+  neutral: {
+    vars: {
+      [foreground]: colorPaletteVars.foreground.neutral,
+    },
+  },
+  accent: {
+    vars: {
+      [foreground]: colorPaletteVars.foreground.accent,
+    },
+  },
+  positive: {
+    vars: {
+      [foreground]: colorPaletteVars.foreground.positive,
     },
   },
 });
