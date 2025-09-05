@@ -1,6 +1,6 @@
+import { Tooltip } from '@base-ui-components/react';
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import clsx from 'clsx';
-import copy from 'copy-to-clipboard';
 import {
   CodeXml,
   Sun,
@@ -32,6 +32,7 @@ import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
 import { isMac } from '../../utils/formatting';
 import { createUrlForData, resolveDataFromUrl } from '../../utils/params';
+import { useCopy } from '../../utils/useCopy';
 import { Box } from '../Box/Box';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import {
@@ -336,7 +337,7 @@ const HeaderMenu = () => {
   );
 };
 
-const headerButtonIconSize = 'medium';
+const headerButtonIconSize = 'small';
 
 const CopyLinkButton = ({
   linkCopied,
@@ -369,28 +370,9 @@ const CopyLinkButton = ({
 
 export const Header = () => {
   const [{ code, editorHidden }, dispatch] = useContext(StoreContext);
+  const { copying, onCopyClick } = useCopy();
 
   const hasCode = code.trim().length > 0;
-  const [linkCopied, setLinkCopied] = useState(false);
-
-  const handleShareClick = () => {
-    copy(window.location.href);
-    setLinkCopied(true);
-  };
-
-  useEffect(() => {
-    if (!linkCopied) {
-      return;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setLinkCopied(false);
-    }, 2000);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [linkCopied]);
 
   return (
     <Box className={styles.root}>
@@ -400,55 +382,57 @@ export const Header = () => {
 
       <Title />
 
-      <div className={styles.actionsContainer}>
-        {/* Todo - try animate in/out */}
-        {hasCode ? (
-          <div className={styles.segmentedGroup}>
-            <CopyLinkButton
-              linkCopied={linkCopied}
-              onClick={handleShareClick}
-            />
-            <Popover
-              aria-label="Share options"
-              align="end"
-              side="bottom"
-              trigger={(triggerProps) => (
-                <button
-                  type="button"
-                  className={styles.segmentedIconButton}
-                  {...triggerProps}
-                >
-                  <ChevronIcon direction="down" size={10} />
-                </button>
-              )}
-            >
-              <PreviewSelection />
-            </Popover>
-          </div>
-        ) : null}
+      <Tooltip.Provider>
+        <div className={styles.actionsContainer}>
+          {/* Todo - try animate in/out */}
+          {hasCode ? (
+            <div className={styles.segmentedGroup}>
+              <CopyLinkButton
+                linkCopied={copying}
+                onClick={() => onCopyClick(window.location.href)}
+              />
+              <Popover
+                aria-label="Share options"
+                align="end"
+                side="bottom"
+                trigger={(triggerProps) => (
+                  <button
+                    type="button"
+                    className={styles.segmentedIconButton}
+                    {...triggerProps}
+                  >
+                    <ChevronIcon direction="down" size={10} />
+                  </button>
+                )}
+              >
+                <PreviewSelection />
+              </Popover>
+            </div>
+          ) : null}
 
-        <Menu
-          width="small"
-          trigger={
-            <ButtonIcon
-              size={headerButtonIconSize}
-              label="Configure frames"
-              icon={<FrameIcon />}
-            />
-          }
-        >
-          <FramesMenu />
-        </Menu>
+          <Menu
+            width="small"
+            trigger={
+              <ButtonIcon
+                size={headerButtonIconSize}
+                label="Configure frames"
+                icon={<FrameIcon />}
+              />
+            }
+          >
+            <FramesMenu />
+          </Menu>
 
-        <ButtonIcon
-          size={headerButtonIconSize}
-          label={editorHidden ? 'Show code' : 'Hide code'}
-          icon={<CodeXml />}
-          onClick={() =>
-            dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
-          }
-        />
-      </div>
+          <ButtonIcon
+            size={headerButtonIconSize}
+            label={editorHidden ? 'Show code' : 'Hide code'}
+            icon={<CodeXml />}
+            onClick={() =>
+              dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
+            }
+          />
+        </div>
+      </Tooltip.Provider>
     </Box>
   );
 };
