@@ -15,18 +15,20 @@ interface Props extends TriggerNoStyles {
   icon: ComponentProps<typeof Tooltip.Trigger>['children'];
   label: string;
   size?: keyof typeof styles.size;
+  tone?: keyof typeof styles.tone;
 }
 export const ButtonIcon = ({
   icon,
   label,
   size = 'medium',
+  tone = 'neutral',
   ...restProps
 }: Props) => (
   <Tooltip.Root>
     <Tooltip.Trigger
       {...restProps}
       aria-label={label}
-      className={clsx(styles.button, styles.size[size])}
+      className={clsx(styles.button, styles.size[size], styles.tone[tone])}
     >
       {icon}
     </Tooltip.Trigger>
