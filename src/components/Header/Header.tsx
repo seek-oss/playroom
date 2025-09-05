@@ -45,6 +45,7 @@ import {
   MenuCheckboxItem,
   MenuGroup,
   MenuItem,
+  MenuItemLink,
   MenuRadioGroup,
   MenuRadioItem,
   MenuSeparator,
@@ -160,6 +161,13 @@ const HeaderMenu = () => {
   >(editorHidden ? 'hidden' : editorOrientation);
 
   const hasSnippets = snippets && snippets.length > 0;
+  const { title, ...params } = resolveDataFromUrl();
+  const duplicateUrl = createUrlForData(
+    compressParams({
+      ...params,
+      title: title ? `(Copy) ${title}` : undefined,
+    })
+  );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -197,14 +205,13 @@ const HeaderMenu = () => {
           </span>
         }
       >
-        <MenuItem
+        <MenuItemLink
           icon={File}
-          onClick={() => {
-            window.open(`${window.location.pathname}`, '_blank');
-          }}
+          href={window.location.pathname}
+          target="_blank"
         >
           New Playroom
-        </MenuItem>
+        </MenuItemLink>
         <MenuItem
           icon={FolderOpen}
           onClick={() => setOpenDialog(true)}
@@ -212,21 +219,9 @@ const HeaderMenu = () => {
         >
           Open...
         </MenuItem>
-        <MenuItem
-          icon={CopyPlus}
-          onClick={() => {
-            const { title, ...params } = resolveDataFromUrl();
-            const url = createUrlForData(
-              compressParams({
-                ...params,
-                title: `(Copy) ${title}`,
-              })
-            );
-            window.open(url, '_blank');
-          }}
-        >
+        <MenuItemLink icon={CopyPlus} href={duplicateUrl} target="_blank">
           Duplicate
-        </MenuItem>
+        </MenuItemLink>
 
         <MenuSeparator />
 

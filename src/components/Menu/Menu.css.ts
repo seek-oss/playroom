@@ -51,6 +51,19 @@ export const item = style([
   },
 ]);
 
+export const itemLink = style([
+  item,
+  sprinkles({
+    cursor: 'pointer',
+  }),
+  {
+    textDecoration: 'none',
+    ':visited': {
+      color: colorPaletteVars.foreground.neutral,
+    },
+  },
+]);
+
 export const critical = style({
   vars: {
     [highlightColor]: colorPaletteVars.background.critical,
