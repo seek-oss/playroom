@@ -11,7 +11,7 @@ import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 export const root = style([
   sprinkles({
     paddingX: 'xlarge',
-    paddingY: 'small',
+    paddingY: 'xsmall',
   }),
   {
     display: 'grid',
@@ -48,7 +48,7 @@ export const menuButton = style([
   }),
   minTouchableBeforePseudo,
   {
-    color: colorPaletteVars.foreground.neutral,
+    color: '#212121',
     ':focus-visible': {
       outline: `2px solid ${colorPaletteVars.outline.focus}`,
       outlineOffset: 6,
@@ -73,13 +73,14 @@ export const openDialogContent = style([
   },
 ]);
 
+const segmentedButtonRadius = 'medium';
 const segmentedControlBorder = `1px solid ${colorPaletteVars.border.standard}`;
 
 export const segmentedGroup = style([
   sprinkles({
     display: 'flex',
     alignItems: 'stretch',
-    borderRadius: 'medium',
+    borderRadius: segmentedButtonRadius,
   }),
   {
     border: segmentedControlBorder,
@@ -97,6 +98,7 @@ const segmentedButtonBase = style([
     paddingY: 'xsmall',
     cursor: 'pointer',
     transition: 'fast',
+    borderRadius: segmentedButtonRadius,
   }),
   minTouchableBeforePseudo,
   {
@@ -119,6 +121,10 @@ const segmentedButtonBase = style([
 
 export const segmentedTextButton = style([
   segmentedButtonBase,
+  {
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+  },
   sprinkles({ paddingX: 'small' }),
 ]);
 
@@ -126,6 +132,8 @@ export const segmentedIconButton = style([
   segmentedButtonBase,
   sprinkles({ paddingX: 'xsmall' }),
   {
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
     borderLeft: segmentedControlBorder,
   },
 ]);
@@ -150,5 +158,6 @@ export const copyLinkSuccess = style([
   {
     position: 'absolute',
     inset: 0,
+    color: colorPaletteVars.foreground.positive,
   },
 ]);
