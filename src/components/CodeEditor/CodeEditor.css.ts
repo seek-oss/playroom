@@ -314,8 +314,8 @@ globalStyle('.CodeMirror-dialog button', {
 
 globalStyle('.CodeMirror-dialog button:focus', {
   color: colorPaletteVars.foreground.accent,
-  boxShadow: colorPaletteVars.shadows.focus,
-  outline: 'none',
+  outline: `2px solid ${colorPaletteVars.outline.focus}`,
+  outlineOffset: 0,
 });
 
 globalStyle('.CodeMirror-dialog button:focus:hover', {
