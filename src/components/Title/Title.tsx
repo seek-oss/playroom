@@ -8,20 +8,21 @@ export const Title = () => {
   const [{ title }, dispatch] = useContext(StoreContext);
 
   return (
-    <label className={styles.label}>
-      <input
-        type="text"
-        id="playroomTitleField"
-        placeholder="Untitled"
-        className={styles.textField}
-        value={title}
-        onChange={(e) =>
-          dispatch({
-            type: 'updateTitle',
-            payload: { title: e.target.value },
-          })
-        }
-      />
-    </label>
+    <input
+      type="text"
+      id="playroomTitleField"
+      placeholder="Untitled"
+      className={styles.textField}
+      value={title}
+      onFocus={(event) => {
+        event.currentTarget.select();
+      }}
+      onChange={(e) =>
+        dispatch({
+          type: 'updateTitle',
+          payload: { title: e.target.value },
+        })
+      }
+    />
   );
 };
