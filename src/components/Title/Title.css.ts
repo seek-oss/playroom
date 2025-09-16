@@ -1,49 +1,36 @@
 import { style } from '@vanilla-extract/css';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
-import { vars } from '../../css/vars.css';
 
 export const textField = style([
   sprinkles({
-    font: 'large',
-    paddingX: 'small',
+    font: 'standard',
+    fontWeight: 'strong',
     boxSizing: 'border-box',
-    borderRadius: 'medium',
+    borderRadius: 'small',
     textAlign: 'center',
     border: 0,
   }),
   {
     outline: 'none',
-    width: 300,
+    width: 250,
+    height: 40,
     color: colorPaletteVars.foreground.neutral,
-    height: vars.touchableSize,
     background: 'transparent',
+    border: '1px solid transparent',
     '::placeholder': {
       color: colorPaletteVars.foreground.neutralSoft,
-    },
-  },
-]);
-
-export const label = style([
-  sprinkles({
-    position: 'relative',
-  }),
-  {
-    '::after': {
-      content: '',
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 4,
-      height: 2,
-      borderRadius: vars.radii.medium,
-      background: colorPaletteVars.background.accent,
-      transition: vars.transition.medium,
+      fontWeight: 'normal',
     },
     selectors: {
-      '&:not(:focus-within)::after': {
-        opacity: 0,
-        transform: 'scaleX(0.8)',
+      '&:hover:not(:focus-visible)': {
+        background: colorPaletteVars.background.neutral,
+      },
+      '&:focus-visible': {
+        borderColor: colorPaletteVars.background.accent,
+      },
+      '&:focus-visible::placeholder': {
+        color: 'transparent',
       },
     },
   },
