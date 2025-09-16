@@ -172,7 +172,7 @@ const Frame = ({
           intersectionRootRef={scrollingPanelRef}
           src={frameSrc({
             themeName: frame.theme,
-            code: compileJsx(code),
+            code,
           })}
           data-testid="frameIframe"
           className={styles.frame}
@@ -210,7 +210,7 @@ export default function Frames({ code }: FramesProps) {
         <Frame
           key={`${frame.theme}_${frame.width}`}
           frame={frame}
-          code={code}
+          code={renderCode.current}
           title={title}
           scrollingPanelRef={scrollingPanelRef}
         />
