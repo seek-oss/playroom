@@ -166,7 +166,6 @@ const Frame = ({
         </Tooltip.Provider>
       </div>
       <div className={styles.frameWrapper}>
-        <div className={styles.frameBorder} />
         <Iframe
           ref={iframeRef}
           intersectionRootRef={scrollingPanelRef}
