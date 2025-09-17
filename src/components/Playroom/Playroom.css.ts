@@ -106,9 +106,6 @@ export const editor = style([
       },
     },
   },
-  sprinkles({
-    overflow: 'hidden',
-  }),
 ]);
 
 export const framesContainer = sprinkles({
@@ -119,6 +116,7 @@ export const framesContainer = sprinkles({
 export const editorContainer = sprinkles({
   position: 'absolute',
   inset: 0,
+  overflow: 'hidden',
 });
 
 export const editorOverlays = style([

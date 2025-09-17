@@ -231,7 +231,7 @@ export default () => {
         inert={editorHidden}
         ref={editorRef}
       >
-        <div className={styles.editorContainer}>
+        {!editorHidden ? (
           <ResizeHandle
             ref={editorRef}
             position={resizeHandlePosition[editorOrientation]}
@@ -254,6 +254,8 @@ export default () => {
               });
             }}
           />
+        ) : null}
+        <div className={styles.editorContainer}>
           <CodeEditor
             code={code}
             editorHidden={editorHidden}
