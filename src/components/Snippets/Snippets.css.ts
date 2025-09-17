@@ -36,7 +36,6 @@ export const snippet = style([
   }),
   {
     color: colorPaletteVars.foreground.neutral,
-    backgroundColor: colorPaletteVars.background.surface,
     '::before': {
       content: '',
       position: 'absolute',

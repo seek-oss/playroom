@@ -32,7 +32,7 @@ export const sharedPopupStyles = (size: Size) =>
       ...popupSize[size],
     }),
     {
-      backgroundColor: colorPaletteVars.background.surface,
+      backgroundColor: colorPaletteVars.background.floating,
       transformOrigin: 'var(--transform-origin)',
       outline: `1px solid ${colorPaletteVars.border.standard}`,
       outlineOffset: -1,
