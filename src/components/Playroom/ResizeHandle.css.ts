@@ -1,10 +1,14 @@
 import { style, styleVariants } from '@vanilla-extract/css';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
-import { vars } from '../../css/vars.css';
 
-const thickness = 4;
-const length = 70;
+const thickness = 6;
+const length = 38;
+const size = 2;
+
+const backgroundTransition = 'background-color 100ms ease';
+const borderTransition = 'border-color 100ms ease';
+const hoverTransitionDelay = '200ms';
 
 // Separate style applied to the container AND the body during resize.
 export const resizeCursor = styleVariants({
@@ -32,23 +36,27 @@ export const resizeContainer = styleVariants({
     containerCommon,
     sprinkles({
       width: 'full',
-      paddingTop: 'xxsmall',
     }),
     {
+      transform: 'translateY(-50%)',
+      zIndex: 2,
       '::before': {
         content: '',
         position: 'absolute',
-        top: 0,
+        top: '50%',
         left: 0,
         right: 0,
-        height: 2,
-        background: colorPaletteVars.background.accent,
-        transition: vars.transition.medium,
+        height: size,
+        transform: 'translateY(-50%)',
+        transition: backgroundTransition,
       },
       selectors: {
-        [`&:not(${resizing})::before`]: {
-          opacity: 0,
-          transform: 'scaleX(0.8)',
+        [`&${resizing}::before`]: {
+          background: colorPaletteVars.background.accent,
+        },
+        [`&:not(${resizing}):hover::before`]: {
+          background: colorPaletteVars.background.search,
+          transitionDelay: hoverTransitionDelay,
         },
       },
     },
@@ -58,23 +66,28 @@ export const resizeContainer = styleVariants({
     containerCommon,
     sprinkles({
       height: 'full',
-      paddingX: 'xxsmall',
     }),
     {
+      right: 0,
+      transform: 'translateX(50%)',
+      zIndex: 2,
       '::before': {
         content: '',
         position: 'absolute',
         top: 0,
         bottom: 0,
-        right: 0,
-        width: 2,
-        background: colorPaletteVars.background.accent,
-        transition: vars.transition.medium,
+        left: '50%',
+        width: size,
+        transform: 'translateX(-50%)',
+        transition: backgroundTransition,
       },
       selectors: {
-        [`&:not(${resizing})::before`]: {
-          opacity: 0,
-          transform: 'scaleY(0.8)',
+        [`&${resizing}::before`]: {
+          background: colorPaletteVars.background.accent,
+        },
+        [`&:not(${resizing}):hover::before`]: {
+          background: colorPaletteVars.background.search,
+          transitionDelay: hoverTransitionDelay,
         },
       },
     },
@@ -88,14 +101,25 @@ const handleCommon = style([
   sprinkles({
     borderRadius: 'large',
     pointerEvents: 'none',
+    position: 'relative',
+    zIndex: 1,
   }),
   {
-    background: colorPaletteVars.background.neutral,
+    background: colorPaletteVars.background.surface,
+    border: `1px solid ${colorPaletteVars.border.standard}`,
     selectors: {
       [`${resizing} &`]: {
         background: colorPaletteVars.background.accent,
+        borderColor: colorPaletteVars.background.accent,
       },
+      [`:is(${resizeContainer.horizontal}, ${resizeContainer.vertical}):not(${resizing}):hover &`]:
+        {
+          background: colorPaletteVars.background.search,
+          borderColor: colorPaletteVars.background.search,
+          transitionDelay: hoverTransitionDelay,
+        },
     },
+    transition: `${backgroundTransition}, ${borderTransition}`,
   },
 ]);
 
