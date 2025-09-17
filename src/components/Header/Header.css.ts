@@ -85,7 +85,7 @@ export const segmentedGroup = style([
   {
     border: segmentedControlBorder,
     overflow: 'hidden',
-    background: 'transparent',
+    background: colorPaletteVars.background.floating,
   },
 ]);
 

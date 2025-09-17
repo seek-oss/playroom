@@ -56,7 +56,6 @@ export const frameWrapper = style([
   }),
   {
     border: `1px solid ${colorPaletteVars.border.standard}`,
-    background: colorPaletteVars.background.surface,
   },
 ]);
 
@@ -69,7 +68,7 @@ export const frame = style([
   }),
   {
     isolation: 'isolate',
-    background: colorPaletteVars.background.surface,
+    background: '#fff',
     outline: '2px solid transparent',
     transition: `outline-color ${transitionTiming}, opacity ${transitionTiming}`,
     selectors: {
