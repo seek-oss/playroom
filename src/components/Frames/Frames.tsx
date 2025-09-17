@@ -111,6 +111,7 @@ const Frame = ({
             <ButtonIcon
               size="small"
               tone={copying ? 'positive' : 'accent'}
+              variant="transparent"
               icon={copying ? <TickIcon /> : <ShareIcon />}
               label={copying ? 'Copied' : 'Copy preview link'}
               onClick={() => (!copying ? onCopyClick(previewUrl) : undefined)}
@@ -118,6 +119,7 @@ const Frame = ({
             <ButtonIcon
               size="small"
               tone="accent"
+              variant="transparent"
               icon={<PlayIcon />}
               label="Open preview"
               onClick={() => {
@@ -150,6 +152,7 @@ const Frame = ({
                 <ButtonIcon
                   size="small"
                   tone="accent"
+                  variant="transparent"
                   icon={<Camera />}
                   label="Take screenshot"
                 />
