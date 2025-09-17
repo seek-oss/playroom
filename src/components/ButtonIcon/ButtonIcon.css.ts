@@ -20,7 +20,6 @@ export const button = style([
   sprinkles({
     boxSizing: 'border-box',
     margin: 'none',
-    padding: 'none',
     userSelect: 'none',
     border: 0,
     appearance: 'none',
@@ -35,26 +34,17 @@ export const button = style([
     background: 'transparent',
     outline: 'none',
     color: foreground,
-    height: sizeVar,
-    width: sizeVar,
     isolation: 'isolate',
     // Background pseudo element
     '::after': {
       content: '',
       position: 'absolute',
-      inset: calc(vars.space.xsmall).negate().toString(),
       transition: vars.transition.fast,
-      backgroundColor: colorPaletteVars.background.neutral,
-      borderRadius: vars.radii.full,
       zIndex: -1,
     },
     selectors: {
-      [`&:not(:hover, :focus-visible, [data-popup-open])::after`]: {
-        opacity: 0,
-        transform: 'scale(.5)',
-      },
-      ['&:active']: {
-        transform: 'scale(.9)',
+      ['&[data-pressed], &:active']: {
+        transform: 'scale(.95)',
       },
       [`&:focus-visible::after`]: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
@@ -97,6 +87,45 @@ export const tone = styleVariants({
       [foreground]: colorPaletteVars.foreground.positive,
     },
   },
+});
+
+export const variant = styleVariants({
+  standard: [
+    sprinkles({ padding: 'xsmall' }),
+    {
+      height: 'auto',
+      width: 'auto',
+      '::after': {
+        inset: 0,
+        backgroundColor: colorPaletteVars.background.floating,
+        borderRadius: vars.radii.medium,
+        outline: `1px solid ${colorPaletteVars.border.standard}`,
+      },
+      selectors: {
+        ['&:hover::after']: {
+          backgroundColor: colorPaletteVars.background.neutral,
+        },
+      },
+    },
+  ],
+  transparent: [
+    sprinkles({ padding: 'none' }),
+    {
+      height: sizeVar,
+      width: sizeVar,
+      '::after': {
+        inset: calc(vars.space.xxsmall).negate().toString(),
+        backgroundColor: colorPaletteVars.background.neutral,
+        borderRadius: vars.radii.medium,
+      },
+      selectors: {
+        [`&:not(:hover, :focus-visible, [data-popup-open])::after`]: {
+          opacity: 0,
+          transform: 'scale(.5)',
+        },
+      },
+    },
+  ],
 });
 
 globalStyle(`${button} > svg`, {

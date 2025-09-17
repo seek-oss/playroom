@@ -30,7 +30,7 @@ export const actionsContainer = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
-    gap: 'large',
+    gap: 'xsmall',
   }),
   {
     width: 'fit-content',
