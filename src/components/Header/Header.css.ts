@@ -1,12 +1,12 @@
 import { style } from '@vanilla-extract/css';
-
-import { comma } from '../../css/delimiters';
+import { calc } from '@vanilla-extract/css-utils';
 
 import {
   minTouchableBeforePseudo,
   sharedPopupStyles,
 } from '../../css/shared.css';
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
 export const root = style([
   sprinkles({
@@ -49,13 +49,23 @@ export const menuButton = style([
   minTouchableBeforePseudo,
   {
     color: colorPaletteVars.foreground.neutral,
+    isolation: 'isolate',
+    '::after': {
+      content: '',
+      position: 'absolute',
+      transition: vars.transition.fast,
+      zIndex: -1,
+      inset: calc(vars.space.xsmall).negate().toString(),
+      backgroundColor: colorPaletteVars.background.selection,
+      borderRadius: vars.radii.medium,
+    },
     ':focus-visible': {
       outline: `2px solid ${colorPaletteVars.outline.focus}`,
       outlineOffset: 6,
     },
     selectors: {
-      [comma('&:hover', '&:active', '&:focus-visible', '&[data-popup-open]')]: {
-        color: colorPaletteVars.foreground.accent,
+      [`&:not(:hover, :focus-visible, [data-popup-open])::after`]: {
+        opacity: 0,
       },
     },
   },
