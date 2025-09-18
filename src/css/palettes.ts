@@ -189,7 +189,7 @@ export const dark = {
     accentLight: transparentize(0.25, seekPalette.blue[600]),
     positive: mix(0.6, seekPalette.grey[900], seekPalette.mint[500]),
     critical: mix(0.7, seekPalette.grey[900], seekPalette.red[600]),
-    floating: '#2b2b29',
+    floating: '#222221',
     surface: '#1c1c1b',
     body: darken(0.02, '#1c1c1b'),
     selection: '#4d4d4d',
