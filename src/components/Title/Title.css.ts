@@ -24,7 +24,7 @@ export const textField = style([
     },
     selectors: {
       '&:hover:not(:focus-visible)': {
-        background: colorPaletteVars.background.neutral,
+        background: colorPaletteVars.background.selection,
       },
       '&:focus-visible': {
         borderColor: colorPaletteVars.background.accent,

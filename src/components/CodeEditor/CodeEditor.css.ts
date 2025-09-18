@@ -116,7 +116,7 @@ globalStyle('.CodeMirror-hints', {
   overflowY: 'auto',
 });
 globalStyle('[data-playroom-dark] .CodeMirror-hints', {
-  backgroundColor: colorPaletteVars.background.neutral,
+  backgroundColor: colorPaletteVars.background.floating,
 });
 
 globalStyle('.CodeMirror-hint', {
