@@ -5,8 +5,10 @@ import { vars } from '../../css/vars.css';
 
 const minimumLineNumberWidth = '50px';
 
+const textSelectionBackground = 'Highlight';
+
 export const insertionPoint = style({
-  backgroundColor: colorPaletteVars.background.selection,
+  backgroundColor: textSelectionBackground,
 });
 
 const fadeIn = keyframes({
@@ -167,7 +169,7 @@ globalStyle('.cm-s-neo .CodeMirror-gutters::after', {
 });
 
 globalStyle('.cm-s-neo .CodeMirror-selected', {
-  background: colorPaletteVars.background.selection,
+  background: textSelectionBackground,
 });
 
 globalStyle('.cm-s-neo .CodeMirror-activeline-background', {
