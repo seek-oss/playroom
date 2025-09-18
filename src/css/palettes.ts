@@ -81,6 +81,7 @@ export const light = {
   background: {
     transparent: 'rgb(0, 0, 0, .05)',
     accent: originalPalette.blue2,
+    accentLight: darken(0.15, originalPalette.blue0),
     positive: originalPalette.green1,
     critical: originalPalette.red1,
     neutral: originalPalette.gray2,
@@ -88,7 +89,6 @@ export const light = {
     surface: originalPalette.gray0,
     body: darken(0.015, originalPalette.gray0),
     selection: transparentize(0.85, originalPalette.blue1),
-    search: darken(0.15, originalPalette.blue0),
   },
   border: {
     standard: '#e2e2e2',
@@ -187,6 +187,7 @@ export const dark = {
   background: {
     transparent: 'rgb(255, 255, 255, .07)',
     accent: seekPalette.blue[500],
+    accentLight: transparentize(0.25, seekPalette.blue[600]),
     positive: mix(0.6, seekPalette.grey[900], seekPalette.mint[500]),
     critical: mix(0.7, seekPalette.grey[900], seekPalette.red[600]),
     neutral: '#383838',
@@ -194,7 +195,6 @@ export const dark = {
     surface: '#1c1c1b',
     body: darken(0.02, '#1c1c1b'),
     selection: '#4d4d4d',
-    search: '#383838',
   },
   border: {
     standard: '#343434',

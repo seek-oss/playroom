@@ -27,6 +27,7 @@ export const colorPaletteVars = createThemeContract({
   background: {
     transparent: null,
     accent: null,
+    accentLight: null,
     positive: null,
     critical: null,
     neutral: null,
@@ -34,7 +35,6 @@ export const colorPaletteVars = createThemeContract({
     floating: null,
     body: null,
     selection: null,
-    search: null,
   },
   border: {
     standard: null,
