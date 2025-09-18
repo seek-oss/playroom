@@ -188,12 +188,12 @@ export const dark = {
     neutralInverted: originalPalette.black,
     secondary: seekPalette.grey[400],
     critical: seekPalette.red[400],
-    accent: seekPalette.blue[500],
+    accent: seekPalette.blue[400],
     positive: seekPalette.mint[500],
   },
   background: {
     transparent: 'rgb(255, 255, 255, .07)',
-    accent: seekPalette.blue[500],
+    accent: seekPalette.blue[400],
     accentLight: transparentize(0.25, seekPalette.blue[600]),
     positive: mix(0.6, seekPalette.grey[900], seekPalette.mint[500]),
     critical: mix(0.7, seekPalette.grey[900], seekPalette.red[600]),
@@ -204,7 +204,7 @@ export const dark = {
   },
   border: {
     standard: lighten(0.12, baseDarkSurfaceColor),
-    accent: seekPalette.blue[500],
+    accent: seekPalette.blue[400],
   },
   outline: {
     focus: seekPalette.blue[400],
