@@ -4,7 +4,7 @@ import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 
 const thickness = 6;
 const length = 38;
-const size = 2;
+const size = 1;
 
 const backgroundTransition = 'background-color 100ms ease';
 const borderTransition = 'border-color 100ms ease';
@@ -107,19 +107,34 @@ const handleCommon = style([
   {
     background: colorPaletteVars.background.surface,
     border: `1px solid ${colorPaletteVars.border.standard}`,
+    // Place ::after: on top of opaque background,
+    // to allow using transparent background when resizing
+    '::after': {
+      content: '',
+      position: 'absolute',
+      inset: 0,
+      borderRadius: 'inherit',
+      transition: backgroundTransition,
+    },
     selectors: {
       [`${resizing} &`]: {
-        background: colorPaletteVars.background.accent,
         borderColor: colorPaletteVars.background.accent,
+      },
+      [`${resizing} &::after`]: {
+        background: colorPaletteVars.background.accent,
       },
       [`:is(${resizeContainer.horizontal}, ${resizeContainer.vertical}):not(${resizing}):hover &`]:
         {
-          background: colorPaletteVars.background.accentLight,
           borderColor: colorPaletteVars.background.accentLight,
           transitionDelay: hoverTransitionDelay,
         },
+      [`:is(${resizeContainer.horizontal}, ${resizeContainer.vertical}):not(${resizing}):hover &::after`]:
+        {
+          background: colorPaletteVars.background.accentLight,
+          transitionDelay: hoverTransitionDelay,
+        },
     },
-    transition: `${backgroundTransition}, ${borderTransition}`,
+    transition: borderTransition,
   },
 ]);
 
