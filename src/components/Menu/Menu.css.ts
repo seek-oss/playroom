@@ -131,4 +131,5 @@ export const shortcut = style({
   gridAutoColumns: '1fr',
   alignItems: 'baseline',
   justifyItems: 'center',
+  isolation: 'isolate',
 });
