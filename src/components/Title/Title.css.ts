@@ -17,7 +17,7 @@ export const textField = style([
     height: 40,
     color: colorPaletteVars.foreground.neutral,
     background: 'transparent',
-    border: '1px solid transparent',
+    border: '2px solid transparent',
     '::placeholder': {
       color: colorPaletteVars.foreground.secondary,
       fontWeight: 'normal',

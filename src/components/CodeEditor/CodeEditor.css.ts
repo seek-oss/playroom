@@ -284,7 +284,7 @@ globalStyle('label.CodeMirror-search-label', {
 });
 
 globalStyle('.dialog-opened.cm-s-neo .CodeMirror-selected', {
-  background: colorPaletteVars.background.accentLight,
+  background: colorPaletteVars.background.accent,
 });
 
 globalStyle('.cm-overlay.cm-searching', {
