@@ -36,6 +36,7 @@ export const snippet = style([
   }),
   {
     color: colorPaletteVars.foreground.neutral,
+    isolation: 'isolate',
     '::before': {
       content: '',
       position: 'absolute',
@@ -47,6 +48,7 @@ export const snippet = style([
       borderRadius: vars.radii.small,
       opacity: 0,
       pointerEvents: 'none',
+      zIndex: -1,
     },
   },
 ]);
