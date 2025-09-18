@@ -1,11 +1,6 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import {
-  BetweenHorizontalStart,
-  BrushCleaningIcon,
-  type LucideIcon,
-} from 'lucide-react';
-import {
   type ComponentProps,
   useContext,
   useEffect,
@@ -13,7 +8,6 @@ import {
   useState,
 } from 'react';
 
-import { useEditor } from '../../contexts/EditorContext';
 import {
   type EditorOrientation,
   StoreContext,
@@ -21,12 +15,11 @@ import {
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
+import { EditorActions } from '../EditorActions/EditorActions';
 import { EditorErrorMessage } from '../EditorErrorMessage/EditorErrorMessage';
 import Frames from '../Frames/Frames';
 import { Header } from '../Header/Header';
 import { Logo } from '../Logo/Logo';
-import { Popover, type PopoverTrigger } from '../Popover/Popover';
-import Snippets from '../Snippets/Snippets';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 import { ANIMATION_DURATION_SLOW } from '../constants';
@@ -42,91 +35,6 @@ const resizeHandlePosition: Record<
   horizontal: 'top',
   vertical: 'right',
 } as const;
-
-interface EditorActionButtonProps extends PopoverTrigger {
-  onClick?: () => void;
-  name: string;
-  shortcut: string;
-  icon: LucideIcon;
-}
-
-const EditorActionButton = ({
-  onClick,
-  name,
-  shortcut,
-  icon: Icon,
-  ...restProps
-}: EditorActionButtonProps) => (
-  <button
-    {...restProps}
-    onClick={onClick}
-    className={styles.editorActionButton}
-  >
-    <Icon size={16} />
-    <Text>{name}</Text>
-    <Text tone="secondary">{shortcut}</Text>
-  </button>
-);
-
-// Todo - fix when minimum width editor
-const EditorActions = () => {
-  const [{ snippetsOpen, hasSyntaxError }, dispatch] = useContext(StoreContext);
-  const { runCommand } = useEditor();
-  const searchRef = useRef<HTMLInputElement | null>(null);
-  const hasSnippets = snippets && snippets.length > 0;
-
-  return (
-    <div className={styles.editorActions}>
-      {hasSyntaxError ? (
-        <Text>Code has syntax errors. Fix them to use editor actions.</Text>
-      ) : (
-        <>
-          {hasSnippets ? (
-            <Popover
-              aria-label="Select a snippet"
-              size="small"
-              side="top"
-              open={snippetsOpen}
-              onOpenChange={(open) =>
-                dispatch({ type: open ? 'openSnippets' : 'closeSnippets' })
-              }
-              trigger={
-                <EditorActionButton
-                  name="Insert snippet"
-                  shortcut="⌘K"
-                  icon={BetweenHorizontalStart}
-                />
-              }
-              initialFocus={searchRef}
-            >
-              <div className={styles.snippetsPopupWidth}>
-                <Snippets
-                  searchRef={searchRef}
-                  onSelect={(snippet) => {
-                    if (snippet) {
-                      dispatch({
-                        type: 'persistSnippet',
-                        payload: { snippet },
-                      });
-                    } else {
-                      dispatch({ type: 'closeSnippets' });
-                    }
-                  }}
-                />
-              </div>
-            </Popover>
-          ) : null}
-          <EditorActionButton
-            onClick={() => runCommand('formatCode')}
-            name="Tidy"
-            shortcut="⌘S"
-            icon={BrushCleaningIcon}
-          />
-        </>
-      )}
-    </div>
-  );
-};
 
 const ZeroState = () => {
   const hasSnippets = snippets && snippets.length > 0;
