@@ -189,16 +189,15 @@ export const dark = {
     accent: seekPalette.blue[500],
     positive: mix(0.6, seekPalette.grey[900], seekPalette.mint[500]),
     critical: mix(0.7, seekPalette.grey[900], seekPalette.red[600]),
-    neutral: seekPalette.grey[800],
-    // todo - fix
-    floating: seekPalette.grey[900],
-    surface: seekPalette.grey[900],
-    body: darken(0.02, seekPalette.grey[900]),
-    selection: transparentize(0.75, seekPalette.blue[600]),
-    search: transparentize(0.25, seekPalette.blue[600]),
+    neutral: '#383838',
+    floating: '#2b2b29',
+    surface: '#1c1c1b',
+    body: darken(0.02, '#1c1c1b'),
+    selection: '#4d4d4d',
+    search: '#383838',
   },
   border: {
-    standard: seekPalette.grey[800],
+    standard: '#343434',
     accent: seekPalette.blue[500],
   },
   outline: {
