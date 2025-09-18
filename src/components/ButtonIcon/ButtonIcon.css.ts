@@ -103,7 +103,7 @@ export const variant = styleVariants({
       },
       selectors: {
         ['&:hover::after']: {
-          backgroundColor: colorPaletteVars.background.neutral,
+          backgroundColor: colorPaletteVars.background.selection,
         },
       },
     },
@@ -115,7 +115,7 @@ export const variant = styleVariants({
       width: sizeVar,
       '::after': {
         inset: calc(vars.space.xxsmall).negate().toString(),
-        backgroundColor: colorPaletteVars.background.neutral,
+        backgroundColor: colorPaletteVars.background.selection,
         borderRadius: vars.radii.medium,
       },
       selectors: {
