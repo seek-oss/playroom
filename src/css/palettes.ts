@@ -50,6 +50,16 @@ const darken = (amount: number, color: string) =>
   `hsl(from ${color} h s calc(l - ${guard(amount) * 100}))`;
 
 /**
+ * Adds `amount` to the lightness of `color`.
+ * Amount must be between 0 and 1 inclusive.
+ *
+ * Similar to `lighten` from polished but uses CSS
+ * @see https://polished.js.org/docs/#lighten
+ */
+const lighten = (amount: number, color: string) =>
+  `hsl(from ${color} h s calc(l + ${guard(amount) * 100}))`;
+
+/**
  * Mixes `amount` of `color1` into `color2`.
  * Amount must be between 0 and 1 inclusive.
  *
@@ -164,6 +174,8 @@ const seekPalette = {
   },
 };
 
+const baseDarkSurfaceColor = '#1c1c1b';
+
 export const dark = {
   code: {
     text: seekPalette.grey[50],
@@ -189,13 +201,13 @@ export const dark = {
     accentLight: transparentize(0.25, seekPalette.blue[600]),
     positive: mix(0.6, seekPalette.grey[900], seekPalette.mint[500]),
     critical: mix(0.7, seekPalette.grey[900], seekPalette.red[600]),
-    floating: '#222221',
-    surface: '#1c1c1b',
-    body: darken(0.02, '#1c1c1b'),
-    selection: '#4d4d4d',
+    floating: lighten(0.03, baseDarkSurfaceColor),
+    surface: baseDarkSurfaceColor,
+    body: darken(0.03, baseDarkSurfaceColor),
+    selection: darken(0.1, baseDarkSurfaceColor),
   },
   border: {
-    standard: '#343434',
+    standard: lighten(0.12, baseDarkSurfaceColor),
     accent: seekPalette.blue[500],
   },
   outline: {
