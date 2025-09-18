@@ -35,7 +35,6 @@ export const sharedPopupStyles = (size: Size) =>
       backgroundColor: colorPaletteVars.background.floating,
       transformOrigin: 'var(--transform-origin)',
       outline: `1px solid ${colorPaletteVars.border.standard}`,
-      outlineOffset: -1,
       selectors: {
         [comma('&[data-starting-style]', '&[data-ending-style]')]: {
           opacity: 0,

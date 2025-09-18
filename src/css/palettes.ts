@@ -107,7 +107,10 @@ export const light = {
     focus: originalPalette.blue2,
   },
   shadows: {
-    small: '0 2px 8px rgb(18, 21, 26, 0.3)',
+    small: [
+      '0 1px 2px rgb(18, 21, 26, 0.05)',
+      '0 6px 18px -6px rgb(18, 21, 26, 0.08)',
+    ].join(', '),
   },
 };
 
@@ -214,6 +217,9 @@ export const dark = {
     focus: seekPalette.blue[400],
   },
   shadows: {
-    small: `0 0 10px -2px ${darken(0.05, seekPalette.grey[900])}`,
+    small: [
+      `0 1px 2px ${transparentize(0.85, originalPalette.black)}`,
+      `0 6px 18px -6px ${transparentize(0.92, originalPalette.black)}`,
+    ].join(', '),
   },
 };
