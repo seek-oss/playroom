@@ -19,7 +19,7 @@ export const textField = style([
     background: 'transparent',
     border: '1px solid transparent',
     '::placeholder': {
-      color: colorPaletteVars.foreground.neutralSoft,
+      color: colorPaletteVars.foreground.secondary,
       fontWeight: 'normal',
     },
     selectors: {
