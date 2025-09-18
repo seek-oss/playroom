@@ -109,7 +109,7 @@ const segmentedButtonBase = style([
     color: colorPaletteVars.foreground.neutral,
     selectors: {
       ['&:hover']: {
-        backgroundColor: colorPaletteVars.background.neutral,
+        backgroundColor: colorPaletteVars.background.selection,
       },
       ['&:focus-visible']: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
