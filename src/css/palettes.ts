@@ -40,24 +40,17 @@ const transparentize = (amount: number, color: string) =>
   `rgb(from ${color} r g b / calc(alpha - ${guard(amount)}))`;
 
 /**
- * Subtracts `amount` from the lightness of `color`.
- * Amount must be between 0 and 1 inclusive.
- *
- * Similar to `darken` from polished but uses CSS
+ * Similar to `darken` and `lighten` from polished but uses CSS
  * @see https://polished.js.org/docs/#darken
  */
-const darken = (amount: number, color: string) =>
-  `hsl(from ${color} h s calc(l - ${guard(amount) * 100}))`;
+const adjustLightness = (amount: number, color: string, operator: '+' | '-') =>
+  `hsl(from ${color} h s calc(l ${operator} ${guard(amount) * 100}))`;
 
-/**
- * Adds `amount` to the lightness of `color`.
- * Amount must be between 0 and 1 inclusive.
- *
- * Similar to `lighten` from polished but uses CSS
- * @see https://polished.js.org/docs/#lighten
- */
+const darken = (amount: number, color: string) =>
+  adjustLightness(amount, color, '-');
+
 const lighten = (amount: number, color: string) =>
-  `hsl(from ${color} h s calc(l + ${guard(amount) * 100}))`;
+  adjustLightness(amount, color, '+');
 
 /**
  * Mixes `amount` of `color1` into `color2`.
