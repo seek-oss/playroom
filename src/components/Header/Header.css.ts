@@ -48,7 +48,7 @@ export const menuButton = style([
   }),
   minTouchableBeforePseudo,
   {
-    color: '#212121',
+    color: colorPaletteVars.foreground.neutral,
     ':focus-visible': {
       outline: `2px solid ${colorPaletteVars.outline.focus}`,
       outlineOffset: 6,
