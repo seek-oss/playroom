@@ -55,7 +55,7 @@ export const resizeContainer = styleVariants({
           background: colorPaletteVars.background.accent,
         },
         [`&:not(${resizing}):hover::before`]: {
-          background: colorPaletteVars.background.search,
+          background: colorPaletteVars.background.accentLight,
           transitionDelay: hoverTransitionDelay,
         },
       },
@@ -86,7 +86,7 @@ export const resizeContainer = styleVariants({
           background: colorPaletteVars.background.accent,
         },
         [`&:not(${resizing}):hover::before`]: {
-          background: colorPaletteVars.background.search,
+          background: colorPaletteVars.background.accentLight,
           transitionDelay: hoverTransitionDelay,
         },
       },
@@ -114,8 +114,8 @@ const handleCommon = style([
       },
       [`:is(${resizeContainer.horizontal}, ${resizeContainer.vertical}):not(${resizing}):hover &`]:
         {
-          background: colorPaletteVars.background.search,
-          borderColor: colorPaletteVars.background.search,
+          background: colorPaletteVars.background.accentLight,
+          borderColor: colorPaletteVars.background.accentLight,
           transitionDelay: hoverTransitionDelay,
         },
     },
