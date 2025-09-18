@@ -97,7 +97,7 @@ export const light = {
     floating: originalPalette.white,
     surface: originalPalette.gray0,
     body: darken(0.015, originalPalette.gray0),
-    selection: transparentize(0.85, originalPalette.blue1),
+    selection: originalPalette.gray2,
   },
   border: {
     standard: '#e2e2e2',
