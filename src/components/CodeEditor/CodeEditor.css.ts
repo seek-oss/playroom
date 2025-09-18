@@ -282,7 +282,7 @@ globalStyle('label.CodeMirror-search-label', {
 });
 
 globalStyle('.dialog-opened.cm-s-neo .CodeMirror-selected', {
-  background: colorPaletteVars.background.search,
+  background: colorPaletteVars.background.accentLight,
 });
 
 globalStyle('.cm-overlay.cm-searching', {
