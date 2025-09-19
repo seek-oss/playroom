@@ -2,6 +2,7 @@ import { Tooltip } from '@base-ui-components/react';
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import clsx from 'clsx';
 import {
+  type LucideIcon,
   CodeXml,
   Sun,
   Moon,
@@ -9,9 +10,6 @@ import {
   PanelLeft,
   PanelBottom,
   Frame as FrameIcon,
-  Eraser,
-  Palette,
-  MaximizeIcon,
   BetweenHorizontalStart,
   File,
   Check,
@@ -20,6 +18,9 @@ import {
   LayoutPanelLeft,
   EyeOff,
   Link as LinkIcon,
+  Smartphone,
+  Tablet,
+  Maximize,
 } from 'lucide-react';
 import { useContext, useEffect, useRef, useState } from 'react';
 
@@ -56,10 +57,42 @@ import {
 } from '../Menu/Menu';
 import { PreviewTiles } from '../PreviewTiles/PreviewTiles';
 import { Text } from '../Text/Text';
+import { TextButton } from '../TextButton/TextButton';
 import { Title } from '../Title/Title';
 import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Header.css';
+import * as menuStyles from '../Menu/Menu.css';
+
+type FrameWidthIconRange = {
+  min: number;
+  max?: number;
+  icon: LucideIcon;
+};
+
+const frameWidthIconRanges: Record<string, FrameWidthIconRange> = {
+  mobile: { min: 0, max: 767, icon: Smartphone },
+  tablet: { min: 768, max: 1023, icon: Tablet },
+  desktop: { min: 1024, icon: Monitor },
+};
+
+const getIconForWidth = (width: number | 'Fit to window'): LucideIcon => {
+  if (width === 'Fit to window') {
+    return Maximize;
+  }
+
+  const ranges = Object.values(frameWidthIconRanges);
+  for (const range of ranges) {
+    const withinMin = width >= range.min;
+    const withinMax = typeof range.max === 'number' ? width <= range.max : true;
+
+    if (withinMin && withinMax) {
+      return range.icon;
+    }
+  }
+
+  return FrameIcon;
+};
 
 const FramesMenu = () => {
   const [{ selectedWidths, selectedThemes }, dispatch] =
@@ -74,75 +107,80 @@ const FramesMenu = () => {
 
   return (
     <>
-      <MenuGroup label="Widths">
-        {availableWidths.map((width) => (
-          <MenuCheckboxItem
-            icon={width === 'Fit to window' ? MaximizeIcon : FrameIcon}
-            key={width}
-            checked={hasFilteredWidths && selectedWidths.includes(width)}
-            onCheckedChange={(checked: boolean) => {
-              const newWidths =
-                selectedWidths.length === 0 ? [width] : selectedWidths;
-
-              dispatch({
-                type: 'updateSelectedWidths',
-                payload: {
-                  widths: checked
-                    ? [...newWidths, width]
-                    : newWidths.filter((w) => w !== width),
-                },
-              });
+      <div className={menuStyles.menuGroupLabel}>
+        <span>Widths</span>
+        {hasFilteredWidths ? (
+          <TextButton
+            label="Clear"
+            onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              e.stopPropagation();
             }}
-          >
-            {width}
-          </MenuCheckboxItem>
-        ))}
-        <MenuItem
-          icon={Eraser}
-          onClick={() => dispatch({ type: 'resetSelectedWidths' })}
-          closeOnClick={false}
-          disabled={!hasFilteredWidths}
+            onClick={() => dispatch({ type: 'resetSelectedWidths' })}
+          />
+        ) : null}
+      </div>
+      {availableWidths.map((width) => (
+        <MenuCheckboxItem
+          icon={getIconForWidth(width)}
+          key={width}
+          checked={hasFilteredWidths && selectedWidths.includes(width)}
+          onCheckedChange={(checked: boolean) => {
+            const newWidths =
+              selectedWidths.length === 0 ? [width] : selectedWidths;
+
+            dispatch({
+              type: 'updateSelectedWidths',
+              payload: {
+                widths: checked
+                  ? [...newWidths, width]
+                  : newWidths.filter((w) => w !== width),
+              },
+            });
+          }}
         >
-          Clear selection
-        </MenuItem>
-      </MenuGroup>
+          {width}
+        </MenuCheckboxItem>
+      ))}
 
       {themesEnabled ? (
         <>
           <MenuSeparator />
 
-          <MenuGroup label="Themes">
-            {availableThemes.map((theme) => (
-              <MenuCheckboxItem
-                icon={Palette}
-                key={theme}
-                checked={hasFilteredThemes && selectedThemes.includes(theme)}
-                onCheckedChange={(checked: boolean) => {
-                  const newThemes =
-                    selectedThemes.length === 0 ? [theme] : selectedThemes;
-
-                  dispatch({
-                    type: 'updateSelectedThemes',
-                    payload: {
-                      themes: checked
-                        ? [...newThemes, theme]
-                        : newThemes.filter((w) => w !== theme),
-                    },
-                  });
+          <div className={menuStyles.menuGroupLabel}>
+            <span>Themes</span>
+            {hasFilteredThemes ? (
+              <TextButton
+                label="Clear"
+                onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                 }}
-              >
-                {theme}
-              </MenuCheckboxItem>
-            ))}
-            <MenuItem
-              icon={Eraser}
-              onClick={() => dispatch({ type: 'resetSelectedThemes' })}
-              closeOnClick={false}
-              disabled={!hasFilteredThemes}
+                onClick={() => dispatch({ type: 'resetSelectedThemes' })}
+              />
+            ) : null}
+          </div>
+          {availableThemes.map((theme) => (
+            <MenuCheckboxItem
+              key={theme}
+              checked={hasFilteredThemes && selectedThemes.includes(theme)}
+              onCheckedChange={(checked: boolean) => {
+                const newThemes =
+                  selectedThemes.length === 0 ? [theme] : selectedThemes;
+
+                dispatch({
+                  type: 'updateSelectedThemes',
+                  payload: {
+                    themes: checked
+                      ? [...newThemes, theme]
+                      : newThemes.filter((w) => w !== theme),
+                  },
+                });
+              }}
             >
-              Clear selection
-            </MenuItem>
-          </MenuGroup>
+              {theme}
+            </MenuCheckboxItem>
+          ))}
         </>
       ) : null}
     </>

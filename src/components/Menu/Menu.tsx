@@ -46,7 +46,7 @@ type MenuItemProps = Omit<
   'render' | 'className'
 > & {
   shortcut?: Shortcut;
-  icon: LucideIcon;
+  icon?: LucideIcon;
 };
 export const MenuItem = ({
   children,
@@ -59,7 +59,7 @@ export const MenuItem = ({
   return (
     <BaseUIMenu.Item className={styles.item} {...restProps}>
       <span className={styles.itemLeft}>
-        <Icon size={menuIconSize} />
+        {Icon ? <Icon size={menuIconSize} /> : null}
         {children}
       </span>
       {shortcut && (
@@ -100,7 +100,7 @@ export const MenuItemLink = ({
           rel={target === '_blank' ? 'noopener,noreferrer' : undefined}
         >
           <span className={styles.itemLeft}>
-            <Icon size={menuIconSize} />
+            {Icon ? <Icon size={menuIconSize} /> : null}
             {children}
           </span>
           {shortcut && (
@@ -131,11 +131,11 @@ export const MenuRadioItem = ({
 }: {
   value: ComponentProps<typeof BaseUIMenu.RadioItem>['value'];
   children: ComponentProps<typeof BaseUIMenu.RadioItem>['children'];
-  icon: LucideIcon;
+  icon?: LucideIcon;
 }) => (
   <BaseUIMenu.RadioItem className={styles.fieldItem} value={value}>
     <span className={styles.itemLeft}>
-      <Icon size={menuIconSize} />
+      {Icon ? <Icon size={menuIconSize} /> : null}
       {children}
     </span>
     <BaseUIMenu.RadioItemIndicator className={styles.fieldItemIndicator}>
@@ -171,7 +171,7 @@ export const MenuCheckboxItem = ({
     typeof BaseUIMenu.CheckboxItem
   >['onCheckedChange'];
   children: ComponentProps<typeof BaseUIMenu.CheckboxItem>['children'];
-  icon: LucideIcon;
+  icon?: LucideIcon;
 }) => (
   <BaseUIMenu.CheckboxItem
     checked={checked}
@@ -179,7 +179,7 @@ export const MenuCheckboxItem = ({
     className={styles.fieldItem}
   >
     <span className={styles.itemLeft}>
-      <Icon size={menuIconSize} />
+      {Icon ? <Icon size={menuIconSize} /> : null}
       {children}
     </span>
     <span className={styles.checkboxBox}>
