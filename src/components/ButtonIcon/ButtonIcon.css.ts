@@ -108,6 +108,24 @@ export const variant = styleVariants({
       },
     },
   ],
+  solid: [
+    sprinkles({ padding: 'xsmall' }),
+    {
+      height: 'auto',
+      width: 'auto',
+      color: colorPaletteVars.foreground.neutralInverted,
+      '::after': {
+        inset: 0,
+        backgroundColor: colorPaletteVars.background.secondaryAccent,
+        borderRadius: vars.radii.medium,
+      },
+      selectors: {
+        ['&:hover::after']: {
+          backgroundColor: colorPaletteVars.background.secondaryAccentLight,
+        },
+      },
+    },
+  ],
   transparent: [
     sprinkles({ padding: 'none' }),
     {
