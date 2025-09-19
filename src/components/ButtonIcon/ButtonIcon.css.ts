@@ -115,13 +115,15 @@ export const variant = styleVariants({
       width: sizeVar,
       '::after': {
         inset: calc(vars.space.xxsmall).negate().toString(),
-        backgroundColor: colorPaletteVars.background.selection,
+        backgroundColor: foreground,
         borderRadius: vars.radii.medium,
       },
       selectors: {
         [`&:not(:hover, :focus-visible, [data-popup-open])::after`]: {
           opacity: 0,
-          transform: 'scale(.5)',
+        },
+        ['&:hover, &:focus-visible, &[data-popup-open]']: {
+          color: colorPaletteVars.foreground.neutralInverted,
         },
       },
     },
