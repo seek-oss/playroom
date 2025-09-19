@@ -4,9 +4,12 @@ import type { LucideIcon } from 'lucide-react';
 import {
   type AllHTMLAttributes,
   type ComponentProps,
+  type ReactNode,
   createContext,
   forwardRef,
   useContext,
+  useEffect,
+  useState,
 } from 'react';
 
 import { isMac } from '../../utils/formatting';
@@ -279,3 +282,49 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
     );
   }
 );
+
+type MenuCopyItemProps = {
+  onCopy: () => void;
+  children: ReactNode;
+  resetMs?: number;
+};
+
+export const MenuCopyItem = ({
+  onCopy,
+  children,
+  resetMs = 1200,
+}: MenuCopyItemProps) => {
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) {
+      return;
+    }
+
+    const timer = setTimeout(() => setCopied(false), resetMs);
+
+    return () => clearTimeout(timer);
+  }, [copied, resetMs]);
+
+  return (
+    <BaseUIMenu.Item
+      className={clsx({ [styles.item]: true, [styles.positive]: copied })}
+      closeOnClick={false}
+      onClick={() => {
+        onCopy();
+        setCopied(true);
+      }}
+    >
+      <span className={styles.itemLeft}>
+        {copied ? (
+          <>
+            <TickIcon size={menuIconSize} />
+            <Text tone="positive">Copied</Text>
+          </>
+        ) : (
+          <>{children}</>
+        )}
+      </span>
+    </BaseUIMenu.Item>
+  );
+};
