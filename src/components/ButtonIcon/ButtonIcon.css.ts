@@ -134,7 +134,7 @@ export const variant = styleVariants({
       '::after': {
         inset: calc(vars.space.xxsmall).negate().toString(),
         backgroundColor: foreground,
-        borderRadius: vars.radii.medium,
+        borderRadius: vars.radii.small,
       },
       selectors: {
         [`&:not(:hover, :focus-visible, [data-popup-open])::after`]: {
