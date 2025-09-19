@@ -115,6 +115,35 @@ export const fieldItemIndicator = style([
     height: fieldIndicatorSize,
     width: fieldIndicatorSize,
     color: colorPaletteVars.foreground.neutral,
+    selectors: {
+      '[aria-checked="true"] &': {
+        color: colorPaletteVars.foreground.neutralInverted,
+      },
+    },
+  },
+]);
+
+export const checkboxBox = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 'small',
+    zIndex: 1,
+  }),
+  {
+    height: fieldIndicatorSize,
+    width: fieldIndicatorSize,
+    boxSizing: 'border-box',
+    backgroundColor: 'transparent',
+    border: `1px solid ${colorPaletteVars.foreground.neutral}`,
+    isolation: 'isolate',
+    selectors: {
+      '[aria-checked="true"] &': {
+        backgroundColor: colorPaletteVars.background.accent,
+        borderColor: colorPaletteVars.background.accent,
+      },
+    },
   },
 ]);
 
