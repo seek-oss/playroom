@@ -28,6 +28,8 @@ export const colorPaletteVars = createThemeContract({
     transparent: null,
     accent: null,
     accentLight: null,
+    secondaryAccent: null,
+    secondaryAccentLight: null,
     positive: null,
     critical: null,
     surface: null,
