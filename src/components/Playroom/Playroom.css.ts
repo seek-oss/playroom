@@ -6,8 +6,7 @@ import {
   styleVariants,
 } from '@vanilla-extract/css';
 
-import { space, comma, newline } from '../../css/delimiters';
-import { ANIMATION_DURATION_SLOW } from '../constants';
+import { space, newline } from '../../css/delimiters';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
@@ -45,17 +44,9 @@ export const root = style([
       'auto',
       fallbackVar(editorHeight, '0px')
     ),
-    willChange: comma('grid-template-columns', 'grid-template-rows'),
     isolation: 'isolate',
   },
 ]);
-
-export const editorTransition = style({
-  transition: comma(
-    `grid-template-columns ${ANIMATION_DURATION_SLOW}ms ease`,
-    `grid-template-rows ${ANIMATION_DURATION_SLOW}ms ease`
-  ),
-});
 
 export const editorOrientation = styleVariants({
   horizontal: [
@@ -134,5 +125,3 @@ export const editorOverlays = style([
     marginInline: 'auto',
   },
 ]);
-
-// EditorActions styles moved to components/EditorActions
