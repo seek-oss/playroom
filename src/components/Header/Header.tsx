@@ -490,6 +490,7 @@ export const Header = () => {
             size={headerButtonIconSize}
             label={editorHidden ? 'Show code' : 'Hide code'}
             icon={<CodeXml />}
+            variant={editorHidden ? 'standard' : 'solid'}
             onClick={() =>
               dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
             }
