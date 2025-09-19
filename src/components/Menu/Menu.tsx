@@ -182,9 +182,11 @@ export const MenuCheckboxItem = ({
       <Icon size={menuIconSize} />
       {children}
     </span>
-    <BaseUIMenu.CheckboxItemIndicator className={styles.fieldItemIndicator}>
-      <TickIcon />
-    </BaseUIMenu.CheckboxItemIndicator>
+    <span className={styles.checkboxBox}>
+      <BaseUIMenu.CheckboxItemIndicator className={styles.fieldItemIndicator}>
+        <TickIcon size={12} />
+      </BaseUIMenu.CheckboxItemIndicator>
+    </span>
   </BaseUIMenu.CheckboxItem>
 );
 
