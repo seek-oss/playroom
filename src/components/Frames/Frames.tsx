@@ -2,7 +2,14 @@ import { Tooltip } from '@base-ui-components/react';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import clsx from 'clsx';
 import html2canvas from 'html2canvas';
-import { Camera, ClipboardCopy, Download } from 'lucide-react';
+import {
+  Camera,
+  ClipboardCopy,
+  Download,
+  ExternalLink,
+  Fullscreen,
+  Link,
+} from 'lucide-react';
 import {
   type ReactNode,
   type RefObject,
@@ -22,8 +29,6 @@ import { ReceiveErrorMessage } from '../Frame/frameMessaging';
 import { Menu, MenuItem } from '../Menu/Menu';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
-import PlayIcon from '../icons/PlayIcon';
-import ShareIcon from '../icons/ShareIcon';
 import TickIcon from '../icons/TickIcon';
 
 import Iframe from './Iframe';
@@ -112,7 +117,7 @@ const Frame = ({
               size="small"
               tone={copying ? 'positive' : 'accent'}
               variant="transparent"
-              icon={copying ? <TickIcon /> : <ShareIcon />}
+              icon={copying ? <TickIcon /> : <Link />}
               label={copying ? 'Copied' : 'Copy preview link'}
               onClick={() => (!copying ? onCopyClick(previewUrl) : undefined)}
             />
@@ -120,8 +125,18 @@ const Frame = ({
               size="small"
               tone="accent"
               variant="transparent"
-              icon={<PlayIcon />}
+              icon={<ExternalLink />}
               label="Open preview"
+              onClick={() => {
+                window.open(previewUrl, '_blank', 'noopener,noreferrer');
+              }}
+            />
+            <ButtonIcon
+              size="small"
+              tone="accent"
+              variant="transparent"
+              icon={<Fullscreen />}
+              label="Undock"
               onClick={() => {
                 const width =
                   frame.width === 'Fit to window' ? '' : frame.width;
@@ -144,6 +159,7 @@ const Frame = ({
                 );
               }}
             />
+
             <Menu
               align="end"
               onOpenChange={setFrameActive}
@@ -154,7 +170,7 @@ const Frame = ({
                   tone="accent"
                   variant="transparent"
                   icon={<Camera />}
-                  label="Take screenshot"
+                  label="Screenshot"
                 />
               }
             >
