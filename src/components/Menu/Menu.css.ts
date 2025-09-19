@@ -105,16 +105,33 @@ export const fieldItem = style([
 ]);
 
 const fieldIndicatorSize = '16px';
-export const fieldItemIndicator = style([
+export const radioItemIndicator = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   }),
   {
+    position: 'relative',
+    height: fieldIndicatorSize,
+    width: fieldIndicatorSize,
+    color: 'inherit',
+    zIndex: 1,
+  },
+]);
+
+export const checkboxItemIndicator = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+  {
+    position: 'relative',
     height: fieldIndicatorSize,
     width: fieldIndicatorSize,
     color: colorPaletteVars.foreground.neutral,
+    zIndex: 1,
     selectors: {
       '[aria-checked="true"] &': {
         color: colorPaletteVars.foreground.neutralInverted,

@@ -1,6 +1,6 @@
 import { Menu as BaseUIMenu } from '@base-ui-components/react/menu';
 import clsx from 'clsx';
-import type { LucideIcon } from 'lucide-react';
+import { type LucideIcon, Check } from 'lucide-react';
 import {
   type AllHTMLAttributes,
   type ComponentProps,
@@ -138,24 +138,8 @@ export const MenuRadioItem = ({
       {Icon ? <Icon size={menuIconSize} /> : null}
       {children}
     </span>
-    <BaseUIMenu.RadioItemIndicator className={styles.fieldItemIndicator}>
-      <svg
-        viewBox="0 0 24 24"
-        focusable="false"
-        fill="currentColor"
-        width={12}
-        height={12}
-        role="img"
-      >
-        <circle
-          cx="12"
-          cy="12"
-          r="8"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="5"
-        />
-      </svg>
+    <BaseUIMenu.RadioItemIndicator className={styles.radioItemIndicator}>
+      <Check size={menuIconSize} />
     </BaseUIMenu.RadioItemIndicator>
   </BaseUIMenu.RadioItem>
 );
@@ -183,7 +167,9 @@ export const MenuCheckboxItem = ({
       {children}
     </span>
     <span className={styles.checkboxBox}>
-      <BaseUIMenu.CheckboxItemIndicator className={styles.fieldItemIndicator}>
+      <BaseUIMenu.CheckboxItemIndicator
+        className={styles.checkboxItemIndicator}
+      >
         <TickIcon size={12} />
       </BaseUIMenu.CheckboxItemIndicator>
     </span>
