@@ -154,4 +154,9 @@ globalStyle(`${button} > svg`, {
   width: sizeVar,
 });
 
-export const popup = sharedPopupStyles('small');
+export const popup = style([
+  sharedPopupStyles('small'),
+  {
+    backgroundColor: colorPaletteVars.background.dark,
+  },
+]);

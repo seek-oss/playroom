@@ -18,6 +18,7 @@ const originalPalette = {
   gray4: '#767676',
   gray5: '#515151',
   gray6: '#1e1e1e',
+  gray7: '#1c1c1b',
   black: '#000',
 };
 
@@ -80,6 +81,7 @@ export const light = {
     critical: originalPalette.red3,
     accent: originalPalette.blue2,
     positive: originalPalette.green2,
+    light: originalPalette.white,
   },
   background: {
     transparent: 'rgb(0, 0, 0, .05)',
@@ -93,6 +95,7 @@ export const light = {
     surface: originalPalette.gray0,
     body: darken(0.015, originalPalette.gray0),
     selection: originalPalette.gray2,
+    dark: originalPalette.gray7,
   },
   border: {
     standard: '#e2e2e2',
@@ -172,7 +175,7 @@ const seekPalette = {
   },
 };
 
-const baseDarkSurfaceColor = '#1c1c1b';
+const baseDarkSurfaceColor = originalPalette.gray6;
 
 export const dark = {
   code: {
@@ -192,6 +195,7 @@ export const dark = {
     critical: seekPalette.red[400],
     accent: seekPalette.blue[400],
     positive: seekPalette.mint[500],
+    light: originalPalette.white,
   },
   background: {
     transparent: 'rgb(255, 255, 255, .07)',
@@ -205,6 +209,7 @@ export const dark = {
     surface: baseDarkSurfaceColor,
     body: darken(0.03, baseDarkSurfaceColor),
     selection: darken(0.1, baseDarkSurfaceColor),
+    dark: originalPalette.black,
   },
   border: {
     standard: lighten(0.12, baseDarkSurfaceColor),
