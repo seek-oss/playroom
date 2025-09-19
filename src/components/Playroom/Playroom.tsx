@@ -1,12 +1,6 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
-import {
-  type ComponentProps,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { type ComponentProps, useContext, useRef, useState } from 'react';
 
 import {
   type EditorOrientation,
@@ -22,7 +16,6 @@ import { Header } from '../Header/Header';
 import { Logo } from '../Logo/Logo';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
-import { ANIMATION_DURATION_SLOW } from '../constants';
 
 import { ResizeHandle } from './ResizeHandle';
 
@@ -89,23 +82,7 @@ export default () => {
   useDocumentTitle({ title });
 
   const editorRef = useRef<HTMLElement | null>(null);
-  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [resizing, setResizing] = useState(false);
-  const [lastEditorHidden, setLastEditorHidden] = useState(editorHidden);
-
-  useEffect(() => {
-    transitionTimeoutRef.current = setTimeout(
-      () => setLastEditorHidden(editorHidden),
-      ANIMATION_DURATION_SLOW
-    );
-
-    return () => {
-      if (transitionTimeoutRef.current) {
-        clearTimeout(transitionTimeoutRef.current);
-        transitionTimeoutRef.current = null;
-      }
-    };
-  }, [editorHidden]);
 
   const isVerticalEditor = editorOrientation === 'vertical';
   const editorSize = isVerticalEditor ? editorWidth : editorHeight;
@@ -117,7 +94,6 @@ export default () => {
         [styles.root]: true,
         [styles.resizing]: resizing,
         [styles.editorOrientation[editorOrientation]]: true,
-        [styles.editorTransition]: lastEditorHidden !== editorHidden,
       }}
       style={assignInlineVars({
         [styles.editorSize]: editorHidden ? undefined : editorSize,
@@ -139,30 +115,28 @@ export default () => {
         inert={editorHidden}
         ref={editorRef}
       >
-        {!editorHidden ? (
-          <ResizeHandle
-            ref={editorRef}
-            position={resizeHandlePosition[editorOrientation]}
-            onResize={(newValue) => {
-              dispatch({
-                type: isVerticalEditor
-                  ? 'updateEditorWidth'
-                  : 'updateEditorHeight',
-                payload: { size: newValue },
-              });
-            }}
-            onResizeStart={() => setResizing(true)}
-            onResizeEnd={(endValue) => {
-              setResizing(false);
-              dispatch({
-                type: isVerticalEditor
-                  ? 'updateEditorWidth'
-                  : 'updateEditorHeight',
-                payload: { size: endValue },
-              });
-            }}
-          />
-        ) : null}
+        <ResizeHandle
+          ref={editorRef}
+          position={resizeHandlePosition[editorOrientation]}
+          onResize={(newValue) => {
+            dispatch({
+              type: isVerticalEditor
+                ? 'updateEditorWidth'
+                : 'updateEditorHeight',
+              payload: { size: newValue },
+            });
+          }}
+          onResizeStart={() => setResizing(true)}
+          onResizeEnd={(endValue) => {
+            setResizing(false);
+            dispatch({
+              type: isVerticalEditor
+                ? 'updateEditorWidth'
+                : 'updateEditorHeight',
+              payload: { size: endValue },
+            });
+          }}
+        />
         <div className={styles.editorContainer}>
           <CodeEditor
             code={code}
