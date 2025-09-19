@@ -18,6 +18,10 @@ export const secondary = style({
   color: colorPaletteVars.foreground.secondary,
 });
 
+export const positive = style({
+  color: colorPaletteVars.foreground.positive,
+});
+
 export const xsmall = sprinkles({
   font: 'xsmall',
 });
