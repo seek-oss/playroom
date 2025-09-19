@@ -43,9 +43,10 @@ export const frameContainer = style([
 export const highlightOnHover = style({
   transition: `color ${transitionTiming}`,
   selectors: {
-    [`${frameContainer}:hover &, ${frameActive} &`]: {
-      color: `${colorPaletteVars.foreground.accent}`,
-    },
+    [`${frameContainer}:hover &, ${frameContainer}:focus-within &, ${frameActive} &`]:
+      {
+        color: `${colorPaletteVars.foreground.accent}`,
+      },
   },
 });
 
@@ -72,7 +73,11 @@ export const frame = style([
     outline: '2px solid transparent',
     transition: `outline-color ${transitionTiming}, opacity ${transitionTiming}`,
     selectors: {
-      [`${frameContainer}:hover &, ${frameActive} &`]: {
+      [`${frameContainer}:hover &, ` +
+      `${frameContainer}:focus-within &, ` +
+      `${frameActive} &, ` +
+      '&:focus, ' +
+      '&:focus-visible']: {
         outlineColor: `${colorPaletteVars.border.accent}`,
       },
     },
@@ -89,7 +94,7 @@ export const frameHeadingContainer = style([
   {
     transition: `opacity ${transitionTiming}`,
     selectors: {
-      [`${frameContainer}:not(:hover, ${frameActive}) &`]: {
+      [`${frameContainer}:not(:hover, :focus-within, ${frameActive}) &`]: {
         opacity: 0.4,
       },
     },
@@ -105,7 +110,7 @@ export const frameActionsContainer = style([
   {
     transition: `opacity ${transitionTiming}`,
     selectors: {
-      [`${frameContainer}:not(:hover, ${frameActive}) &`]: {
+      [`${frameContainer}:not(:hover, :focus-within, ${frameActive}) &`]: {
         opacity: 0,
       },
     },
