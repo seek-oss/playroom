@@ -1,4 +1,4 @@
-import { createVar, style } from '@vanilla-extract/css';
+import { createVar, globalStyle, style } from '@vanilla-extract/css';
 
 import { comma } from '../../css/delimiters';
 
@@ -69,6 +69,17 @@ export const critical = style({
     [highlightColor]: colorPaletteVars.background.critical,
   },
   color: colorPaletteVars.foreground.critical,
+});
+
+export const positive = style({
+  color: colorPaletteVars.foreground.positive,
+  vars: {
+    [highlightColor]: 'transparent',
+  },
+});
+
+globalStyle(`${positive} svg`, {
+  color: colorPaletteVars.foreground.positive,
 });
 
 export const itemLeft = style([

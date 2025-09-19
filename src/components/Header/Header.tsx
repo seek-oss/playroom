@@ -19,10 +19,12 @@ import {
   FolderOpen,
   LayoutPanelLeft,
   EyeOff,
+  Link as LinkIcon,
 } from 'lucide-react';
 import { useContext, useEffect, useRef, useState } from 'react';
 
-import { compressParams } from '../../../utils';
+import { compressParams, createPreviewUrl } from '../../../utils';
+import playroomConfig from '../../config';
 import {
   themeNames as availableThemes,
   themesEnabled,
@@ -44,6 +46,7 @@ import { Logo } from '../Logo/Logo';
 import {
   Menu,
   MenuCheckboxItem,
+  MenuCopyItem,
   MenuGroup,
   MenuItem,
   MenuItemLink,
@@ -51,8 +54,6 @@ import {
   MenuRadioItem,
   MenuSeparator,
 } from '../Menu/Menu';
-import { Popover } from '../Popover/Popover';
-import { PreviewSelection } from '../PreviewSelection/PreviewSelection';
 import { PreviewTiles } from '../PreviewTiles/PreviewTiles';
 import { Text } from '../Text/Text';
 import { Title } from '../Title/Title';
@@ -148,6 +149,66 @@ const FramesMenu = () => {
   );
 };
 
+const ShareMenu = () => {
+  const [{ code, title, editorHidden }] = useContext(StoreContext);
+  const { onCopyClick } = useCopy();
+
+  return (
+    <>
+      <MenuCopyItem onCopy={() => onCopyClick(window.location.href)}>
+        Playroom link
+      </MenuCopyItem>
+      {themesEnabled ? (
+        <>
+          <MenuSeparator />
+          <MenuGroup label="Preview link">
+            {availableThemes.map((theme) => {
+              const baseUrl = window.location.href
+                .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
+                .split('index.html')[0];
+              const previewUrl = createPreviewUrl({
+                baseUrl,
+                code,
+                theme,
+                paramType: playroomConfig.paramType,
+                title,
+                editorHidden,
+              });
+
+              return (
+                <MenuCopyItem
+                  key={theme}
+                  onCopy={() => onCopyClick(previewUrl)}
+                >
+                  {theme}
+                </MenuCopyItem>
+              );
+            })}
+          </MenuGroup>
+        </>
+      ) : (
+        <MenuCopyItem
+          onCopy={() => {
+            const baseUrl = window.location.href
+              .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
+              .split('index.html')[0];
+            const previewUrl = createPreviewUrl({
+              baseUrl,
+              code,
+              paramType: playroomConfig.paramType,
+              title,
+              editorHidden,
+            });
+            onCopyClick(previewUrl);
+          }}
+        >
+          Preview link
+        </MenuCopyItem>
+      )}
+    </>
+  );
+};
+
 const HeaderMenu = () => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const inputCommandRef = useRef<EditorCommand | null>(null);
@@ -223,6 +284,13 @@ const HeaderMenu = () => {
         <MenuItemLink icon={CopyPlus} href={duplicateUrl} target="_blank">
           Duplicate
         </MenuItemLink>
+
+        <Menu
+          trigger={<MenuItem icon={LinkIcon}>Share</MenuItem>}
+          width="small"
+        >
+          <ShareMenu />
+        </Menu>
 
         <MenuSeparator />
 
@@ -391,22 +459,17 @@ export const Header = () => {
                 linkCopied={copying}
                 onClick={() => onCopyClick(window.location.href)}
               />
-              <Popover
-                aria-label="Share options"
+              <Menu
+                width="small"
                 align="end"
-                side="bottom"
-                trigger={(triggerProps) => (
-                  <button
-                    type="button"
-                    className={styles.segmentedIconButton}
-                    {...triggerProps}
-                  >
-                    <ChevronIcon direction="down" size={10} />
+                trigger={
+                  <button type="button" className={styles.segmentedIconButton}>
+                    <ChevronIcon direction="down" size={14} />
                   </button>
-                )}
+                }
               >
-                <PreviewSelection />
-              </Popover>
+                <ShareMenu />
+              </Menu>
             </div>
           ) : null}
 
