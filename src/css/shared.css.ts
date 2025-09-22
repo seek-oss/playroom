@@ -1,7 +1,5 @@
 import { style } from '@vanilla-extract/css';
 
-import { comma } from './delimiters';
-
 import { colorPaletteVars, type Sprinkles, sprinkles } from './sprinkles.css';
 import { vars } from './vars.css';
 
@@ -28,22 +26,12 @@ export const sharedPopupStyles = (size: Size) =>
   style([
     sprinkles({
       boxSizing: 'border-box',
-      transition: 'fast',
       ...popupSize[size],
     }),
     {
       backgroundColor: colorPaletteVars.background.floating,
       transformOrigin: 'var(--transform-origin)',
       outline: `1px solid ${colorPaletteVars.border.standard}`,
-      selectors: {
-        [comma('&[data-starting-style]', '&[data-ending-style]')]: {
-          opacity: 0,
-          transform: 'scale(0.9)',
-        },
-        ['&[data-instant]']: {
-          transitionDuration: '0ms',
-        },
-      },
     },
   ]);
 
