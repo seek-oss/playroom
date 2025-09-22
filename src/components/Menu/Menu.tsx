@@ -244,17 +244,7 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
             <MenuTrigger ref={triggerRef} render={trigger} />
           </SubMenuTriggerContext.Provider>
           <BaseUIMenu.Portal>
-            <BaseUIMenu.Positioner
-              align={align}
-              alignOffset={
-                -4 /* Align with the edge of the popup corner radius (half of medium) */
-              }
-              sideOffset={
-                isSubMenu
-                  ? 10 /* Align with the padding size of the popup + gap */
-                  : 8 /* Double padding size (medium) */
-              }
-            >
+            <BaseUIMenu.Positioner align={align} sideOffset={isSubMenu ? 0 : 6}>
               <BaseUIMenu.Popup
                 className={clsx({
                   [styles.popup]: true,
