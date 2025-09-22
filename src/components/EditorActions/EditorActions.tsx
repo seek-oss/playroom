@@ -4,18 +4,17 @@ import {
   BrushCleaningIcon,
   type LucideIcon,
 } from 'lucide-react';
-import { useContext, useRef } from 'react';
+import { useContext, type ButtonHTMLAttributes } from 'react';
 
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
-import { Popover, type PopoverTrigger } from '../Popover/Popover';
-import Snippets from '../Snippets/Snippets';
+import { Snippets } from '../Snippets/Snippets';
 import { Text } from '../Text/Text';
 
 import * as styles from './EditorActions.css';
 
-interface EditorActionButtonProps extends PopoverTrigger {
-  onClick?: () => void;
+interface EditorActionButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
   name: string;
   shortcut: string;
   icon: LucideIcon;
@@ -36,9 +35,8 @@ const EditorActionButton = ({
 );
 
 export const EditorActions = () => {
-  const [{ snippetsOpen, hasSyntaxError }, dispatch] = useContext(StoreContext);
+  const [{ hasSyntaxError }] = useContext(StoreContext);
   const { runCommand } = useEditor();
-  const searchRef = useRef<HTMLInputElement | null>(null);
   const hasSnippets = snippets && snippets.length > 0;
 
   return (
@@ -48,39 +46,16 @@ export const EditorActions = () => {
       ) : (
         <>
           {hasSnippets ? (
-            <Popover
-              aria-label="Select a snippet"
-              size="small"
-              side="top"
-              open={snippetsOpen}
-              onOpenChange={(open) =>
-                dispatch({ type: open ? 'openSnippets' : 'closeSnippets' })
-              }
-              trigger={
+            <Snippets
+              trigger={(triggerProps) => (
                 <EditorActionButton
+                  {...triggerProps}
                   name="Insert snippet"
                   shortcut="⌘K"
                   icon={BetweenHorizontalStart}
                 />
-              }
-              initialFocus={searchRef}
-            >
-              <div className={styles.snippetsPopupWidth}>
-                <Snippets
-                  searchRef={searchRef}
-                  onSelect={(snippet) => {
-                    if (snippet) {
-                      dispatch({
-                        type: 'persistSnippet',
-                        payload: { snippet },
-                      });
-                    } else {
-                      dispatch({ type: 'closeSnippets' });
-                    }
-                  }}
-                />
-              </div>
-            </Popover>
+              )}
+            />
           ) : null}
           <EditorActionButton
             onClick={() => runCommand('formatCode')}

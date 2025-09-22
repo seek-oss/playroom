@@ -2,6 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
+import { sharedPopupStyles } from '../../css/shared.css';
 
 export const root = sprinkles({
   position: 'relative',
@@ -67,4 +68,10 @@ export const highlight = style({
   '::before': {
     opacity: 1,
   },
+});
+
+export const popup = sharedPopupStyles('small');
+
+export const popupWidth = style({
+  width: 'min(300px, 90vw)',
 });
