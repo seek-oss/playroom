@@ -1,8 +1,12 @@
-import { style } from '@vanilla-extract/css';
+import { style, keyframes } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
+import { sharedPopupStyles } from '../../css/shared.css';
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
-import { sharedPopupStyles } from '../../css/shared.css';
+
+const popoverPadding = 'xxsmall';
+const snippetPadding = 'xsmall';
 
 export const root = sprinkles({
   position: 'relative',
@@ -13,12 +17,75 @@ export const fieldContainer = style([
     display: 'flex',
     alignItems: 'center',
   }),
+  {
+    position: 'relative',
+    '::after': {
+      content: '',
+      position: 'absolute',
+      left: calc(vars.space[popoverPadding]).negate().toString(),
+      right: calc(vars.space[popoverPadding]).negate().toString(),
+      bottom: 0,
+      height: 1,
+      backgroundColor: colorPaletteVars.border.standard,
+    },
+  },
+]);
+
+export const searchField = style([
+  sprinkles({
+    border: 0,
+    flexGrow: 1,
+    font: 'standard',
+  }),
+  {
+    paddingInline: vars.space[snippetPadding],
+    color: colorPaletteVars.foreground.neutral,
+    height: vars.touchableSize,
+    background: 'transparent',
+    boxShadow: 'none',
+    selectors: {
+      '&::-webkit-search-cancel-button': {
+        WebkitAppearance: 'none',
+      },
+      '&::-webkit-search-decoration': {
+        WebkitAppearance: 'none',
+      },
+      '&::-ms-clear': {
+        display: 'none',
+      },
+      '&::-ms-reveal': {
+        display: 'none',
+      },
+    },
+    ':focus-visible': {
+      outline: 'none',
+      boxShadow: 'none',
+    },
+    '::placeholder': {
+      color: colorPaletteVars.foreground.secondary,
+    },
+  },
+]);
+
+export const clearButton = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 'xxsmall',
+  }),
+  {
+    background: 'transparent',
+    border: 0,
+    color: colorPaletteVars.foreground.secondary,
+  },
 ]);
 
 export const snippetsContainer = style([
   sprinkles({
     overflow: 'auto',
     paddingX: 'none',
+    paddingY: popoverPadding,
     margin: 'none',
   }),
   {
@@ -32,12 +99,12 @@ export const snippet = style([
     position: 'relative',
     display: 'block',
     cursor: 'pointer',
-    paddingY: 'small',
-    paddingX: 'medium',
+    padding: snippetPadding,
   }),
   {
     color: colorPaletteVars.foreground.neutral,
     isolation: 'isolate',
+    scrollMarginBlock: vars.space[popoverPadding],
     '::before': {
       content: '',
       position: 'absolute',
@@ -51,6 +118,14 @@ export const snippet = style([
       pointerEvents: 'none',
       zIndex: -1,
     },
+    selectors: {
+      '&[data-selected="true"]': {
+        color: colorPaletteVars.foreground.accent,
+      },
+      '&[data-selected="true"]::before': {
+        opacity: 1,
+      },
+    },
   },
 ]);
 
@@ -63,14 +138,34 @@ export const snippetName = style([
   },
 ]);
 
-export const highlight = style({
-  color: colorPaletteVars.foreground.accent,
-  '::before': {
-    opacity: 1,
+export const snippetRow = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'xsmall',
+  }),
+  {
+    flexWrap: 'nowrap',
   },
+]);
+
+const enterAnimation = keyframes({
+  to: { opacity: 1, transform: 'scale(1)' },
 });
 
-export const popup = sharedPopupStyles('small');
+export const popup = style([
+  sharedPopupStyles,
+  sprinkles({
+    borderRadius: 'medium',
+    paddingX: popoverPadding,
+    paddingY: 'none',
+  }),
+  {
+    transform: 'scale(0.97)',
+    opacity: 0,
+    animation: `${enterAnimation} 80ms ease-out forwards`,
+  },
+]);
 
 export const popupWidth = style({
   width: 'min(300px, 90vw)',

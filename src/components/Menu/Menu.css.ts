@@ -7,7 +7,10 @@ import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
 const popupGutter = 'xsmall';
-export const popup = sharedPopupStyles('small');
+export const popup = style([
+  sharedPopupStyles,
+  sprinkles({ padding: 'xxsmall', borderRadius: 'medium' }),
+]);
 
 export const small = style({
   width: 250,
