@@ -1,11 +1,11 @@
 import { Popover as BaseUIPopover } from '@base-ui-components/react';
 import clsx from 'clsx';
-import Fuse from 'fuse.js';
+import { Command, useCommandState } from 'cmdk-base';
+import { X } from 'lucide-react';
 import {
   useState,
-  useEffect,
   useRef,
-  useMemo,
+  useEffect,
   useContext,
   type RefObject,
   type ComponentProps,
@@ -15,14 +15,10 @@ import { useDebouncedCallback } from 'use-debounce';
 import type { Snippet } from '../../../utils';
 import snippets from '../../configModules/snippets';
 import { StoreContext } from '../../contexts/StoreContext';
-import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
-
-import SearchField from './SearchField/SearchField';
 
 import * as styles from './Snippets.css';
 
-type HighlightIndex = number | null;
 type ReturnedSnippet = Snippet | null;
 
 const getLabel = (snippet: Snippet) => `${snippet.group}\n${snippet.name}`;
@@ -30,14 +26,6 @@ const getLabel = (snippet: Snippet) => `${snippet.group}\n${snippet.name}`;
 function getSnippetId(snippet: Snippet, index: number) {
   return `${snippet.group}_${snippet.name}_${index}`;
 }
-
-const fuse = new Fuse(snippets, {
-  threshold: 0.3,
-  keys: [
-    { name: 'group', weight: 2 },
-    { name: 'name', weight: 1 },
-  ],
-});
 
 type SnippetsContentProps = {
   searchRef: RefObject<HTMLInputElement | null>;
@@ -47,123 +35,106 @@ type SnippetsContentProps = {
 const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
   const [, dispatch] = useContext(StoreContext);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [highlightedIndex, setHighlightedIndex] =
-    useState<HighlightIndex>(null);
 
-  const listEl = useRef<HTMLUListElement | null>(null);
-  const highlightedEl = useRef<HTMLLIElement | null>(null);
+  const valueToSnippetRef = useRef<Map<string, Snippet> | null>(null);
 
-  const filteredSnippets = useMemo(
-    () =>
-      searchTerm
-        ? fuse.search(searchTerm).map((result) => result.item)
-        : snippets,
-    [searchTerm]
-  );
+  if (!valueToSnippetRef.current) {
+    const map = new Map<string, Snippet>();
+
+    for (const snippet of snippets) {
+      const value = `${snippet.group ? `${snippet.group} ` : ''}${
+        snippet.name
+      }`;
+
+      map.set(value, snippet);
+    }
+    valueToSnippetRef.current = map;
+  }
 
   const debouncedPreview = useDebouncedCallback((snippet: ReturnedSnippet) => {
     dispatch({ type: 'previewSnippet', payload: { snippet } });
   }, 50);
 
-  if (
-    typeof highlightedIndex === 'number' &&
-    filteredSnippets[highlightedIndex]
-  ) {
-    const highlightedItem = document.getElementById(
-      getSnippetId(filteredSnippets[highlightedIndex], highlightedIndex)
-    );
-    highlightedItem?.scrollIntoView({ block: 'nearest' });
-  }
+  // Todo - migrate to event listener
+  /*
+  Using a component under <Command> so it can subscribe to cmdk store via
+  useCommandState
+  Avoiding issues with event handlers
+  */
+  const SelectedPreviewEffect = () => {
+    const selectedValue = useCommandState((state) => state.value);
+    const previewRef = useRef(debouncedPreview);
+    previewRef.current = debouncedPreview;
 
-  useEffect(() => {
-    debouncedPreview(
-      typeof highlightedIndex === 'number'
-        ? filteredSnippets[highlightedIndex]
-        : null
-    );
-  }, [debouncedPreview, filteredSnippets, highlightedIndex]);
+    useEffect(() => {
+      const snippet = selectedValue
+        ? valueToSnippetRef.current?.get(selectedValue) ?? null
+        : null;
+      previewRef.current(snippet);
+    }, [selectedValue]);
+    return null;
+  };
 
   return (
     <div className={styles.root}>
-      <div className={styles.fieldContainer}>
-        <SearchField
-          ref={searchRef}
-          value={searchTerm}
-          onChange={(e) => {
-            const { value } = e.currentTarget;
-            setSearchTerm(value);
-          }}
-          placeholder="Find a snippet..."
-          aria-label="Search snippets"
-          onBlur={() => {
-            setHighlightedIndex(null);
-          }}
-          onKeyDown={(event) => {
-            if (/^(?:Arrow)?Down$/.test(event.key)) {
-              if (
-                highlightedIndex === null ||
-                highlightedIndex === filteredSnippets.length - 1
-              ) {
-                setHighlightedIndex(0);
-              } else if (highlightedIndex < filteredSnippets.length - 1) {
-                setHighlightedIndex(highlightedIndex + 1);
+      <Command>
+        <div className={styles.fieldContainer}>
+          <Command.Input
+            ref={searchRef}
+            placeholder="Find a snippet..."
+            aria-label="Search snippets"
+            value={searchTerm}
+            onValueChange={setSearchTerm}
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') {
+                onSelect(null);
               }
-              event.preventDefault();
-            } else if (/^(?:Arrow)?Up$/.test(event.key)) {
-              if (highlightedIndex === null || highlightedIndex === 0) {
-                setHighlightedIndex(filteredSnippets.length - 1);
-              } else if (highlightedIndex > 0) {
-                setHighlightedIndex(highlightedIndex - 1);
-              }
-              event.preventDefault();
-            } else if (
-              !event.ctrlKey &&
-              !event.metaKey &&
-              !event.altKey &&
-              /^[a-z0-9!"#$%&'()*+,.\/:;<=>?@\[\] ^_`{|}~-]$/i.test(event.key)
-            ) {
-              setHighlightedIndex(0);
-            } else if (event.key === 'Enter' && highlightedIndex !== null) {
-              onSelect(filteredSnippets[highlightedIndex]);
-            } else if (event.key === 'Escape') {
-              onSelect(null);
-            }
-          }}
-        />
-      </div>
-      <ul
-        className={styles.snippetsContainer}
-        ref={listEl}
-        aria-label="Filtered snippets"
-      >
-        {filteredSnippets.map((snippet, index) => {
-          const isHighlighted = highlightedIndex === index;
-          return (
-            <li
-              ref={isHighlighted ? highlightedEl : undefined}
-              id={getSnippetId(snippet, index)}
-              key={`${snippet.group}_${snippet.name}_${index}`}
-              className={clsx(styles.snippet, {
-                [styles.highlight]: isHighlighted,
-              })}
-              onMouseMove={
-                !isHighlighted ? () => setHighlightedIndex(index) : undefined
-              }
-              onMouseDown={() => onSelect(filteredSnippets[index])}
-              title={getLabel(snippet)}
+            }}
+            className={styles.searchField}
+          />
+          {searchTerm ? (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => setSearchTerm('')}
+              className={styles.clearButton}
             >
-              <Stack space="none">
-                <Text size="large" weight="strong">
-                  {snippet.group}
-                </Text>
-                <Text size="large" tone="secondary">
-                  {snippet.name}
-                </Text>
-              </Stack>
-            </li>
-          );
-        })}
-      </ul>
+              <X size={16} aria-hidden="true" />
+            </button>
+          ) : null}
+        </div>
+        <SelectedPreviewEffect />
+        <Command.List
+          className={styles.snippetsContainer}
+          aria-label="Filtered snippets"
+        >
+          {snippets.map((snippet, index) => {
+            const value = `${snippet.group ? `${snippet.group} ` : ''}${
+              snippet.name
+            }`;
+            return (
+              <Command.Item
+                id={getSnippetId(snippet, index)}
+                key={`${snippet.group}_${snippet.name}_${index}`}
+                value={value}
+                onSelect={() => onSelect(snippet)}
+                onMouseMove={() => debouncedPreview(snippet)}
+                onFocus={() => debouncedPreview(snippet)}
+                title={getLabel(snippet)}
+                className={clsx(styles.snippet)}
+              >
+                <div className={styles.snippetRow}>
+                  {snippet.group ? <Text truncate>{snippet.group}</Text> : null}
+                  <Text tone={snippet.group ? 'secondary' : 'neutral'} truncate>
+                    {snippet.name}
+                  </Text>
+                </div>
+              </Command.Item>
+            );
+          })}
+        </Command.List>
+      </Command>
     </div>
   );
 };

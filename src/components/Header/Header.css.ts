@@ -1,10 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
 
-import {
-  minTouchableBeforePseudo,
-  sharedPopupStyles,
-} from '../../css/shared.css';
+import { minTouchableBeforePseudo } from '../../css/shared.css';
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
@@ -147,8 +144,6 @@ export const segmentedIconButton = style([
     borderLeft: segmentedControlBorder,
   },
 ]);
-
-export const sharePopup = sharedPopupStyles('small');
 
 export const copyLinkContainer = style({
   position: 'relative',

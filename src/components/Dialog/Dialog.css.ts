@@ -28,10 +28,12 @@ export const backdrop = style([
 ]);
 
 export const popup = style([
-  sharedPopupStyles('large'),
+  sharedPopupStyles,
   sprinkles({
     position: 'fixed',
     overflow: 'auto',
+    padding: 'xlarge',
+    borderRadius: 'large',
   }),
   {
     top: '50%',
