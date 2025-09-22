@@ -1,3 +1,4 @@
+import { Popover as BaseUIPopover } from '@base-ui-components/react';
 import clsx from 'clsx';
 import Fuse from 'fuse.js';
 import {
@@ -7,6 +8,7 @@ import {
   useMemo,
   useContext,
   type RefObject,
+  type ComponentProps,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -32,28 +34,21 @@ function getSnippetId(snippet: Snippet, index: number) {
 const fuse = new Fuse(snippets, {
   threshold: 0.3,
   keys: [
-    {
-      name: 'group',
-      weight: 2,
-    },
-    {
-      name: 'name',
-      weight: 1,
-    },
+    { name: 'group', weight: 2 },
+    { name: 'name', weight: 1 },
   ],
 });
 
-export default ({
-  onSelect,
-  searchRef,
-}: {
+type SnippetsContentProps = {
+  searchRef: RefObject<HTMLInputElement | null>;
   onSelect: (snippet: ReturnedSnippet) => void;
-  searchRef?: RefObject<HTMLInputElement | null>;
-}) => {
+};
+
+const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
+  const [, dispatch] = useContext(StoreContext);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [highlightedIndex, setHighlightedIndex] =
     useState<HighlightIndex>(null);
-  const [, dispatch] = useContext(StoreContext);
 
   const listEl = useRef<HTMLUListElement | null>(null);
   const highlightedEl = useRef<HTMLLIElement | null>(null);
@@ -67,10 +62,7 @@ export default ({
   );
 
   const debouncedPreview = useDebouncedCallback((snippet: ReturnedSnippet) => {
-    dispatch({
-      type: 'previewSnippet',
-      payload: { snippet },
-    });
+    dispatch({ type: 'previewSnippet', payload: { snippet } });
   }, 50);
 
   if (
@@ -80,7 +72,6 @@ export default ({
     const highlightedItem = document.getElementById(
       getSnippetId(filteredSnippets[highlightedIndex], highlightedIndex)
     );
-
     highlightedItem?.scrollIntoView({ block: 'nearest' });
   }
 
@@ -131,7 +122,6 @@ export default ({
               !event.altKey &&
               /^[a-z0-9!"#$%&'()*+,.\/:;<=>?@\[\] ^_`{|}~-]$/i.test(event.key)
             ) {
-              // reset index when character typed in field
               setHighlightedIndex(0);
             } else if (event.key === 'Enter' && highlightedIndex !== null) {
               onSelect(filteredSnippets[highlightedIndex]);
@@ -148,7 +138,6 @@ export default ({
       >
         {filteredSnippets.map((snippet, index) => {
           const isHighlighted = highlightedIndex === index;
-
           return (
             <li
               ref={isHighlighted ? highlightedEl : undefined}
@@ -176,5 +165,48 @@ export default ({
         })}
       </ul>
     </div>
+  );
+};
+
+type SnippetsProps = {
+  trigger: ComponentProps<typeof BaseUIPopover.Trigger>['render'];
+};
+
+export const Snippets = ({ trigger }: SnippetsProps) => {
+  const [{ snippetsOpen }, dispatch] = useContext(StoreContext);
+  const searchRef = useRef<HTMLInputElement | null>(null);
+
+  const handleSelect = (snippet: ReturnedSnippet) => {
+    if (snippet) {
+      dispatch({ type: 'persistSnippet', payload: { snippet } });
+    } else {
+      dispatch({ type: 'closeSnippets' });
+    }
+  };
+
+  return (
+    <BaseUIPopover.Root
+      open={snippetsOpen}
+      onOpenChange={(open) =>
+        dispatch({ type: open ? 'openSnippets' : 'closeSnippets' })
+      }
+    >
+      <BaseUIPopover.Trigger render={trigger} />
+      <BaseUIPopover.Portal>
+        <BaseUIPopover.Positioner
+          sideOffset={10}
+          side="top"
+          positionMethod="fixed"
+        >
+          <BaseUIPopover.Popup
+            className={clsx(styles.popup, styles.popupWidth)}
+            aria-label="Select a snippet"
+            initialFocus={searchRef}
+          >
+            <Content searchRef={searchRef} onSelect={handleSelect} />
+          </BaseUIPopover.Popup>
+        </BaseUIPopover.Positioner>
+      </BaseUIPopover.Portal>
+    </BaseUIPopover.Root>
   );
 };
