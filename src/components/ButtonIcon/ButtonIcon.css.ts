@@ -155,7 +155,8 @@ globalStyle(`${button} > svg`, {
 });
 
 export const popup = style([
-  sharedPopupStyles('small'),
+  sharedPopupStyles,
+  sprinkles({ padding: 'xsmall', borderRadius: 'medium' }),
   {
     backgroundColor: colorPaletteVars.background.dark,
   },
