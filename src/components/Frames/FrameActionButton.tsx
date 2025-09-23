@@ -4,44 +4,31 @@ import type { ComponentProps } from 'react';
 
 import { Text } from '../Text/Text';
 
-import * as styles from './ButtonIcon.css';
+import * as styles from './FrameActionButton.css';
 
-type TriggerNoStyles = Exclude<
-  ComponentProps<typeof Tooltip.Trigger>,
-  'style' | 'className'
->;
-
-interface Props extends TriggerNoStyles {
+interface FrameActionButtonProps
+  extends Omit<ComponentProps<typeof Tooltip.Trigger>, 'style' | 'className'> {
   icon: ComponentProps<typeof Tooltip.Trigger>['children'];
   label: string;
   size?: keyof typeof styles.size;
   tone?: keyof typeof styles.tone;
-  variant?: keyof typeof styles.variant;
 }
-export const ButtonIcon = ({
+
+// Todo - consolidate with ButtonIcon if possible
+export const FrameActionButton = ({
   icon,
   label,
   size = 'medium',
   tone = 'neutral',
-  variant = 'standard',
   ...restProps
-}: Props) => (
+}: FrameActionButtonProps) => (
   <Tooltip.Root>
     <Tooltip.Trigger
       {...restProps}
       aria-label={label}
-      className={clsx(styles.button, styles.variant[variant])}
+      className={clsx(styles.button, styles.size[size], styles.tone[tone])}
     >
-      <span
-        className={clsx(
-          styles.content,
-          styles.size[size],
-          styles.tone[tone],
-          styles.variant[variant]
-        )}
-      >
-        {icon}
-      </span>
+      {icon}
     </Tooltip.Trigger>
     <Tooltip.Portal>
       <Tooltip.Positioner sideOffset={12 /* vars.space.small */}>

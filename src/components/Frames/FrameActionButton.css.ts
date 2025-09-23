@@ -4,12 +4,11 @@ import {
   style,
   styleVariants,
 } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
-import {
-  minTouchableBeforePseudo,
-  sharedPopupStyles,
-} from '../../css/shared.css';
+import { sharedPopupStyles } from '../../css/shared.css';
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
 export const sizeVar = createVar();
 export const foreground = createVar();
@@ -21,43 +20,37 @@ export const button = style([
     userSelect: 'none',
     border: 0,
     appearance: 'none',
-    borderRadius: 'medium',
-  }),
-  {
-    background: 'transparent',
-    padding: 0,
-  },
-]);
-
-export const content = style([
-  sprinkles({
-    boxSizing: 'border-box',
-    margin: 'none',
-    userSelect: 'none',
-    border: 0,
-    appearance: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
     transition: 'fast',
-    padding: 'xsmall',
+    padding: 'none',
   }),
-  minTouchableBeforePseudo,
   {
-    borderRadius: 'inherit',
-    background: 'transparent',
-    outline: 'none',
+    position: 'relative',
+    backgroundColor: 'transparent',
+    borderRadius: vars.radii.small,
     color: foreground,
     isolation: 'isolate',
-    height: 'auto',
-    width: 'auto',
     selectors: {
       ['&[data-pressed], &:active']: {
         transform: 'scale(.95)',
       },
-      [`${button}:focus-visible &`]: {
-        outline: `2px solid ${colorPaletteVars.outline.focus}`,
+      ['&::after']: {
+        content: '',
+        position: 'absolute',
+        transition: vars.transition.fast,
+        zIndex: -1,
+        inset: calc(vars.space.xxsmall).negate().toString(),
+        backgroundColor: foreground,
+        borderRadius: vars.radii.small,
+        pointerEvents: 'none',
+      },
+      [`&:not(:hover, :focus-visible, [data-popup-open])::after`]: {
+        opacity: 0,
+      },
+      ['&:hover, &:focus-visible, &[data-popup-open]']: {
+        color: colorPaletteVars.foreground.neutralInverted,
       },
     },
   },
@@ -99,32 +92,7 @@ export const tone = styleVariants({
   },
 });
 
-export const variant = styleVariants({
-  standard: [
-    {
-      backgroundColor: colorPaletteVars.background.floating,
-      outline: `1px solid ${colorPaletteVars.border.standard}`,
-      selectors: {
-        ['&:hover']: {
-          backgroundColor: colorPaletteVars.background.selection,
-        },
-      },
-    },
-  ],
-  solid: [
-    {
-      color: colorPaletteVars.foreground.neutralInverted,
-      backgroundColor: colorPaletteVars.background.secondaryAccent,
-      selectors: {
-        ['&:hover']: {
-          backgroundColor: colorPaletteVars.background.secondaryAccentLight,
-        },
-      },
-    },
-  ],
-});
-
-globalStyle(`${content} > svg`, {
+globalStyle(`${button} > svg`, {
   display: 'block',
   height: sizeVar,
   width: sizeVar,
@@ -137,3 +105,11 @@ export const popup = style([
     backgroundColor: colorPaletteVars.background.dark,
   },
 ]);
+
+globalStyle(`${button} > svg`, {
+  display: 'block',
+  height: sizeVar,
+  width: sizeVar,
+  position: 'relative',
+  zIndex: 1,
+});

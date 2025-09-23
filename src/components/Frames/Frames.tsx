@@ -24,13 +24,13 @@ import { StoreContext } from '../../contexts/StoreContext';
 import { compileJsx } from '../../utils/compileJsx';
 import { useCopy } from '../../utils/useCopy';
 import usePreviewUrl from '../../utils/usePreviewUrl';
-import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { ReceiveErrorMessage } from '../Frame/frameMessaging';
 import { Menu, MenuItem } from '../Menu/Menu';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 import TickIcon from '../icons/TickIcon';
 
+import { FrameActionButton } from './FrameActionButton';
 import Iframe from './Iframe';
 import frameSrc from './frameSrc';
 
@@ -113,28 +113,25 @@ const Frame = ({
         )}
         <Tooltip.Provider>
           <div className={styles.frameActionsContainer}>
-            <ButtonIcon
+            <FrameActionButton
               size="small"
               tone={copying ? 'positive' : 'accent'}
-              variant="transparent"
               icon={copying ? <TickIcon /> : <Link />}
               label={copying ? 'Copied' : 'Copy preview link'}
               onClick={() => (!copying ? onCopyClick(previewUrl) : undefined)}
             />
-            <ButtonIcon
+            <FrameActionButton
               size="small"
               tone="accent"
-              variant="transparent"
               icon={<ExternalLink />}
               label="Open preview"
               onClick={() => {
                 window.open(previewUrl, '_blank', 'noopener,noreferrer');
               }}
             />
-            <ButtonIcon
+            <FrameActionButton
               size="small"
               tone="accent"
-              variant="transparent"
               icon={<Fullscreen />}
               label="Undock"
               onClick={() => {
@@ -146,7 +143,7 @@ const Frame = ({
                   previewUrl,
                   '_blank',
                   [
-                    `popup=${Boolean(width)}`, // popup if not `Fit to window`
+                    `popup=${Boolean(width)}`,
                     `width=${width}`,
                     `height=${height}`,
                     `left=${width ? screen.availWidth / 2 - width / 2 : ''}`,
@@ -165,10 +162,9 @@ const Frame = ({
               onOpenChange={setFrameActive}
               width="content"
               trigger={
-                <ButtonIcon
+                <FrameActionButton
                   size="small"
                   tone="accent"
-                  variant="transparent"
                   icon={<Camera />}
                   label="Screenshot"
                 />
