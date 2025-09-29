@@ -33,9 +33,7 @@ export const FrameActionButton = ({
     <Tooltip.Portal>
       <Tooltip.Positioner sideOffset={12 /* vars.space.small */}>
         <Tooltip.Popup className={styles.popup}>
-          <Text tone="light" size="small">
-            {label}
-          </Text>
+          <Text size="small">{label}</Text>
         </Tooltip.Popup>
       </Tooltip.Positioner>
     </Tooltip.Portal>

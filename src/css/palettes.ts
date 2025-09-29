@@ -81,7 +81,7 @@ export const light = {
     critical: originalPalette.red3,
     accent: originalPalette.blue2,
     positive: originalPalette.green2,
-    light: originalPalette.white,
+    tooltip: originalPalette.white,
   },
   background: {
     transparent: 'rgb(0, 0, 0, .05)',
@@ -95,7 +95,7 @@ export const light = {
     surface: originalPalette.gray0,
     body: darken(0.015, originalPalette.gray0),
     selection: originalPalette.gray2,
-    dark: originalPalette.gray7,
+    tooltip: originalPalette.gray7,
   },
   border: {
     standard: '#e2e2e2',
@@ -195,7 +195,7 @@ export const dark = {
     critical: seekPalette.red[400],
     accent: seekPalette.blue[400],
     positive: seekPalette.mint[500],
-    light: originalPalette.white,
+    tooltip: originalPalette.white,
   },
   background: {
     transparent: 'rgb(255, 255, 255, .07)',
@@ -209,7 +209,7 @@ export const dark = {
     surface: baseDarkSurfaceColor,
     body: darken(0.03, baseDarkSurfaceColor),
     selection: darken(0.1, baseDarkSurfaceColor),
-    dark: originalPalette.black,
+    tooltip: originalPalette.black,
   },
   border: {
     standard: lighten(0.12, baseDarkSurfaceColor),

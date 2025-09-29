@@ -134,6 +134,10 @@ export const popup = style([
   sharedPopupStyles,
   sprinkles({ padding: 'xsmall', borderRadius: 'medium' }),
   {
-    backgroundColor: colorPaletteVars.background.dark,
+    backgroundColor: colorPaletteVars.background.tooltip,
+    vars: {
+      [colorPaletteVars.foreground.neutral]:
+        colorPaletteVars.foreground.tooltip,
+    },
   },
 ]);
