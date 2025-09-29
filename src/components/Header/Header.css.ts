@@ -32,6 +32,11 @@ export const actionsContainer = style([
   {
     width: 'fit-content',
     justifySelf: 'flex-end',
+    '@media': {
+      ['screen and (max-width: 767px)']: {
+        display: 'none',
+      },
+    },
   },
 ]);
 
