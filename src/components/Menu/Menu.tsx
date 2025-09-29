@@ -244,7 +244,11 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
             <MenuTrigger ref={triggerRef} render={trigger} />
           </SubMenuTriggerContext.Provider>
           <BaseUIMenu.Portal>
-            <BaseUIMenu.Positioner align={align} sideOffset={isSubMenu ? 0 : 6}>
+            <BaseUIMenu.Positioner
+              align={align}
+              alignOffset={isSubMenu ? -4 : 0}
+              sideOffset={isSubMenu ? 0 : 6}
+            >
               <BaseUIMenu.Popup
                 className={clsx({
                   [styles.popup]: true,
