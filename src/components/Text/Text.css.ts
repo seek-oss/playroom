@@ -22,10 +22,6 @@ export const positive = style({
   color: colorPaletteVars.foreground.positive,
 });
 
-export const light = style({
-  color: colorPaletteVars.foreground.light,
-});
-
 export const xsmall = sprinkles({
   font: 'xsmall',
 });
