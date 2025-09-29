@@ -28,6 +28,7 @@ export const item = style([
     padding: 'xsmall',
   }),
   {
+    outline: 'none',
     color: colorPaletteVars.foreground.neutral,
     '::before': {
       content: '',
@@ -46,6 +47,9 @@ export const item = style([
         '&[data-highlighted]:not([aria-disabled])::before'
       )]: {
         backgroundColor: highlightColor,
+      },
+      [`&:focus-visible::before`]: {
+        outline: `2px solid ${colorPaletteVars.outline.focus}`,
       },
       [`&[aria-disabled]`]: {
         color: colorPaletteVars.foreground.secondary,
