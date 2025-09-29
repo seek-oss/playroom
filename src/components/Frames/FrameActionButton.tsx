@@ -22,7 +22,7 @@ export const FrameActionButton = ({
   tone = 'neutral',
   ...restProps
 }: FrameActionButtonProps) => (
-  <Tooltip.Root>
+  <Tooltip.Root delay={0}>
     <Tooltip.Trigger
       {...restProps}
       aria-label={label}

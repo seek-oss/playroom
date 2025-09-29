@@ -39,7 +39,7 @@ export const button = style([
       ['&::after']: {
         content: '',
         position: 'absolute',
-        transition: vars.transition.fast,
+        transition: 'transform 100ms ease',
         zIndex: -1,
         inset: calc(vars.space.xxsmall).negate().toString(),
         backgroundColor: foreground,
