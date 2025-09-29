@@ -129,33 +129,35 @@ const Frame = ({
                 window.open(previewUrl, '_blank', 'noopener,noreferrer');
               }}
             />
-            <FrameActionButton
-              size="small"
-              tone="accent"
-              icon={<Fullscreen />}
-              label="Undock"
-              onClick={() => {
-                const width =
-                  frame.width === 'Fit to window' ? '' : frame.width;
-                const height = iframeRef.current?.offsetHeight;
+            {frame.width !== 'Fit to window' ? (
+              <FrameActionButton
+                size="small"
+                tone="accent"
+                icon={<Fullscreen />}
+                label="Undock"
+                onClick={() => {
+                  const width =
+                    frame.width === 'Fit to window' ? '' : frame.width;
+                  const height = iframeRef.current?.offsetHeight;
 
-                window.open(
-                  previewUrl,
-                  '_blank',
-                  [
-                    `popup=${Boolean(width)}`,
-                    `width=${width}`,
-                    `height=${height}`,
-                    `left=${width ? screen.availWidth / 2 - width / 2 : ''}`,
-                    `top=${
-                      height ? screen.availHeight / 2 - height * 0.75 : ''
-                    }`,
-                    'noopener',
-                    'noreferrer',
-                  ].join(',')
-                );
-              }}
-            />
+                  window.open(
+                    previewUrl,
+                    '_blank',
+                    [
+                      `popup=true`,
+                      `width=${width}`,
+                      `height=${height}`,
+                      `left=${width ? screen.availWidth / 2 - width / 2 : ''}`,
+                      `top=${
+                        height ? screen.availHeight / 2 - height * 0.75 : ''
+                      }`,
+                      'noopener',
+                      'noreferrer',
+                    ].join(',')
+                  );
+                }}
+              />
+            ) : null}
 
             <Menu
               align="end"
