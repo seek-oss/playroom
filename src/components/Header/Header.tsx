@@ -189,13 +189,10 @@ const FramesMenu = () => {
 
 const ShareMenu = () => {
   const [{ code, title, editorHidden }] = useContext(StoreContext);
-  const { onCopyClick } = useCopy();
 
   return (
     <>
-      <MenuCopyItem onCopy={() => onCopyClick(window.location.href)}>
-        Playroom link
-      </MenuCopyItem>
+      <MenuCopyItem content={window.location.href}>Playroom link</MenuCopyItem>
       {themesEnabled ? (
         <>
           <MenuSeparator />
@@ -214,10 +211,7 @@ const ShareMenu = () => {
               });
 
               return (
-                <MenuCopyItem
-                  key={theme}
-                  onCopy={() => onCopyClick(previewUrl)}
-                >
+                <MenuCopyItem key={theme} content={previewUrl}>
                   {theme}
                 </MenuCopyItem>
               );
@@ -226,19 +220,15 @@ const ShareMenu = () => {
         </>
       ) : (
         <MenuCopyItem
-          onCopy={() => {
-            const baseUrl = window.location.href
+          content={createPreviewUrl({
+            baseUrl: window.location.href
               .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
-              .split('index.html')[0];
-            const previewUrl = createPreviewUrl({
-              baseUrl,
-              code,
-              paramType: playroomConfig.paramType,
-              title,
-              editorHidden,
-            });
-            onCopyClick(previewUrl);
-          }}
+              .split('index.html')[0],
+            code,
+            paramType: playroomConfig.paramType,
+            title,
+            editorHidden,
+          })}
         >
           Preview link
         </MenuCopyItem>
