@@ -8,11 +8,10 @@ import {
   createContext,
   forwardRef,
   useContext,
-  useEffect,
-  useState,
 } from 'react';
 
 import { isMac } from '../../utils/formatting';
+import { useCopy } from '../../utils/useCopy';
 import { Text } from '../Text/Text';
 import ChevronIcon from '../icons/ChevronIcon';
 import TickIcon from '../icons/TickIcon';
@@ -266,39 +265,21 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
 );
 
 type MenuCopyItemProps = {
-  onCopy: () => void;
+  content: string;
   children: ReactNode;
-  resetMs?: number;
 };
 
-export const MenuCopyItem = ({
-  onCopy,
-  children,
-  resetMs = 1200,
-}: MenuCopyItemProps) => {
-  const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    if (!copied) {
-      return;
-    }
-
-    const timer = setTimeout(() => setCopied(false), resetMs);
-
-    return () => clearTimeout(timer);
-  }, [copied, resetMs]);
+export const MenuCopyItem = ({ content, children }: MenuCopyItemProps) => {
+  const { copying, onCopyClick } = useCopy();
 
   return (
     <BaseUIMenu.Item
-      className={clsx({ [styles.item]: true, [styles.positive]: copied })}
+      className={clsx({ [styles.item]: true, [styles.positive]: copying })}
       closeOnClick={false}
-      onClick={() => {
-        onCopy();
-        setCopied(true);
-      }}
+      onClick={() => onCopyClick(content)}
     >
       <span className={styles.itemLeft}>
-        {copied ? (
+        {copying ? (
           <>
             <TickIcon size={menuIconSize} />
             <Text tone="positive">Copied</Text>
