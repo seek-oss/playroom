@@ -26,7 +26,7 @@ export const ButtonIcon = ({
   variant = 'standard',
   ...restProps
 }: Props) => (
-  <Tooltip.Root>
+  <Tooltip.Root delay={0}>
     <Tooltip.Trigger
       {...restProps}
       aria-label={label}
