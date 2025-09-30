@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   release:
     name: Publish to npm
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     env:
       CI: true
@@ -25,8 +27,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'pnpm'
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
 
       - name: Install Dependencies
         run: pnpm i
@@ -38,4 +40,36 @@ jobs:
           publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.SEEK_OSS_CI_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  snapshot:
+    name: Publish snapshot version
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          # This makes Actions fetch all Git history for semantic-release
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Publish
+        uses: seek-oss/changesets-snapshot@v0
+        with:
+          pre-publish: pnpm package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
