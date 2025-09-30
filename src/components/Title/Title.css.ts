@@ -7,7 +7,7 @@ export const textField = style([
     font: 'standard',
     fontWeight: 'strong',
     boxSizing: 'border-box',
-    borderRadius: 'small',
+    borderRadius: 'medium',
     textAlign: 'center',
     border: 0,
   }),
@@ -27,7 +27,7 @@ export const textField = style([
         background: colorPaletteVars.background.selection,
       },
       '&:focus-visible': {
-        borderColor: colorPaletteVars.background.accent,
+        outline: `2px solid ${colorPaletteVars.outline.focus}`,
       },
       '&:focus-visible::placeholder': {
         color: 'transparent',
