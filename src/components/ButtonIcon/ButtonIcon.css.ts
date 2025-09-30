@@ -5,6 +5,8 @@ import {
   styleVariants,
 } from '@vanilla-extract/css';
 
+import { comma } from '../../css/delimiters';
+
 import {
   minTouchableBeforePseudo,
   sharedPopupStyles,
@@ -105,7 +107,7 @@ export const variant = styleVariants({
       backgroundColor: colorPaletteVars.background.floating,
       outline: `1px solid ${colorPaletteVars.border.standard}`,
       selectors: {
-        ['&:hover']: {
+        [comma('&:hover', '[data-popup-open] > &')]: {
           backgroundColor: colorPaletteVars.background.selection,
         },
       },
@@ -116,7 +118,7 @@ export const variant = styleVariants({
       color: colorPaletteVars.foreground.neutralInverted,
       backgroundColor: colorPaletteVars.background.secondaryAccent,
       selectors: {
-        ['&:hover']: {
+        [comma('&:hover', '[data-popup-open] > &')]: {
           backgroundColor: colorPaletteVars.background.secondaryAccentLight,
         },
       },

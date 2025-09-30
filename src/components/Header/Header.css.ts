@@ -1,6 +1,8 @@
 import { style } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
 
+import { comma } from '../../css/delimiters';
+
 import { minTouchableBeforePseudo } from '../../css/shared.css';
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
@@ -120,12 +122,12 @@ const segmentedButtonBase = style([
     outline: 'none',
     color: colorPaletteVars.foreground.neutral,
     selectors: {
-      ['&:hover']: {
+      [comma('&:hover', '&[data-popup-open]')]: {
         backgroundColor: colorPaletteVars.background.selection,
       },
       ['&:focus-visible']: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
-        outlineOffset: -2,
+        zIndex: 1,
       },
     },
   },
