@@ -33,6 +33,10 @@ jobs:
       - name: Install Dependencies
         run: pnpm i
 
+      # Ensure npm 11.5.1 or later is installed
+      - name: Install latest npm
+        run: npm install -g npm@latest
+
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1
         with:
@@ -66,6 +70,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm i
+
+      # Ensure npm 11.5.1 or later is installed
+      - name: Install latest npm
+        run: npm install -g npm@latest
 
       - name: Publish
         uses: seek-oss/changesets-snapshot@v0
