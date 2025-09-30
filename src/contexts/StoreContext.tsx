@@ -533,7 +533,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         const selectedWidths = widthsFromUrl || storedSelectedWidths;
         const selectedThemes = themesFromUrl || storedSelectedThemes;
         const storedPlayroomValues = Object.entries(storedPlayrooms || {});
-        let id = '';
+        let id = code || title ? createPlayroomId() : '';
 
         // If the playroom from the URL matches a storage entry,
         // assume same id to enable updating to handle refresh case.
