@@ -16,11 +16,12 @@ import {
   CopyPlus,
   FolderOpen,
   LayoutPanelLeft,
-  EyeOff,
   Link as LinkIcon,
   Smartphone,
   Tablet,
   Maximize,
+  Square,
+  SunMoon,
 } from 'lucide-react';
 import { useContext, useEffect, useRef, useState } from 'react';
 
@@ -387,7 +388,7 @@ const HeaderMenu = () => {
               <MenuRadioItem icon={PanelBottom} value="horizontal">
                 Bottom
               </MenuRadioItem>
-              <MenuRadioItem icon={EyeOff} value="hidden">
+              <MenuRadioItem icon={Square} value="hidden">
                 Hidden
               </MenuRadioItem>
             </MenuRadioGroup>
@@ -395,7 +396,7 @@ const HeaderMenu = () => {
         </Menu>
 
         <Menu
-          trigger={<MenuItem icon={Monitor}>Appearance</MenuItem>}
+          trigger={<MenuItem icon={SunMoon}>Appearance</MenuItem>}
           width="small"
         >
           <MenuRadioGroup
