@@ -406,7 +406,7 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         id,
         code,
-        title,
+        title: title || '',
         selectedWidths:
           selectedWidths && selectedWidths?.length > 0
             ? selectedWidths
