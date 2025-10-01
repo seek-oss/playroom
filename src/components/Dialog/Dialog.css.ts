@@ -34,11 +34,13 @@ export const popup = style([
     overflow: 'auto',
     padding: 'xlarge',
     borderRadius: 'large',
+    transition: 'fast',
   }),
   {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
+    opacity: 1,
     maxWidth: calc('100dvw')
       .subtract(calc(vars.space.small).multiply(2))
       .toString(),
@@ -47,7 +49,8 @@ export const popup = style([
       .toString(),
     selectors: {
       [comma('&[data-starting-style]', '&[data-ending-style]')]: {
-        transform: 'translate(-50%, -50%) scale(0.9)',
+        transform: 'translate(-50%, -50%) scale(0.98)',
+        opacity: 0,
       },
     },
   },
