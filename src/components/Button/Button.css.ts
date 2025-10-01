@@ -40,7 +40,7 @@ export const base = style([
       [highlightColor]: 'currentColor',
     },
     color: highlightColor,
-    border: `1px solid ${colorPaletteVars.foreground.neutralSoft}`,
+    border: `1px solid ${colorPaletteVars.border.standard}`,
     ':hover': {
       vars: {
         [highlightColor]: colorPaletteVars.foreground.accent,

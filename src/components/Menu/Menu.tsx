@@ -281,8 +281,8 @@ export const MenuCopyItem = ({ content, children }: MenuCopyItemProps) => {
       <span className={styles.itemLeft}>
         {copying ? (
           <>
-            <TickIcon size={menuIconSize} />
             <Text tone="positive">Copied</Text>
+            <TickIcon size={menuIconSize} />
           </>
         ) : (
           <>{children}</>

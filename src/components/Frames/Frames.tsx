@@ -7,8 +7,8 @@ import {
   ClipboardCopy,
   Download,
   ExternalLink,
-  Fullscreen,
   Link,
+  PictureInPicture2,
 } from 'lucide-react';
 import {
   type ReactNode,
@@ -104,7 +104,7 @@ const Frame = ({
             <Highlight>{frame.widthName}</Highlight>
           </Text>
         ) : (
-          <Text>
+          <Text tone="secondary">
             <Highlight>
               <Strong>{frame.theme}</Strong>
               {` \u2013 ${frame.widthName}`}
@@ -133,8 +133,8 @@ const Frame = ({
               <FrameActionButton
                 size="small"
                 tone="accent"
-                icon={<Fullscreen />}
-                label="Undock"
+                icon={<PictureInPicture2 />}
+                label="Open standalone"
                 onClick={() => {
                   const width =
                     frame.width === 'Fit to window' ? '' : frame.width;

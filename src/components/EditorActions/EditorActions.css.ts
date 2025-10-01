@@ -8,6 +8,7 @@ export const root = style([
     gap: 'xsmall',
     padding: 'xxsmall',
     borderRadius: 'medium',
+    boxShadow: 'small',
   }),
   {
     backgroundColor: colorPaletteVars.background.floating,

@@ -26,7 +26,7 @@ export const header = style([
     padding: 'small',
   }),
   {
-    borderBottom: `1px solid ${colorPaletteVars.foreground.neutralSoft}`,
+    borderBottom: `1px solid ${colorPaletteVars.border.standard}`,
     gap: 12,
   },
 ]);

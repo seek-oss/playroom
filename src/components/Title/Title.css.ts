@@ -9,15 +9,14 @@ export const textField = style([
     boxSizing: 'border-box',
     borderRadius: 'medium',
     textAlign: 'center',
+    padding: 'xsmall',
     border: 0,
   }),
   {
     outline: 'none',
     width: 250,
-    height: 40,
     color: colorPaletteVars.foreground.neutral,
     background: 'transparent',
-    border: '2px solid transparent',
     '::placeholder': {
       color: colorPaletteVars.foreground.secondary,
       fontWeight: 'normal',

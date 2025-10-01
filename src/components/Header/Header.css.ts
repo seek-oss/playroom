@@ -52,7 +52,7 @@ export const menuButton = style([
   }),
   minTouchableBeforePseudo,
   {
-    color: colorPaletteVars.foreground.neutral,
+    color: colorPaletteVars.background.secondaryAccent,
     isolation: 'isolate',
     '::after': {
       content: '',
@@ -75,11 +75,14 @@ export const menuButton = style([
   },
 ]);
 
+const dialogScrollContentGutter = 'small';
 export const openDialogContent = style([
   sprinkles({
     overflow: 'auto',
+    padding: dialogScrollContentGutter,
   }),
   {
+    margin: calc(vars.space[dialogScrollContentGutter]).negate().toString(),
     height: '60vh',
     maxHeight: '700px',
     width: '60vw',
@@ -98,8 +101,7 @@ export const segmentedGroup = style([
   }),
   {
     border: segmentedControlBorder,
-    overflow: 'hidden',
-    background: colorPaletteVars.background.floating,
+    background: colorPaletteVars.background.surface,
   },
 ]);
 
@@ -113,6 +115,7 @@ const segmentedButtonBase = style([
     cursor: 'pointer',
     transition: 'fast',
     borderRadius: segmentedButtonRadius,
+    userSelect: 'none',
   }),
   minTouchableBeforePseudo,
   {
