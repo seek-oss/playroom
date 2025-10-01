@@ -4,6 +4,7 @@ import type { LucideIcon } from 'lucide-react';
 import type { ComponentProps } from 'react';
 
 import { menuIconSize } from '../Menu/Menu';
+import { Text } from '../Text/Text';
 
 import * as styles from '../Menu/Menu.css';
 
@@ -33,7 +34,7 @@ export const ContextMenuItem = ({
   >
     <span className={styles.itemLeft}>
       {Icon ? <Icon size={menuIconSize} /> : null}
-      {children}
+      <Text tone={tone}>{children}</Text>
     </span>
   </BaseUIContextMenu.Item>
 );

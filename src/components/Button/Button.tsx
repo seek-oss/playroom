@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import type { AllHTMLAttributes, ElementType } from 'react';
 
+import { Text } from '../Text/Text';
+
 import * as styles from './Button.css';
 
 interface BaseProps {
@@ -33,6 +35,8 @@ export const Button = ({
     disabled={tone === 'positive'}
     {...props}
   >
-    {children}
+    <Text weight="strong" tone={tone}>
+      {children}
+    </Text>
   </ButtonComponent>
 );

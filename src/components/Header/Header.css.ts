@@ -130,6 +130,7 @@ const segmentedButtonBase = style([
     border: 0,
     outline: 'none',
     color: colorPaletteVars.foreground.neutral,
+    height: 32,
     selectors: {
       [comma('&:hover', '&[data-popup-open]')]: {
         backgroundColor: colorPaletteVars.background.selection,
@@ -160,15 +161,6 @@ export const segmentedIconButton = style([
     borderLeft: segmentedControlBorder,
   },
 ]);
-
-export const copyLinkContainer = style({
-  position: 'relative',
-});
-
-export const copyLinkTextHidden = style({
-  opacity: 0,
-  userSelect: 'none',
-});
 
 export const copyLinkSuccess = style([
   sprinkles({

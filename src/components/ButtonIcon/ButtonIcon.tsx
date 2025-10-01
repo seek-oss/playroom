@@ -17,6 +17,7 @@ interface Props extends TriggerNoStyles {
   size?: keyof typeof styles.size;
   tone?: keyof typeof styles.tone;
   variant?: keyof typeof styles.variant;
+  bleed?: boolean;
 }
 export const ButtonIcon = ({
   icon,
@@ -24,13 +25,18 @@ export const ButtonIcon = ({
   size = 'small',
   tone = 'neutral',
   variant = 'standard',
+  bleed,
   ...restProps
 }: Props) => (
   <Tooltip.Root delay={0}>
     <Tooltip.Trigger
       {...restProps}
       aria-label={label}
-      className={clsx(styles.button, styles.variant[variant])}
+      className={clsx({
+        [styles.button]: true,
+        [styles.variant[variant]]: true,
+        [styles.bleed]: bleed,
+      })}
     >
       <span
         className={clsx(
@@ -44,7 +50,7 @@ export const ButtonIcon = ({
       </span>
     </Tooltip.Trigger>
     <Tooltip.Portal>
-      <Tooltip.Positioner sideOffset={12 /* vars.space.small */}>
+      <Tooltip.Positioner sideOffset={8 /* vars.space.xsmall */}>
         <Tooltip.Popup className={styles.popup}>
           <Text size="small" weight="strong">
             {label}
