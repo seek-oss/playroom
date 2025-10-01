@@ -22,7 +22,6 @@ export const message = style([
     marginInline: 'auto',
     width: 'fit-content',
     maxWidth: '80ex',
-    color: dark.foreground.neutral,
     background: light.foreground.critical,
     boxShadow: `0 2px 10px -2px ${light.foreground.critical}`,
     wordBreak: 'break-word',
@@ -47,13 +46,15 @@ export const delay = style({
 
 export const size = {
   small: sprinkles({
-    font: 'small',
     padding: 'xsmall',
     borderRadius: 'small',
   }),
   large: sprinkles({
-    font: 'large',
     padding: 'medium',
     borderRadius: 'medium',
   }),
 };
+
+export const invertText = style({
+  color: dark.foreground.neutral,
+});

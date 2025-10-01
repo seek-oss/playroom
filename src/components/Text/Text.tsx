@@ -12,6 +12,10 @@ interface Props {
   children: ReactNode;
 }
 
+export const Truncate = ({ children }: { children: ReactNode }) => (
+  <span className={styles.truncate}>{children}</span>
+);
+
 export const Text = ({
   as: component = 'span',
   size = 'standard',
@@ -23,10 +27,9 @@ export const Text = ({
   React.createElement(
     component,
     {
-      className: clsx(styles.base, styles[size], styles[tone], {
+      className: clsx(styles.base, styles.size[size], styles[tone], {
         [styles.strong]: weight === 'strong',
-        [styles.truncate]: truncate,
       }),
     },
-    children
+    truncate ? <Truncate>{children}</Truncate> : children
   );

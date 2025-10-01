@@ -4,7 +4,7 @@ import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 
 export const root = style([
   sprinkles({
-    padding: 'xsmall',
+    padding: 'small',
     borderRadius: 'medium',
   }),
   {

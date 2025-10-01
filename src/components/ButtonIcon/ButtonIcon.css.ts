@@ -4,6 +4,7 @@ import {
   style,
   styleVariants,
 } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
 import { comma } from '../../css/delimiters';
 
@@ -12,6 +13,7 @@ import {
   sharedPopupStyles,
 } from '../../css/shared.css';
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
 export const sizeVar = createVar();
 export const foreground = createVar();
@@ -31,6 +33,8 @@ export const button = style([
   },
 ]);
 
+const padding = 'xsmall';
+
 export const content = style([
   sprinkles({
     boxSizing: 'border-box',
@@ -43,7 +47,7 @@ export const content = style([
     justifyContent: 'center',
     position: 'relative',
     transition: 'fast',
-    padding: 'xsmall',
+    padding,
   }),
   minTouchableBeforePseudo,
   {
@@ -124,6 +128,20 @@ export const variant = styleVariants({
       },
     },
   ],
+  transparent: [
+    {
+      selectors: {
+        [comma('&:hover', '[data-popup-open] > &')]: {
+          backgroundColor: colorPaletteVars.background.selection,
+        },
+      },
+    },
+  ],
+});
+
+const viewboxGutter = '2px';
+export const bleed = style({
+  margin: calc(vars.space[padding]).add(viewboxGutter).negate().toString(),
 });
 
 globalStyle(`${content} > svg`, {

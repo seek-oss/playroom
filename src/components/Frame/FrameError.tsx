@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
+import { Text } from '../Text/Text';
+
 import * as styles from './FrameError.css';
 
 export const FrameError = ({
@@ -21,6 +23,8 @@ export const FrameError = ({
       [styles.delay]: delayVisibility,
     })}
   >
-    {message}
+    <Text size={size}>
+      <span className={styles.invertText}>{message}</span>
+    </Text>
   </div>
 );

@@ -24,12 +24,13 @@ export const item = style([
     justifyContent: 'space-between',
     position: 'relative',
     userSelect: 'none',
-    font: 'standard',
+    boxSizing: 'border-box',
     padding: 'xsmall',
   }),
   {
     outline: 'none',
     color: colorPaletteVars.foreground.neutral,
+    height: 34, // Explicit height until icons are vertically trimmed
     '::before': {
       content: '',
       pointerEvents: 'none',
@@ -171,12 +172,7 @@ export const checkboxBox = style([
   },
 ]);
 
-export const menuGroupLabel = style([
-  item,
-  sprinkles({
-    fontWeight: 'strong',
-  }),
-]);
+export const menuGroupLabel = style([item]);
 
 export const separator = style([
   sprinkles({

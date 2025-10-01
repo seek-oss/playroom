@@ -30,14 +30,12 @@ export const base = style([
   sprinkles({
     borderRadius: 'medium',
     overflow: 'hidden',
-    paddingY: 'xsmall',
-    paddingX: 'small',
+    padding: 'small',
     font: 'standard',
     transition: 'fast',
   }),
   minTouchableBeforePseudo,
   {
-    color: colorPaletteVars.foreground.neutral,
     border: `1px solid ${colorPaletteVars.border.standard}`,
     backgroundColor: colorPaletteVars.background.surface,
     isolation: 'isolate',
@@ -72,7 +70,6 @@ export const base = style([
 
 export const tone = {
   positive: style({
-    color: colorPaletteVars.foreground.positive,
     borderColor: colorPaletteVars.foreground.positive,
     selectors: {
       ['&::after']: {
@@ -81,7 +78,6 @@ export const tone = {
     },
   }),
   critical: style({
-    color: colorPaletteVars.foreground.critical,
     borderColor: colorPaletteVars.foreground.critical,
     selectors: {
       ['&::after']: {

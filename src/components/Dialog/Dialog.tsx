@@ -42,22 +42,31 @@ export const Dialog = ({
           aria-labelledby={titleId}
           finalFocus={finalFocus}
         >
-          <Stack space="large">
+          <Stack space="xlarge">
             <Box
               display="flex"
               justifyContent="space-between"
-              alignItems="center"
               gap="small"
               flexGrow={1}
             >
               <Heading level="3">
-                <span ref={headingRef} tabIndex={-1} id={titleId}>
+                <span
+                  ref={headingRef}
+                  tabIndex={-1}
+                  id={titleId}
+                  className={styles.titleOutline}
+                >
                   {title}
                 </span>
               </Heading>
               <BaseUIDialog.Close
                 render={
-                  <ButtonIcon icon={<DismissIcon />} label="Close" />
+                  <ButtonIcon
+                    bleed
+                    variant="transparent"
+                    icon={<DismissIcon />}
+                    label="Close"
+                  />
                 }
               />
             </Box>

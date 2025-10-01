@@ -4,7 +4,7 @@ import { calc } from '@vanilla-extract/css-utils';
 import { comma } from '../../css/delimiters';
 
 import { sharedPopupStyles } from '../../css/shared.css';
-import { sprinkles } from '../../css/sprinkles.css';
+import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
 export const backdrop = style([
@@ -52,6 +52,18 @@ export const popup = style([
         transform: 'translate(-50%, -50%) scale(0.98)',
         opacity: 0,
       },
+    },
+  },
+]);
+
+export const titleOutline = style([
+  sprinkles({
+    borderRadius: 'small',
+  }),
+  {
+    ':focus-visible': {
+      outline: `2px solid ${colorPaletteVars.outline.focus}`,
+      outlineOffset: 2,
     },
   },
 ]);

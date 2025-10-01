@@ -46,7 +46,7 @@ export const PreviewTiles = ({ onSelect }: { onSelect: () => void }) => {
   );
 
   return sortedPlayroomEntries.length === 0 ? (
-    <Stack space="medium">
+    <Stack space="large">
       <Text size="large">No saved Playrooms available.</Text>
       <Text size="large">
         Playrooms are automatically saved and stored locally in your browser.
@@ -124,26 +124,28 @@ export const PreviewTiles = ({ onSelect }: { onSelect: () => void }) => {
         onOpenChange={() => setConfirmDeleteId(null)}
         finalFocus={listRef}
       >
-        <Text>Are you sure you want to delete this playroom?</Text>
-        <Box display="flex" gap="small">
-          <Button onClick={() => setConfirmDeleteId(null)}>Cancel</Button>
-          <Button
-            tone="critical"
-            onClick={() => {
-              if (confirmDeleteId) {
-                dispatch({
-                  type: 'deletePlayroom',
-                  payload: {
-                    id: confirmDeleteId,
-                  },
-                });
-              }
-              setConfirmDeleteId(null);
-            }}
-          >
-            Delete
-          </Button>
-        </Box>
+        <Stack space="xxlarge">
+          <Text>Are you sure you want to delete this playroom?</Text>
+          <Box display="flex" gap="small">
+            <Button onClick={() => setConfirmDeleteId(null)}>Cancel</Button>
+            <Button
+              tone="critical"
+              onClick={() => {
+                if (confirmDeleteId) {
+                  dispatch({
+                    type: 'deletePlayroom',
+                    payload: {
+                      id: confirmDeleteId,
+                    },
+                  });
+                }
+                setConfirmDeleteId(null);
+              }}
+            >
+              Delete
+            </Button>
+          </Box>
+        </Stack>
       </Dialog>
     </>
   );
