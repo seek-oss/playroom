@@ -32,6 +32,7 @@ export const button = style([
     borderRadius: vars.radii.small,
     color: foreground,
     isolation: 'isolate',
+    outline: 'none',
     selectors: {
       ['&[data-pressed], &:active']: {
         transform: 'scale(.95)',
@@ -40,17 +41,21 @@ export const button = style([
         content: '',
         position: 'absolute',
         transition: 'transform 100ms ease',
-        zIndex: -1,
         inset: calc(vars.space.xxsmall).negate().toString(),
         backgroundColor: foreground,
         borderRadius: vars.radii.small,
-        pointerEvents: 'none',
       },
-      [`&:not(:hover, :focus-visible, [data-popup-open])::after`]: {
+      [`&:not(:hover, [data-popup-open])::after`]: {
         opacity: 0,
       },
-      ['&:hover, &:focus-visible, &[data-popup-open]']: {
+      ['&:hover, &[data-popup-open]:not(:focus-visible)']: {
         color: colorPaletteVars.foreground.neutralInverted,
+      },
+      ['&:focus-visible::after']: {
+        outline: `2px solid ${colorPaletteVars.outline.focus}`,
+      },
+      ['&:focus-visible:not(:hover)::after']: {
+        background: 'transparent',
       },
     },
   },
@@ -77,17 +82,17 @@ export const size = styleVariants({
 export const tone = styleVariants({
   neutral: {
     vars: {
-      [foreground]: colorPaletteVars.foreground.neutral,
+      [foreground]: colorPaletteVars.background.selection,
     },
   },
   accent: {
     vars: {
-      [foreground]: colorPaletteVars.foreground.accent,
+      [foreground]: colorPaletteVars.background.accent,
     },
   },
   positive: {
     vars: {
-      [foreground]: colorPaletteVars.foreground.positive,
+      [foreground]: colorPaletteVars.background.positive,
     },
   },
 });

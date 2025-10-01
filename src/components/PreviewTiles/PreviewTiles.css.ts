@@ -1,9 +1,8 @@
 import { createVar, style } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
 
-import { comma } from '../../css/delimiters';
-
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
 export const scaleVar = createVar();
 
@@ -57,7 +56,6 @@ export const tile = style([
   {
     aspectRatio: '5/4',
     listStyle: 'none',
-    border: `2px solid ${borderColor}`,
   },
 ]);
 
@@ -71,8 +69,11 @@ export const iframe = style([
   {
     height: calc('100%').divide(scaleVar).toString(),
     width: calc('100%').divide(scaleVar).toString(),
+    borderRadius: calc(vars.radii[borderRadius]).divide(scaleVar).toString(),
     transform: `scale(${scaleVar})`,
     transformOrigin: '0 0',
+    // Guard against sub pixel scaling artifacts bleeding into the outer tile
+    padding: calc('1px').divide(scaleVar).toString(),
   },
 ]);
 
@@ -84,9 +85,12 @@ export const titleContainer = style([
     right: 0,
     paddingY: 'small',
     paddingX: 'xsmall',
+    borderRadius,
   }),
   {
-    background: borderColor,
+    background: colorPaletteVars.background.selection,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
   },
 ]);
 
@@ -101,8 +105,12 @@ export const button = style([
   }),
   {
     background: 'transparent',
+    outline: `1px solid ${borderColor}`,
     selectors: {
-      [comma('&:hover', '&:focus-visible')]: {
+      ['&:hover']: {
+        outline: `1px solid ${colorPaletteVars.border.accent}`,
+      },
+      ['&:focus-visible']: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
       },
     },

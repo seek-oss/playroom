@@ -104,7 +104,7 @@ export const tone = styleVariants({
 export const variant = styleVariants({
   standard: [
     {
-      backgroundColor: colorPaletteVars.background.floating,
+      backgroundColor: colorPaletteVars.background.surface,
       outline: `1px solid ${colorPaletteVars.border.standard}`,
       selectors: {
         [comma('&:hover', '[data-popup-open] > &')]: {
