@@ -57,11 +57,7 @@ export const Dialog = ({
               </Heading>
               <BaseUIDialog.Close
                 render={
-                  <ButtonIcon
-                    size="small"
-                    icon={<DismissIcon />}
-                    label="Close"
-                  />
+                  <ButtonIcon icon={<DismissIcon />} label="Close" />
                 }
               />
             </Box>

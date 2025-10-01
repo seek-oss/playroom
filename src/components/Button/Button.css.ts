@@ -1,7 +1,7 @@
-import { style, createVar } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
 
+import { minTouchableBeforePseudo } from '../../css/shared.css';
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
-import { vars } from '../../css/vars.css';
 
 export const reset = style([
   sprinkles({
@@ -26,42 +26,43 @@ export const reset = style([
   },
 ]);
 
-const highlightColor = createVar();
-
 export const base = style([
   sprinkles({
     borderRadius: 'medium',
+    overflow: 'hidden',
     paddingY: 'xsmall',
     paddingX: 'small',
     font: 'standard',
+    transition: 'fast',
   }),
+  minTouchableBeforePseudo,
   {
-    vars: {
-      [highlightColor]: 'currentColor',
-    },
-    color: highlightColor,
+    color: colorPaletteVars.foreground.neutral,
     border: `1px solid ${colorPaletteVars.border.standard}`,
-    ':hover': {
-      vars: {
-        [highlightColor]: colorPaletteVars.foreground.accent,
-      },
-      borderColor: highlightColor,
-    },
-    ':active': {
-      transform: 'scale(0.98)',
-    },
-    '::after': {
-      content: '',
-      position: 'absolute',
-      transform: 'translateY(-50%)',
-      minHeight: vars.touchableSize,
-      minWidth: vars.touchableSize,
-      width: '100%',
-      height: '100%',
-      top: '50%',
-    },
+    backgroundColor: colorPaletteVars.background.surface,
+    isolation: 'isolate',
+    outline: 'none',
+    transformOrigin: 'center',
     selectors: {
-      [`&:focus:not(:active):not(:hover):not([disabled])`]: {
+      ['&::after']: {
+        content: '',
+        position: 'absolute',
+        inset: 0,
+        backgroundColor: colorPaletteVars.background.selection,
+        opacity: 0,
+        transition: 'opacity 120ms ease',
+        zIndex: -1,
+      },
+      ['&:hover::after']: {
+        opacity: 1,
+      },
+      ['&:focus-visible::after']: {
+        opacity: 1,
+      },
+      ['&:active']: {
+        transform: 'scale(0.97)',
+      },
+      ['&:focus-visible']: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
         outlineOffset: 0,
       },
@@ -69,23 +70,23 @@ export const base = style([
   },
 ]);
 
-export const positive = style({
-  vars: {
-    [highlightColor]: `${colorPaletteVars.foreground.positive} !important`,
-  },
-  borderColor: highlightColor,
-});
-
-export const critical = style({
-  vars: {
-    [highlightColor]: `${colorPaletteVars.foreground.critical} !important`,
-  },
-  borderColor: highlightColor,
-});
-
-export const iconContainer = style([
-  sprinkles({ position: 'relative', paddingLeft: 'xxsmall' }),
-  {
-    top: '1px',
-  },
-]);
+export const tone = {
+  positive: style({
+    color: colorPaletteVars.foreground.positive,
+    borderColor: colorPaletteVars.foreground.positive,
+    selectors: {
+      ['&::after']: {
+        backgroundColor: colorPaletteVars.background.positive,
+      },
+    },
+  }),
+  critical: style({
+    color: colorPaletteVars.foreground.critical,
+    borderColor: colorPaletteVars.foreground.critical,
+    selectors: {
+      ['&::after']: {
+        backgroundColor: colorPaletteVars.background.critical,
+      },
+    },
+  }),
+};

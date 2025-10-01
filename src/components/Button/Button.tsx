@@ -1,12 +1,11 @@
 import clsx from 'clsx';
-import type { ElementType, AllHTMLAttributes, ReactElement } from 'react';
+import type { AllHTMLAttributes, ElementType } from 'react';
 
 import * as styles from './Button.css';
 
 interface BaseProps {
   as?: ElementType;
   tone?: 'positive' | 'critical';
-  icon?: ReactElement;
 }
 
 interface ButtonProps
@@ -22,19 +21,18 @@ type Props = ButtonProps | LinkProps;
 export const Button = ({
   as: ButtonComponent = 'button',
   children,
-  icon,
   tone,
   ...props
 }: Props) => (
   <ButtonComponent
-    className={clsx(styles.reset, styles.base, {
-      [styles.positive]: tone === 'positive',
-      [styles.critical]: tone === 'critical',
-    })}
+    className={clsx(
+      styles.reset,
+      styles.base,
+      tone ? styles.tone[tone] : undefined
+    )}
     disabled={tone === 'positive'}
     {...props}
   >
     {children}
-    {icon ? <span className={styles.iconContainer}>{icon}</span> : null}
   </ButtonComponent>
 );

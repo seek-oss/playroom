@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Maximize2 } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useState } from 'react';
 
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
@@ -7,6 +7,7 @@ import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { ReceiveErrorMessage } from '../Frame/frameMessaging';
 import frameSrc from '../Frames/frameSrc';
+import { logoSize } from '../Header/Header';
 import { Logo } from '../Logo/Logo';
 import { Text } from '../Text/Text';
 
@@ -27,20 +28,16 @@ const PreviewHeader = ({
 }) => (
   <div className={styles.header}>
     <div className={styles.leftGroup}>
-      <Logo size={20} />
-      <Text tone="secondary">
-        Preview containing unreviewed, user-provided code.
-      </Text>
+      <Logo size={logoSize} />
+      <span className={styles.headerDescription}>
+        <Text tone="secondary">Previewing user-provided code</Text>
+      </span>
     </div>
     <div className={styles.actions}>
       <Button as="a" href={editorHref} target="_blank" rel="noreferrer">
-        Edit
+        Edit in Playroom
       </Button>
-      <ButtonIcon
-        label="Hide header"
-        icon={<Maximize2 />}
-        onClick={onHideHeader}
-      />
+      <ButtonIcon label="Dismiss" icon={<X />} onClick={onHideHeader} />
     </div>
   </div>
 );
@@ -48,7 +45,7 @@ const PreviewHeader = ({
 const PreviewFooter = ({ editorHref }: { editorHref: string }) => (
   <div className={styles.footer}>
     <div className={styles.leftGroup}>
-      <Logo size={20} />
+      <Logo size={logoSize} />
       <Text tone="secondary">Playroom</Text>
     </div>
     <div className={styles.actions}>
