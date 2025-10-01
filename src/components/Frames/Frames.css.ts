@@ -1,5 +1,7 @@
 import { createVar, style } from '@vanilla-extract/css';
 
+import { comma } from '../../css/delimiters';
+
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 
 const transitionTiming = '150ms ease';
@@ -32,7 +34,6 @@ export const frameContainer = style([
     textAlign: 'left',
     display: 'flex',
     flexDirection: 'column',
-    gap: 'small',
   }),
   {
     flexShrink: 0,
@@ -60,6 +61,24 @@ export const frameWrapper = style([
   },
 ]);
 
+export const frameHeadingContainer = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: 'xxsmall',
+    paddingBottom: 'small',
+  }),
+  {
+    transition: `opacity ${transitionTiming}`,
+    selectors: {
+      [`${frameContainer}:not(:hover, :focus-within, ${frameActive}) &`]: {
+        opacity: 1,
+      },
+    },
+  },
+]);
+
 export const frame = style([
   sprinkles({
     border: 0,
@@ -70,32 +89,14 @@ export const frame = style([
   {
     isolation: 'isolate',
     background: '#fff',
-    outline: '2px solid transparent',
+    outline: '1px solid transparent',
     transition: `outline-color ${transitionTiming}, opacity ${transitionTiming}`,
     selectors: {
-      [`${frameContainer}:hover &, ` +
-      `${frameContainer}:focus-within &, ` +
-      `${frameActive} &, ` +
-      '&:focus, ' +
-      '&:focus-visible']: {
-        outlineColor: `${colorPaletteVars.border.accent}`,
-      },
-    },
-  },
-]);
-
-export const frameHeadingContainer = style([
-  sprinkles({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: 'xxsmall',
-  }),
-  {
-    transition: `opacity ${transitionTiming}`,
-    selectors: {
-      [`${frameContainer}:not(:hover, :focus-within, ${frameActive}) &`]: {
-        opacity: 0.4,
+      [comma(
+        `${frameHeadingContainer}:hover ~ ${frameWrapper} &`,
+        `${frameHeadingContainer}:focus-within ~ ${frameWrapper}&`
+      )]: {
+        outlineColor: `${colorPaletteVars.foreground.accent}`,
       },
     },
   },
@@ -105,7 +106,7 @@ export const frameActionsContainer = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
-    gap: 'small',
+    gap: 'xsmall',
   }),
   {
     transition: `opacity ${transitionTiming}`,

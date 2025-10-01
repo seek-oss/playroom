@@ -67,14 +67,13 @@ export const foldFolded = style([
   {
     '::after': {
       content: '+',
-      color: colorPaletteVars.foreground.accent,
+      opacity: 1,
     },
   },
 ]);
 
 globalStyle('.react-codemirror2', {
   height: '100%',
-  backgroundColor: colorPaletteVars.background.surface,
 });
 
 globalStyle('.CodeMirror', {
@@ -108,15 +107,13 @@ globalStyle('.CodeMirror-hints', {
   padding: 0,
   boxShadow: colorPaletteVars.shadows.small,
   borderRadius: vars.radii.small,
-  backgroundColor: colorPaletteVars.background.surface,
+  backgroundColor: colorPaletteVars.background.floating,
+  border: `1px solid ${colorPaletteVars.border.standard}`,
   fontSize: '90%',
   lineHeight: '150%',
   fontFamily: vars.font.family.code,
   maxHeight: '20em',
   overflowY: 'auto',
-});
-globalStyle('[data-playroom-dark] .CodeMirror-hints', {
-  backgroundColor: colorPaletteVars.background.floating,
 });
 
 globalStyle('.CodeMirror-hint', {
@@ -129,8 +126,7 @@ globalStyle('.CodeMirror-hint', {
 });
 
 globalStyle('li.CodeMirror-hint-active', {
-  backgroundColor: colorPaletteVars.background.accent,
-  color: colorPaletteVars.foreground.neutralInverted,
+  backgroundColor: colorPaletteVars.background.selection,
 });
 
 globalStyle('.CodeMirror-linenumbers', {
@@ -144,8 +140,9 @@ globalStyle('.CodeMirror-foldmarker', {
   padding: `0 ${vars.space.xxsmall}`,
 });
 
+const editorBackground = colorPaletteVars.background.surface;
 globalStyle('.cm-s-neo.CodeMirror', {
-  backgroundColor: colorPaletteVars.background.surface,
+  backgroundColor: editorBackground,
   color: colorPaletteVars.code.text,
 });
 
@@ -155,17 +152,17 @@ globalStyle('.cm-s-neo .CodeMirror-cursor', {
 });
 
 globalStyle('.cm-s-neo .CodeMirror-gutters', {
-  backgroundColor: colorPaletteVars.background.surface,
+  backgroundColor: editorBackground,
   border: 'none',
 });
 
 globalStyle('.cm-s-neo .CodeMirror-gutters::after', {
   content: '""',
-  backgroundColor: colorPaletteVars.background.surface,
+  backgroundColor: editorBackground,
   position: 'absolute',
   right: vars.space.xxxsmall,
   height: '100%',
-  boxShadow: `0 0 10px 5px ${colorPaletteVars.background.surface}`,
+  boxShadow: `0 0 10px 5px ${editorBackground}`,
 });
 
 globalStyle('.cm-s-neo .CodeMirror-selected', {
@@ -183,10 +180,12 @@ globalStyle('.cm-s-neo .CodeMirror-guttermarker-subtle', {
   transition: vars.transition.fast,
 });
 
+const inactiveNumberLineOpacity = 0.4;
 globalStyle(
   `.cm-s-neo .CodeMirror-guttermarker-subtle:not(:hover):not(${foldFolded})`,
   {
-    color: colorPaletteVars.foreground.neutralSoft,
+    color: colorPaletteVars.foreground.neutral,
+    opacity: inactiveNumberLineOpacity,
   }
 );
 
@@ -199,7 +198,7 @@ globalStyle('.cm-s-neo .CodeMirror-linenumber', {
 globalStyle(
   '.cm-s-neo .CodeMirror-linenumber:not(:hover):not(.cm-s-neo .CodeMirror-activeline .CodeMirror-linenumber)',
   {
-    color: colorPaletteVars.foreground.neutralSoft,
+    opacity: inactiveNumberLineOpacity,
   }
 );
 
@@ -284,13 +283,13 @@ globalStyle('label.CodeMirror-search-label', {
 });
 
 globalStyle('.dialog-opened.cm-s-neo .CodeMirror-selected', {
-  background: colorPaletteVars.background.accent,
+  background: 'Highlight',
 });
 
 globalStyle('.cm-overlay.cm-searching', {
   paddingTop: vars.space.xxxsmall,
   paddingBottom: vars.space.xxxsmall,
-  background: colorPaletteVars.background.selection,
+  background: colorPaletteVars.background.surface,
 });
 
 globalStyle('.CodeMirror-dialog button:first-of-type', {
@@ -311,19 +310,14 @@ globalStyle('.CodeMirror-dialog button', {
   background: 'none',
   borderRadius: vars.radii.medium,
   cursor: 'pointer',
-  border: '1px solid currentColor',
+  border: `1px solid ${colorPaletteVars.border.standard}`,
 });
 
-globalStyle('.CodeMirror-dialog button:focus', {
-  color: colorPaletteVars.foreground.accent,
+globalStyle('.CodeMirror-dialog button:focus-visible', {
   outline: `2px solid ${colorPaletteVars.outline.focus}`,
   outlineOffset: 0,
 });
 
-globalStyle('.CodeMirror-dialog button:focus:hover', {
-  background: colorPaletteVars.background.selection,
-});
-
 globalStyle('.CodeMirror-dialog button:hover', {
-  background: colorPaletteVars.background.transparent,
+  background: colorPaletteVars.background.selection,
 });

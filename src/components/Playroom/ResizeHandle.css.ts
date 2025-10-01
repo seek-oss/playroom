@@ -47,7 +47,7 @@ export const resizeContainer = styleVariants({
         left: 0,
         right: 0,
         height: size,
-        transform: 'translateY(-50%)',
+        transform: `translateY(${size * -1}px)`,
         transition: backgroundTransition,
       },
       selectors: {
@@ -55,7 +55,7 @@ export const resizeContainer = styleVariants({
           background: colorPaletteVars.background.accent,
         },
         [`&:not(${resizing}):hover::before`]: {
-          background: colorPaletteVars.background.accentLight,
+          background: colorPaletteVars.background.accent,
           transitionDelay: hoverTransitionDelay,
         },
       },
@@ -86,7 +86,7 @@ export const resizeContainer = styleVariants({
           background: colorPaletteVars.background.accent,
         },
         [`&:not(${resizing}):hover::before`]: {
-          background: colorPaletteVars.background.accentLight,
+          background: colorPaletteVars.background.accent,
           transitionDelay: hoverTransitionDelay,
         },
       },
@@ -105,7 +105,7 @@ const handleCommon = style([
     zIndex: 1,
   }),
   {
-    background: colorPaletteVars.background.surface,
+    background: colorPaletteVars.background.floating,
     border: `1px solid ${colorPaletteVars.border.standard}`,
     // Place ::after: on top of opaque background,
     // to allow using transparent background when resizing
@@ -125,12 +125,11 @@ const handleCommon = style([
       },
       [`:is(${resizeContainer.horizontal}, ${resizeContainer.vertical}):not(${resizing}):hover &`]:
         {
-          borderColor: colorPaletteVars.background.accentLight,
+          borderColor: colorPaletteVars.background.accent,
           transitionDelay: hoverTransitionDelay,
         },
       [`:is(${resizeContainer.horizontal}, ${resizeContainer.vertical}):not(${resizing}):hover &::after`]:
         {
-          background: colorPaletteVars.background.accentLight,
           transitionDelay: hoverTransitionDelay,
         },
     },
