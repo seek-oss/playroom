@@ -7,10 +7,13 @@ import { minTouchableBeforePseudo } from '../../css/shared.css';
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
+export const headerPaddingX = 'xlarge';
+export const headerPaddingY = 'xsmall';
+
 export const root = style([
   sprinkles({
-    paddingX: 'xlarge',
-    paddingY: 'xsmall',
+    paddingX: headerPaddingX,
+    paddingY: headerPaddingY,
   }),
   {
     display: 'grid',
@@ -25,11 +28,13 @@ export const menuContainer = style({
   width: 'fit-content',
 });
 
+export const actionsGap = 'xsmall';
+
 export const actionsContainer = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
-    gap: 'xsmall',
+    gap: actionsGap,
   }),
   {
     width: 'fit-content',
@@ -98,6 +103,7 @@ export const segmentedGroup = style([
     display: 'flex',
     alignItems: 'stretch',
     borderRadius: segmentedButtonRadius,
+    overflow: 'hidden',
   }),
   {
     border: segmentedControlBorder,
@@ -114,7 +120,7 @@ const segmentedButtonBase = style([
     paddingY: 'xsmall',
     cursor: 'pointer',
     transition: 'fast',
-    borderRadius: segmentedButtonRadius,
+    overflow: 'hidden',
     userSelect: 'none',
   }),
   minTouchableBeforePseudo,
