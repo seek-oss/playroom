@@ -89,7 +89,7 @@ export const frame = style([
   {
     isolation: 'isolate',
     background: '#fff',
-    outline: '1px solid transparent',
+    outline: '2px solid transparent',
     transition: `outline-color ${transitionTiming}, opacity ${transitionTiming}`,
     selectors: {
       [comma(
