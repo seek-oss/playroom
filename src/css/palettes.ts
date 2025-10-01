@@ -213,7 +213,7 @@ const darkPalette = {
 export const light = {
   code: {
     text: lightPalette.gray[1000],
-    tag: lightPalette.blue[1000],
+    tag: mix(0.5, lightPalette.blue[1000], lightPalette.blue[900]),
     attribute: lightPalette.blue[900],
     string: lightPalette.teal[900],
     atom: lightPalette.blue[800],
@@ -263,9 +263,9 @@ export const light = {
 export const dark = {
   code: {
     text: darkPalette.gray[1000],
-    tag: darkPalette.blue[1000],
+    tag: mix(0.5, darkPalette.blue[1000], darkPalette.blue[900]),
     attribute: darkPalette.blue[900],
-    string: darkPalette.teal[900],
+    string: mix(0.5, darkPalette.teal[1000], darkPalette.teal[900]),
     atom: darkPalette.blue[800],
     variable: darkPalette.blue[700],
     number: darkPalette.purple[900],
