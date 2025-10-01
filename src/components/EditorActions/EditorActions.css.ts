@@ -16,6 +16,8 @@ export const root = style([
   },
 ]);
 
+export const syntaxErrorsContainer = sprinkles({ padding: 'xsmall' });
+
 export const button = style([
   sprinkles({
     padding: 'xsmall',

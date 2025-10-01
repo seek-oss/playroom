@@ -1,6 +1,5 @@
 import { Tooltip } from '@base-ui-components/react';
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
-import clsx from 'clsx';
 import {
   type LucideIcon,
   CodeXml,
@@ -111,7 +110,7 @@ const FramesMenu = () => {
   return (
     <>
       <div className={menuStyles.menuGroupLabel}>
-        <span>Widths</span>
+        <Text weight="strong">Widths</Text>
         {hasFilteredWidths ? (
           <TextButton
             label="Clear"
@@ -151,7 +150,7 @@ const FramesMenu = () => {
           <MenuSeparator />
 
           <div className={menuStyles.menuGroupLabel}>
-            <span>Themes</span>
+            <Text weight="strong">Themes</Text>
             {hasFilteredThemes ? (
               <TextButton
                 label="Clear"
@@ -449,19 +448,13 @@ const CopyLinkButton = ({
     disabled={linkCopied}
     onClick={onClick}
   >
-    <span className={styles.copyLinkContainer}>
-      {linkCopied ? (
-        <span className={styles.copyLinkSuccess}>
-          <Check size={14} />
-        </span>
-      ) : null}
-      <span
-        className={clsx(linkCopied ? styles.copyLinkTextHidden : undefined)}
-        aria-hidden={linkCopied ? true : undefined}
-      >
-        <Text>Copy link</Text>
+    {linkCopied ? (
+      <span className={styles.copyLinkSuccess}>
+        <Check size={14} />
       </span>
-    </span>
+    ) : (
+      <Text>Copy link</Text>
+    )}
   </button>
 );
 

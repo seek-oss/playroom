@@ -99,7 +99,8 @@ export const snippet = style([
     position: 'relative',
     display: 'block',
     cursor: 'pointer',
-    padding: snippetPadding,
+    paddingX: snippetPadding,
+    paddingY: 'small',
   }),
   {
     color: colorPaletteVars.foreground.neutral,

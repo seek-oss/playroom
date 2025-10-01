@@ -59,7 +59,7 @@ export const MenuItem = ({
     <BaseUIMenu.Item className={styles.item} {...restProps}>
       <span className={styles.itemLeft}>
         {Icon ? <Icon size={menuIconSize} /> : null}
-        {children}
+        <Text>{children}</Text>
       </span>
       {shortcut && (
         <span className={styles.shortcut}>
@@ -100,7 +100,7 @@ export const MenuItemLink = ({
         >
           <span className={styles.itemLeft}>
             {Icon ? <Icon size={menuIconSize} /> : null}
-            {children}
+            <Text>{children}</Text>
           </span>
           {shortcut && (
             <span className={styles.shortcut}>
@@ -135,7 +135,7 @@ export const MenuRadioItem = ({
   <BaseUIMenu.RadioItem className={styles.fieldItem} value={value}>
     <span className={styles.itemLeft}>
       {Icon ? <Icon size={menuIconSize} /> : null}
-      {children}
+      <Text>{children}</Text>
     </span>
     <BaseUIMenu.RadioItemIndicator className={styles.radioItemIndicator}>
       <Check size={menuIconSize} />
@@ -163,7 +163,7 @@ export const MenuCheckboxItem = ({
   >
     <span className={styles.itemLeft}>
       {Icon ? <Icon size={menuIconSize} /> : null}
-      {children}
+      <Text>{children}</Text>
     </span>
     <span className={styles.checkboxBox}>
       <BaseUIMenu.CheckboxItemIndicator
@@ -188,7 +188,7 @@ export const MenuGroup = ({
 }) => (
   <BaseUIMenu.Group>
     <BaseUIMenu.GroupLabel className={styles.menuGroupLabel}>
-      {label}
+      <Text weight="strong">{label}</Text>
     </BaseUIMenu.GroupLabel>
     {children}
   </BaseUIMenu.Group>
@@ -285,7 +285,7 @@ export const MenuCopyItem = ({ content, children }: MenuCopyItemProps) => {
             <TickIcon size={menuIconSize} />
           </>
         ) : (
-          <>{children}</>
+          <Text>{children}</Text>
         )}
       </span>
     </BaseUIMenu.Item>

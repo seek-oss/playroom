@@ -1,10 +1,32 @@
+import plusJakartaSansMetrics from '@capsizecss/metrics/plusJakartaSans';
+import { createTextStyle } from '@capsizecss/vanilla-extract';
 import { style } from '@vanilla-extract/css';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
+import { fontSizeDefinitions, vars } from '../../css/vars.css';
 
-export const base = sprinkles({
-  display: 'block',
-});
+export const base = style([
+  sprinkles({
+    display: 'block',
+  }),
+  {
+    fontFamily: vars.font.family.standard,
+  },
+]);
+
+export const size = Object.fromEntries(
+  Object.entries(fontSizeDefinitions).map(([name, [fontSize, leading]]) => [
+    name,
+    createTextStyle(
+      {
+        fontSize,
+        leading,
+        fontMetrics: plusJakartaSansMetrics,
+      },
+      name
+    ),
+  ])
+);
 
 export const neutral = style({
   color: colorPaletteVars.foreground.neutral,
@@ -22,28 +44,13 @@ export const positive = style({
   color: colorPaletteVars.foreground.positive,
 });
 
-export const xsmall = sprinkles({
-  font: 'xsmall',
-});
-
-export const small = sprinkles({
-  font: 'small',
-});
-
-export const standard = sprinkles({
-  font: 'standard',
-});
-
-export const large = sprinkles({
-  font: 'large',
-});
-
 export const strong = sprinkles({
   fontWeight: 'strong',
 });
 
 export const truncate = style([
   sprinkles({
+    display: 'block',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
   }),

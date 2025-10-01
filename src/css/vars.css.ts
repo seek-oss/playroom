@@ -1,18 +1,27 @@
 import { createGlobalTheme } from '@vanilla-extract/css';
 
 const fontFamily = '"Plus Jakarta Sans", sans-serif';
+export const fontSizeDefinitions = {
+  xsmall: [10, 14],
+  small: [12, 16],
+  standard: [14, 18],
+  large: [16, 20],
+};
+
+const fontScale = Object.fromEntries(
+  Object.entries(fontSizeDefinitions).map(([size, definition]) => [
+    size,
+    `normal ${definition.map((v) => `${v}px`).join('/')} ${fontFamily}`,
+  ])
+);
+
 export const vars = createGlobalTheme(':root', {
   font: {
     family: {
       standard: fontFamily,
       code: 'Source Code Pro, Firacode, Hasklig, Menlo, monospace',
     },
-    scale: {
-      xsmall: `normal 10px ${fontFamily}`,
-      small: `normal 12px ${fontFamily}`,
-      standard: `normal 14px ${fontFamily}`,
-      large: `normal 16px/20px ${fontFamily}`,
-    },
+    scale: fontScale,
     weight: {
       strong: '700',
     },
