@@ -1,6 +1,6 @@
 import { createGlobalTheme } from '@vanilla-extract/css';
 
-const fontFamily = 'Helvetica, arial, sans-serif';
+const fontFamily = '"Plus Jakarta Sans", sans-serif';
 export const vars = createGlobalTheme(':root', {
   font: {
     family: {
