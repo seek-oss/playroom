@@ -2,6 +2,11 @@ import { style } from '@vanilla-extract/css';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
+import {
+  actionsGap,
+  headerPaddingX,
+  headerPaddingY,
+} from '../Header/Header.css';
 
 export const root = style([
   sprinkles({
@@ -23,13 +28,22 @@ export const header = style([
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 'small',
+    paddingX: headerPaddingX,
+    paddingY: headerPaddingY,
   }),
   {
     borderBottom: `1px solid ${colorPaletteVars.border.standard}`,
     gap: 12,
   },
 ]);
+
+export const headerDescription = style({
+  '@media': {
+    ['screen and (max-width: 599px)']: {
+      display: 'none',
+    },
+  },
+});
 
 export const footer = style([
   sprinkles({
@@ -47,13 +61,13 @@ export const footer = style([
 export const leftGroup = sprinkles({
   display: 'flex',
   alignItems: 'center',
-  gap: 'small',
+  gap: 'medium',
 });
 
 export const actions = sprinkles({
   display: 'flex',
   alignItems: 'center',
-  gap: 'medium',
+  gap: actionsGap,
 });
 
 export const frameContainer = style([

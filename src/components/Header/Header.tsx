@@ -65,6 +65,8 @@ import ChevronIcon from '../icons/ChevronIcon';
 import * as styles from './Header.css';
 import * as menuStyles from '../Menu/Menu.css';
 
+export const logoSize = 24;
+
 type FrameWidthIconRange = {
   min: number;
   max?: number;
@@ -291,7 +293,7 @@ const HeaderMenu = () => {
         width="small"
         trigger={
           <span className={styles.menuButton}>
-            <Logo size={24} />
+            <Logo size={logoSize} />
             <ChevronIcon direction="down" size={12} />
           </span>
         }
@@ -434,8 +436,6 @@ const HeaderMenu = () => {
   );
 };
 
-const headerButtonIconSize = 'small';
-
 const CopyLinkButton = ({
   linkCopied,
   onClick,
@@ -476,9 +476,7 @@ export const Header = () => {
       <div className={styles.menuContainer}>
         <HeaderMenu />
       </div>
-
       <Title />
-
       <Tooltip.Provider>
         <div className={styles.actionsContainer}>
           {/* Todo - try animate in/out */}
@@ -505,18 +503,13 @@ export const Header = () => {
           <Menu
             width="small"
             trigger={
-              <ButtonIcon
-                size={headerButtonIconSize}
-                label="Configure frames"
-                icon={<FrameIcon />}
-              />
+              <ButtonIcon label="Configure frames" icon={<FrameIcon />} />
             }
           >
             <FramesMenu />
           </Menu>
 
           <ButtonIcon
-            size={headerButtonIconSize}
             label={editorHidden ? 'Show code' : 'Hide code'}
             icon={<CodeXml />}
             variant={editorHidden ? 'standard' : 'solid'}

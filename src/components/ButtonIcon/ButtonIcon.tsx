@@ -21,7 +21,7 @@ interface Props extends TriggerNoStyles {
 export const ButtonIcon = ({
   icon,
   label,
-  size = 'medium',
+  size = 'small',
   tone = 'neutral',
   variant = 'standard',
   ...restProps
