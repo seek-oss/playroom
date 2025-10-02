@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 
 import type { ButtonIconProps } from '../ButtonIcon/ButtonIcon';
-import { Tooltip } from '../Tooltip/Tooltip';
+import { Tooltip, type TooltipTrigger } from '../Tooltip/Tooltip';
 
 import * as styles from './FrameActionButton.css';
 
-interface FrameActionButtonProps {
+interface FrameActionButtonProps extends TooltipTrigger {
   icon: ButtonIconProps['icon'];
   label: ButtonIconProps['label'];
   size?: keyof typeof styles.size;
