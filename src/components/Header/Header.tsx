@@ -342,7 +342,7 @@ const HeaderMenu = () => {
               Editor actions
             </MenuItem>
           }
-          width="small"
+          width="content"
           disabled={editorHidden}
         >
           {hasSnippets && (
