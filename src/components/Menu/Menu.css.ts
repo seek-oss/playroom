@@ -10,7 +10,7 @@ import {
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
-const popupGutter = 'xsmall';
+const popupGutter = 'xxsmall';
 export const popup = style([
   sharedPopupStyles,
   sprinkles({ padding: 'xxsmall', borderRadius: 'medium' }),
@@ -67,6 +67,7 @@ export const item = style([
       },
       [`&:focus-visible::before`]: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
+        outlineOffset: -2,
       },
       [`&[aria-disabled]`]: {
         color: colorPaletteVars.foreground.secondary,
@@ -231,6 +232,7 @@ export const clearItem = style([
       },
       [`&:focus-visible`]: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
+        outlineOffset: -2,
       },
     },
   },

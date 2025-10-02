@@ -271,6 +271,7 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
               align={align}
               alignOffset={isSubMenu ? -4 : 0}
               sideOffset={isSubMenu ? 0 : 6}
+              collisionPadding={12}
               collisionAvoidance={{
                 side: 'shift',
                 align: 'shift',
