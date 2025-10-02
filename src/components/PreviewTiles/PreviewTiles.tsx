@@ -12,6 +12,7 @@ import { Dialog } from '../Dialog/Dialog';
 import frameSrc from '../Frames/frameSrc';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 import * as styles from './PreviewTiles.css';
 
@@ -75,19 +76,29 @@ export const PreviewTiles = ({ onSelect }: { onSelect: () => void }) => {
                 <span className={styles.titleContainer}>
                   <Text truncate>{params.title || 'Untitled Playroom'}</Text>
                 </span>
-                <button
-                  className={styles.button}
-                  onClick={() => {
-                    dispatch({
-                      type: 'openPlayroom',
-                      payload: {
-                        ...params,
-                        id,
-                        code,
-                      },
-                    });
-                    onSelect();
-                  }}
+                <Tooltip
+                  label={`Open “${params.title || 'Untitled Playroom'}”`}
+                  delay={500}
+                  side="bottom"
+                  trigger={
+                    <button
+                      className={styles.button}
+                      aria-label={`Open “${
+                        params.title || 'Untitled Playroom'
+                      }”`}
+                      onClick={() => {
+                        dispatch({
+                          type: 'openPlayroom',
+                          payload: {
+                            ...params,
+                            id,
+                            code,
+                          },
+                        });
+                        onSelect();
+                      }}
+                    />
+                  }
                 />
               </li>
             }
