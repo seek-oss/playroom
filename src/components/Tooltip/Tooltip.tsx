@@ -1,5 +1,5 @@
 import { Tooltip as BaseUITooltip } from '@base-ui-components/react';
-import { useId, type ComponentProps } from 'react';
+import { type ReactNode, useId, type ComponentProps } from 'react';
 
 import { Text } from '../Text/Text';
 
@@ -12,7 +12,7 @@ export type TooltipTrigger = Exclude<
 
 type TooltipProps = TooltipTrigger & {
   trigger: ComponentProps<typeof BaseUITooltip.Trigger>['render'];
-  label: string;
+  label: ReactNode;
   side?: ComponentProps<typeof BaseUITooltip.Positioner>['side'];
   delay?: ComponentProps<typeof BaseUITooltip.Root>['delay'];
   announceAsDescription?: boolean;

@@ -8,6 +8,9 @@ export const shortcut = style({
   justifyItems: 'center',
   isolation: 'isolate',
   whiteSpace: 'nowrap',
+});
+
+export const hideOnMobile = style({
   '@media': {
     'screen and (max-width: 767px)': {
       display: 'none',

@@ -5,7 +5,7 @@ import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 export const root = style([
   sprinkles({
     display: 'flex',
-    gap: 'xsmall',
+    gap: 'xxsmall',
     padding: 'xxsmall',
     borderRadius: 'medium',
     boxShadow: 'small',
