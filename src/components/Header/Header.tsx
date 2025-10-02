@@ -333,7 +333,15 @@ const HeaderMenu = () => {
         </Menu>
 
         <Menu
-          trigger={<MenuItem icon={CodeXml}>Editor actions</MenuItem>}
+          trigger={
+            <MenuItem
+              icon={CodeXml}
+              disabled={editorHidden}
+              disabledReason="Editor is hidden"
+            >
+              Editor actions
+            </MenuItem>
+          }
           width="small"
           disabled={editorHidden}
         >
@@ -341,7 +349,8 @@ const HeaderMenu = () => {
             <MenuItem
               icon={BetweenHorizontalStart}
               shortcut={['Cmd', 'K']}
-              disabled={editorHidden || hasSyntaxError}
+              disabled={hasSyntaxError}
+              disabledReason="Code has syntax errors preventing snippets"
               onClick={() => dispatch({ type: 'openSnippets' })}
             >
               Insert snippet
@@ -356,6 +365,11 @@ const HeaderMenu = () => {
               }}
               icon={Icon}
               disabled={command === 'formatCode' && hasSyntaxError}
+              disabledReason={
+                command === 'formatCode'
+                  ? 'Code has syntax errors preventing format'
+                  : undefined
+              }
             >
               {label}
             </MenuItem>
