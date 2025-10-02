@@ -8,7 +8,6 @@ import * as styles from './FrameActionButton.css';
 interface FrameActionButtonProps extends TooltipTrigger {
   icon: ButtonIconProps['icon'];
   label: ButtonIconProps['label'];
-  size?: keyof typeof styles.size;
   tone?: keyof typeof styles.tone;
 }
 
@@ -16,17 +15,13 @@ interface FrameActionButtonProps extends TooltipTrigger {
 export const FrameActionButton = ({
   icon,
   label,
-  size = 'medium',
-  tone = 'neutral',
+  tone = 'accent',
   ...restProps
 }: FrameActionButtonProps) => (
   <Tooltip
     label={label}
     trigger={
-      <button
-        {...restProps}
-        className={clsx(styles.button, styles.size[size], styles.tone[tone])}
-      >
+      <button {...restProps} className={clsx(styles.button, styles.tone[tone])}>
         {icon}
       </button>
     }

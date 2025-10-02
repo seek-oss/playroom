@@ -114,14 +114,12 @@ const Frame = ({
         <SharedTooltipContext>
           <div className={styles.frameActionsContainer}>
             <FrameActionButton
-              size="small"
               tone={copying ? 'positive' : 'accent'}
               icon={copying ? <TickIcon /> : <Link />}
               label={copying ? 'Copied' : 'Copy preview link'}
               onClick={() => (!copying ? onCopyClick(previewUrl) : undefined)}
             />
             <FrameActionButton
-              size="small"
               tone="accent"
               icon={<ExternalLink />}
               label="Open preview"
@@ -131,7 +129,6 @@ const Frame = ({
             />
             {frame.width !== 'Fit to window' ? (
               <FrameActionButton
-                size="small"
                 tone="accent"
                 icon={<PictureInPicture2 />}
                 label="Open standalone"
@@ -165,7 +162,6 @@ const Frame = ({
               width="content"
               trigger={
                 <FrameActionButton
-                  size="small"
                   tone="accent"
                   icon={<Camera />}
                   label="Screenshot"

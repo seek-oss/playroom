@@ -9,7 +9,6 @@ import { calc } from '@vanilla-extract/css-utils';
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
-export const sizeVar = createVar();
 export const foreground = createVar();
 
 export const button = style([
@@ -60,46 +59,24 @@ export const button = style([
   },
 ]);
 
-export const size = styleVariants({
-  small: {
-    vars: {
-      [sizeVar]: '16px',
-    },
-  },
-  medium: {
-    vars: {
-      [sizeVar]: '20px',
-    },
-  },
-  large: {
-    vars: {
-      [sizeVar]: '24px',
-    },
-  },
-});
-
 export const tone = styleVariants({
-  neutral: {
-    vars: {
-      [foreground]: colorPaletteVars.background.selection,
-    },
-  },
   accent: {
     vars: {
-      [foreground]: colorPaletteVars.background.accent,
+      [foreground]: colorPaletteVars.foreground.accent,
     },
   },
   positive: {
     vars: {
-      [foreground]: colorPaletteVars.background.positive,
+      [foreground]: colorPaletteVars.foreground.positive,
     },
   },
 });
 
+const size = '16px';
 globalStyle(`${button} > svg`, {
   display: 'block',
-  height: sizeVar,
-  width: sizeVar,
+  height: size,
+  width: size,
   position: 'relative',
   zIndex: 1,
 });
