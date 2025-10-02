@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import { isMac } from '../../utils/formatting';
 
 import * as styles from './KeyboardShortcut.css';
@@ -21,9 +23,20 @@ const convertShortcutForPlatform = (shortcut: KeyCombination) => {
   return shortcut.map((key) => wordToSymbolMap[key] || key).join('');
 };
 
-export const KeyboardShortcut = ({ shortcut }: { shortcut: KeyCombination }) =>
+export const KeyboardShortcut = ({
+  shortcut,
+  hideOnMobile = true,
+}: {
+  shortcut: KeyCombination;
+  hideOnMobile?: boolean;
+}) =>
   shortcut && (
-    <span className={styles.shortcut}>
+    <span
+      className={clsx({
+        [styles.shortcut]: true,
+        [styles.hideOnMobile]: hideOnMobile,
+      })}
+    >
       {convertShortcutForPlatform(shortcut)}
     </span>
   );
