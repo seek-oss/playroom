@@ -103,7 +103,6 @@ export const segmentedGroup = style([
     display: 'flex',
     alignItems: 'stretch',
     borderRadius: segmentedButtonRadius,
-    overflow: 'hidden',
   }),
   {
     border: segmentedControlBorder,
@@ -120,7 +119,7 @@ const segmentedButtonBase = style([
     paddingY: 'xsmall',
     cursor: 'pointer',
     transition: 'fast',
-    overflow: 'hidden',
+    borderRadius: segmentedButtonRadius,
     userSelect: 'none',
   }),
   minTouchableBeforePseudo,
