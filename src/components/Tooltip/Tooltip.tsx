@@ -49,3 +49,5 @@ export const Tooltip = ({
     </BaseUITooltip.Root>
   );
 };
+
+export const SharedTooltipContext = BaseUITooltip.Provider;

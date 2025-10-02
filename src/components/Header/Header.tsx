@@ -1,4 +1,3 @@
-import { Tooltip } from '@base-ui-components/react';
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import {
   type LucideIcon,
@@ -59,6 +58,7 @@ import {
 import { PreviewTiles } from '../PreviewTiles/PreviewTiles';
 import { Text } from '../Text/Text';
 import { Title } from '../Title/Title';
+import { SharedTooltipContext, Tooltip } from '../Tooltip/Tooltip';
 import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Header.css';
@@ -485,7 +485,7 @@ export const Header = () => {
         <HeaderMenu />
       </div>
       <Title />
-      <Tooltip.Provider>
+      <SharedTooltipContext>
         <div className={styles.actionsContainer}>
           {/* Todo - try animate in/out */}
           {hasCode ? (
@@ -498,9 +498,17 @@ export const Header = () => {
                 width="small"
                 align="end"
                 trigger={
-                  <button type="button" className={styles.segmentedIconButton}>
-                    <ChevronIcon direction="down" size={14} />
-                  </button>
+                  <Tooltip
+                    label="Share options"
+                    trigger={
+                      <button
+                        type="button"
+                        className={styles.segmentedIconButton}
+                      >
+                        <ChevronIcon direction="down" size={14} />
+                      </button>
+                    }
+                  />
                 }
               >
                 <ShareMenu />
@@ -526,7 +534,7 @@ export const Header = () => {
             }
           />
         </div>
-      </Tooltip.Provider>
+      </SharedTooltipContext>
     </Box>
   );
 };

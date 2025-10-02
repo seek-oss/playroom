@@ -1,4 +1,3 @@
-import { Tooltip } from '@base-ui-components/react';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import clsx from 'clsx';
 import html2canvas from 'html2canvas';
@@ -28,6 +27,7 @@ import { ReceiveErrorMessage } from '../Frame/frameMessaging';
 import { Menu, MenuItem } from '../Menu/Menu';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
+import { SharedTooltipContext } from '../Tooltip/Tooltip';
 import TickIcon from '../icons/TickIcon';
 
 import { FrameActionButton } from './FrameActionButton';
@@ -111,7 +111,7 @@ const Frame = ({
             </Highlight>
           </Text>
         )}
-        <Tooltip.Provider>
+        <SharedTooltipContext>
           <div className={styles.frameActionsContainer}>
             <FrameActionButton
               size="small"
@@ -180,7 +180,7 @@ const Frame = ({
               </MenuItem>
             </Menu>
           </div>
-        </Tooltip.Provider>
+        </SharedTooltipContext>
       </div>
       <div className={styles.frameWrapper}>
         <Iframe
