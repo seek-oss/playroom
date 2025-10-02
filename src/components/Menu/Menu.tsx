@@ -12,6 +12,7 @@ import {
 
 import { isMac } from '../../utils/formatting';
 import { useCopy } from '../../utils/useCopy';
+import { ScrollContainer } from '../ScrollContainer/ScrollContainer';
 import { Text } from '../Text/Text';
 import { Tooltip } from '../Tooltip/Tooltip';
 import ChevronIcon from '../icons/ChevronIcon';
@@ -63,7 +64,9 @@ export const MenuItem = ({
     <BaseUIMenu.Item className={styles.item} disabled={disabled} {...restProps}>
       <span className={styles.itemLeft}>
         {Icon ? <Icon size={menuIconSize} /> : null}
-        <Text tone={disabled ? 'secondary' : undefined}>{children}</Text>
+        <Text tone={disabled ? 'secondary' : undefined} truncate>
+          {children}
+        </Text>
       </span>
       {shortcut && (
         <span className={styles.shortcut}>
@@ -116,7 +119,7 @@ export const MenuItemLink = ({
         >
           <span className={styles.itemLeft}>
             {Icon ? <Icon size={menuIconSize} /> : null}
-            <Text>{children}</Text>
+            <Text truncate>{children}</Text>
           </span>
           {shortcut && (
             <span className={styles.shortcut}>
@@ -151,7 +154,7 @@ export const MenuRadioItem = ({
   <BaseUIMenu.RadioItem className={styles.fieldItem} value={value}>
     <span className={styles.itemLeft}>
       {Icon ? <Icon size={menuIconSize} /> : null}
-      <Text>{children}</Text>
+      <Text truncate>{children}</Text>
     </span>
     <BaseUIMenu.RadioItemIndicator className={styles.radioItemIndicator}>
       <Check size={menuIconSize} />
@@ -179,7 +182,7 @@ export const MenuCheckboxItem = ({
   >
     <span className={styles.itemLeft}>
       {Icon ? <Icon size={menuIconSize} /> : null}
-      <Text>{children}</Text>
+      <Text truncate>{children}</Text>
     </span>
     <span className={styles.checkboxBox}>
       <BaseUIMenu.CheckboxItemIndicator
@@ -206,7 +209,9 @@ export const MenuGroup = ({
 }) => (
   <BaseUIMenu.Group>
     <BaseUIMenu.GroupLabel className={styles.menuGroupLabel}>
-      <Text weight="strong">{label}</Text>
+      <Text weight="strong" truncate>
+        {label}
+      </Text>
       {action}
     </BaseUIMenu.GroupLabel>
     {children}
@@ -266,6 +271,10 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
               align={align}
               alignOffset={isSubMenu ? -4 : 0}
               sideOffset={isSubMenu ? 0 : 6}
+              collisionAvoidance={{
+                side: 'shift',
+                align: 'shift',
+              }}
             >
               <BaseUIMenu.Popup
                 className={clsx({
@@ -273,7 +282,9 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
                   [styles.small]: width === 'small',
                 })}
               >
-                {children}
+                <ScrollContainer direction="vertical" fadeSize="small">
+                  <div className={styles.menuSizeLimit}>{children}</div>
+                </ScrollContainer>
               </BaseUIMenu.Popup>
             </BaseUIMenu.Positioner>
           </BaseUIMenu.Portal>

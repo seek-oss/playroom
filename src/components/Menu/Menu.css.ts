@@ -16,6 +16,17 @@ export const popup = style([
   sprinkles({ padding: 'xxsmall', borderRadius: 'medium' }),
 ]);
 
+/**
+ * BaseUI Menu Vars
+ * See https://base-ui.com/react/components/menu#positioner
+ */
+const baseUIAvailableMenuHeight = 'var(--available-height)';
+export const menuSizeLimit = style({
+  maxHeight: calc(baseUIAvailableMenuHeight)
+    .subtract(vars.space.xsmall)
+    .toString(),
+});
+
 export const small = style({
   width: 250,
 });
@@ -30,6 +41,7 @@ export const item = style([
     userSelect: 'none',
     boxSizing: 'border-box',
     padding: 'xsmall',
+    gap: 'medium',
   }),
   {
     outline: 'none',

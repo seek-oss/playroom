@@ -16,6 +16,7 @@ globalStyle('html, body', {
   padding: 0,
   overflow: 'hidden',
   backgroundColor: colorPaletteVars.background.body,
+  scrollbarColor: space(colorPaletteVars.border.standard, 'transparent'),
 });
 
 globalStyle('html[data-playroom-dark]', {
