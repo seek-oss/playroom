@@ -35,7 +35,7 @@ export const Button = ({
     disabled={tone === 'positive'}
     {...props}
   >
-    <Text weight="strong" tone={tone}>
+    <Text weight="strong" tone={tone} truncate>
       {children}
     </Text>
   </ButtonComponent>

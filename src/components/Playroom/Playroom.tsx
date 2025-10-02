@@ -1,5 +1,4 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import { type ComponentProps, useContext, useRef, useState } from 'react';
 
 import {
@@ -9,15 +8,11 @@ import {
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
-import { primaryMod } from '../CodeEditor/editorCommands';
 import { EditorActions } from '../EditorActions/EditorActions';
 import { EditorErrorMessage } from '../EditorErrorMessage/EditorErrorMessage';
 import Frames from '../Frames/Frames';
 import { Header } from '../Header/Header';
-import { KeyboardShortcut } from '../KeyboardShortcut/KeyboardShortcut';
-import { Logo } from '../Logo/Logo';
-import { Stack } from '../Stack/Stack';
-import { Text } from '../Text/Text';
+import { ZeroState } from '../ZeroState/ZeroState';
 
 import { ResizeHandle } from './ResizeHandle';
 
@@ -30,41 +25,6 @@ const resizeHandlePosition: Record<
   horizontal: 'top',
   vertical: 'right',
 } as const;
-
-const ZeroState = () => {
-  const hasSnippets = snippets && snippets.length > 0;
-
-  return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      height="full"
-      textAlign="center"
-      gap="xxxlarge"
-    >
-      <Text size="large" tone="secondary">
-        <Logo size={100} />
-      </Text>
-
-      <Stack space="large">
-        <Text size="large" tone="secondary">
-          Open playroom <KeyboardShortcut shortcut={[primaryMod, 'O']} />
-        </Text>
-        {hasSnippets ? (
-          <Text size="large" tone="secondary">
-            Insert snippet <KeyboardShortcut shortcut={[primaryMod, 'K']} />
-          </Text>
-        ) : null}
-      </Stack>
-
-      <Text size="large" tone="secondary">
-        ...or just start coding
-      </Text>
-    </Box>
-  );
-};
 
 export default () => {
   const [

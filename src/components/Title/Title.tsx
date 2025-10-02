@@ -14,7 +14,7 @@ export const Title = () => {
       aria-label="Title"
       placeholder="Untitled"
       className={styles.textField}
-      value={title}
+      value={title || ''}
       onFocus={(event) => {
         event.currentTarget.select();
       }}
