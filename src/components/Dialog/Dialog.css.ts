@@ -27,12 +27,13 @@ export const backdrop = style([
   },
 ]);
 
+const dialogPadding = 'xlarge';
 export const popup = style([
   sharedPopupStyles,
   sprinkles({
     position: 'fixed',
     overflow: 'auto',
-    padding: 'xlarge',
+    padding: dialogPadding,
     borderRadius: 'large',
     transition: 'fast',
   }),
@@ -56,6 +57,13 @@ export const popup = style([
   },
 ]);
 
+export const titleContainer = style([
+  sprinkles({
+    display: 'block',
+    paddingRight: 'xxlarge', // Reserve space for absolutely positioned close button
+  }),
+]);
+
 export const titleOutline = style([
   sprinkles({
     borderRadius: 'small',
@@ -66,4 +74,13 @@ export const titleOutline = style([
       outlineOffset: 2,
     },
   },
+]);
+
+export const closeContainer = style([
+  sprinkles({
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    padding: dialogPadding,
+  }),
 ]);
