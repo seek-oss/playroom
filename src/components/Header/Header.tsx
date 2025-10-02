@@ -243,10 +243,15 @@ const ShareMenu = () => {
 const HeaderMenu = () => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const inputCommandRef = useRef<EditorCommand | null>(null);
-  const [openDialog, setOpenDialog] = useState(false);
   const { runCommand } = useEditor();
   const [
-    { editorOrientation, editorHidden, colorScheme, hasSyntaxError },
+    {
+      editorOrientation,
+      editorHidden,
+      colorScheme,
+      hasSyntaxError,
+      openDialogOpen,
+    },
     dispatch,
   ] = useContext(StoreContext);
   const [editorPosition, setEditorPosition] = useState<
@@ -268,7 +273,7 @@ const HeaderMenu = () => {
 
       if (cmdOrCtrl && e.key === 'o') {
         e.preventDefault();
-        setOpenDialog(true);
+        dispatch({ type: 'openPlayroomDialog' });
         return;
       }
     };
@@ -278,7 +283,7 @@ const HeaderMenu = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -316,7 +321,7 @@ const HeaderMenu = () => {
         </MenuItemLink>
         <MenuItem
           icon={FolderOpen}
-          onClick={() => setOpenDialog(true)}
+          onClick={() => dispatch({ type: 'openPlayroomDialog' })}
           shortcut={['Cmd', 'O']}
         >
           Open...
@@ -448,11 +453,17 @@ const HeaderMenu = () => {
 
       <Dialog
         title="Open Playroom"
-        open={openDialog}
-        onOpenChange={setOpenDialog}
+        open={openDialogOpen}
+        onOpenChange={(open) =>
+          dispatch({
+            type: open ? 'openPlayroomDialog' : 'closePlayroomDialog',
+          })
+        }
       >
         <div className={styles.openDialogContent}>
-          <PreviewTiles onSelect={() => setOpenDialog(false)} />
+          <PreviewTiles
+            onSelect={() => dispatch({ type: 'closePlayroomDialog' })}
+          />
         </div>
       </Dialog>
     </>

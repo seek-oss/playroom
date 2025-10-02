@@ -55,6 +55,7 @@ export const menuButton = style([
     gap: 'small',
     borderRadius: 'small',
     border: 0,
+    padding: 'none',
   }),
   minTouchableBeforePseudo,
   {

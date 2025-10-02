@@ -8,6 +8,8 @@ import { fontSizeDefinitions, vars } from '../../css/vars.css';
 export const base = style([
   sprinkles({
     display: 'block',
+    margin: 'none',
+    fontWeight: 'normal',
   }),
   {
     fontFamily: vars.font.family.standard,
@@ -46,6 +48,11 @@ export const positive = style({
 
 export const strong = sprinkles({
   fontWeight: 'strong',
+});
+
+export const underline = style({
+  textDecoration: 'underline',
+  textUnderlineOffset: '3px',
 });
 
 export const truncate = style([
