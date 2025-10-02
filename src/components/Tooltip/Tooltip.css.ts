@@ -8,6 +8,8 @@ export const popup = style([
   sprinkles({ padding: 'xsmall', borderRadius: 'medium' }),
   {
     backgroundColor: colorPaletteVars.background.tooltip,
+    outline: `1px solid ${colorPaletteVars.border.tooltip}`,
+    outlineOffset: -1,
     vars: {
       [colorPaletteVars.foreground.neutral]:
         colorPaletteVars.foreground.tooltip,

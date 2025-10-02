@@ -6,7 +6,6 @@ import {
 } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
 
-import { sharedPopupStyles } from '../../css/shared.css';
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
@@ -96,24 +95,6 @@ export const tone = styleVariants({
     },
   },
 });
-
-globalStyle(`${button} > svg`, {
-  display: 'block',
-  height: sizeVar,
-  width: sizeVar,
-});
-
-export const popup = style([
-  sharedPopupStyles,
-  sprinkles({ padding: 'xsmall', borderRadius: 'medium' }),
-  {
-    backgroundColor: colorPaletteVars.background.tooltip,
-    vars: {
-      [colorPaletteVars.foreground.neutral]:
-        colorPaletteVars.foreground.tooltip,
-    },
-  },
-]);
 
 globalStyle(`${button} > svg`, {
   display: 'block',
