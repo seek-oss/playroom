@@ -15,6 +15,7 @@ import {
 } from '../KeyboardShortcut/KeyboardShortcut';
 import { Snippets } from '../Snippets/Snippets';
 import { Text } from '../Text/Text';
+import { SharedTooltipContext, Tooltip } from '../Tooltip/Tooltip';
 
 import * as styles from './EditorActions.css';
 
@@ -32,13 +33,15 @@ const EditorActionButton = ({
   icon: Icon,
   ...restProps
 }: EditorActionButtonProps) => (
-  <button {...restProps} onClick={onClick} className={styles.button}>
-    <Icon size={16} />
-    <Text>{name}</Text>
-    <Text tone="secondary">
-      <KeyboardShortcut shortcut={shortcut} />
-    </Text>
-  </button>
+  <Tooltip
+    label={<KeyboardShortcut shortcut={shortcut} hideOnMobile={false} />}
+    trigger={
+      <button {...restProps} onClick={onClick} className={styles.button}>
+        <Icon size={16} />
+        <Text>{name}</Text>
+      </button>
+    }
+  />
 );
 
 export const EditorActions = () => {
@@ -47,33 +50,35 @@ export const EditorActions = () => {
   const hasSnippets = snippets && snippets.length > 0;
 
   return (
-    <div className={styles.root}>
-      {hasSyntaxError ? (
-        <div className={styles.syntaxErrorsContainer}>
-          <Text>Code has syntax errors. Fix them to use editor actions.</Text>
-        </div>
-      ) : (
-        <>
-          {hasSnippets ? (
-            <Snippets
-              trigger={(triggerProps) => (
-                <EditorActionButton
-                  {...triggerProps}
-                  name="Insert snippet"
-                  shortcut={[primaryMod, 'K']}
-                  icon={BetweenHorizontalStart}
-                />
-              )}
+    <SharedTooltipContext>
+      <div className={styles.root}>
+        {hasSyntaxError ? (
+          <div className={styles.syntaxErrorsContainer}>
+            <Text>Code has syntax errors. Fix them to use editor actions.</Text>
+          </div>
+        ) : (
+          <>
+            {hasSnippets ? (
+              <Snippets
+                trigger={(triggerProps) => (
+                  <EditorActionButton
+                    {...triggerProps}
+                    name="Insert snippet"
+                    shortcut={[primaryMod, 'K']}
+                    icon={BetweenHorizontalStart}
+                  />
+                )}
+              />
+            ) : null}
+            <EditorActionButton
+              onClick={() => runCommand('formatCode')}
+              name="Tidy"
+              shortcut={[primaryMod, 'S']}
+              icon={BrushCleaningIcon}
             />
-          ) : null}
-          <EditorActionButton
-            onClick={() => runCommand('formatCode')}
-            name="Tidy"
-            shortcut={[primaryMod, 'S']}
-            icon={BrushCleaningIcon}
-          />
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
+    </SharedTooltipContext>
   );
 };
