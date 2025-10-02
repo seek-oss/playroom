@@ -8,6 +8,11 @@ import { useContext, type ButtonHTMLAttributes } from 'react';
 
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
+import { primaryMod } from '../CodeEditor/editorCommands';
+import {
+  KeyboardShortcut,
+  type KeyCombination,
+} from '../KeyboardShortcut/KeyboardShortcut';
 import { Snippets } from '../Snippets/Snippets';
 import { Text } from '../Text/Text';
 
@@ -16,7 +21,7 @@ import * as styles from './EditorActions.css';
 interface EditorActionButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   name: string;
-  shortcut: string;
+  shortcut: KeyCombination;
   icon: LucideIcon;
 }
 
@@ -30,7 +35,9 @@ const EditorActionButton = ({
   <button {...restProps} onClick={onClick} className={styles.button}>
     <Icon size={16} />
     <Text>{name}</Text>
-    <Text tone="secondary">{shortcut}</Text>
+    <Text tone="secondary">
+      <KeyboardShortcut shortcut={shortcut} />
+    </Text>
   </button>
 );
 
@@ -53,7 +60,7 @@ export const EditorActions = () => {
                 <EditorActionButton
                   {...triggerProps}
                   name="Insert snippet"
-                  shortcut="⌘K"
+                  shortcut={[primaryMod, 'K']}
                   icon={BetweenHorizontalStart}
                 />
               )}
@@ -62,7 +69,7 @@ export const EditorActions = () => {
           <EditorActionButton
             onClick={() => runCommand('formatCode')}
             name="Tidy"
-            shortcut="⌘S"
+            shortcut={[primaryMod, 'S']}
             icon={BrushCleaningIcon}
           />
         </>

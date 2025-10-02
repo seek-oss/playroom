@@ -20,11 +20,13 @@ export const popup = style([
  * BaseUI Menu Vars
  * See https://base-ui.com/react/components/menu#positioner
  */
-const baseUIAvailableMenuHeight = 'var(--available-height)';
+const baseUIMenuVars = {
+  availableHeight: 'var(--available-height)',
+  availableWidth: 'var(--available-width)',
+};
 export const menuSizeLimit = style({
-  maxHeight: calc(baseUIAvailableMenuHeight)
-    .subtract(vars.space.xsmall)
-    .toString(),
+  maxHeight: baseUIMenuVars.availableHeight,
+  maxWidth: baseUIMenuVars.availableWidth,
 });
 
 export const small = style({

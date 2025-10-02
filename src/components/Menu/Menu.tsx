@@ -10,8 +10,11 @@ import {
   useContext,
 } from 'react';
 
-import { isMac } from '../../utils/formatting';
 import { useCopy } from '../../utils/useCopy';
+import {
+  KeyboardShortcut,
+  type KeyCombination,
+} from '../KeyboardShortcut/KeyboardShortcut';
 import { ScrollContainer } from '../ScrollContainer/ScrollContainer';
 import { Text } from '../Text/Text';
 import { Tooltip } from '../Tooltip/Tooltip';
@@ -20,25 +23,7 @@ import TickIcon from '../icons/TickIcon';
 
 import * as styles from './Menu.css';
 
-export type Shortcut = string[];
-const mac = isMac();
 export const menuIconSize = 16;
-
-const wordToSymbolMap: Record<string, string> = {
-  Cmd: '⌘',
-  Alt: '⌥',
-  Shift: '⇧',
-  Up: '↑',
-  Down: '↓',
-};
-
-const convertShortcutForPlatform = (shortcut: Shortcut) => {
-  if (!mac) {
-    return shortcut;
-  }
-
-  return shortcut.map((key) => wordToSymbolMap[key] || key);
-};
 
 const SubMenuTriggerContext = createContext(false);
 
@@ -46,7 +31,7 @@ type MenuItemProps = Omit<
   ComponentProps<typeof BaseUIMenu.Item>,
   'render' | 'className'
 > & {
-  shortcut?: Shortcut;
+  shortcut?: KeyCombination;
   icon?: LucideIcon;
   disabledReason?: string;
 };
@@ -69,13 +54,9 @@ export const MenuItem = ({
         </Text>
       </span>
       {shortcut && (
-        <span className={styles.shortcut}>
-          {convertShortcutForPlatform(shortcut).map((key, index) => (
-            <Text tone="secondary" key={index}>
-              {key}
-            </Text>
-          ))}
-        </span>
+        <Text tone="secondary">
+          <KeyboardShortcut shortcut={shortcut} />
+        </Text>
       )}
       {isSubMenuTrigger ? <ChevronIcon direction="right" size={12} /> : null}
     </BaseUIMenu.Item>
@@ -122,13 +103,9 @@ export const MenuItemLink = ({
             <Text truncate>{children}</Text>
           </span>
           {shortcut && (
-            <span className={styles.shortcut}>
-              {convertShortcutForPlatform(shortcut).map((key, index) => (
-                <Text tone="secondary" key={index}>
-                  {key}
-                </Text>
-              ))}
-            </span>
+            <Text tone="secondary">
+              <KeyboardShortcut shortcut={shortcut} />
+            </Text>
           )}
           {isSubMenuTrigger ? (
             <ChevronIcon direction="right" size={12} />

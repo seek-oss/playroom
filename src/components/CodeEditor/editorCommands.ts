@@ -40,7 +40,7 @@ export interface EditorCommandMeta {
 
 const mac = isMac();
 
-const primaryMod = mac ? 'Cmd' : 'Ctrl';
+export const primaryMod = mac ? 'Cmd' : 'Ctrl';
 
 export const editorCommandList: EditorCommandMeta[] = [
   {
