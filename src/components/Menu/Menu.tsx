@@ -182,13 +182,16 @@ export const MenuSeparator = () => (
 export const MenuGroup = ({
   label,
   children,
+  action,
 }: {
   label: string;
   children: ComponentProps<typeof BaseUIMenu.Group>['children'];
+  action?: ComponentProps<typeof BaseUIMenu.Group>['children'];
 }) => (
   <BaseUIMenu.Group>
     <BaseUIMenu.GroupLabel className={styles.menuGroupLabel}>
       <Text weight="strong">{label}</Text>
+      {action}
     </BaseUIMenu.GroupLabel>
     {children}
   </BaseUIMenu.Group>
@@ -291,3 +294,24 @@ export const MenuCopyItem = ({ content, children }: MenuCopyItemProps) => {
     </BaseUIMenu.Item>
   );
 };
+
+type MenuClearItemProps = Omit<
+  ComponentProps<typeof BaseUIMenu.Item>,
+  'render' | 'className'
+>;
+export const MenuClearItem = ({
+  onClick,
+  children,
+  ...restProps
+}: MenuClearItemProps) => (
+  <BaseUIMenu.Item
+    {...restProps}
+    className={styles.clearItem}
+    closeOnClick={false}
+    onClick={onClick}
+  >
+    <Text tone="secondary" size="small">
+      {children}
+    </Text>
+  </BaseUIMenu.Item>
+);

@@ -47,6 +47,7 @@ import { Logo } from '../Logo/Logo';
 import {
   Menu,
   MenuCheckboxItem,
+  MenuClearItem,
   MenuCopyItem,
   MenuGroup,
   MenuItem,
@@ -57,12 +58,10 @@ import {
 } from '../Menu/Menu';
 import { PreviewTiles } from '../PreviewTiles/PreviewTiles';
 import { Text } from '../Text/Text';
-import { TextButton } from '../TextButton/TextButton';
 import { Title } from '../Title/Title';
 import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Header.css';
-import * as menuStyles from '../Menu/Menu.css';
 
 export const logoSize = 24;
 
@@ -109,80 +108,82 @@ const FramesMenu = () => {
 
   return (
     <>
-      <div className={menuStyles.menuGroupLabel}>
-        <Text weight="strong">Widths</Text>
-        {hasFilteredWidths ? (
-          <TextButton
-            label="Clear"
-            onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            onClick={() => dispatch({ type: 'resetSelectedWidths' })}
-          />
-        ) : null}
-      </div>
-      {availableWidths.map((width) => (
-        <MenuCheckboxItem
-          icon={getIconForWidth(width)}
-          key={width}
-          checked={hasFilteredWidths && selectedWidths.includes(width)}
-          onCheckedChange={(checked: boolean) => {
-            const newWidths =
-              selectedWidths.length === 0 ? [width] : selectedWidths;
+      <MenuGroup
+        label="Widths"
+        action={
+          hasFilteredWidths ? (
+            <MenuClearItem
+              onClick={() => dispatch({ type: 'resetSelectedWidths' })}
+              aria-label="Clear selected widths"
+            >
+              Clear
+            </MenuClearItem>
+          ) : null
+        }
+      >
+        {availableWidths.map((width) => (
+          <MenuCheckboxItem
+            icon={getIconForWidth(width)}
+            key={width}
+            checked={hasFilteredWidths && selectedWidths.includes(width)}
+            onCheckedChange={(checked: boolean) => {
+              const newWidths =
+                selectedWidths.length === 0 ? [width] : selectedWidths;
 
-            dispatch({
-              type: 'updateSelectedWidths',
-              payload: {
-                widths: checked
-                  ? [...newWidths, width]
-                  : newWidths.filter((w) => w !== width),
-              },
-            });
-          }}
-        >
-          {width}
-        </MenuCheckboxItem>
-      ))}
+              dispatch({
+                type: 'updateSelectedWidths',
+                payload: {
+                  widths: checked
+                    ? [...newWidths, width]
+                    : newWidths.filter((w) => w !== width),
+                },
+              });
+            }}
+          >
+            {width}
+          </MenuCheckboxItem>
+        ))}
+      </MenuGroup>
 
       {themesEnabled ? (
         <>
           <MenuSeparator />
 
-          <div className={menuStyles.menuGroupLabel}>
-            <Text weight="strong">Themes</Text>
-            {hasFilteredThemes ? (
-              <TextButton
-                label="Clear"
-                onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-                onClick={() => dispatch({ type: 'resetSelectedThemes' })}
-              />
-            ) : null}
-          </div>
-          {availableThemes.map((theme) => (
-            <MenuCheckboxItem
-              key={theme}
-              checked={hasFilteredThemes && selectedThemes.includes(theme)}
-              onCheckedChange={(checked: boolean) => {
-                const newThemes =
-                  selectedThemes.length === 0 ? [theme] : selectedThemes;
+          <MenuGroup
+            label="Themes"
+            action={
+              hasFilteredThemes ? (
+                <MenuClearItem
+                  onClick={() => dispatch({ type: 'resetSelectedThemes' })}
+                  aria-label="Clear selected themes"
+                >
+                  Clear
+                </MenuClearItem>
+              ) : null
+            }
+          >
+            {availableThemes.map((theme) => (
+              <MenuCheckboxItem
+                key={theme}
+                checked={hasFilteredThemes && selectedThemes.includes(theme)}
+                onCheckedChange={(checked: boolean) => {
+                  const newThemes =
+                    selectedThemes.length === 0 ? [theme] : selectedThemes;
 
-                dispatch({
-                  type: 'updateSelectedThemes',
-                  payload: {
-                    themes: checked
-                      ? [...newThemes, theme]
-                      : newThemes.filter((w) => w !== theme),
-                  },
-                });
-              }}
-            >
-              {theme}
-            </MenuCheckboxItem>
-          ))}
+                  dispatch({
+                    type: 'updateSelectedThemes',
+                    payload: {
+                      themes: checked
+                        ? [...newThemes, theme]
+                        : newThemes.filter((w) => w !== theme),
+                    },
+                  });
+                }}
+              >
+                {theme}
+              </MenuCheckboxItem>
+            ))}
+          </MenuGroup>
         </>
       ) : null}
     </>

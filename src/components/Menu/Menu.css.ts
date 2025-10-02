@@ -1,8 +1,12 @@
 import { createVar, globalStyle, style } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
 import { comma } from '../../css/delimiters';
 
-import { sharedPopupStyles } from '../../css/shared.css';
+import {
+  minTouchableBeforePseudo,
+  sharedPopupStyles,
+} from '../../css/shared.css';
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
@@ -193,3 +197,29 @@ export const shortcut = style({
   justifyItems: 'center',
   isolation: 'isolate',
 });
+
+const clearItemPadding = 'xsmall';
+export const clearItem = style([
+  sprinkles({
+    position: 'relative',
+    display: 'block',
+    textAlign: 'center',
+    borderRadius: 'small',
+    paddingY: clearItemPadding,
+    paddingX: clearItemPadding,
+  }),
+  minTouchableBeforePseudo,
+  {
+    background: 'transparent',
+    border: 'none',
+    margin: calc(vars.space[clearItemPadding]).negate().toString(),
+    selectors: {
+      [comma('&:hover', '&[data-highlighted]')]: {
+        backgroundColor: colorPaletteVars.background.selection,
+      },
+      [`&:focus-visible`]: {
+        outline: `2px solid ${colorPaletteVars.outline.focus}`,
+      },
+    },
+  },
+]);
