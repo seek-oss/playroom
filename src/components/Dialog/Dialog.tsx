@@ -1,7 +1,6 @@
 import { Dialog as BaseUIDialog } from '@base-ui-components/react';
 import { useId, useRef, type ComponentProps } from 'react';
 
-import { Box } from '../Box/Box';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { Heading } from '../Heading/Heading';
 import { Stack } from '../Stack/Stack';
@@ -43,12 +42,7 @@ export const Dialog = ({
           finalFocus={finalFocus}
         >
           <Stack space="xlarge">
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              gap="small"
-              flexGrow={1}
-            >
+            <div className={styles.titleContainer}>
               <Heading level="3">
                 <span
                   ref={headingRef}
@@ -59,20 +53,22 @@ export const Dialog = ({
                   {title}
                 </span>
               </Heading>
-              <BaseUIDialog.Close
-                render={
-                  <ButtonIcon
-                    bleed
-                    variant="transparent"
-                    icon={<DismissIcon />}
-                    label="Close"
-                  />
-                }
-              />
-            </Box>
+            </div>
 
             <>{children}</>
           </Stack>
+          <div className={styles.closeContainer}>
+            <BaseUIDialog.Close
+              render={
+                <ButtonIcon
+                  bleed
+                  variant="transparent"
+                  icon={<DismissIcon />}
+                  label="Close"
+                />
+              }
+            />
+          </div>
         </BaseUIDialog.Popup>
       </BaseUIDialog.Portal>
     </BaseUIDialog.Root>
