@@ -233,7 +233,7 @@ export const light = {
     accent: lightPalette.blue[800],
     secondaryAccent: lightPalette.gray[1000],
     secondaryAccentLight: mix(0.1, '#fff', lightPalette.gray[1000]),
-    positive: lightPalette.teal[900],
+    positive: lightPalette.teal[300],
     critical: lightPalette.red[300],
     body: mix(0.5, lightPalette.gray[100], lightPalette.background[200]),
     surface: mix(
@@ -284,7 +284,7 @@ export const dark = {
     accent: darkPalette.blue[900],
     secondaryAccent: darkPalette.gray[1000],
     secondaryAccentLight: mix(0.1, '#000', darkPalette.gray[1000]),
-    positive: darkPalette.teal[900],
+    positive: darkPalette.teal[300],
     critical: darkPalette.red[300],
     body: darkPalette.background[100],
     surface: mix(0.5, darkPalette.gray[100], darkPalette.background[100]),
