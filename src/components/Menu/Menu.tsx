@@ -51,15 +51,16 @@ export const MenuItem = ({
   children,
   shortcut,
   icon: Icon,
+  disabled,
   ...restProps
 }: MenuItemProps) => {
   const isSubMenuTrigger = useContext(SubMenuTriggerContext);
 
   return (
-    <BaseUIMenu.Item className={styles.item} {...restProps}>
+    <BaseUIMenu.Item className={styles.item} disabled={disabled} {...restProps}>
       <span className={styles.itemLeft}>
         {Icon ? <Icon size={menuIconSize} /> : null}
-        <Text>{children}</Text>
+        <Text tone={disabled ? 'secondary' : undefined}>{children}</Text>
       </span>
       {shortcut && (
         <span className={styles.shortcut}>
