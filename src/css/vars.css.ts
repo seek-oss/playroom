@@ -23,6 +23,7 @@ export const vars = createGlobalTheme(':root', {
     },
     scale: fontScale,
     weight: {
+      normal: '400',
       strong: '700',
     },
   },

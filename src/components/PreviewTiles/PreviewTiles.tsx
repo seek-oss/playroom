@@ -23,30 +23,24 @@ export const PreviewTiles = ({ onSelect }: { onSelect: () => void }) => {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  const sortedPlayroomEntries = useMemo(
+  const playroomEntries = useMemo(
     () =>
-      Object.entries(storedPlayrooms)
-        .sort(
-          ([, { lastModifiedDate: aDate }], [, { lastModifiedDate: bDate }]) =>
-            bDate.getTime() - aDate.getTime()
-        )
-        .map(([id, storedPlayroom]) => {
-          const params = decompressParams(storedPlayroom.dataParam);
-          const { themes, code = '' } = params;
-          const themeName =
-            themes?.length === 1 ? themes[0] : selectedThemes[0];
+      Object.entries(storedPlayrooms).map(([id, storedPlayroom]) => {
+        const params = decompressParams(storedPlayroom.dataParam);
+        const { themes, code = '' } = params;
+        const themeName = themes?.length === 1 ? themes[0] : selectedThemes[0];
 
-          return {
-            id,
-            code,
-            params,
-            themeName,
-          };
-        }),
+        return {
+          id,
+          code,
+          params,
+          themeName,
+        };
+      }),
     [storedPlayrooms, selectedThemes]
   );
 
-  return sortedPlayroomEntries.length === 0 ? (
+  return playroomEntries.length === 0 ? (
     <Stack space="large">
       <Text size="large">No saved Playrooms available.</Text>
       <Text size="large">
@@ -58,7 +52,7 @@ export const PreviewTiles = ({ onSelect }: { onSelect: () => void }) => {
   ) : (
     <>
       <ul ref={listRef} tabIndex={-1} className={styles.tiles}>
-        {sortedPlayroomEntries.map(({ id, params, code, themeName }) => (
+        {playroomEntries.map(({ id, params, code, themeName }) => (
           <ContextMenu
             key={id}
             trigger={

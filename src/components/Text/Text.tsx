@@ -9,6 +9,7 @@ interface Props {
   tone?: 'neutral' | 'secondary' | 'critical' | 'positive';
   as?: ElementType;
   truncate?: boolean;
+  underline?: boolean;
   children: ReactNode;
 }
 
@@ -22,6 +23,7 @@ export const Text = ({
   weight = 'regular',
   tone = 'neutral',
   truncate = false,
+  underline = false,
   children,
 }: Props) =>
   React.createElement(
@@ -29,6 +31,7 @@ export const Text = ({
     {
       className: clsx(styles.base, styles.size[size], styles[tone], {
         [styles.strong]: weight === 'strong',
+        [styles.underline]: underline,
       }),
     },
     truncate ? <Truncate>{children}</Truncate> : children

@@ -79,6 +79,7 @@ interface State {
   previewEditorCode?: string;
   highlightLineNumber?: number;
   snippetsOpen: boolean;
+  openDialogOpen: boolean;
   hasSyntaxError?: boolean;
   cursorPosition: CursorPosition;
   editorHidden: boolean;
@@ -101,6 +102,8 @@ export type Action =
     }
   | { type: 'persistSnippet'; payload: { snippet: Snippet } }
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
+  | { type: 'openPlayroomDialog' }
+  | { type: 'closePlayroomDialog' }
   | { type: 'openSnippets' }
   | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
@@ -162,6 +165,14 @@ const resetPreview = ({
   ...state,
   snippetsOpen: false,
 });
+
+const sortStoredPlayrooms = (storedPlayrooms: State['storedPlayrooms']) =>
+  Object.fromEntries(
+    Object.entries(storedPlayrooms).sort(
+      ([, { lastModifiedDate: aDate }], [, { lastModifiedDate: bDate }]) =>
+        bDate.getTime() - aDate.getTime()
+    )
+  );
 
 const createPlayroomId = () => self.crypto.randomUUID();
 
@@ -278,6 +289,20 @@ const reducer = (state: State, action: Action): State => {
         editorErrorMessage: undefined,
         previewEditorCode: code,
         highlightLineNumber: cursor.line,
+      };
+    }
+
+    case 'openPlayroomDialog': {
+      return {
+        ...state,
+        openDialogOpen: true,
+      };
+    }
+
+    case 'closePlayroomDialog': {
+      return {
+        ...state,
+        openDialogOpen: false,
       };
     }
 
@@ -421,6 +446,15 @@ const reducer = (state: State, action: Action): State => {
 
     case 'storePlayroom': {
       const { id, dataParam } = action.payload;
+      const previous = state.storedPlayrooms[id];
+      const hasNotChanged = previous?.dataParam === dataParam;
+      const hasNothingToSave =
+        state.code.trim().length === 0 &&
+        (state.title || '').trim().length === 0;
+
+      if (hasNotChanged || hasNothingToSave) {
+        return state;
+      }
 
       const updatedPlayrooms = {
         ...state.storedPlayrooms,
@@ -434,7 +468,7 @@ const reducer = (state: State, action: Action): State => {
 
       return {
         ...state,
-        storedPlayrooms: updatedPlayrooms,
+        storedPlayrooms: sortStoredPlayrooms(updatedPlayrooms),
       };
     }
 
@@ -463,6 +497,7 @@ const initialState: State = {
   code: exampleCode,
   cursorPosition: { line: 0, ch: 0 },
   snippetsOpen: false,
+  openDialogOpen: false,
   editorHidden: false,
   editorOrientation: defaultOrientation,
   editorHeight: defaultEditorSize,
@@ -559,7 +594,9 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
             ...(themesEnabled && selectedThemes ? { selectedThemes } : {}),
             ...(selectedWidths ? { selectedWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
-            ...(storedPlayrooms ? { storedPlayrooms } : {}),
+            ...(storedPlayrooms
+              ? { storedPlayrooms: sortStoredPlayrooms(storedPlayrooms) }
+              : {}),
             title,
           },
         });
