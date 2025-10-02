@@ -13,6 +13,7 @@ import {
 import { isMac } from '../../utils/formatting';
 import { useCopy } from '../../utils/useCopy';
 import { Text } from '../Text/Text';
+import { Tooltip } from '../Tooltip/Tooltip';
 import ChevronIcon from '../icons/ChevronIcon';
 import TickIcon from '../icons/TickIcon';
 
@@ -46,17 +47,19 @@ type MenuItemProps = Omit<
 > & {
   shortcut?: Shortcut;
   icon?: LucideIcon;
+  disabledReason?: string;
 };
 export const MenuItem = ({
   children,
   shortcut,
   icon: Icon,
   disabled,
+  disabledReason,
   ...restProps
 }: MenuItemProps) => {
   const isSubMenuTrigger = useContext(SubMenuTriggerContext);
 
-  return (
+  const item = (
     <BaseUIMenu.Item className={styles.item} disabled={disabled} {...restProps}>
       <span className={styles.itemLeft}>
         {Icon ? <Icon size={menuIconSize} /> : null}
@@ -73,6 +76,18 @@ export const MenuItem = ({
       )}
       {isSubMenuTrigger ? <ChevronIcon direction="right" size={12} /> : null}
     </BaseUIMenu.Item>
+  );
+
+  return disabled && disabledReason ? (
+    <Tooltip
+      label={disabledReason}
+      announceAsDescription
+      delay={500}
+      side="right"
+      trigger={item}
+    />
+  ) : (
+    item
   );
 };
 
