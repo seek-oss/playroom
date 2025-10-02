@@ -54,9 +54,11 @@ export const menuButton = style([
     alignItems: 'center',
     gap: 'small',
     borderRadius: 'small',
+    border: 0,
   }),
   minTouchableBeforePseudo,
   {
+    background: 'transparent',
     color: colorPaletteVars.background.secondaryAccent,
     isolation: 'isolate',
     '::after': {
