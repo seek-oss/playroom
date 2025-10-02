@@ -248,6 +248,7 @@ export const light = {
   border: {
     standard: lightPalette.gray[400],
     accent: lightPalette.blue[800],
+    tooltip: lightPalette.gray[1000],
   },
   outline: {
     focus: lightPalette.blue[600],
@@ -294,6 +295,7 @@ export const dark = {
   border: {
     standard: darkPalette.gray[400],
     accent: darkPalette.blue[900],
+    tooltip: darkPalette.gray[200],
   },
   outline: {
     focus: darkPalette.blue[600],
