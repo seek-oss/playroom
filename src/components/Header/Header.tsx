@@ -292,10 +292,19 @@ const HeaderMenu = () => {
         ref={menuTriggerRef}
         width="small"
         trigger={
-          <span className={styles.menuButton}>
-            <Logo size={logoSize} />
-            <ChevronIcon direction="down" size={12} />
-          </span>
+          <Tooltip
+            label="Main menu"
+            trigger={
+              <button
+                type="button"
+                aria-label="Main menu"
+                className={styles.menuButton}
+              >
+                <Logo size={logoSize} />
+                <ChevronIcon direction="down" size={12} />
+              </button>
+            }
+          />
         }
       >
         <MenuItemLink
@@ -503,6 +512,7 @@ export const Header = () => {
                     trigger={
                       <button
                         type="button"
+                        aria-label="Share options"
                         className={styles.segmentedIconButton}
                       >
                         <ChevronIcon direction="down" size={14} />

@@ -11,6 +11,7 @@ export const Title = () => {
     <input
       type="text"
       id="playroomTitleField"
+      aria-label="Title"
       placeholder="Untitled"
       className={styles.textField}
       value={title}

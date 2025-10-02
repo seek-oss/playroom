@@ -28,6 +28,7 @@ export const ButtonIcon = ({
     trigger={
       <button
         {...restProps}
+        aria-label={label}
         className={clsx({
           [styles.button]: true,
           [styles.variant[variant]]: true,
