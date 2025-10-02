@@ -9,10 +9,12 @@ import {
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
+import { primaryMod } from '../CodeEditor/editorCommands';
 import { EditorActions } from '../EditorActions/EditorActions';
 import { EditorErrorMessage } from '../EditorErrorMessage/EditorErrorMessage';
 import Frames from '../Frames/Frames';
 import { Header } from '../Header/Header';
+import { KeyboardShortcut } from '../KeyboardShortcut/KeyboardShortcut';
 import { Logo } from '../Logo/Logo';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
@@ -48,11 +50,11 @@ const ZeroState = () => {
 
       <Stack space="large">
         <Text size="large" tone="secondary">
-          Open playroom ⌘O
+          Open playroom <KeyboardShortcut shortcut={[primaryMod, 'O']} />
         </Text>
         {hasSnippets ? (
           <Text size="large" tone="secondary">
-            Insert snippet ⌘K
+            Insert snippet <KeyboardShortcut shortcut={[primaryMod, 'K']} />
           </Text>
         ) : null}
       </Stack>
