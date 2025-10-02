@@ -8,10 +8,7 @@ import { calc } from '@vanilla-extract/css-utils';
 
 import { comma } from '../../css/delimiters';
 
-import {
-  minTouchableBeforePseudo,
-  sharedPopupStyles,
-} from '../../css/shared.css';
+import { minTouchableBeforePseudo } from '../../css/shared.css';
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
@@ -149,15 +146,3 @@ globalStyle(`${content} > svg`, {
   height: sizeVar,
   width: sizeVar,
 });
-
-export const popup = style([
-  sharedPopupStyles,
-  sprinkles({ padding: 'xsmall', borderRadius: 'medium' }),
-  {
-    backgroundColor: colorPaletteVars.background.tooltip,
-    vars: {
-      [colorPaletteVars.foreground.neutral]:
-        colorPaletteVars.foreground.tooltip,
-    },
-  },
-]);

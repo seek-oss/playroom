@@ -1,15 +1,13 @@
-import { Tooltip } from '@base-ui-components/react';
 import clsx from 'clsx';
-import type { ComponentProps } from 'react';
 
-import { Text } from '../Text/Text';
+import type { ButtonIconProps } from '../ButtonIcon/ButtonIcon';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 import * as styles from './FrameActionButton.css';
 
-interface FrameActionButtonProps
-  extends Omit<ComponentProps<typeof Tooltip.Trigger>, 'style' | 'className'> {
-  icon: ComponentProps<typeof Tooltip.Trigger>['children'];
-  label: string;
+interface FrameActionButtonProps {
+  icon: ButtonIconProps['icon'];
+  label: ButtonIconProps['label'];
   size?: keyof typeof styles.size;
   tone?: keyof typeof styles.tone;
 }
@@ -22,22 +20,15 @@ export const FrameActionButton = ({
   tone = 'neutral',
   ...restProps
 }: FrameActionButtonProps) => (
-  <Tooltip.Root delay={0}>
-    <Tooltip.Trigger
-      {...restProps}
-      aria-label={label}
-      className={clsx(styles.button, styles.size[size], styles.tone[tone])}
-    >
-      {icon}
-    </Tooltip.Trigger>
-    <Tooltip.Portal>
-      <Tooltip.Positioner sideOffset={12 /* vars.space.small */}>
-        <Tooltip.Popup className={styles.popup}>
-          <Text size="small" weight="strong">
-            {label}
-          </Text>
-        </Tooltip.Popup>
-      </Tooltip.Positioner>
-    </Tooltip.Portal>
-  </Tooltip.Root>
+  <Tooltip
+    label={label}
+    trigger={
+      <button
+        {...restProps}
+        className={clsx(styles.button, styles.size[size], styles.tone[tone])}
+      >
+        {icon}
+      </button>
+    }
+  />
 );
