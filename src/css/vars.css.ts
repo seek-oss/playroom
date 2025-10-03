@@ -52,4 +52,9 @@ export const vars = createGlobalTheme(':root', {
     xxlarge: '32px',
     xxxlarge: '40px',
   },
+  buttonSizes: {
+    small: '28px',
+    medium: '32px',
+    large: '36px',
+  },
 });

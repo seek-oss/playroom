@@ -18,6 +18,7 @@ export const foreground = createVar();
 export const button = style([
   sprinkles({
     boxSizing: 'border-box',
+    position: 'relative',
     margin: 'none',
     padding: 'none',
     userSelect: 'none',
@@ -25,9 +26,12 @@ export const button = style([
     appearance: 'none',
     borderRadius: 'medium',
   }),
+  minTouchableBeforePseudo,
   {
     background: 'transparent',
     outline: 'none',
+    height: sizeVar,
+    width: sizeVar,
   },
 ]);
 
@@ -35,26 +39,26 @@ const padding = 'xsmall';
 
 export const content = style([
   sprinkles({
+    position: 'absolute',
+    inset: 0,
     boxSizing: 'border-box',
     userSelect: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
     transition: 'fast',
+    height: 'full',
+    width: 'full',
     padding,
   }),
-  minTouchableBeforePseudo,
   {
     borderRadius: 'inherit',
     background: 'transparent',
     outline: 'none',
     color: foreground,
     isolation: 'isolate',
-    height: 'auto',
-    width: 'auto',
     selectors: {
-      ['&[data-pressed], &:active']: {
+      [comma(`${button}[data-pressed] &`, `${button}:active &`)]: {
         transform: 'scale(.95)',
       },
       [`${button}:focus-visible &`]: {
@@ -64,23 +68,11 @@ export const content = style([
   },
 ]);
 
-export const size = styleVariants({
-  small: {
-    vars: {
-      [sizeVar]: '16px',
-    },
+export const size = styleVariants(vars.buttonSizes, (buttonSize) => ({
+  vars: {
+    [sizeVar]: buttonSize,
   },
-  medium: {
-    vars: {
-      [sizeVar]: '20px',
-    },
-  },
-  large: {
-    vars: {
-      [sizeVar]: '24px',
-    },
-  },
-});
+}));
 
 export const tone = styleVariants({
   neutral: {
@@ -144,6 +136,6 @@ export const bleed = style({
 
 globalStyle(`${content} > svg`, {
   display: 'block',
-  height: sizeVar,
-  width: sizeVar,
+  height: '100%',
+  width: '100%',
 });
