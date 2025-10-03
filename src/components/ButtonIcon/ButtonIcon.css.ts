@@ -19,6 +19,7 @@ export const button = style([
   sprinkles({
     boxSizing: 'border-box',
     margin: 'none',
+    padding: 'none',
     userSelect: 'none',
     border: 0,
     appearance: 'none',
@@ -26,7 +27,7 @@ export const button = style([
   }),
   {
     background: 'transparent',
-    padding: 0,
+    outline: 'none',
   },
 ]);
 
@@ -35,10 +36,7 @@ const padding = 'xsmall';
 export const content = style([
   sprinkles({
     boxSizing: 'border-box',
-    margin: 'none',
     userSelect: 'none',
-    border: 0,
-    appearance: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -107,6 +105,7 @@ export const variant = styleVariants({
     {
       backgroundColor: colorPaletteVars.background.surface,
       outline: `1px solid ${colorPaletteVars.border.standard}`,
+      outlineOffset: -1,
       selectors: {
         [comma('&:hover', '[data-popup-open] > &')]: {
           backgroundColor: colorPaletteVars.background.selection,
@@ -116,7 +115,9 @@ export const variant = styleVariants({
   ],
   solid: [
     {
-      color: colorPaletteVars.foreground.neutralInverted,
+      vars: {
+        [foreground]: colorPaletteVars.foreground.neutralInverted,
+      },
       backgroundColor: colorPaletteVars.background.secondaryAccent,
       selectors: {
         [comma('&:hover', '[data-popup-open] > &')]: {
