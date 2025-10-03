@@ -30,6 +30,12 @@ export const size = Object.fromEntries(
   ])
 );
 
+export const align = {
+  left: sprinkles({ textAlign: 'left' }),
+  right: sprinkles({ textAlign: 'right' }),
+  center: sprinkles({ textAlign: 'center' }),
+};
+
 export const neutral = style({
   color: colorPaletteVars.foreground.neutral,
 });
