@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
 export const root = style([
   sprinkles({
@@ -9,10 +10,18 @@ export const root = style([
     padding: 'xxsmall',
     borderRadius: 'medium',
     boxShadow: 'small',
+    transition: 'fast',
   }),
   {
     backgroundColor: colorPaletteVars.background.floating,
     outline: `1px solid ${colorPaletteVars.border.standard}`,
+  },
+]);
+
+export const hidden = style([
+  sprinkles({ opacity: 0, pointerEvents: 'none' }),
+  {
+    transform: `translateY(${vars.space.xxsmall})`,
   },
 ]);
 
