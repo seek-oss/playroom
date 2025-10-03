@@ -24,13 +24,21 @@ export const ZeroState = () => {
     () =>
       Object.entries(storedPlayrooms).map(([id, storedPlayroom]) => {
         const params = decompressParams(storedPlayroom.dataParam);
-        const { title, code = '' } = params;
+        const {
+          themes = [],
+          widths = [],
+          title = '',
+          code = '',
+          editorHidden,
+        } = params;
 
         return {
           id,
           code,
-          params,
-          title: title || 'Untitled Playroom',
+          title,
+          themes,
+          widths,
+          editorHidden,
           lastModified: formatAsRelative(storedPlayroom.lastModifiedDate),
         };
       }),
@@ -98,28 +106,40 @@ export const ZeroState = () => {
               <Stack space="xlarge">
                 {playroomEntries
                   .slice(0, 5)
-                  .map(({ id, params, code, title, lastModified }) => (
-                    <button
-                      key={id}
-                      className={styles.textButton}
-                      onClick={() =>
-                        dispatch({
-                          type: 'openPlayroom',
-                          payload: {
-                            ...params,
-                            id,
-                            code,
-                            title,
-                          },
-                        })
-                      }
-                    >
-                      <Text underline>{title}</Text>
-                      <Text tone="secondary" size="small">
-                        {lastModified}
-                      </Text>
-                    </button>
-                  ))}
+                  .map(
+                    ({
+                      id,
+                      code,
+                      themes,
+                      widths,
+                      title,
+                      editorHidden,
+                      lastModified,
+                    }) => (
+                      <button
+                        key={id}
+                        className={styles.textButton}
+                        onClick={() =>
+                          dispatch({
+                            type: 'openPlayroom',
+                            payload: {
+                              id,
+                              code,
+                              title,
+                              themes,
+                              widths,
+                              editorHidden,
+                            },
+                          })
+                        }
+                      >
+                        <Text underline>{title || 'Untitled Playroom'}</Text>
+                        <Text tone="secondary" size="small">
+                          {lastModified}
+                        </Text>
+                      </button>
+                    )
+                  )}
               </Stack>
             </Stack>
           ) : null}
