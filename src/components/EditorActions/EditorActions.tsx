@@ -1,4 +1,5 @@
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
+import clsx from 'clsx';
 import {
   BetweenHorizontalStart,
   BrushCleaningIcon,
@@ -45,13 +46,18 @@ const EditorActionButton = ({
 );
 
 export const EditorActions = () => {
-  const [{ hasSyntaxError }] = useContext(StoreContext);
+  const [{ hasSyntaxError, id }] = useContext(StoreContext);
   const { runCommand } = useEditor();
   const hasSnippets = snippets && snippets.length > 0;
 
   return (
     <SharedTooltipContext>
-      <div className={styles.root}>
+      <div
+        className={clsx({
+          [styles.root]: true,
+          [styles.hidden]: !id,
+        })}
+      >
         {hasSyntaxError ? (
           <div className={styles.syntaxErrorsContainer}>
             <Text>Code has syntax errors. Fix them to use editor actions.</Text>
