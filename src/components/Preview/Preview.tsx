@@ -28,9 +28,11 @@ const PreviewHeader = ({
 }) => (
   <div className={styles.header}>
     <div className={styles.leftGroup}>
-      <Logo size={logoSize} />
+      <Logo size={logoSize} wordmark />
       <span className={styles.headerDescription}>
-        <Text tone="secondary">Previewing user-provided code</Text>
+        <Text tone="secondary" size="small">
+          View is the result of user-provided code
+        </Text>
       </span>
     </div>
     <div className={styles.actions}>
@@ -44,10 +46,7 @@ const PreviewHeader = ({
 
 const PreviewFooter = ({ editorHref }: { editorHref: string }) => (
   <div className={styles.footer}>
-    <div className={styles.leftGroup}>
-      <Logo size={logoSize} />
-      <Text tone="secondary">Playroom</Text>
-    </div>
+    <Logo size={logoSize} wordmark />
     <div className={styles.actions}>
       <Button as="a" href={editorHref} target="_blank" rel="noreferrer">
         Open

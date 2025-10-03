@@ -7,15 +7,17 @@ import * as styles from './Button.css';
 
 interface BaseProps {
   as?: ElementType;
-  tone?: 'positive' | 'critical';
+  tone?: keyof typeof styles.tone;
+  size?: keyof typeof styles.size;
+  height?: 'explicit' | 'content';
 }
 
 interface ButtonProps
-  extends Omit<AllHTMLAttributes<HTMLButtonElement>, 'as'>,
+  extends Omit<AllHTMLAttributes<HTMLButtonElement>, 'as' | 'size' | 'height'>,
     BaseProps {}
 
 interface LinkProps
-  extends Omit<AllHTMLAttributes<HTMLAnchorElement>, 'as'>,
+  extends Omit<AllHTMLAttributes<HTMLAnchorElement>, 'as' | 'size' | 'height'>,
     BaseProps {}
 
 type Props = ButtonProps | LinkProps;
@@ -24,18 +26,26 @@ export const Button = ({
   as: ButtonComponent = 'button',
   children,
   tone,
+  size = 'medium',
+  height = 'explicit',
   ...props
 }: Props) => (
   <ButtonComponent
-    className={clsx(
-      styles.reset,
-      styles.base,
-      tone ? styles.tone[tone] : undefined
-    )}
+    className={clsx({
+      [styles.base]: true,
+      [styles.tone[tone!]]: tone,
+      [styles.size[size]]: size,
+      [styles.height[height!]]: height,
+    })}
     disabled={tone === 'positive'}
     {...props}
   >
-    <Text weight="strong" tone={tone} truncate>
+    <Text
+      weight="strong"
+      tone={tone}
+      size={size !== 'medium' ? size : undefined}
+      truncate
+    >
       {children}
     </Text>
   </ButtonComponent>

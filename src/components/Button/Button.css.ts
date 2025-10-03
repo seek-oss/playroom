@@ -1,38 +1,37 @@
-import { style } from '@vanilla-extract/css';
+import { createVar, style, styleVariants } from '@vanilla-extract/css';
 
 import { minTouchableBeforePseudo } from '../../css/shared.css';
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
-export const reset = style([
+export const sizeVar = createVar();
+
+const reset = style([
   sprinkles({
     boxSizing: 'border-box',
     border: 0,
     margin: 'none',
-    padding: 'none',
     appearance: 'none',
     userSelect: 'none',
-    position: 'relative',
-    cursor: 'pointer',
-    display: 'flex',
-    placeItems: 'center',
   }),
   {
     background: 'transparent',
     outline: 'none',
     textDecoration: 'none',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
     WebkitTapHighlightColor: 'transparent',
   },
 ]);
 
 export const base = style([
+  reset,
   sprinkles({
+    position: 'relative',
     borderRadius: 'medium',
     overflow: 'hidden',
-    padding: 'small',
-    font: 'standard',
+    paddingX: 'small',
     transition: 'fast',
+    display: 'flex',
+    placeItems: 'center',
   }),
   minTouchableBeforePseudo,
   {
@@ -68,6 +67,16 @@ export const base = style([
   },
 ]);
 
+export const height = {
+  explicit: style([
+    sprinkles({ paddingY: 'xxsmall' }),
+    {
+      height: sizeVar,
+    },
+  ]),
+  content: sprinkles({ paddingY: 'small' }),
+};
+
 export const tone = {
   positive: style({
     borderColor: colorPaletteVars.foreground.positive,
@@ -86,3 +95,9 @@ export const tone = {
     },
   }),
 };
+
+export const size = styleVariants(vars.buttonSizes, (buttonSize) => ({
+  vars: {
+    [sizeVar]: buttonSize,
+  },
+}));
