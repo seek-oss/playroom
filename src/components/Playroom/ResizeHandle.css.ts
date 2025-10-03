@@ -2,12 +2,12 @@ import { style, styleVariants } from '@vanilla-extract/css';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 
-const thickness = 6;
+const thickness = 8;
 const length = 38;
 const size = 1;
 
 const backgroundTransition = 'background-color 100ms ease';
-const borderTransition = 'border-color 100ms ease';
+const borderTransition = 'outline-color 100ms ease';
 const hoverTransitionDelay = '200ms';
 
 // Separate style applied to the container AND the body during resize.
@@ -106,7 +106,8 @@ const handleCommon = style([
   }),
   {
     background: colorPaletteVars.background.floating,
-    border: `1px solid ${colorPaletteVars.border.standard}`,
+    outline: `1px solid ${colorPaletteVars.border.standard}`,
+    outlineOffset: -1,
     // Place ::after: on top of opaque background,
     // to allow using transparent background when resizing
     '::after': {
@@ -118,14 +119,14 @@ const handleCommon = style([
     },
     selectors: {
       [`${resizing} &`]: {
-        borderColor: colorPaletteVars.background.accent,
+        outlineColor: colorPaletteVars.background.accent,
       },
       [`${resizing} &::after`]: {
         background: colorPaletteVars.background.accent,
       },
       [`:is(${resizeContainer.horizontal}, ${resizeContainer.vertical}):not(${resizing}):hover &`]:
         {
-          borderColor: colorPaletteVars.background.accent,
+          outlineColor: colorPaletteVars.background.accent,
           transitionDelay: hoverTransitionDelay,
         },
       [`:is(${resizeContainer.horizontal}, ${resizeContainer.vertical}):not(${resizing}):hover &::after`]:

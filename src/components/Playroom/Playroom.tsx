@@ -75,6 +75,8 @@ export default () => {
         position="relative"
         className={styles.editor}
         inert={editorHidden}
+        opacity={editorHidden ? 0 : undefined}
+        pointerEvents={editorHidden ? 'none' : undefined}
         ref={editorRef}
       >
         <ResizeHandle

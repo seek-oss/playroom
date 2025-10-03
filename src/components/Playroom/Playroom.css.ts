@@ -79,25 +79,16 @@ export const editorOrientation = styleVariants({
 export const header = style({
   gridArea: 'header',
   zIndex: 1,
-  borderBottom: `1px solid ${colorPaletteVars.border.standard}`,
+  outline: `1px solid ${colorPaletteVars.border.standard}`,
 });
 export const frames = style({
   gridArea: 'frames',
 });
 
-export const editor = style([
-  {
-    gridArea: 'editor',
-    selectors: {
-      [`${editorOrientation.horizontal} &`]: {
-        borderTop: `1px solid ${colorPaletteVars.border.standard}`,
-      },
-      [`${editorOrientation.vertical} &`]: {
-        borderRight: `1px solid ${colorPaletteVars.border.standard}`,
-      },
-    },
-  },
-]);
+export const editor = style({
+  gridArea: 'editor',
+  outline: `1px solid ${colorPaletteVars.border.standard}`,
+});
 
 export const framesContainer = sprinkles({
   position: 'absolute',
