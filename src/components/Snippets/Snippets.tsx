@@ -158,6 +158,7 @@ export const Snippets = ({ trigger }: SnippetsProps) => {
   return (
     <BaseUIPopover.Root
       open={snippetsOpen}
+      modal
       onOpenChange={(open) =>
         dispatch({ type: open ? 'openSnippets' : 'closeSnippets' })
       }
