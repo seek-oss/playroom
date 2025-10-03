@@ -10,7 +10,11 @@ import {
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { type Snippet, compressParams } from '../../utils';
+import {
+  type CompressParamsOptions,
+  type Snippet,
+  compressParams,
+} from '../../utils';
 import playroomConfig from '../config';
 import {
   themeNames as availableThemes,
@@ -135,10 +139,10 @@ export type Action =
       type: 'openPlayroom';
       payload: {
         id: State['id'];
-        code: State['code'];
-        title?: State['title'];
-        selectedThemes?: State['selectedThemes'];
-        selectedWidths?: State['selectedWidths'];
+        code: NonNullable<CompressParamsOptions['code']>;
+        title: NonNullable<CompressParamsOptions['title']>;
+        themes: NonNullable<CompressParamsOptions['themes']>;
+        widths: NonNullable<CompressParamsOptions['widths']>;
         editorHidden?: State['editorHidden'];
       };
     }
@@ -424,22 +428,16 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case 'openPlayroom': {
-      const { id, code, title, selectedThemes, selectedWidths, editorHidden } =
-        action.payload;
+      const { id, code, title, themes, widths, editorHidden } = action.payload;
 
       return {
         ...state,
         id,
         code,
-        title: title || '',
-        selectedWidths:
-          selectedWidths && selectedWidths?.length > 0
-            ? selectedWidths
-            : state.selectedWidths, // Maintain local preference in favour of config
+        title,
+        selectedWidths: widths.length > 0 ? widths : state.selectedWidths, // Maintain local preference in favour of config
         selectedThemes:
-          themesEnabled && selectedThemes && selectedThemes?.length > 0
-            ? selectedThemes
-            : state.selectedThemes, // Maintain local preference in favour of config
+          themesEnabled && themes.length > 0 ? themes : state.selectedThemes, // Maintain local preference in favour of config
         editorHidden: editorHidden ?? false,
       };
     }
