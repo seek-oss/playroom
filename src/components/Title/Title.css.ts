@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
 export const textField = style([
   sprinkles({
@@ -9,12 +10,14 @@ export const textField = style([
     boxSizing: 'border-box',
     borderRadius: 'medium',
     textAlign: 'center',
-    padding: 'xsmall',
+    paddingX: 'xsmall',
+    paddingY: 'xxsmall',
     border: 0,
   }),
   {
     outline: 'none',
     width: 250,
+    height: vars.buttonSizes.medium,
     color: colorPaletteVars.foreground.neutral,
     background: 'transparent',
     '::placeholder': {

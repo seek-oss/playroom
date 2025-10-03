@@ -128,7 +128,7 @@ const segmentedButtonBase = style([
     background: colorPaletteVars.background.surface,
     color: colorPaletteVars.foreground.neutral,
     border: segmentedControlBorder,
-    height: 32,
+    height: vars.buttonSizes.medium,
     selectors: {
       [comma('&:hover', '&[data-popup-open]')]: {
         backgroundColor: colorPaletteVars.background.selection,

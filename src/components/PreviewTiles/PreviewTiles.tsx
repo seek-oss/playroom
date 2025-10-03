@@ -144,12 +144,15 @@ export const PreviewTiles = ({ onSelect }: { onSelect: () => void }) => {
         onOpenChange={() => setConfirmDeleteId(null)}
         finalFocus={listRef}
       >
-        <Stack space="xxlarge">
+        <Stack space="xlarge">
           <Text>Are you sure you want to delete this playroom?</Text>
           <Box display="flex" gap="small">
-            <Button onClick={() => setConfirmDeleteId(null)}>Cancel</Button>
+            <Button size="large" onClick={() => setConfirmDeleteId(null)}>
+              Cancel
+            </Button>
             <Button
               tone="critical"
+              size="large"
               onClick={() => {
                 if (confirmDeleteId) {
                   dispatch({

@@ -59,6 +59,7 @@ export const ZeroState = () => {
             <Inline space="large">
               {hasStoredPlayrooms ? (
                 <Button
+                  height="content"
                   onClick={() => dispatch({ type: 'openPlayroomDialog' })}
                 >
                   <Stack space="xsmall">
@@ -73,7 +74,10 @@ export const ZeroState = () => {
                 </Button>
               ) : null}
               {hasSnippets ? (
-                <Button onClick={() => dispatch({ type: 'openSnippets' })}>
+                <Button
+                  height="content"
+                  onClick={() => dispatch({ type: 'openSnippets' })}
+                >
                   <Stack space="xsmall">
                     <BetweenHorizontalStart size={20} />
                     <Inline space="xsmall">

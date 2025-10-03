@@ -17,7 +17,7 @@ export interface ButtonIconProps extends TooltipTrigger {
 export const ButtonIcon = ({
   icon,
   label,
-  size = 'small',
+  size = 'medium',
   tone = 'neutral',
   variant = 'standard',
   bleed,
@@ -33,10 +33,11 @@ export const ButtonIcon = ({
           [styles.button]: true,
           [styles.tone[tone]]: true,
           [styles.variant[variant]]: true,
+          [styles.size[size]]: true,
           [styles.bleed]: bleed,
         })}
       >
-        <span className={clsx(styles.content, styles.size[size])}>{icon}</span>
+        <span className={clsx(styles.content)}>{icon}</span>
       </button>
     }
   />
