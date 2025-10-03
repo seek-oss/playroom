@@ -99,18 +99,14 @@ export const openDialogContent = style([
 ]);
 
 const segmentedButtonRadius = 'medium';
-const segmentedControlBorder = `1px solid ${colorPaletteVars.border.standard}`;
+const segmentedButtonBorderWidth = '1px';
+const segmentedControlBorder = `${segmentedButtonBorderWidth} solid ${colorPaletteVars.border.standard}`;
 
 export const segmentedGroup = style([
   sprinkles({
     display: 'flex',
     alignItems: 'stretch',
-    borderRadius: segmentedButtonRadius,
   }),
-  {
-    border: segmentedControlBorder,
-    background: colorPaletteVars.background.surface,
-  },
 ]);
 
 const segmentedButtonBase = style([
@@ -128,10 +124,10 @@ const segmentedButtonBase = style([
   minTouchableBeforePseudo,
   {
     appearance: 'none',
-    background: 'transparent',
-    border: 0,
     outline: 'none',
+    background: colorPaletteVars.background.surface,
     color: colorPaletteVars.foreground.neutral,
+    border: segmentedControlBorder,
     height: 32,
     selectors: {
       [comma('&:hover', '&[data-popup-open]')]: {
@@ -150,6 +146,7 @@ export const segmentedTextButton = style([
   {
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
+    marginRight: `-${segmentedButtonBorderWidth}`,
   },
   sprinkles({ paddingX: 'small' }),
 ]);
@@ -160,7 +157,6 @@ export const segmentedIconButton = style([
   {
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
-    borderLeft: segmentedControlBorder,
   },
 ]);
 
@@ -169,10 +165,10 @@ export const copyLinkSuccess = style([
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  }),
-  {
     position: 'absolute',
     inset: 0,
+  }),
+  {
     color: colorPaletteVars.foreground.positive,
   },
 ]);

@@ -31,20 +31,12 @@ export const ButtonIcon = ({
         aria-label={label}
         className={clsx({
           [styles.button]: true,
+          [styles.tone[tone]]: true,
           [styles.variant[variant]]: true,
           [styles.bleed]: bleed,
         })}
       >
-        <span
-          className={clsx(
-            styles.content,
-            styles.size[size],
-            styles.tone[tone],
-            styles.variant[variant]
-          )}
-        >
-          {icon}
-        </span>
+        <span className={clsx(styles.content, styles.size[size])}>{icon}</span>
       </button>
     }
   />
