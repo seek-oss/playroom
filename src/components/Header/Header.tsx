@@ -527,6 +527,7 @@ export const Header = () => {
 
           <Menu
             width="small"
+            align="end"
             trigger={
               <ButtonIcon label="Configure frames" icon={<FrameIcon />} />
             }
