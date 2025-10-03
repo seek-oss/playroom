@@ -470,29 +470,6 @@ const HeaderMenu = () => {
   );
 };
 
-const CopyLinkButton = ({
-  linkCopied,
-  onClick,
-}: {
-  linkCopied: boolean;
-  onClick: () => void;
-}) => (
-  <button
-    type="button"
-    className={styles.segmentedTextButton}
-    disabled={linkCopied}
-    onClick={onClick}
-  >
-    {linkCopied ? (
-      <span className={styles.copyLinkSuccess}>
-        <Check size={14} />
-      </span>
-    ) : (
-      <Text>Copy link</Text>
-    )}
-  </button>
-);
-
 export const Header = () => {
   const [{ code, editorHidden }, dispatch] = useContext(StoreContext);
   const { copying, onCopyClick } = useCopy();
@@ -510,10 +487,21 @@ export const Header = () => {
           {/* Todo - try animate in/out */}
           {hasCode ? (
             <div className={styles.segmentedGroup}>
-              <CopyLinkButton
-                linkCopied={copying}
+              <button
+                type="button"
+                className={styles.segmentedTextButton}
+                disabled={copying}
                 onClick={() => onCopyClick(window.location.href)}
-              />
+              >
+                <Box component="span" opacity={copying ? 0 : undefined}>
+                  <Text>Copy link</Text>
+                </Box>
+                {copying ? (
+                  <span className={styles.copyLinkSuccess}>
+                    <Check size={14} />
+                  </span>
+                ) : null}
+              </button>
               <Menu
                 width="small"
                 align="end"
