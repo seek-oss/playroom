@@ -60,7 +60,9 @@ export const EditorActions = () => {
       >
         {hasSyntaxError ? (
           <div className={styles.syntaxErrorsContainer}>
-            <Text>Code has syntax errors. Fix them to use editor actions.</Text>
+            <Text tone="critical">
+              Code has syntax errors. Fix them to use editor actions.
+            </Text>
           </div>
         ) : (
           <>
