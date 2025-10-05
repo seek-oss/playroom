@@ -25,19 +25,35 @@ export const hidden = style([
   },
 ]);
 
-export const syntaxErrorsContainer = sprinkles({ padding: 'xsmall' });
+export const syntaxErrorsContainer = style([
+  sprinkles({
+    paddingX: 'xsmall',
+    paddingY: 'xxsmall',
+    display: 'flex',
+    alignItems: 'center',
+    boxSizing: 'border-box',
+  }),
+  {
+    height: vars.buttonSizes.medium,
+  },
+]);
 
 export const button = style([
   sprinkles({
-    padding: 'xsmall',
+    paddingX: 'xsmall',
+    paddingY: 'xxsmall',
     borderRadius: 'small',
     display: 'flex',
     alignItems: 'center',
     gap: 'xsmall',
     border: 0,
+    userSelect: 'none',
+    boxSizing: 'border-box',
+    appearance: 'none',
   }),
   {
     background: 'transparent',
+    height: vars.buttonSizes.medium,
     color: colorPaletteVars.foreground.neutral,
     ':hover': {
       backgroundColor: colorPaletteVars.background.selection,
