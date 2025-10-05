@@ -46,7 +46,7 @@ export const errorMarker = style([
 export const foldGutter = style([
   sprinkles({
     paddingY: 'none',
-    paddingX: 'xsmall',
+    paddingX: 'xxsmall',
   }),
   {
     width: '1em',
@@ -85,9 +85,8 @@ globalStyle('.CodeMirror', {
 });
 
 globalStyle('.CodeMirror-gutters', {
-  minWidth: vars.codeGutterSize,
   boxSizing: 'border-box',
-  paddingLeft: vars.space.xsmall,
+  paddingLeft: vars.space.xxsmall,
 });
 
 globalStyle('.CodeMirror pre, .CodeMirror-linenumber', {
