@@ -33,7 +33,6 @@ export const vars = createGlobalTheme(':root', {
     large: '16px',
     full: '100%',
   },
-  codeGutterSize: '70px',
   touchableSize: '44px',
   transition: {
     slow: 'opacity 300ms ease, transform 300ms ease',
