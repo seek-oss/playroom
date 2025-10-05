@@ -40,6 +40,8 @@ const Highlight = ({ children }: { children: ReactNode }) => (
   <span className={styles.highlightOnHover}>{children}</span>
 );
 
+export const popOutWindowName = 'standalone_playroom_frame';
+
 const Frame = ({
   frame,
   title,
@@ -131,7 +133,7 @@ const Frame = ({
               <FrameActionButton
                 tone="accent"
                 icon={<PictureInPicture2 />}
-                label="Open standalone"
+                label="Pop out frame"
                 onClick={() => {
                   const width =
                     frame.width === 'Fit to window' ? '' : frame.width;
@@ -139,7 +141,8 @@ const Frame = ({
 
                   window.open(
                     previewUrl,
-                    '_blank',
+                    // Providing a `name` to check and in Preview and not show the header.
+                    popOutWindowName,
                     [
                       `popup=true`,
                       `width=${width}`,
@@ -148,9 +151,11 @@ const Frame = ({
                       `top=${
                         height ? screen.availHeight / 2 - height * 0.75 : ''
                       }`,
-                      'noopener',
-                      'noreferrer',
                     ].join(',')
+                    /**
+                     * Not setting `noopener` and `noreferrer` so we can control the popup
+                     * dimensions in Safari.
+                     */
                   );
                 }}
               />

@@ -6,6 +6,7 @@ import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { ReceiveErrorMessage } from '../Frame/frameMessaging';
+import { popOutWindowName } from '../Frames/Frames';
 import frameSrc from '../Frames/frameSrc';
 import { logoSize } from '../Header/Header';
 import { Logo } from '../Logo/Logo';
@@ -68,6 +69,9 @@ export default ({ title, code, themeName }: PreviewProps) => {
   const isEmbedded =
     typeof window !== 'undefined' && window.self !== window.top;
 
+  const isStandalone =
+    typeof window !== 'undefined' && window.name === popOutWindowName;
+
   return (
     <div
       className={clsx([
@@ -75,7 +79,7 @@ export default ({ title, code, themeName }: PreviewProps) => {
         isEmbedded ? styles.rootEmbedded : undefined,
       ])}
     >
-      {!headerHidden && !isEmbedded ? (
+      {!isStandalone && !headerHidden && !isEmbedded ? (
         <PreviewHeader
           editorHref={editorHref}
           onHideHeader={() => setHeaderHidden(true)}
