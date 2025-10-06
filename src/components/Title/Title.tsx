@@ -28,10 +28,13 @@ export const Title = () => {
         <Text
           weight={styles.titleWeight}
           size={styles.titleSize}
+          tone={!title ? 'secondary' : undefined}
           align="center"
           truncate
         >
-          <span className={styles.preserveWhiteSpace}>{title}</span>
+          <span className={styles.preserveWhiteSpace}>
+            {title || 'Untitled'}
+          </span>
         </Text>
       </span>
     </div>
