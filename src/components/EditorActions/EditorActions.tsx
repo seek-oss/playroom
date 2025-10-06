@@ -46,7 +46,7 @@ const EditorActionButton = ({
 );
 
 export const EditorActions = () => {
-  const [{ hasSyntaxError, id }] = useContext(StoreContext);
+  const [{ hasSyntaxError, snippetsOpen, id }] = useContext(StoreContext);
   const { runCommand } = useEditor();
   const hasSnippets = snippets && snippets.length > 0;
 
@@ -55,7 +55,7 @@ export const EditorActions = () => {
       <div
         className={clsx({
           [styles.root]: true,
-          [styles.hidden]: !id,
+          [styles.hidden]: !id && !snippetsOpen,
         })}
       >
         {hasSyntaxError ? (

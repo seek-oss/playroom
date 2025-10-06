@@ -195,11 +195,13 @@ const ShareMenu = () => {
 
   return (
     <>
-      <MenuCopyItem content={window.location.href}>Playroom link</MenuCopyItem>
+      <MenuCopyItem content={window.location.href}>
+        Link to edit mode
+      </MenuCopyItem>
       {themesEnabled ? (
         <>
           <MenuSeparator />
-          <MenuGroup label="Preview link">
+          <MenuGroup label="Link to preview mode">
             {availableThemes.map((theme) => {
               const baseUrl = window.location.href
                 .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
@@ -233,7 +235,7 @@ const ShareMenu = () => {
             editorHidden,
           })}
         >
-          Preview link
+          Link to preview mode
         </MenuCopyItem>
       )}
     </>
