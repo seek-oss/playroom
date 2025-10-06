@@ -73,6 +73,7 @@ export const item = style([
       },
       [`&[aria-disabled]`]: {
         color: colorPaletteVars.foreground.secondary,
+        cursor: 'not-allowed',
       },
     },
   },
@@ -85,8 +86,10 @@ export const itemLink = style([
   }),
   {
     textDecoration: 'none',
-    ':visited': {
-      color: colorPaletteVars.foreground.neutral,
+    selectors: {
+      '&[aria-disabled]': {
+        cursor: 'not-allowed',
+      },
     },
   },
 ]);

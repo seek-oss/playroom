@@ -253,6 +253,7 @@ const HeaderMenu = () => {
       colorScheme,
       hasSyntaxError,
       openDialogOpen,
+      id,
     },
     dispatch,
   ] = useContext(StoreContext);
@@ -328,7 +329,13 @@ const HeaderMenu = () => {
         >
           Open...
         </MenuItem>
-        <MenuItemLink icon={CopyPlus} href={duplicateUrl} target="_blank">
+        <MenuItemLink
+          icon={CopyPlus}
+          href={duplicateUrl}
+          target="_blank"
+          disabled={!id}
+          disabledReason="No active Playroom to duplicate"
+        >
           Duplicate
         </MenuItemLink>
 

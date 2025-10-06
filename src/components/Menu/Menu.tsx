@@ -90,22 +90,28 @@ export const MenuItemLink = ({
   icon: Icon,
   href,
   target,
+  disabled,
+  disabledReason,
   ...restProps
 }: MenuItemLinkProps) => {
   const isSubMenuTrigger = useContext(SubMenuTriggerContext);
 
-  return (
+  const item = (
     <BaseUIMenu.Item
+      disabled={disabled}
       render={
         <a
-          href={href}
+          href={disabled ? undefined : href}
           className={styles.itemLink}
           target={target}
           rel={target === '_blank' ? 'noopener,noreferrer' : undefined}
         >
           <span className={styles.itemLeft}>
             {Icon ? <Icon size={menuIconSize} /> : null}
-            <Text truncate>{children}</Text>
+
+            <Text tone={disabled ? 'secondary' : undefined} truncate>
+              {children}
+            </Text>
           </span>
           {shortcut && (
             <Text tone="secondary">
@@ -119,6 +125,18 @@ export const MenuItemLink = ({
       }
       {...restProps}
     />
+  );
+
+  return disabled && disabledReason ? (
+    <Tooltip
+      label={disabledReason}
+      announceAsDescription
+      delay={500}
+      side="right"
+      trigger={item}
+    />
+  ) : (
+    item
   );
 };
 
