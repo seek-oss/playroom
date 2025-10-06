@@ -67,7 +67,11 @@ export default () => {
 
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
-          {id ? <Frames code={previewRenderCode || code} /> : <ZeroState />}
+          {id || previewEditorCode ? (
+            <Frames code={previewRenderCode || code} />
+          ) : (
+            <ZeroState />
+          )}
         </Box>
       </Box>
 
