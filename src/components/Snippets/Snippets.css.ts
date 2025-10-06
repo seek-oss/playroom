@@ -139,15 +139,10 @@ export const snippetName = style([
   },
 ]);
 
-export const snippetRow = style([
+export const groupName = style([
   sprinkles({
-    display: 'flex',
-    alignItems: 'center',
-    gap: 'xsmall',
+    paddingRight: 'xsmall',
   }),
-  {
-    flexWrap: 'nowrap',
-  },
 ]);
 
 const enterAnimation = keyframes({
