@@ -15,6 +15,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import type { Snippet } from '../../../utils';
 import snippets from '../../configModules/snippets';
 import { StoreContext } from '../../contexts/StoreContext';
+import { Secondary } from '../Secondary/Secondary';
 import { Text } from '../Text/Text';
 
 import * as styles from './Snippets.css';
@@ -124,12 +125,16 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
                 title={getLabel(snippet)}
                 className={clsx(styles.snippet)}
               >
-                <div className={styles.snippetRow}>
-                  {snippet.group ? <Text truncate>{snippet.group}</Text> : null}
-                  <Text tone={snippet.group ? 'secondary' : 'neutral'} truncate>
-                    {snippet.name}
-                  </Text>
-                </div>
+                <Text truncate>
+                  {snippet.group ? (
+                    <>
+                      <span className={styles.groupName}>{snippet.group}</span>
+                      <Secondary>{snippet.name}</Secondary>
+                    </>
+                  ) : (
+                    snippet.name
+                  )}
+                </Text>
               </Command.Item>
             );
           })}
