@@ -282,13 +282,13 @@ globalStyle('label.CodeMirror-search-label', {
 });
 
 globalStyle('.dialog-opened.cm-s-neo .CodeMirror-selected', {
-  background: 'Highlight',
+  background: textSelectionBackground,
 });
 
 globalStyle('.cm-overlay.cm-searching', {
   paddingTop: vars.space.xxxsmall,
   paddingBottom: vars.space.xxxsmall,
-  background: colorPaletteVars.background.surface,
+  background: textSelectionBackground,
 });
 
 globalStyle('.CodeMirror-dialog button:first-of-type', {

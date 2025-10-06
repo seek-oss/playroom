@@ -261,6 +261,7 @@ export const CodeEditor = ({
         viewportMargin: 50,
         lineNumbers: true,
         styleActiveLine: !previewCode,
+        cursorScrollMargin: 100,
         foldGutter: {
           gutter: styles.foldGutter,
           indicatorOpen: styles.foldOpen,
