@@ -8,7 +8,7 @@ const minimumLineNumberWidth = '50px';
 const textSelectionBackground = 'Highlight';
 
 export const insertionPoint = style({
-  backgroundColor: textSelectionBackground,
+  backgroundColor: colorPaletteVars.background.selection,
 });
 
 const fadeIn = keyframes({

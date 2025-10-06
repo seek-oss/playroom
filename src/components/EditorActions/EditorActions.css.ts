@@ -1,5 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
+import { comma } from '../../css/delimiters';
+
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
@@ -55,12 +57,14 @@ export const button = style([
     background: 'transparent',
     height: vars.buttonSizes.medium,
     color: colorPaletteVars.foreground.neutral,
-    ':hover': {
-      backgroundColor: colorPaletteVars.background.selection,
-    },
     ':focus-visible': {
       outline: `2px solid ${colorPaletteVars.outline.focus}`,
       outlineOffset: 2,
+    },
+    selectors: {
+      [comma('&:hover', '&[data-popup-open]')]: {
+        backgroundColor: colorPaletteVars.background.selection,
+      },
     },
   },
 ]);

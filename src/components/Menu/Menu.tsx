@@ -46,7 +46,12 @@ export const MenuItem = ({
   const isSubMenuTrigger = useContext(SubMenuTriggerContext);
 
   const item = (
-    <BaseUIMenu.Item className={styles.item} disabled={disabled} {...restProps}>
+    <BaseUIMenu.Item
+      className={styles.item}
+      disabled={disabled}
+      closeOnClick={isSubMenuTrigger ? false : undefined}
+      {...restProps}
+    >
       <span className={styles.itemLeft}>
         {Icon ? <Icon size={menuIconSize} /> : null}
         <Text tone={disabled ? 'secondary' : undefined} truncate>
