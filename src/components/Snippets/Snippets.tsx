@@ -33,11 +33,18 @@ type SnippetsContentProps = {
   onSelect: (snippet: ReturnedSnippet) => void;
 };
 
-const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
+// Todo - migrate to event listener
+/*
+Using a Hook under <Command> so it can subscribe to cmdk store via
+useCommandState avoiding issues with event handlers
+*/
+const useDebouncedPreview = () => {
   const [, dispatch] = useContext(StoreContext);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-
+  const selectedValue = useCommandState((state) => state.value);
   const valueToSnippetRef = useRef<Map<string, Snippet> | null>(null);
+  const debouncedPreview = useDebouncedCallback((snippet: ReturnedSnippet) => {
+    dispatch({ type: 'previewSnippet', payload: { snippet } });
+  }, 50);
 
   if (!valueToSnippetRef.current) {
     const map = new Map<string, Snippet>();
@@ -52,94 +59,81 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
     valueToSnippetRef.current = map;
   }
 
-  const debouncedPreview = useDebouncedCallback((snippet: ReturnedSnippet) => {
-    dispatch({ type: 'previewSnippet', payload: { snippet } });
-  }, 50);
+  useEffect(() => {
+    const snippet = selectedValue
+      ? valueToSnippetRef.current?.get(selectedValue) ?? null
+      : null;
+    debouncedPreview(snippet);
+  }, [selectedValue, debouncedPreview]);
 
-  // Todo - migrate to event listener
-  /*
-  Using a component under <Command> so it can subscribe to cmdk store via
-  useCommandState
-  Avoiding issues with event handlers
-  */
-  const SelectedPreviewEffect = () => {
-    const selectedValue = useCommandState((state) => state.value);
-    const previewRef = useRef(debouncedPreview);
-    previewRef.current = debouncedPreview;
+  return debouncedPreview;
+};
 
-    useEffect(() => {
-      const snippet = selectedValue
-        ? valueToSnippetRef.current?.get(selectedValue) ?? null
-        : null;
-      previewRef.current(snippet);
-    }, [selectedValue]);
-    return null;
-  };
+const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const debouncedPreview = useDebouncedPreview();
 
   return (
     <div className={styles.root}>
-      <Command>
-        <div className={styles.fieldContainer}>
-          <Command.Input
-            ref={searchRef}
-            placeholder="Find a snippet..."
-            aria-label="Search snippets"
-            value={searchTerm}
-            onValueChange={setSearchTerm}
-            onKeyDown={(event) => {
-              if (event.key === 'Escape') {
-                onSelect(null);
-              }
-            }}
-            className={styles.searchField}
-          />
-          {searchTerm ? (
-            <button
-              type="button"
-              aria-label="Clear search"
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() => setSearchTerm('')}
-              className={styles.clearButton}
+      <div className={styles.fieldContainer}>
+        <Command.Input
+          ref={searchRef}
+          placeholder="Find a snippet..."
+          aria-label="Search snippets"
+          value={searchTerm}
+          onValueChange={setSearchTerm}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape') {
+              onSelect(null);
+            }
+          }}
+          className={styles.searchField}
+        />
+        {searchTerm ? (
+          <button
+            type="button"
+            aria-label="Clear search"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => setSearchTerm('')}
+            className={styles.clearButton}
+          >
+            <X size={16} aria-hidden="true" />
+          </button>
+        ) : null}
+      </div>
+      <Command.List
+        className={styles.snippetsContainer}
+        aria-label="Filtered snippets"
+      >
+        {snippets.map((snippet, index) => {
+          const value = `${snippet.group ? `${snippet.group} ` : ''}${
+            snippet.name
+          }`;
+          return (
+            <Command.Item
+              id={getSnippetId(snippet, index)}
+              key={`${snippet.group}_${snippet.name}_${index}`}
+              value={value}
+              onSelect={() => onSelect(snippet)}
+              onMouseMove={() => debouncedPreview(snippet)}
+              onFocus={() => debouncedPreview(snippet)}
+              title={getLabel(snippet)}
+              className={clsx(styles.snippet)}
             >
-              <X size={16} aria-hidden="true" />
-            </button>
-          ) : null}
-        </div>
-        <SelectedPreviewEffect />
-        <Command.List
-          className={styles.snippetsContainer}
-          aria-label="Filtered snippets"
-        >
-          {snippets.map((snippet, index) => {
-            const value = `${snippet.group ? `${snippet.group} ` : ''}${
-              snippet.name
-            }`;
-            return (
-              <Command.Item
-                id={getSnippetId(snippet, index)}
-                key={`${snippet.group}_${snippet.name}_${index}`}
-                value={value}
-                onSelect={() => onSelect(snippet)}
-                onMouseMove={() => debouncedPreview(snippet)}
-                onFocus={() => debouncedPreview(snippet)}
-                title={getLabel(snippet)}
-                className={clsx(styles.snippet)}
-              >
-                <Text truncate>
-                  {snippet.group ? (
-                    <>
-                      <span className={styles.groupName}>{snippet.group}</span>
-                      <Secondary>{snippet.name}</Secondary>
-                    </>
-                  ) : (
-                    snippet.name
-                  )}
-                </Text>
-              </Command.Item>
-            );
-          })}
-        </Command.List>
-      </Command>
+              <Text truncate>
+                {snippet.group ? (
+                  <>
+                    <span className={styles.groupName}>{snippet.group}</span>
+                    <Secondary>{snippet.name}</Secondary>
+                  </>
+                ) : (
+                  snippet.name
+                )}
+              </Text>
+            </Command.Item>
+          );
+        })}
+      </Command.List>
     </div>
   );
 };
@@ -180,7 +174,9 @@ export const Snippets = ({ trigger }: SnippetsProps) => {
             aria-label="Select a snippet"
             initialFocus={searchRef}
           >
-            <Content searchRef={searchRef} onSelect={handleSelect} />
+            <Command>
+              <Content searchRef={searchRef} onSelect={handleSelect} />
+            </Command>
           </BaseUIPopover.Popup>
         </BaseUIPopover.Positioner>
       </BaseUIPopover.Portal>
