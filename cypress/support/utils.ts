@@ -229,12 +229,10 @@ export const assertFramesMatch = (
 
 export const assertPreviewContains = (text: string) =>
   cy
-    .then(() => {
-      cy.get('[data-testid="splashscreen"]').should('not.be.visible');
-    })
-    .get('body')
-    .should((el) => {
-      expect(el.get(0).innerText).to.eq(text);
+    .get('[data-testid="previewIframe"]')
+    .its('0.contentDocument.body')
+    .should((frameBody) => {
+      expect(frameBody.innerText).to.eq(text);
     });
 
 export const loadPlayroom = (initialCode?: string) => {

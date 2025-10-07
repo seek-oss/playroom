@@ -86,7 +86,11 @@ export default ({ title, code, themeName }: PreviewProps) => {
         />
       ) : null}
       <div className={styles.frameContainer}>
-        <iframe src={absoluteSrc} className={styles.iframe} />
+        <iframe
+          src={absoluteSrc}
+          className={styles.iframe}
+          data-testid="previewIframe"
+        />
         <ReceiveErrorMessage size="large" />
       </div>
       {isEmbedded ? <PreviewFooter editorHref={editorHref} /> : null}
