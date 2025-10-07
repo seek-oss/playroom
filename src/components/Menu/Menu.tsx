@@ -4,6 +4,7 @@ import { type LucideIcon, Check } from 'lucide-react';
 import {
   type AllHTMLAttributes,
   type ComponentProps,
+  type ReactElement,
   type ReactNode,
   createContext,
   forwardRef,
@@ -63,7 +64,9 @@ export const MenuItem = ({
           <KeyboardShortcut shortcut={shortcut} />
         </Text>
       )}
-      {isSubMenuTrigger ? <ChevronIcon direction="right" size={12} /> : null}
+      {isSubMenuTrigger && !disabled ? (
+        <ChevronIcon direction="right" size={12} />
+      ) : null}
     </BaseUIMenu.Item>
   );
 
@@ -118,7 +121,7 @@ export const MenuItemLink = ({
               <KeyboardShortcut shortcut={shortcut} />
             </Text>
           )}
-          {isSubMenuTrigger ? (
+          {isSubMenuTrigger && !disabled ? (
             <ChevronIcon direction="right" size={12} />
           ) : null}
         </a>
@@ -221,11 +224,10 @@ export const MenuGroup = ({
 const SubMenuContext = createContext(false);
 
 type Props = {
-  trigger: ComponentProps<typeof BaseUIMenu.Trigger>['render'];
+  trigger: NonNullable<ComponentProps<typeof BaseUIMenu.Trigger>['render']>;
   width: 'content' | 'small';
   align?: ComponentProps<typeof BaseUIMenu.Positioner>['align'];
   children: ComponentProps<typeof BaseUIMenu.Popup>['children'];
-  disabled?: ComponentProps<typeof BaseUIMenu.SubmenuRoot>['disabled'];
   onOpenChange?: ComponentProps<typeof BaseUIMenu.Root>['onOpenChange'];
   onClose?: () => void;
 };
@@ -238,7 +240,6 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
       children,
       onClose,
       onOpenChange,
-      disabled,
     },
     triggerRef
   ) => {
@@ -248,9 +249,10 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
       ? BaseUIMenu.SubmenuTrigger
       : BaseUIMenu.Trigger;
 
-    if (disabled && !isSubMenu) {
-      throw new Error("Menu cannot be disabled unless it's a submenu");
-    }
+    const triggerEl = (
+      typeof trigger === 'function' ? trigger({}, { open: true }) : trigger
+    ) as ReactElement<HTMLButtonElement>;
+    const isMenuDisabled = isSubMenu && Boolean(triggerEl.props.disabled);
 
     return (
       <SubMenuContext.Provider value={true}>
@@ -261,7 +263,7 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
               onClose();
             }
           }}
-          disabled={disabled && isSubMenu}
+          disabled={isMenuDisabled}
         >
           <SubMenuTriggerContext.Provider value={true}>
             <MenuTrigger ref={triggerRef} render={trigger} />
