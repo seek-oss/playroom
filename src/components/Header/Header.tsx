@@ -253,6 +253,7 @@ const HeaderMenu = () => {
       colorScheme,
       hasSyntaxError,
       openDialogOpen,
+      code,
       id,
     },
     dispatch,
@@ -262,6 +263,7 @@ const HeaderMenu = () => {
   >(editorHidden ? 'hidden' : editorOrientation);
 
   const hasSnippets = snippets && snippets.length > 0;
+  const hasCode = code.trim().length > 0;
   const { title, ...params } = resolveDataFromUrl();
   const duplicateUrl = createUrlForData(
     compressParams({
@@ -340,7 +342,15 @@ const HeaderMenu = () => {
         </MenuItemLink>
 
         <Menu
-          trigger={<MenuItem icon={LinkIcon}>Share</MenuItem>}
+          trigger={
+            <MenuItem
+              icon={LinkIcon}
+              disabled={!hasCode}
+              disabledReason="No active Playroom to share"
+            >
+              Share
+            </MenuItem>
+          }
           width="small"
         >
           <ShareMenu />
@@ -366,7 +376,6 @@ const HeaderMenu = () => {
             </MenuItem>
           }
           width="content"
-          disabled={editorHidden}
         >
           {hasSnippets && (
             <MenuItem
