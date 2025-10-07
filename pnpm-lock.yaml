@@ -178,8 +178,8 @@ importers:
         specifier: ^19.0.5
         version: 19.0.13
       '@testing-library/cypress':
-        specifier: ^10.0.3
-        version: 10.0.3(cypress@13.17.0)
+        specifier: ^10.1.0
+        version: 10.1.0(cypress@15.3.0)
       '@types/jest':
         specifier: ^29.2.4
         version: 29.5.14
@@ -193,8 +193,8 @@ importers:
         specifier: ^9.1.2
         version: 9.1.2
       cypress:
-        specifier: ^13.6.6
-        version: 13.17.0
+        specifier: ^15.3.0
+        version: 15.3.0
       eslint:
         specifier: ^9.23.0
         version: 9.23.0(jiti@2.4.2)
@@ -963,12 +963,8 @@ packages:
   '@changesets/write@0.4.0':
     resolution: {integrity: sha512-CdTLvIOPiCNuH71pyDu3rA+Q0n65cmAbXnwWH84rKGiFumFzkmHNT8KHTMEchcxN+Kl8I54xGUhJ7l3E7X396Q==}
 
-  '@colors/colors@1.5.0':
-    resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
-    engines: {node: '>=0.1.90'}
-
-  '@cypress/request@3.0.8':
-    resolution: {integrity: sha512-h0NFgh1mJmm1nr4jCwkGHwKneVYKghUyWe6TMNrk0B9zsjAJxpg8C4/+BAcmLgCPa1vj1V8rNUaILl+zYRUWBQ==}
+  '@cypress/request@3.0.9':
+    resolution: {integrity: sha512-I3l7FdGRXluAS44/0NguwWlO83J18p0vlr2FYHrJkWdNYhgVoiYo61IXPqaOsL+vNxU1ZqMACzItGK3/KKDsdw==}
     engines: {node: '>= 6'}
 
   '@cypress/xvfb@1.2.4':
@@ -1523,11 +1519,11 @@ packages:
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
 
-  '@testing-library/cypress@10.0.3':
-    resolution: {integrity: sha512-TeZJMCNtiS59cPWalra7LgADuufO5FtbqQBYxuAgdX6ZFAR2D9CtQwAG8VbgvFcchW3K414va/+7P4OkQ80UVg==}
+  '@testing-library/cypress@10.1.0':
+    resolution: {integrity: sha512-tNkNtYRqPQh71xXKuMizr146zlellawUfDth7A/urYU4J66g0VGZ063YsS0gqS79Z58u1G/uo9UxN05qvKXMag==}
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
-      cypress: ^12.0.0 || ^13.0.0 || ^14.0.0
+      cypress: ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
 
   '@testing-library/dom@10.4.0':
     resolution: {integrity: sha512-pemlzrSESWbdAloYml3bAJMEfNh1Z7EduzqPKprCH5S341frlpYnUEW0H72dLxa6IsYr+mPno20GiSm+h9dEdQ==}
@@ -1675,6 +1671,9 @@ packages:
 
   '@types/tern@0.23.9':
     resolution: {integrity: sha512-ypzHFE/wBzh+BlH6rrBgS5I/Z7RD21pGhZ2rltb/+ZrVM1awdZwjx7hE5XfuYgHWk9uvV5HLZN3SloevCAp3Bw==}
+
+  '@types/tmp@0.2.6':
+    resolution: {integrity: sha512-chhaNf2oKHlRkDGt+tiKE2Z5aJ6qalm7Z9rlLdBwmOiAAf09YQvvoLXjWK4HWPF1xU/fqvMgfNfpVoBscA/tKA==}
 
   '@types/webpack-env@1.18.8':
     resolution: {integrity: sha512-G9eAoJRMLjcvN4I08wB5I7YofOb/kaJNd5uoCMX+LbKXTPCF+ZIHuqTnFaK9Jz1rgs035f9JUPUhNFtqgucy/A==}
@@ -2346,10 +2345,6 @@ packages:
     resolution: {integrity: sha512-w0q/enDHhPLq44ovMGdQeeDLvwxwavsJX7oQGYt/LrBlYsyaxyDnp6z3QzFut/6kLLKnlcUVJLrpB7KBfgG/RA==}
     engines: {node: 10.* || >= 12.*}
 
-  cli-table3@0.6.5:
-    resolution: {integrity: sha512-+W/5efTR7y5HRD7gACw9yQjqMVvEMLBHmboM/kPWam+H+Hmyrgjh6YncVKK122YZkXrLudzTuAukUw9FnMf7IQ==}
-    engines: {node: 10.* || >= 12.*}
-
   cli-truncate@2.1.0:
     resolution: {integrity: sha512-n8fOixwDD6b/ObinzTrp1ZKFzbgvKZvuz/TvejnLn1aQfC6r52XEx85FmuC+3HI+JM7coBRXUvNqEU2PHVrHpg==}
     engines: {node: '>=8'}
@@ -2549,9 +2544,9 @@ packages:
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
 
-  cypress@13.17.0:
-    resolution: {integrity: sha512-5xWkaPurwkIljojFidhw8lFScyxhtiFHl/i/3zov+1Z5CmY4t9tjIdvSXfu82Y3w7wt0uR9KkucbhkVvJZLQSA==}
-    engines: {node: ^16.0.0 || ^18.0.0 || >=20.0.0}
+  cypress@15.3.0:
+    resolution: {integrity: sha512-g9rDhoK9y8wW4Vx3Ppr8dtfvThXxPL3mJsV5e98fG+6EerrhXKmeRT2sL86cvNRtEZouXJfsuVL1lqiMuGNGcg==}
+    engines: {node: ^20.1.0 || ^22.0.0 || >=24.0.0}
     hasBin: true
 
   dashdash@1.14.1:
@@ -3182,6 +3177,10 @@ packages:
     resolution: {integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==}
     engines: {node: '>= 6'}
 
+  form-data@4.0.4:
+    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
+    engines: {node: '>= 6'}
+
   forwarded@0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
     engines: {node: '>= 0.6'}
@@ -3270,9 +3269,6 @@ packages:
 
   get-tsconfig@4.10.1:
     resolution: {integrity: sha512-auHyJ4AgMz7vgS8Hp3N6HXSmlMdUyhSUrfBF16w153rxtLIEOE+HGqaBppczZvnHLqQJfiHotCYpNhl0lUROFQ==}
-
-  getos@3.2.1:
-    resolution: {integrity: sha512-U56CfOK17OKgTVqozZjUKNdkfEv6jk5WISBJ8SHoagjE6L69zOwl3Z+O8myjY9MEW3i2HPWQBt/LTbCgcC973Q==}
 
   getpass@0.1.7:
     resolution: {integrity: sha512-0fzj9JxOLfJ+XGLhR8ze3unN0KZCgZwiSSDz168VERjK8Wl8kVSdcu2kspd4s4wtAa1y/qrVRiAA0WclVsu0ng==}
@@ -3372,6 +3368,10 @@ packages:
   has-tostringtag@1.0.2:
     resolution: {integrity: sha512-NqADB8VjPFLM2V0VvHUewwwsw0ZWBaIdgo+ieHtK3hasLz4qeCRjYcqfB6AQrBggRKppKF8L52/VqdVsO47Dlw==}
     engines: {node: '>= 0.4'}
+
+  hasha@5.2.2:
+    resolution: {integrity: sha512-Hrp5vIK/xr5SkeN2onO32H0MgNZ0f17HRNH39WfL0SYUNOTZ5Lz1TJ8Pajo/87dYGEFlLMm7mIc/k/s6Bvz9HQ==}
+    engines: {node: '>=8'}
 
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
@@ -5311,6 +5311,12 @@ packages:
     resolution: {integrity: sha512-tfJpTBlTyrAgmEVp21cyagcszFXNBZA6Ba9SkngRHHtKtfbJdJXQ7G1udW6HTLaUkzWDB7aheiyG+NSkZy/0PQ==}
     hasBin: true
 
+  systeminformation@5.27.7:
+    resolution: {integrity: sha512-saaqOoVEEFaux4v0K8Q7caiauRwjXC4XbD2eH60dxHXbpKxQ8kH9Rf7Jh+nryKpOUSEFxtCdBlSUx0/lO6rwRg==}
+    engines: {node: '>=8.0.0'}
+    os: [darwin, linux, win32, freebsd, openbsd, netbsd, sunos, android]
+    hasBin: true
+
   tabbable@6.2.0:
     resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
 
@@ -5397,8 +5403,8 @@ packages:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}
     engines: {node: '>=0.6.0'}
 
-  tmp@0.2.3:
-    resolution: {integrity: sha512-nZD7m9iCPC5g0pYmcaxogYKggSfLsdxl8of3Q/oIbqCqLLIO9IAF0GWjX1z9NZRHPiXv8Wex4yDCaZsgEw0Y8w==}
+  tmp@0.2.5:
+    resolution: {integrity: sha512-voyz6MApa1rQGUxT3E+BK7/ROe8itEx7vD8/HEvt4xwXucvQ5G5oeEiHkmHZJuBO21RpOf+YYm9MOivj709jow==}
     engines: {node: '>=14.14'}
 
   tmpl@1.0.5:
@@ -6837,10 +6843,7 @@ snapshots:
       human-id: 4.1.1
       prettier: 2.8.8
 
-  '@colors/colors@1.5.0':
-    optional: true
-
-  '@cypress/request@3.0.8':
+  '@cypress/request@3.0.9':
     dependencies:
       aws-sign2: 0.7.0
       aws4: 1.13.2
@@ -6848,7 +6851,7 @@ snapshots:
       combined-stream: 1.0.8
       extend: 3.0.2
       forever-agent: 0.6.1
-      form-data: 4.0.2
+      form-data: 4.0.4
       http-signature: 1.4.0
       is-typedarray: 1.0.0
       isstream: 0.1.2
@@ -7266,7 +7269,7 @@ snapshots:
 
   '@manypkg/find-root@1.1.0':
     dependencies:
-      '@babel/runtime': 7.26.10
+      '@babel/runtime': 7.28.4
       '@types/node': 12.20.55
       find-up: 4.1.0
       fs-extra: 8.1.0
@@ -7459,16 +7462,16 @@ snapshots:
       strip-ansi: 6.0.1
       webpack: 5.98.0
 
-  '@testing-library/cypress@10.0.3(cypress@13.17.0)':
+  '@testing-library/cypress@10.1.0(cypress@15.3.0)':
     dependencies:
-      '@babel/runtime': 7.26.10
+      '@babel/runtime': 7.28.4
       '@testing-library/dom': 10.4.0
-      cypress: 13.17.0
+      cypress: 15.3.0
 
   '@testing-library/dom@10.4.0':
     dependencies:
       '@babel/code-frame': 7.26.2
-      '@babel/runtime': 7.26.10
+      '@babel/runtime': 7.28.4
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       chalk: 4.1.2
@@ -7650,6 +7653,8 @@ snapshots:
   '@types/tern@0.23.9':
     dependencies:
       '@types/estree': 1.0.6
+
+  '@types/tmp@0.2.6': {}
 
   '@types/webpack-env@1.18.8': {}
 
@@ -8445,12 +8450,6 @@ snapshots:
     optionalDependencies:
       colors: 1.4.0
 
-  cli-table3@0.6.5:
-    dependencies:
-      string-width: 4.2.3
-    optionalDependencies:
-      '@colors/colors': 1.5.0
-
   cli-truncate@2.1.0:
     dependencies:
       slice-ansi: 3.0.0
@@ -8666,22 +8665,22 @@ snapshots:
 
   csstype@3.1.3: {}
 
-  cypress@13.17.0:
+  cypress@15.3.0:
     dependencies:
-      '@cypress/request': 3.0.8
+      '@cypress/request': 3.0.9
       '@cypress/xvfb': 1.2.4(supports-color@8.1.1)
       '@types/sinonjs__fake-timers': 8.1.1
       '@types/sizzle': 2.3.9
+      '@types/tmp': 0.2.6
       arch: 2.2.0
       blob-util: 2.0.2
       bluebird: 3.7.2
       buffer: 5.7.1
       cachedir: 2.4.0
       chalk: 4.1.2
-      check-more-types: 2.24.0
       ci-info: 4.2.0
       cli-cursor: 3.1.0
-      cli-table3: 0.6.5
+      cli-table3: 0.6.1
       commander: 6.2.1
       common-tags: 1.8.2
       dayjs: 1.11.13
@@ -8693,9 +8692,8 @@ snapshots:
       extract-zip: 2.0.1(supports-color@8.1.1)
       figures: 3.2.0
       fs-extra: 9.1.0
-      getos: 3.2.1
+      hasha: 5.2.2
       is-installed-globally: 0.4.0
-      lazy-ass: 1.6.0
       listr2: 3.14.0(enquirer@2.4.1)
       lodash: 4.17.21
       log-symbols: 4.1.0
@@ -8707,7 +8705,8 @@ snapshots:
       request-progress: 3.0.0
       semver: 7.7.2
       supports-color: 8.1.1
-      tmp: 0.2.3
+      systeminformation: 5.27.7
+      tmp: 0.2.5
       tree-kill: 1.2.2
       untildify: 4.0.0
       yauzl: 2.10.0
@@ -9500,6 +9499,14 @@ snapshots:
       es-set-tostringtag: 2.1.0
       mime-types: 2.1.35
 
+  form-data@4.0.4:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
+      mime-types: 2.1.35
+
   forwarded@0.2.0: {}
 
   fresh@0.5.2: {}
@@ -9594,10 +9601,6 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
-  getos@3.2.1:
-    dependencies:
-      async: 3.2.6
-
   getpass@0.1.7:
     dependencies:
       assert-plus: 1.0.0
@@ -9690,6 +9693,11 @@ snapshots:
   has-tostringtag@1.0.2:
     dependencies:
       has-symbols: 1.1.0
+
+  hasha@5.2.2:
+    dependencies:
+      is-stream: 2.0.1
+      type-fest: 0.8.1
 
   hasown@2.0.2:
     dependencies:
@@ -10651,7 +10659,7 @@ snapshots:
 
   media-query-parser@2.0.2:
     dependencies:
-      '@babel/runtime': 7.26.10
+      '@babel/runtime': 7.28.4
 
   media-typer@0.3.0: {}
 
@@ -11275,7 +11283,7 @@ snapshots:
 
   regenerator-transform@0.15.2:
     dependencies:
-      '@babel/runtime': 7.26.10
+      '@babel/runtime': 7.28.4
 
   regexp.prototype.flags@1.5.4:
     dependencies:
@@ -11957,6 +11965,8 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  systeminformation@5.27.7: {}
+
   tabbable@6.2.0: {}
 
   table-layout@1.0.2:
@@ -12037,7 +12047,7 @@ snapshots:
     dependencies:
       os-tmpdir: 1.0.2
 
-  tmp@0.2.3: {}
+  tmp@0.2.5: {}
 
   tmpl@1.0.5: {}
 
