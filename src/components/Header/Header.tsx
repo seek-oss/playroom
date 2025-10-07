@@ -351,7 +351,7 @@ const HeaderMenu = () => {
               Share
             </MenuItem>
           }
-          width="small"
+          width="content"
         >
           <ShareMenu />
         </Menu>
@@ -521,7 +521,7 @@ export const Header = () => {
                 ) : null}
               </button>
               <Menu
-                width="small"
+                width="content"
                 align="end"
                 trigger={
                   <Tooltip
