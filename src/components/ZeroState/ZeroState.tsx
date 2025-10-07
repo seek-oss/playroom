@@ -48,7 +48,7 @@ export const ZeroState = () => {
   const hasStoredPlayrooms = playroomEntries.length > 0;
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} data-testid="zeroState">
       <div className={styles.maxWidth}>
         <Stack space="xxxlarge">
           <Text size="large">
