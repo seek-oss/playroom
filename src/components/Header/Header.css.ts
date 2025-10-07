@@ -116,7 +116,6 @@ const segmentedButtonBase = style([
     justifyContent: 'center',
     position: 'relative',
     paddingY: 'xsmall',
-    cursor: 'pointer',
     transition: 'fast',
     borderRadius: segmentedButtonRadius,
     userSelect: 'none',
