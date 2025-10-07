@@ -108,10 +108,11 @@ export const button = style([
     outline: `1px solid ${borderColor}`,
     selectors: {
       ['&:hover']: {
-        outline: `1px solid ${colorPaletteVars.border.accent}`,
+        outline: `2px solid ${colorPaletteVars.border.accent}`,
       },
       ['&:focus-visible']: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
+        outlineOffset: 2,
       },
     },
   },
