@@ -2,6 +2,9 @@ import {
   assertFirstFrameContains,
   assertCodePaneContains,
   assertFramesMatch,
+  assertZeroStateIsVisible,
+  typeCode,
+  assertTitle,
 } from '../support/utils';
 
 describe('URL handling', () => {
@@ -20,6 +23,8 @@ describe('URL handling', () => {
         'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
 
+      assertZeroStateIsVisible();
+      typeCode('code');
       assertFramesMatch([375, 768]);
     });
 
@@ -28,6 +33,7 @@ describe('URL handling', () => {
         'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA'
       );
 
+      assertTitle('Test');
       cy.title().should('eq', 'Test | Playroom');
     });
 
@@ -36,6 +42,7 @@ describe('URL handling', () => {
         'http://localhost:9000/#?code=N4IgpgJglgLg9gJwBJQhMA7EAuGCCuYAvkA'
       );
 
+      assertZeroStateIsVisible();
       cy.get('textarea').should('not.be.focused');
       cy.get('.CodeMirror-code').should('be.hidden');
     });
@@ -56,6 +63,8 @@ describe('URL handling', () => {
         'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
 
+      assertZeroStateIsVisible();
+      typeCode('code');
       assertFramesMatch([
         ['themeOne', 375],
         ['themeTwo', 375],
@@ -69,6 +78,7 @@ describe('URL handling', () => {
         'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA'
       );
 
+      assertTitle('Test');
       cy.title().should('eq', 'Test | Playroom');
     });
 
@@ -85,6 +95,7 @@ describe('URL handling', () => {
         'http://localhost:9001/?code=N4IgpgJglgLg9gJwBJQhMA7EAuGCCuYAvkA'
       );
 
+      assertZeroStateIsVisible();
       cy.get('textarea').should('not.be.focused');
       cy.get('.CodeMirror-code').should('be.hidden');
     });

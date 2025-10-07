@@ -58,6 +58,11 @@ export const selectWidthPreference = (width: Widths[number]) => {
   cy.findByRole('checkbox', { name: `${width}` }).click();
 };
 
+export const assertTitle = (title: string) =>
+  cy
+    .findByRole('textbox', { name: 'Playroom Title' })
+    .should('have.value', title);
+
 export const changeTitle = (title: string) => {
   cy.findByRole('button', { name: 'Configure visible frames' }).click();
   cy.findByRole('textbox', { name: 'Title' }).type(title);
@@ -79,14 +84,16 @@ export const toggleSnippets = () =>
   cy.findByRole('button', { name: /Insert snippet/i }).click();
 
 export const filterSnippets = (search: string) => {
-  cy.findByRole('searchbox', { name: 'Search snippets' }).type(search);
+  cy.findByRole('combobox', { name: 'Search snippets' }).type(search);
 };
 
 export const assertSnippetsSearchFieldIsVisible = () =>
-  cy.findByRole('searchbox', { name: 'Search snippets' }).should('be.visible');
+  cy.findByRole('combobox', { name: 'Search snippets' }).should('be.visible');
 
 const getSnippets = () =>
-  cy.findByRole('list', { name: 'Filtered snippets' }).find('li');
+  cy
+    .findByRole('listbox', { name: 'Filtered snippets' })
+    .findAllByRole('option');
 
 export const selectSnippetByIndex = (index: number) => getSnippets().eq(index);
 
@@ -280,3 +287,6 @@ export const assertCodePaneSearchMatchesCount = (lines: number) => {
     cy.get('.cm-searching').should('have.length', lines)
   );
 };
+
+export const assertZeroStateIsVisible = () =>
+  cy.findByTestId('zeroState').should('be.visible');
