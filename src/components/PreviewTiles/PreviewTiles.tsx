@@ -16,7 +16,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 
 import * as styles from './PreviewTiles.css';
 
-const scale = 0.5;
+const scale = 0.15;
 export const PreviewTiles = ({ onSelect }: { onSelect: () => void }) => {
   const [{ selectedThemes, storedPlayrooms }, dispatch] =
     useContext(StoreContext);
