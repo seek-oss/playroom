@@ -98,13 +98,13 @@ export const snippet = style([
   sprinkles({
     position: 'relative',
     display: 'block',
-    cursor: 'pointer',
     paddingX: snippetPadding,
     paddingY: 'small',
   }),
   {
     color: colorPaletteVars.foreground.neutral,
     isolation: 'isolate',
+    cursor: 'default',
     scrollMarginBlock: vars.space[popoverPadding],
     '::before': {
       content: '',

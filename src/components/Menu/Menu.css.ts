@@ -47,6 +47,7 @@ export const item = style([
   }),
   {
     outline: 'none',
+    cursor: 'default',
     color: colorPaletteVars.foreground.neutral,
     height: 34, // Explicit height until icons are vertically trimmed
     '::before': {
