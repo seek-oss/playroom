@@ -129,37 +129,37 @@ const Frame = ({
                 window.open(previewUrl, '_blank', 'noopener,noreferrer');
               }}
             />
-            {frame.width !== 'Fit to window' ? (
-              <FrameActionButton
-                tone="accent"
-                icon={<PictureInPicture2 />}
-                label="Pop out frame"
-                onClick={() => {
-                  const width =
-                    frame.width === 'Fit to window' ? '' : frame.width;
-                  const height = iframeRef.current?.offsetHeight;
+            <FrameActionButton
+              tone="accent"
+              icon={<PictureInPicture2 />}
+              label="Pop out frame"
+              onClick={() => {
+                const width =
+                  frame.width === 'Fit to window'
+                    ? iframeRef.current?.offsetWidth
+                    : frame.width;
+                const height = iframeRef.current?.offsetHeight;
 
-                  window.open(
-                    previewUrl,
-                    // Providing a `name` to check and in Preview and not show the header.
-                    popOutWindowName,
-                    [
-                      `popup=true`,
-                      `width=${width}`,
-                      `height=${height}`,
-                      `left=${width ? screen.availWidth / 2 - width / 2 : ''}`,
-                      `top=${
-                        height ? screen.availHeight / 2 - height * 0.75 : ''
-                      }`,
-                    ].join(',')
-                    /**
-                     * Not setting `noopener` and `noreferrer` so we can control the popup
-                     * dimensions in Safari.
-                     */
-                  );
-                }}
-              />
-            ) : null}
+                window.open(
+                  previewUrl,
+                  // Providing a `name` to check and in Preview and not show the header.
+                  popOutWindowName,
+                  [
+                    `popup=true`,
+                    `width=${width}`,
+                    `height=${height}`,
+                    `left=${width ? screen.availWidth / 2 - width / 2 : ''}`,
+                    `top=${
+                      height ? screen.availHeight / 2 - height * 0.75 : ''
+                    }`,
+                  ].join(',')
+                  /**
+                   * Not setting `noopener` and `noreferrer` so we can control the popup
+                   * dimensions in Safari.
+                   */
+                );
+              }}
+            />
 
             <Menu
               align="end"
