@@ -201,7 +201,7 @@ const ShareMenu = () => {
       {themesEnabled ? (
         <>
           <MenuSeparator />
-          <MenuGroup label="Link to preview mode">
+          <MenuGroup label="Theme for preview link">
             {availableThemes.map((theme) => {
               const baseUrl = window.location.href
                 .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]

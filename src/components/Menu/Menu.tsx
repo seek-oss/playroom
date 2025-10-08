@@ -212,7 +212,7 @@ export const MenuGroup = ({
 }) => (
   <BaseUIMenu.Group>
     <BaseUIMenu.GroupLabel className={styles.menuGroupLabel}>
-      <Text weight="strong" truncate>
+      <Text tone="secondary" truncate>
         {label}
       </Text>
       {action}
