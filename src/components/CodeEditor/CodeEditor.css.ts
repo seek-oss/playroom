@@ -53,24 +53,18 @@ export const foldGutter = style([
   },
 ]);
 
-export const foldOpen = style([
-  sprinkles({ cursor: 'pointer' }),
-  {
-    '::after': {
-      content: '-',
-    },
+export const foldOpen = style({
+  '::after': {
+    content: '-',
   },
-]);
+});
 
-export const foldFolded = style([
-  sprinkles({ cursor: 'pointer' }),
-  {
-    '::after': {
-      content: '+',
-      opacity: 1,
-    },
+export const foldFolded = style({
+  '::after': {
+    content: '+',
+    opacity: 1,
   },
-]);
+});
 
 globalStyle('.react-codemirror2', {
   height: '100%',
@@ -121,7 +115,7 @@ globalStyle('.CodeMirror-hint', {
   borderRadius: vars.radii.small,
   whiteSpace: 'pre',
   color: colorPaletteVars.code.text,
-  cursor: 'pointer',
+  cursor: 'default',
 });
 
 globalStyle('li.CodeMirror-hint-active', {
@@ -135,7 +129,7 @@ globalStyle('.CodeMirror-linenumbers', {
 globalStyle('.CodeMirror-foldmarker', {
   color: colorPaletteVars.foreground.accent,
   fontFamily: 'arial',
-  cursor: 'pointer',
+  cursor: 'default',
   padding: `0 ${vars.space.xxsmall}`,
 });
 
@@ -308,7 +302,7 @@ globalStyle('.CodeMirror-dialog button', {
   display: 'block',
   background: 'none',
   borderRadius: vars.radii.medium,
-  cursor: 'pointer',
+  cursor: 'default',
   border: `1px solid ${colorPaletteVars.border.standard}`,
 });
 
