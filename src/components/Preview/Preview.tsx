@@ -60,12 +60,12 @@ export default ({ title, code, themeName }: PreviewProps) => {
   useDocumentTitle({ title, suffix: 'Playroom Preview' });
 
   const [headerHidden, setHeaderHidden] = useState(false);
+  const editorHref = window.location.href.replace(/\/preview\/$/, '/');
   const absoluteSrc = new URL(
     frameSrc({ themeName, code }),
-    window.location.origin
+    editorHref
   ).toString();
 
-  const editorHref = window.location.href.replace('/preview', '');
   const isEmbedded =
     typeof window !== 'undefined' && window.self !== window.top;
 
