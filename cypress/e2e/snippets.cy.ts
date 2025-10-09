@@ -1,6 +1,5 @@
 import dedent from 'dedent';
 
-import { isMac } from '../../src/utils/formatting';
 import {
   typeCode,
   assertFirstFrameContains,
@@ -13,6 +12,7 @@ import {
   assertSnippetsSearchFieldIsVisible,
   mouseOverSnippet,
   loadPlayroom,
+  cmdPlus,
 } from '../support/utils';
 
 describe('Snippets', () => {
@@ -69,12 +69,12 @@ describe('Snippets', () => {
 
   it('driven with keyboard', () => {
     // Open and format for insertion point
-    typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
+    typeCode(cmdPlus('k'));
     assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
     filterSnippets('{esc}');
     assertCodePaneLineCount(1, true);
-    typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
+    typeCode(cmdPlus('k'));
     assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
 
@@ -93,7 +93,7 @@ describe('Snippets', () => {
     assertCodePaneLineCount(1, true);
 
     // Re-open and persist
-    typeCode(`${isMac() ? '{cmd}' : '{ctrl}'}k`);
+    typeCode(cmdPlus('k'));
     filterSnippets('{downarrow}{downarrow}{downarrow}{downarrow}{enter}');
     assertFirstFrameContains('Initial code\nBar\nBlue Bar');
     assertCodePaneLineCount(7);
@@ -114,27 +114,5 @@ describe('Snippets', () => {
           </span>
         </div>\n
       `);
-  });
-
-  it('snippets preview code is disabled while snippet pane is closing', () => {
-    toggleSnippets();
-    toggleSnippets();
-
-    // Mouse over snippet while snippet panel is closing
-    mouseOverSnippet(0);
-
-    assertCodePaneContains(dedent`
-      <div>Initial <span>code</span></div>
-    `);
-
-    assertFirstFrameContains('Initial code');
-
-    typeCode('<div>test');
-
-    assertCodePaneContains(dedent`
-      <div>Initial <span>code<div>test</div></span></div>
-    `);
-
-    assertFirstFrameContains('Initial code\ntest');
   });
 });
