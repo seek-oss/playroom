@@ -36,6 +36,7 @@ export const popup = style([
     padding: dialogPadding,
     borderRadius: 'large',
     transition: 'fast',
+    userSelect: 'none',
   }),
   {
     top: '50%',
@@ -67,6 +68,7 @@ export const titleContainer = style([
 export const titleOutline = style([
   sprinkles({
     borderRadius: 'small',
+    userSelect: 'none',
   }),
   {
     ':focus-visible': {

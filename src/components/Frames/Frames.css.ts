@@ -17,6 +17,7 @@ export const root = style([
     paddingX: 'xlarge',
     textAlign: 'center',
     overflow: 'auto',
+    userSelect: 'none',
   }),
   {
     justifyContent: 'safe center',
