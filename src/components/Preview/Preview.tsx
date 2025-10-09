@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
-import { ReceiveErrorMessage } from '../Frame/frameMessaging';
+import { ErrorMessageReceiver } from '../Frame/frameMessenger';
 import { popOutWindowName } from '../Frames/Frames';
 import frameSrc from '../Frames/frameSrc';
 import { logoSize } from '../Header/Header';
@@ -91,7 +91,7 @@ export default ({ title, code, themeName }: PreviewProps) => {
           className={styles.iframe}
           data-testid="previewIframe"
         />
-        <ReceiveErrorMessage size="large" />
+        <ErrorMessageReceiver size="large" />
       </div>
       {isEmbedded ? <PreviewFooter editorHref={editorHref} /> : null}
     </div>
