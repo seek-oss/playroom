@@ -43,6 +43,9 @@ export const textField = style([
         opacity: 1,
         color: 'transparent',
       },
+      '&:hover:not(:focus-visible)::selection': {
+        background: 'transparent',
+      },
       '&:focus-visible': {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
         opacity: 1,
@@ -60,6 +63,7 @@ export const readOnlyText = style([
     boxSizing: 'border-box',
     pointerEvents: 'none',
     paddingX,
+    userSelect: 'none',
   }),
   {
     maxWidth: '50vw',

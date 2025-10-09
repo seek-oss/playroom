@@ -10,6 +10,7 @@ const snippetPadding = 'xsmall';
 
 export const root = sprinkles({
   position: 'relative',
+  userSelect: 'none',
 });
 
 export const fieldContainer = style([
