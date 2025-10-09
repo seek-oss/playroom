@@ -1,6 +1,5 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import clsx from 'clsx';
-import html2canvas from 'html2canvas';
 import {
   Camera,
   ClipboardCopy,
@@ -23,7 +22,10 @@ import { StoreContext } from '../../contexts/StoreContext';
 import { compileJsx } from '../../utils/compileJsx';
 import { useCopy } from '../../utils/useCopy';
 import usePreviewUrl from '../../utils/usePreviewUrl';
-import { ReceiveErrorMessage } from '../Frame/frameMessaging';
+import {
+  ErrorMessageReceiver,
+  screenshotMessageSender,
+} from '../Frame/frameMessenger';
 import { Menu, MenuItem } from '../Menu/Menu';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
@@ -59,32 +61,23 @@ const Frame = ({
   const previewUrl = usePreviewUrl(frame.theme);
   const { copying, onCopyClick } = useCopy();
 
-  const screenshotHandler = async () => {
-    if (iframeRef.current?.contentDocument?.body) {
-      const canvas = await html2canvas(iframeRef.current.contentDocument.body);
-      const dataUrl = canvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = dataUrl;
-      a.download = `${title || 'Untitled Playroom'} (${
-        noTheme ? frame.widthName : `${frame.theme} - ${frame.widthName}`
-      }).png`;
-      a.style.position = 'absolute';
-      a.style.top = '0';
-      a.style.opacity = '0';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+  const downloadHandler = () => {
+    if (iframeRef.current?.contentWindow) {
+      screenshotMessageSender({
+        messageWindow: iframeRef.current.contentWindow,
+        action: 'download',
+        fileName: `${title || 'Untitled Playroom'} (${
+          noTheme ? frame.widthName : `${frame.theme} - ${frame.widthName}`
+        })`,
+      });
     }
   };
 
-  const copyHandler = async () => {
-    if (iframeRef.current?.contentDocument?.body) {
-      const canvas = await html2canvas(iframeRef.current.contentDocument.body);
-      canvas.toBlob(async (blob) => {
-        if (blob) {
-          const clipboardItem = new ClipboardItem({ [blob.type]: blob });
-          await navigator.clipboard.write([clipboardItem]);
-        }
+  const copyHandler = () => {
+    if (iframeRef.current?.contentWindow) {
+      screenshotMessageSender({
+        messageWindow: iframeRef.current.contentWindow,
+        action: 'copy',
       });
     }
   };
@@ -173,7 +166,7 @@ const Frame = ({
                 />
               }
             >
-              <MenuItem icon={Download} onClick={screenshotHandler}>
+              <MenuItem icon={Download} onClick={downloadHandler}>
                 Download
               </MenuItem>
               <MenuItem icon={ClipboardCopy} onClick={copyHandler}>
@@ -194,7 +187,7 @@ const Frame = ({
           data-testid="frameIframe"
           className={styles.frame}
         />
-        <ReceiveErrorMessage />
+        <ErrorMessageReceiver />
       </div>
     </div>
   );
