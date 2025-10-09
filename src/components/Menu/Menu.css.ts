@@ -82,10 +82,8 @@ export const item = style([
 
 export const itemLink = style([
   item,
-  sprinkles({
-    cursor: 'pointer',
-  }),
   {
+    cursor: 'pointer', // needs higher importance than sprinkle class
     textDecoration: 'none',
     selectors: {
       '&[aria-disabled]': {
