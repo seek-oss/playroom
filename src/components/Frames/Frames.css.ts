@@ -57,7 +57,7 @@ export const frameWrapper = style([
     height: 'full',
   }),
   {
-    border: `1px solid ${colorPaletteVars.border.standard}`,
+    outline: `1px solid ${colorPaletteVars.border.standard}`,
   },
 ]);
 
