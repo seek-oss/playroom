@@ -199,7 +199,7 @@ describe('Keymaps', () => {
     });
 
     it('should add a cursor on the next line', () => {
-      typeCode(`{${cmdPlus('alt+downArrow')}}a`);
+      typeCode(`${cmdPlus('alt+downArrow')}a`);
       assertCodePaneContains(dedent`
         a<div>First line</div>
         a<div>Second line</div>
@@ -209,7 +209,7 @@ describe('Keymaps', () => {
 
     it('should add a cursor on the previous line', () => {
       typeCode('{downArrow}{downArrow}');
-      typeCode(`{${cmdPlus('alt+upArrow')}}a`);
+      typeCode(`${cmdPlus('alt+upArrow')}a`);
       assertCodePaneContains(dedent`
         <div>First line</div>
         a<div>Second line</div>

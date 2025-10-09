@@ -95,6 +95,8 @@ export const snippetsContainer = style([
   },
 ]);
 
+export const dummyItem = sprinkles({ display: 'none' });
+
 export const snippet = style([
   sprinkles({
     position: 'relative',

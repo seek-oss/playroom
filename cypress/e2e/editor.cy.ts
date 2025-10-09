@@ -1,13 +1,14 @@
 import dedent from 'dedent';
 
 import {
-  formatCode,
   typeCode,
   assertFirstFrameContains,
   assertCodePaneContains,
   assertCodePaneLineCount,
   loadPlayroom,
   selectHint,
+  formatCodeByKeyboard,
+  formatCodeByEditorAction,
 } from '../support/utils';
 
 describe('Editor', () => {
@@ -35,10 +36,17 @@ describe('Editor', () => {
     assertCodePaneContains('<Foo color="blue" />');
   });
 
-  it('formats', () => {
+  it('formats with keyboard shortcut', () => {
     typeCode('<Foo><Foo><Bar/>');
     assertCodePaneLineCount(1);
-    formatCode();
+    formatCodeByKeyboard();
+    assertCodePaneLineCount(6);
+  });
+
+  it('formats with editor action', () => {
+    typeCode('<Foo><Foo><Bar/>');
+    assertCodePaneLineCount(1);
+    formatCodeByEditorAction();
     assertCodePaneLineCount(6);
   });
 
@@ -47,7 +55,7 @@ describe('Editor', () => {
       '<style jsx>{{}`html {{} border: 1px solid red; {}}{rightarrow}{}}'
     );
     assertCodePaneLineCount(1);
-    formatCode();
+    formatCodeByKeyboard();
     assertCodePaneContains(dedent`
       <style jsx>{\`
         html {

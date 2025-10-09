@@ -14,7 +14,7 @@ const navigationModifier = isMac() ? 'alt' : 'ctrl';
 
 export const cmdPlus = (keyCombo: string) => {
   const platformSpecificKey = isMac() ? 'cmd' : 'ctrl';
-  return `${platformSpecificKey}+${keyCombo}`;
+  return `{${platformSpecificKey}+${keyCombo}}`;
 };
 
 const getCodeEditor = () =>
@@ -48,10 +48,11 @@ export const selectHint = (index?: number) => {
     });
 };
 
-export const formatCode = () =>
-  getCodeEditor()
-    .focused()
-    .type(`${isMac() ? '{cmd}' : '{ctrl}'}s`);
+export const formatCodeByKeyboard = () =>
+  getCodeEditor().focused().type(cmdPlus('s'));
+
+export const formatCodeByEditorAction = () =>
+  cy.findByRole('button', { name: 'Tidy' }).click();
 
 export const selectWidthPreference = (width: Widths[number]) => {
   cy.findByRole('button', { name: 'Configure visible frames' }).click();
@@ -98,8 +99,7 @@ const getSnippets = () =>
 export const selectSnippetByIndex = (index: number) => getSnippets().eq(index);
 
 export const mouseOverSnippet = (index: number) =>
-  // force stops cypress scrolling the panel out of the editor
-  selectSnippetByIndex(index).trigger('mousemove', { force: true });
+  selectSnippetByIndex(index).trigger('pointermove');
 
 export const assertSnippetCount = (count: number) =>
   getSnippets().should('have.length', count);
