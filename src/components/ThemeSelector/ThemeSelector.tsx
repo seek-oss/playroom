@@ -26,8 +26,7 @@ export const ThemeSelector = ({ value, onChange }: ThemeSelectorProps) => {
     <div className={styles.root}>
       <select
         className={styles.select}
-        aria-label="Select theme"
-        title="Select theme"
+        aria-label="Preview theme"
         value={value}
         id="theme-select"
         onChange={(e) => onChange(e.target.value)}

@@ -499,22 +499,28 @@ export const Header = () => {
                 align="end"
                 trigger={<ButtonIcon label="Launch Preview" icon={<Play />} />}
               >
-                {availableThemes.map((theme) => {
-                  const previewUrl = createPreviewUrl({
-                    baseUrl,
-                    code,
-                    theme,
-                    paramType: playroomConfig.paramType,
-                    title,
-                    editorHidden,
-                  });
+                <MenuGroup label="Choose preview theme">
+                  {availableThemes.map((theme) => {
+                    const previewUrl = createPreviewUrl({
+                      baseUrl,
+                      code,
+                      theme,
+                      paramType: playroomConfig.paramType,
+                      title,
+                      editorHidden,
+                    });
 
-                  return (
-                    <MenuItemLink key={theme} href={previewUrl} target="_blank">
-                      {theme}
-                    </MenuItemLink>
-                  );
-                })}
+                    return (
+                      <MenuItemLink
+                        key={theme}
+                        href={previewUrl}
+                        target="_blank"
+                      >
+                        {theme}
+                      </MenuItemLink>
+                    );
+                  })}
+                </MenuGroup>
               </Menu>
             ) : (
               <ButtonIcon
