@@ -95,6 +95,10 @@ const renderDocumentToCanvas = async (doc: Document) => {
         ? 'https://proxy.corsfix.com/?'
         : undefined,
     backgroundColor: '#fff',
+    fallbackURL: ({ width, height }) =>
+      `https://placehold.co/${width}${
+        height ? `x${height}` : ''
+      }/eee/aaa?text=CORS%20blocked%20image`,
   });
 
   return result;
