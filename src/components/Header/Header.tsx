@@ -1,4 +1,5 @@
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
+import clsx from 'clsx';
 import {
   type LucideIcon,
   CodeXml,
@@ -456,8 +457,12 @@ export const Header = () => {
       <Title />
       <SharedTooltipContext>
         <div className={styles.actionsContainer}>
-          {/* Todo - try animate in/out */}
-          {hasCode ? (
+          <div
+            className={clsx({
+              [styles.actionsNeedingCode]: true,
+              [styles.hasCode]: hasCode,
+            })}
+          >
             <div className={styles.segmentedGroup}>
               <button
                 type="button"
@@ -485,50 +490,50 @@ export const Header = () => {
                 }
               />
             </div>
-          ) : null}
 
-          {themesEnabled ? (
-            <Menu
-              width="content"
-              align="end"
-              trigger={<ButtonIcon label="Launch Preview" icon={<Play />} />}
-            >
-              {availableThemes.map((theme) => {
-                const previewUrl = createPreviewUrl({
-                  baseUrl,
-                  code,
-                  theme,
-                  paramType: playroomConfig.paramType,
-                  title,
-                  editorHidden,
-                });
-
-                return (
-                  <MenuItemLink key={theme} href={previewUrl} target="_blank">
-                    {theme}
-                  </MenuItemLink>
-                );
-              })}
-            </Menu>
-          ) : (
-            <ButtonIcon
-              label="Launch Preview"
-              icon={<Play />}
-              onClick={() => {
-                window.open(
-                  createPreviewUrl({
+            {themesEnabled ? (
+              <Menu
+                width="content"
+                align="end"
+                trigger={<ButtonIcon label="Launch Preview" icon={<Play />} />}
+              >
+                {availableThemes.map((theme) => {
+                  const previewUrl = createPreviewUrl({
                     baseUrl,
                     code,
+                    theme,
                     paramType: playroomConfig.paramType,
                     title,
                     editorHidden,
-                  }),
-                  '_blank',
-                  'noopener,noreferrer'
-                );
-              }}
-            />
-          )}
+                  });
+
+                  return (
+                    <MenuItemLink key={theme} href={previewUrl} target="_blank">
+                      {theme}
+                    </MenuItemLink>
+                  );
+                })}
+              </Menu>
+            ) : (
+              <ButtonIcon
+                label="Launch Preview"
+                icon={<Play />}
+                onClick={() => {
+                  window.open(
+                    createPreviewUrl({
+                      baseUrl,
+                      code,
+                      paramType: playroomConfig.paramType,
+                      title,
+                      editorHidden,
+                    }),
+                    '_blank',
+                    'noopener,noreferrer'
+                  );
+                }}
+              />
+            )}
+          </div>
 
           <Menu
             width="small"
