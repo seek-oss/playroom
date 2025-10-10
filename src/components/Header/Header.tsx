@@ -21,7 +21,7 @@ import {
   Square,
   SunMoon,
 } from 'lucide-react';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 
 import { compressParams, createPreviewUrl } from '../../../utils';
 import playroomConfig from '../../config';
@@ -258,9 +258,6 @@ const HeaderMenu = () => {
     },
     dispatch,
   ] = useContext(StoreContext);
-  const [editorPosition, setEditorPosition] = useState<
-    'vertical' | 'horizontal' | 'hidden'
-  >(editorHidden ? 'hidden' : editorOrientation);
 
   const hasSnippets = snippets && snippets.length > 0;
   const hasCode = code.trim().length > 0;
@@ -411,36 +408,32 @@ const HeaderMenu = () => {
         <MenuSeparator />
 
         <Menu
-          trigger={<MenuItem icon={LayoutPanelLeft}>View</MenuItem>}
+          trigger={<MenuItem icon={LayoutPanelLeft}>Editor Position</MenuItem>}
           width="small"
         >
-          <MenuGroup label="Editor Position">
-            <MenuRadioGroup
-              value={editorPosition}
-              onValueChange={(newValue: typeof editorPosition) => {
-                setEditorPosition(newValue);
-
-                if (newValue === 'hidden') {
-                  dispatch({ type: 'hideEditor' });
-                } else {
-                  dispatch({
-                    type: 'updateEditorOrientation',
-                    payload: { orientation: newValue },
-                  });
-                }
-              }}
-            >
-              <MenuRadioItem icon={PanelLeft} value="vertical">
-                Left
-              </MenuRadioItem>
-              <MenuRadioItem icon={PanelBottom} value="horizontal">
-                Bottom
-              </MenuRadioItem>
-              <MenuRadioItem icon={Square} value="hidden">
-                Hidden
-              </MenuRadioItem>
-            </MenuRadioGroup>
-          </MenuGroup>
+          <MenuRadioGroup
+            value={editorHidden ? 'hidden' : editorOrientation}
+            onValueChange={(newValue) => {
+              if (newValue === 'hidden') {
+                dispatch({ type: 'hideEditor' });
+              } else {
+                dispatch({
+                  type: 'updateEditorOrientation',
+                  payload: { orientation: newValue },
+                });
+              }
+            }}
+          >
+            <MenuRadioItem icon={PanelLeft} value="vertical">
+              Left
+            </MenuRadioItem>
+            <MenuRadioItem icon={PanelBottom} value="horizontal">
+              Bottom
+            </MenuRadioItem>
+            <MenuRadioItem icon={Square} value="hidden">
+              Hidden
+            </MenuRadioItem>
+          </MenuRadioGroup>
         </Menu>
 
         <Menu
