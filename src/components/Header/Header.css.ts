@@ -160,14 +160,18 @@ export const segmentedIconButton = style([
 ]);
 
 export const copyLinkSuccess = style([
-  sprinkles({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    inset: 0,
-  }),
   {
     color: colorPaletteVars.foreground.positive,
+  },
+]);
+
+export const separator = style([
+  sprinkles({
+    width: 'full',
+    border: 0,
+  }),
+  {
+    height: 1,
+    backgroundColor: colorPaletteVars.border.standard,
   },
 ]);

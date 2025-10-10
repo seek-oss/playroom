@@ -11,18 +11,24 @@ export const backdrop = style([
   sprinkles({
     position: 'fixed',
     inset: 0,
-    transition: 'fast',
   }),
   {
-    backgroundColor: 'black',
-    opacity: 0.2,
+    backdropFilter: 'blur(6px)',
+    '::before': {
+      content: '',
+      position: 'absolute',
+      inset: 0,
+      backgroundColor: colorPaletteVars.background.body,
+      opacity: 0.4,
+    },
     selectors: {
-      [`html[data-playroom-dark] &`]: {
+      [`html[data-playroom-dark] &::before`]: {
         opacity: 0.7,
       },
-      [comma('&[data-starting-style]', '&[data-ending-style]')]: {
-        opacity: 0,
-      },
+      [comma('&[data-starting-style]::before', '&[data-ending-style]::before')]:
+        {
+          opacity: 0,
+        },
     },
   },
 ]);
@@ -37,12 +43,12 @@ export const popup = style([
     borderRadius: 'large',
     transition: 'fast',
     userSelect: 'none',
+    display: 'flex',
+    inset: 0,
   }),
   {
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    opacity: 1,
+    alignSelf: 'center',
+    justifySelf: 'center',
     maxWidth: calc('100dvw')
       .subtract(calc(vars.space.small).multiply(2))
       .toString(),
@@ -51,7 +57,7 @@ export const popup = style([
       .toString(),
     selectors: {
       [comma('&[data-starting-style]', '&[data-ending-style]')]: {
-        transform: 'translate(-50%, -50%) scale(0.98)',
+        transform: 'scale(0.98)',
         opacity: 0,
       },
     },

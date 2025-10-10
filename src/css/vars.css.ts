@@ -4,8 +4,8 @@ const fontFamily = '"Plus Jakarta Sans", sans-serif';
 export const fontSizeDefinitions = {
   xsmall: [10, 14],
   small: [12, 16],
-  standard: [14, 18],
-  large: [16, 20],
+  standard: [14, 20],
+  large: [16, 22],
 };
 
 const fontScale = Object.fromEntries(
