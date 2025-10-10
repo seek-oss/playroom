@@ -43,7 +43,7 @@ export const Dialog = ({
         >
           <Stack space="xlarge">
             <div className={styles.titleContainer}>
-              <Heading level="3">
+              <Heading level="2">
                 <span
                   ref={headingRef}
                   tabIndex={-1}

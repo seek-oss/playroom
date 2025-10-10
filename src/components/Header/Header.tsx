@@ -10,7 +10,6 @@ import {
   Frame as FrameIcon,
   BetweenHorizontalStart,
   File,
-  Check,
   CopyPlus,
   FolderOpen,
   LayoutPanelLeft,
@@ -20,13 +19,24 @@ import {
   Maximize,
   Square,
   SunMoon,
+  Play,
+  Check,
+  Link,
 } from 'lucide-react';
-import { useContext, useEffect, useRef } from 'react';
+import {
+  type ComponentProps,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import { compressParams, createPreviewUrl } from '../../../utils';
 import playroomConfig from '../../config';
 import {
   themeNames as availableThemes,
+  themeNames,
   themesEnabled,
 } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
@@ -36,18 +46,20 @@ import { isMac } from '../../utils/formatting';
 import { createUrlForData, resolveDataFromUrl } from '../../utils/params';
 import { useCopy } from '../../utils/useCopy';
 import { Box } from '../Box/Box';
+import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import {
   type EditorCommand,
   editorCommandList,
 } from '../CodeEditor/editorCommands';
 import { Dialog } from '../Dialog/Dialog';
+import { Heading } from '../Heading/Heading';
+import { Inline } from '../Inline/Inline';
 import { Logo } from '../Logo/Logo';
 import {
   Menu,
   MenuCheckboxItem,
   MenuClearItem,
-  MenuCopyItem,
   MenuGroup,
   MenuItem,
   MenuItemLink,
@@ -56,7 +68,9 @@ import {
   MenuSeparator,
 } from '../Menu/Menu';
 import { PreviewTiles } from '../PreviewTiles/PreviewTiles';
+import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
+import { ThemeSelector } from '../ThemeSelector/ThemeSelector';
 import { Title } from '../Title/Title';
 import { SharedTooltipContext, Tooltip } from '../Tooltip/Tooltip';
 import ChevronIcon from '../icons/ChevronIcon';
@@ -190,59 +204,7 @@ const FramesMenu = () => {
   );
 };
 
-const ShareMenu = () => {
-  const [{ code, title, editorHidden }] = useContext(StoreContext);
-
-  return (
-    <>
-      <MenuCopyItem content={window.location.href}>
-        Link to edit mode
-      </MenuCopyItem>
-      {themesEnabled ? (
-        <>
-          <MenuSeparator />
-          <MenuGroup label="Theme for preview link">
-            {availableThemes.map((theme) => {
-              const baseUrl = window.location.href
-                .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
-                .split('index.html')[0];
-              const previewUrl = createPreviewUrl({
-                baseUrl,
-                code,
-                theme,
-                paramType: playroomConfig.paramType,
-                title,
-                editorHidden,
-              });
-
-              return (
-                <MenuCopyItem key={theme} content={previewUrl}>
-                  {theme}
-                </MenuCopyItem>
-              );
-            })}
-          </MenuGroup>
-        </>
-      ) : (
-        <MenuCopyItem
-          content={createPreviewUrl({
-            baseUrl: window.location.href
-              .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
-              .split('index.html')[0],
-            code,
-            paramType: playroomConfig.paramType,
-            title,
-            editorHidden,
-          })}
-        >
-          Link to preview mode
-        </MenuCopyItem>
-      )}
-    </>
-  );
-};
-
-const HeaderMenu = () => {
+const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const inputCommandRef = useRef<EditorCommand | null>(null);
   const { runCommand } = useEditor();
@@ -338,20 +300,14 @@ const HeaderMenu = () => {
           Duplicate
         </MenuItemLink>
 
-        <Menu
-          trigger={
-            <MenuItem
-              icon={LinkIcon}
-              disabled={!hasCode}
-              disabledReason="No active Playroom to share"
-            >
-              Share
-            </MenuItem>
-          }
-          width="content"
+        <MenuItem
+          icon={LinkIcon}
+          disabled={!hasCode}
+          disabledReason="No active Playroom to share"
+          onClick={onShareClick}
         >
-          <ShareMenu />
-        </Menu>
+          Share
+        </MenuItem>
 
         <MenuSeparator />
 
@@ -482,15 +438,20 @@ const HeaderMenu = () => {
 };
 
 export const Header = () => {
-  const [{ code, editorHidden }, dispatch] = useContext(StoreContext);
+  const [{ code, title, editorHidden }, dispatch] = useContext(StoreContext);
   const { copying, onCopyClick } = useCopy();
+  const [shareOpen, setShareOpen] = useState(false);
 
   const hasCode = code.trim().length > 0;
+
+  const baseUrl = window.location.href
+    .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
+    .split('index.html')[0];
 
   return (
     <Box className={styles.root}>
       <div className={styles.menuContainer}>
-        <HeaderMenu />
+        <HeaderMenu onShareClick={() => setShareOpen(true)} />
       </div>
       <Title />
       <SharedTooltipContext>
@@ -501,40 +462,73 @@ export const Header = () => {
               <button
                 type="button"
                 className={styles.segmentedTextButton}
-                disabled={copying}
-                onClick={() => onCopyClick(window.location.href)}
+                onClick={() => setShareOpen(true)}
               >
-                <Box component="span" opacity={copying ? 0 : undefined}>
-                  <Text>Copy link</Text>
-                </Box>
-                {copying ? (
-                  <span className={styles.copyLinkSuccess}>
-                    <Check size={14} />
-                  </span>
-                ) : null}
+                <Text>Share</Text>
               </button>
-              <Menu
-                width="content"
-                align="end"
+              <Tooltip
+                label={copying ? 'Copied!' : 'Copy link'}
                 trigger={
-                  <Tooltip
-                    label="Share options"
-                    trigger={
-                      <button
-                        type="button"
-                        aria-label="Share options"
-                        className={styles.segmentedIconButton}
-                      >
-                        <ChevronIcon direction="down" size={14} />
-                      </button>
-                    }
-                  />
+                  <button
+                    type="button"
+                    className={styles.segmentedIconButton}
+                    onClick={() => onCopyClick(window.location.href)}
+                  >
+                    {copying ? (
+                      <span className={styles.copyLinkSuccess}>
+                        <Check size={14} />
+                      </span>
+                    ) : (
+                      <Link direction="down" size={14} />
+                    )}
+                  </button>
                 }
-              >
-                <ShareMenu />
-              </Menu>
+              />
             </div>
           ) : null}
+
+          {themesEnabled ? (
+            <Menu
+              width="content"
+              align="end"
+              trigger={<ButtonIcon label="Launch Preview" icon={<Play />} />}
+            >
+              {availableThemes.map((theme) => {
+                const previewUrl = createPreviewUrl({
+                  baseUrl,
+                  code,
+                  theme,
+                  paramType: playroomConfig.paramType,
+                  title,
+                  editorHidden,
+                });
+
+                return (
+                  <MenuItemLink key={theme} href={previewUrl} target="_blank">
+                    {theme}
+                  </MenuItemLink>
+                );
+              })}
+            </Menu>
+          ) : (
+            <ButtonIcon
+              label="Launch Preview"
+              icon={<Play />}
+              onClick={() => {
+                window.open(
+                  createPreviewUrl({
+                    baseUrl,
+                    code,
+                    paramType: playroomConfig.paramType,
+                    title,
+                    editorHidden,
+                  }),
+                  '_blank',
+                  'noopener,noreferrer'
+                );
+              }}
+            />
+          )}
 
           <Menu
             width="small"
@@ -555,7 +549,92 @@ export const Header = () => {
             }
           />
         </div>
+        <ShareDialog open={shareOpen} onOpenChange={setShareOpen} />
       </SharedTooltipContext>
     </Box>
+  );
+};
+
+const ShareCopyButton = ({
+  children,
+  linkToCopy,
+}: {
+  children: ReactNode;
+  linkToCopy: string;
+}) => {
+  const { copying, onCopyClick } = useCopy();
+
+  return (
+    <Inline space="small" alignY="center">
+      <Button onClick={() => onCopyClick(linkToCopy)}>{children}</Button>
+      {copying ? (
+        <Text tone="positive">
+          Copied <Check size={14} />
+        </Text>
+      ) : null}
+    </Inline>
+  );
+};
+
+const ShareDialog = ({
+  open,
+  onOpenChange,
+}: Pick<ComponentProps<typeof Dialog>, 'open' | 'onOpenChange'>) => {
+  const [{ code, editorHidden, title, selectedThemes }] =
+    useContext(StoreContext);
+  const defaultTheme =
+    selectedThemes.length > 0 ? selectedThemes[0] : themeNames[0];
+  const [themeForPreviewShare, setThemeForPreviewShare] =
+    useState(defaultTheme);
+
+  const previewUrl = createPreviewUrl({
+    baseUrl: window.location.href
+      .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
+      .split('index.html')[0],
+    code,
+    theme: themesEnabled ? themeForPreviewShare : undefined,
+    paramType: playroomConfig.paramType,
+    title,
+    editorHidden,
+  });
+
+  return (
+    <Dialog title="Share Playroom" open={open} onOpenChange={onOpenChange}>
+      <div style={{ maxWidth: '500px', width: '100%' }}>
+        <Stack space="large">
+          <Stack space="xlarge">
+            <Text tone="secondary">
+              Collaborate on your design by sharing a link.
+              <br />
+              The link includes the selected frames, title, and code.
+            </Text>
+            <ShareCopyButton linkToCopy={window.location.href}>
+              Copy link
+            </ShareCopyButton>
+          </Stack>
+
+          <hr className={styles.separator} />
+
+          <Stack space="xlarge">
+            <Stack space="large">
+              <Heading level="3">Preview mode</Heading>
+              <Text tone="secondary">
+                Share a preview of your design as a standalone prototype — ideal
+                for user testing or stakeholder demonstration.
+              </Text>
+              {themesEnabled ? (
+                <ThemeSelector
+                  value={themeForPreviewShare}
+                  onChange={setThemeForPreviewShare}
+                />
+              ) : null}
+            </Stack>
+            <ShareCopyButton linkToCopy={previewUrl}>
+              Copy preview link
+            </ShareCopyButton>
+          </Stack>
+        </Stack>
+      </div>
+    </Dialog>
   );
 };
