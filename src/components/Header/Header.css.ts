@@ -47,6 +47,25 @@ export const actionsContainer = style([
   },
 ]);
 
+export const hasCode = style({});
+export const actionsNeedingCode = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    gap: actionsGap,
+    transition: 'fast',
+  }),
+  {
+    selectors: {
+      [`&:not(${hasCode})`]: {
+        opacity: 0,
+        transform: `translateX(${vars.space[actionsGap]})`,
+        pointerEvents: 'none',
+      },
+    },
+  },
+]);
+
 export const menuButton = style([
   sprinkles({
     position: 'relative',
