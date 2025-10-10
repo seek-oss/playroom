@@ -56,7 +56,7 @@ export const base = style([
       ['&:focus-visible::after']: {
         opacity: 1,
       },
-      ['&:active']: {
+      ['&:active:not([disabled])']: {
         transform: 'scale(0.97)',
       },
       ['&:focus-visible']: {

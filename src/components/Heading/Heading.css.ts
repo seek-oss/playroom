@@ -23,8 +23,8 @@ export const level1 = createTextStyle({
 });
 
 export const level2 = createTextStyle({
-  fontSize: 24,
-  leading: 30,
+  fontSize: 20,
+  leading: 28,
   fontMetrics: plusJakartaSansMetrics,
 });
 
