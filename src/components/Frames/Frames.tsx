@@ -4,8 +4,6 @@ import {
   Camera,
   ClipboardCopy,
   Download,
-  ExternalLink,
-  Link,
   PictureInPicture2,
 } from 'lucide-react';
 import {
@@ -20,7 +18,6 @@ import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths, { type Widths } from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
 import { compileJsx } from '../../utils/compileJsx';
-import { useCopy } from '../../utils/useCopy';
 import usePreviewUrl from '../../utils/usePreviewUrl';
 import {
   ErrorMessageReceiver,
@@ -30,7 +27,6 @@ import { Menu, MenuItem } from '../Menu/Menu';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 import { SharedTooltipContext } from '../Tooltip/Tooltip';
-import TickIcon from '../icons/TickIcon';
 
 import { FrameActionButton } from './FrameActionButton';
 import Iframe from './Iframe';
@@ -59,7 +55,6 @@ const Frame = ({
   const [frameActive, setFrameActive] = useState(false);
   const noTheme = frame.theme === '__PLAYROOM__NO_THEME__';
   const previewUrl = usePreviewUrl(frame.theme);
-  const { copying, onCopyClick } = useCopy();
 
   const downloadHandler = () => {
     if (iframeRef.current?.contentWindow) {
@@ -86,7 +81,7 @@ const Frame = ({
     <div
       className={clsx({
         [styles.frameContainer]: true,
-        [styles.frameActive]: frameActive || copying,
+        [styles.frameActive]: frameActive,
       })}
       style={assignInlineVars({
         [styles.frameWidth]:
@@ -108,20 +103,6 @@ const Frame = ({
         )}
         <SharedTooltipContext>
           <div className={styles.frameActionsContainer}>
-            <FrameActionButton
-              tone={copying ? 'positive' : 'accent'}
-              icon={copying ? <TickIcon /> : <Link />}
-              label={copying ? 'Copied' : 'Copy preview link'}
-              onClick={() => (!copying ? onCopyClick(previewUrl) : undefined)}
-            />
-            <FrameActionButton
-              tone="accent"
-              icon={<ExternalLink />}
-              label="Open preview"
-              onClick={() => {
-                window.open(previewUrl, '_blank', 'noopener,noreferrer');
-              }}
-            />
             <FrameActionButton
               tone="accent"
               icon={<PictureInPicture2 />}
