@@ -12,7 +12,7 @@ export const root = style([
     width: 'full',
     boxSizing: 'border-box',
     display: 'flex',
-    gap: 'medium',
+    gap: 'xxlarge',
     paddingY: 'xxlarge',
     paddingX: 'xlarge',
     textAlign: 'center',
