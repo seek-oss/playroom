@@ -208,6 +208,7 @@ const FramesMenu = () => {
 const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const inputCommandRef = useRef<EditorCommand | null>(null);
+  const openDialogContentRef = useRef<HTMLDivElement>(null);
   const { runCommand } = useEditor();
   const [
     {
@@ -428,9 +429,10 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
           })
         }
       >
-        <div className={styles.openDialogContent}>
+        <div ref={openDialogContentRef} className={styles.openDialogContent}>
           <PreviewTiles
             onSelect={() => dispatch({ type: 'closePlayroomDialog' })}
+            scrollingRef={openDialogContentRef}
           />
         </div>
       </Dialog>
