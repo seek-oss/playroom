@@ -166,6 +166,7 @@ const Frame = ({
             code,
           })}
           data-testid="frameIframe"
+          rootMargin="800px"
           className={styles.frame}
         />
         <ErrorMessageReceiver />

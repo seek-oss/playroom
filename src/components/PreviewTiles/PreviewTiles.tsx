@@ -1,6 +1,6 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { FolderOpen, Trash } from 'lucide-react';
-import { useContext, useMemo, useRef, useState } from 'react';
+import { type RefObject, useContext, useMemo, useRef, useState } from 'react';
 
 import { decompressParams } from '../../../utils';
 import { StoreContext } from '../../contexts/StoreContext';
@@ -9,6 +9,7 @@ import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
 import { ContextMenu, ContextMenuItem } from '../ContextMenu/ContextMenu';
 import { Dialog } from '../Dialog/Dialog';
+import Iframe from '../Frames/Iframe';
 import frameSrc from '../Frames/frameSrc';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
@@ -17,7 +18,13 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import * as styles from './PreviewTiles.css';
 
 const scale = 0.15;
-export const PreviewTiles = ({ onSelect }: { onSelect: () => void }) => {
+export const PreviewTiles = ({
+  onSelect,
+  scrollingRef,
+}: {
+  onSelect: () => void;
+  scrollingRef: RefObject<HTMLDivElement | null>;
+}) => {
   const [{ selectedThemes, storedPlayrooms }, dispatch] =
     useContext(StoreContext);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
@@ -72,10 +79,11 @@ export const PreviewTiles = ({ onSelect }: { onSelect: () => void }) => {
                     [styles.scaleVar]: `${scale}`,
                   })}
                 >
-                  <iframe
+                  <Iframe
                     tabIndex={-1}
                     className={styles.iframe}
                     src={frameSrc({ themeName, code: compileJsx(code) })}
+                    intersectionRootRef={scrollingRef}
                   />
                   <span className={styles.titleContainer}>
                     <Text truncate>{title || 'Untitled Playroom'}</Text>

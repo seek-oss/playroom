@@ -12,10 +12,11 @@ import playroomConfig from '../../config';
 interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
   src: string;
   intersectionRootRef: RefObject<Element | null>;
+  rootMargin?: string;
 }
 
 export default forwardRef<HTMLIFrameElement, IframeProps>(function Iframe(
-  { intersectionRootRef, style, src, ...restProps },
+  { intersectionRootRef, style, src, rootMargin, ...restProps },
   forwardedRef
 ) {
   const [loaded, setLoaded] = useState(false);
@@ -23,7 +24,7 @@ export default forwardRef<HTMLIFrameElement, IframeProps>(function Iframe(
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const intersection = useIntersection(iframeRef, {
     root: intersectionRootRef.current,
-    rootMargin: '800px',
+    rootMargin,
     threshold: 0,
   });
 
