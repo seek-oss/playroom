@@ -441,7 +441,8 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
 };
 
 export const Header = () => {
-  const [{ code, title, editorHidden }, dispatch] = useContext(StoreContext);
+  const [{ code, title, selectedThemes, editorHidden }, dispatch] =
+    useContext(StoreContext);
   const { copying, onCopyClick } = useCopy();
   const [shareOpen, setShareOpen] = useState(false);
 
@@ -493,7 +494,7 @@ export const Header = () => {
               />
             </div>
 
-            {themesEnabled ? (
+            {themesEnabled && selectedThemes.length !== 1 ? (
               <Menu
                 width="content"
                 align="end"
@@ -531,6 +532,7 @@ export const Header = () => {
                     createPreviewUrl({
                       baseUrl,
                       code,
+                      theme: themesEnabled ? selectedThemes[0] : undefined,
                       paramType: playroomConfig.paramType,
                       title,
                       editorHidden,
