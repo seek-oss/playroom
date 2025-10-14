@@ -138,6 +138,20 @@ globalStyle('.cm-s-neo.CodeMirror', {
   backgroundColor: editorBackground,
   color: colorPaletteVars.code.text,
 });
+const scrollAffordanceFadeWidth = '20px';
+globalStyle('.cm-s-neo.CodeMirror::after', {
+  position: 'absolute',
+  content: '',
+  top: 0,
+  bottom: 0,
+  width: scrollAffordanceFadeWidth,
+  background: `linear-gradient(90deg, transparent, ${editorBackground})`,
+  right: 0,
+});
+
+globalStyle('.CodeMirror-scroll', {
+  paddingRight: scrollAffordanceFadeWidth,
+});
 
 globalStyle('.cm-s-neo .CodeMirror-cursor', {
   backgroundColor: colorPaletteVars.foreground.neutral,
