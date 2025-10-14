@@ -1,6 +1,6 @@
 import type { Tooltip as BaseUITooltip } from '@base-ui-components/react';
 import clsx from 'clsx';
-import type { ComponentProps } from 'react';
+import { forwardRef, type ComponentProps } from 'react';
 
 import { Tooltip, type TooltipTrigger } from '../Tooltip/Tooltip';
 
@@ -14,31 +14,37 @@ export interface ButtonIconProps extends TooltipTrigger {
   variant?: keyof typeof styles.variant;
   bleed?: boolean;
 }
-export const ButtonIcon = ({
-  icon,
-  label,
-  size = 'medium',
-  tone = 'neutral',
-  variant = 'standard',
-  bleed,
-  ...restProps
-}: ButtonIconProps) => (
-  <Tooltip
-    label={label}
-    trigger={
-      <button
-        {...restProps}
-        aria-label={label}
-        className={clsx({
-          [styles.button]: true,
-          [styles.tone[tone]]: true,
-          [styles.variant[variant]]: true,
-          [styles.size[size]]: true,
-          [styles.bleed]: bleed,
-        })}
-      >
-        <span className={clsx(styles.content)}>{icon}</span>
-      </button>
-    }
-  />
+export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
+  (
+    {
+      icon,
+      label,
+      size = 'medium',
+      tone = 'neutral',
+      variant = 'standard',
+      bleed,
+      ...restProps
+    },
+    ref
+  ) => (
+    <Tooltip
+      label={label}
+      trigger={
+        <button
+          {...restProps}
+          ref={ref}
+          aria-label={label}
+          className={clsx({
+            [styles.button]: true,
+            [styles.tone[tone]]: true,
+            [styles.variant[variant]]: true,
+            [styles.size[size]]: true,
+            [styles.bleed]: bleed,
+          })}
+        >
+          <span className={clsx(styles.content)}>{icon}</span>
+        </button>
+      }
+    />
+  )
 );
