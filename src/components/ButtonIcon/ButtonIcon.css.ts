@@ -19,6 +19,7 @@ export const button = style([
   sprinkles({
     boxSizing: 'border-box',
     position: 'relative',
+    display: 'block',
     margin: 'none',
     padding: 'none',
     userSelect: 'none',

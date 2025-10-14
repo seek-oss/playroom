@@ -441,7 +441,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
 };
 
 export const Header = () => {
-  const [{ code, title, selectedThemes, editorHidden }, dispatch] =
+  const [{ code, title, selectedThemes, editorHidden }] =
     useContext(StoreContext);
   const { copying, onCopyClick } = useCopy();
   const [shareOpen, setShareOpen] = useState(false);
@@ -554,15 +554,6 @@ export const Header = () => {
           >
             <FramesMenu />
           </Menu>
-
-          <ButtonIcon
-            label={editorHidden ? 'Show code' : 'Hide code'}
-            icon={<CodeXml />}
-            variant={editorHidden ? 'standard' : 'solid'}
-            onClick={() =>
-              dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
-            }
-          />
         </div>
         <ShareDialog open={shareOpen} onOpenChange={setShareOpen} />
       </SharedTooltipContext>

@@ -1,5 +1,13 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { type ComponentProps, useContext, useRef, useState } from 'react';
+import clsx from 'clsx';
+import { CodeXml, PanelBottomClose, PanelLeftClose } from 'lucide-react';
+import {
+  type ComponentProps,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   type EditorOrientation,
@@ -7,6 +15,7 @@ import {
 } from '../../contexts/StoreContext';
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
 import { EditorActions } from '../EditorActions/EditorActions';
 import { EditorErrorMessage } from '../EditorErrorMessage/EditorErrorMessage';
@@ -43,11 +52,25 @@ export default () => {
   ] = useContext(StoreContext);
   useDocumentTitle({ title });
 
+  const lastHidden = useRef(editorHidden);
   const editorRef = useRef<HTMLElement | null>(null);
+  const showCodeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const hideCodeButtonRef = useRef<HTMLButtonElement | null>(null);
   const [resizing, setResizing] = useState(false);
 
   const isVerticalEditor = editorOrientation === 'vertical';
   const editorSize = isVerticalEditor ? editorWidth : editorHeight;
+
+  useEffect(() => {
+    if (lastHidden.current !== editorHidden) {
+      if (editorHidden) {
+        showCodeButtonRef.current?.focus();
+      } else {
+        hideCodeButtonRef.current?.focus();
+      }
+    }
+    lastHidden.current = editorHidden;
+  }, [editorHidden]);
 
   return (
     <Box
@@ -73,6 +96,17 @@ export default () => {
             <ZeroState />
           )}
         </Box>
+        {editorHidden ? (
+          <aside className={styles.showCodeContainer}>
+            <ButtonIcon
+              label="Show code"
+              icon={<CodeXml />}
+              variant="solid"
+              ref={showCodeButtonRef}
+              onClick={() => dispatch({ type: 'showEditor' })}
+            />
+          </aside>
+        ) : null}
       </Box>
 
       <Box
@@ -114,6 +148,30 @@ export default () => {
             }
             previewCode={previewEditorCode}
           />
+          <aside
+            className={clsx({
+              [styles.hideCodeContainer]: true,
+              [styles.hideCodeContainerHorizontal]:
+                editorOrientation === 'horizontal',
+              [styles.hideCodeContainerVertical]:
+                editorOrientation === 'vertical',
+            })}
+          >
+            <ButtonIcon
+              icon={
+                editorOrientation === 'horizontal' ? (
+                  <PanelBottomClose />
+                ) : (
+                  <PanelLeftClose />
+                )
+              }
+              label="Hide code"
+              variant="transparent"
+              size="large"
+              ref={hideCodeButtonRef}
+              onClick={() => dispatch({ type: 'hideEditor' })}
+            />
+          </aside>
           <div className={styles.editorOverlays}>
             <EditorErrorMessage />
             <EditorActions />

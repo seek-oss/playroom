@@ -7,7 +7,7 @@ import { minTouchableBeforePseudo } from '../../css/shared.css';
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
-export const headerPaddingX = 'xlarge';
+export const headerPaddingX = 'medium';
 export const headerPaddingY = 'xsmall';
 
 export const root = style([
