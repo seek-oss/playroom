@@ -5,6 +5,7 @@ import {
   fallbackVar,
   styleVariants,
 } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
 import { space, newline } from '../../css/delimiters';
 
@@ -117,3 +118,60 @@ export const editorOverlays = style([
     marginInline: 'auto',
   },
 ]);
+
+const showCodeOutlineSize = '2px';
+const showCodeRadius = 'large';
+export const showCodeContainer = style([
+  sprinkles({
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    display: 'block',
+    padding: 'xsmall',
+    margin: 'small',
+    borderRadius: showCodeRadius,
+  }),
+  {
+    backdropFilter: 'blur(2px)',
+    '::before': {
+      content: '',
+      position: 'absolute',
+      inset: 1,
+      pointerEvents: 'none',
+      background: colorPaletteVars.background.floating,
+      borderRadius: calc(vars.radii[showCodeRadius])
+        .subtract(showCodeOutlineSize)
+        .toString(),
+      opacity: 0.8,
+    },
+    '::after': {
+      content: '',
+      position: 'absolute',
+      inset: 0,
+      pointerEvents: 'none',
+      borderRadius: calc(vars.radii[showCodeRadius])
+        .subtract(showCodeOutlineSize)
+        .toString(),
+      outline: `${showCodeOutlineSize} solid var(--border-standard__1oi8mvoo)`,
+      outlineOffset: `-${showCodeOutlineSize}`,
+    },
+  },
+]);
+
+export const hideCodeContainer = sprinkles({
+  position: 'absolute',
+});
+
+export const hideCodeContainerHorizontal = sprinkles({
+  top: 0,
+  right: 0,
+  paddingY: 'xxxsmall',
+  paddingX: 'xsmall',
+});
+
+export const hideCodeContainerVertical = sprinkles({
+  bottom: 0,
+  right: 0,
+  paddingY: 'medium',
+  paddingX: 'xxxsmall',
+});
