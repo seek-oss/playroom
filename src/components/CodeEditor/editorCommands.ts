@@ -52,7 +52,7 @@ export const editorCommandList: EditorCommandMeta[] = [
   {
     command: 'replace',
     label: 'Find and replace',
-    shortcut: ['Alt', primaryMod, 'F'],
+    shortcut: [primaryMod, 'Alt', 'F'],
     icon: SearchIcon,
   },
   {
