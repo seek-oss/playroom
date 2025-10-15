@@ -5,7 +5,7 @@ import dedent from 'dedent';
 import type { Direction } from '../../src/components/CodeEditor/keymaps/types';
 import type { Widths } from '../../src/configModules/widths';
 import { isMac } from '../../src/utils/formatting';
-import { createUrl } from '../../utils';
+import { createUrl, decompressParams } from '../../utils';
 
 const CYPRESS_DEFAULT_WAIT_TIME = 500;
 
@@ -55,8 +55,14 @@ export const formatCodeByEditorAction = () =>
   cy.findByRole('button', { name: 'Tidy' }).click();
 
 export const selectWidthPreference = (width: Widths[number]) => {
-  cy.findByRole('button', { name: 'Configure visible frames' }).click();
-  cy.findByRole('checkbox', { name: `${width}` }).click();
+  cy.findByRole('button', { name: 'Configure frames' }).click();
+  cy.findByRole('menuitemcheckbox', { name: `${width}` }).click();
+  cy.findByRole('button', { name: 'Configure frames' }).click();
+};
+export const selectThemePreference = (theme: string) => {
+  cy.findByRole('button', { name: 'Configure frames' }).click();
+  cy.findByRole('menuitemcheckbox', { name: theme }).click();
+  cy.findByRole('button', { name: 'Configure frames' }).click();
 };
 
 export const assertTitle = (title: string) =>
@@ -65,18 +71,45 @@ export const assertTitle = (title: string) =>
     .should('have.value', title);
 
 export const changeTitle = (title: string) => {
-  cy.findByRole('button', { name: 'Configure visible frames' }).click();
-  cy.findByRole('textbox', { name: 'Title' }).type(title);
+  cy.findByRole('textbox', { name: 'Playroom Title' }).type(title);
 };
 
-export const getResetButton = () => cy.findByRole('button', { name: 'Clear' });
+export const clearWidthSelection = () => {
+  cy.findByRole('button', { name: 'Configure frames' }).click();
+  cy.findByRole('menuitem', { name: 'Clear selected widths' }).click();
+  cy.findByRole('button', { name: 'Configure frames' }).click();
+};
 
-export const togglePreviewPanel = () =>
-  cy.findByRole('button', { name: 'Preview playroom' }).click();
+export const clearThemeSelection = () => {
+  cy.findByRole('button', { name: 'Configure frames' }).click();
+  cy.findByRole('menuitem', { name: 'Clear selected themes' }).click();
+  cy.findByRole('button', { name: 'Configure frames' }).click();
+};
 
 export const gotoPreview = () => {
-  togglePreviewPanel();
-  cy.findByRole('link', { name: 'Open' }).then((link) => {
+  cy.findByRole('link', { name: 'Launch Preview' }).then((link) => {
+    cy.visit(link.prop('href'));
+  });
+};
+
+export const gotoThemedPreview = (themeName: string) => {
+  cy.findByRole('button', { name: 'Launch Preview' }).click();
+  cy.findByRole('link', { name: themeName }).then((link) => {
+    cy.visit(link.prop('href'));
+  });
+};
+
+export const assertPreviewForTheme = (themeName: string) => {
+  cy.location().should((loc) => {
+    const resolvedParams = decompressParams(
+      new URLSearchParams(loc.search).get('code')
+    );
+    expect(resolvedParams.theme).to.eq(themeName);
+  });
+};
+
+export const editPreview = () => {
+  cy.findByRole('link', { name: 'Edit in Playroom' }).then((link) => {
     cy.visit(link.prop('href'));
   });
 };
@@ -99,6 +132,8 @@ const getSnippets = () =>
 export const selectSnippetByIndex = (index: number) => getSnippets().eq(index);
 
 export const mouseOverSnippet = (index: number) =>
+  // Using `pointerMove` to trigger the event monitored by `cmdk` library
+  // See: https://github.com/pacocoursey/cmdk/blob/d6fde235386414196bf80d9b9fa91e2cf89a72ea/cmdk/src/index.tsx#L717C7-L717C20
   selectSnippetByIndex(index).trigger('pointermove');
 
 export const assertSnippetCount = (count: number) =>
@@ -214,7 +249,9 @@ export const assertFramesMatch = (
 
     return typeof frame === 'number'
       ? `${frame}px`
-      : `${frame[0]} – ${frame[1]}px`;
+      : `${frame[0]} – ${
+          frame[1] === 'Fit to window' ? frame[1] : `${frame[1]}px`
+        }`;
   });
 
   getFrameNames()
@@ -235,8 +272,7 @@ export const assertPreviewContains = (text: string) =>
       expect(frameBody.innerText).to.eq(text);
     });
 
-export const loadPlayroom = (initialCode?: string) => {
-  const baseUrl = 'http://localhost:9000';
+const _loadPlayroom = (baseUrl: string, initialCode?: string) => {
   const visitUrl = initialCode
     ? createUrl({ baseUrl, code: dedent(initialCode) })
     : baseUrl;
@@ -250,6 +286,11 @@ export const loadPlayroom = (initialCode?: string) => {
     indexedDB.deleteDatabase(storageKey);
   });
 };
+export const loadPlayroom = (initialCode?: string) =>
+  _loadPlayroom('http://localhost:9000', initialCode);
+
+export const loadThemedPlayroom = (initialCode?: string) =>
+  _loadPlayroom('http://localhost:9001', initialCode);
 
 const typeInSearchField = (text: string) =>
   cy.get('.CodeMirror-search-field').type(text);
