@@ -479,6 +479,7 @@ export const Header = () => {
                 trigger={
                   <button
                     type="button"
+                    aria-label="Copy link"
                     className={styles.segmentedIconButton}
                     onClick={() => onCopyClick(window.location.href)}
                   >
@@ -487,7 +488,7 @@ export const Header = () => {
                         <Check size={14} />
                       </span>
                     ) : (
-                      <Link direction="down" size={14} />
+                      <Link size={14} />
                     )}
                   </button>
                 }
