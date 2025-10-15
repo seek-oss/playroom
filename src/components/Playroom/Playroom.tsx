@@ -53,6 +53,7 @@ export default () => {
   useDocumentTitle({ title });
 
   const lastHidden = useRef(editorHidden);
+  const hideActionSource = useRef<'editor' | null>(null);
   const editorRef = useRef<HTMLElement | null>(null);
   const showCodeButtonRef = useRef<HTMLButtonElement | null>(null);
   const hideCodeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -62,12 +63,17 @@ export default () => {
   const editorSize = isVerticalEditor ? editorWidth : editorHeight;
 
   useEffect(() => {
-    if (lastHidden.current !== editorHidden) {
+    if (
+      lastHidden.current !== editorHidden &&
+      hideActionSource.current === 'editor'
+    ) {
       if (editorHidden) {
         showCodeButtonRef.current?.focus();
       } else {
         hideCodeButtonRef.current?.focus();
       }
+
+      hideActionSource.current = null;
     }
     lastHidden.current = editorHidden;
   }, [editorHidden]);
@@ -103,7 +109,10 @@ export default () => {
               icon={<CodeXml />}
               variant="solid"
               ref={showCodeButtonRef}
-              onClick={() => dispatch({ type: 'showEditor' })}
+              onClick={() => {
+                hideActionSource.current = 'editor';
+                dispatch({ type: 'showEditor' });
+              }}
             />
           </aside>
         ) : null}
@@ -168,7 +177,10 @@ export default () => {
               label="Hide code"
               variant="transparent"
               ref={hideCodeButtonRef}
-              onClick={() => dispatch({ type: 'hideEditor' })}
+              onClick={() => {
+                hideActionSource.current = 'editor';
+                dispatch({ type: 'hideEditor' });
+              }}
             />
           </aside>
           <div className={styles.editorOverlays}>
