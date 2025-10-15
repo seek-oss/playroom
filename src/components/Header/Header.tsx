@@ -48,7 +48,7 @@ import { createUrlForData, resolveDataFromUrl } from '../../utils/params';
 import { useCopy } from '../../utils/useCopy';
 import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
-import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
+import { ButtonIcon, ButtonIconLink } from '../ButtonIcon/ButtonIcon';
 import {
   type EditorCommand,
   editorCommandList,
@@ -502,46 +502,37 @@ export const Header = () => {
                 trigger={<ButtonIcon label="Launch Preview" icon={<Play />} />}
               >
                 <MenuGroup label="Choose preview theme">
-                  {availableThemes.map((theme) => {
-                    const previewUrl = createPreviewUrl({
-                      baseUrl,
-                      code,
-                      theme,
-                      paramType: playroomConfig.paramType,
-                      title,
-                      editorHidden,
-                    });
-
-                    return (
-                      <MenuItemLink
-                        key={theme}
-                        href={previewUrl}
-                        target="_blank"
-                      >
-                        {theme}
-                      </MenuItemLink>
-                    );
-                  })}
+                  {availableThemes.map((theme) => (
+                    <MenuItemLink
+                      key={theme}
+                      href={createPreviewUrl({
+                        baseUrl,
+                        code,
+                        theme,
+                        paramType: playroomConfig.paramType,
+                        title,
+                        editorHidden,
+                      })}
+                      target="_blank"
+                    >
+                      {theme}
+                    </MenuItemLink>
+                  ))}
                 </MenuGroup>
               </Menu>
             ) : (
-              <ButtonIcon
+              <ButtonIconLink
                 label="Launch Preview"
                 icon={<Play />}
-                onClick={() => {
-                  window.open(
-                    createPreviewUrl({
-                      baseUrl,
-                      code,
-                      theme: themesEnabled ? selectedThemes[0] : undefined,
-                      paramType: playroomConfig.paramType,
-                      title,
-                      editorHidden,
-                    }),
-                    '_blank',
-                    'noopener,noreferrer'
-                  );
-                }}
+                href={createPreviewUrl({
+                  baseUrl,
+                  code,
+                  theme: themesEnabled ? selectedThemes[0] : undefined,
+                  paramType: playroomConfig.paramType,
+                  title,
+                  editorHidden,
+                })}
+                target="_blank"
               />
             )}
           </div>
