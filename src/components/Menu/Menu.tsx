@@ -108,6 +108,7 @@ export const MenuItemLink = ({
           className={styles.itemLink}
           target={target}
           rel={target === '_blank' ? 'noopener,noreferrer' : undefined}
+          role="link"
         >
           <span className={styles.itemLeft}>
             {Icon ? <Icon size={menuIconSize} /> : null}
