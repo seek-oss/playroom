@@ -167,7 +167,6 @@ export default () => {
               }
               label="Hide code"
               variant="transparent"
-              size="large"
               ref={hideCodeButtonRef}
               onClick={() => dispatch({ type: 'hideEditor' })}
             />

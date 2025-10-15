@@ -165,8 +165,7 @@ export const hideCodeContainer = sprinkles({
 export const hideCodeContainerHorizontal = sprinkles({
   top: 0,
   right: 0,
-  paddingY: 'xxxsmall',
-  paddingX: 'xsmall',
+  padding: 'xxxsmall',
 });
 
 export const hideCodeContainerVertical = sprinkles({
