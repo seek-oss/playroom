@@ -298,7 +298,7 @@ const typeInSearchField = (text: string) =>
 export const findInCode = (term: string) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
-  typeCode(`{${cmdPlus('f')}}`);
+  typeCode(cmdPlus('f'));
 
   typeInSearchField(`${term}{enter}`);
 };
@@ -306,7 +306,7 @@ export const findInCode = (term: string) => {
 export const replaceInCode = (term: string, replaceWith?: string) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
-  typeCode(`{${cmdPlus('alt+f')}}`);
+  typeCode(cmdPlus('alt+f'));
   typeInSearchField(`${term}{enter}`);
   if (replaceWith) {
     typeInSearchField(`${replaceWith}{enter}`);
@@ -316,7 +316,7 @@ export const replaceInCode = (term: string, replaceWith?: string) => {
 export const jumpToLine = (line: number, character?: number) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
-  typeCode(`{${cmdPlus('g')}}`);
+  typeCode(cmdPlus('g'));
 
   typeCode(character ? `${line}:${character}{enter}` : `${line}{enter}`);
 };
