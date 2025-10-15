@@ -137,7 +137,7 @@ describe('Keymaps', () => {
     const cmdPlusD = cmdPlus('D');
 
     it('should select the current word on one use', () => {
-      typeCode(`{rightArrow}{${cmdPlusD}}`);
+      typeCode(`{rightArrow}${cmdPlusD}`);
 
       // Overwrite to check the selection
       typeCode('a');
@@ -150,7 +150,7 @@ describe('Keymaps', () => {
     });
 
     it('should select the next instance of the word on two uses', () => {
-      typeCode(`{rightArrow}{${cmdPlusD}}{${cmdPlusD}}`);
+      typeCode(`{rightArrow}${cmdPlusD}${cmdPlusD}`);
 
       // Overwrite to check the selection
       typeCode('a');
@@ -163,7 +163,7 @@ describe('Keymaps', () => {
     });
 
     it('should select the all instances of the word when spamming the key', () => {
-      typeCode(`{rightArrow}${`{${cmdPlusD}}`.repeat(20)}`);
+      typeCode(`{rightArrow}${`${cmdPlusD}`.repeat(20)}`);
 
       // Overwrite to check the selection and that multiple cursors were created
       typeCode('span');
@@ -178,7 +178,7 @@ describe('Keymaps', () => {
     it("should select next occurrence in whole word mode when there's no selection", () => {
       typeCode('{rightArrow}'.repeat(3));
 
-      typeCode(`{${cmdPlusD}}`.repeat(2));
+      typeCode(`${cmdPlusD}`.repeat(2));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -226,10 +226,9 @@ describe('Keymaps', () => {
         <div>Third line</div>
       `);
     });
-    const modifierKey = isMac() ? 'cmd' : 'ctrl';
 
     it("should insert a fragment with cursors when there's no selection", () => {
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('a');
 
       assertCodePaneContains(dedent`
@@ -242,7 +241,7 @@ describe('Keymaps', () => {
     it('should wrap the selection when there is one', () => {
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -257,7 +256,7 @@ describe('Keymaps', () => {
       typeCode('{leftArrow}');
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -271,7 +270,7 @@ describe('Keymaps', () => {
       typeCode('{shift+downArrow}');
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -288,7 +287,7 @@ describe('Keymaps', () => {
       typeCode('{shift+downArrow}');
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       // Return to the start
@@ -299,7 +298,7 @@ describe('Keymaps', () => {
       typeCode('{downArrow}');
       typeCode('{shift+downArrow}'.repeat(2));
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('a');
 
       assertCodePaneContains(dedent`
@@ -314,10 +313,10 @@ describe('Keymaps', () => {
     });
 
     it('should wrap a multi-cursor single-line selection', () => {
-      typeCode(`{${modifierKey}+alt+downArrow}`);
+      typeCode(cmdPlus(`alt+downArrow`));
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -328,13 +327,13 @@ describe('Keymaps', () => {
     });
 
     it('should wrap a multi-cursor multi-line selection', () => {
-      typeCode(`{${modifierKey}+alt+downArrow}`);
+      typeCode(cmdPlus(`alt+downArrow`));
       typeCode('{shift+alt+downArrow}{upArrow}');
 
       selectNextLines(1);
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -359,9 +358,9 @@ describe('Keymaps', () => {
       typeCode(`{enter}`);
 
       // Select all
-      typeCode(`{${modifierKey}+a}`);
+      typeCode(cmdPlus('a'));
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('a');
 
       assertCodePaneContains(dedent`
@@ -546,8 +545,7 @@ describe('Keymaps', () => {
       <div>Second line</div>
       <div>Third line</div>`;
 
-    const modifierKey = isMac() ? 'cmd' : 'ctrl';
-    const executeToggleCommentCommand = () => typeCode(`{${modifierKey}+/}`);
+    const executeToggleCommentCommand = () => typeCode(cmdPlus('/'));
 
     it('should create a comment when there is no code in the editor', () => {
       loadPlayroom('');
