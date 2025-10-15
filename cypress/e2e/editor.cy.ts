@@ -9,6 +9,7 @@ import {
   selectHint,
   formatCodeByKeyboard,
   formatCodeByEditorAction,
+  getCodeEditor,
 } from '../support/utils';
 
 describe('Editor', () => {
@@ -63,5 +64,17 @@ describe('Editor', () => {
         }
       \`}</style>\n
     `);
+  });
+
+  it('editor visibility', () => {
+    // Hide code
+    cy.findByRole('button', { name: 'Hide code' }).click();
+    getCodeEditor().should('not.be.visible');
+    cy.findByRole('button', { name: 'Show code' }).should('have.focus');
+
+    // Show code
+    cy.findByRole('button', { name: 'Show code' }).click();
+    getCodeEditor().should('be.visible');
+    cy.findByRole('button', { name: 'Hide code' }).should('have.focus');
   });
 });
