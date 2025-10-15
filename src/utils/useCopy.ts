@@ -1,4 +1,3 @@
-import copy from 'copy-to-clipboard';
 import { useEffect, useState } from 'react';
 
 export const useCopy = () => {
@@ -12,10 +11,11 @@ export const useCopy = () => {
     }
   }, [copying]);
 
-  const onCopyClick = (content: string) => {
+  const onCopyClick = async (content: string) => {
     if (!copying) {
-      copy(content);
       setCopying(true);
+      const clipboardItem = new ClipboardItem({ 'text/plain': content });
+      await navigator.clipboard.write([clipboardItem]);
     }
   };
 
