@@ -17,8 +17,7 @@ export const cmdPlus = (keyCombo: string) => {
   return `{${platformSpecificKey}+${keyCombo}}`;
 };
 
-const getCodeEditor = () =>
-  cy.get('.CodeMirror-code').then((editor) => cy.wrap(editor));
+export const getCodeEditor = () => cy.get('.CodeMirror-code');
 
 export const getFrames = () => cy.get('[data-testid="frameIframe"]');
 
