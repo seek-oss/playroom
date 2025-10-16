@@ -446,7 +446,7 @@ describe('Keymaps', () => {
     });
 
     it('should back out of replace correctly', () => {
-      replaceInCode('div', 'span', { source: 'keyboard' });
+      replaceInCode('div', null, { source: 'keyboard' });
 
       typeCode('{esc}');
 
