@@ -33,8 +33,7 @@ import {
   useState,
 } from 'react';
 
-import { compressParams, createPreviewUrl } from '../../../utils';
-import playroomConfig from '../../config';
+import { compressParams } from '../../../utils';
 import {
   themeNames as availableThemes,
   themeNames,
@@ -46,6 +45,7 @@ import { StoreContext } from '../../contexts/StoreContext';
 import { isMac } from '../../utils/formatting';
 import { createUrlForData, resolveDataFromUrl } from '../../utils/params';
 import { useCopy } from '../../utils/useCopy';
+import usePreviewUrl from '../../utils/usePreviewUrl';
 import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
 import { ButtonIcon, ButtonIconLink } from '../ButtonIcon/ButtonIcon';
@@ -440,17 +440,26 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
   );
 };
 
+const MenuItemThemedPreviewLink = ({ theme }: { theme: string }) => {
+  const previewUrl = usePreviewUrl(theme);
+
+  return (
+    <MenuItemLink href={previewUrl} target="_blank">
+      {theme}
+    </MenuItemLink>
+  );
+};
+
 export const Header = () => {
-  const [{ code, title, selectedThemes, editorHidden }] =
-    useContext(StoreContext);
+  const [{ code, selectedThemes }] = useContext(StoreContext);
   const { copying, onCopyClick } = useCopy();
   const [shareOpen, setShareOpen] = useState(false);
 
   const hasCode = code.trim().length > 0;
 
-  const baseUrl = window.location.href
-    .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
-    .split('index.html')[0];
+  const previewUrl = usePreviewUrl(
+    themesEnabled ? selectedThemes[0] : undefined
+  );
 
   return (
     <Box className={styles.root}>
@@ -503,20 +512,7 @@ export const Header = () => {
               >
                 <MenuGroup label="Choose preview theme">
                   {availableThemes.map((theme) => (
-                    <MenuItemLink
-                      key={theme}
-                      href={createPreviewUrl({
-                        baseUrl,
-                        code,
-                        theme,
-                        paramType: playroomConfig.paramType,
-                        title,
-                        editorHidden,
-                      })}
-                      target="_blank"
-                    >
-                      {theme}
-                    </MenuItemLink>
+                    <MenuItemThemedPreviewLink key={theme} theme={theme} />
                   ))}
                 </MenuGroup>
               </Menu>
@@ -524,14 +520,7 @@ export const Header = () => {
               <ButtonIconLink
                 label="Launch Preview"
                 icon={<Play />}
-                href={createPreviewUrl({
-                  baseUrl,
-                  code,
-                  theme: themesEnabled ? selectedThemes[0] : undefined,
-                  paramType: playroomConfig.paramType,
-                  title,
-                  editorHidden,
-                })}
+                href={previewUrl}
                 target="_blank"
               />
             )}
@@ -565,11 +554,13 @@ const ShareCopyButton = ({
   return (
     <Inline space="small" alignY="center">
       <Button onClick={() => onCopyClick(linkToCopy)}>{children}</Button>
-      {copying ? (
-        <Text tone="positive">
-          Copied <Check size={14} />
-        </Text>
-      ) : null}
+      <div role="status" aria-live="assertive">
+        {copying ? (
+          <Text tone="positive">
+            Copied <Check size={14} />
+          </Text>
+        ) : null}
+      </div>
     </Inline>
   );
 };
@@ -578,23 +569,13 @@ const ShareDialog = ({
   open,
   onOpenChange,
 }: Pick<ComponentProps<typeof Dialog>, 'open' | 'onOpenChange'>) => {
-  const [{ code, editorHidden, title, selectedThemes }] =
-    useContext(StoreContext);
+  const [{ selectedThemes }] = useContext(StoreContext);
   const defaultTheme =
     selectedThemes.length > 0 ? selectedThemes[0] : themeNames[0];
   const [themeForPreviewShare, setThemeForPreviewShare] =
     useState(defaultTheme);
 
-  const previewUrl = createPreviewUrl({
-    baseUrl: window.location.href
-      .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
-      .split('index.html')[0],
-    code,
-    theme: themesEnabled ? themeForPreviewShare : undefined,
-    paramType: playroomConfig.paramType,
-    title,
-    editorHidden,
-  });
+  const previewUrl = usePreviewUrl(themeForPreviewShare);
 
   return (
     <Dialog title="Share Playroom" open={open} onOpenChange={onOpenChange}>
