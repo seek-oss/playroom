@@ -397,7 +397,7 @@ export const findInCode = (
 
 export const replaceInCode = (
   term: string,
-  replaceWith: string,
+  replaceWith: string | null,
   options: { source: 'keyboard' | 'menu' }
 ) => {
   // Wait necessary to ensure code pane is focussed
@@ -419,7 +419,9 @@ export const replaceInCode = (
   }
 
   typeInSearchField(`${term}{enter}`);
-  typeInSearchField(`${replaceWith}{enter}`);
+  if (replaceWith) {
+    typeInSearchField(`${replaceWith}{enter}`);
+  }
 };
 
 export const jumpToLine = (
