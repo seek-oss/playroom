@@ -18,6 +18,7 @@ import {
   findInCode,
   replaceInCode,
   jumpToLine,
+  jumpToCharacter,
 } from '../support/utils';
 
 describe('Keymaps', () => {
@@ -381,7 +382,7 @@ describe('Keymaps', () => {
     });
 
     it('should find all occurrences of search term', () => {
-      findInCode('div');
+      findInCode('div', { source: 'keyboard' });
 
       assertCodePaneSearchMatchesCount(6);
 
@@ -397,7 +398,7 @@ describe('Keymaps', () => {
     });
 
     it('should replace and skip occurrences of search term correctly', () => {
-      replaceInCode('div', 'span');
+      replaceInCode('div', 'span', { source: 'keyboard' });
 
       // replace occurrence
       cy.get('.CodeMirror-dialog button').contains('Yes').click();
@@ -445,7 +446,7 @@ describe('Keymaps', () => {
     });
 
     it('should back out of replace correctly', () => {
-      replaceInCode('div');
+      replaceInCode('div', 'span', { source: 'keyboard' });
 
       typeCode('{esc}');
 
@@ -480,7 +481,7 @@ describe('Keymaps', () => {
 
     it('should jump to line number correctly', () => {
       const line = 6;
-      jumpToLine(line);
+      jumpToLine(line, { source: 'keyboard' });
 
       typeCode('c');
 
@@ -497,7 +498,7 @@ describe('Keymaps', () => {
       typeCode('{backspace}');
 
       const nextLine = 2;
-      jumpToLine(nextLine);
+      jumpToLine(nextLine, { source: 'keyboard' });
 
       typeCode('c');
 
@@ -513,7 +514,7 @@ describe('Keymaps', () => {
     });
 
     it('should jump to line and column number correctly', () => {
-      jumpToLine(6, 10);
+      jumpToCharacter(6, 10);
       typeCode('a');
 
       assertCodePaneContains(dedent`

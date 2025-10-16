@@ -26,10 +26,10 @@ describe('Header actions', () => {
     assertZeroStateIsVisible();
     typeCode('TEST');
     assertFramesMatch(widths);
-    selectWidthPreference(widthToSelect);
+    selectWidthPreference(widthToSelect, { source: 'header' });
     assertFramesMatch([widthToSelect]);
 
-    clearWidthSelection();
+    clearWidthSelection({ source: 'header' });
     assertFramesMatch(widths);
   });
 
@@ -46,21 +46,21 @@ describe('Header actions', () => {
     typeCode('TEST');
     assertFramesMatch(allFrames);
     // First selection
-    selectWidthPreference(widths[3]);
-    selectThemePreference(themes[1]);
+    selectWidthPreference(widths[3], { source: 'header' });
+    selectThemePreference(themes[1], { source: 'header' });
     assertFramesMatch([[themes[1], widths[3]]]);
 
     // Second selection
-    selectThemePreference(themes[1]);
-    selectThemePreference(themes[0]);
-    selectWidthPreference(widths[1]);
+    selectThemePreference(themes[1], { source: 'header' });
+    selectThemePreference(themes[0], { source: 'header' });
+    selectWidthPreference(widths[1], { source: 'header' });
     assertFramesMatch([
       [themes[0], widths[1]],
       [themes[0], widths[3]],
     ]);
 
-    clearWidthSelection();
-    clearThemeSelection();
+    clearWidthSelection({ source: 'header' });
+    clearThemeSelection({ source: 'header' });
     assertFramesMatch(allFrames);
   });
 
