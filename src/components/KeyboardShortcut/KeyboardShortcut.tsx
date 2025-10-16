@@ -32,6 +32,7 @@ export const KeyboardShortcut = ({
 }) =>
   shortcut && (
     <span
+      aria-hidden
       className={clsx({
         [styles.shortcut]: true,
         [styles.hideOnMobile]: hideOnMobile,

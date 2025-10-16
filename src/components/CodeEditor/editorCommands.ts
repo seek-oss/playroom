@@ -111,7 +111,7 @@ export const editorCommandList: EditorCommandMeta[] = [
   },
   {
     command: 'addCursorToPrevLine',
-    label: 'Add cursor to prev line',
+    label: 'Add cursor to previous line',
     shortcut: [primaryMod, 'Alt', 'Up'],
     icon: ArrowUpFromLineIcon,
   },

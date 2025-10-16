@@ -7,9 +7,8 @@ import {
   assertCodePaneLineCount,
   loadPlayroom,
   selectHint,
-  formatCodeByKeyboard,
-  formatCodeByEditorAction,
   getCodeEditor,
+  formatCode,
 } from '../support/utils';
 
 describe('Editor', () => {
@@ -40,14 +39,14 @@ describe('Editor', () => {
   it('formats with keyboard shortcut', () => {
     typeCode('<Foo><Foo><Bar/>');
     assertCodePaneLineCount(1);
-    formatCodeByKeyboard();
+    formatCode({ source: 'keyboard' });
     assertCodePaneLineCount(6);
   });
 
   it('formats with editor action', () => {
     typeCode('<Foo><Foo><Bar/>');
     assertCodePaneLineCount(1);
-    formatCodeByEditorAction();
+    formatCode({ source: 'editorAction' });
     assertCodePaneLineCount(6);
   });
 
@@ -56,7 +55,7 @@ describe('Editor', () => {
       '<style jsx>{{}`html {{} border: 1px solid red; {}}{rightarrow}{}}'
     );
     assertCodePaneLineCount(1);
-    formatCodeByKeyboard();
+    formatCode({ source: 'keyboard' });
     assertCodePaneContains(dedent`
       <style jsx>{\`
         html {
