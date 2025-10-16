@@ -17,6 +17,14 @@ export const cmdPlus = (keyCombo: string) => {
   return `{${platformSpecificKey}+${keyCombo}}`;
 };
 
+export const openMainMenu = () => {
+  cy.findByRole('button', { name: 'Main menu' }).click();
+  cy.findByRole('menu', { name: 'Main menu' }).should('be.visible');
+};
+export const closeMainMenu = () => {
+  cy.findByRole('button', { name: 'Main menu' }).click();
+};
+
 export const getCodeEditor = () => cy.get('.CodeMirror-code');
 
 export const getFrames = () => cy.get('[data-testid="frameIframe"]');
@@ -47,21 +55,73 @@ export const selectHint = (index?: number) => {
     });
 };
 
-export const formatCodeByKeyboard = () =>
-  getCodeEditor().focused().type(cmdPlus('s'));
-
-export const formatCodeByEditorAction = () =>
-  cy.findByRole('button', { name: 'Tidy' }).click();
-
-export const selectWidthPreference = (width: Widths[number]) => {
-  cy.findByRole('button', { name: 'Configure frames' }).click();
-  cy.findByRole('menuitemcheckbox', { name: `${width}` }).click();
-  cy.findByRole('button', { name: 'Configure frames' }).click();
+export const formatCode = (options: {
+  source: 'keyboard' | 'editorAction' | 'menu';
+}) => {
+  switch (options.source) {
+    case 'keyboard': {
+      getCodeEditor().focused().type(cmdPlus('s'));
+      break;
+    }
+    case 'editorAction': {
+      cy.findByRole('button', { name: 'Tidy' }).click();
+      break;
+    }
+    case 'menu': {
+      openMainMenuSubMenu('Editor actions');
+      cy.findByRole('menuitem', { name: 'Tidy' }).click();
+      break;
+    }
+    default: {
+      throw new Error('No source provided');
+    }
+  }
 };
-export const selectThemePreference = (theme: string) => {
-  cy.findByRole('button', { name: 'Configure frames' }).click();
+
+export const openMainMenuSubMenu = (name: string) => {
+  openMainMenu();
+  // Clicking submenu triggers is having issues on second menu visit in Cypress only, using enter instead
+  cy.findByRole('menuitem', { name }).type(`{enter}`);
+};
+
+const toggleFramesMenuForSource = (
+  source: 'menu' | 'header',
+  state: 'open' | 'close'
+) => {
+  switch (source) {
+    case 'header': {
+      cy.findByRole('button', { name: 'Configure frames' }).click();
+      break;
+    }
+    case 'menu': {
+      if (state === 'open') {
+        openMainMenuSubMenu('Frames');
+      } else if (state === 'close') {
+        closeMainMenu();
+      }
+      break;
+    }
+    default: {
+      throw new Error('No source provided');
+    }
+  }
+};
+
+export const selectWidthPreference = (
+  width: Widths[number],
+  options: { source: 'menu' | 'header' }
+) => {
+  toggleFramesMenuForSource(options.source, 'open');
+  cy.findByRole('menuitemcheckbox', { name: `${width}` }).click();
+  toggleFramesMenuForSource(options.source, 'close');
+};
+export const selectThemePreference = (
+  theme: string,
+  options: { source: 'menu' | 'header' }
+) => {
+  toggleFramesMenuForSource(options.source, 'open');
   cy.findByRole('menuitemcheckbox', { name: theme }).click();
-  cy.findByRole('button', { name: 'Configure frames' }).click();
+  toggleFramesMenuForSource(options.source, 'close');
 };
 
 export const assertTitle = (title: string) =>
@@ -73,16 +133,16 @@ export const changeTitle = (title: string) => {
   cy.findByRole('textbox', { name: 'Playroom Title' }).type(title);
 };
 
-export const clearWidthSelection = () => {
-  cy.findByRole('button', { name: 'Configure frames' }).click();
+export const clearWidthSelection = (options: { source: 'menu' | 'header' }) => {
+  toggleFramesMenuForSource(options.source, 'open');
   cy.findByRole('menuitem', { name: 'Clear selected widths' }).click();
-  cy.findByRole('button', { name: 'Configure frames' }).click();
+  toggleFramesMenuForSource(options.source, 'close');
 };
 
-export const clearThemeSelection = () => {
-  cy.findByRole('button', { name: 'Configure frames' }).click();
+export const clearThemeSelection = (options: { source: 'menu' | 'header' }) => {
+  toggleFramesMenuForSource(options.source, 'open');
   cy.findByRole('menuitem', { name: 'Clear selected themes' }).click();
-  cy.findByRole('button', { name: 'Configure frames' }).click();
+  toggleFramesMenuForSource(options.source, 'close');
 };
 
 export const gotoPreview = () => {
@@ -291,33 +351,106 @@ export const loadPlayroom = (initialCode?: string) =>
 export const loadThemedPlayroom = (initialCode?: string) =>
   _loadPlayroom('http://localhost:9001', initialCode);
 
-const typeInSearchField = (text: string) =>
+export const loadPlayroomWithAppearance = (
+  appearance: 'light' | 'dark',
+  initialCode?: string
+) => {
+  cy.window().then((win) => {
+    cy.stub(win, 'matchMedia')
+      .withArgs('(prefers-color-scheme: dark)')
+      .returns({
+        matches: appearance === 'dark',
+        addEventListener: () => {},
+        removeEventListener: () => {},
+      });
+  });
+  loadPlayroom(initialCode);
+};
+
+export const typeInSearchField = (text: string) =>
   cy.get('.CodeMirror-search-field').type(text);
 
-export const findInCode = (term: string) => {
+export const findInCode = (
+  term: string,
+  options: { source: 'keyboard' | 'menu' }
+) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
-  typeCode(cmdPlus('f'));
 
-  typeInSearchField(`${term}{enter}`);
-};
-
-export const replaceInCode = (term: string, replaceWith?: string) => {
-  // Wait necessary to ensure code pane is focussed
-  cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
-  typeCode(cmdPlus('alt+f'));
-  typeInSearchField(`${term}{enter}`);
-  if (replaceWith) {
-    typeInSearchField(`${replaceWith}{enter}`);
+  switch (options.source) {
+    case 'keyboard': {
+      typeCode(cmdPlus('f'));
+      break;
+    }
+    case 'menu': {
+      openMainMenuSubMenu('Editor actions');
+      cy.findByRole('menuitem', { name: 'Find' }).click();
+      break;
+    }
+    default: {
+      throw new Error('No source provided');
+    }
   }
+
+  typeInSearchField(`${term}{enter}`);
 };
 
-export const jumpToLine = (line: number, character?: number) => {
+export const replaceInCode = (
+  term: string,
+  replaceWith: string,
+  options: { source: 'keyboard' | 'menu' }
+) => {
+  // Wait necessary to ensure code pane is focussed
+  cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
+
+  switch (options.source) {
+    case 'keyboard': {
+      typeCode(cmdPlus('alt+f'));
+      break;
+    }
+    case 'menu': {
+      openMainMenuSubMenu('Editor actions');
+      cy.findByRole('menuitem', { name: 'Find and replace' }).click();
+      break;
+    }
+    default: {
+      throw new Error('No source provided');
+    }
+  }
+
+  typeInSearchField(`${term}{enter}`);
+  typeInSearchField(`${replaceWith}{enter}`);
+};
+
+export const jumpToLine = (
+  line: number,
+  options: { source: 'keyboard' | 'menu' }
+) => {
+  // Wait necessary to ensure code pane is focussed
+  cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
+
+  switch (options.source) {
+    case 'keyboard': {
+      typeCode(cmdPlus('g'));
+      break;
+    }
+    case 'menu': {
+      openMainMenuSubMenu('Editor actions');
+      cy.findByRole('menuitem', { name: 'Jump to line number' }).click();
+      break;
+    }
+    default: {
+      throw new Error('No source provided');
+    }
+  }
+
+  typeCode(`${line}{enter}`);
+};
+export const jumpToCharacter = (line: number, character: number) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
   typeCode(cmdPlus('g'));
-
-  typeCode(character ? `${line}:${character}{enter}` : `${line}{enter}`);
+  typeCode(`${line}:${character}{enter}`);
 };
 
 export const assertCodePaneSearchMatchesCount = (lines: number) => {
@@ -328,3 +461,39 @@ export const assertCodePaneSearchMatchesCount = (lines: number) => {
 
 export const assertZeroStateIsVisible = () =>
   cy.findByTestId('zeroState').should('be.visible');
+
+export const assertColourMode = (mode: 'dark' | 'light') => {
+  cy.document().then((doc) => {
+    expect(doc.documentElement.getAttribute('data-playroom-dark')).to.equal(
+      mode === 'dark' ? '' : null
+    );
+  });
+};
+
+export const editorPositionViaMenu = (
+  position: 'bottom' | 'left' | 'hidden'
+) => {
+  let initialCodeParam = '';
+  cy.location().then((loc) => {
+    initialCodeParam = loc.hash;
+  });
+  openMainMenuSubMenu('Editor Position');
+  cy.findByRole('menuitemradio', {
+    name: {
+      bottom: 'Bottom',
+      left: 'Left',
+      hidden: 'Hidden',
+    }[position],
+  }).click();
+  closeMainMenu();
+
+  /**
+   * Consider refactor to bypass debounced URL update for settings
+   * e.g. editorHidden, editorPosition, themes, widths.
+   *
+   * This waits for the url update to avoid race conditions.
+   */
+  cy.location().should((loc) => {
+    expect(loc.hash).not.to.eq(initialCodeParam);
+  });
+};
