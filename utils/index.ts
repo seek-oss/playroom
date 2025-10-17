@@ -32,8 +32,8 @@ export const compressParams = ({
 }: CompressParamsOptions): string => {
   const data = JSON.stringify({
     ...(code ? { code } : {}),
-    ...(themes ? { themes } : {}),
-    ...(widths ? { widths } : {}),
+    ...(themes && themes.length > 0 ? { themes } : {}),
+    ...(widths && widths.length > 0 ? { widths } : {}),
     ...(theme ? { theme } : {}),
     ...(title ? { title } : {}),
     ...(editorHidden ? { editorHidden } : {}),
@@ -56,8 +56,8 @@ export const decompressParams = (param: string | null) => {
 
   return {
     ...(code ? { code } : {}),
-    ...(themes ? { themes } : {}),
-    ...(widths ? { widths } : {}),
+    ...(themes && themes.length > 0 ? { themes } : {}),
+    ...(widths && widths.length > 0 ? { widths } : {}),
     ...(theme ? { theme } : {}),
     ...(title ? { title } : {}),
     ...(editorHidden ? { editorHidden } : {}),
