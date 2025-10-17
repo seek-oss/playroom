@@ -499,3 +499,36 @@ export const editorPositionViaMenu = (
     expect(loc.hash).not.to.eq(initialCodeParam);
   });
 };
+
+export const assertStoredPlayrooms = (count: number) => {
+  openMainMenu();
+  cy.findByRole('menuitem', { name: 'Open...' }).click();
+  cy.findByRole('dialog', { name: 'Open Playroom' }).should('be.visible');
+  cy.findByRole('list', { name: 'Stored Playrooms' }).within(() => {
+    cy.findAllByRole('listitem').should('have.length', count);
+  });
+  cy.get('body').type('{esc}');
+};
+
+export const openStoredPlayroomByName = (
+  name: string,
+  options: { source: 'keyboard' | 'menu' }
+) => {
+  switch (options.source) {
+    case 'keyboard': {
+      cy.get('body').type(cmdPlus('o'));
+      break;
+    }
+    case 'menu': {
+      openMainMenu();
+      cy.findByRole('menuitem', { name: 'Open...' }).click();
+      break;
+    }
+    default: {
+      throw new Error('No source provided');
+    }
+  }
+
+  cy.findByRole('dialog', { name: 'Open Playroom' }).should('be.visible');
+  cy.findByRole('button', { name: `Open “${name}”` }).click();
+};
