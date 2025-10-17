@@ -17,6 +17,8 @@ import { StoreContext } from '../../contexts/StoreContext';
 import { Secondary } from '../Secondary/Secondary';
 import { Text } from '../Text/Text';
 
+import { snippetPreviewDebounce } from './snippetsPreviewDebounce';
+
 import * as styles from './Snippets.css';
 
 type ReturnedSnippet = Snippet | null;
@@ -44,7 +46,7 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
   const [, dispatch] = useContext(StoreContext);
   const debouncedPreview = useDebouncedCallback((snippet: ReturnedSnippet) => {
     dispatch({ type: 'previewSnippet', payload: { snippet } });
-  }, 50);
+  }, snippetPreviewDebounce);
 
   return (
     <div className={styles.root}>
