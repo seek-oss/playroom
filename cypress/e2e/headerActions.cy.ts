@@ -15,6 +15,7 @@ import {
   gotoThemedPreview,
   editPreview,
   assertPreviewForTheme,
+  getFrames,
 } from '../support/utils';
 
 describe('Header actions', () => {
@@ -66,8 +67,10 @@ describe('Header actions', () => {
 
   it('change title', () => {
     loadPlayroom();
+    assertZeroStateIsVisible();
     changeTitle('Test');
     cy.title().should('eq', 'Test | Playroom');
+    getFrames().first().should('be.visible');
   });
 
   it('preview', () => {

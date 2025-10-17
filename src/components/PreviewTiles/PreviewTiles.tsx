@@ -67,7 +67,12 @@ export const PreviewTiles = ({
     </Stack>
   ) : (
     <>
-      <ul ref={listRef} tabIndex={-1} className={styles.tiles}>
+      <ul
+        ref={listRef}
+        tabIndex={-1}
+        className={styles.tiles}
+        aria-label="Stored Playrooms"
+      >
         {playroomEntries.map(
           ({ id, code, themes, widths, themeName, title, editorHidden }) => (
             <ContextMenu
