@@ -478,10 +478,6 @@ export const assertColourMode = (mode: 'dark' | 'light') => {
 export const editorPositionViaMenu = (
   position: 'bottom' | 'left' | 'hidden'
 ) => {
-  let initialCodeParam = '';
-  cy.location().then((loc) => {
-    initialCodeParam = loc.hash;
-  });
   openMainMenuSubMenu('Editor Position');
   cy.findByRole('menuitemradio', {
     name: {
@@ -491,16 +487,6 @@ export const editorPositionViaMenu = (
     }[position],
   }).click();
   closeMainMenu();
-
-  /**
-   * Consider refactor to bypass debounced URL update for settings
-   * e.g. editorHidden, editorPosition, themes, widths.
-   *
-   * This waits for the url update to avoid race conditions.
-   */
-  cy.location().should((loc) => {
-    expect(loc.hash).not.to.eq(initialCodeParam);
-  });
 };
 
 export const assertStoredPlayrooms = (count: number) => {
