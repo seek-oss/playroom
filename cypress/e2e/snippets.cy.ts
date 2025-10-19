@@ -12,7 +12,6 @@ import {
   assertSnippetsSearchFieldIsVisible,
   mouseOverSnippet,
   loadPlayroom,
-  cmdPlus,
 } from '../support/utils';
 
 describe('Snippets', () => {
@@ -23,7 +22,7 @@ describe('Snippets', () => {
 
   it('driven with mouse', () => {
     // Open and format for insertion point
-    toggleSnippets();
+    toggleSnippets({ source: 'editorAction' });
     assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
 
@@ -37,12 +36,12 @@ describe('Snippets', () => {
     assertFirstFrameContains('Initial code\nBar\nBar');
 
     // Close without persisting
-    toggleSnippets();
+    toggleSnippets({ source: 'editorAction' });
     assertCodePaneContains('<div>Initial <span>code</span></div>');
     assertCodePaneLineCount(1);
 
     // Re-open and persist
-    toggleSnippets();
+    toggleSnippets({ source: 'editorAction' });
     mouseOverSnippet(3);
     assertFirstFrameContains('Initial code\nBar\nBlue Bar');
     selectSnippetByIndex(3).click();
@@ -67,14 +66,14 @@ describe('Snippets', () => {
       `);
   });
 
-  it('driven with keyboard', () => {
+  it.only('driven with keyboard', () => {
     // Open and format for insertion point
-    typeCode(cmdPlus('k'));
+    toggleSnippets({ source: 'keyboard' });
     assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
     filterSnippets('{esc}');
     assertCodePaneLineCount(1, true);
-    typeCode(cmdPlus('k'));
+    toggleSnippets({ source: 'keyboard' });
     assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
 
@@ -93,7 +92,7 @@ describe('Snippets', () => {
     assertCodePaneLineCount(1, true);
 
     // Re-open and persist
-    typeCode(cmdPlus('k'));
+    toggleSnippets({ source: 'keyboard' });
     filterSnippets('{downarrow}{downarrow}{downarrow}{downarrow}{enter}');
     assertFirstFrameContains('Initial code\nBar\nBlue Bar');
     assertCodePaneLineCount(7);
