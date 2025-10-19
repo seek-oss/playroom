@@ -174,8 +174,23 @@ export const editPreview = () => {
   });
 };
 
-export const toggleSnippets = () =>
-  cy.findByRole('button', { name: /Insert snippet/i }).click();
+export const toggleSnippets = (options: {
+  source: 'editorAction' | 'keyboard';
+}) => {
+  switch (options.source) {
+    case 'editorAction': {
+      cy.findByRole('button', { name: /Insert snippet/i }).click();
+      break;
+    }
+    case 'keyboard': {
+      cy.get('body').type(cmdPlus('k'));
+      break;
+    }
+    default: {
+      throw new Error('No source provided');
+    }
+  }
+};
 
 export const filterSnippets = (search: string) => {
   cy.findByRole('combobox', { name: 'Search snippets' }).type(search, {
