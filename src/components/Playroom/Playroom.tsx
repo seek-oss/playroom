@@ -41,6 +41,7 @@ export default () => {
       editorOrientation,
       editorHeight,
       editorWidth,
+      panelsVisible,
       editorHidden,
       code,
       previewRenderCode,
@@ -61,6 +62,7 @@ export default () => {
 
   const isVerticalEditor = editorOrientation === 'vertical';
   const editorSize = isVerticalEditor ? editorWidth : editorHeight;
+  const editorVisible = panelsVisible && !editorHidden;
 
   useEffect(() => {
     if (
@@ -87,7 +89,7 @@ export default () => {
         [styles.editorOrientation[editorOrientation]]: true,
       }}
       style={assignInlineVars({
-        [styles.editorSize]: editorHidden ? undefined : editorSize,
+        [styles.editorSize]: editorVisible ? editorSize : undefined,
       })}
     >
       <Box className={styles.header}>
@@ -102,7 +104,7 @@ export default () => {
             <ZeroState />
           )}
         </Box>
-        {editorHidden ? (
+        {panelsVisible && editorHidden ? (
           <aside className={styles.showCodeContainer}>
             <ButtonIcon
               label="Show code"
@@ -121,9 +123,9 @@ export default () => {
       <Box
         position="relative"
         className={styles.editor}
-        inert={editorHidden}
-        opacity={editorHidden ? 0 : undefined}
-        pointerEvents={editorHidden ? 'none' : undefined}
+        inert={!editorVisible}
+        opacity={!editorVisible ? 0 : undefined}
+        pointerEvents={!editorVisible ? 'none' : undefined}
         ref={editorRef}
       >
         <ResizeHandle

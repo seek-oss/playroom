@@ -90,6 +90,7 @@ interface State {
   editorOrientation: EditorOrientation;
   editorHeight: string;
   editorWidth: string;
+  panelsVisible: boolean;
   editorErrorMessage?: string;
   selectedThemes: typeof availableThemes;
   selectedWidths: Widths;
@@ -124,6 +125,7 @@ export type Action =
     }
   | { type: 'updateEditorHeight'; payload: { size: number } }
   | { type: 'updateEditorWidth'; payload: { size: number } }
+  | { type: 'togglePanelVisibility' }
   | {
       type: 'updateSelectedThemes';
       payload: { themes: typeof availableThemes };
@@ -376,6 +378,13 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'togglePanelVisibility': {
+      return {
+        ...state,
+        panelsVisible: !state.panelsVisible,
+      };
+    }
+
     case 'updateSelectedThemes': {
       const { themes } = action.payload;
       const selectedThemes = availableThemes.filter((t) => themes.includes(t));
@@ -500,6 +509,7 @@ const initialState: State = {
   editorOrientation: defaultOrientation,
   editorHeight: defaultEditorSize,
   editorWidth: defaultEditorSize,
+  panelsVisible: true,
   selectedThemes:
     themesEnabled && playroomConfig.defaultVisibleThemes
       ? playroomConfig.defaultVisibleThemes
