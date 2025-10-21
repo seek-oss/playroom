@@ -14,6 +14,7 @@ import {
   clearThemeSelection,
   clearWidthSelection,
   closeMainMenu,
+  cmdPlus,
   editorPositionViaMenu,
   findInCode,
   formatCode,
@@ -358,6 +359,30 @@ describe('Main Menu', () => {
     editorPositionViaMenu('left');
     getCodeEditor().should('be.visible');
     cy.findByRole('button', { name: 'Hide code' }).should('be.visible');
+  });
+
+  describe('Show/Hide UI', () => {
+    it('Mouse', () => {
+      loadPlayroom();
+
+      getCodeEditor().should('be.visible');
+      openMainMenu();
+      cy.findByRole('menuitem', { name: 'Show/Hide UI' }).click();
+      getCodeEditor().should('not.be.visible');
+      openMainMenu();
+      cy.findByRole('menuitem', { name: 'Show/Hide UI' }).click();
+      getCodeEditor().should('be.visible');
+    });
+
+    it('Keyboard', () => {
+      loadPlayroom();
+
+      getCodeEditor().should('be.visible');
+      cy.get('body').type(cmdPlus('\\'));
+      getCodeEditor().should('not.be.visible');
+      cy.get('body').type(cmdPlus('\\'));
+      getCodeEditor().should('be.visible');
+    });
   });
 
   describe('Appearance', () => {

@@ -23,6 +23,8 @@ import {
   Play,
   Check,
   Link,
+  Eye,
+  EyeClosed,
 } from 'lucide-react';
 import {
   type ComponentProps,
@@ -214,6 +216,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
     {
       editorOrientation,
       editorHidden,
+      panelsVisible,
       colorScheme,
       hasSyntaxError,
       openDialogOpen,
@@ -240,6 +243,12 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
       if (cmdOrCtrl && e.key === 'o') {
         e.preventDefault();
         dispatch({ type: 'openPlayroomDialog' });
+        return;
+      }
+
+      if (cmdOrCtrl && e.key === '\\') {
+        e.preventDefault();
+        dispatch({ type: 'togglePanelVisibility' });
         return;
       }
     };
@@ -393,6 +402,14 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
             </MenuRadioItem>
           </MenuRadioGroup>
         </Menu>
+
+        <MenuItem
+          icon={panelsVisible ? Eye : EyeClosed}
+          onClick={() => dispatch({ type: 'togglePanelVisibility' })}
+          shortcut={['Cmd', '\\']}
+        >
+          Show/Hide UI
+        </MenuItem>
 
         <Menu
           trigger={<MenuItem icon={SunMoon}>Appearance</MenuItem>}
