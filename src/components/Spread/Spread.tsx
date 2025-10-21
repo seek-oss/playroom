@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import type { ReactElement } from 'react';
 
-import * as styles from './Inline.css';
+import * as styles from './Spread.css';
 
 type ReactNodeArray = ReactNodeNoStrings[];
 type ReactNodeNoStrings =
@@ -15,16 +15,15 @@ interface Props {
   children: ReactNodeNoStrings;
   space: keyof typeof styles.spaceScale;
   alignY?: keyof typeof styles.horizontalAlignmentScale;
-  nowrap?: boolean;
 }
 
-export const Inline = ({ children, space, alignY, nowrap = false }: Props) => (
+export const Spread = ({ children, space, alignY }: Props) => (
   <div
     className={clsx(
       styles.gap,
       styles.spaceScale[space],
-      alignY ? styles.horizontalAlignmentScale[alignY] : undefined,
-      !nowrap ? styles.wrap : undefined
+      styles.fitContent,
+      alignY ? styles.horizontalAlignmentScale[alignY] : undefined
     )}
   >
     {children}
