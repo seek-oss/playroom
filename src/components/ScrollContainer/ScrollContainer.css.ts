@@ -32,17 +32,17 @@ const scrollOverlaySize = createVar();
 export const fadeSize = styleVariants({
   small: {
     vars: {
-      [scrollOverlaySize]: '40px',
+      [scrollOverlaySize]: '30px',
     },
   },
   medium: {
     vars: {
-      [scrollOverlaySize]: '60px',
+      [scrollOverlaySize]: '45px',
     },
   },
   large: {
     vars: {
-      [scrollOverlaySize]: '80px',
+      [scrollOverlaySize]: '60px',
     },
   },
 });

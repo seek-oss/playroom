@@ -36,7 +36,7 @@ export const button = style([
   },
 ]);
 
-const padding = 'xsmall';
+const paddingVar = createVar();
 
 export const content = style([
   sprinkles({
@@ -50,9 +50,9 @@ export const content = style([
     transition: 'fast',
     height: 'full',
     width: 'full',
-    padding,
   }),
   {
+    padding: paddingVar,
     borderRadius: 'inherit',
     background: 'transparent',
     outline: 'none',
@@ -69,9 +69,10 @@ export const content = style([
   },
 ]);
 
-export const size = styleVariants(vars.buttonSizes, (buttonSize) => ({
+export const size = styleVariants(vars.buttonSizes, (buttonSize, name) => ({
   vars: {
     [sizeVar]: buttonSize,
+    [paddingVar]: name === 'small' ? '6px' : vars.space.xsmall,
   },
 }));
 
@@ -132,7 +133,7 @@ export const variant = styleVariants({
 
 const viewboxGutter = '2px';
 export const bleed = style({
-  margin: calc(vars.space[padding]).add(viewboxGutter).negate().toString(),
+  margin: calc(paddingVar).add(viewboxGutter).negate().toString(),
 });
 
 globalStyle(`${content} > svg`, {

@@ -68,8 +68,6 @@ export const resizeContainer = styleVariants({
       height: 'full',
     }),
     {
-      right: 0,
-      transform: 'translateX(50%)',
       zIndex: 2,
       '::before': {
         content: '',
@@ -94,8 +92,18 @@ export const resizeContainer = styleVariants({
   ],
 });
 
-export const right = sprinkles({ right: 0 });
-export const left = sprinkles({ left: 0 });
+export const right = style([
+  sprinkles({ right: 0 }),
+  {
+    transform: 'translateX(50%)',
+  },
+]);
+export const left = style([
+  sprinkles({ left: 0 }),
+  {
+    transform: 'translateX(-50%)',
+  },
+]);
 
 const handleCommon = style([
   sprinkles({
