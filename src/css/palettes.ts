@@ -244,6 +244,7 @@ export const light = {
     floating: lightPalette.background[100],
     selection: lightPalette.gray[100],
     tooltip: lightPalette.gray[1000],
+    textSelection: lightPalette.blue[400],
   },
   border: {
     standard: lightPalette.gray[400],
@@ -291,6 +292,7 @@ export const dark = {
     floating: 'hsla(0,0%,2%,1)',
     selection: 'hsla(0,0%,12%,1)',
     tooltip: 'hsla(0,0%,0%,1)',
+    textSelection: darkPalette.blue[400],
   },
   border: {
     standard: darkPalette.gray[400],
