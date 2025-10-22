@@ -5,8 +5,6 @@ import { vars } from '../../css/vars.css';
 
 const minimumLineNumberWidth = '50px';
 
-const textSelectionBackground = 'Highlight';
-
 export const insertionPoint = style({
   backgroundColor: colorPaletteVars.background.selection,
 });
@@ -173,7 +171,7 @@ globalStyle('.cm-s-neo .CodeMirror-gutters::after', {
 });
 
 globalStyle('.cm-s-neo .CodeMirror-selected', {
-  background: textSelectionBackground,
+  background: colorPaletteVars.background.textSelection,
 });
 
 globalStyle('.cm-s-neo .CodeMirror-activeline-background', {
@@ -290,13 +288,13 @@ globalStyle('label.CodeMirror-search-label', {
 });
 
 globalStyle('.dialog-opened.cm-s-neo .CodeMirror-selected', {
-  background: textSelectionBackground,
+  background: colorPaletteVars.background.textSelection,
 });
 
 globalStyle('.cm-overlay.cm-searching', {
   paddingTop: vars.space.xxxsmall,
   paddingBottom: vars.space.xxxsmall,
-  background: textSelectionBackground,
+  background: colorPaletteVars.background.textSelection,
 });
 
 globalStyle('.CodeMirror-dialog button:first-of-type', {

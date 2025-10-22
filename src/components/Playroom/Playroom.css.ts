@@ -158,9 +158,16 @@ export const showCodeContainer = style([
   },
 ]);
 
-export const hideCodeContainer = sprinkles({
-  position: 'absolute',
-});
+export const hideCodeContainer = style([
+  sprinkles({
+    position: 'absolute',
+    borderRadius: 'medium',
+  }),
+  {
+    background: colorPaletteVars.background.surface,
+    boxShadow: `0 0 4px 2px ${colorPaletteVars.background.surface}`,
+  },
+]);
 
 export const hideCodeContainerHorizontal = sprinkles({
   top: 0,
