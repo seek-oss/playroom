@@ -20,13 +20,6 @@ export const root = style([
   },
 ]);
 
-export const hidden = style([
-  sprinkles({ opacity: 0, pointerEvents: 'none' }),
-  {
-    transform: `translateY(${vars.space.xxsmall})`,
-  },
-]);
-
 export const syntaxErrorsContainer = style([
   sprinkles({
     paddingX: 'xsmall',
