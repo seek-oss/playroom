@@ -20,6 +20,13 @@ export const root = style([
   },
 ]);
 
+export const hidden = style([
+  sprinkles({ opacity: 0, pointerEvents: 'none' }),
+  {
+    transform: `translateY(${vars.space.xxsmall})`,
+  },
+]);
+
 export const syntaxErrorsContainer = style([
   sprinkles({
     paddingX: 'xsmall',
@@ -57,6 +64,13 @@ export const button = style([
     selectors: {
       [comma('&:hover', '&[data-popup-open]')]: {
         backgroundColor: colorPaletteVars.background.selection,
+      },
+      '&[aria-disabled="true"]': {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+      },
+      '&[aria-disabled="true"]:hover': {
+        backgroundColor: 'transparent',
       },
     },
   },
