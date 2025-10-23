@@ -24,6 +24,7 @@ export const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
     const descriptionId = useId();
 
     return (
+      // Todo - set delay to 0. this currently causes some tests to fail
       <BaseUITooltip.Root delay={10}>
         <BaseUITooltip.Trigger
           {...restProps}
