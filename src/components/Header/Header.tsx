@@ -299,7 +299,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
           onClick={() => dispatch({ type: 'openPlayroomDialog' })}
           shortcut={['Cmd', 'O']}
         >
-          Open...
+          Open Playroom...
         </MenuItem>
         <MenuItemLink
           icon={CopyPlus}
