@@ -1,6 +1,6 @@
 import { Menu as BaseUIMenu } from '@base-ui-components/react/menu';
 import clsx from 'clsx';
-import { type LucideIcon, Check } from 'lucide-react';
+import { type LucideIcon, ArrowUpRight, Check } from 'lucide-react';
 import {
   type AllHTMLAttributes,
   type ComponentProps,
@@ -115,6 +115,13 @@ export const MenuItemLink = ({
 
             <Text tone={disabled ? 'secondary' : undefined} truncate>
               {children}
+              {target === '_blank' && !disabled ? (
+                <ArrowUpRight
+                  height={12}
+                  width={12}
+                  className={styles.externalLink}
+                />
+              ) : null}
             </Text>
           </span>
           {shortcut && (

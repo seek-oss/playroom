@@ -93,6 +93,10 @@ export const itemLink = style([
   },
 ]);
 
+export const externalLink = style({
+  marginLeft: 3,
+});
+
 export const critical = style({
   vars: {
     [highlightColor]: colorPaletteVars.background.critical,
