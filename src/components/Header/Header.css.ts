@@ -30,11 +30,13 @@ export const menuContainer = style({
 
 export const actionsGap = 'xsmall';
 
+export const actionsReady = style({});
 export const actionsContainer = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
     gap: actionsGap,
+    transition: 'fast',
   }),
   {
     width: 'fit-content',
@@ -44,20 +46,8 @@ export const actionsContainer = style([
         display: 'none',
       },
     },
-  },
-]);
-
-export const hasCode = style({});
-export const actionsNeedingCode = style([
-  sprinkles({
-    display: 'flex',
-    alignItems: 'center',
-    gap: actionsGap,
-    transition: 'fast',
-  }),
-  {
     selectors: {
-      [`&:not(${hasCode})`]: {
+      [`&:not(${actionsReady})`]: {
         opacity: 0,
         transform: `translateX(${vars.space[actionsGap]})`,
         pointerEvents: 'none',
