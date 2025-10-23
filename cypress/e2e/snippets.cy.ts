@@ -66,7 +66,7 @@ describe('Snippets', () => {
       `);
   });
 
-  it.only('driven with keyboard', () => {
+  it('driven with keyboard', () => {
     // Open and format for insertion point
     toggleSnippets({ source: 'keyboard' });
     assertSnippetsSearchFieldIsVisible();
