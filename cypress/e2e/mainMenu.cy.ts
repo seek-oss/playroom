@@ -48,7 +48,7 @@ describe('Main Menu', () => {
   it('Open playroom', () => {
     loadPlayroom();
     openMainMenu();
-    cy.findByRole('menuitem', { name: 'Open...' }).click();
+    cy.findByRole('menuitem', { name: 'Open Playroom...' }).click();
     cy.findByRole('dialog', { name: 'Open Playroom' }).should('be.visible');
   });
 

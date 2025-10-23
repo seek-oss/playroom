@@ -506,7 +506,7 @@ export const editorPositionViaMenu = (
 
 export const assertStoredPlayrooms = (count: number) => {
   openMainMenu();
-  cy.findByRole('menuitem', { name: 'Open...' }).click();
+  cy.findByRole('menuitem', { name: 'Open Playroom...' }).click();
   cy.findByRole('dialog', { name: 'Open Playroom' }).should('be.visible');
   cy.findByRole('list', { name: 'Stored Playrooms' }).within(() => {
     cy.findAllByRole('listitem').should('have.length', count);
@@ -525,7 +525,7 @@ export const openStoredPlayroomByName = (
     }
     case 'menu': {
       openMainMenu();
-      cy.findByRole('menuitem', { name: 'Open...' }).click();
+      cy.findByRole('menuitem', { name: 'Open Playroom...' }).click();
       break;
     }
     default: {
