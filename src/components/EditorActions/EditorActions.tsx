@@ -87,7 +87,7 @@ export const EditorActions = () => {
                           hideOnMobile={false}
                         />
                       ) : (
-                        "Can't insert snippet at cursor"
+                        'Can only insert between tags'
                       )
                     }
                     icon={BetweenHorizontalStart}
