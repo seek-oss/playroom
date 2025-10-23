@@ -1,5 +1,5 @@
 import { Tooltip as BaseUITooltip } from '@base-ui-components/react';
-import { type ReactNode, useId, type ComponentProps } from 'react';
+import { type ReactNode, useId, type ComponentProps, forwardRef } from 'react';
 
 import { Text } from '../Text/Text';
 
@@ -16,36 +16,36 @@ type TooltipProps = TooltipTrigger & {
   side?: ComponentProps<typeof BaseUITooltip.Positioner>['side'];
   announceAsDescription?: boolean;
 };
-export const Tooltip = ({
-  label,
-  trigger,
-  side,
-  announceAsDescription,
-  ...restProps
-}: TooltipProps) => {
-  const descriptionId = useId();
+export const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
+  (
+    { label, trigger, side, announceAsDescription, ...restProps },
+    triggerRef
+  ) => {
+    const descriptionId = useId();
 
-  return (
-    <BaseUITooltip.Root delay={0}>
-      <BaseUITooltip.Trigger
-        {...restProps}
-        aria-describedby={announceAsDescription ? descriptionId : undefined}
-        render={trigger}
-      />
-      <BaseUITooltip.Portal>
-        <BaseUITooltip.Positioner
-          side={side}
-          sideOffset={8 /* vars.space.xsmall */}
-        >
-          <BaseUITooltip.Popup className={styles.popup} id={descriptionId}>
-            <Text size="small" weight="strong">
-              {label}
-            </Text>
-          </BaseUITooltip.Popup>
-        </BaseUITooltip.Positioner>
-      </BaseUITooltip.Portal>
-    </BaseUITooltip.Root>
-  );
-};
+    return (
+      <BaseUITooltip.Root delay={10}>
+        <BaseUITooltip.Trigger
+          {...restProps}
+          ref={triggerRef}
+          aria-describedby={announceAsDescription ? descriptionId : undefined}
+          render={trigger}
+        />
+        <BaseUITooltip.Portal>
+          <BaseUITooltip.Positioner
+            side={side}
+            sideOffset={8 /* vars.space.xsmall */}
+          >
+            <BaseUITooltip.Popup className={styles.popup} id={descriptionId}>
+              <Text size="small" weight="strong">
+                {label}
+              </Text>
+            </BaseUITooltip.Popup>
+          </BaseUITooltip.Positioner>
+        </BaseUITooltip.Portal>
+      </BaseUITooltip.Root>
+    );
+  }
+);
 
 export const SharedTooltipContext = BaseUITooltip.Provider;
