@@ -10,7 +10,9 @@ import { primaryMod } from '../CodeEditor/editorCommands';
 import { Inline } from '../Inline/Inline';
 import { KeyboardShortcut } from '../KeyboardShortcut/KeyboardShortcut';
 import { Logo } from '../Logo/Logo';
+import { ScrollContainer } from '../ScrollContainer/ScrollContainer';
 import { Secondary } from '../Secondary/Secondary';
+import { Spread } from '../Spread/Spread';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 
@@ -48,113 +50,115 @@ export const ZeroState = () => {
   const hasStoredPlayrooms = playroomEntries.length > 0;
 
   return (
-    <div className={styles.root} data-testid="zeroState">
-      <div className={styles.maxWidth}>
-        <Stack space="xxxlarge">
-          <Text size="large">
-            <Logo size={36} wordmark />
-          </Text>
+    <ScrollContainer direction="vertical">
+      <div className={styles.root} data-testid="zeroState">
+        <div className={styles.maxWidth}>
+          <Stack space="xxxlarge">
+            <Text size="large">
+              <Logo size={36} wordmark />
+            </Text>
 
-          {hasStoredPlayrooms || hasSnippets ? (
-            <Inline space="large">
-              {hasStoredPlayrooms ? (
-                <Button
-                  height="content"
-                  onClick={() => dispatch({ type: 'openPlayroomDialog' })}
-                >
-                  <Stack space="xsmall">
-                    <FolderOpen size={20} />
-                    <Inline space="xsmall">
-                      <span>Open Playroom </span>
-                      <Secondary>
-                        <KeyboardShortcut shortcut={[primaryMod, 'O']} />
-                      </Secondary>
-                    </Inline>
-                  </Stack>
-                </Button>
-              ) : null}
-              {hasSnippets ? (
-                <Button
-                  height="content"
-                  onClick={() => dispatch({ type: 'openSnippets' })}
-                >
-                  <Stack space="xsmall">
-                    <BetweenHorizontalStart size={20} />
-                    <Inline space="xsmall">
-                      <span>Insert snippet</span>
-                      <Secondary>
-                        <KeyboardShortcut shortcut={[primaryMod, 'K']} />
-                      </Secondary>
-                    </Inline>
-                  </Stack>
-                </Button>
-              ) : null}
-            </Inline>
-          ) : null}
-
-          {hasStoredPlayrooms ? (
-            <Stack space="large">
-              <div className={styles.recentTitleSpread}>
-                <Text size="large" weight="strong" as="h3">
-                  Recent Playrooms
-                </Text>
-                {playroomEntries.length > 5 ? (
-                  <button
-                    className={styles.textButton}
+            {hasStoredPlayrooms || hasSnippets ? (
+              <Inline space="large">
+                {hasStoredPlayrooms ? (
+                  <Button
+                    height="content"
                     onClick={() => dispatch({ type: 'openPlayroomDialog' })}
                   >
-                    <Text underline>View all ({playroomEntries.length})</Text>
-                  </button>
+                    <Stack space="xsmall">
+                      <FolderOpen size={20} />
+                      <Inline space="xsmall">
+                        <span>Open Playroom </span>
+                        <Secondary>
+                          <KeyboardShortcut shortcut={[primaryMod, 'O']} />
+                        </Secondary>
+                      </Inline>
+                    </Stack>
+                  </Button>
                 ) : null}
-              </div>
-              <Stack space="xlarge">
-                {playroomEntries
-                  .slice(0, 5)
-                  .map(
-                    ({
-                      id,
-                      code,
-                      themes,
-                      widths,
-                      title,
-                      editorHidden,
-                      lastModified,
-                    }) => (
-                      <button
-                        key={id}
-                        className={styles.textButton}
-                        onClick={() =>
-                          dispatch({
-                            type: 'openPlayroom',
-                            payload: {
-                              id,
-                              code,
-                              title,
-                              themes,
-                              widths,
-                              editorHidden,
-                            },
-                          })
-                        }
-                      >
-                        <Text underline>{title || 'Untitled Playroom'}</Text>
-                        <Text tone="secondary" size="small">
-                          {lastModified}
-                        </Text>
-                      </button>
-                    )
-                  )}
-              </Stack>
-            </Stack>
-          ) : null}
+                {hasSnippets ? (
+                  <Button
+                    height="content"
+                    onClick={() => dispatch({ type: 'openSnippets' })}
+                  >
+                    <Stack space="xsmall">
+                      <BetweenHorizontalStart size={20} />
+                      <Inline space="xsmall">
+                        <span>Insert snippet</span>
+                        <Secondary>
+                          <KeyboardShortcut shortcut={[primaryMod, 'K']} />
+                        </Secondary>
+                      </Inline>
+                    </Stack>
+                  </Button>
+                ) : null}
+              </Inline>
+            ) : null}
 
-          <Text size="large">
-            {hasStoredPlayrooms || hasSnippets
-              ? '...or just start coding'
-              : 'Start designing with code'}
-          </Text>
-        </Stack>
+            {hasStoredPlayrooms ? (
+              <Stack space="large">
+                <Spread space="small" alignY="center">
+                  <Text size="large" weight="strong" as="h3">
+                    Recent Playrooms
+                  </Text>
+                  {playroomEntries.length > 5 ? (
+                    <button
+                      className={styles.textButton}
+                      onClick={() => dispatch({ type: 'openPlayroomDialog' })}
+                    >
+                      <Text underline>View all ({playroomEntries.length})</Text>
+                    </button>
+                  ) : null}
+                </Spread>
+                <Stack space="xlarge">
+                  {playroomEntries
+                    .slice(0, 5)
+                    .map(
+                      ({
+                        id,
+                        code,
+                        themes,
+                        widths,
+                        title,
+                        editorHidden,
+                        lastModified,
+                      }) => (
+                        <button
+                          key={id}
+                          className={styles.textButton}
+                          onClick={() =>
+                            dispatch({
+                              type: 'openPlayroom',
+                              payload: {
+                                id,
+                                code,
+                                title,
+                                themes,
+                                widths,
+                                editorHidden,
+                              },
+                            })
+                          }
+                        >
+                          <Text underline>{title || 'Untitled Playroom'}</Text>
+                          <Text tone="secondary" size="small">
+                            {lastModified}
+                          </Text>
+                        </button>
+                      )
+                    )}
+                </Stack>
+              </Stack>
+            ) : null}
+
+            <Text size="large">
+              {hasStoredPlayrooms || hasSnippets
+                ? '...or just start coding'
+                : 'Start designing with code'}
+            </Text>
+          </Stack>
+        </div>
       </div>
-    </div>
+    </ScrollContainer>
   );
 };
