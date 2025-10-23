@@ -14,13 +14,11 @@ type TooltipProps = TooltipTrigger & {
   trigger: ComponentProps<typeof BaseUITooltip.Trigger>['render'];
   label: ReactNode;
   side?: ComponentProps<typeof BaseUITooltip.Positioner>['side'];
-  delay?: ComponentProps<typeof BaseUITooltip.Root>['delay'];
   announceAsDescription?: boolean;
 };
 export const Tooltip = ({
   label,
   trigger,
-  delay,
   side,
   announceAsDescription,
   ...restProps
@@ -28,7 +26,7 @@ export const Tooltip = ({
   const descriptionId = useId();
 
   return (
-    <BaseUITooltip.Root delay={delay}>
+    <BaseUITooltip.Root delay={0}>
       <BaseUITooltip.Trigger
         {...restProps}
         aria-describedby={announceAsDescription ? descriptionId : undefined}

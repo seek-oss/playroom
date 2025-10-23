@@ -95,7 +95,6 @@ export const PreviewTiles = ({
                   </span>
                   <Tooltip
                     label={`Open “${title || 'Untitled Playroom'}”`}
-                    delay={500}
                     side="bottom"
                     trigger={
                       <button
