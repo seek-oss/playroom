@@ -74,7 +74,6 @@ export const MenuItem = ({
     <Tooltip
       label={disabledReason}
       announceAsDescription
-      delay={500}
       side="right"
       trigger={item}
     />
@@ -142,7 +141,6 @@ export const MenuItemLink = ({
     <Tooltip
       label={disabledReason}
       announceAsDescription
-      delay={500}
       side="right"
       trigger={item}
     />
