@@ -1,18 +1,17 @@
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
+import clsx from 'clsx';
 import {
   BetweenHorizontalStart,
   BrushCleaningIcon,
   type LucideIcon,
 } from 'lucide-react';
-import { useContext, type ButtonHTMLAttributes } from 'react';
+import { useContext, type ButtonHTMLAttributes, type ReactNode } from 'react';
 
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
+import { isValidLocation } from '../../utils/cursor';
 import { primaryMod } from '../CodeEditor/editorCommands';
-import {
-  KeyboardShortcut,
-  type KeyCombination,
-} from '../KeyboardShortcut/KeyboardShortcut';
+import { KeyboardShortcut } from '../KeyboardShortcut/KeyboardShortcut';
 import { Snippets } from '../Snippets/Snippets';
 import { Text } from '../Text/Text';
 import { SharedTooltipContext, Tooltip } from '../Tooltip/Tooltip';
@@ -22,36 +21,58 @@ import * as styles from './EditorActions.css';
 interface EditorActionButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   name: string;
-  shortcut: KeyCombination;
+  label: ReactNode;
   icon: LucideIcon;
 }
 
-const EditorActionButton = ({
-  onClick,
-  name,
-  shortcut,
-  icon: Icon,
-  ...restProps
-}: EditorActionButtonProps) => (
-  <Tooltip
-    label={<KeyboardShortcut shortcut={shortcut} hideOnMobile={false} />}
-    trigger={
-      <button {...restProps} onClick={onClick} className={styles.button}>
-        <Icon size={16} />
-        <Text>{name}</Text>
-      </button>
+const EditorActionButton = (props: EditorActionButtonProps) => {
+  const { onClick, name, label, icon: Icon, disabled, ...restProps } = props;
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (disabled) {
+      e.preventDefault();
+      return;
     }
-  />
-);
+    onClick?.(e);
+  };
+
+  return (
+    <Tooltip
+      label={label}
+      trigger={
+        <button
+          {...restProps}
+          onClick={handleClick}
+          aria-disabled={disabled}
+          className={styles.button}
+        >
+          <Icon size={16} />
+          <Text>{name}</Text>
+        </button>
+      }
+    />
+  );
+};
 
 export const EditorActions = () => {
-  const [{ hasSyntaxError }] = useContext(StoreContext);
+  const [{ hasSyntaxError, snippetsOpen, id, code, cursorPosition }] =
+    useContext(StoreContext);
   const { runCommand } = useEditor();
   const hasSnippets = snippets && snippets.length > 0;
 
+  const validCursorPosition = isValidLocation({
+    code,
+    cursor: cursorPosition,
+  });
+
   return (
     <SharedTooltipContext>
-      <div className={styles.root}>
+      <div
+        className={clsx({
+          [styles.root]: true,
+          [styles.hidden]: !id && !snippetsOpen,
+        })}
+      >
         {hasSyntaxError ? (
           <div className={styles.syntaxErrorsContainer}>
             <Text tone="critical">
@@ -66,8 +87,18 @@ export const EditorActions = () => {
                   <EditorActionButton
                     {...triggerProps}
                     name="Insert snippet"
-                    shortcut={[primaryMod, 'K']}
+                    label={
+                      validCursorPosition ? (
+                        <KeyboardShortcut
+                          shortcut={[primaryMod, 'K']}
+                          hideOnMobile={false}
+                        />
+                      ) : (
+                        "Can't insert snippet at cursor"
+                      )
+                    }
                     icon={BetweenHorizontalStart}
+                    disabled={!validCursorPosition}
                   />
                 )}
               />
@@ -75,7 +106,12 @@ export const EditorActions = () => {
             <EditorActionButton
               onClick={() => runCommand('formatCode')}
               name="Tidy"
-              shortcut={[primaryMod, 'S']}
+              label={
+                <KeyboardShortcut
+                  shortcut={[primaryMod, 'S']}
+                  hideOnMobile={false}
+                />
+              }
               icon={BrushCleaningIcon}
             />
           </>
