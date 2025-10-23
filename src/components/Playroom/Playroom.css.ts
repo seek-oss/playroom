@@ -66,7 +66,7 @@ export const editorOrientation = styleVariants({
   vertical: [
     {
       vars: {
-        [editorWidth]: `clamp(150px, ${editorSize}, 90vw)`,
+        [editorWidth]: `clamp(300px, ${editorSize}, 90vw)`,
       },
       gridTemplateAreas: newline(
         '"header header"',
