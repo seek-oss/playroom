@@ -280,7 +280,7 @@ const reducer = (state: State, action: Action): State => {
       if (!validCursorPosition) {
         return {
           ...state,
-          editorErrorMessage: "Can't insert snippet at cursor",
+          editorErrorMessage: 'Can only insert between tags',
         };
       }
 
