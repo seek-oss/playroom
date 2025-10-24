@@ -1,10 +1,12 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { FolderOpen, Trash } from 'lucide-react';
+import { FolderOpen, Link, Trash } from 'lucide-react';
 import { type RefObject, useContext, useMemo, useRef, useState } from 'react';
 
-import { decompressParams } from '../../../utils';
+import { createUrl, decompressParams } from '../../../utils';
+import playroomConfig from '../../config';
 import { StoreContext } from '../../contexts/StoreContext';
 import { compileJsx } from '../../utils/compileJsx';
+import { useCopy } from '../../utils/useCopy';
 import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
 import { ContextMenu, ContextMenuItem } from '../ContextMenu/ContextMenu';
@@ -18,6 +20,12 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import * as styles from './PreviewTiles.css';
 
 const scale = 0.15;
+
+const getBaseUrl = () =>
+  window.location.href
+    .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
+    .split('index.html')[0];
+
 export const PreviewTiles = ({
   onSelect,
   scrollingRef,
@@ -29,6 +37,7 @@ export const PreviewTiles = ({
     useContext(StoreContext);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const { copying, onCopyClick } = useCopy();
 
   const playroomEntries = useMemo(
     () =>
@@ -51,6 +60,7 @@ export const PreviewTiles = ({
           widths,
           themeName,
           editorHidden,
+          dataParam: storedPlayroom.dataParam,
         };
       }),
     [storedPlayrooms, selectedThemes]
@@ -74,80 +84,110 @@ export const PreviewTiles = ({
         aria-label="Stored Playrooms"
       >
         {playroomEntries.map(
-          ({ id, code, themes, widths, themeName, title, editorHidden }) => (
-            <ContextMenu
-              key={id}
-              trigger={
-                <li
-                  className={styles.tile}
-                  style={assignInlineVars({
-                    [styles.scaleVar]: `${scale}`,
-                  })}
+          ({
+            id,
+            code,
+            themes,
+            widths,
+            themeName,
+            title,
+            editorHidden,
+            dataParam: _dataParam,
+          }) => {
+            const playroomUrl = createUrl({
+              baseUrl: getBaseUrl(),
+              code,
+              themes,
+              widths,
+              title,
+              editorHidden,
+              paramType: playroomConfig.paramType,
+            });
+
+            return (
+              <ContextMenu
+                key={id}
+                trigger={
+                  <li
+                    className={styles.tile}
+                    style={assignInlineVars({
+                      [styles.scaleVar]: `${scale}`,
+                    })}
+                  >
+                    <Iframe
+                      tabIndex={-1}
+                      className={styles.iframe}
+                      src={frameSrc({ themeName, code: compileJsx(code) })}
+                      intersectionRootRef={scrollingRef}
+                    />
+                    <span className={styles.titleContainer}>
+                      <Text truncate>{title || 'Untitled Playroom'}</Text>
+                    </span>
+                    <Tooltip
+                      label={`Open "${title || 'Untitled Playroom'}"`}
+                      side="bottom"
+                      trigger={
+                        <button
+                          className={styles.button}
+                          aria-label={`Open "${title || 'Untitled Playroom'}"`}
+                          onClick={() => {
+                            dispatch({
+                              type: 'openPlayroom',
+                              payload: {
+                                id,
+                                code,
+                                title,
+                                themes,
+                                widths,
+                                editorHidden,
+                              },
+                            });
+                            onSelect();
+                          }}
+                        />
+                      }
+                    />
+                  </li>
+                }
+              >
+                <ContextMenuItem
+                  icon={FolderOpen}
+                  onClick={() => {
+                    dispatch({
+                      type: 'openPlayroom',
+                      payload: {
+                        id,
+                        code,
+                        title,
+                        themes,
+                        widths,
+                        editorHidden,
+                      },
+                    });
+                    onSelect();
+                  }}
                 >
-                  <Iframe
-                    tabIndex={-1}
-                    className={styles.iframe}
-                    src={frameSrc({ themeName, code: compileJsx(code) })}
-                    intersectionRootRef={scrollingRef}
-                  />
-                  <span className={styles.titleContainer}>
-                    <Text truncate>{title || 'Untitled Playroom'}</Text>
-                  </span>
-                  <Tooltip
-                    label={`Open “${title || 'Untitled Playroom'}”`}
-                    side="bottom"
-                    trigger={
-                      <button
-                        className={styles.button}
-                        aria-label={`Open “${title || 'Untitled Playroom'}”`}
-                        onClick={() => {
-                          dispatch({
-                            type: 'openPlayroom',
-                            payload: {
-                              id,
-                              code,
-                              title,
-                              themes,
-                              widths,
-                              editorHidden,
-                            },
-                          });
-                          onSelect();
-                        }}
-                      />
-                    }
-                  />
-                </li>
-              }
-            >
-              <ContextMenuItem
-                icon={FolderOpen}
-                onClick={() => {
-                  dispatch({
-                    type: 'openPlayroom',
-                    payload: {
-                      id,
-                      code,
-                      title,
-                      themes,
-                      widths,
-                      editorHidden,
-                    },
-                  });
-                  onSelect();
-                }}
-              >
-                Open
-              </ContextMenuItem>
-              <ContextMenuItem
-                icon={Trash}
-                tone="critical"
-                onClick={() => setConfirmDeleteId(id)}
-              >
-                Delete
-              </ContextMenuItem>
-            </ContextMenu>
-          )
+                  Open
+                </ContextMenuItem>
+                <ContextMenuItem
+                  icon={!copying ? Link : undefined}
+                  closeOnClick={false}
+                  onClick={() => onCopyClick(playroomUrl)}
+                  tone={copying ? 'positive' : 'neutral'}
+                  active={!copying}
+                >
+                  {copying ? 'Copied!' : 'Copy link'}
+                </ContextMenuItem>
+                <ContextMenuItem
+                  icon={Trash}
+                  tone="critical"
+                  onClick={() => setConfirmDeleteId(id)}
+                >
+                  Delete
+                </ContextMenuItem>
+              </ContextMenu>
+            );
+          }
         )}
       </ul>
       <Dialog

@@ -6,7 +6,8 @@ import type { ComponentProps } from 'react';
 import { menuIconSize } from '../Menu/Menu';
 import { Text } from '../Text/Text';
 
-import * as styles from '../Menu/Menu.css';
+import * as styles from './ContextMenu.css';
+import * as menuStyles from '../Menu/Menu.css';
 
 export const ContextMenuItem = ({
   onClick,
@@ -15,24 +16,27 @@ export const ContextMenuItem = ({
   disabled,
   tone = 'neutral',
   icon: Icon,
+  active = true,
 }: {
   onClick: ComponentProps<typeof BaseUIContextMenu.Item>['onClick'];
   children: ComponentProps<typeof BaseUIContextMenu.Item>['children'];
   closeOnClick?: ComponentProps<typeof BaseUIContextMenu.Item>['closeOnClick'];
   disabled?: ComponentProps<typeof BaseUIContextMenu.Item>['disabled'];
-  tone?: 'neutral' | 'critical';
+  tone?: 'neutral' | 'critical' | 'positive';
   icon?: LucideIcon;
+  active?: boolean;
 }) => (
   <BaseUIContextMenu.Item
     className={clsx({
-      [styles.item]: true,
-      [styles.critical]: tone === 'critical',
+      [menuStyles.item]: true,
+      [menuStyles.critical]: tone === 'critical',
     })}
     onClick={onClick}
     closeOnClick={closeOnClick}
     disabled={disabled}
+    style={!active ? { pointerEvents: 'none' } : undefined}
   >
-    <span className={styles.itemLeft}>
+    <span className={menuStyles.itemLeft}>
       {Icon ? <Icon size={menuIconSize} /> : null}
       <Text tone={tone}>{children}</Text>
     </span>
@@ -40,7 +44,7 @@ export const ContextMenuItem = ({
 );
 
 export const ContextMenuSeparator = () => (
-  <BaseUIContextMenu.Separator className={styles.separator} />
+  <BaseUIContextMenu.Separator className={menuStyles.separator} />
 );
 
 type Props = {
@@ -59,7 +63,9 @@ export const ContextMenu = ({
     <BaseUIContextMenu.Trigger render={trigger} />
     <BaseUIContextMenu.Portal>
       <BaseUIContextMenu.Positioner align={align}>
-        <BaseUIContextMenu.Popup className={styles.popup}>
+        <BaseUIContextMenu.Popup
+          className={clsx(menuStyles.popup, styles.contextMenu)}
+        >
           {children}
         </BaseUIContextMenu.Popup>
       </BaseUIContextMenu.Positioner>
