@@ -82,6 +82,8 @@ export const MenuItem = ({
   );
 };
 
+export const linkArrowSize = 12;
+
 type MenuItemLinkProps = MenuItemProps &
   AllHTMLAttributes<HTMLAnchorElement> & {
     href: string;
@@ -116,8 +118,8 @@ export const MenuItemLink = ({
               {children}
               {target === '_blank' && !disabled ? (
                 <ArrowUpRight
-                  height={12}
-                  width={12}
+                  height={linkArrowSize}
+                  width={linkArrowSize}
                   className={styles.externalLink}
                 />
               ) : null}
