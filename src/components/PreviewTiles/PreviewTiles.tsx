@@ -64,7 +64,6 @@ export const PreviewTiles = ({
           widths,
           themeName,
           editorHidden,
-          dataParam: storedPlayroom.dataParam,
         };
       }),
     [storedPlayrooms, selectedThemes]
@@ -88,16 +87,7 @@ export const PreviewTiles = ({
         aria-label="Stored Playrooms"
       >
         {playroomEntries.map(
-          ({
-            id,
-            code,
-            themes,
-            widths,
-            themeName,
-            title,
-            editorHidden,
-            dataParam: _dataParam,
-          }) => {
+          ({ id, code, themes, widths, themeName, title, editorHidden }) => {
             const playroomUrl = createUrl({
               baseUrl: getBaseUrl(),
               code,
