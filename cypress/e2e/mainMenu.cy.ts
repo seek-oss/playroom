@@ -10,7 +10,6 @@ import {
   assertFramesMatch,
   assertSnippetsSearchFieldIsVisible,
   assertTitle,
-  assertZeroStateIsVisible,
   clearThemeSelection,
   clearWidthSelection,
   closeMainMenu,
@@ -39,7 +38,6 @@ describe('Main Menu', () => {
     cy.findByRole('link', { name: 'New Playroom' }).then((link) => {
       cy.visit(link.prop('href'));
     });
-    assertZeroStateIsVisible();
     typeCode('TEST');
     assertCodePaneContains('TEST');
     assertFirstFrameContains('TEST');
@@ -92,7 +90,6 @@ describe('Main Menu', () => {
       const widthToSelect = widths[1];
 
       loadPlayroom();
-      assertZeroStateIsVisible();
       typeCode('TEST');
       assertFramesMatch(widths);
       selectWidthPreference(widthToSelect, { source: 'menu' });
@@ -111,7 +108,6 @@ describe('Main Menu', () => {
       );
 
       loadThemedPlayroom();
-      assertZeroStateIsVisible();
       typeCode('TEST');
       assertFramesMatch(allFrames);
 

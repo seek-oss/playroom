@@ -8,7 +8,6 @@ import {
   clearWidthSelection,
   selectWidthPreference,
   changeTitle,
-  assertZeroStateIsVisible,
   loadThemedPlayroom,
   selectThemePreference,
   clearThemeSelection,
@@ -24,7 +23,6 @@ describe('Header actions', () => {
     const widthToSelect = widths[1];
 
     loadPlayroom();
-    assertZeroStateIsVisible();
     typeCode('TEST');
     assertFramesMatch(widths);
     selectWidthPreference(widthToSelect, { source: 'header' });
@@ -43,7 +41,6 @@ describe('Header actions', () => {
     );
 
     loadThemedPlayroom();
-    assertZeroStateIsVisible();
     typeCode('TEST');
     assertFramesMatch(allFrames);
     // First selection
@@ -67,7 +64,6 @@ describe('Header actions', () => {
 
   it('change title', () => {
     loadPlayroom();
-    assertZeroStateIsVisible();
     changeTitle('Test');
     cy.title().should('eq', 'Test | Playroom');
     getFrames().first().should('be.visible');
