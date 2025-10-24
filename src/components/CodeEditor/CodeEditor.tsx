@@ -5,6 +5,7 @@ import {
   useEffect,
   useCallback,
   type Dispatch,
+  useState,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import 'codemirror/lib/codemirror.css';
@@ -19,7 +20,9 @@ import {
 } from '../../contexts/StoreContext';
 import { validateCode } from '../../utils/compileJsx';
 import { hints } from '../../utils/componentsToHints';
+import { isValidLocation } from '../../utils/cursor';
 import { isMac } from '../../utils/formatting';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 import { UnControlled as ReactCodeMirror } from './CodeMirror2';
 import { editorCommandList } from './editorCommands';
@@ -98,6 +101,11 @@ export const CodeEditor = ({
 }: Props) => {
   const { registerEditor } = useEditor();
   const previewSnippetsCode = useRef(false);
+  const cursorErrorMarkerRef = useRef<HTMLButtonElement | null>(null);
+  const invalidSnippetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+  const [invalidSnippetLocation, setInvalidSnippetLocation] = useState(false);
   const editorInstanceRef = useRef<Editor | null>(null);
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
     null
@@ -123,13 +131,55 @@ export const CodeEditor = ({
   );
 
   useEffect(() => {
+    if (invalidSnippetLocation) {
+      invalidSnippetTimeoutRef.current = setTimeout(
+        () => setInvalidSnippetLocation(false),
+        2000
+      );
+    }
+
+    return () => {
+      if (invalidSnippetTimeoutRef.current) {
+        clearTimeout(invalidSnippetTimeoutRef.current);
+      }
+    };
+  }, [invalidSnippetLocation]);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (editorInstanceRef && editorInstanceRef.current) {
         const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
 
         if (cmdOrCtrl && e.key === 'k') {
           e.preventDefault();
-          dispatch({ type: 'openSnippets' });
+
+          const validCursorPosition = isValidLocation({
+            code: editorInstanceRef.current.getValue(),
+            cursor: editorInstanceRef.current.getCursor(),
+          });
+
+          if (validCursorPosition) {
+            dispatch({ type: 'openSnippets' });
+          } else if (cursorErrorMarkerRef.current) {
+            const cursorPos = editorInstanceRef.current.cursorCoords(
+              true,
+              'local'
+            );
+            const scrollOffset = editorInstanceRef.current.getScrollInfo();
+            const gutterWidth = editorInstanceRef.current
+              .getGutterElement()
+              .getBoundingClientRect().width;
+            cursorErrorMarkerRef.current.style.top = `${
+              cursorPos.top - scrollOffset.top
+            }px`;
+            cursorErrorMarkerRef.current.style.left = `${
+              cursorPos.left + gutterWidth - scrollOffset.left
+            }px`;
+            cursorErrorMarkerRef.current.style.height = `${
+              cursorPos.bottom - cursorPos.top
+            }px`;
+            setInvalidSnippetLocation(true);
+          }
         }
 
         // Prevent browser keyboard shortcuts when the search/replace input is focused
@@ -223,77 +273,99 @@ export const CodeEditor = ({
   }, [highlightLineNumber]);
 
   return (
-    <ReactCodeMirror
-      editorDidMount={(editorInstance) => {
-        editorInstanceRef.current = editorInstance;
-        editorInstanceRef.current.setValue(code);
-        validateCodeInEditor(editorInstance, code, dispatch);
-        if (!editorHidden) {
-          setCursorPosition(cursorPosition);
-        }
-        registerEditor(editorInstance);
-      }}
-      onChange={(editorInstance, data, newCode) => {
-        if (editorInstance.hasFocus() && !previewCode) {
-          validateCodeInEditor(editorInstance, newCode, dispatch);
-          debouncedChange(newCode);
-        }
-      }}
-      onCursorActivity={(editor) => {
-        setTimeout(() => {
-          if (!editor.somethingSelected() && editor.hasFocus()) {
-            const { line, ch } = editor.getCursor();
-
-            dispatch({
-              type: 'updateCursorPosition',
-              payload: { position: { line, ch }, code: editor.getValue() },
-            });
+    <>
+      <ReactCodeMirror
+        editorDidMount={(editorInstance) => {
+          editorInstanceRef.current = editorInstance;
+          editorInstanceRef.current.setValue(code);
+          validateCodeInEditor(editorInstance, code, dispatch);
+          if (!editorHidden) {
+            setCursorPosition(cursorPosition);
           }
-        });
-      }}
-      options={{
-        mode: 'jsx',
-        autoCloseTags: true,
-        autoCloseBrackets: true,
-        theme: 'neo',
-        gutters: ['errorGutter', 'CodeMirror-linenumbers', styles.foldGutter],
-        hintOptions: { schemaInfo: hints },
-        viewportMargin: 50,
-        lineNumbers: true,
-        styleActiveLine: !previewCode,
-        cursorScrollMargin: 100,
-        foldGutter: {
-          gutter: styles.foldGutter,
-          indicatorOpen: styles.foldOpen,
-          indicatorFolded: styles.foldFolded,
-        },
-        foldOptions: {
-          widget: '\u2026',
-          minFoldSize: 1,
-        },
-        extraKeys: {
-          Tab: (cm) => {
-            if (cm.somethingSelected()) {
-              cm.indentSelection('add');
-            } else {
-              const indent = cm.getOption('indentUnit') as number;
-              const spaces = Array(indent + 1).join(' ');
-              cm.replaceSelection(spaces);
+          registerEditor(editorInstance);
+        }}
+        onChange={(editorInstance, data, newCode) => {
+          if (editorInstance.hasFocus() && !previewCode) {
+            validateCodeInEditor(editorInstance, newCode, dispatch);
+            debouncedChange(newCode);
+          }
+        }}
+        onCursorActivity={(editor) => {
+          setInvalidSnippetLocation(false);
+          setTimeout(() => {
+            if (!editor.somethingSelected() && editor.hasFocus()) {
+              const { line, ch } = editor.getCursor();
+
+              dispatch({
+                type: 'updateCursorPosition',
+                payload: { position: { line, ch }, code: editor.getValue() },
+              });
             }
+          });
+        }}
+        options={{
+          mode: 'jsx',
+          autoCloseTags: true,
+          autoCloseBrackets: true,
+          theme: 'neo',
+          gutters: ['errorGutter', 'CodeMirror-linenumbers', styles.foldGutter],
+          hintOptions: { schemaInfo: hints },
+          viewportMargin: 50,
+          lineNumbers: true,
+          styleActiveLine: !previewCode,
+          cursorScrollMargin: 100,
+          foldGutter: {
+            gutter: styles.foldGutter,
+            indicatorOpen: styles.foldOpen,
+            indicatorFolded: styles.foldFolded,
           },
-          'Ctrl-Space': completeIfInTag,
-          "'<'": completeAfter,
-          "'/'": completeIfAfterLt,
-          "' '": completeIfInTag,
-          "'='": completeIfInTag,
-          'Alt-G': false, // override default keybinding
-          'Alt-F': false, // override default keybinding
-          'Shift-Ctrl-R': false, // override default keybinding
-          'Cmd-Option-F': false, // override default keybinding
-          'Shift-Cmd-Option-F': false, // override default keybinding
-          ...editorCommands,
-        },
-      }}
-    />
+          foldOptions: {
+            widget: '\u2026',
+            minFoldSize: 1,
+          },
+          extraKeys: {
+            Esc: invalidSnippetLocation
+              ? () => setInvalidSnippetLocation(false)
+              : false,
+            Tab: (cm) => {
+              if (cm.somethingSelected()) {
+                cm.indentSelection('add');
+              } else {
+                const indent = cm.getOption('indentUnit') as number;
+                const spaces = Array(indent + 1).join(' ');
+                cm.replaceSelection(spaces);
+              }
+            },
+            'Ctrl-Space': completeIfInTag,
+            "'<'": completeAfter,
+            "'/'": completeIfAfterLt,
+            "' '": completeIfInTag,
+            "'='": completeIfInTag,
+            'Alt-G': false, // override default keybinding
+            'Alt-F': false, // override default keybinding
+            'Shift-Ctrl-R': false, // override default keybinding
+            'Cmd-Option-F': false, // override default keybinding
+            'Shift-Cmd-Option-F': false, // override default keybinding
+            ...editorCommands,
+          },
+        }}
+      />
+      <Tooltip
+        open={invalidSnippetLocation}
+        label="Can only insert between tags"
+        ref={cursorErrorMarkerRef}
+        side="bottom"
+        sideOffset={2}
+        trigger={
+          <span
+            style={{
+              position: 'absolute',
+              pointerEvents: 'none',
+            }}
+            tabIndex={-1}
+          />
+        }
+      />
+    </>
   );
 };
