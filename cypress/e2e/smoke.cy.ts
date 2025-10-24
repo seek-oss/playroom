@@ -1,6 +1,5 @@
 import {
   assertPreviewContains,
-  assertZeroStateIsVisible,
   getFrames,
   loadPlayroom,
   typeCode,
@@ -9,7 +8,6 @@ import {
 describe('Smoke', () => {
   it('zero state, edit, and interactive frames', () => {
     loadPlayroom();
-    assertZeroStateIsVisible();
     typeCode('TEST');
     getFrames().first().click('center');
   });

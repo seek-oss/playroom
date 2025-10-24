@@ -48,6 +48,7 @@ export default () => {
       previewEditorCode,
       title,
       id,
+      storedPlayrooms,
     },
     dispatch,
   ] = useContext(StoreContext);
@@ -63,6 +64,7 @@ export default () => {
   const isVerticalEditor = editorOrientation === 'vertical';
   const editorSize = isVerticalEditor ? editorWidth : editorHeight;
   const editorVisible = panelsVisible && !editorHidden;
+  const hasNoStoredPlayrooms = Object.entries(storedPlayrooms).length === 0;
 
   useEffect(() => {
     if (
@@ -98,7 +100,7 @@ export default () => {
 
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
-          {id || previewEditorCode ? (
+          {hasNoStoredPlayrooms || id || previewEditorCode ? (
             <Frames code={previewRenderCode || code} />
           ) : (
             <ZeroState />
