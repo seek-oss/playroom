@@ -1,5 +1,5 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { FolderOpen, Link, Trash } from 'lucide-react';
+import { ExternalLink, FolderOpen, Link, Trash } from 'lucide-react';
 import { type RefObject, useContext, useMemo, useRef, useState } from 'react';
 
 import { createUrl, decompressParams } from '../../../utils';
@@ -9,7 +9,11 @@ import { compileJsx } from '../../utils/compileJsx';
 import { useCopy } from '../../utils/useCopy';
 import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
-import { ContextMenu, ContextMenuItem } from '../ContextMenu/ContextMenu';
+import {
+  ContextMenu,
+  ContextMenuItem,
+  ContextMenuItemLink,
+} from '../ContextMenu/ContextMenu';
 import { Dialog } from '../Dialog/Dialog';
 import Iframe from '../Frames/Iframe';
 import frameSrc from '../Frames/frameSrc';
@@ -178,6 +182,9 @@ export const PreviewTiles = ({
                 >
                   {copying ? 'Copied!' : 'Copy link'}
                 </ContextMenuItem>
+                <ContextMenuItemLink icon={ExternalLink} href={playroomUrl}>
+                  Open in new tab
+                </ContextMenuItemLink>
                 <ContextMenuItem
                   icon={Trash}
                   tone="critical"

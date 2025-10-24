@@ -1,9 +1,9 @@
 import { ContextMenu as BaseUIContextMenu } from '@base-ui-components/react';
 import clsx from 'clsx';
-import type { LucideIcon } from 'lucide-react';
-import type { ComponentProps } from 'react';
+import { type LucideIcon, ArrowUpRight } from 'lucide-react';
+import type { AllHTMLAttributes, ComponentProps } from 'react';
 
-import { menuIconSize } from '../Menu/Menu';
+import { linkArrowSize, menuIconSize } from '../Menu/Menu';
 import { Text } from '../Text/Text';
 
 import * as styles from './ContextMenu.css';
@@ -41,6 +41,60 @@ export const ContextMenuItem = ({
       <Text tone={tone}>{children}</Text>
     </span>
   </BaseUIContextMenu.Item>
+);
+
+type ContextMenuItemLinkProps = Omit<
+  ComponentProps<typeof BaseUIContextMenu.Item>,
+  'render' | 'className'
+> &
+  Omit<AllHTMLAttributes<HTMLAnchorElement>, 'active'> & {
+    href: string;
+    icon?: LucideIcon;
+    tone?: 'neutral' | 'critical' | 'positive';
+  };
+
+export const ContextMenuItemLink = ({
+  onClick,
+  children,
+  href,
+  target = '_blank',
+  disabled,
+  tone = 'neutral',
+  icon: Icon,
+  ...restProps
+}: ContextMenuItemLinkProps) => (
+  <BaseUIContextMenu.Item
+    className={clsx({
+      [menuStyles.item]: true,
+      [menuStyles.critical]: tone === 'critical',
+    })}
+    disabled={disabled}
+    render={
+      <a
+        href={disabled ? undefined : href}
+        className={menuStyles.itemLink}
+        target={target}
+        rel={target === '_blank' ? 'noopener,noreferrer' : undefined}
+        role="link"
+        onClick={onClick}
+        {...(restProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        <span className={menuStyles.itemLeft}>
+          {Icon ? <Icon size={menuIconSize} /> : null}
+          <Text tone={tone}>
+            {children}
+            {target === '_blank' && !disabled ? (
+              <ArrowUpRight
+                height={linkArrowSize}
+                width={linkArrowSize}
+                className={menuStyles.externalLink}
+              />
+            ) : null}
+          </Text>
+        </span>
+      </a>
+    }
+  />
 );
 
 export const ContextMenuSeparator = () => (
