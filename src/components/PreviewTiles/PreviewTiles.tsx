@@ -134,19 +134,25 @@ export const PreviewTiles = ({
                         <button
                           className={styles.button}
                           aria-label={`Open "${title || 'Untitled Playroom'}"`}
-                          onClick={() => {
-                            dispatch({
-                              type: 'openPlayroom',
-                              payload: {
-                                id,
-                                code,
-                                title,
-                                themes,
-                                widths,
-                                editorHidden,
-                              },
-                            });
-                            onSelect();
+                          onClick={(event) => {
+                            const isCmdOrCtrl = event.metaKey || event.ctrlKey;
+
+                            if (isCmdOrCtrl) {
+                              window.open(playroomUrl, '_blank');
+                            } else {
+                              dispatch({
+                                type: 'openPlayroom',
+                                payload: {
+                                  id,
+                                  code,
+                                  title,
+                                  themes,
+                                  widths,
+                                  editorHidden,
+                                },
+                              });
+                              onSelect();
+                            }
                           }}
                         />
                       }
