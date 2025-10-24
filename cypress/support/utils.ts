@@ -534,5 +534,7 @@ export const openStoredPlayroomByName = (
   }
 
   cy.findByRole('dialog', { name: 'Open Playroom' }).should('be.visible');
-  cy.findByRole('button', { name: `Open “${name}”` }).click();
+  cy.findByRole('dialog', { name: 'Open Playroom' }).within(() => {
+    cy.findByRole('button', { name: `Open "${name}"` }).click();
+  });
 };
