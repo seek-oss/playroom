@@ -10,8 +10,11 @@ import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
 import { isValidLocation } from '../../utils/cursor';
 import { primaryMod } from '../CodeEditor/editorCommands';
+import { editorErrorDelay } from '../CodeEditor/editorErrorDelay';
+import { ErrorMessage } from '../EditorActions/EditorError';
 import { KeyboardShortcut } from '../KeyboardShortcut/KeyboardShortcut';
 import { Snippets } from '../Snippets/Snippets';
+import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 import { SharedTooltipContext, Tooltip } from '../Tooltip/Tooltip';
 
@@ -54,7 +57,10 @@ const EditorActionButton = (props: EditorActionButtonProps) => {
 };
 
 export const EditorActions = () => {
-  const [{ hasSyntaxError, code, cursorPosition }] = useContext(StoreContext);
+  const [
+    { hasSyntaxError, syntaxErrorLineNumber, code, cursorPosition },
+    dispatch,
+  ] = useContext(StoreContext);
   const { runCommand } = useEditor();
   const hasSnippets = snippets && snippets.length > 0;
 
@@ -65,51 +71,64 @@ export const EditorActions = () => {
 
   return (
     <SharedTooltipContext>
-      <div className={styles.root}>
-        {hasSyntaxError ? (
-          <div className={styles.syntaxErrorsContainer}>
-            <Text tone="critical">
-              Code has syntax errors. Fix them to use editor actions.
-            </Text>
-          </div>
-        ) : (
-          <>
-            {hasSnippets ? (
-              <Snippets
-                trigger={(triggerProps) => (
-                  <EditorActionButton
-                    {...triggerProps}
-                    name="Insert snippet"
-                    label={
-                      validCursorPosition ? (
-                        <KeyboardShortcut
-                          shortcut={[primaryMod, 'K']}
-                          hideOnMobile={false}
-                        />
-                      ) : (
-                        'Can only insert between tags'
-                      )
-                    }
-                    icon={BetweenHorizontalStart}
-                    disabled={!validCursorPosition}
-                  />
-                )}
-              />
-            ) : null}
-            <EditorActionButton
-              onClick={() => runCommand('formatCode')}
-              name="Tidy"
-              label={
-                <KeyboardShortcut
-                  shortcut={[primaryMod, 'S']}
-                  hideOnMobile={false}
+      <Stack space="small" align="center">
+        <ErrorMessage
+          delay={editorErrorDelay}
+          action={
+            syntaxErrorLineNumber
+              ? () =>
+                  dispatch({
+                    type: 'updateCursorPosition',
+                    payload: {
+                      position: { line: syntaxErrorLineNumber, ch: 0 },
+                    },
+                  })
+              : undefined
+          }
+          actionLabel="Jump to line"
+        >
+          {hasSyntaxError ? 'Code contains syntax errors.' : null}
+        </ErrorMessage>
+        <div
+          className={styles.root}
+          style={hasSyntaxError ? { pointerEvents: 'none' } : undefined}
+        >
+          {hasSnippets ? (
+            <Snippets
+              trigger={(triggerProps) => (
+                <EditorActionButton
+                  {...triggerProps}
+                  name="Insert snippet"
+                  label={
+                    validCursorPosition ? (
+                      <KeyboardShortcut
+                        shortcut={[primaryMod, 'K']}
+                        hideOnMobile={false}
+                      />
+                    ) : (
+                      'Can only insert between tags'
+                    )
+                  }
+                  icon={BetweenHorizontalStart}
+                  disabled={!validCursorPosition}
                 />
-              }
-              icon={BrushCleaningIcon}
+              )}
             />
-          </>
-        )}
-      </div>
+          ) : null}
+          <EditorActionButton
+            onClick={() => runCommand('formatCode')}
+            name="Tidy"
+            label={
+              <KeyboardShortcut
+                shortcut={[primaryMod, 'S']}
+                hideOnMobile={false}
+              />
+            }
+            icon={BrushCleaningIcon}
+            disabled={hasSyntaxError}
+          />
+        </div>
+      </Stack>
     </SharedTooltipContext>
   );
 };

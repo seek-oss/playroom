@@ -1,4 +1,4 @@
-import { style, globalStyle, keyframes } from '@vanilla-extract/css';
+import { style, globalStyle } from '@vanilla-extract/css';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
@@ -9,37 +9,26 @@ export const insertionPoint = style({
   backgroundColor: colorPaletteVars.background.selection,
 });
 
-const fadeIn = keyframes({
-  '90%': {
-    opacity: 0,
-  },
-  '100%': {
-    opacity: 1,
-  },
-});
 export const errorMarker = style([
   sprinkles({
-    borderRadius: 'medium',
+    borderRadius: 'small',
     position: 'relative',
     textAlign: 'right',
     marginRight: 'xxsmall',
     paddingRight: 'xsmall',
     opacity: 0,
+    transition: 'fast',
   }),
   {
-    ':hover': {
-      cursor: 'help',
-    },
     backgroundColor: colorPaletteVars.background.critical,
     color: colorPaletteVars.foreground.critical,
     minWidth: minimumLineNumberWidth,
-    animationName: fadeIn,
-    animationDuration: '1s',
-    animationTimingFunction: 'ease',
-    animationIterationCount: 1,
-    animationFillMode: 'forwards',
   },
 ]);
+
+export const showErrorMarker = style({
+  opacity: 1,
+});
 
 export const foldGutter = style([
   sprinkles({

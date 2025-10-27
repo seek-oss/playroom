@@ -85,6 +85,7 @@ interface State {
   snippetsOpen: boolean;
   openDialogOpen: boolean;
   hasSyntaxError?: boolean;
+  syntaxErrorLineNumber?: number;
   cursorPosition: CursorPosition;
   editorHidden: boolean;
   editorOrientation: EditorOrientation;
@@ -114,7 +115,10 @@ export type Action =
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
   | { type: 'resetErrorMessage' }
-  | { type: 'setHasSyntaxError'; payload: { value: boolean } }
+  | {
+      type: 'setHasSyntaxError';
+      payload: { value: boolean; lineNumber?: number };
+    }
   | {
       type: 'updateColorScheme';
       payload: { colorScheme: ColorScheme };
@@ -210,10 +214,11 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case 'setHasSyntaxError': {
-      const { value } = action.payload;
+      const { value, lineNumber } = action.payload;
       return {
         ...state,
         hasSyntaxError: value,
+        syntaxErrorLineNumber: value ? lineNumber : undefined,
       };
     }
 
@@ -456,7 +461,7 @@ const reducer = (state: State, action: Action): State => {
         state.code.trim().length === 0 &&
         (state.title || '').trim().length === 0;
 
-      if (hasNotChanged || hasNothingToSave) {
+      if (hasNotChanged || hasNothingToSave || state.hasSyntaxError) {
         return state;
       }
 

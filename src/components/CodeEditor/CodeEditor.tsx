@@ -26,6 +26,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 
 import { UnControlled as ReactCodeMirror } from './CodeMirror2';
 import { editorCommandList } from './editorCommands';
+import { editorErrorDelay } from './editorErrorDelay';
 import {
   completeAfter,
   completeIfAfterLt,
@@ -72,17 +73,17 @@ const validateCodeInEditor = (
     editorInstance.clearGutter('errorGutter');
     dispatch({ type: 'setHasSyntaxError', payload: { value: false } });
   } else {
-    const errorMessage = maybeValid.message;
     const lineNumber = maybeValid.loc?.line;
-    dispatch({ type: 'setHasSyntaxError', payload: { value: true } });
-
-    if (lineNumber) {
-      const marker = document.createElement('div');
-      marker.setAttribute('class', styles.errorMarker);
-      marker.setAttribute('title', errorMessage);
-      marker.innerText = String(lineNumber);
-      editorInstance.setGutterMarker(lineNumber - 1, 'errorGutter', marker);
-    }
+    dispatch({
+      type: 'setHasSyntaxError',
+      payload: {
+        value: true,
+        lineNumber:
+          typeof lineNumber === 'number'
+            ? lineNumber - 1 // Offset the wrapping fragment
+            : undefined,
+      },
+    });
   }
 };
 
@@ -105,13 +106,23 @@ export const CodeEditor = ({
   const invalidSnippetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
+  const errorGutterTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
   const [invalidSnippetLocation, setInvalidSnippetLocation] = useState(false);
   const editorInstanceRef = useRef<Editor | null>(null);
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
     null
   );
-  const [{ cursorPosition, highlightLineNumber }, dispatch] =
-    useContext(StoreContext);
+  const [
+    {
+      cursorPosition,
+      syntaxErrorLineNumber,
+      hasSyntaxError,
+      highlightLineNumber,
+    },
+    dispatch,
+  ] = useContext(StoreContext);
 
   const debouncedChange = useDebouncedCallback(
     (newCode: string) => onChange(newCode),
@@ -129,6 +140,32 @@ export const CodeEditor = ({
     },
     [previewCode]
   );
+
+  useEffect(() => {
+    if (hasSyntaxError && typeof syntaxErrorLineNumber === 'number') {
+      const marker = document.createElement('div');
+      marker.setAttribute('class', styles.errorMarker);
+      marker.innerText = String(syntaxErrorLineNumber + 1); // Offset the wrapping fragment
+      editorInstanceRef.current?.setGutterMarker(
+        syntaxErrorLineNumber,
+        'errorGutter',
+        marker
+      );
+
+      // Using timeout to transition in after delay, aligned with error message
+      errorGutterTimeoutRef.current = setTimeout(() => {
+        marker.classList.add(styles.showErrorMarker);
+      }, editorErrorDelay);
+    }
+
+    return () => {
+      editorInstanceRef.current?.clearGutter('errorGutter');
+      if (errorGutterTimeoutRef.current) {
+        clearTimeout(errorGutterTimeoutRef.current);
+        errorGutterTimeoutRef.current = null;
+      }
+    };
+  }, [hasSyntaxError, syntaxErrorLineNumber]);
 
   useEffect(() => {
     if (invalidSnippetLocation) {
