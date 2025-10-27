@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 import playroomConfig from '../../config';
+import { useGlobalKeyboardShortcutsForWindow } from '../globalKeyboardShortcuts';
 
 interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
   src: string;
@@ -49,6 +50,12 @@ export default forwardRef<HTMLIFrameElement, IframeProps>(function Iframe(
       }
     }
   }, [renderedSrc]);
+
+  useGlobalKeyboardShortcutsForWindow(
+    loaded && iframeRef.current?.contentWindow
+      ? iframeRef.current?.contentWindow
+      : null
+  );
 
   return (
     <iframe

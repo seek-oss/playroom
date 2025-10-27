@@ -30,7 +30,6 @@ import {
   type ComponentProps,
   type ReactNode,
   useContext,
-  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -44,7 +43,6 @@ import {
 import availableWidths from '../../configModules/widths';
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
-import { isMac } from '../../utils/formatting';
 import { createUrlForData, resolveDataFromUrl } from '../../utils/params';
 import { useCopy } from '../../utils/useCopy';
 import usePreviewUrl from '../../utils/usePreviewUrl';
@@ -77,6 +75,7 @@ import { Text } from '../Text/Text';
 import { ThemeSelector } from '../ThemeSelector/ThemeSelector';
 import { Title } from '../Title/Title';
 import { SharedTooltipContext, Tooltip } from '../Tooltip/Tooltip';
+import { useGlobalKeyboardShortcutsForWindow } from '../globalKeyboardShortcuts';
 import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Header.css';
@@ -237,40 +236,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
     })
   );
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
-
-      if (cmdOrCtrl) {
-        switch (e.key) {
-          case 'o': {
-            e.preventDefault();
-            dispatch({ type: 'openPlayroomDialog' });
-            break;
-          }
-          case '\\': {
-            e.preventDefault();
-            dispatch({ type: 'togglePanelVisibility' });
-            break;
-          }
-          case 's': {
-            e.preventDefault();
-            if (!editorHidden) {
-              runCommand('formatCode');
-            }
-            break;
-          }
-        }
-        return;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [dispatch, editorHidden, runCommand]);
+  useGlobalKeyboardShortcutsForWindow(window);
 
   return (
     <>
