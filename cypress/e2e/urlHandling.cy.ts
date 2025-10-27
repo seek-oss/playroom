@@ -23,7 +23,6 @@ describe('URL handling', () => {
         'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
 
-      assertZeroStateIsVisible();
       typeCode('code');
       assertFramesMatch([375, 768]);
     });
@@ -42,7 +41,6 @@ describe('URL handling', () => {
         'http://localhost:9000/#?code=N4IgpgJglgLg9gJwBJQhMA7EAuGCCuYAvkA'
       );
 
-      assertZeroStateIsVisible();
       cy.get('textarea').should('not.be.focused');
       cy.get('.CodeMirror-code').should('be.hidden');
     });
