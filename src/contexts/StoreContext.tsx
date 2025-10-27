@@ -38,9 +38,11 @@ const store = localforage.createInstance({
 
 const defaultEditorSize = '40%';
 const defaultOrientation = 'horizontal';
+const defaultOpenLayout = 'grid';
 
 export type EditorOrientation = 'horizontal' | 'vertical';
 export type ColorScheme = 'light' | 'dark' | 'system';
+export type OpenLayout = 'grid' | 'list';
 
 const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
   document.documentElement[
@@ -96,6 +98,7 @@ interface State {
   selectedThemes: typeof availableThemes;
   selectedWidths: Widths;
   colorScheme: ColorScheme;
+  openLayout: OpenLayout;
   storedPlayrooms: Record<string, StoredPlayroom>;
 }
 
@@ -141,6 +144,10 @@ export type Action =
     }
   | { type: 'resetSelectedWidths' }
   | { type: 'updateTitle'; payload: { title: string } }
+  | {
+      type: 'updateOpenLayout';
+      payload: { layout: OpenLayout };
+    }
   | {
       type: 'openPlayroom';
       payload: {
@@ -353,6 +360,16 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'updateOpenLayout': {
+      const { layout } = action.payload;
+      store.setItem('openLayout', layout);
+
+      return {
+        ...state,
+        openLayout: layout,
+      };
+    }
+
     case 'updateEditorHeight': {
       const { size } = action.payload;
 
@@ -518,6 +535,7 @@ const initialState: State = {
       : [],
   selectedWidths: playroomConfig.defaultVisibleWidths || [],
   colorScheme: 'system',
+  openLayout: defaultOpenLayout,
   storedPlayrooms: {},
 };
 
@@ -564,6 +582,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       store.getItem<State['selectedWidths']>('visibleWidths'),
       store.getItem<State['selectedThemes']>('visibleThemes'),
       store.getItem<State['colorScheme']>('colorScheme'),
+      store.getItem<State['openLayout']>('openLayout'),
       store.getItem<State['storedPlayrooms']>('playrooms'),
     ]).then(
       ([
@@ -573,6 +592,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         storedSelectedWidths,
         storedSelectedThemes,
         colorScheme,
+        openLayout,
         storedPlayrooms,
       ]) => {
         const selectedWidths = widthsFromUrl || storedSelectedWidths;
@@ -604,6 +624,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
             ...(themesEnabled && selectedThemes ? { selectedThemes } : {}),
             ...(selectedWidths ? { selectedWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
+            ...(openLayout ? { openLayout } : {}),
             ...(storedPlayrooms
               ? { storedPlayrooms: sortStoredPlayrooms(storedPlayrooms) }
               : {}),

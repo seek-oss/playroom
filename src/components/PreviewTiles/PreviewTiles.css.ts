@@ -3,42 +3,57 @@ import { calc } from '@vanilla-extract/css-utils';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
+import { dialogScrollContentGutter } from '../Header/Header.css';
+
+const outlineSize = '2px';
 
 export const scaleVar = createVar();
 
-const tileCount = createVar();
-const tileGap = 'medium';
-export const tiles = style([
+export const container = style([
   sprinkles({
-    gap: tileGap,
-    margin: 'none',
-    padding: 'none',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: dialogScrollContentGutter,
   }),
   {
+    flex: 1,
+    minHeight: 0,
+  },
+]);
+
+const gridItemCount = createVar();
+const gridGap = 'medium';
+export const grid = style([
+  sprinkles({
+    gap: gridGap,
+    margin: 'none',
+  }),
+  {
+    padding: outlineSize,
     vars: {
-      [tileCount]: '1',
+      [gridItemCount]: '1',
     },
     display: 'grid',
-    gridTemplateColumns: `repeat(${tileCount}, 1fr)`,
+    gridTemplateColumns: `repeat(${gridItemCount}, 1fr)`,
     '@media': {
       ['screen and (min-width: 500px)']: {
         vars: {
-          [tileCount]: '2',
+          [gridItemCount]: '2',
         },
       },
       ['screen and (min-width: 800px)']: {
         vars: {
-          [tileCount]: '3',
+          [gridItemCount]: '3',
         },
       },
       ['screen and (min-width: 1200px)']: {
         vars: {
-          [tileCount]: '4',
+          [gridItemCount]: '4',
         },
       },
       ['screen and (min-width: 1600px)']: {
         vars: {
-          [tileCount]: '5',
+          [gridItemCount]: '5',
         },
       },
     },
@@ -47,7 +62,8 @@ export const tiles = style([
 
 const borderColor = colorPaletteVars.border.standard;
 const borderRadius = 'medium';
-export const tile = style([
+
+export const gridItem = style([
   sprinkles({
     position: 'relative',
     borderRadius,
@@ -59,7 +75,7 @@ export const tile = style([
   },
 ]);
 
-export const iframe = style([
+export const gridItemIframe = style([
   sprinkles({
     position: 'absolute',
     inset: 0,
@@ -77,7 +93,7 @@ export const iframe = style([
   },
 ]);
 
-export const titleContainer = style([
+export const gridItemTitle = style([
   sprinkles({
     position: 'absolute',
     left: 0,
@@ -94,7 +110,7 @@ export const titleContainer = style([
   },
 ]);
 
-export const button = style([
+export const gridItemButton = style([
   sprinkles({
     position: 'absolute',
     inset: 0,
@@ -104,6 +120,52 @@ export const button = style([
     padding: 'none',
   }),
   {
+    background: 'transparent',
+    outline: `1px solid ${borderColor}`,
+    selectors: {
+      ['&:hover']: {
+        outline: `${outlineSize} solid ${colorPaletteVars.border.accent}`,
+      },
+      ['&:focus-visible']: {
+        outline: `${outlineSize} solid ${colorPaletteVars.outline.focus}`,
+        outlineOffset: 2,
+      },
+    },
+  },
+]);
+
+export const list = style([
+  sprinkles({
+    display: 'flex',
+    flexDirection: 'column',
+    margin: 'none',
+    gap: 'small',
+    padding: 'xxxsmall',
+  }),
+]);
+
+export const listItem = style([
+  sprinkles({
+    position: 'relative',
+    borderRadius,
+    boxSizing: 'border-box',
+  }),
+  {
+    listStyle: 'none',
+  },
+]);
+
+export const listItemButton = style([
+  sprinkles({
+    borderRadius,
+    border: 0,
+    appearance: 'none',
+    padding: 'medium',
+    boxSizing: 'border-box',
+  }),
+  {
+    width: '100%',
+    textAlign: 'left',
     background: 'transparent',
     outline: `1px solid ${borderColor}`,
     selectors: {

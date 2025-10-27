@@ -92,11 +92,11 @@ export const menuButton = style([
   },
 ]);
 
-const dialogScrollContentGutter = 'small';
+export const dialogScrollContentGutter = 'small';
 export const openDialogContent = style([
   sprinkles({
-    overflow: 'auto',
-    padding: dialogScrollContentGutter,
+    display: 'flex',
+    flexDirection: 'column',
   }),
   {
     margin: calc(vars.space[dialogScrollContentGutter]).negate().toString(),
