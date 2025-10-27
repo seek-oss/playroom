@@ -241,15 +241,26 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
 
-      if (cmdOrCtrl && e.key === 'o') {
-        e.preventDefault();
-        dispatch({ type: 'openPlayroomDialog' });
-        return;
-      }
-
-      if (cmdOrCtrl && e.key === '\\') {
-        e.preventDefault();
-        dispatch({ type: 'togglePanelVisibility' });
+      if (cmdOrCtrl) {
+        switch (e.key) {
+          case 'o': {
+            e.preventDefault();
+            dispatch({ type: 'openPlayroomDialog' });
+            break;
+          }
+          case '\\': {
+            e.preventDefault();
+            dispatch({ type: 'togglePanelVisibility' });
+            break;
+          }
+          case 's': {
+            e.preventDefault();
+            if (!editorHidden) {
+              runCommand('formatCode');
+            }
+            break;
+          }
+        }
         return;
       }
     };
@@ -259,7 +270,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [dispatch]);
+  }, [dispatch, editorHidden, runCommand]);
 
   return (
     <>
