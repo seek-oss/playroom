@@ -54,6 +54,7 @@ import { ButtonIcon, ButtonIconLink } from '../ButtonIcon/ButtonIcon';
 import {
   type EditorCommand,
   editorCommandList,
+  primaryMod,
 } from '../CodeEditor/editorCommands';
 import { Dialog } from '../Dialog/Dialog';
 import { Heading } from '../Heading/Heading';
@@ -297,7 +298,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
         <MenuItem
           icon={FolderOpen}
           onClick={() => dispatch({ type: 'openPlayroomDialog' })}
-          shortcut={['Cmd', 'O']}
+          shortcut={[primaryMod, 'O']}
         >
           Open Playroom...
         </MenuItem>
@@ -344,7 +345,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
           {hasSnippets && (
             <MenuItem
               icon={BetweenHorizontalStart}
-              shortcut={['Cmd', 'K']}
+              shortcut={[primaryMod, 'K']}
               disabled={hasSyntaxError}
               disabledReason="Code has syntax errors preventing snippets"
               onClick={() => dispatch({ type: 'openSnippets' })}
@@ -406,7 +407,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
         <MenuItem
           icon={panelsVisible ? Eye : EyeClosed}
           onClick={() => dispatch({ type: 'togglePanelVisibility' })}
-          shortcut={['Cmd', '\\']}
+          shortcut={[primaryMod, '\\']}
         >
           Show/Hide UI
         </MenuItem>

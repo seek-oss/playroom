@@ -17,7 +17,7 @@ const wordToSymbolMap: Record<string, string> = {
 
 const convertShortcutForPlatform = (shortcut: KeyCombination) => {
   if (!mac) {
-    return shortcut.join(' +  ');
+    return shortcut.join('+');
   }
 
   return shortcut.map((key) => wordToSymbolMap[key] || key).join('');
@@ -35,6 +35,8 @@ export const KeyboardShortcut = ({
       aria-hidden
       className={clsx({
         [styles.shortcut]: true,
+        [styles.mac]: mac,
+        [styles.win]: !mac,
         [styles.hideOnMobile]: hideOnMobile,
       })}
     >
