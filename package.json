@@ -138,7 +138,7 @@
     "@types/node": "^18.11.9",
     "@types/webpack-env": "^1.18.8",
     "concurrently": "^9.1.2",
-    "cypress": "^15.3.0",
+    "cypress": "^15.5.0",
     "eslint": "^9.23.0",
     "eslint-config-seek": "^14.4.0",
     "husky": "^9.1.7",
