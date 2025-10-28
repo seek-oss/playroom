@@ -38,6 +38,7 @@ describe('Main Menu', () => {
     cy.findByRole('link', { name: 'New Playroom' }).then((link) => {
       cy.visit(link.prop('href'));
     });
+    assertCodePaneContains('');
     typeCode('TEST');
     assertCodePaneContains('TEST');
     assertFirstFrameContains('TEST');
