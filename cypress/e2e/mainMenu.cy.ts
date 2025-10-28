@@ -181,6 +181,7 @@ describe('Main Menu', () => {
         <div>First line</div>
         <div>Second line</div>
         <div>Third line</div>`);
+      assertCodePaneLineCount(3);
       openMainMenuSubMenu('Editor actions');
       cy.findByRole('menuitem', { name: 'Toggle comment' }).click();
       assertCodePaneContains(dedent`
@@ -196,6 +197,7 @@ describe('Main Menu', () => {
         <div>Second line</div>
         <div>Third line</div>
       `);
+      assertCodePaneLineCount(3);
       selectToEndOfLine();
       openMainMenuSubMenu('Editor actions');
       cy.findByRole('menuitem', { name: 'Wrap selection in tag' }).click();
@@ -213,6 +215,7 @@ describe('Main Menu', () => {
         <div>Second line</div>
         <div>Third line</div>
       `);
+      assertCodePaneLineCount(3);
       typeCode('{rightArrow}');
       openMainMenuSubMenu('Editor actions');
       cy.findByRole('menuitem', { name: 'Select next occurrence' }).click();
@@ -231,6 +234,7 @@ describe('Main Menu', () => {
         <div>Third line</div>
         <div>Forth line</div>
       `);
+      assertCodePaneLineCount(4);
       jumpToLine(3, { source: 'menu' });
       typeCode('c');
       assertCodePaneContains(dedent`
@@ -247,6 +251,7 @@ describe('Main Menu', () => {
         <div>Second line</div>
         <div>Third line</div>
       `);
+      assertCodePaneLineCount(3);
       typeCode('{downArrow}');
       openMainMenuSubMenu('Editor actions');
       cy.findByRole('menuitem', { name: 'Swap line up' }).click();
@@ -263,6 +268,7 @@ describe('Main Menu', () => {
         <div>Second line</div>
         <div>Third line</div>
       `);
+      assertCodePaneLineCount(3);
       openMainMenuSubMenu('Editor actions');
       cy.findByRole('menuitem', { name: 'Swap line down' }).click();
       assertCodePaneContains(dedent`
@@ -278,6 +284,7 @@ describe('Main Menu', () => {
         <div>Second line</div>
         <div>Third line</div>
       `);
+      assertCodePaneLineCount(3);
       openMainMenuSubMenu('Editor actions');
       cy.findByRole('menuitem', { name: 'Duplicate line up' }).click();
       assertCodePaneContains(dedent`
@@ -294,6 +301,7 @@ describe('Main Menu', () => {
         <div>Second line</div>
         <div>Third line</div>
       `);
+      assertCodePaneLineCount(3);
       typeCode('{downArrow}');
       openMainMenuSubMenu('Editor actions');
       cy.findByRole('menuitem', { name: 'Duplicate line down' }).click();
@@ -311,6 +319,7 @@ describe('Main Menu', () => {
         <div>Second line</div>
         <div>Third line</div>
       `);
+      assertCodePaneLineCount(3);
       typeCode('{downArrow}');
       openMainMenuSubMenu('Editor actions');
       cy.findByRole('menuitem', {
@@ -330,6 +339,7 @@ describe('Main Menu', () => {
         <div>Second line</div>
         <div>Third line</div>
       `);
+      assertCodePaneLineCount(3);
       typeCode('{downArrow}');
       openMainMenuSubMenu('Editor actions');
       cy.findByRole('menuitem', {
