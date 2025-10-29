@@ -75,6 +75,22 @@ describe('formatting code', () => {
       code: `<div>\n  <h1>Title</h1>\n</div>\n<div>\n  <h1>Title Two</h1>\n</div>\n`,
     });
   });
+
+  it('should handle JSX comment', () => {
+    const code = `{/* test comment */}`;
+    expect(formatCode({ code, cursor: { line: 0, ch: 0 } })).toEqual({
+      code,
+      cursor: { line: 0, ch: 0 },
+    });
+  });
+
+  it('should handle JSX comment and preserve cursor position', () => {
+    const code = `{/* test comment */}`;
+    expect(formatCode({ code, cursor: { line: 0, ch: 20 } })).toEqual({
+      code,
+      cursor: { line: 0, ch: 20 },
+    });
+  });
 });
 
 describe('format and insert', () => {

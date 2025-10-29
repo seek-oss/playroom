@@ -62,8 +62,15 @@ export const cursorOffsetToPosition = (
 export const wrapJsx = (code: string) => `<>\n${code}\n</>`;
 
 // Removes `<>\n`  and `\n</>` and unindents the two spaces due to the wrapping
-export const unwrapJsx = (code: string) =>
-  code.replace(/\n {2}/g, '\n').slice(3, -5);
+export const unwrapJsx = (code: string) => {
+  if (code.startsWith('<>\n')) {
+    // Multi-line: remove indentation, then unwrap
+    return code.replace(/\n {2}/g, '\n').slice(3, -5);
+  }
+
+  // Single-line: just remove wrapper tags
+  return code.slice(2).replace(/<\/>;?\n?$/, '');
+};
 
 // Handles running prettier, ensuring multiple root level JSX values are valid
 // by wrapping the code in <>{code}</> then finally removing the layer of indentation
@@ -104,10 +111,12 @@ export const formatCode = ({
     formatResult.cursorOffset
   );
 
+  const isMultiLine = formatResult.formatted.startsWith('<>\n');
+
   return {
     code: formattedCode,
     cursor: {
-      line: position.line - WRAPPED_LINE_OFFSET,
+      line: position.line - (isMultiLine ? WRAPPED_LINE_OFFSET : 0),
       ch: position.ch === 0 ? 0 : position.ch - WRAPPED_INDENT_OFFSET,
     },
   };
