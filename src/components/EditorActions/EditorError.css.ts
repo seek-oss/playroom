@@ -8,13 +8,14 @@ import { vars } from '../../css/vars.css';
 
 export const show = style({});
 
-const gutter = vars.space.xsmall;
+const verticalGutter = 'xxsmall';
+const horizontalGutter = 'small';
 
 export const message = style([
   sprinkles({
     transition: 'medium',
-    padding: 'xxsmall',
-    paddingLeft: 'small',
+    paddingY: verticalGutter,
+    paddingX: horizontalGutter,
     borderRadius: 'medium',
     userSelect: 'none',
     display: 'flex',
@@ -30,9 +31,10 @@ export const message = style([
     wordBreak: 'break-word',
     whiteSpace: 'pre-line',
     outline: `1px solid ${light.foreground.critical}`,
+    height: vars.buttonSizes.small,
     selectors: {
       [`&:not(${show})`]: {
-        transform: `translateY(${gutter})`,
+        transform: `translateY(${vars.space.xsmall})`,
         transition: 'none',
         opacity: 0,
       },
@@ -53,11 +55,18 @@ export const button = style([
     fontWeight: 'strong',
     border: 0,
     paddingX: 'small',
-    paddingY: 'xxsmall',
+    paddingY: 'xxxsmall',
+    display: 'flex',
+    alignItems: 'center',
     userSelect: 'none',
   }),
   {
     background: light.foreground.critical,
     color: dark.foreground.neutral,
+    height: vars.buttonSizes.small,
+    marginRight: calc(vars.space[horizontalGutter])
+      .subtract(vars.space[verticalGutter])
+      .negate()
+      .toString(),
   },
 ]);

@@ -75,7 +75,7 @@ export const EditorActions = () => {
         <ErrorMessage
           delay={editorErrorDelay}
           action={
-            syntaxErrorLineNumber
+            typeof syntaxErrorLineNumber === 'number'
               ? () =>
                   dispatch({
                     type: 'updateCursorPosition',
