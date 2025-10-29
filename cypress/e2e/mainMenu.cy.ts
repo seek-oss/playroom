@@ -28,9 +28,10 @@ describe('Main Menu', () => {
     cy.findByRole('link', { name: 'New Playroom' }).then((link) => {
       cy.visit(link.prop('href')).then(() => {
         assertCodePaneContains('');
-        typeCode('TEST');
-        assertCodePaneContains('TEST');
-        assertFirstFrameContains('TEST');
+        typeCode('TEST').then(() => {
+          assertCodePaneContains('TEST');
+          assertFirstFrameContains('TEST');
+        });
       });
     });
   });
