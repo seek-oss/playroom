@@ -37,11 +37,11 @@ describe('Main Menu', () => {
     openMainMenu();
     cy.findByRole('link', { name: 'New Playroom' }).then((link) => {
       cy.visit(link.prop('href'));
+      assertCodePaneContains('');
+      typeCode('TEST');
+      assertCodePaneContains('TEST');
+      assertFirstFrameContains('TEST');
     });
-    assertCodePaneContains('');
-    typeCode('TEST');
-    assertCodePaneContains('TEST');
-    assertFirstFrameContains('TEST');
   });
 
   it('Open playroom', () => {
