@@ -83,6 +83,15 @@ export const openMainMenuSubMenu = (name: string) => {
   openMainMenu();
   // Clicking submenu triggers is having issues on second menu visit in Cypress only, using enter instead
   cy.findByRole('menuitem', { name }).type(`{enter}`);
+  cy.findByRole('menuitem', { name }).should(
+    'have.attr',
+    'aria-expanded',
+    'true'
+  );
+  cy.findByRole('menuitem', { name }).then((el) => {
+    const subMenuId = el.attr('aria-controls')?.replace(/:/g, '\\:'); // escape colons for Cypress
+    cy.get(`#${subMenuId}`).should('be.visible');
+  });
 };
 
 const toggleFramesMenuForSource = (
