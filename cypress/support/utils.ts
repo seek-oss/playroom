@@ -57,7 +57,7 @@ export const selectHint = (index?: number) => {
 };
 
 export const formatCode = (options: {
-  source: 'keyboard' | 'editorAction' | 'menu';
+  source: 'keyboard' | 'editorAction';
 }) => {
   switch (options.source) {
     case 'keyboard': {
@@ -65,12 +65,7 @@ export const formatCode = (options: {
       break;
     }
     case 'editorAction': {
-      cy.findByRole('button', { name: 'Tidy' }).click();
-      break;
-    }
-    case 'menu': {
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', { name: 'Tidy' }).click();
+      cy.findByRole('button', { name: 'Tidy code' }).click();
       break;
     }
     default: {
@@ -92,6 +87,11 @@ export const openMainMenuSubMenu = (name: string) => {
     const subMenuId = el.attr('aria-controls')?.replace(/:/g, '\\:'); // escape colons for Cypress
     cy.get(`#${subMenuId}`).should('be.visible');
   });
+};
+
+export const openEditorActionsMenu = () => {
+  cy.findByRole('button', { name: 'More actions' }).click();
+  cy.findByRole('menu', { name: 'More actions' }).should('be.visible');
 };
 
 const toggleFramesMenuForSource = (
@@ -399,7 +399,7 @@ export const typeInSearchField = (text: string) =>
 
 export const findInCode = (
   term: string,
-  options: { source: 'keyboard' | 'menu' }
+  options: { source: 'keyboard' | 'editorAction' }
 ) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
@@ -409,9 +409,8 @@ export const findInCode = (
       typeCode(cmdPlus('f'));
       break;
     }
-    case 'menu': {
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', { name: 'Find' }).click();
+    case 'editorAction': {
+      cy.findByRole('button', { name: 'Find' }).click();
       break;
     }
     default: {
@@ -425,7 +424,7 @@ export const findInCode = (
 export const replaceInCode = (
   term: string,
   replaceWith: string | null,
-  options: { source: 'keyboard' | 'menu' }
+  options: { source: 'keyboard' | 'editorAction' }
 ) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
@@ -435,8 +434,8 @@ export const replaceInCode = (
       typeCode(cmdPlus('alt+f'));
       break;
     }
-    case 'menu': {
-      openMainMenuSubMenu('Editor actions');
+    case 'editorAction': {
+      openEditorActionsMenu();
       cy.findByRole('menuitem', { name: 'Find and replace' }).click();
       break;
     }
@@ -453,7 +452,7 @@ export const replaceInCode = (
 
 export const jumpToLine = (
   line: number,
-  options: { source: 'keyboard' | 'menu' }
+  options: { source: 'keyboard' | 'editorAction' }
 ) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
@@ -463,8 +462,8 @@ export const jumpToLine = (
       typeCode(cmdPlus('g'));
       break;
     }
-    case 'menu': {
-      openMainMenuSubMenu('Editor actions');
+    case 'editorAction': {
+      openEditorActionsMenu();
       cy.findByRole('menuitem', { name: 'Jump to line number' }).click();
       break;
     }

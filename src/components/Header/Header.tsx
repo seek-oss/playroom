@@ -1,15 +1,12 @@
-import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import clsx from 'clsx';
 import {
   type LucideIcon,
-  CodeXml,
   Sun,
   Moon,
   Monitor,
   PanelLeft,
   PanelBottom,
   Frame as FrameIcon,
-  BetweenHorizontalStart,
   File,
   CopyPlus,
   FolderOpen,
@@ -41,7 +38,6 @@ import {
   themesEnabled,
 } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
-import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
 import { createUrlForData, resolveDataFromUrl } from '../../utils/params';
 import { useCopy } from '../../utils/useCopy';
@@ -49,11 +45,7 @@ import usePreviewUrl from '../../utils/usePreviewUrl';
 import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
 import { ButtonIcon, ButtonIconLink } from '../ButtonIcon/ButtonIcon';
-import {
-  type EditorCommand,
-  editorCommandList,
-  primaryMod,
-} from '../CodeEditor/editorCommands';
+import { primaryMod } from '../CodeEditor/editorCommands';
 import { Dialog } from '../Dialog/Dialog';
 import { Heading } from '../Heading/Heading';
 import { Inline } from '../Inline/Inline';
@@ -209,16 +201,13 @@ const FramesMenu = () => {
 
 const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
-  const inputCommandRef = useRef<EditorCommand | null>(null);
   const openDialogContentRef = useRef<HTMLDivElement>(null);
-  const { runCommand } = useEditor();
   const [
     {
       editorOrientation,
       editorHidden,
       panelsVisible,
       colorScheme,
-      hasSyntaxError,
       openDialogOpen,
       code,
       id,
@@ -226,7 +215,6 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
     dispatch,
   ] = useContext(StoreContext);
 
-  const hasSnippets = snippets && snippets.length > 0;
   const hasCode = code.trim().length > 0;
   const { title, ...params } = resolveDataFromUrl();
   const duplicateUrl = createUrlForData(
@@ -241,12 +229,6 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
   return (
     <>
       <Menu
-        onClose={() => {
-          if (inputCommandRef.current) {
-            runCommand(inputCommandRef.current);
-            inputCommandRef.current = null;
-          }
-        }}
         ref={menuTriggerRef}
         width="small"
         trigger={
@@ -306,51 +288,6 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
         >
           <FramesMenu />
         </Menu>
-
-        <Menu
-          trigger={
-            <MenuItem
-              icon={CodeXml}
-              disabled={editorHidden}
-              disabledReason="Editor is hidden"
-            >
-              Editor actions
-            </MenuItem>
-          }
-          width="content"
-        >
-          {hasSnippets && (
-            <MenuItem
-              icon={BetweenHorizontalStart}
-              shortcut={[primaryMod, 'K']}
-              disabled={hasSyntaxError}
-              disabledReason="Code has syntax errors preventing snippets"
-              onClick={() => dispatch({ type: 'openSnippets' })}
-            >
-              Insert snippet
-            </MenuItem>
-          )}
-          {editorCommandList.map(({ command, label, shortcut, icon: Icon }) => (
-            <MenuItem
-              key={command}
-              shortcut={shortcut}
-              onClick={() => {
-                inputCommandRef.current = command;
-              }}
-              icon={Icon}
-              disabled={command === 'formatCode' && hasSyntaxError}
-              disabledReason={
-                command === 'formatCode'
-                  ? 'Code has syntax errors preventing format'
-                  : undefined
-              }
-            >
-              {label}
-            </MenuItem>
-          ))}
-        </Menu>
-
-        <MenuSeparator />
 
         <Menu
           trigger={<MenuItem icon={LayoutPanelLeft}>Editor Position</MenuItem>}

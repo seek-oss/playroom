@@ -1,32 +1,22 @@
-import dedent from 'dedent';
-
 import type { Widths } from '../../src/configModules/widths';
 import {
   assertCodePaneContains,
-  assertCodePaneLineCount,
-  assertCodePaneSearchMatchesCount,
   assertColourMode,
   assertFirstFrameContains,
   assertFramesMatch,
-  assertSnippetsSearchFieldIsVisible,
   assertTitle,
   clearThemeSelection,
   clearWidthSelection,
   closeMainMenu,
   cmdPlus,
   editorPositionViaMenu,
-  findInCode,
-  formatCode,
   getCodeEditor,
-  jumpToLine,
   loadPlayroom,
   loadPlayroomWithAppearance,
   loadThemedPlayroom,
   openMainMenu,
   openMainMenuSubMenu,
-  replaceInCode,
   selectThemePreference,
-  selectToEndOfLine,
   selectWidthPreference,
   typeCode,
 } from '../support/utils';
@@ -133,240 +123,20 @@ describe('Main Menu', () => {
     });
   });
 
-  describe('Editor actions', () => {
-    it('Insert snippet', () => {
+  describe('Editor position', () => {
+    it('Hidden', () => {
       loadPlayroom();
-      typeCode('<div>Initial <span>code');
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', { name: 'Insert snippet' }).click();
-      assertSnippetsSearchFieldIsVisible();
-      assertCodePaneLineCount(8);
+      editorPositionViaMenu('hidden');
+      getCodeEditor().should('not.be.visible');
+      cy.findByRole('button', { name: 'Show code' }).should('be.visible');
     });
 
-    it('Find', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      findInCode('div', { source: 'menu' });
-      assertCodePaneSearchMatchesCount(6);
-    });
-
-    it('Find & replace', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      replaceInCode('div', 'span', { source: 'menu' });
-      cy.get('.CodeMirror-dialog button').contains('Yes').click();
-      cy.get('.CodeMirror-dialog button').contains('Yes').click();
-      assertCodePaneContains(dedent`
-        <span>First line</span>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-    });
-
-    it('Tidy code', () => {
+    it('Left', () => {
       loadPlayroom();
-      typeCode('<Foo><Foo><Bar/>');
-      assertCodePaneLineCount(1);
-      formatCode({ source: 'keyboard' });
-      assertCodePaneLineCount(6);
+      editorPositionViaMenu('left');
+      getCodeEditor().should('be.visible');
+      cy.findByRole('button', { name: 'Hide code' }).should('be.visible');
     });
-
-    it('Toggle comment', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>`);
-      assertCodePaneLineCount(3);
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', { name: 'Toggle comment' }).click();
-      assertCodePaneContains(dedent`
-        {/* <div>First line</div> */}
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-    });
-
-    it('Wrap selection in tag', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      assertCodePaneLineCount(3);
-      selectToEndOfLine();
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', { name: 'Wrap selection in tag' }).click();
-      typeCode('a');
-      assertCodePaneContains(dedent`
-        <a><div>First line</div></a>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-    });
-
-    it('Select next occurrence', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      assertCodePaneLineCount(3);
-      typeCode('{rightArrow}');
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', { name: 'Select next occurrence' }).click();
-      typeCode('a');
-      assertCodePaneContains(dedent`
-        <a>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-    });
-
-    it('Jump to line number', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-        <div>Forth line</div>
-      `);
-      assertCodePaneLineCount(4);
-      jumpToLine(3, { source: 'menu' });
-      typeCode('c');
-      assertCodePaneContains(dedent`
-        <div>First line</div>
-        <div>Second line</div>
-        c<div>Third line</div>
-        <div>Forth line</div>
-      `);
-    });
-
-    it('Swap line up', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      assertCodePaneLineCount(3);
-      typeCode('{downArrow}');
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', { name: 'Swap line up' }).click();
-      assertCodePaneContains(dedent`
-        <div>Second line</div>
-        <div>First line</div>
-        <div>Third line</div>
-      `);
-    });
-
-    it('Swap line down', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      assertCodePaneLineCount(3);
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', { name: 'Swap line down' }).click();
-      assertCodePaneContains(dedent`
-        <div>Second line</div>
-        <div>First line</div>
-        <div>Third line</div>
-      `);
-    });
-
-    it('Duplicate line up', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      assertCodePaneLineCount(3);
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', { name: 'Duplicate line up' }).click();
-      assertCodePaneContains(dedent`
-        <div>First line</div>
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-    });
-
-    it('Duplicate line down', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      assertCodePaneLineCount(3);
-      typeCode('{downArrow}');
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', { name: 'Duplicate line down' }).click();
-      assertCodePaneContains(dedent`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-    });
-
-    it('Add cursor to previous line', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      assertCodePaneLineCount(3);
-      typeCode('{downArrow}');
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', {
-        name: 'Add cursor to previous line',
-      }).click();
-      typeCode('x');
-      assertCodePaneContains(dedent`
-        x<div>First line</div>
-        x<div>Second line</div>
-        <div>Third line</div>
-      `);
-    });
-
-    it('Add cursor to next line', () => {
-      loadPlayroom(`
-        <div>First line</div>
-        <div>Second line</div>
-        <div>Third line</div>
-      `);
-      assertCodePaneLineCount(3);
-      typeCode('{downArrow}');
-      openMainMenuSubMenu('Editor actions');
-      cy.findByRole('menuitem', {
-        name: 'Add cursor to next line',
-      }).click();
-      typeCode('x');
-      assertCodePaneContains(dedent`
-        <div>First line</div>
-        x<div>Second line</div>
-        x<div>Third line</div>
-      `);
-    });
-  });
-
-  it('Editor position', () => {
-    loadPlayroom();
-
-    // Hide code
-    editorPositionViaMenu('hidden');
-    getCodeEditor().should('not.be.visible');
-    cy.findByRole('button', { name: 'Show code' }).should('be.visible');
-
-    // Show code
-    editorPositionViaMenu('left');
-    getCodeEditor().should('be.visible');
-    cy.findByRole('button', { name: 'Hide code' }).should('be.visible');
   });
 
   describe('Show/Hide UI', () => {

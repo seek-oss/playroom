@@ -124,9 +124,10 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
 
 type SnippetsProps = {
   trigger: ComponentProps<typeof BaseUIPopover.Trigger>['render'];
+  sideOffset?: ComponentProps<typeof BaseUIPopover.Positioner>['sideOffset'];
 };
 
-export const Snippets = ({ trigger }: SnippetsProps) => {
+export const Snippets = ({ trigger, sideOffset }: SnippetsProps) => {
   const [{ snippetsOpen }, dispatch] = useContext(StoreContext);
   const searchRef = useRef<HTMLInputElement | null>(null);
 
@@ -149,7 +150,9 @@ export const Snippets = ({ trigger }: SnippetsProps) => {
       <BaseUIPopover.Trigger render={trigger} />
       <BaseUIPopover.Portal>
         <BaseUIPopover.Positioner
-          sideOffset={10}
+          align="start"
+          alignOffset={-12}
+          sideOffset={sideOffset}
           side="top"
           positionMethod="fixed"
         >

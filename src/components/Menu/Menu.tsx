@@ -235,6 +235,8 @@ type Props = {
   trigger: NonNullable<ComponentProps<typeof BaseUIMenu.Trigger>['render']>;
   width: 'content' | 'small';
   align?: ComponentProps<typeof BaseUIMenu.Positioner>['align'];
+  side?: ComponentProps<typeof BaseUIMenu.Positioner>['side'];
+  sideOffset?: ComponentProps<typeof BaseUIMenu.Positioner>['sideOffset'];
   children: ComponentProps<typeof BaseUIMenu.Popup>['children'];
   onOpenChange?: ComponentProps<typeof BaseUIMenu.Root>['onOpenChange'];
   onClose?: () => void;
@@ -244,6 +246,8 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
     {
       trigger,
       align = 'start',
+      side,
+      sideOffset = 6,
       width = 'content',
       children,
       onClose,
@@ -279,8 +283,9 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
           <BaseUIMenu.Portal>
             <BaseUIMenu.Positioner
               align={align}
-              alignOffset={isSubMenu ? -4 : 0}
-              sideOffset={isSubMenu ? 0 : 6}
+              alignOffset={isSubMenu ? -4 : -4}
+              sideOffset={isSubMenu ? 0 : sideOffset}
+              side={side}
               collisionPadding={12}
               collisionAvoidance={{
                 side: 'shift',
