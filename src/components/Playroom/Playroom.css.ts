@@ -148,7 +148,7 @@ export const showCodeContainer = style([
       borderRadius: calc(vars.radii[showCodeRadius])
         .subtract(showCodeOutlineSize)
         .toString(),
-      outline: `${showCodeOutlineSize} solid var(--border-standard__1oi8mvoo)`,
+      outline: `${showCodeOutlineSize} solid ${colorPaletteVars.border.standard}`,
       outlineOffset: `-${showCodeOutlineSize}`,
     },
   },

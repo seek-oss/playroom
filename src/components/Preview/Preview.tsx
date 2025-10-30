@@ -38,7 +38,7 @@ const PreviewHeader = ({
     </div>
     <div className={styles.actions}>
       <Button as="a" href={editorHref} target="_blank" rel="noreferrer">
-        Edit in Playroom
+        Edit
       </Button>
       <ButtonIcon label="Dismiss" icon={<X />} onClick={onHideHeader} />
     </div>

@@ -1,7 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
-import { vars } from '../../css/vars.css';
 import {
   actionsGap,
   headerPaddingX,
@@ -18,10 +17,14 @@ export const root = style([
   }),
 ]);
 
-export const rootEmbedded = style({
-  border: `1px solid ${colorPaletteVars.border.standard}`,
-  borderRadius: vars.radii.medium,
-});
+export const rootEmbedded = style([
+  sprinkles({
+    borderRadius: 'medium',
+  }),
+  {
+    border: `1px solid ${colorPaletteVars.border.standard}`,
+  },
+]);
 
 export const header = style([
   sprinkles({
@@ -30,10 +33,10 @@ export const header = style([
     justifyContent: 'space-between',
     paddingX: headerPaddingX,
     paddingY: headerPaddingY,
+    gap: 'small',
   }),
   {
     borderBottom: `1px solid ${colorPaletteVars.border.standard}`,
-    gap: 12,
   },
 ]);
 
@@ -51,10 +54,10 @@ export const footer = style([
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 'small',
+    gap: 'small',
   }),
   {
     borderTop: `1px solid ${colorPaletteVars.border.standard}`,
-    gap: 12,
   },
 ]);
 

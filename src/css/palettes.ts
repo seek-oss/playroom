@@ -1,29 +1,5 @@
 import { comma } from './delimiters';
 
-const originalPalette = {
-  blue0: '#e5f3ff',
-  blue1: '#0088ff',
-  blue2: '#005ad2',
-  blue3: '#00439c',
-  blue4: '#040080',
-  green1: '#c5f5e9',
-  green2: '#1da584',
-  red1: '#fee1e9',
-  red2: '#e52b50',
-  red3: '#cd193d',
-  purple: '#75438a',
-  white: '#fff',
-  gray0: '#f7f7f7',
-  gray1: '#f4f4f4',
-  gray2: '#eeeeee',
-  gray3: '#a7a7a7',
-  gray4: '#767676',
-  gray5: '#515151',
-  gray6: '#1e1e1e',
-  gray7: '#1c1c1b',
-  black: '#000',
-};
-
 const guard = (amount: number) => {
   if (amount > 1 || amount < 0) {
     throw new Error('Amount must be between 0 and 1 inclusive');
@@ -304,8 +280,8 @@ export const dark = {
   },
   shadows: {
     small: comma(
-      `0 1px 2px ${transparentize(0.85, originalPalette.black)}`,
-      `0 6px 18px -6px ${transparentize(0.92, originalPalette.black)}`
+      `0 1px 2px ${transparentize(0.85, '#000')}`,
+      `0 6px 18px -6px ${transparentize(0.92, '#000')}`
     ),
   },
 };
