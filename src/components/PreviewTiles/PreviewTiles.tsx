@@ -7,11 +7,19 @@ import {
   List,
   Trash,
 } from 'lucide-react';
-import { type RefObject, useContext, useMemo, useRef, useState } from 'react';
+import {
+  type Dispatch,
+  type RefObject,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { createUrl, decompressParams } from '../../../utils';
 import playroomConfig from '../../config';
-import { StoreContext } from '../../contexts/StoreContext';
+import type { Widths } from '../../configModules/widths';
+import { StoreContext, type Action } from '../../contexts/StoreContext';
 import { compileJsx } from '../../utils/compileJsx';
 import { formatAsRelative } from '../../utils/formatAsRelative';
 import { useCopy } from '../../utils/useCopy';
@@ -39,6 +47,75 @@ const getBaseUrl = () =>
   window.location.href
     .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
     .split('index.html')[0];
+
+const PreviewTileContextMenu = ({
+  playroomUrl,
+  id,
+  code,
+  title,
+  themes,
+  widths,
+  editorHidden,
+  dispatch,
+  onSelect,
+  copying,
+  onCopyClick,
+  setConfirmDeleteId,
+}: {
+  playroomUrl: string;
+  id: string;
+  code: string;
+  title: string;
+  themes: string[];
+  widths: Widths;
+  editorHidden?: boolean;
+  dispatch: Dispatch<Action>;
+  onSelect: () => void;
+  copying: boolean;
+  onCopyClick: (text: string) => void;
+  setConfirmDeleteId: (id: string) => void;
+}) => (
+  <>
+    <ContextMenuItem
+      icon={FolderOpen}
+      onClick={() => {
+        dispatch({
+          type: 'openPlayroom',
+          payload: {
+            id,
+            code,
+            title,
+            themes,
+            widths,
+            editorHidden,
+          },
+        });
+        onSelect();
+      }}
+    >
+      Open
+    </ContextMenuItem>
+    <ContextMenuItem
+      icon={!copying ? Link : undefined}
+      closeOnClick={false}
+      onClick={() => onCopyClick(playroomUrl)}
+      tone={copying ? 'positive' : 'neutral'}
+      active={!copying}
+    >
+      {copying ? 'Copied!' : 'Copy link'}
+    </ContextMenuItem>
+    <ContextMenuItemLink icon={ExternalLink} href={playroomUrl}>
+      Open in new tab
+    </ContextMenuItemLink>
+    <ContextMenuItem
+      icon={Trash}
+      tone="critical"
+      onClick={() => setConfirmDeleteId(id)}
+    >
+      Delete
+    </ContextMenuItem>
+  </>
+);
 
 export const PreviewTiles = ({
   onSelect,
@@ -78,52 +155,6 @@ export const PreviewTiles = ({
         };
       }),
     [storedPlayrooms, selectedThemes]
-  );
-
-  const renderContextMenu = (playroomUrl: string, id: string) => (
-    <>
-      <ContextMenuItem
-        icon={FolderOpen}
-        onClick={() => {
-          const entry = playroomEntries.find((p) => p.id === id);
-          if (entry) {
-            dispatch({
-              type: 'openPlayroom',
-              payload: {
-                id,
-                code: entry.code,
-                title: entry.title,
-                themes: entry.themes,
-                widths: entry.widths,
-                editorHidden: entry.editorHidden,
-              },
-            });
-            onSelect();
-          }
-        }}
-      >
-        Open
-      </ContextMenuItem>
-      <ContextMenuItem
-        icon={!copying ? Link : undefined}
-        closeOnClick={false}
-        onClick={() => onCopyClick(playroomUrl)}
-        tone={copying ? 'positive' : 'neutral'}
-        active={!copying}
-      >
-        {copying ? 'Copied!' : 'Copy link'}
-      </ContextMenuItem>
-      <ContextMenuItemLink icon={ExternalLink} href={playroomUrl}>
-        Open in new tab
-      </ContextMenuItemLink>
-      <ContextMenuItem
-        icon={Trash}
-        tone="critical"
-        onClick={() => setConfirmDeleteId(id)}
-      >
-        Delete
-      </ContextMenuItem>
-    </>
   );
 
   return (
@@ -268,7 +299,20 @@ export const PreviewTiles = ({
 
                 return (
                   <ContextMenu key={id} trigger={trigger}>
-                    {renderContextMenu(playroomUrl, id)}
+                    <PreviewTileContextMenu
+                      playroomUrl={playroomUrl}
+                      id={id}
+                      code={code}
+                      title={title}
+                      themes={themes}
+                      widths={widths}
+                      editorHidden={editorHidden}
+                      dispatch={dispatch}
+                      onSelect={onSelect}
+                      copying={copying}
+                      onCopyClick={onCopyClick}
+                      setConfirmDeleteId={setConfirmDeleteId}
+                    />
                   </ContextMenu>
                 );
               }
