@@ -556,6 +556,12 @@ describe('Keymaps', () => {
       assertCodePaneContains(dedent`
         {/*  */}
       `);
+
+      typeCode('this is a comment');
+
+      assertCodePaneContains(dedent`
+        {/* this is a comment */}
+      `);
     });
 
     describe('should wrap a single line in a comment when there is no selection', () => {
