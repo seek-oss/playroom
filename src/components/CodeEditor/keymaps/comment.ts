@@ -1,4 +1,4 @@
-import CodeMirror, { type Editor, Pos } from 'codemirror';
+import { type Editor, Pos } from 'codemirror';
 
 import type { Selection } from './types';
 
@@ -272,8 +272,7 @@ const determineCommentType = (
   return 'line';
 };
 
-/** @ts-expect-error Register `toggleComment` command */
-CodeMirror.commands.toggleComment = (cm: Editor) => {
+export const toggleComment = (cm: Editor) => {
   const newSelections: Selection[] = [];
   const tagRanges: TagRange[] = [];
 

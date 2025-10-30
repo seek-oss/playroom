@@ -32,11 +32,7 @@ import {
   completeIfAfterLt,
   completeIfInTag,
 } from './keymaps/complete';
-import './keymaps/comment';
-import './keymaps/cursors';
-import './keymaps/format';
-import './keymaps/lines';
-import './keymaps/wrap';
+import './registerKeymaps';
 
 import * as styles from './CodeEditor.css';
 
