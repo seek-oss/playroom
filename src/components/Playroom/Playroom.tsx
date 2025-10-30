@@ -18,7 +18,6 @@ import { Box } from '../Box/Box';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
 import { EditorActions } from '../EditorActions/EditorActions';
-import { EditorErrorMessage } from '../EditorErrorMessage/EditorErrorMessage';
 import Frames from '../Frames/Frames';
 import { Header } from '../Header/Header';
 import { ZeroState } from '../ZeroState/ZeroState';
@@ -188,7 +187,6 @@ export default () => {
             />
           </aside>
           <div className={styles.editorOverlays}>
-            <EditorErrorMessage />
             <EditorActions />
           </div>
         </div>

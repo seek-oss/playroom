@@ -94,7 +94,6 @@ interface State {
   editorHeight: string;
   editorWidth: string;
   panelsVisible: boolean;
-  editorErrorMessage?: string;
   selectedThemes: typeof availableThemes;
   selectedWidths: Widths;
   colorScheme: ColorScheme;
@@ -117,7 +116,6 @@ export type Action =
   | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
-  | { type: 'resetErrorMessage' }
   | {
       type: 'setHasSyntaxError';
       payload: { value: boolean; lineNumber?: number };
@@ -213,13 +211,6 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case 'resetErrorMessage': {
-      return {
-        ...state,
-        editorErrorMessage: undefined,
-      };
-    }
-
     case 'setHasSyntaxError': {
       const { value, lineNumber } = action.payload;
       return {
@@ -254,7 +245,6 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         code: newCode,
         cursorPosition: position,
-        editorErrorMessage: undefined,
       };
     }
 
@@ -280,7 +270,6 @@ const reducer = (state: State, action: Action): State => {
         return {
           ...state,
           snippetsOpen: false,
-          editorErrorMessage: undefined,
         };
       }
 
@@ -301,7 +290,6 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         snippetsOpen: true,
-        editorErrorMessage: undefined,
         previewEditorCode: code,
         highlightLineNumber: cursor.line,
       };

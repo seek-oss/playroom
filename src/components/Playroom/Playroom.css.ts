@@ -105,10 +105,6 @@ export const editorContainer = sprinkles({
 export const editorOverlays = style([
   sprinkles({
     position: 'absolute',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'xsmall',
-    alignItems: 'center',
   }),
   {
     left: vars.space.medium,
