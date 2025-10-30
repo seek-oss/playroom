@@ -5,8 +5,10 @@ import { StoreContext } from '../contexts/StoreContext';
 import { isMac } from '../utils/formatting';
 
 export const useGlobalKeyboardShortcutsForWindow = (win: Window | null) => {
-  const [{ editorHidden }, dispatch] = useContext(StoreContext);
+  const [{ editorHidden, openDialogOpen, snippetsOpen }, dispatch] =
+    useContext(StoreContext);
   const { runCommand } = useEditor();
+  const formattable = !editorHidden && !openDialogOpen && !snippetsOpen;
 
   useEffect(() => {
     if (win === null) {
@@ -30,7 +32,7 @@ export const useGlobalKeyboardShortcutsForWindow = (win: Window | null) => {
           }
           case 's': {
             e.preventDefault();
-            if (!editorHidden) {
+            if (formattable) {
               runCommand('formatCode');
             }
             break;
@@ -45,5 +47,5 @@ export const useGlobalKeyboardShortcutsForWindow = (win: Window | null) => {
     return () => {
       win.removeEventListener('keydown', handleKeyDown);
     };
-  }, [dispatch, editorHidden, runCommand, win]);
+  }, [dispatch, formattable, runCommand, win]);
 };

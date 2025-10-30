@@ -386,6 +386,10 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case 'togglePanelVisibility': {
+      if (state.openDialogOpen || state.snippetsOpen) {
+        return state;
+      }
+
       return {
         ...state,
         panelsVisible: !state.panelsVisible,
