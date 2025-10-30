@@ -178,7 +178,7 @@ export const assertPreviewForTheme = (themeName: string) => {
 };
 
 export const editPreview = () => {
-  cy.findByRole('link', { name: 'Edit in Playroom' }).then((link) => {
+  cy.findByRole('link', { name: 'Edit' }).then((link) => {
     cy.visit(link.prop('href'));
   });
 };
