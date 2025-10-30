@@ -549,6 +549,21 @@ describe('Keymaps', () => {
     const modifierKey = isMac() ? 'cmd' : 'ctrl';
     const executeToggleCommentCommand = () => typeCode(`{${modifierKey}+/}`);
 
+    it('should create a comment when there is no code in the editor', () => {
+      loadPlayroom('');
+      executeToggleCommentCommand();
+
+      assertCodePaneContains(dedent`
+        {/*  */}
+      `);
+
+      typeCode('this is a comment');
+
+      assertCodePaneContains(dedent`
+        {/* this is a comment */}
+      `);
+    });
+
     describe('should wrap a single line in a comment when there is no selection', () => {
       it('block', () => {
         loadPlayroom(blockStarter);

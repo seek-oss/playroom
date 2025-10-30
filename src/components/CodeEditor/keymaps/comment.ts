@@ -225,6 +225,12 @@ const determineCommentType = (
   from: CodeMirror.Position,
   to: CodeMirror.Position
 ): CommentType => {
+  const lineContent = cm.getLine(from.line);
+
+  if (lineContent.trim() === '' && from.line === to.line) {
+    return 'block';
+  }
+
   const lineTokens = cm.getLineTokens(from.line);
 
   const containsTag = lineTokens.some((token) => token.type === 'tag');
