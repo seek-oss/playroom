@@ -1,5 +1,13 @@
 # playroom
 
+## 0.44.4
+
+### Patch Changes
+
+- [#450](https://github.com/seek-oss/playroom/pull/450) [`2dfefd8`](https://github.com/seek-oss/playroom/commit/2dfefd810b2c161f9028f5fc52c575b1aac8d1f6) Thanks [@felixhabib](https://github.com/felixhabib)! - Ensure "Toggle comment" command works correctly when there is no other code in the editor.
+
+- [#451](https://github.com/seek-oss/playroom/pull/451) [`4a515dc`](https://github.com/seek-oss/playroom/commit/4a515dc5171661c9b68f5013eb6db2111ad95505) Thanks [@felixhabib](https://github.com/felixhabib)! - Ensure "Format code" command works correctly when there is no code other than JSX comments in the editor.
+
 ## 0.44.3
 
 ### Patch Changes
