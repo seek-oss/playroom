@@ -38,12 +38,13 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
           className={clsx({
             [styles.button]: true,
             [styles.tone[tone]]: true,
-            [styles.variant[variant]]: true,
             [styles.size[size]]: true,
             [styles.bleed]: bleed,
           })}
         >
-          <span className={clsx(styles.content)}>{icon}</span>
+          <span className={clsx([styles.content, styles.variant[variant]])}>
+            {icon}
+          </span>
         </button>
       }
     />
@@ -86,12 +87,13 @@ export const ButtonIconLink = forwardRef<
           className={clsx({
             [styles.button]: true,
             [styles.tone[tone]]: true,
-            [styles.variant[variant]]: true,
             [styles.size[size]]: true,
             [styles.bleed]: bleed,
           })}
         >
-          <span className={clsx(styles.content)}>{icon}</span>
+          <span className={clsx([styles.content, styles.variant[variant]])}>
+            {icon}
+          </span>
         </a>
       }
     />
