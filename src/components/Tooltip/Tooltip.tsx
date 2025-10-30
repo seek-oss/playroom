@@ -17,6 +17,7 @@ type TooltipProps = TooltipTrigger & {
   side?: ComponentProps<typeof BaseUITooltip.Positioner>['side'];
   sideOffset?: ComponentProps<typeof BaseUITooltip.Positioner>['sideOffset'];
   announceAsDescription?: boolean;
+  delay?: boolean;
 };
 export const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
   (
@@ -27,6 +28,7 @@ export const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
       sideOffset = 8, // vars.space.xsmall
       open,
       announceAsDescription,
+      delay = false,
       ...restProps
     },
     triggerRef
@@ -35,7 +37,7 @@ export const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
 
     return (
       // Todo - set delay to 0. this currently causes some tests to fail
-      <BaseUITooltip.Root delay={10} open={open}>
+      <BaseUITooltip.Root delay={delay ? 800 : 10} open={open}>
         <BaseUITooltip.Trigger
           {...restProps}
           ref={triggerRef}

@@ -284,7 +284,8 @@ export const PreviewTiles = ({
                         <Text truncate>{displayTitle}</Text>
                       </span>
                       <Tooltip
-                        label={`Open "${displayTitle}"`}
+                        delay
+                        label={displayTitle}
                         side="bottom"
                         trigger={
                           <button
