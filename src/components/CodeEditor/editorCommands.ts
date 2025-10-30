@@ -12,6 +12,7 @@ import {
   SquareArrowDownIcon,
   ArrowUpFromLineIcon,
   ArrowDownFromLineIcon,
+  ScanSearch,
 } from 'lucide-react';
 
 import { isMac } from '../../utils/formatting';
@@ -53,7 +54,7 @@ export const editorCommandList: EditorCommandMeta[] = [
     command: 'replace',
     label: 'Find and replace',
     shortcut: [primaryMod, 'Alt', 'F'],
-    icon: SearchIcon,
+    icon: ScanSearch,
   },
   {
     command: 'formatCode',
