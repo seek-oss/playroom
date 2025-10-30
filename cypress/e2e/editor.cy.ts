@@ -13,6 +13,7 @@ import {
   replaceInCode,
   selectToEndOfLine,
   jumpToLine,
+  cmdPlus,
 } from '../support/utils';
 
 describe('Editor', () => {
@@ -43,6 +44,10 @@ describe('Editor', () => {
     typeCode('<Foo><Foo><Bar/>');
     assertCodePaneLineCount(1);
     formatCode({ source: 'keyboard' });
+    assertCodePaneLineCount(6);
+    typeCode(cmdPlus('z')); // Undo
+    assertCodePaneLineCount(1);
+    typeCode(cmdPlus('shift+z')); // Redo
     assertCodePaneLineCount(6);
   });
 

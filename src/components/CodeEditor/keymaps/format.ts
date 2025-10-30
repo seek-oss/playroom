@@ -3,11 +3,14 @@ import type { Editor } from 'codemirror';
 import { formatCode as formatCodeUtil } from '../../../utils/formatting';
 
 export const formatCode = (cm: Editor) => {
+  const currentValue = cm.getValue();
   const { code: formattedCode, cursor: formattedCursor } = formatCodeUtil({
-    code: cm.getValue(),
+    code: currentValue,
     cursor: cm.getCursor(),
   });
 
-  cm.setValue(formattedCode);
-  cm.setCursor(formattedCursor);
+  if (formattedCode !== currentValue) {
+    cm.setValue(formattedCode);
+    cm.setCursor(formattedCursor);
+  }
 };
