@@ -1,9 +1,9 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import clsx from 'clsx';
 import {
-  Camera,
-  ClipboardCopy,
-  Download,
+  // Camera,
+  // ClipboardCopy,
+  // Download,
   PictureInPicture2,
 } from 'lucide-react';
 import {
@@ -11,7 +11,7 @@ import {
   type RefObject,
   useContext,
   useRef,
-  useState,
+  // useState,
 } from 'react';
 
 import { themeNames as availableThemes } from '../../configModules/themes';
@@ -21,9 +21,9 @@ import { compileJsx } from '../../utils/compileJsx';
 import usePreviewUrl from '../../utils/usePreviewUrl';
 import {
   ErrorMessageReceiver,
-  screenshotMessageSender,
+  // screenshotMessageSender,
 } from '../Frame/frameMessenger';
-import { Menu, MenuItem } from '../Menu/Menu';
+// import { Menu, MenuItem } from '../Menu/Menu';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 import { SharedTooltipContext } from '../Tooltip/Tooltip';
@@ -42,7 +42,7 @@ export const popOutWindowName = 'standalone_playroom_frame';
 
 const Frame = ({
   frame,
-  title,
+  // title,
   code,
   scrollingPanelRef,
 }: {
@@ -52,36 +52,36 @@ const Frame = ({
   scrollingPanelRef: RefObject<HTMLDivElement | null>;
 }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [frameActive, setFrameActive] = useState(false);
+  // const [frameActive, setFrameActive] = useState(false);
   const noTheme = frame.theme === '__PLAYROOM__NO_THEME__';
   const previewUrl = usePreviewUrl(frame.theme);
 
-  const downloadHandler = () => {
-    if (iframeRef.current?.contentWindow) {
-      screenshotMessageSender({
-        messageWindow: iframeRef.current.contentWindow,
-        action: 'download',
-        fileName: `${title || 'Untitled Playroom'} (${
-          noTheme ? frame.widthName : `${frame.theme} - ${frame.widthName}`
-        })`,
-      });
-    }
-  };
+  // const downloadHandler = () => {
+  //   if (iframeRef.current?.contentWindow) {
+  //     screenshotMessageSender({
+  //       messageWindow: iframeRef.current.contentWindow,
+  //       action: 'download',
+  //       fileName: `${title || 'Untitled Playroom'} (${
+  //         noTheme ? frame.widthName : `${frame.theme} - ${frame.widthName}`
+  //       })`,
+  //     });
+  //   }
+  // };
 
-  const copyHandler = () => {
-    if (iframeRef.current?.contentWindow) {
-      screenshotMessageSender({
-        messageWindow: iframeRef.current.contentWindow,
-        action: 'copy',
-      });
-    }
-  };
+  // const copyHandler = () => {
+  //   if (iframeRef.current?.contentWindow) {
+  //     screenshotMessageSender({
+  //       messageWindow: iframeRef.current.contentWindow,
+  //       action: 'copy',
+  //     });
+  //   }
+  // };
 
   return (
     <div
       className={clsx({
         [styles.frameContainer]: true,
-        [styles.frameActive]: frameActive,
+        // [styles.frameActive]: frameActive,
       })}
       style={assignInlineVars({
         [styles.frameWidth]:
@@ -135,7 +135,7 @@ const Frame = ({
               }}
             />
 
-            <Menu
+            {/* <Menu
               align="end"
               onOpenChange={setFrameActive}
               width="content"
@@ -153,7 +153,7 @@ const Frame = ({
               <MenuItem icon={ClipboardCopy} onClick={copyHandler}>
                 Copy
               </MenuItem>
-            </Menu>
+            </Menu> */}
           </div>
         </SharedTooltipContext>
       </div>
