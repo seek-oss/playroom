@@ -1,6 +1,11 @@
 import { Menu as BaseUIMenu } from '@base-ui-components/react/menu';
 import clsx from 'clsx';
-import { type LucideIcon, ArrowUpRight, Check } from 'lucide-react';
+import {
+  type LucideIcon,
+  ArrowUpRight,
+  Check,
+  ChevronRight,
+} from 'lucide-react';
 import {
   type AllHTMLAttributes,
   type ComponentProps,
@@ -19,8 +24,6 @@ import {
 import { ScrollContainer } from '../ScrollContainer/ScrollContainer';
 import { Text } from '../Text/Text';
 import { Tooltip } from '../Tooltip/Tooltip';
-import ChevronIcon from '../icons/ChevronIcon';
-import TickIcon from '../icons/TickIcon';
 
 import * as styles from './Menu.css';
 
@@ -64,9 +67,7 @@ export const MenuItem = ({
           <KeyboardShortcut shortcut={shortcut} />
         </Text>
       )}
-      {isSubMenuTrigger && !disabled ? (
-        <ChevronIcon direction="right" size={12} />
-      ) : null}
+      {isSubMenuTrigger && !disabled ? <ChevronRight size={12} /> : null}
     </BaseUIMenu.Item>
   );
 
@@ -130,9 +131,7 @@ export const MenuItemLink = ({
               <KeyboardShortcut shortcut={shortcut} />
             </Text>
           )}
-          {isSubMenuTrigger && !disabled ? (
-            <ChevronIcon direction="right" size={12} />
-          ) : null}
+          {isSubMenuTrigger && !disabled ? <ChevronRight size={12} /> : null}
         </a>
       }
       {...restProps}
@@ -199,7 +198,7 @@ export const MenuCheckboxItem = ({
       <BaseUIMenu.CheckboxItemIndicator
         className={styles.checkboxItemIndicator}
       >
-        <TickIcon size={12} />
+        <Check size={12} />
       </BaseUIMenu.CheckboxItemIndicator>
     </span>
   </BaseUIMenu.CheckboxItem>
@@ -328,7 +327,7 @@ export const MenuCopyItem = ({ content, children }: MenuCopyItemProps) => {
         {copying ? (
           <>
             <Text tone="positive">Copied</Text>
-            <TickIcon size={menuIconSize} />
+            <Check size={menuIconSize} />
           </>
         ) : (
           <Text>{children}</Text>

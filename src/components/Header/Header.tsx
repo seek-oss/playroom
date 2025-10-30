@@ -22,6 +22,7 @@ import {
   Link,
   Eye,
   EyeClosed,
+  ChevronDown,
 } from 'lucide-react';
 import {
   type ComponentProps,
@@ -68,7 +69,6 @@ import { ThemeSelector } from '../ThemeSelector/ThemeSelector';
 import { Title } from '../Title/Title';
 import { SharedTooltipContext, Tooltip } from '../Tooltip/Tooltip';
 import { useGlobalKeyboardShortcutsForWindow } from '../globalKeyboardShortcuts';
-import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './Header.css';
 
@@ -241,7 +241,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
                 className={styles.menuButton}
               >
                 <Logo size={logoSize} />
-                <ChevronIcon direction="down" size={12} />
+                <ChevronDown size={12} />
               </button>
             }
           />

@@ -1,10 +1,10 @@
 import { Dialog as BaseUIDialog } from '@base-ui-components/react';
+import { X } from 'lucide-react';
 import { useId, useRef, type ComponentProps } from 'react';
 
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { Heading } from '../Heading/Heading';
 import { Stack } from '../Stack/Stack';
-import DismissIcon from '../icons/DismissIcon';
 
 import * as styles from './Dialog.css';
 
@@ -63,7 +63,7 @@ export const Dialog = ({
                 <ButtonIcon
                   bleed
                   variant="transparent"
-                  icon={<DismissIcon />}
+                  icon={<X />}
                   label="Close"
                 />
               }

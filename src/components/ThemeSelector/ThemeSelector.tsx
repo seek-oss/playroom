@@ -1,10 +1,10 @@
 import clsx from 'clsx';
+import { ChevronDown } from 'lucide-react';
 import { Fragment, useContext } from 'react';
 
 import { themeNames } from '../../configModules/themes';
 import { StoreContext } from '../../contexts/StoreContext';
 import { Text } from '../Text/Text';
-import ChevronIcon from '../icons/ChevronIcon';
 
 import * as styles from './ThemeSelector.css';
 
@@ -58,7 +58,7 @@ export const ThemeSelector = ({ value, onChange }: ThemeSelectorProps) => {
         <span className={clsx(styles.column, styles.minColumn)}>
           &nbsp;
           <span style={{ position: 'relative', top: 2 }}>
-            <ChevronIcon size={16} />
+            <ChevronDown size={16} />
           </span>
         </span>
       </label>

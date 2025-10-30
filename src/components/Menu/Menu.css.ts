@@ -50,6 +50,7 @@ export const item = style([
     cursor: 'default',
     color: colorPaletteVars.foreground.neutral,
     height: 34, // Explicit height until icons are vertically trimmed
+    isolation: 'isolate',
     '::before': {
       content: '',
       pointerEvents: 'none',
@@ -57,6 +58,7 @@ export const item = style([
       insetBlock: 0,
       insetInline: 0,
       borderRadius: vars.radii.small,
+      zIndex: -1,
     },
     vars: {
       [highlightColor]: colorPaletteVars.background.selection,
