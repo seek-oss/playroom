@@ -183,22 +183,39 @@ export const editPreview = () => {
   });
 };
 
-export const toggleSnippets = (options: {
+type ToggleSnippetsOptions = {
   source: 'editorAction' | 'keyboard';
-}) => {
+};
+const toggleSnippets = (
+  state: 'open' | 'close',
+  options: ToggleSnippetsOptions
+) => {
   switch (options.source) {
     case 'editorAction': {
       cy.findByRole('button', { name: /Insert snippet/i }).click();
       break;
     }
     case 'keyboard': {
-      cy.get('body').type(cmdPlus('k'));
+      if (state === 'open') {
+        cy.get('body').type(cmdPlus('k'));
+      } else {
+        filterSnippets('{esc}');
+      }
       break;
     }
     default: {
       throw new Error('No source provided');
     }
   }
+};
+
+export const openSnippets = (options: ToggleSnippetsOptions) => {
+  toggleSnippets('open', options);
+  cy.findByRole('dialog', { name: 'Select a snippet' }).should('be.visible');
+};
+export const closeSnippets = (options: ToggleSnippetsOptions) => {
+  toggleSnippets('close', options);
+  getCodeEditor().should('be.visible');
 };
 
 export const filterSnippets = (search: string) => {

@@ -68,20 +68,6 @@ export const searchField = style([
   },
 ]);
 
-export const clearButton = style([
-  sprinkles({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 'xxsmall',
-  }),
-  {
-    background: 'transparent',
-    border: 0,
-    color: colorPaletteVars.foreground.secondary,
-  },
-]);
-
 export const snippetsContainer = style([
   sprinkles({
     overflow: 'auto',
@@ -94,8 +80,6 @@ export const snippetsContainer = style([
     height: 300,
   },
 ]);
-
-export const dummyItem = sprinkles({ display: 'none' });
 
 export const snippet = style([
   sprinkles({

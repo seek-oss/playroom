@@ -7,11 +7,12 @@ import {
   assertCodePaneLineCount,
   selectSnippetByIndex,
   filterSnippets,
-  toggleSnippets,
   assertSnippetCount,
   assertSnippetsSearchFieldIsVisible,
   mouseOverSnippet,
   loadPlayroom,
+  openSnippets,
+  closeSnippets,
 } from '../support/utils';
 
 describe('Snippets', () => {
@@ -22,7 +23,7 @@ describe('Snippets', () => {
 
   it('driven with mouse', () => {
     // Open and format for insertion point
-    toggleSnippets({ source: 'editorAction' });
+    openSnippets({ source: 'editorAction' });
     assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
 
@@ -36,12 +37,12 @@ describe('Snippets', () => {
     assertFirstFrameContains('Initial code\nBar\nBar');
 
     // Close without persisting
-    toggleSnippets({ source: 'editorAction' });
+    closeSnippets({ source: 'editorAction' });
     assertCodePaneContains('<div>Initial <span>code</span></div>');
     assertCodePaneLineCount(1);
 
     // Re-open and persist
-    toggleSnippets({ source: 'editorAction' });
+    openSnippets({ source: 'editorAction' });
     mouseOverSnippet(3);
     assertFirstFrameContains('Initial code\nBar\nBlue Bar');
     selectSnippetByIndex(3).click();
@@ -68,12 +69,12 @@ describe('Snippets', () => {
 
   it('driven with keyboard', () => {
     // Open and format for insertion point
-    toggleSnippets({ source: 'keyboard' });
+    openSnippets({ source: 'keyboard' });
     assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
-    filterSnippets('{esc}');
+    closeSnippets({ source: 'keyboard' });
     assertCodePaneLineCount(1, true);
-    toggleSnippets({ source: 'keyboard' });
+    openSnippets({ source: 'keyboard' });
     assertSnippetsSearchFieldIsVisible();
     assertCodePaneLineCount(8);
 
@@ -87,12 +88,12 @@ describe('Snippets', () => {
     assertFirstFrameContains('Initial code\nBar\nBar');
 
     // Close without persisting
-    filterSnippets('{esc}');
+    closeSnippets({ source: 'keyboard' });
     assertCodePaneContains('<div>Initial <span>code</span></div>');
     assertCodePaneLineCount(1, true);
 
     // Re-open and persist
-    toggleSnippets({ source: 'keyboard' });
+    openSnippets({ source: 'keyboard' });
     filterSnippets('{downarrow}{downarrow}{downarrow}{downarrow}{enter}');
     assertFirstFrameContains('Initial code\nBar\nBlue Bar');
     assertCodePaneLineCount(7);

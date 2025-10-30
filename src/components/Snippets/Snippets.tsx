@@ -14,6 +14,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import type { Snippet } from '../../../utils';
 import snippets from '../../configModules/snippets';
 import { StoreContext } from '../../contexts/StoreContext';
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { Secondary } from '../Secondary/Secondary';
 import { Text } from '../Text/Text';
 
@@ -41,8 +42,10 @@ type SnippetsContentProps = {
   onSelect: (snippet: ReturnedSnippet) => void;
 };
 
+const initialMatchedSnippet = ' ';
 const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [matchedSnippet, setMatchedSnippet] = useState(initialMatchedSnippet);
+  const [inputValue, setInputValue] = useState('');
   const [, dispatch] = useContext(StoreContext);
   const debouncedPreview = useDebouncedCallback((snippet: ReturnedSnippet) => {
     dispatch({ type: 'previewSnippet', payload: { snippet } });
@@ -53,16 +56,22 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
       <Command
         label="Search snippets"
         loop
-        defaultValue="-"
-        value={searchTerm}
+        value={matchedSnippet}
         onValueChange={(v) => {
           debouncedPreview(snippetsByValue[v]);
-          setSearchTerm(v);
+          setMatchedSnippet(v);
         }}
       >
         <div className={styles.fieldContainer}>
           <Command.Input
             ref={searchRef}
+            value={inputValue}
+            onValueChange={(v) => {
+              setInputValue(v);
+              if (v.trim().length === 0) {
+                setMatchedSnippet(initialMatchedSnippet);
+              }
+            }}
             placeholder="Find a snippet..."
             onKeyDown={(event) => {
               if (event.key === 'Escape') {
@@ -71,31 +80,24 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
             }}
             className={styles.searchField}
           />
-          {searchTerm ? (
-            <button
-              type="button"
-              aria-label="Clear search"
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() => setSearchTerm('')}
-              className={styles.clearButton}
-            >
-              <X size={16} aria-hidden="true" />
-            </button>
+          {inputValue.trim().length > 0 ? (
+            <ButtonIcon
+              onClick={() => {
+                setMatchedSnippet(initialMatchedSnippet);
+                setInputValue('');
+                searchRef.current?.focus();
+              }}
+              variant="transparent"
+              size="small"
+              label="Clear search"
+              icon={<X />}
+            />
           ) : null}
         </div>
         <Command.List
           className={styles.snippetsContainer}
           label="Filtered snippets"
         >
-          {/* Dummy item that is prevents the auto selection of the first item in the list */}
-          {!searchTerm ? (
-            <Command.Item
-              value="-"
-              aria-hidden
-              role="none"
-              className={styles.dummyItem}
-            />
-          ) : null}
           {snippets.map((snippet, index) => (
             <Command.Item
               key={`${snippet.group}_${snippet.name}_${index}`}
