@@ -4,8 +4,6 @@
 
 <br/>
 
-<img src="images/demo.gif?raw=true" alt="Playroom Demo" title="Playroom Demo" />
-
 Simultaneously design across a variety of themes and screen sizes, powered by JSX and your own component library.
 
 Playroom allows you to create a zero-install code-oriented design environment, built into a standalone bundle that can be deployed alongside your existing design system documentation.
