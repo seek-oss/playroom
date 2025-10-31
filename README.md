@@ -68,6 +68,7 @@ module.exports = {
       Hello World!
     </Button>
   `,
+  cwd: './playroom',
   scope: './playroom/useScope.js',
   port: 9000,
   openBrowser: true,
