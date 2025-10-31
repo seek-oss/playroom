@@ -60,18 +60,18 @@ module.exports = {
   // Optional:
   title: 'My Awesome Library',
   themes: './src/themes',
+  widths: [320, 768, 1024],
   snippets: './playroom/snippets.js',
   frameComponent: './playroom/FrameComponent.js',
-  scope: './playroom/useScope.js',
-  widths: [320, 768, 1024],
-  port: 9000,
-  openBrowser: true,
-  paramType: 'search', // default is 'hash'
   exampleCode: `
     <Button>
       Hello World!
     </Button>
   `,
+  scope: './playroom/useScope.js',
+  port: 9000,
+  openBrowser: true,
+  paramType: 'search', // default is 'hash'
   baseUrl: '/playroom/',
   webpackConfig: () => ({
     // Custom webpack config goes here...
