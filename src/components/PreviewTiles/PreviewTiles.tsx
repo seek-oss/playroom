@@ -8,7 +8,7 @@ import {
   Trash,
 } from 'lucide-react';
 import {
-  type Dispatch,
+  type ComponentProps,
   type RefObject,
   useContext,
   useMemo,
@@ -18,8 +18,7 @@ import {
 
 import { createUrl, decompressParams } from '../../../utils';
 import playroomConfig from '../../config';
-import type { Widths } from '../../configModules/widths';
-import { StoreContext, type Action } from '../../contexts/StoreContext';
+import { StoreContext } from '../../contexts/StoreContext';
 import { compileJsx } from '../../utils/compileJsx';
 import { formatAsRelative } from '../../utils/formatAsRelative';
 import { useCopy } from '../../utils/useCopy';
@@ -49,73 +48,41 @@ const getBaseUrl = () =>
     .split('index.html')[0];
 
 const PreviewTileContextMenu = ({
+  trigger,
   playroomUrl,
-  id,
-  code,
-  title,
-  themes,
-  widths,
-  editorHidden,
-  dispatch,
-  onSelect,
-  copying,
-  onCopyClick,
-  setConfirmDeleteId,
+  onOpen,
+  onDelete,
 }: {
+  trigger: ComponentProps<typeof ContextMenu>['trigger'];
   playroomUrl: string;
-  id: string;
-  code: string;
-  title: string;
-  themes: string[];
-  widths: Widths;
-  editorHidden?: boolean;
-  dispatch: Dispatch<Action>;
-  onSelect: () => void;
-  copying: boolean;
-  onCopyClick: (text: string) => void;
-  setConfirmDeleteId: (id: string) => void;
-}) => (
-  <>
-    <ContextMenuItem
-      icon={FolderOpen}
-      onClick={() => {
-        dispatch({
-          type: 'openPlayroom',
-          payload: {
-            id,
-            code,
-            title,
-            themes,
-            widths,
-            editorHidden,
-          },
-        });
-        onSelect();
-      }}
-    >
-      Open
-    </ContextMenuItem>
-    <ContextMenuItem
-      icon={!copying ? Link : undefined}
-      closeOnClick={false}
-      onClick={() => onCopyClick(playroomUrl)}
-      tone={copying ? 'positive' : 'neutral'}
-      active={!copying}
-    >
-      {copying ? 'Copied!' : 'Copy link'}
-    </ContextMenuItem>
-    <ContextMenuItemLink icon={ExternalLink} href={playroomUrl}>
-      Open in new tab
-    </ContextMenuItemLink>
-    <ContextMenuItem
-      icon={Trash}
-      tone="critical"
-      onClick={() => setConfirmDeleteId(id)}
-    >
-      Delete
-    </ContextMenuItem>
-  </>
-);
+  onOpen: () => void;
+  onDelete: () => void;
+}) => {
+  const { copying, onCopyClick } = useCopy();
+
+  return (
+    <ContextMenu trigger={trigger}>
+      <ContextMenuItem icon={FolderOpen} onClick={onOpen}>
+        Open
+      </ContextMenuItem>
+      <ContextMenuItem
+        icon={!copying ? Link : undefined}
+        closeOnClick={false}
+        onClick={() => onCopyClick(playroomUrl)}
+        tone={copying ? 'positive' : 'neutral'}
+        active={!copying}
+      >
+        {copying ? 'Copied!' : 'Copy link'}
+      </ContextMenuItem>
+      <ContextMenuItemLink icon={ExternalLink} href={playroomUrl}>
+        Open in new tab
+      </ContextMenuItemLink>
+      <ContextMenuItem icon={Trash} tone="critical" onClick={onDelete}>
+        Delete
+      </ContextMenuItem>
+    </ContextMenu>
+  );
+};
 
 export const PreviewTiles = ({
   onSelect,
@@ -128,7 +95,6 @@ export const PreviewTiles = ({
     useContext(StoreContext);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const listRef = useRef<HTMLUListElement>(null);
-  const { copying, onCopyClick } = useCopy();
 
   const playroomEntries = useMemo(
     () =>
@@ -226,8 +192,8 @@ export const PreviewTiles = ({
                   paramType: playroomConfig.paramType,
                 });
 
-                const handleOpen = (event: React.MouseEvent) => {
-                  const isCmdOrCtrl = event.metaKey || event.ctrlKey;
+                const handleOpen = (event?: React.MouseEvent) => {
+                  const isCmdOrCtrl = event?.metaKey || event?.ctrlKey;
 
                   if (isCmdOrCtrl) {
                     window.open(playroomUrl, '_blank');
@@ -248,13 +214,14 @@ export const PreviewTiles = ({
                 };
 
                 const displayTitle = title || 'Untitled Playroom';
+                const ariaLabel = `Open "${displayTitle}"`;
 
                 const trigger =
                   openLayout === 'list' ? (
                     <li className={styles.listItem}>
                       <button
                         className={styles.listItemButton}
-                        aria-label={`Open "${displayTitle}"`}
+                        aria-label={ariaLabel}
                         onClick={handleOpen}
                       >
                         <Stack space="xsmall">
@@ -290,7 +257,7 @@ export const PreviewTiles = ({
                         trigger={
                           <button
                             className={styles.gridItemButton}
-                            aria-label={`Open "${displayTitle}"`}
+                            aria-label={ariaLabel}
                             onClick={handleOpen}
                           />
                         }
@@ -299,22 +266,13 @@ export const PreviewTiles = ({
                   );
 
                 return (
-                  <ContextMenu key={id} trigger={trigger}>
-                    <PreviewTileContextMenu
-                      playroomUrl={playroomUrl}
-                      id={id}
-                      code={code}
-                      title={title}
-                      themes={themes}
-                      widths={widths}
-                      editorHidden={editorHidden}
-                      dispatch={dispatch}
-                      onSelect={onSelect}
-                      copying={copying}
-                      onCopyClick={onCopyClick}
-                      setConfirmDeleteId={setConfirmDeleteId}
-                    />
-                  </ContextMenu>
+                  <PreviewTileContextMenu
+                    key={id}
+                    trigger={trigger}
+                    playroomUrl={playroomUrl}
+                    onOpen={handleOpen}
+                    onDelete={() => setConfirmDeleteId(id)}
+                  />
                 );
               }
             )}
