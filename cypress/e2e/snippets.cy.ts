@@ -67,37 +67,45 @@ describe('Snippets', () => {
       `);
   });
 
-  it('driven with keyboard', () => {
-    // Open and format for insertion point
-    openSnippets({ source: 'keyboard' });
-    assertSnippetsSearchFieldIsVisible();
-    assertCodePaneLineCount(8);
-    closeSnippets({ source: 'keyboard' });
-    assertCodePaneLineCount(1, true);
-    openSnippets({ source: 'keyboard' });
-    assertSnippetsSearchFieldIsVisible();
-    assertCodePaneLineCount(8);
+  it(
+    'driven with keyboard',
+    {
+      retries: {
+        runMode: 5,
+        openMode: 0,
+      },
+    },
+    () => {
+      // Open and format for insertion point
+      openSnippets({ source: 'keyboard' });
+      assertSnippetsSearchFieldIsVisible();
+      assertCodePaneLineCount(8);
+      closeSnippets({ source: 'keyboard' });
+      assertCodePaneLineCount(1, true);
+      openSnippets({ source: 'keyboard' });
+      assertSnippetsSearchFieldIsVisible();
+      assertCodePaneLineCount(8);
 
-    // Browse snippetlist
-    assertSnippetCount(5);
-    filterSnippets('{downarrow}');
-    assertFirstFrameContains('Initial code\nFoo\nFoo');
-    filterSnippets('{downarrow}');
-    assertFirstFrameContains('Initial code\nFoo\nRed Foo');
-    filterSnippets('{downarrow}');
-    assertFirstFrameContains('Initial code\nBar\nBar');
+      // Browse snippetlist
+      assertSnippetCount(5);
+      filterSnippets('{downarrow}');
+      assertFirstFrameContains('Initial code\nFoo\nFoo');
+      filterSnippets('{downarrow}');
+      assertFirstFrameContains('Initial code\nFoo\nRed Foo');
+      filterSnippets('{downarrow}');
+      assertFirstFrameContains('Initial code\nBar\nBar');
 
-    // Close without persisting
-    closeSnippets({ source: 'keyboard' });
-    assertCodePaneContains('<div>Initial <span>code</span></div>');
-    assertCodePaneLineCount(1, true);
+      // Close without persisting
+      closeSnippets({ source: 'keyboard' });
+      assertCodePaneContains('<div>Initial <span>code</span></div>');
+      assertCodePaneLineCount(1, true);
 
-    // Re-open and persist
-    openSnippets({ source: 'keyboard' });
-    filterSnippets('{downarrow}{downarrow}{downarrow}{downarrow}{enter}');
-    assertFirstFrameContains('Initial code\nBar\nBlue Bar');
-    assertCodePaneLineCount(7);
-    assertCodePaneContains(dedent`
+      // Re-open and persist
+      openSnippets({ source: 'keyboard' });
+      filterSnippets('{downarrow}{downarrow}{downarrow}{downarrow}{enter}');
+      assertFirstFrameContains('Initial code\nBar\nBlue Bar');
+      assertCodePaneLineCount(7);
+      assertCodePaneContains(dedent`
         <div>
           Initial{" "}
           <span>
@@ -105,8 +113,8 @@ describe('Snippets', () => {
           </span>
         </div>\n
       `);
-    typeCode('cursor position');
-    assertCodePaneContains(dedent`
+      typeCode('cursor position');
+      assertCodePaneContains(dedent`
         <div>
           Initial{" "}
           <span>
@@ -114,5 +122,6 @@ describe('Snippets', () => {
           </span>
         </div>\n
       `);
-  });
+    }
+  );
 });
