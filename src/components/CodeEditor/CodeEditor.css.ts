@@ -1,7 +1,7 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
-import { vars } from '../../css/vars.css';
+import { fontSizeDefinitions, vars } from '../../css/vars.css';
 
 const minimumLineNumberWidth = '50px';
 
@@ -84,13 +84,13 @@ globalStyle('.CodeMirror-hints', {
   overflow: 'hidden',
   listStyle: 'none',
   margin: 0,
-  padding: 0,
+  padding: vars.space.xxxsmall,
   boxShadow: colorPaletteVars.shadows.small,
-  borderRadius: vars.radii.small,
+  borderRadius: vars.radii.medium,
   backgroundColor: colorPaletteVars.background.floating,
   border: `1px solid ${colorPaletteVars.border.standard}`,
-  fontSize: '90%',
-  lineHeight: '150%',
+  fontSize: fontSizeDefinitions.standard[0],
+  lineHeight: `${fontSizeDefinitions.standard[1]}px`,
   fontFamily: vars.font.family.code,
   maxHeight: '20em',
   overflowY: 'auto',
@@ -103,10 +103,26 @@ globalStyle('.CodeMirror-hint', {
   whiteSpace: 'pre',
   color: colorPaletteVars.code.text,
   cursor: 'default',
+  height: vars.buttonSizes.medium,
+  display: 'flex',
+  alignItems: 'center',
+  position: 'relative',
+  boxSizing: 'border-box',
 });
 
-globalStyle('li.CodeMirror-hint-active', {
+globalStyle('.CodeMirror-hint::before', {
+  content: '',
+  pointerEvents: 'none',
+  position: 'absolute',
+  inset: 0,
+  borderRadius: vars.radii.small,
+  zIndex: -1,
   backgroundColor: colorPaletteVars.background.selection,
+  opacity: 0,
+});
+
+globalStyle('.CodeMirror-hint-active::before', {
+  opacity: 1,
 });
 
 globalStyle('.CodeMirror-linenumbers', {
