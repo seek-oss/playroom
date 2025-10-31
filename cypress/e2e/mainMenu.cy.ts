@@ -5,6 +5,7 @@ import {
   assertFirstFrameContains,
   assertFramesMatch,
   assertTitle,
+  changeTitle,
   clearThemeSelection,
   clearWidthSelection,
   closeMainMenu,
@@ -23,15 +24,21 @@ import {
 
 describe('Main Menu', () => {
   it('New playroom', () => {
-    loadPlayroom();
+    loadPlayroom(`
+      <div>First line</div>
+      <div>Second line</div>
+      <div>Third line</div>
+    `);
+    assertCodePaneContains(
+      '<div>First line</div>\n<div>Second line</div>\n<div>Third line</div>'
+    );
+    changeTitle('Initial Title');
     openMainMenu();
     cy.findByRole('link', { name: 'New Playroom' }).then((link) => {
       cy.visit(link.prop('href')).then(() => {
+        assertTitle('');
         assertCodePaneContains('');
-        typeCode('TEST').then(() => {
-          assertCodePaneContains('TEST');
-          assertFirstFrameContains('TEST');
-        });
+        assertFirstFrameContains('');
       });
     });
   });
