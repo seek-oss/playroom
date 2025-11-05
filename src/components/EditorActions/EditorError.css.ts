@@ -68,5 +68,10 @@ export const button = style([
       .subtract(vars.space[verticalGutter])
       .negate()
       .toString(),
+    selectors: {
+      ['&:active:not([disabled])']: {
+        transform: 'scale(0.97)',
+      },
+    },
   },
 ]);
