@@ -30,6 +30,8 @@ export const ErrorMessage = ({
           })
         : undefined
     }
+    role="status"
+    aria-live="assertive"
   >
     <Text>{children}</Text>
     {action && actionLabel ? (

@@ -14,6 +14,7 @@ import {
   selectToEndOfLine,
   jumpToLine,
   cmdPlus,
+  moveBy,
 } from '../support/utils';
 
 describe('Editor', () => {
@@ -280,6 +281,79 @@ describe('Editor', () => {
         x<div>Second line</div>
         x<div>Third line</div>
       `);
+    });
+  });
+
+  describe('Editor error', () => {
+    it('shows error for invalid code syntax', () => {
+      loadPlayroom('<Foo');
+      cy.findByRole('status').should('be.visible');
+    });
+
+    it('jumps to line when action clicked', () => {
+      loadPlayroom(`
+        <a>
+          Initial{" "}
+          <span>
+            code
+            <Bar>
+              Bar<Bar>Bar</Bar>
+              <Foo color="red">
+                Red Foo
+                <Bar color="blue">
+                  <Foo color="red">Red Foo</Foo>Blue Bar
+                </Bar>
+                aslkjdajsdlasdj
+              </Foo>
+            </Bar>
+            <Bar>
+              Bar<Bar>Bar</Bar>
+              <Foo color="red">
+                Red Foo
+                <Bar color="blue">
+                  <Foo color="red">Red Foo</Foo>Blue Bar
+                </Bar>
+                aslkjdajsdlasdj
+              </Foo>
+            </Bar>
+          </sp/an>
+        </a>
+      `);
+      cy.findByRole('button', { name: `Jump to line 25` }).click();
+      typeCode('cursor position');
+      assertCodePaneContains(dedent`
+        <a>
+          Initial{" "}
+          <span>
+            code
+            <Bar>
+              Bar<Bar>Bar</Bar>
+              <Foo color="red">
+                Red Foo
+                <Bar color="blue">
+                  <Foo color="red">Red Foo</Foo>Blue Bar
+                </Bar>
+                aslkjdajsdlasdj
+              </Foo>
+            </Bar>
+            <Bar>
+              Bar<Bar>Bar</Bar>
+              <Foo color="red">
+                Red Foo
+                <Bar color="blue">
+                  <Foo color="red">Red Foo</Foo>Blue Bar
+                </Bar>
+                aslkjdajsdlasdj
+              </Foo>
+            </Bar>
+        cursor position  </sp/an>
+        </a>
+      `);
+      moveBy(6);
+      typeCode('{del}');
+      assertFirstFrameContains(
+        `Initial code\nBar\nBar\nBar\nBar\nFoo\nRed Foo\nBar\nFoo\nRed Foo\nBlue Bar\naslkjdajsdlasdj\nBar\nBar\nBar\nBar\nFoo\nRed Foo\nBar\nFoo\nRed Foo\nBlue Bar\naslkjdajsdlasdj\ncursor position`
+      );
     });
   });
 });

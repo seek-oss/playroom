@@ -268,25 +268,39 @@ export const CodeEditor = ({
           'background'
         );
       }
-      if (typeof highlightLineNumber === 'number') {
-        editorInstanceRef.current?.focus();
-      }
     };
   }, [previewCode, highlightLineNumber]);
 
   useEffect(() => {
-    if (
-      !editorInstanceRef.current ||
-      code === editorInstanceRef.current.getValue()
-    ) {
-      return;
+    if (editorInstanceRef.current) {
+      const { line: storeLine, ch: storeCh } = cursorPosition;
+      const { line: editorLine, ch: editorCh } =
+        editorInstanceRef.current.getCursor();
+
+      if (
+        hasSyntaxError &&
+        (storeLine !== editorLine || storeCh !== editorCh)
+      ) {
+        editorInstanceRef.current.setCursor(storeLine, storeCh);
+        editorInstanceRef.current.focus();
+      }
     }
+  }, [cursorPosition, hasSyntaxError]);
 
-    editorInstanceRef.current.setValue(code);
-    editorInstanceRef.current.setCursor(cursorPosition.line, cursorPosition.ch);
-
-    validateCodeInEditor(editorInstanceRef.current, code, dispatch);
-  }, [code, cursorPosition, dispatch]);
+  useEffect(() => {
+    if (
+      editorInstanceRef.current &&
+      code !== editorInstanceRef.current.getValue()
+    ) {
+      editorInstanceRef.current.setValue(code);
+      editorInstanceRef.current.setCursor(
+        cursorPosition.line,
+        cursorPosition.ch
+      );
+      editorInstanceRef.current.focus();
+      validateCodeInEditor(editorInstanceRef.current, code, dispatch);
+    }
+  }, [code, cursorPosition, hasSyntaxError, dispatch]);
 
   return (
     <>

@@ -132,7 +132,11 @@ export const EditorActions = () => {
                   })
               : undefined
           }
-          actionLabel="Jump to line"
+          actionLabel={
+            typeof syntaxErrorLineNumber === 'number'
+              ? `Jump to line ${syntaxErrorLineNumber + 1}`
+              : undefined
+          }
         >
           {hasSyntaxError ? syntaxErrorMessage : null}
         </ErrorMessage>
