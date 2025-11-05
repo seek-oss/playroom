@@ -125,34 +125,6 @@ export const PreviewTiles = ({
 
   return (
     <div className={styles.container}>
-      <Box display="flex" justifyContent="flex-end" marginBottom="medium">
-        <Box display="flex" gap="xsmall">
-          <ButtonIcon
-            size="small"
-            icon={<LayoutGrid />}
-            label="Grid view"
-            variant={openLayout === 'grid' ? 'solid' : 'transparent'}
-            onClick={() =>
-              dispatch({
-                type: 'updateOpenLayout',
-                payload: { layout: 'grid' },
-              })
-            }
-          />
-          <ButtonIcon
-            size="small"
-            icon={<List />}
-            label="List view"
-            variant={openLayout === 'list' ? 'solid' : 'transparent'}
-            onClick={() =>
-              dispatch({
-                type: 'updateOpenLayout',
-                payload: { layout: 'list' },
-              })
-            }
-          />
-        </Box>
-      </Box>
       {playroomEntries.length === 0 ? (
         <Stack space="large">
           <Text size="large">No saved Playrooms available.</Text>
@@ -164,120 +136,150 @@ export const PreviewTiles = ({
           </Text>
         </Stack>
       ) : (
-        <ScrollContainer direction="vertical" fadeSize="medium">
-          <ul
-            ref={listRef}
-            tabIndex={-1}
-            className={openLayout === 'grid' ? styles.grid : styles.list}
-            aria-label="Stored Playrooms"
-          >
-            {playroomEntries.map(
-              ({
-                id,
-                code,
-                themes,
-                widths,
-                themeName,
-                title,
-                editorHidden,
-                lastModifiedDate,
-              }) => {
-                const playroomUrl = createUrl({
-                  baseUrl: getBaseUrl(),
+        <>
+          <Box display="flex" justifyContent="flex-end" marginBottom="medium">
+            <Box display="flex" gap="xsmall">
+              <ButtonIcon
+                size="small"
+                icon={<LayoutGrid />}
+                label="Grid view"
+                variant={openLayout === 'grid' ? 'solid' : 'transparent'}
+                onClick={() =>
+                  dispatch({
+                    type: 'updateOpenLayout',
+                    payload: { layout: 'grid' },
+                  })
+                }
+              />
+              <ButtonIcon
+                size="small"
+                icon={<List />}
+                label="List view"
+                variant={openLayout === 'list' ? 'solid' : 'transparent'}
+                onClick={() =>
+                  dispatch({
+                    type: 'updateOpenLayout',
+                    payload: { layout: 'list' },
+                  })
+                }
+              />
+            </Box>
+          </Box>
+          <ScrollContainer direction="vertical" fadeSize="medium">
+            <ul
+              ref={listRef}
+              tabIndex={-1}
+              className={openLayout === 'grid' ? styles.grid : styles.list}
+              aria-label="Stored Playrooms"
+            >
+              {playroomEntries.map(
+                ({
+                  id,
                   code,
                   themes,
                   widths,
+                  themeName,
                   title,
                   editorHidden,
-                  paramType: playroomConfig.paramType,
-                });
+                  lastModifiedDate,
+                }) => {
+                  const playroomUrl = createUrl({
+                    baseUrl: getBaseUrl(),
+                    code,
+                    themes,
+                    widths,
+                    title,
+                    editorHidden,
+                    paramType: playroomConfig.paramType,
+                  });
 
-                const handleOpen = (event?: React.MouseEvent) => {
-                  const isCmdOrCtrl = event?.metaKey || event?.ctrlKey;
+                  const handleOpen = (event?: React.MouseEvent) => {
+                    const isCmdOrCtrl = event?.metaKey || event?.ctrlKey;
 
-                  if (isCmdOrCtrl) {
-                    window.open(playroomUrl, '_blank');
-                  } else {
-                    dispatch({
-                      type: 'openPlayroom',
-                      payload: {
-                        id,
-                        code,
-                        title,
-                        themes,
-                        widths,
-                        editorHidden,
-                      },
-                    });
-                    onSelect();
-                  }
-                };
+                    if (isCmdOrCtrl) {
+                      window.open(playroomUrl, '_blank');
+                    } else {
+                      dispatch({
+                        type: 'openPlayroom',
+                        payload: {
+                          id,
+                          code,
+                          title,
+                          themes,
+                          widths,
+                          editorHidden,
+                        },
+                      });
+                      onSelect();
+                    }
+                  };
 
-                const displayTitle = title || 'Untitled Playroom';
-                const ariaLabel = `Open "${displayTitle}"`;
+                  const displayTitle = title || 'Untitled Playroom';
+                  const ariaLabel = `Open "${displayTitle}"`;
 
-                const trigger =
-                  openLayout === 'list' ? (
-                    <li className={styles.listItem}>
-                      <button
-                        className={styles.listItemButton}
-                        aria-label={ariaLabel}
-                        onClick={handleOpen}
+                  const trigger =
+                    openLayout === 'list' ? (
+                      <li className={styles.listItem}>
+                        <button
+                          className={styles.listItemButton}
+                          aria-label={ariaLabel}
+                          onClick={handleOpen}
+                        >
+                          <Stack space="xsmall">
+                            <Text truncate weight="strong">
+                              {displayTitle}
+                            </Text>
+                            <Text tone="secondary" size="small">
+                              {formatAsRelative(new Date(lastModifiedDate))}
+                            </Text>
+                          </Stack>
+                        </button>
+                      </li>
+                    ) : (
+                      <li
+                        className={styles.gridItem}
+                        style={assignInlineVars({
+                          [styles.scaleVar]: `${scale}`,
+                        })}
                       >
-                        <Stack space="xsmall">
-                          <Text truncate weight="strong">
-                            {displayTitle}
-                          </Text>
-                          <Text tone="secondary" size="small">
-                            {formatAsRelative(new Date(lastModifiedDate))}
-                          </Text>
-                        </Stack>
-                      </button>
-                    </li>
-                  ) : (
-                    <li
-                      className={styles.gridItem}
-                      style={assignInlineVars({
-                        [styles.scaleVar]: `${scale}`,
-                      })}
-                    >
-                      <Iframe
-                        tabIndex={-1}
-                        className={styles.gridItemIframe}
-                        src={frameSrc({ themeName, code: compileJsx(code) })}
-                        intersectionRootRef={scrollingRef}
-                      />
-                      <span className={styles.gridItemTitle}>
-                        <Text truncate>{displayTitle}</Text>
-                      </span>
-                      <Tooltip
-                        delay
-                        label={displayTitle}
-                        side="bottom"
-                        trigger={
-                          <button
-                            className={styles.gridItemButton}
-                            aria-label={ariaLabel}
-                            onClick={handleOpen}
-                          />
-                        }
-                      />
-                    </li>
-                  );
+                        <Iframe
+                          tabIndex={-1}
+                          className={styles.gridItemIframe}
+                          src={frameSrc({ themeName, code: compileJsx(code) })}
+                          intersectionRootRef={scrollingRef}
+                        />
+                        <span className={styles.gridItemTitle}>
+                          <Text truncate>{displayTitle}</Text>
+                        </span>
+                        <Tooltip
+                          delay
+                          label={displayTitle}
+                          side="bottom"
+                          trigger={
+                            <button
+                              className={styles.gridItemButton}
+                              aria-label={ariaLabel}
+                              onClick={handleOpen}
+                            />
+                          }
+                        />
+                      </li>
+                    );
 
-                return (
-                  <PreviewTileContextMenu
-                    key={id}
-                    trigger={trigger}
-                    playroomUrl={playroomUrl}
-                    onOpen={handleOpen}
-                    onDelete={() => setConfirmDeleteId(id)}
-                  />
-                );
-              }
-            )}
-          </ul>
-        </ScrollContainer>
+                  return (
+                    <PreviewTileContextMenu
+                      key={id}
+                      trigger={trigger}
+                      playroomUrl={playroomUrl}
+                      onOpen={handleOpen}
+                      onDelete={() => setConfirmDeleteId(id)}
+                    />
+                  );
+                }
+              )}
+            </ul>
+          </ScrollContainer>
+        </>
       )}
       <Dialog
         title="Confirm delete"
