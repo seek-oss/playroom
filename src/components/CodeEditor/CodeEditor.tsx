@@ -1,23 +1,11 @@
-import type { Editor } from 'codemirror';
-import {
-  useRef,
-  useContext,
-  useEffect,
-  useCallback,
-  type Dispatch,
-  useState,
-} from 'react';
-import { useDebouncedCallback } from 'use-debounce';
+import type { Doc, Editor } from 'codemirror';
+import { useRef, useContext, useEffect, type Dispatch, useState } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/theme/neo.css';
 
 import { useEditor } from '../../contexts/EditorContext';
-import {
-  type Action,
-  type CursorPosition,
-  StoreContext,
-} from '../../contexts/StoreContext';
+import { type Action, StoreContext } from '../../contexts/StoreContext';
 import { validateCode } from '../../utils/compileJsx';
 import { hints } from '../../utils/componentsToHints';
 import { isValidLocation } from '../../utils/cursor';
@@ -83,6 +71,20 @@ const validateCodeInEditor = (
   }
 };
 
+const positionErrorMarkerAtCursor = (
+  cursorMarker: HTMLButtonElement,
+  editor: Editor
+) => {
+  const cursorPos = editor.cursorCoords(true, 'local');
+  const scrollOffset = editor.getScrollInfo();
+  const gutterWidth = editor.getGutterElement().getBoundingClientRect().width;
+  cursorMarker.style.top = `${cursorPos.top - scrollOffset.top}px`;
+  cursorMarker.style.left = `${
+    cursorPos.left + gutterWidth - scrollOffset.left
+  }px`;
+  cursorMarker.style.height = `${cursorPos.bottom - cursorPos.top}px`;
+};
+
 interface Props {
   code: string;
   onChange: (code: string) => void;
@@ -97,7 +99,6 @@ export const CodeEditor = ({
   previewCode,
 }: Props) => {
   const { registerEditor } = useEditor();
-  const previewSnippetsCode = useRef(false);
   const cursorErrorMarkerRef = useRef<HTMLButtonElement | null>(null);
   const invalidSnippetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
     null
@@ -107,6 +108,7 @@ export const CodeEditor = ({
   );
   const [invalidSnippetLocation, setInvalidSnippetLocation] = useState(false);
   const editorInstanceRef = useRef<Editor | null>(null);
+  const editorDocRef = useRef<Doc | null>(null);
   const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
     null
   );
@@ -119,23 +121,6 @@ export const CodeEditor = ({
     },
     dispatch,
   ] = useContext(StoreContext);
-
-  const debouncedChange = useDebouncedCallback(
-    (newCode: string) => onChange(newCode),
-    100
-  );
-
-  const setCursorPosition = useCallback(
-    ({ line, ch }: CursorPosition) => {
-      setTimeout(() => {
-        if (editorInstanceRef.current && !previewCode) {
-          editorInstanceRef.current.focus();
-          editorInstanceRef.current.setCursor(line, ch);
-        }
-      });
-    },
-    [previewCode]
-  );
 
   useEffect(() => {
     if (hasSyntaxError && typeof syntaxErrorLineNumber === 'number') {
@@ -194,23 +179,10 @@ export const CodeEditor = ({
           if (validCursorPosition) {
             dispatch({ type: 'openSnippets' });
           } else if (cursorErrorMarkerRef.current) {
-            const cursorPos = editorInstanceRef.current.cursorCoords(
-              true,
-              'local'
+            positionErrorMarkerAtCursor(
+              cursorErrorMarkerRef.current,
+              editorInstanceRef.current
             );
-            const scrollOffset = editorInstanceRef.current.getScrollInfo();
-            const gutterWidth = editorInstanceRef.current
-              .getGutterElement()
-              .getBoundingClientRect().width;
-            cursorErrorMarkerRef.current.style.top = `${
-              cursorPos.top - scrollOffset.top
-            }px`;
-            cursorErrorMarkerRef.current.style.left = `${
-              cursorPos.left + gutterWidth - scrollOffset.left
-            }px`;
-            cursorErrorMarkerRef.current.style.height = `${
-              cursorPos.bottom - cursorPos.top
-            }px`;
             setInvalidSnippetLocation(true);
           }
         }
@@ -240,49 +212,13 @@ export const CodeEditor = ({
       return;
     }
 
+    // Entering snippets preview mode
     if (previewCode) {
-      editorInstanceRef.current.setValue(previewCode);
-      previewSnippetsCode.current = true;
-    } else if (previewSnippetsCode.current) {
-      // If existing snippets preview, remove the preview code
-      // from the undo history.
-      editorInstanceRef.current.getDoc().undo();
-
-      // prevent redo after undo'ing preview code.
-      const history = editorInstanceRef.current.getDoc().getHistory();
-      editorInstanceRef.current.getDoc().setHistory({ ...history, undone: [] });
-
-      previewSnippetsCode.current = false;
+      editorDocRef.current = editorInstanceRef.current.getDoc();
+      const previewDoc = editorDocRef.current.copy(false);
+      previewDoc.setValue(previewCode);
+      editorInstanceRef.current.swapDoc(previewDoc);
     }
-  }, [previewCode]);
-
-  useEffect(() => {
-    if (!editorInstanceRef.current) {
-      return;
-    }
-
-    if (
-      editorInstanceRef.current.hasFocus() ||
-      code === editorInstanceRef.current.getValue() ||
-      previewCode
-    ) {
-      return;
-    }
-    editorInstanceRef.current.setValue(code);
-    validateCodeInEditor(editorInstanceRef.current, code, dispatch);
-  }, [code, previewCode, dispatch]);
-
-  useEffect(() => {
-    if (editorInstanceRef.current && !editorInstanceRef.current.hasFocus()) {
-      setCursorPosition(cursorPosition);
-    }
-  }, [cursorPosition, previewCode, setCursorPosition]);
-
-  useEffect(() => {
-    if (!editorInstanceRef.current) {
-      return;
-    }
-
     if (typeof highlightLineNumber === 'number') {
       insertionPointRef.current = editorInstanceRef.current.addLineClass(
         highlightLineNumber,
@@ -296,14 +232,40 @@ export const CodeEditor = ({
         },
         200
       );
-    } else if (insertionPointRef.current) {
-      editorInstanceRef.current.removeLineClass(
-        insertionPointRef.current,
-        'background'
-      );
-      insertionPointRef.current = null;
     }
-  }, [highlightLineNumber]);
+
+    return () => {
+      // Exiting snippets preview mode
+      if (previewCode && editorDocRef.current) {
+        editorInstanceRef.current?.swapDoc(editorDocRef.current);
+        editorDocRef.current = null;
+      }
+      if (insertionPointRef.current) {
+        editorInstanceRef.current?.removeLineClass(
+          insertionPointRef.current,
+          'background'
+        );
+        insertionPointRef.current = null;
+      }
+      if (typeof highlightLineNumber === 'number') {
+        editorInstanceRef.current?.focus();
+      }
+    };
+  }, [previewCode, highlightLineNumber]);
+
+  useEffect(() => {
+    if (
+      !editorInstanceRef.current ||
+      code === editorInstanceRef.current.getValue()
+    ) {
+      return;
+    }
+
+    editorInstanceRef.current.setValue(code);
+    editorInstanceRef.current.setCursor(cursorPosition.line, cursorPosition.ch);
+
+    validateCodeInEditor(editorInstanceRef.current, code, dispatch);
+  }, [code, cursorPosition, dispatch]);
 
   return (
     <>
@@ -313,28 +275,42 @@ export const CodeEditor = ({
           editorInstanceRef.current.setValue(code);
           validateCodeInEditor(editorInstance, code, dispatch);
           if (!editorHidden) {
-            setCursorPosition(cursorPosition);
+            editorInstanceRef.current.focus();
+            editorInstanceRef.current.setCursor(
+              cursorPosition.line,
+              cursorPosition.ch
+            );
           }
           registerEditor(editorInstance);
         }}
         onChange={(editorInstance, data, newCode) => {
-          if (editorInstance.hasFocus() && !previewCode) {
+          if (previewCode) {
+            return;
+          }
+
+          if (editorInstance.hasFocus()) {
             validateCodeInEditor(editorInstance, newCode, dispatch);
-            debouncedChange(newCode);
+            onChange(newCode);
           }
         }}
         onCursorActivity={(editor) => {
-          setInvalidSnippetLocation(false);
-          setTimeout(() => {
-            if (!editor.somethingSelected() && editor.hasFocus()) {
-              const { line, ch } = editor.getCursor();
+          if (previewCode) {
+            return;
+          }
 
-              dispatch({
-                type: 'updateCursorPosition',
-                payload: { position: { line, ch }, code: editor.getValue() },
-              });
-            }
-          });
+          setInvalidSnippetLocation(false);
+
+          if (!editor.somethingSelected()) {
+            const { line, ch } = editor.getCursor();
+
+            dispatch({
+              type: 'updateCursorPosition',
+              payload: {
+                position: { line, ch },
+                code: editor.getValue(),
+              },
+            });
+          }
         }}
         options={{
           mode: 'jsx',
