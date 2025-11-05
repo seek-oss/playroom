@@ -1,4 +1,4 @@
-import type { Doc, Editor } from 'codemirror';
+import type { Doc, Editor, EditorConfiguration, LineHandle } from 'codemirror';
 import { useRef, useContext, useEffect, type Dispatch, useState } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/dialog/dialog.css';
@@ -45,6 +45,29 @@ const editorCommands = editorCommandList.reduce(
   }),
   {}
 );
+
+const extraKeys: EditorConfiguration['extraKeys'] = {
+  Tab: (cm: Editor) => {
+    if (cm.somethingSelected()) {
+      cm.indentSelection('add');
+    } else {
+      const indent = cm.getOption('indentUnit') as number;
+      const spaces = Array(indent + 1).join(' ');
+      cm.replaceSelection(spaces);
+    }
+  },
+  'Ctrl-Space': completeIfInTag,
+  "'<'": completeAfter,
+  "'/'": completeIfAfterLt,
+  "' '": completeIfInTag,
+  "'='": completeIfInTag,
+  'Alt-G': false, // override default keybinding
+  'Alt-F': false, // override default keybinding
+  'Shift-Ctrl-R': false, // override default keybinding
+  'Cmd-Option-F': false, // override default keybinding
+  'Shift-Cmd-Option-F': false, // override default keybinding
+  ...editorCommands,
+};
 
 const validateCodeInEditor = (
   editorInstance: Editor,
@@ -100,18 +123,8 @@ export const CodeEditor = ({
 }: Props) => {
   const { registerEditor } = useEditor();
   const cursorErrorMarkerRef = useRef<HTMLButtonElement | null>(null);
-  const invalidSnippetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null
-  );
-  const errorGutterTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null
-  );
   const [invalidSnippetLocation, setInvalidSnippetLocation] = useState(false);
   const editorInstanceRef = useRef<Editor | null>(null);
-  const editorDocRef = useRef<Doc | null>(null);
-  const insertionPointRef = useRef<ReturnType<Editor['addLineClass']> | null>(
-    null
-  );
   const [
     {
       cursorPosition,
@@ -123,6 +136,7 @@ export const CodeEditor = ({
   ] = useContext(StoreContext);
 
   useEffect(() => {
+    let errorGutterTimeout: ReturnType<typeof setTimeout>;
     if (hasSyntaxError && typeof syntaxErrorLineNumber === 'number') {
       const marker = document.createElement('div');
       marker.setAttribute('class', styles.errorMarker);
@@ -134,31 +148,38 @@ export const CodeEditor = ({
       );
 
       // Using timeout to transition in after delay, aligned with error message
-      errorGutterTimeoutRef.current = setTimeout(() => {
+      errorGutterTimeout = setTimeout(() => {
         marker.classList.add(styles.showErrorMarker);
       }, editorErrorDelay);
     }
 
     return () => {
       editorInstanceRef.current?.clearGutter('errorGutter');
-      if (errorGutterTimeoutRef.current) {
-        clearTimeout(errorGutterTimeoutRef.current);
-        errorGutterTimeoutRef.current = null;
+      if (errorGutterTimeout) {
+        clearTimeout(errorGutterTimeout);
       }
     };
   }, [hasSyntaxError, syntaxErrorLineNumber]);
 
   useEffect(() => {
+    let invalidSnippetTimeout: ReturnType<typeof setTimeout>;
+    const closeInvalidSnippetKeymap = {
+      Esc: () => setInvalidSnippetLocation(false),
+    };
+
     if (invalidSnippetLocation) {
-      invalidSnippetTimeoutRef.current = setTimeout(
+      invalidSnippetTimeout = setTimeout(
         () => setInvalidSnippetLocation(false),
         2000
       );
+
+      editorInstanceRef.current?.addKeyMap(closeInvalidSnippetKeymap);
     }
 
     return () => {
-      if (invalidSnippetTimeoutRef.current) {
-        clearTimeout(invalidSnippetTimeoutRef.current);
+      if (invalidSnippetTimeout) {
+        clearTimeout(invalidSnippetTimeout);
+        editorInstanceRef.current?.removeKeyMap(closeInvalidSnippetKeymap);
       }
     };
   }, [invalidSnippetLocation]);
@@ -213,14 +234,16 @@ export const CodeEditor = ({
     }
 
     // Entering snippets preview mode
+    let editorDoc: Doc;
     if (previewCode) {
-      editorDocRef.current = editorInstanceRef.current.getDoc();
-      const previewDoc = editorDocRef.current.copy(false);
+      editorDoc = editorInstanceRef.current.getDoc();
+      const previewDoc = editorDoc.copy(false);
       previewDoc.setValue(previewCode);
       editorInstanceRef.current.swapDoc(previewDoc);
     }
+    let insertionPointLine: LineHandle;
     if (typeof highlightLineNumber === 'number') {
-      insertionPointRef.current = editorInstanceRef.current.addLineClass(
+      insertionPointLine = editorInstanceRef.current.addLineClass(
         highlightLineNumber,
         'background',
         styles.insertionPoint
@@ -236,16 +259,14 @@ export const CodeEditor = ({
 
     return () => {
       // Exiting snippets preview mode
-      if (previewCode && editorDocRef.current) {
-        editorInstanceRef.current?.swapDoc(editorDocRef.current);
-        editorDocRef.current = null;
+      if (previewCode && editorDoc) {
+        editorInstanceRef.current?.swapDoc(editorDoc);
       }
-      if (insertionPointRef.current) {
+      if (insertionPointLine) {
         editorInstanceRef.current?.removeLineClass(
-          insertionPointRef.current,
+          insertionPointLine,
           'background'
         );
-        insertionPointRef.current = null;
       }
       if (typeof highlightLineNumber === 'number') {
         editorInstanceRef.current?.focus();
@@ -332,31 +353,7 @@ export const CodeEditor = ({
             widget: '\u2026',
             minFoldSize: 1,
           },
-          extraKeys: {
-            Esc: invalidSnippetLocation
-              ? () => setInvalidSnippetLocation(false)
-              : false,
-            Tab: (cm) => {
-              if (cm.somethingSelected()) {
-                cm.indentSelection('add');
-              } else {
-                const indent = cm.getOption('indentUnit') as number;
-                const spaces = Array(indent + 1).join(' ');
-                cm.replaceSelection(spaces);
-              }
-            },
-            'Ctrl-Space': completeIfInTag,
-            "'<'": completeAfter,
-            "'/'": completeIfAfterLt,
-            "' '": completeIfInTag,
-            "'='": completeIfInTag,
-            'Alt-G': false, // override default keybinding
-            'Alt-F': false, // override default keybinding
-            'Shift-Ctrl-R': false, // override default keybinding
-            'Cmd-Option-F': false, // override default keybinding
-            'Shift-Cmd-Option-F': false, // override default keybinding
-            ...editorCommands,
-          },
+          extraKeys,
         }}
       />
       <Tooltip
