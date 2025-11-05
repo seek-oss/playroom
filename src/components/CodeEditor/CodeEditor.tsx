@@ -268,6 +268,7 @@ export const CodeEditor = ({
           'background'
         );
       }
+      editorInstanceRef.current?.focus();
     };
   }, [previewCode, highlightLineNumber]);
 
@@ -278,14 +279,14 @@ export const CodeEditor = ({
         editorInstanceRef.current.getCursor();
 
       if (
-        hasSyntaxError &&
+        !editorInstanceRef.current?.somethingSelected() &&
         (storeLine !== editorLine || storeCh !== editorCh)
       ) {
         editorInstanceRef.current.setCursor(storeLine, storeCh);
-        editorInstanceRef.current.focus();
+        editorInstanceRef.current?.focus();
       }
     }
-  }, [cursorPosition, hasSyntaxError]);
+  }, [cursorPosition]);
 
   useEffect(() => {
     if (
@@ -300,7 +301,7 @@ export const CodeEditor = ({
       editorInstanceRef.current.focus();
       validateCodeInEditor(editorInstanceRef.current, code, dispatch);
     }
-  }, [code, cursorPosition, hasSyntaxError, dispatch]);
+  }, [code, cursorPosition, dispatch]);
 
   return (
     <>
