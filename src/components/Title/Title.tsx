@@ -1,7 +1,7 @@
+import { clsx } from 'clsx';
 import { useContext } from 'react';
 
 import { StoreContext } from '../../contexts/StoreContext';
-import { Text } from '../Text/Text';
 
 import * as styles from './Title.css';
 
@@ -24,18 +24,14 @@ export const Title = () => {
           })
         }
       />
-      <span aria-hidden className={styles.readOnlyText}>
-        <Text
-          weight={styles.titleWeight}
-          size={styles.titleSize}
-          tone={!title ? 'secondary' : undefined}
-          align="center"
-          truncate
-        >
-          <span className={styles.preserveWhiteSpace}>
-            {title || 'Untitled'}
-          </span>
-        </Text>
+      <span
+        aria-hidden
+        className={clsx({
+          [styles.readOnlyText]: true,
+          [styles.noTitle]: !title,
+        })}
+      >
+        {title || 'Untitled'}
       </span>
     </div>
   );

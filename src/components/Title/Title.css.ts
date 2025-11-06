@@ -1,5 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
+import { comma } from '../../css/delimiters';
+
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
@@ -35,10 +37,13 @@ export const textField = style([
     background: 'transparent',
     '::placeholder': {
       color: colorPaletteVars.foreground.secondary,
-      fontWeight: 'normal',
+      fontWeight: titleWeight,
     },
     selectors: {
-      '&:hover:not(:focus-visible)': {
+      [comma(
+        '&:hover:not(:focus-visible)',
+        '&:hover:not(:focus-visible)::placeholder'
+      )]: {
         background: colorPaletteVars.background.selection,
         opacity: 1,
         color: 'transparent',
@@ -48,6 +53,7 @@ export const textField = style([
       },
       '&:focus-visible': {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
+        outlineOffset: 0,
         opacity: 1,
       },
       '&:focus-visible::placeholder': {
@@ -64,10 +70,15 @@ export const readOnlyText = style([
     pointerEvents: 'none',
     paddingX,
     userSelect: 'none',
+    font: titleSize,
+    fontWeight: titleWeight,
+    textAlign: 'center',
   }),
   {
     maxWidth: '50vw',
     minWidth: 240,
+    whiteSpace: 'pre',
+    color: colorPaletteVars.foreground.neutral,
     selectors: {
       [`${textField}:focus-visible ~ &`]: {
         opacity: 0,
@@ -76,6 +87,6 @@ export const readOnlyText = style([
   },
 ]);
 
-export const preserveWhiteSpace = style({
-  whiteSpace: 'pre',
+export const noTitle = style({
+  color: colorPaletteVars.foreground.secondary,
 });
