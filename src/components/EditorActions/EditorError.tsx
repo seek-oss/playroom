@@ -19,7 +19,7 @@ export const ErrorMessage = ({
 }) => (
   <div
     className={clsx({
-      [styles.message]: true,
+      [styles.root]: true,
       [styles.show]: Boolean(children),
       [styles.entranceDelay]: typeof delay !== 'undefined',
     })}
@@ -33,7 +33,9 @@ export const ErrorMessage = ({
     role="status"
     aria-live="assertive"
   >
-    <Text>{children}</Text>
+    <span className={styles.message}>
+      <Text>{children}</Text>
+    </span>
     {action && actionLabel ? (
       <button onClick={action} className={styles.button}>
         {actionLabel}

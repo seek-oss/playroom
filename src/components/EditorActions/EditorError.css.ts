@@ -8,19 +8,14 @@ import { vars } from '../../css/vars.css';
 
 export const show = style({});
 
-const verticalGutter = 'xxsmall';
-const horizontalGutter = 'small';
-
-export const message = style([
+export const root = style([
   sprinkles({
     transition: 'medium',
-    paddingY: verticalGutter,
-    paddingX: horizontalGutter,
     borderRadius: 'medium',
     userSelect: 'none',
     display: 'flex',
-    gap: 'medium',
-    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     boxShadow: 'small',
   }),
   {
@@ -31,7 +26,6 @@ export const message = style([
     wordBreak: 'break-word',
     whiteSpace: 'pre-line',
     outline: `1px solid ${light.foreground.critical}`,
-    height: vars.buttonSizes.small,
     selectors: {
       [`&:not(${show})`]: {
         transform: `translateY(${vars.space.xsmall})`,
@@ -47,6 +41,14 @@ export const entranceDelay = style({
   transitionDelay: calc(delay).multiply('1ms').toString(),
 });
 
+export const message = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    padding: 'small',
+  }),
+]);
+
 export const button = style([
   sprinkles({
     appearance: 'none',
@@ -56,6 +58,7 @@ export const button = style([
     border: 0,
     paddingX: 'small',
     paddingY: 'xxxsmall',
+    margin: 'xxsmall',
     display: 'flex',
     alignItems: 'center',
     userSelect: 'none',
@@ -64,10 +67,6 @@ export const button = style([
     background: light.foreground.critical,
     color: dark.foreground.neutral,
     height: vars.buttonSizes.small,
-    marginRight: calc(vars.space[horizontalGutter])
-      .subtract(vars.space[verticalGutter])
-      .negate()
-      .toString(),
     selectors: {
       ['&:active:not([disabled])']: {
         transform: 'scale(0.97)',
