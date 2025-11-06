@@ -150,6 +150,7 @@ globalStyle('.cm-s-neo.CodeMirror::after', {
   width: scrollAffordanceFadeWidth,
   background: `linear-gradient(90deg, transparent, ${editorBackground})`,
   right: 0,
+  pointerEvents: 'none',
 });
 
 globalStyle('.CodeMirror-scroll', {
