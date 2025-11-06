@@ -36,6 +36,7 @@ export const header = style([
     gap: 'small',
   }),
   {
+    backgroundColor: colorPaletteVars.background.previewBanner,
     borderBottom: `1px solid ${colorPaletteVars.border.standard}`,
   },
 ]);
@@ -57,6 +58,7 @@ export const footer = style([
     gap: 'small',
   }),
   {
+    backgroundColor: colorPaletteVars.background.previewBanner,
     borderTop: `1px solid ${colorPaletteVars.border.standard}`,
   },
 ]);

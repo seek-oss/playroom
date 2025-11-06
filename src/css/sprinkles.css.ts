@@ -36,6 +36,7 @@ export const colorPaletteVars = createThemeContract({
     selection: null,
     tooltip: null,
     textSelection: null,
+    previewBanner: null,
   },
   border: {
     standard: null,

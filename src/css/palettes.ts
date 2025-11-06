@@ -186,6 +186,12 @@ const darkPalette = {
   },
 };
 
+const surfaceLight = mix(
+  0.5,
+  lightPalette.background[200],
+  lightPalette.background[100]
+);
+
 export const light = {
   code: {
     text: lightPalette.gray[1000],
@@ -212,15 +218,12 @@ export const light = {
     positive: lightPalette.teal[300],
     critical: lightPalette.red[300],
     body: mix(0.5, lightPalette.gray[100], lightPalette.background[200]),
-    surface: mix(
-      0.5,
-      lightPalette.background[200],
-      lightPalette.background[100]
-    ),
+    surface: surfaceLight,
     floating: lightPalette.background[100],
     selection: lightPalette.gray[100],
     tooltip: lightPalette.gray[1000],
     textSelection: lightPalette.blue[400],
+    previewBanner: surfaceLight,
   },
   border: {
     standard: lightPalette.gray[400],
@@ -269,6 +272,7 @@ export const dark = {
     selection: 'hsla(0,0%,12%,1)',
     tooltip: 'hsla(0,0%,0%,1)',
     textSelection: darkPalette.blue[400],
+    previewBanner: surfaceLight,
   },
   border: {
     standard: darkPalette.gray[400],
