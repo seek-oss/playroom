@@ -48,7 +48,7 @@ export const base = style([
         backgroundColor: colorPaletteVars.background.selection,
         opacity: 0,
         transition: 'opacity 120ms ease',
-        zIndex: -1,
+        pointerEvents: 'none',
       },
       ['&:hover::after']: {
         opacity: 1,
@@ -64,6 +64,20 @@ export const base = style([
         outlineOffset: 0,
       },
     },
+  },
+]);
+
+/**
+ * Fix to ensure text is on top of `after` pseudo that sets the background colour.
+ * Without this, Safari would shift the text around on hover
+ */
+export const labelWrapper = style([
+  sprinkles({
+    position: 'relative',
+    zIndex: 1,
+  }),
+  {
+    isolation: 'isolate',
   },
 ]);
 

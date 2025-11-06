@@ -40,13 +40,15 @@ export const Button = ({
     disabled={tone === 'positive'}
     {...props}
   >
-    <Text
-      weight="strong"
-      tone={tone}
-      size={size !== 'medium' ? size : undefined}
-      truncate
-    >
-      {children}
-    </Text>
+    <span className={styles.labelWrapper}>
+      <Text
+        weight="strong"
+        tone={tone}
+        size={size !== 'medium' ? size : undefined}
+        truncate
+      >
+        {children}
+      </Text>
+    </span>
   </ButtonComponent>
 );
