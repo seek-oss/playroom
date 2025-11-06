@@ -1,4 +1,4 @@
-import { Popover as BaseUIPopover } from '@base-ui-components/react';
+import { Popover as BaseUIPopover } from '@base-ui-components/react/popover';
 import clsx from 'clsx';
 import { Command } from 'cmdk-base';
 import { X } from 'lucide-react';

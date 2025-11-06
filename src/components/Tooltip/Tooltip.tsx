@@ -1,4 +1,4 @@
-import { Tooltip as BaseUITooltip } from '@base-ui-components/react';
+import { Tooltip as BaseUITooltip } from '@base-ui-components/react/tooltip';
 import { type ReactNode, useId, type ComponentProps, forwardRef } from 'react';
 
 import { Text } from '../Text/Text';

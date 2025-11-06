@@ -81,7 +81,7 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
-    "@base-ui-components/react": "1.0.0-beta.1",
+    "@base-ui-components/react": "1.0.0-beta.4",
     "@capsizecss/metrics": "^3.5.0",
     "@capsizecss/vanilla-extract": "^2.0.1",
     "@soda/friendly-errors-webpack-plugin": "^1.8.1",
