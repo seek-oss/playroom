@@ -1,5 +1,4 @@
 import { createVar, globalStyle, style } from '@vanilla-extract/css';
-import { calc } from '@vanilla-extract/css-utils';
 
 import { comma } from '../../css/delimiters';
 
@@ -33,6 +32,7 @@ export const small = style({
   width: 250,
 });
 
+const menuItemHeight = 34; // Explicit height until icons are vertically trimmed
 const highlightColor = createVar();
 export const item = style([
   sprinkles({
@@ -49,7 +49,7 @@ export const item = style([
     outline: 'none',
     cursor: 'default',
     color: colorPaletteVars.foreground.neutral,
-    height: 34, // Explicit height until icons are vertically trimmed
+    height: menuItemHeight,
     isolation: 'isolate',
     '::before': {
       content: '',
@@ -199,7 +199,22 @@ export const checkboxBox = style([
   },
 ]);
 
+export const menuGroup = style([sprinkles({ position: 'relative' })]);
+
 export const menuGroupLabel = style([item]);
+
+export const menuGroupActionContainer = style([
+  sprinkles({
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    display: 'flex',
+    alignItems: 'center',
+  }),
+  {
+    height: menuItemHeight,
+  },
+]);
 
 export const separator = style([
   sprinkles({
@@ -235,7 +250,7 @@ export const clearItem = style([
   {
     background: 'transparent',
     border: 'none',
-    margin: calc(vars.space[clearItemPadding]).negate().toString(),
+    // margin: calc(vars.space[clearItemPadding]).negate().toString(),
     selectors: {
       [comma('&:hover', '&[data-highlighted]')]: {
         backgroundColor: colorPaletteVars.background.selection,

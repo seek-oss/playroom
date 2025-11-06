@@ -217,14 +217,16 @@ export const MenuGroup = ({
   children: ComponentProps<typeof BaseUIMenu.Group>['children'];
   action?: ComponentProps<typeof BaseUIMenu.Group>['children'];
 }) => (
-  <BaseUIMenu.Group>
+  <BaseUIMenu.Group className={styles.menuGroup}>
     <BaseUIMenu.GroupLabel className={styles.menuGroupLabel}>
       <Text tone="secondary" truncate>
         {label}
       </Text>
-      {action}
     </BaseUIMenu.GroupLabel>
     {children}
+    {action ? (
+      <span className={styles.menuGroupActionContainer}>{action}</span>
+    ) : null}
   </BaseUIMenu.Group>
 );
 
