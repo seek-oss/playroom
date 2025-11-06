@@ -74,6 +74,8 @@ import * as styles from './Header.css';
 
 export const logoSize = 24;
 
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
 type FrameWidthIconRange = {
   min: number;
   max?: number;
@@ -253,7 +255,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
         <MenuItem
           icon={FolderOpen}
           onClick={() => dispatch({ type: 'openPlayroomDialog' })}
-          shortcut={[primaryMod, 'O']}
+          shortcut={!isSafari ? [primaryMod, 'O'] : undefined}
         >
           Open Playroom...
         </MenuItem>
