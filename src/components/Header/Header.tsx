@@ -120,14 +120,12 @@ const FramesMenu = () => {
       <MenuGroup
         label="Widths"
         action={
-          hasFilteredWidths ? (
-            <MenuClearItem
-              onClick={() => dispatch({ type: 'resetSelectedWidths' })}
-              aria-label="Clear selected widths"
-            >
-              Clear
-            </MenuClearItem>
-          ) : null
+          <MenuClearItem
+            onClick={() => dispatch({ type: 'resetSelectedWidths' })}
+            aria-label="Clear selected widths"
+          >
+            Clear
+          </MenuClearItem>
         }
       >
         {availableWidths.map((width) => (
@@ -161,14 +159,12 @@ const FramesMenu = () => {
           <MenuGroup
             label="Themes"
             action={
-              hasFilteredThemes ? (
-                <MenuClearItem
-                  onClick={() => dispatch({ type: 'resetSelectedThemes' })}
-                  aria-label="Clear selected themes"
-                >
-                  Clear
-                </MenuClearItem>
-              ) : null
+              <MenuClearItem
+                onClick={() => dispatch({ type: 'resetSelectedThemes' })}
+                aria-label="Clear selected themes"
+              >
+                Clear
+              </MenuClearItem>
             }
           >
             {availableThemes.map((theme) => (
