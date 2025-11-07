@@ -6,11 +6,17 @@ import * as styles from './Text.css';
 interface Props {
   size?: 'xsmall' | 'small' | 'standard' | 'large';
   weight?: 'regular' | 'strong';
-  tone?: 'neutral' | 'secondary' | 'critical';
+  tone?: 'neutral' | 'secondary' | 'critical' | 'positive';
   as?: ElementType;
+  align?: keyof typeof styles.align;
   truncate?: boolean;
+  underline?: boolean;
   children: ReactNode;
 }
+
+export const Truncate = ({ children }: { children: ReactNode }) => (
+  <span className={styles.truncate}>{children}</span>
+);
 
 export const Text = ({
   as: component = 'span',
@@ -18,15 +24,18 @@ export const Text = ({
   weight = 'regular',
   tone = 'neutral',
   truncate = false,
+  underline = false,
+  align,
   children,
 }: Props) =>
   React.createElement(
     component,
     {
-      className: clsx(styles.base, styles[size], styles[tone], {
+      className: clsx(styles.base, styles.size[size], styles[tone], {
         [styles.strong]: weight === 'strong',
-        [styles.truncate]: truncate,
+        [styles.underline]: underline,
+        [styles.align[align!]]: align,
       }),
     },
-    children
+    truncate ? <Truncate>{children}</Truncate> : children
   );

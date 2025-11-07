@@ -1,3 +1,5 @@
+import plusJakartaSansMetrics from '@capsizecss/metrics/plusJakartaSans';
+import { createTextStyle } from '@capsizecss/vanilla-extract';
 import { style } from '@vanilla-extract/css';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
@@ -14,12 +16,20 @@ export const base = style([
   },
 ]);
 
-export const level1 = style({
-  fontSize: '36px',
+export const level1 = createTextStyle({
+  fontSize: 36,
+  leading: 44,
+  fontMetrics: plusJakartaSansMetrics,
 });
-export const level2 = style({
-  fontSize: '24px',
+
+export const level2 = createTextStyle({
+  fontSize: 20,
+  leading: 28,
+  fontMetrics: plusJakartaSansMetrics,
 });
-export const level3 = style({
-  fontSize: '16px',
+
+export const level3 = createTextStyle({
+  fontSize: 16,
+  leading: 20,
+  fontMetrics: plusJakartaSansMetrics,
 });

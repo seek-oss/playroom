@@ -16,31 +16,38 @@ export const colorPaletteVars = createThemeContract({
     number: null,
   },
   foreground: {
-    neutralSoft: null,
     neutral: null,
     neutralInverted: null,
     secondary: null,
     critical: null,
     accent: null,
     positive: null,
+    tooltip: null,
   },
   background: {
-    transparent: null,
     accent: null,
+    secondaryAccent: null,
+    secondaryAccentLight: null,
     positive: null,
     critical: null,
-    neutral: null,
-    surface: null,
     body: null,
+    surface: null,
+    floating: null,
     selection: null,
-    search: null,
+    tooltip: null,
+    textSelection: null,
+    previewBanner: null,
   },
   border: {
     standard: null,
+    accent: null,
+    tooltip: null,
+  },
+  outline: {
+    focus: null,
   },
   shadows: {
     small: null,
-    focus: null,
   },
 });
 
@@ -87,7 +94,15 @@ const responsiveProperties = defineProperties({
     opacity: [0],
     zIndex: [0, 1],
     font: vars.font.scale,
-    fontWeight: vars.font.weight,
+    fontWeight: {
+      normal: {
+        fontWeight: vars.font.weight.normal,
+      },
+      strong: {
+        fontWeight: vars.font.weight.strong,
+        fontVariationSettings: `"wght" 500`, // Select variable font weight for strong text (Safari doesnt support setting this as a font face descriptor)
+      },
+    },
     width: { full: '100%', viewport: '100dvw' },
     height: { full: '100%', viewport: '100dvh' },
     whiteSpace: ['nowrap'],

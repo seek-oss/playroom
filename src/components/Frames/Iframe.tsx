@@ -4,27 +4,28 @@ import {
   useRef,
   type AllHTMLAttributes,
   type RefObject,
+  forwardRef,
 } from 'react';
 
 import playroomConfig from '../../config';
+import { useGlobalKeyboardShortcutsForWindow } from '../globalKeyboardShortcuts';
 
 interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
   src: string;
   intersectionRootRef: RefObject<Element | null>;
+  rootMargin?: string;
 }
 
-export default function Iframe({
-  intersectionRootRef,
-  style,
-  src,
-  ...restProps
-}: IframeProps) {
+export default forwardRef<HTMLIFrameElement, IframeProps>(function Iframe(
+  { intersectionRootRef, style, src, rootMargin, ...restProps },
+  forwardedRef
+) {
   const [loaded, setLoaded] = useState(false);
   const [renderedSrc, setRenderedSrc] = useState<string | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const intersection = useIntersection(iframeRef, {
     root: intersectionRootRef.current,
-    rootMargin: '800px',
+    rootMargin,
     threshold: 0,
   });
 
@@ -50,9 +51,22 @@ export default function Iframe({
     }
   }, [renderedSrc]);
 
+  useGlobalKeyboardShortcutsForWindow(
+    loaded && iframeRef.current?.contentWindow
+      ? iframeRef.current?.contentWindow
+      : null
+  );
+
   return (
     <iframe
-      ref={iframeRef}
+      ref={(el: HTMLIFrameElement | null) => {
+        iframeRef.current = el;
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(el);
+        } else if (forwardedRef && 'current' in forwardedRef) {
+          forwardedRef.current = el;
+        }
+      }}
       sandbox={playroomConfig.iframeSandbox}
       onLoad={() => setLoaded(true)}
       onMouseEnter={() => {
@@ -62,13 +76,12 @@ export default function Iframe({
       }}
       style={{
         ...style,
-        transition: 'opacity .3s ease',
         opacity: loaded ? 1 : 0,
       }}
       {...restProps}
     />
   );
-}
+});
 
 // copied directly from `react-use`
 // https://github.com/streamich/react-use/blob/d2028ae44c79628475f0ef1736c4a48ca310247a/src/useIntersection.ts#L3-L28

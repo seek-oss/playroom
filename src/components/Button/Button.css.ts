@@ -1,83 +1,117 @@
-import { style, createVar } from '@vanilla-extract/css';
+import { createVar, style, styleVariants } from '@vanilla-extract/css';
 
+import { minTouchableBeforePseudo } from '../../css/shared.css';
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
-export const reset = style([
+export const sizeVar = createVar();
+
+const reset = style([
   sprinkles({
     boxSizing: 'border-box',
     border: 0,
     margin: 'none',
-    padding: 'none',
     appearance: 'none',
     userSelect: 'none',
-    position: 'relative',
-    cursor: 'pointer',
-    display: 'flex',
-    placeItems: 'center',
   }),
   {
     background: 'transparent',
     outline: 'none',
     textDecoration: 'none',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
     WebkitTapHighlightColor: 'transparent',
   },
 ]);
 
-const highlightColor = createVar();
-
 export const base = style([
+  reset,
   sprinkles({
+    position: 'relative',
     borderRadius: 'medium',
-    paddingY: 'xsmall',
+    overflow: 'hidden',
     paddingX: 'small',
-    font: 'standard',
+    transition: 'fast',
+    display: 'flex',
+    placeItems: 'center',
+  }),
+  minTouchableBeforePseudo,
+  {
+    border: `1px solid ${colorPaletteVars.border.standard}`,
+    backgroundColor: colorPaletteVars.background.surface,
+    isolation: 'isolate',
+    outline: 'none',
+    transformOrigin: 'center',
+    selectors: {
+      ['&::after']: {
+        content: '',
+        position: 'absolute',
+        inset: 0,
+        backgroundColor: colorPaletteVars.background.selection,
+        opacity: 0,
+        transition: 'opacity 120ms ease',
+        pointerEvents: 'none',
+      },
+      ['&:hover::after']: {
+        opacity: 1,
+      },
+      ['&:focus-visible::after']: {
+        opacity: 1,
+      },
+      ['&:active:not([disabled])']: {
+        transform: 'scale(0.97)',
+      },
+      ['&:focus-visible']: {
+        outline: `2px solid ${colorPaletteVars.outline.focus}`,
+        outlineOffset: 0,
+      },
+    },
+  },
+]);
+
+/**
+ * Fix to ensure text is on top of `after` pseudo that sets the background colour.
+ * Without this, Safari would shift the text around on hover
+ */
+export const labelWrapper = style([
+  sprinkles({
+    position: 'relative',
+    zIndex: 1,
   }),
   {
-    vars: {
-      [highlightColor]: 'currentColor',
+    isolation: 'isolate',
+  },
+]);
+
+export const height = {
+  explicit: style([
+    sprinkles({ paddingY: 'xxsmall' }),
+    {
+      height: sizeVar,
     },
-    color: highlightColor,
-    border: `1px solid ${colorPaletteVars.foreground.neutralSoft}`,
-    ':hover': {
-      vars: {
-        [highlightColor]: colorPaletteVars.foreground.accent,
-      },
-      borderColor: highlightColor,
-    },
-    ':active': {
-      transform: 'scale(0.98)',
-    },
-    '::after': {
-      content: '',
-      position: 'absolute',
-      transform: 'translateY(-50%)',
-      minHeight: vars.touchableSize,
-      minWidth: vars.touchableSize,
-      width: '100%',
-      height: '100%',
-      top: '50%',
-    },
+  ]),
+  content: sprinkles({ paddingY: 'small' }),
+};
+
+export const tone = {
+  positive: style({
+    borderColor: colorPaletteVars.foreground.positive,
     selectors: {
-      [`&:focus:not(:active):not(:hover):not([disabled])`]: {
-        boxShadow: colorPaletteVars.shadows.focus,
+      ['&::after']: {
+        backgroundColor: colorPaletteVars.background.positive,
       },
     },
-  },
-]);
+  }),
+  critical: style({
+    borderColor: colorPaletteVars.foreground.critical,
+    selectors: {
+      ['&::after']: {
+        backgroundColor: colorPaletteVars.background.critical,
+      },
+    },
+  }),
+};
 
-export const positive = style({
+export const size = styleVariants(vars.buttonSizes, (buttonSize) => ({
   vars: {
-    [highlightColor]: `${colorPaletteVars.foreground.positive} !important`,
+    [sizeVar]: buttonSize,
   },
-  borderColor: highlightColor,
-});
-
-export const iconContainer = style([
-  sprinkles({ position: 'relative', paddingLeft: 'xxsmall' }),
-  {
-    top: '1px',
-  },
-]);
+}));

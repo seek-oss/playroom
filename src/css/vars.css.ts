@@ -1,19 +1,29 @@
 import { createGlobalTheme } from '@vanilla-extract/css';
 
-const fontFamily = 'Helvetica, arial, sans-serif';
+const fontFamily = '"Plus Jakarta Sans", sans-serif';
+export const fontSizeDefinitions = {
+  xsmall: [10, 14],
+  small: [12, 16],
+  standard: [14, 20],
+  large: [16, 22],
+};
+
+const fontScale = Object.fromEntries(
+  Object.entries(fontSizeDefinitions).map(([size, definition]) => [
+    size,
+    `normal ${definition.map((v) => `${v}px`).join('/')} ${fontFamily}`,
+  ])
+);
+
 export const vars = createGlobalTheme(':root', {
   font: {
     family: {
       standard: fontFamily,
       code: 'Source Code Pro, Firacode, Hasklig, Menlo, monospace',
     },
-    scale: {
-      xsmall: `normal 10px ${fontFamily}`,
-      small: `normal 12px ${fontFamily}`,
-      standard: `normal 14px ${fontFamily}`,
-      large: `normal 16px/20px ${fontFamily}`,
-    },
+    scale: fontScale,
     weight: {
+      normal: '400',
       strong: '700',
     },
   },
@@ -23,7 +33,6 @@ export const vars = createGlobalTheme(':root', {
     large: '16px',
     full: '100%',
   },
-  codeGutterSize: '70px',
   touchableSize: '44px',
   transition: {
     slow: 'opacity 300ms ease, transform 300ms ease',
@@ -41,5 +50,10 @@ export const vars = createGlobalTheme(':root', {
     xlarge: '24px',
     xxlarge: '32px',
     xxxlarge: '40px',
+  },
+  buttonSizes: {
+    small: '28px',
+    medium: '32px',
+    large: '36px',
   },
 });

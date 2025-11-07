@@ -15,3 +15,14 @@ export const spaceScale = styleVariants(vars.space, (space) => ({
     [size]: space,
   },
 }));
+
+export const horizontalAlignmentScale = styleVariants(
+  {
+    top: 'flex-start',
+    center: 'center',
+    bottom: 'flex-end',
+  },
+  (alignment) => ({
+    alignItems: alignment,
+  })
+);

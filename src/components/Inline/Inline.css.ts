@@ -8,9 +8,12 @@ const horizontalAlignment = createVar();
 export const gap = style({
   display: 'flex',
   flexDirection: 'row',
-  flexWrap: 'wrap',
   gap: size,
   alignItems: horizontalAlignment,
+});
+
+export const wrap = style({
+  flexWrap: 'wrap',
 });
 
 export const spaceScale = styleVariants(vars.space, (space) => ({

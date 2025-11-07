@@ -15,14 +15,16 @@ interface Props {
   children: ReactNodeNoStrings;
   space: keyof typeof styles.spaceScale;
   alignY?: keyof typeof styles.horizontalAlignmentScale;
+  nowrap?: boolean;
 }
 
-export const Inline = ({ children, space, alignY }: Props) => (
+export const Inline = ({ children, space, alignY, nowrap = false }: Props) => (
   <div
     className={clsx(
       styles.gap,
       styles.spaceScale[space],
-      alignY ? styles.horizontalAlignmentScale[alignY] : undefined
+      alignY ? styles.horizontalAlignmentScale[alignY] : undefined,
+      !nowrap ? styles.wrap : undefined
     )}
   >
     {children}

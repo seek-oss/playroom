@@ -5,29 +5,19 @@ import {
   fallbackVar,
   styleVariants,
 } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
-import { space, comma, newline } from '../../css/delimiters';
-import {
-  ANIMATION_DURATION_SLOW,
-  toolbarItemCount,
-  toolbarOpenSize,
-} from '../constants';
+import { space, newline } from '../../css/delimiters';
 
 import { sprinkles, colorPaletteVars } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
-import { toolbarItemSize } from '../ToolbarItem/ToolbarItem.css';
-
-const MIN_HEIGHT = `${toolbarItemSize * toolbarItemCount}px`;
-const MIN_WIDTH = `${toolbarOpenSize + toolbarItemSize + 80}px`;
-
-const MAX_HEIGHT = '80vh';
-const MAX_WIDTH = '90vw';
 
 globalStyle('html, body', {
   margin: 0,
   padding: 0,
   overflow: 'hidden',
   backgroundColor: colorPaletteVars.background.body,
+  scrollbarColor: space(colorPaletteVars.border.standard, 'transparent'),
 });
 
 globalStyle('html[data-playroom-dark]', {
@@ -39,8 +29,8 @@ export const resizing = style({
   userSelect: 'none',
 });
 
-const bottomEditorHeight = createVar();
-const rightEditorWidth = createVar();
+const editorHeight = createVar();
+const editorWidth = createVar();
 export const editorSize = createVar();
 export const assistantWidth = createVar();
 export const root = style([
@@ -50,108 +40,56 @@ export const root = style([
   }),
   {
     display: 'grid',
-    gridTemplateColumns: space('1fr', fallbackVar(rightEditorWidth, '0px')),
-    gridTemplateRows: space('auto', fallbackVar(bottomEditorHeight, '0px')),
-    willChange: comma('grid-template-columns', 'grid-template-rows'),
+    gridTemplateColumns: space(fallbackVar(editorWidth, '0px'), '1fr'),
+    gridTemplateRows: space(
+      'min-content',
+      'auto',
+      fallbackVar(editorHeight, '0px')
+    ),
+    isolation: 'isolate',
   },
 ]);
 
-export const editorTransition = style({
-  transition: comma(
-    `grid-template-columns ${ANIMATION_DURATION_SLOW}ms ease`,
-    `grid-template-rows ${ANIMATION_DURATION_SLOW}ms ease`
-  ),
-});
-
-export const editorPosition = styleVariants({
-  bottom: [
+export const editorOrientation = styleVariants({
+  horizontal: [
     {
       vars: {
-        [bottomEditorHeight]: `clamp(${MIN_HEIGHT}, ${editorSize}, ${MAX_HEIGHT})`,
+        [editorHeight]: `clamp(150px, ${editorSize}, 70vh)`,
       },
-      gridTemplateAreas: newline('"frames frames"', '"editor editor"'),
+      gridTemplateAreas: newline(
+        '"header header"',
+        '"frames frames"',
+        '"editor editor"'
+      ),
     },
   ],
-  right: [
+  vertical: [
     {
       vars: {
-        [rightEditorWidth]: `clamp(${MIN_WIDTH}, ${editorSize}, ${MAX_WIDTH})`,
+        [editorWidth]: `clamp(300px, ${editorSize}, 90vw)`,
       },
-      gridTemplateAreas: newline('"frames editor"', '"frames editor"'),
+      gridTemplateAreas: newline(
+        '"header header"',
+        '"editor frames"',
+        '"editor frames"'
+      ),
     },
   ],
 });
 
+export const header = style({
+  gridArea: 'header',
+  zIndex: 1,
+  outline: `1px solid ${colorPaletteVars.border.standard}`,
+});
 export const frames = style({
   gridArea: 'frames',
 });
 
-export const editor = style([
-  {
-    gridArea: 'editor',
-  },
-  sprinkles({
-    overflow: 'hidden',
-    boxShadow: 'small',
-  }),
-]);
-
-export const toggleEditorContainer = style([
-  sprinkles({
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    display: 'flex',
-    justifyContent: 'center',
-  }),
-  {
-    selectors: {
-      [`${editorPosition.bottom} &`]: {
-        width: toolbarItemSize,
-      },
-    },
-  },
-]);
-
-export const toggleEditorButton = style([
-  sprinkles({
-    position: 'relative',
-    borderRadius: 'medium',
-    padding: 'none',
-    cursor: 'pointer',
-    width: 'full',
-    appearance: 'none',
-    border: 0,
-  }),
-  {
-    background: 'transparent',
-    WebkitTapHighlightColor: 'transparent',
-    outline: 'none',
-    minWidth: vars.touchableSize,
-    height: vars.touchableSize,
-    selectors: {
-      [`&:not(:hover):not(:focus)`]: {
-        opacity: 0.3,
-      },
-      [`&:hover::before, &:focus::before`]: {
-        opacity: 0.05,
-      },
-    },
-    '::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      backgroundColor: 'currentColor',
-      opacity: 0,
-      pointerEvents: 'none',
-      borderRadius: vars.radii.medium,
-      transition: vars.transition.slow,
-    },
-  },
-]);
+export const editor = style({
+  gridArea: 'editor',
+  outline: `1px solid ${colorPaletteVars.border.standard}`,
+});
 
 export const framesContainer = sprinkles({
   position: 'absolute',
@@ -161,11 +99,81 @@ export const framesContainer = sprinkles({
 export const editorContainer = sprinkles({
   position: 'absolute',
   inset: 0,
+  overflow: 'hidden',
 });
 
-export const toolbarContainer = sprinkles({
-  position: 'absolute',
+export const editorOverlays = style([
+  sprinkles({
+    position: 'absolute',
+  }),
+  {
+    left: vars.space.medium,
+    right: vars.space.medium,
+    bottom: vars.space.medium,
+    width: 'fit-content',
+    marginInline: 'auto',
+  },
+]);
+
+const showCodeOutlineSize = '2px';
+const showCodeRadius = 'large';
+export const showCodeContainer = style([
+  sprinkles({
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    display: 'block',
+    padding: 'xsmall',
+    margin: 'small',
+    borderRadius: showCodeRadius,
+  }),
+  {
+    backdropFilter: 'blur(2px)',
+    '::before': {
+      content: '',
+      position: 'absolute',
+      inset: 1,
+      pointerEvents: 'none',
+      background: colorPaletteVars.background.floating,
+      borderRadius: calc(vars.radii[showCodeRadius])
+        .subtract(showCodeOutlineSize)
+        .toString(),
+      opacity: 0.8,
+    },
+    '::after': {
+      content: '',
+      position: 'absolute',
+      inset: 0,
+      pointerEvents: 'none',
+      borderRadius: calc(vars.radii[showCodeRadius])
+        .subtract(showCodeOutlineSize)
+        .toString(),
+      outline: `${showCodeOutlineSize} solid ${colorPaletteVars.border.standard}`,
+      outlineOffset: `-${showCodeOutlineSize}`,
+    },
+  },
+]);
+
+export const hideCodeContainer = style([
+  sprinkles({
+    position: 'absolute',
+    borderRadius: 'medium',
+  }),
+  {
+    background: colorPaletteVars.background.surface,
+    boxShadow: `0 0 4px 2px ${colorPaletteVars.background.surface}`,
+  },
+]);
+
+export const hideCodeContainerHorizontal = sprinkles({
   top: 0,
+  right: 0,
+  padding: 'xxxsmall',
+});
+
+export const hideCodeContainerVertical = sprinkles({
   bottom: 0,
   right: 0,
+  paddingY: 'medium',
+  paddingX: 'xxxsmall',
 });

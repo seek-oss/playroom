@@ -18,6 +18,7 @@ import {
   findInCode,
   replaceInCode,
   jumpToLine,
+  jumpToCharacter,
 } from '../support/utils';
 
 describe('Keymaps', () => {
@@ -137,7 +138,7 @@ describe('Keymaps', () => {
     const cmdPlusD = cmdPlus('D');
 
     it('should select the current word on one use', () => {
-      typeCode(`{rightArrow}{${cmdPlusD}}`);
+      typeCode(`{rightArrow}${cmdPlusD}`);
 
       // Overwrite to check the selection
       typeCode('a');
@@ -150,7 +151,7 @@ describe('Keymaps', () => {
     });
 
     it('should select the next instance of the word on two uses', () => {
-      typeCode(`{rightArrow}{${cmdPlusD}}{${cmdPlusD}}`);
+      typeCode(`{rightArrow}${cmdPlusD}${cmdPlusD}`);
 
       // Overwrite to check the selection
       typeCode('a');
@@ -163,7 +164,7 @@ describe('Keymaps', () => {
     });
 
     it('should select the all instances of the word when spamming the key', () => {
-      typeCode(`{rightArrow}${`{${cmdPlusD}}`.repeat(20)}`);
+      typeCode(`{rightArrow}${`${cmdPlusD}`.repeat(20)}`);
 
       // Overwrite to check the selection and that multiple cursors were created
       typeCode('span');
@@ -178,7 +179,7 @@ describe('Keymaps', () => {
     it("should select next occurrence in whole word mode when there's no selection", () => {
       typeCode('{rightArrow}'.repeat(3));
 
-      typeCode(`{${cmdPlusD}}`.repeat(2));
+      typeCode(`${cmdPlusD}`.repeat(2));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -199,7 +200,7 @@ describe('Keymaps', () => {
     });
 
     it('should add a cursor on the next line', () => {
-      typeCode(`{${cmdPlus('alt+downArrow')}}a`);
+      typeCode(`${cmdPlus('alt+downArrow')}a`);
       assertCodePaneContains(dedent`
         a<div>First line</div>
         a<div>Second line</div>
@@ -209,7 +210,7 @@ describe('Keymaps', () => {
 
     it('should add a cursor on the previous line', () => {
       typeCode('{downArrow}{downArrow}');
-      typeCode(`{${cmdPlus('alt+upArrow')}}a`);
+      typeCode(`${cmdPlus('alt+upArrow')}a`);
       assertCodePaneContains(dedent`
         <div>First line</div>
         a<div>Second line</div>
@@ -226,10 +227,9 @@ describe('Keymaps', () => {
         <div>Third line</div>
       `);
     });
-    const modifierKey = isMac() ? 'cmd' : 'ctrl';
 
     it("should insert a fragment with cursors when there's no selection", () => {
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('a');
 
       assertCodePaneContains(dedent`
@@ -242,7 +242,7 @@ describe('Keymaps', () => {
     it('should wrap the selection when there is one', () => {
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -257,7 +257,7 @@ describe('Keymaps', () => {
       typeCode('{leftArrow}');
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -271,7 +271,7 @@ describe('Keymaps', () => {
       typeCode('{shift+downArrow}');
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -288,7 +288,7 @@ describe('Keymaps', () => {
       typeCode('{shift+downArrow}');
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       // Return to the start
@@ -299,7 +299,7 @@ describe('Keymaps', () => {
       typeCode('{downArrow}');
       typeCode('{shift+downArrow}'.repeat(2));
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('a');
 
       assertCodePaneContains(dedent`
@@ -314,10 +314,10 @@ describe('Keymaps', () => {
     });
 
     it('should wrap a multi-cursor single-line selection', () => {
-      typeCode(`{${modifierKey}+alt+downArrow}`);
+      typeCode(cmdPlus(`alt+downArrow`));
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -328,13 +328,13 @@ describe('Keymaps', () => {
     });
 
     it('should wrap a multi-cursor multi-line selection', () => {
-      typeCode(`{${modifierKey}+alt+downArrow}`);
+      typeCode(cmdPlus(`alt+downArrow`));
       typeCode('{shift+alt+downArrow}{upArrow}');
 
       selectNextLines(1);
       selectToEndOfLine();
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('span');
 
       assertCodePaneContains(dedent`
@@ -359,9 +359,9 @@ describe('Keymaps', () => {
       typeCode(`{enter}`);
 
       // Select all
-      typeCode(`{${modifierKey}+a}`);
+      typeCode(cmdPlus('a'));
 
-      typeCode(`{shift+${modifierKey}+,}`);
+      typeCode(cmdPlus(`shift+,`));
       typeCode('a');
 
       assertCodePaneContains(dedent`
@@ -382,7 +382,7 @@ describe('Keymaps', () => {
     });
 
     it('should find all occurrences of search term', () => {
-      findInCode('div');
+      findInCode('div', { source: 'keyboard' });
 
       assertCodePaneSearchMatchesCount(6);
 
@@ -398,7 +398,7 @@ describe('Keymaps', () => {
     });
 
     it('should replace and skip occurrences of search term correctly', () => {
-      replaceInCode('div', 'span');
+      replaceInCode('div', 'span', { source: 'keyboard' });
 
       // replace occurrence
       cy.get('.CodeMirror-dialog button').contains('Yes').click();
@@ -446,7 +446,7 @@ describe('Keymaps', () => {
     });
 
     it('should back out of replace correctly', () => {
-      replaceInCode('div');
+      replaceInCode('div', null, { source: 'keyboard' });
 
       typeCode('{esc}');
 
@@ -481,7 +481,7 @@ describe('Keymaps', () => {
 
     it('should jump to line number correctly', () => {
       const line = 6;
-      jumpToLine(line);
+      jumpToLine(line, { source: 'keyboard' });
 
       typeCode('c');
 
@@ -498,7 +498,7 @@ describe('Keymaps', () => {
       typeCode('{backspace}');
 
       const nextLine = 2;
-      jumpToLine(nextLine);
+      jumpToLine(nextLine, { source: 'keyboard' });
 
       typeCode('c');
 
@@ -514,7 +514,7 @@ describe('Keymaps', () => {
     });
 
     it('should jump to line and column number correctly', () => {
-      jumpToLine(6, 10);
+      jumpToCharacter(6, 10);
       typeCode('a');
 
       assertCodePaneContains(dedent`
@@ -546,8 +546,7 @@ describe('Keymaps', () => {
       <div>Second line</div>
       <div>Third line</div>`;
 
-    const modifierKey = isMac() ? 'cmd' : 'ctrl';
-    const executeToggleCommentCommand = () => typeCode(`{${modifierKey}+/}`);
+    const executeToggleCommentCommand = () => typeCode(cmdPlus('/'));
 
     it('should create a comment when there is no code in the editor', () => {
       loadPlayroom('');

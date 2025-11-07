@@ -1,4 +1,6 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
+import clsx from 'clsx';
+import { CodeXml, PanelBottomClose, PanelLeftClose } from 'lucide-react';
 import {
   type ComponentProps,
   useContext,
@@ -7,141 +9,149 @@ import {
   useState,
 } from 'react';
 
-import { StoreContext, type EditorPosition } from '../../contexts/StoreContext';
+import {
+  type EditorOrientation,
+  StoreContext,
+} from '../../contexts/StoreContext';
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
+import { EditorActions } from '../EditorActions/EditorActions';
 import Frames from '../Frames/Frames';
-import { StatusMessage } from '../StatusMessage/StatusMessage';
-import Toolbar from '../Toolbar/Toolbar';
-import { ANIMATION_DURATION_SLOW } from '../constants';
-import ChevronIcon from '../icons/ChevronIcon';
+import { Header } from '../Header/Header';
+import { ZeroState } from '../ZeroState/ZeroState';
 
 import { ResizeHandle } from './ResizeHandle';
 
 import * as styles from './Playroom.css';
 
-const resolveDirection = (
-  editorPosition: EditorPosition,
-  editorHidden: boolean
-) => {
-  if (editorPosition === 'right') {
-    return editorHidden ? 'left' : 'right';
-  }
-
-  return editorHidden ? 'up' : 'down';
-};
-
 const resizeHandlePosition: Record<
-  EditorPosition,
+  EditorOrientation,
   ComponentProps<typeof ResizeHandle>['position']
 > = {
-  bottom: 'top',
-  right: 'left',
+  horizontal: 'top',
+  vertical: 'right',
 } as const;
 
 export default () => {
   const [
     {
-      editorPosition,
+      editorOrientation,
       editorHeight,
       editorWidth,
+      panelsVisible,
       editorHidden,
       code,
       previewRenderCode,
       previewEditorCode,
-      ready,
       title,
+      id,
+      storedPlayrooms,
     },
     dispatch,
   ] = useContext(StoreContext);
-
   useDocumentTitle({ title });
 
+  const lastHidden = useRef(editorHidden);
+  const hideActionSource = useRef<'editor' | null>(null);
   const editorRef = useRef<HTMLElement | null>(null);
-  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const showCodeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const hideCodeButtonRef = useRef<HTMLButtonElement | null>(null);
   const [resizing, setResizing] = useState(false);
-  const [lastEditorHidden, setLastEditorHidden] = useState(editorHidden);
+
+  const isVerticalEditor = editorOrientation === 'vertical';
+  const editorSize = isVerticalEditor ? editorWidth : editorHeight;
+  const editorVisible = panelsVisible && !editorHidden;
+  const hasNoStoredPlayrooms = Object.entries(storedPlayrooms).length === 0;
 
   useEffect(() => {
-    transitionTimeoutRef.current = setTimeout(
-      () => setLastEditorHidden(editorHidden),
-      ANIMATION_DURATION_SLOW
-    );
-
-    return () => {
-      if (transitionTimeoutRef.current) {
-        clearTimeout(transitionTimeoutRef.current);
-        transitionTimeoutRef.current = null;
+    if (
+      lastHidden.current !== editorHidden &&
+      hideActionSource.current === 'editor'
+    ) {
+      if (editorHidden) {
+        showCodeButtonRef.current?.focus();
+      } else {
+        hideCodeButtonRef.current?.focus();
       }
-    };
+
+      hideActionSource.current = null;
+    }
+    lastHidden.current = editorHidden;
   }, [editorHidden]);
 
-  const isVerticalEditor = editorPosition === 'right';
-  const editorSize = isVerticalEditor ? editorWidth : editorHeight;
-
-  return !ready ? null : (
+  return (
     <Box
       component="main"
       className={{
         [styles.root]: true,
         [styles.resizing]: resizing,
-        [styles.editorPosition[editorPosition]]: true,
-        [styles.editorTransition]: lastEditorHidden !== editorHidden,
+        [styles.editorOrientation[editorOrientation]]: true,
       }}
       style={assignInlineVars({
-        [styles.editorSize]: editorHidden ? undefined : editorSize,
+        [styles.editorSize]: editorVisible ? editorSize : undefined,
       })}
     >
+      <Box className={styles.header}>
+        <Header />
+      </Box>
+
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
-          <Frames code={previewRenderCode || code} />
+          {hasNoStoredPlayrooms || id || previewEditorCode ? (
+            <Frames code={previewRenderCode || code} />
+          ) : (
+            <ZeroState />
+          )}
         </Box>
-        <Box className={styles.toggleEditorContainer}>
-          <button
-            className={styles.toggleEditorButton}
-            title={`${editorHidden ? 'Show' : 'Hide'} the editor`}
-            onClick={() =>
-              dispatch({ type: editorHidden ? 'showEditor' : 'hideEditor' })
-            }
-          >
-            <ChevronIcon
-              size={16}
-              direction={resolveDirection(editorPosition, editorHidden)}
+        {panelsVisible && editorHidden ? (
+          <aside className={styles.showCodeContainer}>
+            <ButtonIcon
+              label="Show code"
+              icon={<CodeXml />}
+              variant="solid"
+              ref={showCodeButtonRef}
+              onClick={() => {
+                hideActionSource.current = 'editor';
+                dispatch({ type: 'showEditor' });
+              }}
             />
-          </button>
-        </Box>
+          </aside>
+        ) : null}
       </Box>
 
       <Box
         position="relative"
         className={styles.editor}
-        inert={editorHidden}
+        inert={!editorVisible}
+        opacity={!editorVisible ? 0 : undefined}
+        pointerEvents={!editorVisible ? 'none' : undefined}
         ref={editorRef}
       >
+        <ResizeHandle
+          ref={editorRef}
+          position={resizeHandlePosition[editorOrientation]}
+          onResize={(newValue) => {
+            dispatch({
+              type: isVerticalEditor
+                ? 'updateEditorWidth'
+                : 'updateEditorHeight',
+              payload: { size: newValue },
+            });
+          }}
+          onResizeStart={() => setResizing(true)}
+          onResizeEnd={(endValue) => {
+            setResizing(false);
+            dispatch({
+              type: isVerticalEditor
+                ? 'updateEditorWidth'
+                : 'updateEditorHeight',
+              payload: { size: endValue },
+            });
+          }}
+        />
         <div className={styles.editorContainer}>
-          <ResizeHandle
-            ref={editorRef}
-            position={resizeHandlePosition[editorPosition]}
-            onResize={(newValue) => {
-              dispatch({
-                type: isVerticalEditor
-                  ? 'updateEditorWidth'
-                  : 'updateEditorHeight',
-                payload: { size: newValue },
-              });
-            }}
-            onResizeStart={() => setResizing(true)}
-            onResizeEnd={(endValue) => {
-              setResizing(false);
-              dispatch({
-                type: isVerticalEditor
-                  ? 'updateEditorWidth'
-                  : 'updateEditorHeight',
-                payload: { size: endValue },
-              });
-            }}
-          />
           <CodeEditor
             code={code}
             editorHidden={editorHidden}
@@ -150,9 +160,34 @@ export default () => {
             }
             previewCode={previewEditorCode}
           />
-          <StatusMessage />
-          <div className={styles.toolbarContainer}>
-            <Toolbar />
+          <aside
+            className={clsx({
+              [styles.hideCodeContainer]: true,
+              [styles.hideCodeContainerHorizontal]:
+                editorOrientation === 'horizontal',
+              [styles.hideCodeContainerVertical]:
+                editorOrientation === 'vertical',
+            })}
+          >
+            <ButtonIcon
+              icon={
+                editorOrientation === 'horizontal' ? (
+                  <PanelBottomClose />
+                ) : (
+                  <PanelLeftClose />
+                )
+              }
+              label="Hide code"
+              variant="transparent"
+              ref={hideCodeButtonRef}
+              onClick={() => {
+                hideActionSource.current = 'editor';
+                dispatch({ type: 'hideEditor' });
+              }}
+            />
+          </aside>
+          <div className={styles.editorOverlays}>
+            <EditorActions />
           </div>
         </div>
       </Box>

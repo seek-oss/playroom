@@ -1,11 +1,8 @@
-<img src="images/logo.png?raw=true#gh-light-mode-only" alt="Playroom" title="Playroom" width="292" height="50" />
-<img src="images/logo-inverted.png?raw=true#gh-dark-mode-only" alt="Playroom" title="Playroom" width="292" height="50" />
-
 [![npm](https://img.shields.io/npm/v/playroom.svg?style=for-the-badge)](https://www.npmjs.com/package/playroom) [![Build Status](https://img.shields.io/github/actions/workflow/status/seek-oss/playroom/validate.yml?branch=master&style=for-the-badge)](https://github.com/seek-oss/playroom/actions?query=workflow%3AValidate+branch%3Amaster)
 
----
+<img src="images/logo.png" alt="Playroom" title="Playroom" height="80" />
 
-<img src="images/demo.gif?raw=true" alt="Playroom Demo" title="Playroom Demo" />
+<br/>
 
 Simultaneously design across a variety of themes and screen sizes, powered by JSX and your own component library.
 
@@ -21,8 +18,6 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 [Braid Design System](https://seek-oss.github.io/braid-design-system/playroom/#?code=N4Igxg9gJgpiBcIA8BBANjATgFwATYgDsYBeAHRAEtCAzCCgPiQBUYAPbBgdRjUgFsY%2BCLgAKaAIYBPTBAj8AhEgD0rDk2XosnEABoQ2ABYxBAZwQBtEBIAOEsCAC6%2BgO6UoR8-AsB2AGwAHI4AvkA) (Themed)
 
 [Bumbag](https://bumbag.style/playroom/)
-
-[Overdrive](http://overdrive.autoguru.io/playroom/#?code=N4Igxg9gJgpiBcIA8AhCAPABAIwwZQAsBDKCAdwF4AdEAZhswAcSoBLAOwHMLgBtG+iAA0mGgDYaAXQC+APirtMmJHgAuRMAGtMAZ2ZgO3cTXmKlygCox0qgMIR26jjABOmAjBKGeSABKe2LllfVkxVDxcYTEBeDcBpHaQAen8vILkFc3MkKxtZAHUYABtIAFso1Qgwj0wAQQBXcoBxWpdazFgdVk5FHQBPHVUYYswAWkwAeQA3VygXVimAQkTs1VMMpes7Byd2V1N0zOWASXZGeqYCjRgCCALYF2oQX3JMIkjMHohagH4GBNXlBJqDSaUyJNDoUwgaRAA)
 
 [Cubes](https://cubes.trampoline.cx/) (Themed)
 
@@ -63,18 +58,19 @@ module.exports = {
   // Optional:
   title: 'My Awesome Library',
   themes: './src/themes',
+  widths: [320, 768, 1024],
   snippets: './playroom/snippets.js',
   frameComponent: './playroom/FrameComponent.js',
-  scope: './playroom/useScope.js',
-  widths: [320, 768, 1024],
-  port: 9000,
-  openBrowser: true,
-  paramType: 'search', // default is 'hash'
   exampleCode: `
     <Button>
       Hello World!
     </Button>
   `,
+  cwd: './playroom',
+  scope: './playroom/useScope.js',
+  port: 9000,
+  openBrowser: true,
+  paramType: 'search', // default is 'hash'
   baseUrl: '/playroom/',
   webpackConfig: () => ({
     // Custom webpack config goes here...

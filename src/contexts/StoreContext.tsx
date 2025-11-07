@@ -1,23 +1,33 @@
-import copy from 'copy-to-clipboard';
 import dedent from 'dedent';
 import localforage from 'localforage';
-import lzString from 'lz-string';
 import {
   useEffect,
   createContext,
   useReducer,
   type ReactNode,
   type Dispatch,
+  useState,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { type Snippet, compressParams } from '../../utils';
+import {
+  type CompressParamsOptions,
+  type Snippet,
+  compressParams,
+} from '../../utils';
 import playroomConfig from '../config';
-import { themeNames as availableThemes } from '../configModules/themes';
+import {
+  themeNames as availableThemes,
+  themesEnabled,
+} from '../configModules/themes';
 import availableWidths, { type Widths } from '../configModules/widths';
 import { isValidLocation } from '../utils/cursor';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
-import { getParamsFromQuery, updateUrlCode } from '../utils/params';
+import {
+  getDataParam,
+  resolveDataFromUrl,
+  updateUrlCode,
+} from '../utils/params';
 
 const exampleCode = dedent(playroomConfig.exampleCode || '').trim();
 
@@ -27,10 +37,12 @@ const store = localforage.createInstance({
 });
 
 const defaultEditorSize = '40%';
-const defaultPosition = 'bottom';
+const defaultOrientation = 'horizontal';
+const defaultOpenLayout = 'grid';
 
-export type EditorPosition = 'bottom' | 'right';
+export type EditorOrientation = 'horizontal' | 'vertical';
 export type ColorScheme = 'light' | 'dark' | 'system';
+export type OpenLayout = 'grid' | 'list';
 
 const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
   document.documentElement[
@@ -56,46 +68,40 @@ function convertAndStoreSizeAsPercentage(
   return `${sizePercentage}%`;
 }
 
-interface DebounceUpdateUrl {
-  code?: string;
-  themes?: string[];
-  widths?: Widths;
-  title?: string;
-  editorHidden?: boolean;
-}
-
 export interface CursorPosition {
   line: number;
   ch: number;
 }
 
-interface StatusMessage {
-  message: string;
-  tone: 'positive' | 'critical';
-}
-
-type ToolbarPanel = 'snippets' | 'frames' | 'preview' | 'settings';
+type StoredPlayroom = {
+  dataParam: string;
+  lastModifiedDate: Date;
+};
 interface State {
+  id: string;
   code: string;
   title?: string;
   previewRenderCode?: string;
   previewEditorCode?: string;
   highlightLineNumber?: number;
-  activeToolbarPanel?: ToolbarPanel;
-  validCursorPosition: boolean;
+  snippetsOpen: boolean;
+  openDialogOpen: boolean;
+  hasSyntaxError?: boolean;
+  syntaxErrorLineNumber?: number;
   cursorPosition: CursorPosition;
   editorHidden: boolean;
-  editorPosition: EditorPosition;
+  editorOrientation: EditorOrientation;
   editorHeight: string;
   editorWidth: string;
-  statusMessage?: StatusMessage;
-  visibleThemes?: string[];
-  visibleWidths?: Widths;
-  ready: boolean;
+  panelsVisible: boolean;
+  selectedThemes: typeof availableThemes;
+  selectedWidths: Widths;
   colorScheme: ColorScheme;
+  openLayout: OpenLayout;
+  storedPlayrooms: Record<string, StoredPlayroom>;
 }
 
-type Action =
+export type Action =
   | { type: 'initialLoad'; payload: Partial<State> }
   | { type: 'updateCode'; payload: { code: string; cursor?: CursorPosition } }
   | {
@@ -104,40 +110,86 @@ type Action =
     }
   | { type: 'persistSnippet'; payload: { snippet: Snippet } }
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
-  | { type: 'toggleToolbar'; payload: { panel: ToolbarPanel } }
-  | { type: 'closeToolbar' }
+  | { type: 'openPlayroomDialog' }
+  | { type: 'closePlayroomDialog' }
+  | { type: 'openSnippets' }
+  | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
   | {
-      type: 'copyToClipboard';
-      payload: { url: string; trigger: 'toolbarItem' | 'previewPanel' };
+      type: 'setHasSyntaxError';
+      payload: { value: boolean; lineNumber?: number };
     }
-  | { type: 'dismissMessage' }
   | {
       type: 'updateColorScheme';
       payload: { colorScheme: ColorScheme };
     }
   | {
-      type: 'updateEditorPosition';
-      payload: { position: EditorPosition };
+      type: 'updateEditorOrientation';
+      payload: { orientation: EditorOrientation };
     }
   | { type: 'updateEditorHeight'; payload: { size: number } }
   | { type: 'updateEditorWidth'; payload: { size: number } }
-  | { type: 'updateVisibleThemes'; payload: { themes: typeof availableThemes } }
-  | { type: 'resetVisibleThemes' }
+  | { type: 'togglePanelVisibility' }
   | {
-      type: 'updateVisibleWidths';
+      type: 'updateSelectedThemes';
+      payload: { themes: typeof availableThemes };
+    }
+  | { type: 'resetSelectedThemes' }
+  | {
+      type: 'updateSelectedWidths';
       payload: { widths: Widths };
     }
-  | { type: 'resetVisibleWidths' }
-  | { type: 'updateTitle'; payload: { title: string } };
+  | { type: 'resetSelectedWidths' }
+  | { type: 'updateTitle'; payload: { title: string } }
+  | {
+      type: 'updateOpenLayout';
+      payload: { layout: OpenLayout };
+    }
+  | {
+      type: 'openPlayroom';
+      payload: {
+        id: State['id'];
+        code: NonNullable<CompressParamsOptions['code']>;
+        title: NonNullable<CompressParamsOptions['title']>;
+        themes: NonNullable<CompressParamsOptions['themes']>;
+        widths: NonNullable<CompressParamsOptions['widths']>;
+        editorHidden?: State['editorHidden'];
+      };
+    }
+  | {
+      type: 'storePlayroom';
+      payload: {
+        id: string;
+        dataParam: StoredPlayroom['dataParam'];
+      };
+    }
+  | {
+      type: 'deletePlayroom';
+      payload: {
+        id: string;
+      };
+    };
 
 const resetPreview = ({
   previewRenderCode,
   previewEditorCode,
   highlightLineNumber,
   ...state
-}: State): State => state;
+}: State): State => ({
+  ...state,
+  snippetsOpen: false,
+});
+
+const sortStoredPlayrooms = (storedPlayrooms: State['storedPlayrooms']) =>
+  Object.fromEntries(
+    Object.entries(storedPlayrooms).sort(
+      ([, { lastModifiedDate: aDate }], [, { lastModifiedDate: bDate }]) =>
+        bDate.getTime() - aDate.getTime()
+    )
+  );
+
+const createPlayroomId = () => self.crypto.randomUUID();
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -150,42 +202,26 @@ const reducer = (state: State, action: Action): State => {
 
     case 'updateCode': {
       const { code, cursor } = action.payload;
-      store.setItem('code', code);
 
       return {
         ...state,
         code,
+        id: !state.id && code.trim().length > 0 ? createPlayroomId() : state.id,
         cursorPosition: cursor || state.cursorPosition,
       };
     }
 
-    case 'dismissMessage': {
+    case 'setHasSyntaxError': {
+      const { value, lineNumber } = action.payload;
       return {
         ...state,
-        statusMessage: undefined,
-      };
-    }
-
-    case 'copyToClipboard': {
-      const { url, trigger } = action.payload;
-
-      copy(url);
-
-      return {
-        ...state,
-        statusMessage:
-          trigger === 'toolbarItem'
-            ? {
-                message: 'Copied Playroom link to clipboard',
-                tone: 'positive',
-              }
-            : undefined,
+        hasSyntaxError: value,
+        syntaxErrorLineNumber: value ? lineNumber : undefined,
       };
     }
 
     case 'persistSnippet': {
       const { snippet } = action.payload;
-      const { activeToolbarPanel, ...currentState } = state;
 
       const { code, cursor } = formatAndInsert({
         code: state.code,
@@ -194,8 +230,9 @@ const reducer = (state: State, action: Action): State => {
       });
 
       return {
-        ...resetPreview(currentState),
+        ...resetPreview(state),
         code,
+        id: !state.id && code.trim().length > 0 ? createPlayroomId() : state.id,
         cursorPosition: cursor,
       };
     }
@@ -208,11 +245,6 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         code: newCode,
         cursorPosition: position,
-        statusMessage: undefined,
-        validCursorPosition: isValidLocation({
-          code: newCode,
-          cursor: position,
-        }),
       };
     }
 
@@ -233,73 +265,57 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case 'toggleToolbar': {
-      const { panel } = action.payload;
-      const { activeToolbarPanel: currentPanel, ...currentState } = state;
-      const shouldOpen = panel !== currentPanel;
-
-      if (shouldOpen) {
-        if (panel === 'preview' && state.code.trim().length === 0) {
-          return {
-            ...state,
-            statusMessage: {
-              message: 'Must have code to preview',
-              tone: 'critical',
-            },
-          };
-        }
-
-        if (panel === 'snippets') {
-          const validCursorPosition = isValidLocation({
-            code: currentState.code,
-            cursor: currentState.cursorPosition,
-          });
-
-          if (!validCursorPosition) {
-            return {
-              ...currentState,
-              statusMessage: {
-                message: "Can't insert snippet at cursor",
-                tone: 'critical',
-              },
-              validCursorPosition,
-            };
-          }
-
-          const { code, cursor } = formatForInsertion({
-            code: currentState.code,
-            cursor: currentState.cursorPosition,
-          });
-
-          return {
-            ...currentState,
-            statusMessage: undefined,
-            activeToolbarPanel: panel,
-            previewEditorCode: code,
-            highlightLineNumber: cursor.line,
-          };
-        }
-
+    case 'openSnippets': {
+      if (state.hasSyntaxError) {
         return {
-          ...resetPreview(currentState),
-          statusMessage: undefined,
-          activeToolbarPanel: panel,
+          ...state,
+          snippetsOpen: false,
         };
       }
 
-      return resetPreview(currentState);
+      const validCursorPosition = isValidLocation({
+        code: state.code,
+        cursor: state.cursorPosition,
+      });
+
+      if (!validCursorPosition) {
+        return state;
+      }
+
+      const { code, cursor } = formatForInsertion({
+        code: state.code,
+        cursor: state.cursorPosition,
+      });
+
+      return {
+        ...state,
+        snippetsOpen: true,
+        previewEditorCode: code,
+        highlightLineNumber: cursor.line,
+      };
     }
 
-    case 'closeToolbar': {
-      const { activeToolbarPanel, ...currentState } = state;
+    case 'openPlayroomDialog': {
+      return {
+        ...state,
+        openDialogOpen: true,
+      };
+    }
 
-      return resetPreview(currentState);
+    case 'closePlayroomDialog': {
+      return {
+        ...state,
+        openDialogOpen: false,
+      };
+    }
+
+    case 'closeSnippets': {
+      return resetPreview(state);
     }
 
     case 'hideEditor': {
       return {
         ...state,
-        activeToolbarPanel: undefined,
         editorHidden: true,
       };
     }
@@ -321,13 +337,24 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case 'updateEditorPosition': {
-      const { position } = action.payload;
-      store.setItem('editorPosition', position);
+    case 'updateEditorOrientation': {
+      const { orientation } = action.payload;
+      store.setItem('editorOrientation', orientation);
 
       return {
         ...state,
-        editorPosition: position,
+        editorOrientation: orientation,
+        editorHidden: false,
+      };
+    }
+
+    case 'updateOpenLayout': {
+      const { layout } = action.payload;
+      store.setItem('openLayout', layout);
+
+      return {
+        ...state,
+        openLayout: layout,
       };
     }
 
@@ -358,40 +385,55 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case 'updateVisibleThemes': {
-      const { themes } = action.payload;
-      const visibleThemes = availableThemes.filter((t) => themes.includes(t));
-      store.setItem('visibleThemes', visibleThemes);
+    case 'togglePanelVisibility': {
+      if (state.openDialogOpen || state.snippetsOpen) {
+        return state;
+      }
 
       return {
         ...state,
-        visibleThemes,
+        panelsVisible: !state.panelsVisible,
       };
     }
 
-    case 'resetVisibleThemes': {
-      const { visibleThemes, ...restState } = state;
+    case 'updateSelectedThemes': {
+      const { themes } = action.payload;
+      const selectedThemes = availableThemes.filter((t) => themes.includes(t));
+      store.setItem('visibleThemes', selectedThemes);
+
+      return {
+        ...state,
+        selectedThemes,
+      };
+    }
+
+    case 'resetSelectedThemes': {
       store.removeItem('visibleThemes');
 
-      return restState;
-    }
-
-    case 'updateVisibleWidths': {
-      const { widths } = action.payload;
-      const visibleWidths = availableWidths.filter((w) => widths.includes(w));
-      store.setItem('visibleWidths', visibleWidths);
-
       return {
         ...state,
-        visibleWidths,
+        selectedThemes: [],
       };
     }
 
-    case 'resetVisibleWidths': {
-      const { visibleWidths, ...restState } = state;
+    case 'updateSelectedWidths': {
+      const { widths } = action.payload;
+      const selectedWidths = availableWidths.filter((w) => widths.includes(w));
+      store.setItem('visibleWidths', selectedWidths);
+
+      return {
+        ...state,
+        selectedWidths,
+      };
+    }
+
+    case 'resetSelectedWidths': {
       store.removeItem('visibleWidths');
 
-      return restState;
+      return {
+        ...state,
+        selectedWidths: [],
+      };
     }
 
     case 'updateTitle': {
@@ -400,6 +442,64 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         title,
+        id:
+          !state.id && title.trim().length > 0 ? createPlayroomId() : state.id,
+      };
+    }
+
+    case 'openPlayroom': {
+      const { id, code, title, themes, widths, editorHidden } = action.payload;
+
+      return {
+        ...state,
+        id,
+        code,
+        title,
+        selectedWidths: widths.length > 0 ? widths : state.selectedWidths, // Maintain local preference in favour of config
+        selectedThemes:
+          themesEnabled && themes.length > 0 ? themes : state.selectedThemes, // Maintain local preference in favour of config
+        editorHidden: editorHidden ?? false,
+      };
+    }
+
+    case 'storePlayroom': {
+      const { id, dataParam } = action.payload;
+      const previous = state.storedPlayrooms[id];
+      const hasNotChanged = previous?.dataParam === dataParam;
+      const hasNothingToSave =
+        state.code.trim().length === 0 &&
+        (state.title || '').trim().length === 0;
+
+      if (hasNotChanged || hasNothingToSave || state.hasSyntaxError) {
+        return state;
+      }
+
+      const updatedPlayrooms = {
+        ...state.storedPlayrooms,
+        [id]: {
+          dataParam,
+          lastModifiedDate: new Date(),
+        },
+      };
+
+      store.setItem('playrooms', updatedPlayrooms);
+
+      return {
+        ...state,
+        storedPlayrooms: sortStoredPlayrooms(updatedPlayrooms),
+      };
+    }
+
+    case 'deletePlayroom': {
+      const { id } = action.payload;
+      const { [id]: deletedPlayroom, ...remainingPlayrooms } =
+        state.storedPlayrooms;
+
+      store.setItem('playrooms', remainingPlayrooms);
+
+      return {
+        ...state,
+        storedPlayrooms: remainingPlayrooms,
       };
     }
 
@@ -411,15 +511,24 @@ const reducer = (state: State, action: Action): State => {
 type StoreContextValues = [State, Dispatch<Action>];
 
 const initialState: State = {
+  id: '',
   code: exampleCode,
-  validCursorPosition: true,
   cursorPosition: { line: 0, ch: 0 },
+  snippetsOpen: false,
+  openDialogOpen: false,
   editorHidden: false,
-  editorPosition: defaultPosition,
+  editorOrientation: defaultOrientation,
   editorHeight: defaultEditorSize,
   editorWidth: defaultEditorSize,
-  ready: false,
+  panelsVisible: true,
+  selectedThemes:
+    themesEnabled && playroomConfig.defaultVisibleThemes
+      ? playroomConfig.defaultVisibleThemes
+      : [],
+  selectedWidths: playroomConfig.defaultVisibleWidths || [],
   colorScheme: 'system',
+  openLayout: defaultOpenLayout,
+  storedPlayrooms: {},
 };
 
 export const StoreContext = createContext<StoreContextValues>([
@@ -428,113 +537,97 @@ export const StoreContext = createContext<StoreContextValues>([
 ]);
 
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
+  const [ready, setReady] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedCodeUpdate = useDebouncedCallback(
-    (params: DebounceUpdateUrl) => {
-      // Ensure that when removing theme/width preferences
-      // they are also removed from the url. Replacing state
-      // with an empty string (returned from `createUrl`)
-      // does not do anything, so replacing with `#`
-      updateUrlCode(compressParams(params));
+    (params: Parameters<typeof compressParams>[0]) => {
+      const newParams = compressParams(params);
+      updateUrlCode(newParams);
+
+      if (state.id) {
+        dispatch({
+          type: 'storePlayroom',
+          payload: {
+            id: state.id,
+            dataParam: newParams,
+          },
+        });
+      }
     },
     500
   );
-  const hasThemesConfigured =
-    availableThemes.filter(
-      (themeName) => themeName !== '__PLAYROOM__NO_THEME__'
-    ).length > 0;
 
   useEffect(() => {
-    const params = getParamsFromQuery();
-    let codeFromQuery: State['code'];
-    let themesFromQuery: State['visibleThemes'];
-    let widthsFromQuery: State['visibleWidths'];
-    let titleFromQuery: State['title'];
-    let editorHiddenFromQuery: State['editorHidden'];
-
-    const paramsCode = params.get('code');
-    if (paramsCode) {
-      const {
-        code: parsedCode,
-        themes: parsedThemes,
-        widths: parsedWidths,
-        title: parsedTitle,
-        editorHidden: parsedEditorHidden,
-      } = JSON.parse(
-        lzString.decompressFromEncodedURIComponent(String(paramsCode)) ?? ''
-      );
-
-      codeFromQuery = parsedCode;
-      editorHiddenFromQuery = parsedEditorHidden;
-      themesFromQuery = parsedThemes;
-      widthsFromQuery = parsedWidths;
-      titleFromQuery = parsedTitle;
-    }
+    const {
+      code,
+      themes: themesFromUrl,
+      widths: widthsFromUrl,
+      title,
+      editorHidden,
+    } = resolveDataFromUrl();
+    const dataParamFromUrl = getDataParam();
 
     Promise.all([
-      store.getItem<string>('code'),
-      store.getItem<EditorPosition>('editorPosition'),
-      store.getItem<string | number>('editorHeight'), // Number type deprecated
-      store.getItem<string | number>('editorWidth'), // Number type deprecated
-      store.getItem<number[]>('visibleWidths'),
-      store.getItem<string[]>('visibleThemes'),
-      store.getItem<ColorScheme>('colorScheme'),
+      store.getItem<State['editorOrientation']>('editorOrientation'),
+      store.getItem<State['editorHeight']>('editorHeight'),
+      store.getItem<State['editorWidth']>('editorWidth'),
+      store.getItem<State['selectedWidths']>('visibleWidths'),
+      store.getItem<State['selectedThemes']>('visibleThemes'),
+      store.getItem<State['colorScheme']>('colorScheme'),
+      store.getItem<State['openLayout']>('openLayout'),
+      store.getItem<State['storedPlayrooms']>('playrooms'),
     ]).then(
       ([
-        storedCode,
-        storedPosition,
-        storedHeight,
-        storedWidth,
-        storedVisibleWidths,
-        storedVisibleThemes,
-        storedColorScheme,
+        editorOrientation,
+        editorHeight,
+        editorWidth,
+        storedSelectedWidths,
+        storedSelectedThemes,
+        colorScheme,
+        openLayout,
+        storedPlayrooms,
       ]) => {
-        const code = codeFromQuery || storedCode || exampleCode;
-        const editorPosition = storedPosition;
+        const selectedWidths = widthsFromUrl || storedSelectedWidths;
+        const selectedThemes = themesFromUrl || storedSelectedThemes;
+        const storedPlayroomValues = Object.entries(storedPlayrooms || {});
+        let id = code || title ? createPlayroomId() : '';
 
-        const editorHeight =
-          (typeof storedHeight === 'number'
-            ? convertAndStoreSizeAsPercentage('height', storedHeight)
-            : storedHeight) || defaultEditorSize;
+        // If the playroom from the URL matches a storage entry,
+        // assume same id to enable updating to handle refresh case.
+        if (storedPlayrooms) {
+          const matchingPlayroom = storedPlayroomValues.find(
+            ([_, { dataParam }]) => dataParamFromUrl === dataParam
+          );
 
-        const editorWidth =
-          (typeof storedWidth === 'number'
-            ? convertAndStoreSizeAsPercentage('width', storedWidth)
-            : storedWidth) || defaultEditorSize;
-
-        const editorHidden = editorHiddenFromQuery === true;
-
-        const visibleWidths =
-          widthsFromQuery ||
-          storedVisibleWidths ||
-          playroomConfig?.defaultVisibleWidths;
-
-        const visibleThemes =
-          hasThemesConfigured &&
-          (themesFromQuery ||
-            storedVisibleThemes ||
-            playroomConfig?.defaultVisibleThemes);
-
-        const colorScheme = storedColorScheme;
+          if (matchingPlayroom) {
+            id = matchingPlayroom[0];
+          }
+        }
 
         dispatch({
           type: 'initialLoad',
           payload: {
+            ...(id ? { id } : {}),
             ...(code ? { code } : {}),
-            ...(editorPosition ? { editorPosition } : {}),
+            ...(editorOrientation ? { editorOrientation } : {}),
             ...(editorHeight ? { editorHeight } : {}),
             ...(editorWidth ? { editorWidth } : {}),
             ...(editorHidden ? { editorHidden } : {}),
-            ...(visibleThemes ? { visibleThemes } : {}),
-            ...(visibleWidths ? { visibleWidths } : {}),
+            ...(themesEnabled && selectedThemes ? { selectedThemes } : {}),
+            ...(selectedWidths ? { selectedWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
-            title: titleFromQuery,
-            ready: true,
+            ...(openLayout ? { openLayout } : {}),
+            ...(storedPlayrooms
+              ? { storedPlayrooms: sortStoredPlayrooms(storedPlayrooms) }
+              : {}),
+            title,
           },
         });
+
+        setReady(true);
       }
     );
-  }, [hasThemesConfigured]);
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
@@ -557,15 +650,15 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     debouncedCodeUpdate({
       code: state.code,
-      themes: state.visibleThemes,
-      widths: state.visibleWidths,
+      themes: state.selectedThemes,
+      widths: state.selectedWidths,
       title: state.title,
       editorHidden: state.editorHidden,
     });
   }, [
     state.code,
-    state.visibleThemes,
-    state.visibleWidths,
+    state.selectedThemes,
+    state.selectedWidths,
     state.title,
     state.editorHidden,
     debouncedCodeUpdate,
@@ -573,7 +666,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <StoreContext.Provider value={[state, dispatch]}>
-      {children}
+      {ready ? children : null}
     </StoreContext.Provider>
   );
 };

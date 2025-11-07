@@ -2,6 +2,8 @@ import {
   assertFirstFrameContains,
   assertCodePaneContains,
   assertFramesMatch,
+  typeCode,
+  assertTitle,
 } from '../support/utils';
 
 describe('URL handling', () => {
@@ -20,6 +22,7 @@ describe('URL handling', () => {
         'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
 
+      typeCode('code');
       assertFramesMatch([375, 768]);
     });
 
@@ -28,6 +31,7 @@ describe('URL handling', () => {
         'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA'
       );
 
+      assertTitle('Test');
       cy.title().should('eq', 'Test | Playroom');
     });
 
@@ -56,6 +60,7 @@ describe('URL handling', () => {
         'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
       );
 
+      typeCode('code');
       assertFramesMatch([
         ['themeOne', 375],
         ['themeTwo', 375],
@@ -69,6 +74,7 @@ describe('URL handling', () => {
         'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA'
       );
 
+      assertTitle('Test');
       cy.title().should('eq', 'Test | Playroom');
     });
 
