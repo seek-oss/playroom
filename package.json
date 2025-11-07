@@ -1,6 +1,6 @@
 {
   "name": "playroom",
-  "version": "0.44.4",
+  "version": "1.0.0",
   "description": "Design with code, powered by your own component library",
   "bin": {
     "playroom": "bin/cli.cjs"
