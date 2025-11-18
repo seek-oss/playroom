@@ -1,5 +1,11 @@
 # playroom
 
+## 1.0.1
+
+### Patch Changes
+
+- [#457](https://github.com/seek-oss/playroom/pull/457) [`1deb5f5`](https://github.com/seek-oss/playroom/commit/1deb5f589ca532897f83d830166a6270e9468dc1) Thanks [@askoufis](https://github.com/askoufis)! - Fix compilation errors caused by internal styles
+
 ## 1.0.0
 
 ### Major Changes
