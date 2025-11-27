@@ -12,6 +12,7 @@ export interface PlayroomConfig {
   widths?: number[];
   snippets?: Snippet[];
   frameComponent?: string;
+  assistantClient?: string;
   exampleCode?: string;
   cwd?: string;
   storageKey?: string;

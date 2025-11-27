@@ -27,7 +27,7 @@ export const maxWidth = style([
     boxSizing: 'border-box',
   }),
   {
-    maxWidth: 400,
+    maxWidth: 520,
   },
 ]);
 

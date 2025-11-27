@@ -1,8 +1,9 @@
 import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
-import { FolderOpen, BetweenHorizontalStart } from 'lucide-react';
+import { FolderOpen, BetweenHorizontalStart, Sparkles } from 'lucide-react';
 import { useContext, useMemo } from 'react';
 
 import { decompressParams } from '../../../utils';
+import { assistantEnabled } from '../../configModules/assistantClient';
 import { StoreContext } from '../../contexts/StoreContext';
 import { formatAsRelative } from '../../utils/formatAsRelative';
 import { Button } from '../Button/Button';
@@ -59,7 +60,20 @@ export const ZeroState = () => {
             </Text>
 
             {hasStoredPlayrooms || hasSnippets ? (
-              <Inline space="large">
+              <Inline space="medium">
+                {assistantEnabled ? (
+                  <Button
+                    height="content"
+                    onClick={() => dispatch({ type: 'showAssistant' })}
+                  >
+                    <Stack space="xsmall">
+                      <Sparkles size={20} />
+                      <Inline space="xsmall">
+                        <span>Design with Assistant</span>
+                      </Inline>
+                    </Stack>
+                  </Button>
+                ) : null}
                 {hasStoredPlayrooms ? (
                   <Button
                     height="content"

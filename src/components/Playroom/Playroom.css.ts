@@ -32,15 +32,23 @@ export const resizing = style({
 const editorHeight = createVar();
 const editorWidth = createVar();
 export const editorSize = createVar();
-export const assistantWidth = createVar();
+const assistantWidth = createVar();
+export const assistantSize = createVar();
 export const root = style([
   sprinkles({
     height: 'viewport',
     width: 'viewport',
   }),
   {
+    vars: {
+      [assistantWidth]: `clamp(300px, ${assistantSize}, 90vw)`,
+    },
     display: 'grid',
-    gridTemplateColumns: space(fallbackVar(editorWidth, '0px'), '1fr'),
+    gridTemplateColumns: space(
+      fallbackVar(editorWidth, '0px'),
+      '1fr',
+      fallbackVar(assistantWidth, '0px')
+    ),
     gridTemplateRows: space(
       'min-content',
       'auto',
@@ -57,9 +65,9 @@ export const editorOrientation = styleVariants({
         [editorHeight]: `clamp(150px, ${editorSize}, 70vh)`,
       },
       gridTemplateAreas: newline(
-        '"header header"',
-        '"frames frames"',
-        '"editor editor"'
+        '"header header header"',
+        '"frames frames assistant"',
+        '"editor editor assistant"'
       ),
     },
   ],
@@ -69,9 +77,9 @@ export const editorOrientation = styleVariants({
         [editorWidth]: `clamp(300px, ${editorSize}, 90vw)`,
       },
       gridTemplateAreas: newline(
-        '"header header"',
-        '"editor frames"',
-        '"editor frames"'
+        '"header header header"',
+        '"editor frames assistant"',
+        '"editor frames assistant"'
       ),
     },
   ],
@@ -88,6 +96,11 @@ export const frames = style({
 
 export const editor = style({
   gridArea: 'editor',
+  outline: `1px solid ${colorPaletteVars.border.standard}`,
+});
+
+export const assistant = style({
+  gridArea: 'assistant',
   outline: `1px solid ${colorPaletteVars.border.standard}`,
 });
 

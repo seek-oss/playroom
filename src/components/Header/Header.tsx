@@ -23,6 +23,8 @@ import {
   Eye,
   EyeClosed,
   ChevronDown,
+  WandSparkles,
+  Sparkles,
 } from 'lucide-react';
 import {
   type ComponentProps,
@@ -204,6 +206,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
     {
       editorOrientation,
       editorHidden,
+      assistantHidden,
       panelsVisible,
       colorScheme,
       openDialogOpen,
@@ -317,6 +320,17 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
         </Menu>
 
         <MenuItem
+          icon={WandSparkles}
+          onClick={() =>
+            dispatch({
+              type: assistantHidden ? 'showAssistant' : 'hideAssistant',
+            })
+          }
+        >
+          Toggle Assistant
+        </MenuItem>
+
+        <MenuItem
           icon={panelsVisible ? Eye : EyeClosed}
           onClick={() => dispatch({ type: 'togglePanelVisibility' })}
           shortcut={[primaryMod, '\\']}
@@ -381,7 +395,8 @@ const MenuItemThemedPreviewLink = ({ theme }: { theme: string }) => {
 };
 
 export const Header = () => {
-  const [{ code, selectedThemes }] = useContext(StoreContext);
+  const [{ code, selectedThemes, assistantHidden }, dispatch] =
+    useContext(StoreContext);
   const { copying, onCopyClick } = useCopy();
   const [shareOpen, setShareOpen] = useState(false);
 
@@ -463,6 +478,16 @@ export const Header = () => {
           >
             <FramesMenu />
           </Menu>
+          <ButtonIcon
+            variant={assistantHidden ? 'solid' : 'standard'}
+            label={assistantHidden ? 'Open Assistant' : 'Close Assistant'}
+            icon={<Sparkles />}
+            onClick={() =>
+              dispatch({
+                type: assistantHidden ? 'showAssistant' : 'hideAssistant',
+              })
+            }
+          />
         </div>
         <ShareDialog open={shareOpen} onOpenChange={setShareOpen} />
       </SharedTooltipContext>

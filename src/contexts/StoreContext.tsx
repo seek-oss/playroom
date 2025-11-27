@@ -16,13 +16,18 @@ import {
   compressParams,
 } from '../../utils';
 import playroomConfig from '../config';
+import { assistantEnabled } from '../configModules/assistantClient';
 import {
   themeNames as availableThemes,
   themesEnabled,
 } from '../configModules/themes';
 import availableWidths, { type Widths } from '../configModules/widths';
 import { isValidLocation } from '../utils/cursor';
-import { formatForInsertion, formatAndInsert } from '../utils/formatting';
+import {
+  formatForInsertion,
+  formatAndInsert,
+  formatCode,
+} from '../utils/formatting';
 import {
   getDataParam,
   resolveDataFromUrl,
@@ -51,19 +56,17 @@ const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
 };
 
 function convertAndStoreSizeAsPercentage(
-  mode: 'height' | 'width',
-  size: number
+  direction: 'horizontal' | 'vertical',
+  size: number,
+  storeKey: string
 ): string {
   const viewportSize =
-    mode === 'height' ? window.innerHeight : window.innerWidth;
+    direction === 'vertical' ? window.innerHeight : window.innerWidth;
 
   const sizePercentage = (size / viewportSize) * 100;
   const roundedSizePercentage = `${Math.round(sizePercentage)}%`;
 
-  store.setItem(
-    `${mode === 'height' ? 'editorHeight' : 'editorWidth'}`,
-    roundedSizePercentage
-  );
+  store.setItem(storeKey, roundedSizePercentage);
 
   return `${sizePercentage}%`;
 }
@@ -93,6 +96,8 @@ interface State {
   editorOrientation: EditorOrientation;
   editorHeight: string;
   editorWidth: string;
+  assistantWidth: string;
+  assistantHidden: boolean;
   panelsVisible: boolean;
   selectedThemes: typeof availableThemes;
   selectedWidths: Widths;
@@ -110,12 +115,15 @@ export type Action =
     }
   | { type: 'persistSnippet'; payload: { snippet: Snippet } }
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
+  | { type: 'previewSuggestion'; payload: { code: string } }
   | { type: 'openPlayroomDialog' }
   | { type: 'closePlayroomDialog' }
   | { type: 'openSnippets' }
   | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
+  | { type: 'hideAssistant' }
+  | { type: 'showAssistant' }
   | {
       type: 'setHasSyntaxError';
       payload: { value: boolean; lineNumber?: number };
@@ -130,6 +138,7 @@ export type Action =
     }
   | { type: 'updateEditorHeight'; payload: { size: number } }
   | { type: 'updateEditorWidth'; payload: { size: number } }
+  | { type: 'updateAssistantWidth'; payload: { size: number } }
   | { type: 'togglePanelVisibility' }
   | {
       type: 'updateSelectedThemes';
@@ -265,6 +274,22 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'previewSuggestion': {
+      const { code } = action.payload;
+
+      const previewRenderCode = code
+        ? formatCode({
+            code,
+            cursor: { line: 1, ch: 0 },
+          }).code
+        : undefined;
+
+      return {
+        ...state,
+        previewRenderCode,
+      };
+    }
+
     case 'openSnippets': {
       if (state.hasSyntaxError) {
         return {
@@ -327,6 +352,21 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'hideAssistant': {
+      return {
+        ...state,
+        assistantHidden: true,
+        previewRenderCode: undefined,
+      };
+    }
+
+    case 'showAssistant': {
+      return {
+        ...state,
+        assistantHidden: false,
+      };
+    }
+
     case 'updateColorScheme': {
       const { colorScheme } = action.payload;
       store.setItem('colorScheme', colorScheme);
@@ -362,8 +402,9 @@ const reducer = (state: State, action: Action): State => {
       const { size } = action.payload;
 
       const updatedHeightPercentage = convertAndStoreSizeAsPercentage(
-        'height',
-        size
+        'vertical',
+        size,
+        'editorHeight'
       );
 
       return {
@@ -375,13 +416,28 @@ const reducer = (state: State, action: Action): State => {
     case 'updateEditorWidth': {
       const { size } = action.payload;
       const updatedWidthPercentage = convertAndStoreSizeAsPercentage(
-        'width',
-        size
+        'horizontal',
+        size,
+        'editorWidth'
       );
 
       return {
         ...state,
         editorWidth: updatedWidthPercentage,
+      };
+    }
+
+    case 'updateAssistantWidth': {
+      const { size } = action.payload;
+      const updatedWidthPercentage = convertAndStoreSizeAsPercentage(
+        'horizontal',
+        size,
+        'assistantWidth'
+      );
+
+      return {
+        ...state,
+        assistantWidth: updatedWidthPercentage,
       };
     }
 
@@ -520,6 +576,8 @@ const initialState: State = {
   editorOrientation: defaultOrientation,
   editorHeight: defaultEditorSize,
   editorWidth: defaultEditorSize,
+  assistantWidth: '20%',
+  assistantHidden: false,
   panelsVisible: true,
   selectedThemes:
     themesEnabled && playroomConfig.defaultVisibleThemes
@@ -571,6 +629,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       store.getItem<State['editorOrientation']>('editorOrientation'),
       store.getItem<State['editorHeight']>('editorHeight'),
       store.getItem<State['editorWidth']>('editorWidth'),
+      store.getItem<State['assistantWidth']>('assistantWidth'),
       store.getItem<State['selectedWidths']>('visibleWidths'),
       store.getItem<State['selectedThemes']>('visibleThemes'),
       store.getItem<State['colorScheme']>('colorScheme'),
@@ -581,6 +640,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         editorOrientation,
         editorHeight,
         editorWidth,
+        assistantWidth,
         storedSelectedWidths,
         storedSelectedThemes,
         colorScheme,
@@ -612,6 +672,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
             ...(editorOrientation ? { editorOrientation } : {}),
             ...(editorHeight ? { editorHeight } : {}),
             ...(editorWidth ? { editorWidth } : {}),
+            ...(assistantEnabled && assistantWidth ? { assistantWidth } : {}),
             ...(editorHidden ? { editorHidden } : {}),
             ...(themesEnabled && selectedThemes ? { selectedThemes } : {}),
             ...(selectedWidths ? { selectedWidths } : {}),

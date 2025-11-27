@@ -24,6 +24,8 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
       tone = 'neutral',
       variant = 'standard',
       bleed,
+      disabled,
+      type = 'button',
       ...restProps
     },
     ref
@@ -33,7 +35,9 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
       trigger={
         <button
           {...restProps}
+          type={type}
           ref={ref}
+          aria-disabled={disabled}
           aria-label={label}
           className={clsx({
             [styles.button]: true,

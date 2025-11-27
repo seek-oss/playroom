@@ -9,11 +9,13 @@ import {
   useState,
 } from 'react';
 
+import { assistantEnabled } from '../../configModules/assistantClient';
 import {
   type EditorOrientation,
   StoreContext,
 } from '../../contexts/StoreContext';
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
+import { Assistant } from '../Assistant/Assistant';
 import { Box } from '../Box/Box';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
@@ -40,6 +42,8 @@ export default () => {
       editorOrientation,
       editorHeight,
       editorWidth,
+      assistantWidth,
+      assistantHidden,
       panelsVisible,
       editorHidden,
       code,
@@ -56,6 +60,7 @@ export default () => {
   const lastHidden = useRef(editorHidden);
   const hideActionSource = useRef<'editor' | null>(null);
   const editorRef = useRef<HTMLElement | null>(null);
+  const assistantRef = useRef<HTMLElement | null>(null);
   const showCodeButtonRef = useRef<HTMLButtonElement | null>(null);
   const hideCodeButtonRef = useRef<HTMLButtonElement | null>(null);
   const [resizing, setResizing] = useState(false);
@@ -63,6 +68,8 @@ export default () => {
   const isVerticalEditor = editorOrientation === 'vertical';
   const editorSize = isVerticalEditor ? editorWidth : editorHeight;
   const editorVisible = panelsVisible && !editorHidden;
+  const assistantVisible =
+    assistantEnabled && panelsVisible && !assistantHidden;
   const hasNoStoredPlayrooms = Object.entries(storedPlayrooms).length === 0;
 
   useEffect(() => {
@@ -91,6 +98,7 @@ export default () => {
       }}
       style={assignInlineVars({
         [styles.editorSize]: editorVisible ? editorSize : undefined,
+        [styles.assistantSize]: assistantVisible ? assistantWidth : undefined,
       })}
     >
       <Box className={styles.header}>
@@ -99,7 +107,10 @@ export default () => {
 
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
-          {hasNoStoredPlayrooms || id || previewEditorCode ? (
+          {hasNoStoredPlayrooms ||
+          id ||
+          previewEditorCode ||
+          previewRenderCode ? (
             <Frames code={previewRenderCode || code} />
           ) : (
             <ZeroState />
@@ -191,6 +202,37 @@ export default () => {
           </div>
         </div>
       </Box>
+
+      {assistantEnabled ? (
+        <Box
+          position="relative"
+          className={styles.assistant}
+          ref={assistantRef}
+          inert={!assistantVisible}
+          opacity={!assistantVisible ? 0 : undefined}
+          pointerEvents={!assistantVisible ? 'none' : undefined}
+        >
+          <ResizeHandle
+            ref={assistantRef}
+            position="left"
+            onResize={(newValue) => {
+              dispatch({
+                type: 'updateAssistantWidth',
+                payload: { size: newValue },
+              });
+            }}
+            onResizeStart={() => setResizing(true)}
+            onResizeEnd={(endValue) => {
+              setResizing(false);
+              dispatch({
+                type: 'updateAssistantWidth',
+                payload: { size: endValue },
+              });
+            }}
+          />
+          <Assistant />
+        </Box>
+      ) : null}
     </Box>
   );
 };

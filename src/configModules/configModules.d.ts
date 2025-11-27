@@ -26,3 +26,10 @@ declare module '__PLAYROOM_ALIAS__USE_SCOPE__' {
   const useScope: () => Record<string, any>;
   export default useScope;
 }
+
+declare module '__PLAYROOM_ALIAS__ASSISTANT_CLIENT__' {
+  import type OpenAI from 'openai/client';
+
+  export const model: string | false;
+  export const client: OpenAI | false;
+}
