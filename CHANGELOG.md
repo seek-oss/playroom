@@ -1,5 +1,15 @@
 # playroom
 
+## 1.0.2
+
+### Patch Changes
+
+- [#459](https://github.com/seek-oss/playroom/pull/459) [`76b5304`](https://github.com/seek-oss/playroom/commit/76b530476bbc75862a01e3ad8e61d94c93725749) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Ensure Playroom processes only its own styles
+
+  Fixes an issue where consuming projects using [Vanilla Extract] may suffer from double processing of generated styles.
+
+  [Vanilla Extract]: https://vanilla-extract.style/
+
 ## 1.0.1
 
 ### Patch Changes
