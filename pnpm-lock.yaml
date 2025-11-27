@@ -30,8 +30,8 @@ importers:
         specifier: ^3.5.0
         version: 3.5.0
       '@capsizecss/vanilla-extract':
-        specifier: ^2.0.1
-        version: 2.0.1(@vanilla-extract/css@1.17.4)
+        specifier: ^2.0.4
+        version: 2.0.4(@vanilla-extract/css@1.17.4)
       '@soda/friendly-errors-webpack-plugin':
         specifier: ^1.8.1
         version: 1.8.1(webpack@5.98.0)
@@ -883,14 +883,14 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  '@capsizecss/core@4.1.2':
-    resolution: {integrity: sha512-5tMjLsVsaEEwJ816y3eTfhhTIyUWNFt58x6YcHni0eV5tta8MGDOAIe+CV5ICb5pguXgDpNGLprqhPqBWtkFSg==}
+  '@capsizecss/core@4.1.3':
+    resolution: {integrity: sha512-d2sTTBwKuVioYxpwpU4URMp8VkFK+GI1VNGNawQcF8HBMHzCDa1FLcbeXJSzb5AJik7ZGv3aFVCTs7IS9MhvHg==}
 
   '@capsizecss/metrics@3.5.0':
     resolution: {integrity: sha512-Ju2I/Qn3c1OaU8FgeW4Tc22D4C9NwyVfKzNmzst59bvxBjPoLYNZMqFYn+HvCtn4MpXwiaDtCE8fNuQLpdi9yA==}
 
-  '@capsizecss/vanilla-extract@2.0.1':
-    resolution: {integrity: sha512-Lh7d932zojyvSpKh1IkAU3zkSOBec1OQjO7/KRK/tEh9dIF2wWG9H7SG3H4nwBNyeOLBxEulqHKR+bA1gpeKLg==}
+  '@capsizecss/vanilla-extract@2.0.4':
+    resolution: {integrity: sha512-KImqHutsYyeA718+3Fqg7Bw/RCSKgu+FESsMitWt9u4/KpBpB+s7cW4DWJyC6N5AzOoahYB7Jnu0hKB3HW+X6A==}
     peerDependencies:
       '@vanilla-extract/css': ^1.4.0
 
@@ -6635,15 +6635,15 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@capsizecss/core@4.1.2':
+  '@capsizecss/core@4.1.3':
     dependencies:
       csstype: 3.1.3
 
   '@capsizecss/metrics@3.5.0': {}
 
-  '@capsizecss/vanilla-extract@2.0.1(@vanilla-extract/css@1.17.4)':
+  '@capsizecss/vanilla-extract@2.0.4(@vanilla-extract/css@1.17.4)':
     dependencies:
-      '@capsizecss/core': 4.1.2
+      '@capsizecss/core': 4.1.3
       '@vanilla-extract/css': 1.17.4
 
   '@changesets/apply-release-plan@7.0.10':
