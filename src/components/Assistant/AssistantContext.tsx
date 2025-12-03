@@ -83,7 +83,7 @@ export const AssistantProvider = ({ children }: Props) => {
 
   const instructions = `${systemPrompt}${
     attachCode
-      ? `\n\nCurrent code to modify if requested:\n\n${state.code}`
+      ? `\n\nCurrent code to modify is as follows:\`\`\`\n${state.code}\n\`\`\``
       : ''
   }`;
 

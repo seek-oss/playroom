@@ -49,7 +49,8 @@ Multiple variants format (only when explicitly requested):
 }
 
 STRICT RULES:
-1. Put ALL your communication in the "message" field
-2. The "variants" array contains JSX code ready to render (no markdown, no \`\`\`jsx fences, no explanations)
-3. Only include multiple variants if explicitly asked for multiple versions/options/variants
+1. Response MUST be pure JSON only - first character is { and last character is }
+2. Put ALL your communication in the "message" field
+3. The "variants" array contains JSX code ready to render (no markdown, no \`\`\`jsx fences, no explanations)
+4. Only include multiple variants if explicitly asked for multiple versions/options/variants
 `;
