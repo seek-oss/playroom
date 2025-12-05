@@ -34,18 +34,18 @@ ${code}
 
 Required JSON format:
 {
+  "message": "<your response to the user>",
   "variants": ["<JSX code>"],
-  "message": "<your response to the user>"
 }
 
 Multiple variants format (only when explicitly requested):
 {
+  "message": "<your response to the user>",
   "variants": [
     "<JSX code variant 1>",
     "<JSX code variant 2>",
     "<JSX code variant 3>"
-  ],
-  "message": "<your response to the user>"
+  ]
 }
 
 STRICT RULES:

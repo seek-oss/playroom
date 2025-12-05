@@ -35,6 +35,7 @@ import {
 } from 'react';
 
 import { compressParams } from '../../../utils';
+import { assistantEnabled } from '../../configModules/assistantClient';
 import {
   themeNames as availableThemes,
   themeNames,
@@ -395,12 +396,10 @@ const MenuItemThemedPreviewLink = ({ theme }: { theme: string }) => {
 };
 
 export const Header = () => {
-  const [{ code, selectedThemes, assistantHidden }, dispatch] =
+  const [{ selectedThemes, assistantHidden }, dispatch] =
     useContext(StoreContext);
   const { copying, onCopyClick } = useCopy();
   const [shareOpen, setShareOpen] = useState(false);
-
-  const hasCode = code.trim().length > 0;
 
   const previewUrl = usePreviewUrl(
     themesEnabled ? selectedThemes[0] : undefined
@@ -416,7 +415,7 @@ export const Header = () => {
         <div
           className={clsx({
             [styles.actionsContainer]: true,
-            [styles.actionsReady]: hasCode,
+            [styles.actionsReady]: true,
           })}
         >
           <div className={styles.segmentedGroup}>
@@ -478,16 +477,18 @@ export const Header = () => {
           >
             <FramesMenu />
           </Menu>
-          <ButtonIcon
-            variant={assistantHidden ? 'solid' : 'standard'}
-            label={assistantHidden ? 'Open Assistant' : 'Close Assistant'}
-            icon={<Sparkles />}
-            onClick={() =>
-              dispatch({
-                type: assistantHidden ? 'showAssistant' : 'hideAssistant',
-              })
-            }
-          />
+          {assistantEnabled ? (
+            <ButtonIcon
+              variant={assistantHidden ? 'solid' : 'standard'}
+              label={assistantHidden ? 'Open Assistant' : 'Close Assistant'}
+              icon={<Sparkles />}
+              onClick={() =>
+                dispatch({
+                  type: assistantHidden ? 'showAssistant' : 'hideAssistant',
+                })
+              }
+            />
+          ) : null}
         </div>
         <ShareDialog open={shareOpen} onOpenChange={setShareOpen} />
       </SharedTooltipContext>

@@ -34,9 +34,14 @@ const speakThis = (str: string, synth: typeof window.speechSynthesis) => {
 interface Props {
   message: AssistantContextValue['messages'][number];
   groupWithPreviousMessage?: boolean;
+  streaming?: boolean;
 }
 
-export const ChatMessage = ({ message, groupWithPreviousMessage }: Props) => {
+export const ChatMessage = ({
+  message,
+  groupWithPreviousMessage,
+  streaming,
+}: Props) => {
   const speechRef = useRef<typeof window.speechSynthesis | null>(null);
   const isUserMessage = message.role === 'user';
 
@@ -59,7 +64,7 @@ export const ChatMessage = ({ message, groupWithPreviousMessage }: Props) => {
       <Stack space="small">
         <Text>
           {message.content}
-          {!isUserMessage ? (
+          {!isUserMessage && !streaming ? (
             <span className={styles.readMessage}>
               <ButtonIcon
                 label="Listen to assistant"

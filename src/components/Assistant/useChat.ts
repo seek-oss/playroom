@@ -20,6 +20,7 @@ export type AssistantMessage = {
 interface UseOpenAIChatProps {
   instructions?: ResponseCreateParamsNonStreaming['instructions'];
   initialMessages?: AssistantMessage[];
+  onUpdate?: (assistantMessage: AssistantMessage) => void;
   onFinish?: (assistantMessage: AssistantMessage) => void;
   onError?: (err: Error) => void;
 }
@@ -45,11 +46,18 @@ const parseAssistantMessage = ({
       : '';
   let parsedVariants: string[] = [];
 
+  if (parsedMessage.startsWith('```json')) {
+    parsedMessage = parsedMessage.replace(/^```json/, '').trim();
+  }
+  if (parsedMessage.endsWith('```')) {
+    parsedMessage = parsedMessage.replace(/```$/, '').trim();
+  }
+
   if (parsedMessage && isMessageStructuredResponse(parsedMessage)) {
     const parsedContent = JSON.parse(parsedMessage);
 
     parsedMessage = parsedContent.message;
-    parsedVariants = parsedContent.variants;
+    parsedVariants = parsedContent.variants || [];
   }
 
   return {
@@ -63,6 +71,7 @@ const parseAssistantMessage = ({
 export function useChat({
   instructions,
   initialMessages = [],
+  onUpdate,
   onFinish,
   onError,
 }: UseOpenAIChatProps) {
@@ -111,16 +120,77 @@ export function useChat({
             'playroom_assistant_message'
           ),
         },
+        stream: true,
       });
 
-      const response = data.output?.[0];
-      if (response && response.type === 'message') {
-        const assistantMessage = parseAssistantMessage(response);
-        setMessages([...newMessages, assistantMessage]);
-        setLoading(false);
-        onFinish?.(assistantMessage);
-      } else {
-        throw new Error('No assistant message returned');
+      let messageMeta: ResponseOutputMessage | null = null;
+      let messageContent = '';
+      let stage: 'awaitingMessage' | 'awaitingVariants' = 'awaitingMessage';
+      for await (const event of data) {
+        switch (event.type) {
+          case 'response.output_item.added': {
+            messageMeta = event.item;
+            break;
+          }
+          case 'response.output_text.delta': {
+            messageContent += event.delta;
+            try {
+              let renderable = '';
+              if (stage === 'awaitingMessage') {
+                const endOfMessageIndex = messageContent.indexOf('",\n  "');
+                const hasMessageCompleted = endOfMessageIndex > 0;
+                const messagePart = hasMessageCompleted
+                  ? // Handles when end of message chunk appears in same chunk as variants beginning
+                    messageContent.slice(0, endOfMessageIndex)
+                  : // Handles rendering as much of the message as we have receieved
+                    messageContent;
+
+                if (hasMessageCompleted) {
+                  // Move onto next stage for next chunk
+                  stage = 'awaitingVariants';
+                }
+
+                renderable = `${messagePart}"}`;
+                JSON.parse(renderable);
+              } else {
+                const endOfVariantIndex =
+                  messageContent.lastIndexOf('",\n    "');
+
+                if (endOfVariantIndex > 0) {
+                  renderable = `${messageContent.slice(
+                    0,
+                    endOfVariantIndex
+                  )}"]}`;
+                  JSON.parse(renderable);
+                }
+              }
+
+              if (messageMeta && renderable) {
+                const assistantMessage = parseAssistantMessage({
+                  ...messageMeta,
+                  content: [
+                    {
+                      type: 'output_text',
+                      text: renderable,
+                      annotations: [],
+                    },
+                  ],
+                });
+                setMessages([...newMessages, assistantMessage]);
+                onUpdate?.(assistantMessage);
+              }
+            } catch {}
+            break;
+          }
+          case 'response.output_item.done': {
+            const assistantMessage = parseAssistantMessage(event.item);
+            setMessages([...newMessages, assistantMessage]);
+            setLoading(false);
+            onUpdate?.(assistantMessage);
+            onFinish?.(assistantMessage);
+            break;
+          }
+        }
       }
     } catch (err) {
       const errorMsg =

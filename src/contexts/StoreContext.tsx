@@ -108,7 +108,10 @@ interface State {
 
 export type Action =
   | { type: 'initialLoad'; payload: Partial<State> }
-  | { type: 'updateCode'; payload: { code: string; cursor?: CursorPosition } }
+  | {
+      type: 'updateCode';
+      payload: { code: string; cursor?: CursorPosition };
+    }
   | {
       type: 'updateCursorPosition';
       payload: { position: CursorPosition; code?: string };
@@ -116,6 +119,7 @@ export type Action =
   | { type: 'persistSnippet'; payload: { snippet: Snippet } }
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
   | { type: 'previewSuggestion'; payload: { code: string } }
+  | { type: 'persistSuggestion'; payload: { code: string } }
   | { type: 'openPlayroomDialog' }
   | { type: 'closePlayroomDialog' }
   | { type: 'openSnippets' }
@@ -287,6 +291,18 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         previewRenderCode,
+      };
+    }
+
+    case 'persistSuggestion': {
+      const { code } = action.payload;
+
+      return {
+        ...state,
+        previewRenderCode: undefined,
+        editorHidden: false,
+        code,
+        id: !state.id && code.trim().length > 0 ? createPlayroomId() : state.id,
       };
     }
 

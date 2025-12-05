@@ -17,6 +17,7 @@ import { Spread } from '../Spread/Spread';
 import { Stack } from '../Stack/Stack';
 import { Text } from '../Text/Text';
 import { SharedTooltipContext } from '../Tooltip/Tooltip';
+import LoadingIcon from '../icons/LoadingIcon';
 
 import { useAssistant } from './AssistantContext';
 import { ChatForm } from './ChatForm/ChatForm';
@@ -32,9 +33,6 @@ const loadingMessages = [
   'Procrastinating...',
   'Fiddling...',
   'Overthinking...',
-  'Daydreaming...',
-  'Turtle-coding...',
-  'Shell-scripting...',
   'Considering...',
   'Contemplating...',
 ];
@@ -55,8 +53,12 @@ export const AssistantPanel = () => {
     resetActiveSuggestion,
   } = useAssistant();
 
+  const lastMessage = messages[messages.length - 1];
+  const awaitingResponse = loading && lastMessage?.role === 'user';
+  const streamingResponse = loading && lastMessage?.role === 'assistant';
+
   useEffect(() => {
-    if (loading) {
+    if (awaitingResponse) {
       const chooseRandomLoadingMessage = () => {
         const randomIndex = Math.floor(Math.random() * loadingMessages.length);
         setLoadingMessage(loadingMessages[randomIndex]);
@@ -67,13 +69,13 @@ export const AssistantPanel = () => {
 
       return () => clearInterval(intervalId);
     }
-  }, [loading]);
+  }, [awaitingResponse]);
 
   const hasError = Boolean(errorMessage);
   useLayoutEffect(() => {
     const el = messageContainerRef.current;
     el?.scrollTo(0, el.scrollHeight);
-  }, [messages.length, loading, hasError]);
+  }, [messages.length, lastMessage, hasError]);
 
   return (
     <aside className={styles.root}>
@@ -122,6 +124,7 @@ export const AssistantPanel = () => {
                     message.role === 'user' &&
                     messages[messageIndex - 1]?.role === message.role
                   }
+                  streaming={streamingResponse}
                 />
 
                 {message.variants.length > 0 && (
@@ -136,7 +139,7 @@ export const AssistantPanel = () => {
                             suggestionIndex === activeSuggestion.suggestionIndex
                         )}
                         label={
-                          message.variants.length > 1
+                          message.variants.length > 1 || streamingResponse
                             ? `View ${suggestionIndex + 1}`
                             : 'View'
                         }
@@ -156,7 +159,13 @@ export const AssistantPanel = () => {
             ))}
           </Stack>
 
-          {loading ? <Text>{loadingMessage}</Text> : null}
+          {awaitingResponse ? <Text>{loadingMessage}</Text> : null}
+
+          {streamingResponse ? (
+            <Text>
+              <LoadingIcon />
+            </Text>
+          ) : null}
 
           {errorMessage ? <Text tone="critical">{errorMessage}</Text> : null}
         </Box>

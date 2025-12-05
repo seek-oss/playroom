@@ -8,7 +8,7 @@ export const textarea = style([
     font: 'large',
     width: 'full',
     paddingX: 'large',
-    paddingY: formPadding,
+    marginY: formPadding,
     boxSizing: 'border-box',
     borderRadius: 'medium',
   }),

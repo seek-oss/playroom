@@ -59,7 +59,7 @@ export const AssistantProvider = ({ children }: Props) => {
   ) => {
     resetActiveSuggestion();
     dispatch({
-      type: 'updateCode',
+      type: 'persistSuggestion',
       payload: {
         code: suggestion,
       },
@@ -82,7 +82,7 @@ export const AssistantProvider = ({ children }: Props) => {
   };
 
   const instructions = `${systemPrompt}${
-    attachCode
+    attachCode && state.code
       ? `\n\nCurrent code to modify is as follows:\`\`\`\n${state.code}\n\`\`\``
       : ''
   }`;
@@ -103,8 +103,8 @@ export const AssistantProvider = ({ children }: Props) => {
     {
       instructions,
       initialMessages,
-      onFinish: ({ id, role, content, variants }) => {
-        if (role === 'assistant' && content && variants.length > 0) {
+      onUpdate: ({ id, role, variants }) => {
+        if (role === 'assistant' && variants.length > 0) {
           previewSuggestion({ id, code: variants[0], suggestionIndex: 0 });
         }
       },
