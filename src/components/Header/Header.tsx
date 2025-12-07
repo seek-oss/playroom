@@ -396,7 +396,7 @@ const MenuItemThemedPreviewLink = ({ theme }: { theme: string }) => {
 };
 
 export const Header = () => {
-  const [{ selectedThemes, assistantHidden }, dispatch] =
+  const [{ code, selectedThemes, assistantHidden }, dispatch] =
     useContext(StoreContext);
   const { copying, onCopyClick } = useCopy();
   const [shareOpen, setShareOpen] = useState(false);
@@ -405,6 +405,8 @@ export const Header = () => {
     themesEnabled ? selectedThemes[0] : undefined
   );
 
+  const hasCode = code.trim().length > 0;
+
   return (
     <Box className={styles.root}>
       <div className={styles.menuContainer}>
@@ -412,61 +414,63 @@ export const Header = () => {
       </div>
       <Title />
       <SharedTooltipContext>
-        <div
-          className={clsx({
-            [styles.actionsContainer]: true,
-            [styles.actionsReady]: true,
-          })}
-        >
-          <div className={styles.segmentedGroup}>
-            <button
-              type="button"
-              className={styles.segmentedTextButton}
-              onClick={() => setShareOpen(true)}
-            >
-              <Text>Share</Text>
-            </button>
-            <Tooltip
-              label={copying ? 'Copied!' : 'Copy link'}
-              trigger={
-                <button
-                  type="button"
-                  aria-label="Copy link"
-                  className={styles.segmentedIconButton}
-                  onClick={() => onCopyClick(window.location.href)}
-                >
-                  {copying ? (
-                    <span className={styles.copyLinkSuccess}>
-                      <Check size={14} />
-                    </span>
-                  ) : (
-                    <Link size={14} />
-                  )}
-                </button>
-              }
-            />
-          </div>
+        <div className={styles.actionsContainer}>
+          <div
+            className={clsx({
+              [styles.shareActions]: true,
+              [styles.shareActionsReady]: hasCode,
+            })}
+          >
+            <div className={styles.segmentedGroup}>
+              <button
+                type="button"
+                className={styles.segmentedTextButton}
+                onClick={() => setShareOpen(true)}
+              >
+                <Text>Share</Text>
+              </button>
+              <Tooltip
+                label={copying ? 'Copied!' : 'Copy link'}
+                trigger={
+                  <button
+                    type="button"
+                    aria-label="Copy link"
+                    className={styles.segmentedIconButton}
+                    onClick={() => onCopyClick(window.location.href)}
+                  >
+                    {copying ? (
+                      <span className={styles.copyLinkSuccess}>
+                        <Check size={14} />
+                      </span>
+                    ) : (
+                      <Link size={14} />
+                    )}
+                  </button>
+                }
+              />
+            </div>
 
-          {themesEnabled && selectedThemes.length !== 1 ? (
-            <Menu
-              width="content"
-              align="end"
-              trigger={<ButtonIcon label="Launch Preview" icon={<Play />} />}
-            >
-              <MenuGroup label="Choose preview theme">
-                {availableThemes.map((theme) => (
-                  <MenuItemThemedPreviewLink key={theme} theme={theme} />
-                ))}
-              </MenuGroup>
-            </Menu>
-          ) : (
-            <ButtonIconLink
-              label="Launch Preview"
-              icon={<Play />}
-              href={previewUrl}
-              target="_blank"
-            />
-          )}
+            {themesEnabled && selectedThemes.length !== 1 ? (
+              <Menu
+                width="content"
+                align="end"
+                trigger={<ButtonIcon label="Launch Preview" icon={<Play />} />}
+              >
+                <MenuGroup label="Choose preview theme">
+                  {availableThemes.map((theme) => (
+                    <MenuItemThemedPreviewLink key={theme} theme={theme} />
+                  ))}
+                </MenuGroup>
+              </Menu>
+            ) : (
+              <ButtonIconLink
+                label="Launch Preview"
+                icon={<Play />}
+                href={previewUrl}
+                target="_blank"
+              />
+            )}
+          </div>
 
           <Menu
             width="small"

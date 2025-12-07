@@ -1,4 +1,4 @@
-import { PanelRightClose, Sparkles, SquarePen } from 'lucide-react';
+import { Sparkles, SquarePen } from 'lucide-react';
 import {
   useState,
   useEffect,
@@ -38,7 +38,7 @@ const loadingMessages = [
 ];
 
 export const AssistantPanel = () => {
-  const [, dispatch] = useContext(StoreContext);
+  const [{ assistantHidden }] = useContext(StoreContext);
   const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0]);
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
@@ -77,6 +77,12 @@ export const AssistantPanel = () => {
     el?.scrollTo(0, el.scrollHeight);
   }, [messages.length, lastMessage, hasError]);
 
+  useEffect(() => {
+    if (assistantHidden) {
+      resetActiveSuggestion();
+    }
+  }, [assistantHidden, resetActiveSuggestion]);
+
   return (
     <aside className={styles.root}>
       <div className={styles.titleContainer}>
@@ -86,7 +92,7 @@ export const AssistantPanel = () => {
               <Heading level="3">Assistant</Heading>
               <Sparkles height={18} width={18} style={{ marginTop: '-2px' }} />
             </Inline>
-            <Inline space="xsmall">
+            <div className={styles.assistantActions}>
               {messages.length > 1 && (
                 <ButtonIcon
                   label="New chat"
@@ -95,16 +101,7 @@ export const AssistantPanel = () => {
                   size="small"
                 />
               )}
-              <ButtonIcon
-                label="Hide Assistant"
-                icon={<PanelRightClose />}
-                onClick={() => {
-                  dispatch({ type: 'hideAssistant' });
-                  resetActiveSuggestion();
-                }}
-                size="small"
-              />
-            </Inline>
+            </div>
           </Spread>
         </SharedTooltipContext>
       </div>

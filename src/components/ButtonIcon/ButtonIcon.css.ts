@@ -31,8 +31,8 @@ export const button = style([
   {
     background: 'transparent',
     outline: 'none',
-    height: sizeVar,
-    width: sizeVar,
+    height: `${sizeVar} !important`,
+    width: `${sizeVar} !important`,
   },
 ]);
 

@@ -20,7 +20,12 @@ const panelGutter = 'medium';
 
 export const titleContainer = sprinkles({
   padding: panelGutter,
+  paddingTop: 'large',
   paddingBottom: 'xlarge',
+});
+
+export const assistantActions = style({
+  height: vars.buttonSizes.small,
 });
 
 const messagesEndBufferSize = 'large';
