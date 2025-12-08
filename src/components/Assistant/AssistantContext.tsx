@@ -5,8 +5,6 @@ import {
   useContext,
   useState,
   type ReactNode,
-  useRef,
-  useEffect,
 } from 'react';
 
 import { StoreContext } from '../../contexts/StoreContext';
@@ -37,11 +35,6 @@ export const AssistantProvider = ({ children }: Props) => {
   const [state, dispatch] = useContext(StoreContext);
   const [attachCode, setAttachCode] = useState(true);
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
-  const previewRenderCodeRef = useRef(state.previewRenderCode);
-
-  useEffect(() => {
-    previewRenderCodeRef.current = state.previewRenderCode;
-  }, [state.previewRenderCode]);
 
   const instructions = `${systemPrompt}${
     attachCode && state.code
