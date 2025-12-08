@@ -1,6 +1,7 @@
 import { Send } from 'lucide-react';
-import { type FormEvent, useRef, useState } from 'react';
+import { type FormEvent, useContext, useRef, useState } from 'react';
 
+import { StoreContext } from '../../../contexts/StoreContext';
 import { ButtonIcon } from '../../ButtonIcon/ButtonIcon';
 import { Inline } from '../../Inline/Inline';
 import { Spread } from '../../Spread/Spread';
@@ -17,6 +18,7 @@ import { ChatField } from './ChatField';
 import * as styles from './ChatForm.css';
 
 export const ChatForm = () => {
+  const [{ code }] = useContext(StoreContext);
   const [input, setInput] = useState('');
   const fieldRef = useRef<HTMLTextAreaElement>(null);
 
@@ -71,7 +73,7 @@ export const ChatForm = () => {
           <Spread space="small">
             <Inline space="medium" alignY="center" nowrap>
               <AttachImage onAttach={() => fieldRef.current?.focus()} />
-              <AttachCode />
+              {code.trim().length > 0 && <AttachCode />}
             </Inline>
 
             <Inline space="xsmall" nowrap>
