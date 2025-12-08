@@ -420,6 +420,7 @@ export const Header = () => {
               [styles.shareActions]: true,
               [styles.shareActionsReady]: hasCode,
             })}
+            inert={!hasCode ? true : undefined}
           >
             <div className={styles.segmentedGroup}>
               <button
