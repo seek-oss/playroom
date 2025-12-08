@@ -79,6 +79,12 @@ export function useChat({
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const resetChat = () => {
+    setMessages(initialMessages);
+    setErrorMessage(null);
+    setLoading(false);
+  };
+
   const sendMessage = async (input: string, imageDataUrl?: string | null) => {
     const newMessage = {
       id: self.crypto.randomUUID(),
@@ -183,7 +189,10 @@ export function useChat({
             break;
           }
           case 'response.output_item.done': {
-            const assistantMessage = parseAssistantMessage(event.item);
+            const assistantMessage = parseAssistantMessage({
+              ...event.item,
+              id: messageMeta?.id || event.item.id,
+            });
             setMessages([...newMessages, assistantMessage]);
             setLoading(false);
             onUpdate?.(assistantMessage);
@@ -205,7 +214,7 @@ export function useChat({
 
   return {
     messages,
-    setMessages,
+    resetChat,
     sendMessage,
     loading,
     errorMessage,

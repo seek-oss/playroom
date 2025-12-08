@@ -120,6 +120,7 @@ export type Action =
   | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
   | { type: 'previewSuggestion'; payload: { code: string } }
   | { type: 'persistSuggestion'; payload: { code: string } }
+  | { type: 'clearSuggestion' }
   | { type: 'openPlayroomDialog' }
   | { type: 'closePlayroomDialog' }
   | { type: 'openSnippets' }
@@ -303,6 +304,13 @@ const reducer = (state: State, action: Action): State => {
         editorHidden: false,
         code,
         id: !state.id && code.trim().length > 0 ? createPlayroomId() : state.id,
+      };
+    }
+
+    case 'clearSuggestion': {
+      return {
+        ...state,
+        previewRenderCode: undefined,
       };
     }
 

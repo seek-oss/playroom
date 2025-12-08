@@ -38,20 +38,12 @@ const loadingMessages = [
 ];
 
 export const AssistantPanel = () => {
-  const [{ assistantHidden }] = useContext(StoreContext);
+  const [{ assistantHidden }, dispatch] = useContext(StoreContext);
   const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0]);
+  const [activeSuggestion, setActiveSuggestion] = useState<string | null>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
-  const {
-    messages,
-    errorMessage,
-    reset,
-    loading,
-    applySuggestion,
-    activeSuggestion,
-    previewSuggestion,
-    resetActiveSuggestion,
-  } = useAssistant();
+  const { messages, errorMessage, reset, loading } = useAssistant();
 
   const lastMessage = messages[messages.length - 1];
   const awaitingResponse = loading && lastMessage?.role === 'user';
@@ -78,10 +70,21 @@ export const AssistantPanel = () => {
   }, [messages.length, lastMessage, hasError]);
 
   useEffect(() => {
-    if (assistantHidden) {
-      resetActiveSuggestion();
+    if (loading || assistantHidden) {
+      setActiveSuggestion(null);
     }
-  }, [assistantHidden, resetActiveSuggestion]);
+  }, [loading, assistantHidden]);
+
+  useEffect(() => {
+    if (!activeSuggestion && lastMessage?.variants.length > 0) {
+      const firstIndex = 0;
+      setActiveSuggestion(`${lastMessage.id}_${firstIndex}`);
+      dispatch({
+        type: 'previewSuggestion',
+        payload: { code: lastMessage.variants[firstIndex] },
+      });
+    }
+  }, [dispatch, activeSuggestion, lastMessage.variants, lastMessage.id]);
 
   return (
     <aside className={styles.root}>
@@ -126,30 +129,38 @@ export const AssistantPanel = () => {
 
                 {message.variants.length > 0 && (
                   <Stack space="xsmall">
-                    {message.variants.map((suggestion, suggestionIndex) => (
-                      <Suggestion
-                        key={`${message.id}_${suggestionIndex}`}
-                        suggestion={suggestion}
-                        active={Boolean(
-                          activeSuggestion &&
-                            message.id === activeSuggestion.messageId &&
-                            suggestionIndex === activeSuggestion.suggestionIndex
-                        )}
-                        label={
-                          message.variants.length > 1 || streamingResponse
-                            ? `View ${suggestionIndex + 1}`
-                            : 'View'
-                        }
-                        onApply={() => applySuggestion(suggestion)}
-                        onPreview={() =>
-                          previewSuggestion({
-                            id: message.id,
-                            code: suggestion,
-                            suggestionIndex,
-                          })
-                        }
-                      />
-                    ))}
+                    {message.variants.map((suggestion, suggestionIndex) => {
+                      const key = `${message.id}_${suggestionIndex}`;
+
+                      return (
+                        <Suggestion
+                          key={key}
+                          suggestion={suggestion}
+                          active={key === activeSuggestion}
+                          label={
+                            message.variants.length > 1 || streamingResponse
+                              ? `View ${suggestionIndex + 1}`
+                              : 'View'
+                          }
+                          onApply={() => {
+                            dispatch({
+                              type: 'persistSuggestion',
+                              payload: {
+                                code: suggestion,
+                              },
+                            });
+                            setActiveSuggestion(null);
+                          }}
+                          onPreview={() => {
+                            setActiveSuggestion(key);
+                            dispatch({
+                              type: 'previewSuggestion',
+                              payload: { code: suggestion },
+                            });
+                          }}
+                        />
+                      );
+                    })}
                   </Stack>
                 )}
               </Stack>

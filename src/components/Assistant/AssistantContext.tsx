@@ -5,6 +5,8 @@ import {
   useContext,
   useState,
   type ReactNode,
+  useRef,
+  useEffect,
 } from 'react';
 
 import { StoreContext } from '../../contexts/StoreContext';
@@ -12,10 +14,6 @@ import { StoreContext } from '../../contexts/StoreContext';
 import { systemPrompt } from './AssistantPrompt';
 import { useChat, type AssistantMessage } from './useChat';
 
-type ActiveSuggestion = {
-  messageId: string;
-  suggestionIndex: number;
-} | null;
 export type AssistantContextValue = {
   messages: AssistantMessage[];
   reset: () => void;
@@ -26,14 +24,6 @@ export type AssistantContextValue = {
   setAttachCode: Dispatch<SetStateAction<boolean>>;
   imageDataUrl: string | null;
   setImageDataUrl: Dispatch<SetStateAction<string | null>>;
-  applySuggestion: (suggestedCode: string) => void;
-  activeSuggestion: ActiveSuggestion;
-  previewSuggestion: (params: {
-    id: string;
-    code: string;
-    suggestionIndex: number;
-  }) => void;
-  resetActiveSuggestion: () => void;
 };
 
 export const AssistantContext = createContext<AssistantContextValue | null>(
@@ -47,39 +37,11 @@ export const AssistantProvider = ({ children }: Props) => {
   const [state, dispatch] = useContext(StoreContext);
   const [attachCode, setAttachCode] = useState(true);
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
-  const [activeSuggestion, setActiveSuggestion] =
-    useState<ActiveSuggestion>(null);
+  const previewRenderCodeRef = useRef(state.previewRenderCode);
 
-  const resetActiveSuggestion = () => {
-    setActiveSuggestion(null);
-  };
-
-  const applySuggestion: AssistantContextValue['applySuggestion'] = (
-    suggestion
-  ) => {
-    resetActiveSuggestion();
-    dispatch({
-      type: 'persistSuggestion',
-      payload: {
-        code: suggestion,
-      },
-    });
-  };
-
-  const previewSuggestion: AssistantContextValue['previewSuggestion'] = ({
-    id,
-    code,
-    suggestionIndex,
-  }) => {
-    setActiveSuggestion({
-      messageId: id,
-      suggestionIndex,
-    });
-    dispatch({
-      type: 'previewSuggestion',
-      payload: { code },
-    });
-  };
+  useEffect(() => {
+    previewRenderCodeRef.current = state.previewRenderCode;
+  }, [state.previewRenderCode]);
 
   const instructions = `${systemPrompt}${
     attachCode && state.code
@@ -99,20 +61,14 @@ export const AssistantProvider = ({ children }: Props) => {
     },
   ];
 
-  const { messages, setMessages, sendMessage, loading, errorMessage } = useChat(
-    {
-      instructions,
-      initialMessages,
-      onUpdate: ({ id, role, variants }) => {
-        if (role === 'assistant' && variants.length > 0) {
-          previewSuggestion({ id, code: variants[0], suggestionIndex: 0 });
-        }
-      },
-    }
-  );
+  const { messages, resetChat, sendMessage, loading, errorMessage } = useChat({
+    instructions,
+    initialMessages,
+  });
 
   const reset = () => {
-    setMessages(initialMessages);
+    dispatch({ type: 'clearSuggestion' });
+    resetChat();
     setImageDataUrl(null);
   };
 
@@ -121,7 +77,6 @@ export const AssistantProvider = ({ children }: Props) => {
       value={{
         messages,
         handleSubmit: (input) => {
-          setActiveSuggestion(null);
           sendMessage(input, imageDataUrl);
         },
         attachCode,
@@ -131,10 +86,6 @@ export const AssistantProvider = ({ children }: Props) => {
         loading,
         imageDataUrl,
         setImageDataUrl,
-        applySuggestion,
-        activeSuggestion,
-        previewSuggestion,
-        resetActiveSuggestion,
       }}
     >
       {children}
