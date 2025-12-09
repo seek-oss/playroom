@@ -42,6 +42,7 @@ export const AssistantPanel = () => {
   const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0]);
   const [activeSuggestion, setActiveSuggestion] = useState<string | null>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
+  const userSelectedSuggestion = useRef(false);
 
   const { messages, errorMessage, reset, loading } = useAssistant();
 
@@ -72,11 +73,16 @@ export const AssistantPanel = () => {
   useEffect(() => {
     if (loading || assistantHidden) {
       setActiveSuggestion(null);
+      userSelectedSuggestion.current = false;
     }
   }, [loading, assistantHidden]);
 
   useEffect(() => {
-    if (!activeSuggestion && lastMessage?.variants.length > 0) {
+    if (
+      !userSelectedSuggestion.current &&
+      !activeSuggestion &&
+      lastMessage?.variants.length > 0
+    ) {
       const firstIndex = 0;
       setActiveSuggestion(`${lastMessage.id}_${firstIndex}`);
       dispatch({
@@ -131,15 +137,16 @@ export const AssistantPanel = () => {
                   <Stack space="xsmall">
                     {message.variants.map((suggestion, suggestionIndex) => {
                       const key = `${message.id}_${suggestionIndex}`;
+                      const isActive = key === activeSuggestion;
 
                       return (
                         <Suggestion
                           key={key}
                           suggestion={suggestion}
-                          active={key === activeSuggestion}
+                          active={isActive}
                           label={
                             message.variants.length > 1 || streamingResponse
-                              ? `View ${suggestionIndex + 1}`
+                              ? `Variant ${suggestionIndex + 1}`
                               : 'View'
                           }
                           onApply={() => {
@@ -152,11 +159,17 @@ export const AssistantPanel = () => {
                             setActiveSuggestion(null);
                           }}
                           onPreview={() => {
-                            setActiveSuggestion(key);
-                            dispatch({
-                              type: 'previewSuggestion',
-                              payload: { code: suggestion },
-                            });
+                            userSelectedSuggestion.current = true;
+                            if (isActive) {
+                              setActiveSuggestion(null);
+                              dispatch({ type: 'clearSuggestion' });
+                            } else {
+                              setActiveSuggestion(key);
+                              dispatch({
+                                type: 'previewSuggestion',
+                                payload: { code: suggestion },
+                              });
+                            }
                           }}
                         />
                       );
