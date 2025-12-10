@@ -22,6 +22,7 @@ export type AssistantContextValue = {
   setAttachCode: Dispatch<SetStateAction<boolean>>;
   imageDataUrl: string | null;
   setImageDataUrl: Dispatch<SetStateAction<string | null>>;
+  stop: () => void;
 };
 
 export const AssistantContext = createContext<AssistantContextValue | null>(
@@ -54,10 +55,11 @@ export const AssistantProvider = ({ children }: Props) => {
     },
   ];
 
-  const { messages, resetChat, sendMessage, loading, errorMessage } = useChat({
-    instructions,
-    initialMessages,
-  });
+  const { messages, resetChat, sendMessage, loading, errorMessage, stop } =
+    useChat({
+      instructions,
+      initialMessages,
+    });
 
   const reset = () => {
     dispatch({ type: 'clearSuggestion' });
@@ -79,6 +81,7 @@ export const AssistantProvider = ({ children }: Props) => {
         loading,
         imageDataUrl,
         setImageDataUrl,
+        stop,
       }}
     >
       {children}

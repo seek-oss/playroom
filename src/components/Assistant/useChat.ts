@@ -4,7 +4,7 @@ import type {
   ResponseCreateParamsNonStreaming,
   ResponseOutputMessage,
 } from 'openai/resources/responses/responses';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { z } from 'zod';
 
 import { client, model } from '../../configModules/assistantClient';
@@ -68,6 +68,7 @@ const parseAssistantMessage = ({
   };
 };
 
+const userAbortReason = 'USER_ABORT';
 export function useChat({
   instructions,
   initialMessages = [],
@@ -78,6 +79,13 @@ export function useChat({
   const [messages, setMessages] = useState<AssistantMessage[]>(initialMessages);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const stop = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort(userAbortReason);
+    }
+  };
 
   const resetChat = () => {
     setMessages(initialMessages);
@@ -86,6 +94,8 @@ export function useChat({
   };
 
   const sendMessage = async (input: string, imageDataUrl?: string | null) => {
+    abortControllerRef.current = new AbortController();
+
     const newMessage = {
       id: self.crypto.randomUUID(),
       role: 'user' as const,
@@ -101,33 +111,38 @@ export function useChat({
     setErrorMessage(null);
 
     try {
-      const data = await client.responses.create({
-        model,
-        instructions,
-        input: [
-          ...messages,
-          imageDataUrl
-            ? {
-                ...newMessage,
-                content: [
-                  { type: 'input_text', text: input } as const,
-                  {
-                    type: 'input_image',
-                    image_url: imageDataUrl,
-                    detail: 'auto',
-                  } as const,
-                ],
-              }
-            : newMessage,
-        ],
-        text: {
-          format: zodTextFormat(
-            AssistantMessageSchema,
-            'playroom_assistant_message'
-          ),
+      const data = await client.responses.create(
+        {
+          model,
+          instructions,
+          input: [
+            ...messages,
+            imageDataUrl
+              ? {
+                  ...newMessage,
+                  content: [
+                    { type: 'input_text', text: input } as const,
+                    {
+                      type: 'input_image',
+                      image_url: imageDataUrl,
+                      detail: 'auto',
+                    } as const,
+                  ],
+                }
+              : newMessage,
+          ],
+          text: {
+            format: zodTextFormat(
+              AssistantMessageSchema,
+              'playroom_assistant_message'
+            ),
+          },
+          stream: true,
         },
-        stream: true,
-      });
+        {
+          signal: abortControllerRef.current.signal,
+        }
+      );
 
       let messageMeta: ResponseOutputMessage | null = null;
       let messageContent = '';
@@ -202,6 +217,13 @@ export function useChat({
         }
       }
     } catch (err) {
+      const { aborted, reason } = abortControllerRef.current?.signal || {};
+      if (aborted && reason === userAbortReason) {
+        abortControllerRef.current = null;
+        setLoading(false);
+        return;
+      }
+
       const errorMsg =
         err instanceof Error
           ? err.message
@@ -218,5 +240,6 @@ export function useChat({
     sendMessage,
     loading,
     errorMessage,
+    stop,
   };
 }

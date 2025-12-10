@@ -1,4 +1,4 @@
-import { Send } from 'lucide-react';
+import { Send, Square } from 'lucide-react';
 import { type FormEvent, useContext, useRef, useState } from 'react';
 
 import { StoreContext } from '../../../contexts/StoreContext';
@@ -6,7 +6,6 @@ import { ButtonIcon } from '../../ButtonIcon/ButtonIcon';
 import { Inline } from '../../Inline/Inline';
 import { Spread } from '../../Spread/Spread';
 import { Stack } from '../../Stack/Stack';
-import LoadingIcon from '../../icons/LoadingIcon';
 import { useAssistant } from '../AssistantContext';
 import { ImageAttachment } from '../ImageAttachment/ImageAttachment';
 import { TalkButton } from '../TalkButton/TalkButton';
@@ -22,7 +21,7 @@ export const ChatForm = () => {
   const [input, setInput] = useState('');
   const fieldRef = useRef<HTMLTextAreaElement>(null);
 
-  const { handleSubmit, loading, imageDataUrl, setImageDataUrl } =
+  const { handleSubmit, loading, imageDataUrl, setImageDataUrl, stop } =
     useAssistant();
 
   const clearImageInput = () => {
@@ -79,16 +78,20 @@ export const ChatForm = () => {
             <Inline space="xsmall" nowrap>
               <TalkButton onComplete={setInput} />
               <ButtonIcon
-                type="submit"
+                type={loading ? 'button' : 'submit'}
                 size="large"
-                variant={
-                  input.trim().length > 0 || loading ? 'solid' : 'standard'
+                variant={loading ? 'solid' : 'standard'}
+                disabled={!loading && input.trim().length === 0}
+                disabledReason="Enter a message first"
+                label={loading ? 'Stop' : 'Send'}
+                onClick={loading ? stop : undefined}
+                icon={
+                  loading ? (
+                    <Square style={{ strokeWidth: 0, fill: 'currentcolor' }} />
+                  ) : (
+                    <Send />
+                  )
                 }
-                disabled={input.trim().length === 0}
-                label={
-                  input.trim().length === 0 ? 'Enter a message first' : 'Send'
-                }
-                icon={loading ? <LoadingIcon /> : <Send />}
               />
             </Inline>
           </Spread>
