@@ -601,7 +601,7 @@ const initialState: State = {
   editorHeight: defaultEditorSize,
   editorWidth: defaultEditorSize,
   assistantWidth: '20%',
-  assistantHidden: false,
+  assistantHidden: true,
   panelsVisible: true,
   selectedThemes:
     themesEnabled && playroomConfig.defaultVisibleThemes

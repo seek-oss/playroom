@@ -1,5 +1,5 @@
 import { Send, Square } from 'lucide-react';
-import { type FormEvent, useContext, useRef, useState } from 'react';
+import { type FormEvent, useContext, useEffect, useRef, useState } from 'react';
 
 import { StoreContext } from '../../../contexts/StoreContext';
 import { ButtonIcon } from '../../ButtonIcon/ButtonIcon';
@@ -17,7 +17,7 @@ import { ChatField } from './ChatField';
 import * as styles from './ChatForm.css';
 
 export const ChatForm = () => {
-  const [{ code }] = useContext(StoreContext);
+  const [{ code, assistantHidden }] = useContext(StoreContext);
   const [input, setInput] = useState('');
   const fieldRef = useRef<HTMLTextAreaElement>(null);
 
@@ -37,6 +37,12 @@ export const ChatForm = () => {
       fieldRef.current?.focus();
     }
   };
+
+  useEffect(() => {
+    if (assistantHidden === false) {
+      fieldRef.current?.focus();
+    }
+  }, [assistantHidden]);
 
   return (
     <form
