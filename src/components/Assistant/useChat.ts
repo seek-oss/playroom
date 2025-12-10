@@ -68,7 +68,6 @@ const parseAssistantMessage = ({
   };
 };
 
-const userAbortReason = 'USER_ABORT';
 export function useChat({
   instructions,
   initialMessages = [],
@@ -79,11 +78,13 @@ export function useChat({
   const [messages, setMessages] = useState<AssistantMessage[]>(initialMessages);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
+  const streamControllerRef = useRef<AbortController | null>(null);
 
   const stop = () => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort(userAbortReason);
+    if (streamControllerRef.current) {
+      streamControllerRef.current.abort();
+      streamControllerRef.current = null;
+      setLoading(false);
     }
   };
 
@@ -94,7 +95,12 @@ export function useChat({
   };
 
   const sendMessage = async (input: string, imageDataUrl?: string | null) => {
-    abortControllerRef.current = new AbortController();
+    if (client === false) {
+      throw new Error('Assistant client is not configured');
+    }
+    if (model === false) {
+      throw new Error('Assistant model is not provided');
+    }
 
     const newMessage = {
       id: self.crypto.randomUUID(),
@@ -111,38 +117,35 @@ export function useChat({
     setErrorMessage(null);
 
     try {
-      const data = await client.responses.create(
-        {
-          model,
-          instructions,
-          input: [
-            ...messages,
-            imageDataUrl
-              ? {
-                  ...newMessage,
-                  content: [
-                    { type: 'input_text', text: input } as const,
-                    {
-                      type: 'input_image',
-                      image_url: imageDataUrl,
-                      detail: 'auto',
-                    } as const,
-                  ],
-                }
-              : newMessage,
-          ],
-          text: {
-            format: zodTextFormat(
-              AssistantMessageSchema,
-              'playroom_assistant_message'
-            ),
-          },
-          stream: true,
+      const data = await client.responses.create({
+        model,
+        instructions,
+        input: [
+          ...messages,
+          imageDataUrl
+            ? {
+                ...newMessage,
+                content: [
+                  { type: 'input_text', text: input } as const,
+                  {
+                    type: 'input_image',
+                    image_url: imageDataUrl,
+                    detail: 'auto',
+                  } as const,
+                ],
+              }
+            : newMessage,
+        ],
+        text: {
+          format: zodTextFormat(
+            AssistantMessageSchema,
+            'playroom_assistant_message'
+          ),
         },
-        {
-          signal: abortControllerRef.current.signal,
-        }
-      );
+        stream: true,
+      });
+
+      streamControllerRef.current = data.controller;
 
       let messageMeta: ResponseOutputMessage | null = null;
       let messageContent = '';
@@ -150,7 +153,9 @@ export function useChat({
       for await (const event of data) {
         switch (event.type) {
           case 'response.output_item.added': {
-            messageMeta = event.item;
+            if (event.item.type === 'message') {
+              messageMeta = event.item;
+            }
             break;
           }
           case 'response.output_text.delta': {
@@ -204,26 +209,21 @@ export function useChat({
             break;
           }
           case 'response.output_item.done': {
-            const assistantMessage = parseAssistantMessage({
-              ...event.item,
-              id: messageMeta?.id || event.item.id,
-            });
-            setMessages([...newMessages, assistantMessage]);
-            setLoading(false);
-            onUpdate?.(assistantMessage);
-            onFinish?.(assistantMessage);
+            if (event.item.type === 'message') {
+              const assistantMessage = parseAssistantMessage({
+                ...event.item,
+                id: messageMeta?.id || event.item.id,
+              });
+              setMessages([...newMessages, assistantMessage]);
+              setLoading(false);
+              onUpdate?.(assistantMessage);
+              onFinish?.(assistantMessage);
+            }
             break;
           }
         }
       }
     } catch (err) {
-      const { aborted, reason } = abortControllerRef.current?.signal || {};
-      if (aborted && reason === userAbortReason) {
-        abortControllerRef.current = null;
-        setLoading(false);
-        return;
-      }
-
       const errorMsg =
         err instanceof Error
           ? err.message
