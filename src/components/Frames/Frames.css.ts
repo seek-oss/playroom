@@ -3,9 +3,10 @@ import { createVar, style } from '@vanilla-extract/css';
 import { comma } from '../../css/delimiters';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
+import { vars } from '../../css/vars.css';
 
 const transitionTiming = '150ms ease';
-
+const horizontalPadding = 'xlarge';
 export const root = style([
   sprinkles({
     height: 'full',
@@ -14,9 +15,8 @@ export const root = style([
     display: 'flex',
     gap: 'xxlarge',
     paddingY: 'xxlarge',
-    paddingX: 'xlarge',
+    paddingX: horizontalPadding,
     textAlign: 'center',
-    overflow: 'auto',
     userSelect: 'none',
   }),
   {
@@ -39,6 +39,12 @@ export const frameContainer = style([
   {
     flexShrink: 0,
     width: frameWidth,
+    selectors: {
+      // Workaround for scrolling flex container not accounting for padding
+      [`&:last-child`]: {
+        paddingRight: vars.space[horizontalPadding],
+      },
+    },
   },
 ]);
 

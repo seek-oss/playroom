@@ -30,7 +30,6 @@ export const menuContainer = style({
 
 export const actionsGap = 'xsmall';
 
-export const actionsReady = style({});
 export const actionsContainer = style([
   sprinkles({
     display: 'flex',
@@ -46,8 +45,20 @@ export const actionsContainer = style([
         display: 'none',
       },
     },
+  },
+]);
+
+export const shareActionsReady = style({});
+export const shareActions = style([
+  sprinkles({
+    display: 'flex',
+    alignItems: 'center',
+    gap: actionsGap,
+    transition: 'fast',
+  }),
+  {
     selectors: {
-      [`&:not(${actionsReady})`]: {
+      [`&:not(${shareActionsReady})`]: {
         opacity: 0,
         transform: `translateX(${vars.space[actionsGap]})`,
         pointerEvents: 'none',

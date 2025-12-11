@@ -88,7 +88,7 @@ export const height = {
       height: sizeVar,
     },
   ]),
-  content: sprinkles({ paddingY: 'small' }),
+  content: sprinkles({ paddingY: 'medium' }),
 };
 
 export const tone = {
