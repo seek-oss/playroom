@@ -26,6 +26,7 @@ export const message = style([
     boxShadow: `0 2px 10px -2px ${light.foreground.critical}`,
     wordBreak: 'break-word',
     whiteSpace: 'pre-line',
+    userSelect: 'all',
     selectors: {
       [`&:not(${show})`]: {
         transform: `translateY(${calc(gutter).negate()})`,

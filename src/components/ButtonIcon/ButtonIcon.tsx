@@ -13,6 +13,7 @@ type ButtonIconBaseProps = {
   tone?: keyof typeof styles.tone;
   variant?: keyof typeof styles.variant;
   bleed?: boolean;
+  disabledReason?: string;
 };
 export type ButtonIconProps = TooltipTrigger & ButtonIconBaseProps;
 export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
@@ -24,16 +25,21 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
       tone = 'neutral',
       variant = 'standard',
       bleed,
+      disabled,
+      disabledReason,
+      type = 'button',
       ...restProps
     },
     ref
   ) => (
     <Tooltip
-      label={label}
+      label={disabled && disabledReason ? disabledReason : label}
       trigger={
         <button
           {...restProps}
+          type={type}
           ref={ref}
+          aria-disabled={disabled}
           aria-label={label}
           className={clsx({
             [styles.button]: true,

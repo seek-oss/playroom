@@ -31,8 +31,8 @@ export const button = style([
   {
     background: 'transparent',
     outline: 'none',
-    height: sizeVar,
-    width: sizeVar,
+    height: `${sizeVar} !important`,
+    width: `${sizeVar} !important`,
   },
 ]);
 
@@ -50,6 +50,7 @@ export const content = style([
     transition: 'fast',
     height: 'full',
     width: 'full',
+    pointerEvents: 'none',
   }),
   {
     padding: paddingVar,
@@ -64,6 +65,11 @@ export const content = style([
       },
       [`${button}:focus-visible &`]: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
+      },
+      [`${button}[aria-disabled="true"] &`]: {
+        vars: {
+          [foreground]: colorPaletteVars.foreground.secondary,
+        },
       },
     },
   },
@@ -101,7 +107,10 @@ export const variant = styleVariants({
       outline: `1px solid ${colorPaletteVars.border.standard}`,
       outlineOffset: -1,
       selectors: {
-        [comma('&:hover', '[data-popup-open] > &')]: {
+        [comma(
+          `${button}:not([aria-disabled="true"]):hover > &`,
+          `${button}:not([aria-disabled="true"])[data-popup-open] > &`
+        )]: {
           backgroundColor: colorPaletteVars.background.selection,
         },
       },
@@ -114,7 +123,10 @@ export const variant = styleVariants({
       },
       backgroundColor: colorPaletteVars.background.secondaryAccent,
       selectors: {
-        [comma('&:hover', '[data-popup-open] > &')]: {
+        [comma(
+          `${button}:not([aria-disabled="true"]):hover > &`,
+          `${button}:not([aria-disabled="true"])[data-popup-open] > &`
+        )]: {
           backgroundColor: colorPaletteVars.background.secondaryAccentLight,
         },
       },
@@ -123,7 +135,10 @@ export const variant = styleVariants({
   transparent: [
     {
       selectors: {
-        [comma('&:hover', '[data-popup-open] > &')]: {
+        [comma(
+          `${button}:not([aria-disabled="true"]):hover > &`,
+          `${button}:not([aria-disabled="true"])[data-popup-open] > &`
+        )]: {
           backgroundColor: colorPaletteVars.background.selection,
         },
       },

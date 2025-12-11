@@ -24,6 +24,7 @@ import {
   // screenshotMessageSender,
 } from '../Frame/frameMessenger';
 // import { Menu, MenuItem } from '../Menu/Menu';
+import { ScrollContainer } from '../ScrollContainer/ScrollContainer';
 import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 import { SharedTooltipContext } from '../Tooltip/Tooltip';
@@ -197,16 +198,22 @@ export default function Frames({ code }: FramesProps) {
     renderCode.current = compileJsx(code);
   } catch {}
   return (
-    <div ref={scrollingPanelRef} className={styles.root}>
-      {frames.map((frame) => (
-        <Frame
-          key={`${frame.theme}_${frame.width}`}
-          frame={frame}
-          code={renderCode.current}
-          title={title}
-          scrollingPanelRef={scrollingPanelRef}
-        />
-      ))}
-    </div>
+    <ScrollContainer
+      ref={scrollingPanelRef}
+      direction="horizontal"
+      fadeSize="small"
+    >
+      <div className={styles.root}>
+        {frames.map((frame) => (
+          <Frame
+            key={`${frame.theme}_${frame.width}`}
+            frame={frame}
+            code={renderCode.current}
+            title={title}
+            scrollingPanelRef={scrollingPanelRef}
+          />
+        ))}
+      </div>
+    </ScrollContainer>
   );
 }
