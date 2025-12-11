@@ -688,6 +688,11 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
           }
         }
 
+        // Only shows assistant if zero state is not being shown
+        const showAssistantOnload = Boolean(
+          assistantEnabled && !id && storedPlayroomValues.length === 0
+        );
+
         dispatch({
           type: 'initialLoad',
           payload: {
@@ -705,6 +710,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
             ...(storedPlayrooms
               ? { storedPlayrooms: sortStoredPlayrooms(storedPlayrooms) }
               : {}),
+            assistantHidden: !showAssistantOnload,
             title,
           },
         });
