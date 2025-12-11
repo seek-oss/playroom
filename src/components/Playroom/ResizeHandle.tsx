@@ -25,14 +25,14 @@ const resolvePosition = (
 
 export const ResizeHandle = ({
   position,
-  ref,
+  targetRef,
   onResize,
   onResizeStart,
   onResizeEnd,
 }: {
   position: 'top' | 'right' | 'left';
   flip?: boolean;
-  ref: RefObject<HTMLElement | null>;
+  targetRef: RefObject<HTMLElement | null>;
   onResize: (newValue: number) => void;
   onResizeStart?: (startValue: number) => void;
   onResizeEnd?: (endValue: number) => void;
@@ -48,7 +48,7 @@ export const ResizeHandle = ({
     event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>
   ) => {
     const startPosition = resolvePosition(event.nativeEvent, pagePos);
-    const startSize = ref.current?.[elementSize] ?? 0;
+    const startSize = targetRef.current?.[elementSize] ?? 0;
 
     setResizing(true);
     onResizeStart?.(startSize);
@@ -61,7 +61,7 @@ export const ResizeHandle = ({
     };
 
     const stopHandler = () => {
-      const endSize = ref.current?.[elementSize] ?? 0;
+      const endSize = targetRef.current?.[elementSize] ?? 0;
       setResizing(false);
       onResizeEnd?.(endSize);
       document.body.classList.remove(styles.resizeCursor[direction]);

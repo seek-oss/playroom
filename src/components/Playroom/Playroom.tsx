@@ -130,7 +130,7 @@ export default () => {
         ref={editorRef}
       >
         <ResizeHandle
-          ref={editorRef}
+          targetRef={editorRef}
           position={resizeHandlePosition[editorOrientation]}
           onResize={(newValue) => {
             dispatch({
