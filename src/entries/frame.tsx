@@ -19,6 +19,5 @@ renderElement(
         />
       </>
     )}
-  </UrlParams>,
-  document.body
+  </UrlParams>
 );

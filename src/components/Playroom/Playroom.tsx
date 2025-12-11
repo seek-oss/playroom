@@ -81,6 +81,17 @@ export default () => {
     lastHidden.current = editorHidden;
   }, [editorHidden]);
 
+  // Remove in favour of direct DOM attribute when we drop React 18 support
+  useEffect(() => {
+    if (editorRef.current) {
+      if (!editorVisible) {
+        editorRef.current.setAttribute('inert', '');
+      } else {
+        editorRef.current.removeAttribute('inert');
+      }
+    }
+  }, [editorVisible]);
+
   return (
     <Box
       component="main"
@@ -124,7 +135,6 @@ export default () => {
       <Box
         position="relative"
         className={styles.editor}
-        inert={!editorVisible}
         opacity={!editorVisible ? 0 : undefined}
         pointerEvents={!editorVisible ? 'none' : undefined}
         ref={editorRef}
