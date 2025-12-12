@@ -71,8 +71,12 @@ export default () => {
       hideActionSource.current === 'editor'
     ) {
       if (editorHidden) {
+        // Remove in favour of direct DOM attribute when we drop React 18 support
+        editorRef.current?.setAttribute('inert', '');
         showCodeButtonRef.current?.focus();
       } else {
+        // Remove in favour of direct DOM attribute when we drop React 18 support
+        editorRef.current?.removeAttribute('inert');
         hideCodeButtonRef.current?.focus();
       }
 
@@ -80,17 +84,6 @@ export default () => {
     }
     lastHidden.current = editorHidden;
   }, [editorHidden]);
-
-  // Remove in favour of direct DOM attribute when we drop React 18 support
-  useEffect(() => {
-    if (editorRef.current) {
-      if (!editorVisible) {
-        editorRef.current.setAttribute('inert', '');
-      } else {
-        editorRef.current.removeAttribute('inert');
-      }
-    }
-  }, [editorVisible]);
 
   return (
     <Box
