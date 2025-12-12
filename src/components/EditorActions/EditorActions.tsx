@@ -4,7 +4,12 @@ import {
   Ellipsis,
   type LucideIcon,
 } from 'lucide-react';
-import { useContext, useRef, type ButtonHTMLAttributes } from 'react';
+import {
+  forwardRef,
+  useContext,
+  useRef,
+  type ButtonHTMLAttributes,
+} from 'react';
 
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
@@ -38,7 +43,10 @@ interface EditorActionButtonProps
   hideTooltip?: boolean;
 }
 
-const EditorActionButton = (props: EditorActionButtonProps) => {
+const EditorActionButton = forwardRef<
+  HTMLButtonElement,
+  EditorActionButtonProps
+>((props, ref) => {
   const {
     onClick,
     name,
@@ -77,6 +85,7 @@ const EditorActionButton = (props: EditorActionButtonProps) => {
       trigger={
         <button
           {...restProps}
+          ref={ref}
           onClick={handleClick}
           aria-disabled={disabled}
           className={styles.button}
@@ -88,7 +97,7 @@ const EditorActionButton = (props: EditorActionButtonProps) => {
       }
     />
   );
-};
+});
 
 const menuSideOffset = 2;
 const overflowCommands = editorCommandList.filter(
