@@ -23,7 +23,6 @@ import {
   Eye,
   EyeClosed,
   ChevronDown,
-  WandSparkles,
   Sparkles,
 } from 'lucide-react';
 import {
@@ -322,7 +321,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
         </Menu>
 
         <MenuItem
-          icon={WandSparkles}
+          icon={Sparkles}
           onClick={() =>
             dispatch({
               type: assistantHidden ? 'showAssistant' : 'hideAssistant',
