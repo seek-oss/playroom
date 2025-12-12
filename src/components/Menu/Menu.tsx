@@ -39,49 +39,48 @@ type MenuItemProps = Omit<
   icon?: LucideIcon;
   disabledReason?: string;
 };
-export const MenuItem = ({
-  children,
-  shortcut,
-  icon: Icon,
-  disabled,
-  disabledReason,
-  ...restProps
-}: MenuItemProps) => {
-  const isSubMenuTrigger = useContext(SubMenuTriggerContext);
+export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
+  (
+    { children, shortcut, icon: Icon, disabled, disabledReason, ...restProps },
+    ref
+  ) => {
+    const isSubMenuTrigger = useContext(SubMenuTriggerContext);
 
-  const item = (
-    <BaseUIMenu.Item
-      className={styles.item}
-      disabled={disabled}
-      closeOnClick={isSubMenuTrigger ? false : undefined}
-      {...restProps}
-    >
-      <span className={styles.itemLeft}>
-        {Icon ? <Icon size={menuIconSize} /> : null}
-        <Text tone={disabled ? 'secondary' : undefined} truncate>
-          {children}
-        </Text>
-      </span>
-      {shortcut && (
-        <Text tone="secondary">
-          <KeyboardShortcut shortcut={shortcut} />
-        </Text>
-      )}
-      {isSubMenuTrigger && !disabled ? <ChevronRight size={12} /> : null}
-    </BaseUIMenu.Item>
-  );
+    const item = (
+      <BaseUIMenu.Item
+        ref={ref}
+        className={styles.item}
+        disabled={disabled}
+        closeOnClick={isSubMenuTrigger ? false : undefined}
+        {...restProps}
+      >
+        <span className={styles.itemLeft}>
+          {Icon ? <Icon size={menuIconSize} /> : null}
+          <Text tone={disabled ? 'secondary' : undefined} truncate>
+            {children}
+          </Text>
+        </span>
+        {shortcut && (
+          <Text tone="secondary">
+            <KeyboardShortcut shortcut={shortcut} />
+          </Text>
+        )}
+        {isSubMenuTrigger && !disabled ? <ChevronRight size={12} /> : null}
+      </BaseUIMenu.Item>
+    );
 
-  return disabled && disabledReason ? (
-    <Tooltip
-      label={disabledReason}
-      announceAsDescription
-      side="right"
-      trigger={item}
-    />
-  ) : (
-    item
-  );
-};
+    return disabled && disabledReason ? (
+      <Tooltip
+        label={disabledReason}
+        announceAsDescription
+        side="right"
+        trigger={item}
+      />
+    ) : (
+      item
+    );
+  }
+);
 
 export const linkArrowSize = 12;
 
