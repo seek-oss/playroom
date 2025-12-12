@@ -1,5 +1,28 @@
 # playroom
 
+## 1.0.3
+
+### Patch Changes
+
+- [#461](https://github.com/seek-oss/playroom/pull/461) [`67c2517`](https://github.com/seek-oss/playroom/commit/67c25170b7673844642df04cb496b13dcbba76c6) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Design polish, refinements and fixes to internal system components.
+
+- [#464](https://github.com/seek-oss/playroom/pull/464) [`12dc5ba`](https://github.com/seek-oss/playroom/commit/12dc5ba923f6030fd6df2a6beb0e6c5f0202a892) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Ensure `ref` and `inert` usage is React 18 compatible
+
+- [#461](https://github.com/seek-oss/playroom/pull/461) [`67c2517`](https://github.com/seek-oss/playroom/commit/67c25170b7673844642df04cb496b13dcbba76c6) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Introduce scroll afforance for frames area
+
+  Add subtle gradient to edges of frames container to indicate scrollability when the number of frames exceeds the window width
+
+- [#461](https://github.com/seek-oss/playroom/pull/461) [`67c2517`](https://github.com/seek-oss/playroom/commit/67c25170b7673844642df04cb496b13dcbba76c6) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Allow selection of frame error
+
+  Enables a user to select and copy the text from a frame error message.
+
+- [#462](https://github.com/seek-oss/playroom/pull/462) [`65f7793`](https://github.com/seek-oss/playroom/commit/65f779344e6cc38fcfc64a2fa56f304476a75dda) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Only hide share actions from header without code
+
+  The header actions in the top right are now available on page load.
+  This enables the selection of frames and/or themes before any code is added to the editor.
+
+  The share and preview actions are still hidden and revealed when code is entered into the editor.
+
 ## 1.0.2
 
 ### Patch Changes
