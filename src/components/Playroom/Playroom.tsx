@@ -71,8 +71,12 @@ export default () => {
       hideActionSource.current === 'editor'
     ) {
       if (editorHidden) {
+        // Remove in favour of direct DOM attribute when we drop React 18 support
+        editorRef.current?.setAttribute('inert', '');
         showCodeButtonRef.current?.focus();
       } else {
+        // Remove in favour of direct DOM attribute when we drop React 18 support
+        editorRef.current?.removeAttribute('inert');
         hideCodeButtonRef.current?.focus();
       }
 
@@ -124,13 +128,12 @@ export default () => {
       <Box
         position="relative"
         className={styles.editor}
-        inert={!editorVisible}
         opacity={!editorVisible ? 0 : undefined}
         pointerEvents={!editorVisible ? 'none' : undefined}
         ref={editorRef}
       >
         <ResizeHandle
-          ref={editorRef}
+          targetRef={editorRef}
           position={resizeHandlePosition[editorOrientation]}
           onResize={(newValue) => {
             dispatch({

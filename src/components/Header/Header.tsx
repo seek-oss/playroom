@@ -28,6 +28,7 @@ import {
   type ComponentProps,
   type ReactNode,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -384,12 +385,24 @@ export const Header = () => {
   const [{ code, selectedThemes }] = useContext(StoreContext);
   const { copying, onCopyClick } = useCopy();
   const [shareOpen, setShareOpen] = useState(false);
+  const sharedActionsRef = useRef<HTMLDivElement>(null);
 
   const hasCode = code.trim().length > 0;
 
   const previewUrl = usePreviewUrl(
     themesEnabled ? selectedThemes[0] : undefined
   );
+
+  // Remove in favour of direct DOM attribute when we drop React 18 support
+  useEffect(() => {
+    if (sharedActionsRef.current) {
+      if (!hasCode) {
+        sharedActionsRef.current.setAttribute('inert', '');
+      } else {
+        sharedActionsRef.current.removeAttribute('inert');
+      }
+    }
+  }, [hasCode]);
 
   return (
     <Box className={styles.root}>
@@ -400,11 +413,11 @@ export const Header = () => {
       <SharedTooltipContext>
         <div className={styles.actionsContainer}>
           <div
+            ref={sharedActionsRef}
             className={clsx({
               [styles.shareActions]: true,
               [styles.shareActionsReady]: hasCode,
             })}
-            inert={!hasCode ? true : undefined}
           >
             <div className={styles.segmentedGroup}>
               <button
