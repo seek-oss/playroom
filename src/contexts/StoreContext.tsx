@@ -587,8 +587,26 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         openLayout,
         storedPlayrooms,
       ]) => {
-        const selectedWidths = widthsFromUrl || storedSelectedWidths;
-        const selectedThemes = themesFromUrl || storedSelectedThemes;
+        const filteredUrlWidths = widthsFromUrl
+          ? availableWidths.filter((w) => widthsFromUrl.includes(w))
+          : [];
+        const filteredStoredSelectedWidths = storedSelectedWidths
+          ? availableWidths.filter((w) => storedSelectedWidths.includes(w))
+          : [];
+        const selectedWidths = filteredUrlWidths.length
+          ? filteredUrlWidths
+          : filteredStoredSelectedWidths;
+
+        const filteredUrlThemes = themesFromUrl
+          ? availableThemes.filter((t) => themesFromUrl.includes(t))
+          : [];
+        const filteredStoredSelectedThemes = storedSelectedThemes
+          ? availableThemes.filter((t) => storedSelectedThemes.includes(t))
+          : [];
+        const selectedThemes = filteredUrlThemes.length
+          ? filteredUrlThemes
+          : filteredStoredSelectedThemes;
+
         const storedPlayroomValues = Object.entries(storedPlayrooms || {});
         let id = code || title ? createPlayroomId() : '';
 
@@ -613,8 +631,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
             ...(editorHeight ? { editorHeight } : {}),
             ...(editorWidth ? { editorWidth } : {}),
             ...(editorHidden ? { editorHidden } : {}),
-            ...(themesEnabled && selectedThemes ? { selectedThemes } : {}),
-            ...(selectedWidths ? { selectedWidths } : {}),
+            ...(themesEnabled && selectedThemes.length > 0
+              ? { selectedThemes }
+              : {}),
+            ...(selectedWidths.length > 0 ? { selectedWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
             ...(openLayout ? { openLayout } : {}),
             ...(storedPlayrooms
