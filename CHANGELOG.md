@@ -1,5 +1,13 @@
 # playroom
 
+## 1.0.4
+
+### Patch Changes
+
+- [#465](https://github.com/seek-oss/playroom/pull/465) [`63a512b`](https://github.com/seek-oss/playroom/commit/63a512bf8c33d5af15a254dba8d4efd69a886df4) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Only show available themes and widths
+
+  Ensure that themes or widths selected via the URL or from storage are valid options.
+
 ## 1.0.3
 
 ### Patch Changes
