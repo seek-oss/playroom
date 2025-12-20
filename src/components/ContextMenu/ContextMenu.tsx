@@ -97,10 +97,6 @@ export const ContextMenuItemLink = ({
   />
 );
 
-export const ContextMenuSeparator = () => (
-  <BaseUIContextMenu.Separator className={menuStyles.separator} />
-);
-
 type Props = {
   trigger: ComponentProps<typeof BaseUIContextMenu.Trigger>['render'];
   align?: ComponentProps<typeof BaseUIContextMenu.Positioner>['align'];

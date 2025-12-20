@@ -10,13 +10,11 @@ import {
   type AllHTMLAttributes,
   type ComponentProps,
   type ReactElement,
-  type ReactNode,
   createContext,
   forwardRef,
   useContext,
 } from 'react';
 
-import { useCopy } from '../../utils/useCopy';
 import {
   KeyboardShortcut,
   type KeyCombination,
@@ -309,34 +307,6 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
     );
   }
 );
-
-type MenuCopyItemProps = {
-  content: string;
-  children: ReactNode;
-};
-
-export const MenuCopyItem = ({ content, children }: MenuCopyItemProps) => {
-  const { copying, onCopyClick } = useCopy();
-
-  return (
-    <BaseUIMenu.Item
-      className={clsx({ [styles.item]: true, [styles.positive]: copying })}
-      closeOnClick={false}
-      onClick={() => onCopyClick(content)}
-    >
-      <span className={styles.itemLeft}>
-        {copying ? (
-          <>
-            <Text tone="positive">Copied</Text>
-            <Check size={menuIconSize} />
-          </>
-        ) : (
-          <Text>{children}</Text>
-        )}
-      </span>
-    </BaseUIMenu.Item>
-  );
-};
 
 type MenuClearItemProps = Omit<
   ComponentProps<typeof BaseUIMenu.Item>,

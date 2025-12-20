@@ -41,8 +41,8 @@ const defaultOrientation = 'horizontal';
 const defaultOpenLayout = 'grid';
 
 export type EditorOrientation = 'horizontal' | 'vertical';
-export type ColorScheme = 'light' | 'dark' | 'system';
-export type OpenLayout = 'grid' | 'list';
+type ColorScheme = 'light' | 'dark' | 'system';
+type OpenLayout = 'grid' | 'list';
 
 const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
   document.documentElement[

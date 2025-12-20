@@ -68,25 +68,6 @@ export const ErrorMessageReceiver = ({ size }: ReceiveErrorMessageProps) => {
  */
 const playroomScreenshotSource = 'Playroom Frame Screenshot';
 
-type ScreenshoMessage = {
-  messageWindow: Window;
-} & ({ action: 'copy' } | { action: 'download'; fileName: string });
-
-export const screenshotMessageSender = ({
-  messageWindow,
-  action,
-  ...restProps
-}: ScreenshoMessage) => {
-  messageWindow.postMessage({
-    source: playroomScreenshotSource,
-    action,
-    fileName:
-      action === 'download' && 'fileName' in restProps
-        ? restProps.fileName
-        : undefined,
-  });
-};
-
 const renderDocumentToCanvas = async (doc: Document) => {
   const result = await snapdom(doc.documentElement, {
     embedFonts: true,

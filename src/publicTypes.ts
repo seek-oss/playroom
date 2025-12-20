@@ -1,4 +1,4 @@
-export interface Snippet {
+interface Snippet {
   group: string;
   name: string;
   code: string;

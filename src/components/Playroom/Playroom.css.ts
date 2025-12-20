@@ -32,7 +32,6 @@ export const resizing = style({
 const editorHeight = createVar();
 const editorWidth = createVar();
 export const editorSize = createVar();
-export const assistantWidth = createVar();
 export const root = style([
   sprinkles({
     height: 'viewport',
