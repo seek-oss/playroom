@@ -1,5 +1,11 @@
 # playroom
 
+## 1.0.5
+
+### Patch Changes
+
+- [#467](https://github.com/seek-oss/playroom/pull/467) [`fad3b7f`](https://github.com/seek-oss/playroom/commit/fad3b7fc3fb7e58ee240595ba99994bc2701d5c2) Thanks [@askoufis](https://github.com/askoufis)! - Remove unused code, remove unused deps, update `sucrase` to latest version
+
 ## 1.0.4
 
 ### Patch Changes
