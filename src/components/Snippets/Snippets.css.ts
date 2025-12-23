@@ -117,15 +117,6 @@ export const snippet = style([
   },
 ]);
 
-export const snippetName = style([
-  sprinkles({
-    display: 'block',
-  }),
-  {
-    color: colorPaletteVars.foreground.secondary,
-  },
-]);
-
 export const groupName = style([
   sprinkles({
     paddingRight: 'xsmall',

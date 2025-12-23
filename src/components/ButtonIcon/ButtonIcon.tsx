@@ -57,7 +57,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
   )
 );
 
-export type AnchorElementProps = Omit<
+type AnchorElementProps = Omit<
   AllHTMLAttributes<HTMLAnchorElement>,
   'style' | 'className' | 'size'
 > & {

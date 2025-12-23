@@ -11,8 +11,8 @@ export const fieldContainer = sprinkles({
   alignItems: 'center',
 });
 
-export const titleWeight = 'strong';
-export const titleSize = 'standard';
+const titleWeight = 'strong';
+const titleSize = 'standard';
 
 const paddingX = 'small';
 export const textField = style([

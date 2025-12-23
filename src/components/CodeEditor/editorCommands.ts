@@ -32,7 +32,7 @@ export type EditorCommand =
   | 'addCursorToPrevLine'
   | 'addCursorToNextLine';
 
-export interface EditorCommandMeta {
+interface EditorCommandMeta {
   command: EditorCommand;
   label: string;
   shortcut: string[];
