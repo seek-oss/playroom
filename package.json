@@ -145,7 +145,7 @@
     "lint-staged": "^15.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "serve": "^14.1.2",
+    "serve": "^14.2.5",
     "start-server-and-test": "^2.0.11",
     "surge": "^0.24.6",
     "tsdown": "^0.12.7"

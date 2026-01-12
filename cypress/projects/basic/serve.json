@@ -1,3 +1,7 @@
 {
-  "cleanUrls": ["!/frame.html"]
+  "cleanUrls": false,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/preview", "destination": "/preview/index.html" }
+  ]
 }
