@@ -1,5 +1,11 @@
 # playroom
 
+## 1.0.6
+
+### Patch Changes
+
+- [#470](https://github.com/seek-oss/playroom/pull/470) [`2b2e5e9`](https://github.com/seek-oss/playroom/commit/2b2e5e9c19f621ca9f826ed8f77c107bc73b43c1) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Support explicit index document when navigating from Preview to edit
+
 ## 1.0.5
 
 ### Patch Changes
