@@ -5,9 +5,9 @@ import { Text } from '../Text/Text';
 
 import * as styles from './Tooltip.css';
 
-export type TooltipTrigger = Exclude<
+export type TooltipTrigger = Omit<
   ComponentProps<typeof BaseUITooltip.Trigger>,
-  'style' | 'className' | 'render'
+  'style' | 'className' | 'render' | 'delay'
 >;
 
 type TooltipProps = TooltipTrigger & {
