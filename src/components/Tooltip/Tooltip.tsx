@@ -1,4 +1,4 @@
-import { Tooltip as BaseUITooltip } from '@base-ui-components/react/tooltip';
+import { Tooltip as BaseUITooltip } from '@base-ui/react/tooltip';
 import { type ReactNode, useId, type ComponentProps, forwardRef } from 'react';
 
 import { Text } from '../Text/Text';
@@ -36,10 +36,11 @@ export const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
     const descriptionId = useId();
 
     return (
-      // Todo - set delay to 0. this currently causes some tests to fail
-      <BaseUITooltip.Root delay={delay ? 800 : 10} open={open}>
+      <BaseUITooltip.Root open={open}>
         <BaseUITooltip.Trigger
           {...restProps}
+          // Todo - set delay to 0. this currently causes some tests to fail
+          delay={delay ? 800 : 10}
           ref={triggerRef}
           aria-describedby={announceAsDescription ? descriptionId : undefined}
           render={trigger}

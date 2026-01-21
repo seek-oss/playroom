@@ -23,9 +23,9 @@ importers:
       '@babel/preset-typescript':
         specifier: ^7.18.6
         version: 7.26.0(@babel/core@7.26.10)
-      '@base-ui-components/react':
-        specifier: 1.0.0-beta.4
-        version: 1.0.0-beta.4(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@base-ui/react':
+        specifier: ^1.1.0
+        version: 1.1.0(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@capsizecss/metrics':
         specifier: ^3.5.0
         version: 3.5.0
@@ -75,8 +75,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       cmdk-base:
-        specifier: ^0.0.8
-        version: 0.0.8(@base-ui-components/react@1.0.0-beta.4(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^1.0.0
+        version: 1.0.0(@base-ui/react@1.1.0(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       codemirror:
         specifier: ^5.65.10
         version: 5.65.19
@@ -853,8 +853,8 @@ packages:
     resolution: {integrity: sha512-ETyHEk2VHHvl9b9jZP5IHPavHYk57EhanlRRuae9XCpb/j5bDCbPPMOBfCWhnl/7EDJz0jEMCi/RhccCE8r1+Q==}
     engines: {node: '>=6.9.0'}
 
-  '@base-ui-components/react@1.0.0-beta.4':
-    resolution: {integrity: sha512-sPYKj26gbFHD2ZsrMYqQshXnMuomBodzPn+d0dDxWieTj232XCQ9QGt9fU9l5SDGC9hi8s24lDlg9FXPSI7T8A==}
+  '@base-ui/react@1.1.0':
+    resolution: {integrity: sha512-ikcJRNj1mOiF2HZ5jQHrXoVoHcNHdBU5ejJljcBl+VTLoYXR6FidjTN86GjO6hyshi6TZFuNvv0dEOgaOFv6Lw==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@types/react': ^17 || ^18 || ^19
@@ -864,8 +864,8 @@ packages:
       '@types/react':
         optional: true
 
-  '@base-ui-components/utils@0.1.2':
-    resolution: {integrity: sha512-aEitDGpMsYO2qnSpYOwZNykn9Rzn2ioyEVk2fyDRH7t+TIHVKpp9CeV7SPTq43M9mMSDxQ+7UeZJVkrj2dCVIQ==}
+  '@base-ui/utils@0.2.4':
+    resolution: {integrity: sha512-smZwpMhjO29v+jrZusBSc5T+IJ3vBb9cjIiBjtKcvWmRj9Z4DWGVR3efr1eHR56/bqY5a4qyY9ElkOY5ljo3ng==}
     peerDependencies:
       '@types/react': ^17 || ^18 || ^19
       react: ^17 || ^18 || ^19
@@ -2340,10 +2340,10 @@ packages:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
 
-  cmdk-base@0.0.8:
-    resolution: {integrity: sha512-w7tzUkaLb+T8+JaRZLsPGIvAhWNdkI2+ThnC+dqsjYrl7M6JMcOFYWQKtm8QSGf3aF4NXpbsfGCTCCjXaj1WKA==}
+  cmdk-base@1.0.0:
+    resolution: {integrity: sha512-/iInN1zXfyRx+Koz5m+g6zc9Psvt92AUhly6inv8o3ssm9dwfze+0Gdv0HEIWEhYfSSzTglI+XuZClTcRp9TtQ==}
     peerDependencies:
-      '@base-ui-components/react': ^1.0.0-beta.2
+      '@base-ui/react': ^1.0.0
       react: ^18 || ^19 || ^19.0.0-rc
       react-dom: ^18 || ^19 || ^19.0.0-rc
 
@@ -5253,8 +5253,8 @@ packages:
     os: [darwin, linux, win32, freebsd, openbsd, netbsd, sunos, android]
     hasBin: true
 
-  tabbable@6.2.0:
-    resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
+  tabbable@6.4.0:
+    resolution: {integrity: sha512-05PUHKSNE8ou2dwIxTngl4EzcnsCDZGJ/iCLtDflR/SHB/ny14rXc+qU5P4mG9JkusiV7EivzY9Mhm55AzAvCg==}
 
   table-layout@1.0.2:
     resolution: {integrity: sha512-qd/R7n5rQTRFi+Zf2sk5XVVd9UQl6ZkduPFC3S7WEGJAmetDTjY3qPN50eSKzwuzEyQKy5TN2TiZdkIjos2L6A==}
@@ -5553,8 +5553,8 @@ packages:
     peerDependencies:
       react: '*'
 
-  use-sync-external-store@1.5.0:
-    resolution: {integrity: sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==}
+  use-sync-external-store@1.6.0:
+    resolution: {integrity: sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -6570,28 +6570,28 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@base-ui-components/react@1.0.0-beta.4(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@base-ui/react@1.1.0(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@babel/runtime': 7.28.4
-      '@base-ui-components/utils': 0.1.2(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@base-ui/utils': 0.2.4(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@floating-ui/react-dom': 2.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@floating-ui/utils': 0.2.10
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       reselect: 5.1.1
-      tabbable: 6.2.0
-      use-sync-external-store: 1.5.0(react@19.0.0)
+      tabbable: 6.4.0
+      use-sync-external-store: 1.6.0(react@19.0.0)
     optionalDependencies:
       '@types/react': 19.0.12
 
-  '@base-ui-components/utils@0.1.2(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@base-ui/utils@0.2.4(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@babel/runtime': 7.28.4
       '@floating-ui/utils': 0.2.10
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       reselect: 5.1.1
-      use-sync-external-store: 1.5.0(react@19.0.0)
+      use-sync-external-store: 1.6.0(react@19.0.0)
     optionalDependencies:
       '@types/react': 19.0.12
 
@@ -8386,10 +8386,10 @@ snapshots:
 
   clsx@2.1.1: {}
 
-  cmdk-base@0.0.8(@base-ui-components/react@1.0.0-beta.4(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  cmdk-base@1.0.0(@base-ui/react@1.1.0(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
-      '@base-ui-components/react': 1.0.0-beta.4(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@base-ui-components/utils': 0.1.2(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@base-ui/react': 1.1.0(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@base-ui/utils': 0.2.4(@types/react@19.0.12)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
     transitivePeerDependencies:
@@ -11824,7 +11824,7 @@ snapshots:
 
   systeminformation@5.27.7: {}
 
-  tabbable@6.2.0: {}
+  tabbable@6.4.0: {}
 
   table-layout@1.0.2:
     dependencies:
@@ -12098,7 +12098,7 @@ snapshots:
     dependencies:
       react: 19.0.0
 
-  use-sync-external-store@1.5.0(react@19.0.0):
+  use-sync-external-store@1.6.0(react@19.0.0):
     dependencies:
       react: 19.0.0
 

@@ -1,4 +1,4 @@
-import { Dialog as BaseUIDialog } from '@base-ui-components/react/dialog';
+import { Dialog as BaseUIDialog } from '@base-ui/react/dialog';
 import { X } from 'lucide-react';
 import { useId, useRef, type ComponentProps } from 'react';
 
