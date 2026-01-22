@@ -1,4 +1,4 @@
-import { ContextMenu as BaseUIContextMenu } from '@base-ui-components/react/context-menu';
+import { ContextMenu as BaseUIContextMenu } from '@base-ui/react/context-menu';
 import clsx from 'clsx';
 import { type LucideIcon, ArrowUpRight } from 'lucide-react';
 import type { AllHTMLAttributes, ComponentProps } from 'react';
