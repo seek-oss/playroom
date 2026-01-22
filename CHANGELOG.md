@@ -1,5 +1,11 @@
 # playroom
 
+## 1.1.0
+
+### Minor Changes
+
+- [#474](https://github.com/seek-oss/playroom/pull/474) [`7cf78e1`](https://github.com/seek-oss/playroom/commit/7cf78e13ee94f73f2fad127c59404f0b691fa367) Thanks [@mihkeleidast](https://github.com/mihkeleidast)! - Swap @base-ui-components/react for @base-ui/react and update cmdk-base
+
 ## 1.0.6
 
 ### Patch Changes
