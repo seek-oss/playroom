@@ -1,4 +1,4 @@
-import { Menu as BaseUIMenu } from '@base-ui-components/react/menu';
+import { Menu as BaseUIMenu } from '@base-ui/react/menu';
 import clsx from 'clsx';
 import {
   type LucideIcon,
