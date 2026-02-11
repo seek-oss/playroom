@@ -114,7 +114,7 @@ export const groupHeading = style([
   },
 ]);
 
-export const groupItems = sprinkles({ paddingY: popoverPadding });
+export const groupItems = style([sprinkles({ paddingY: popoverPadding })]);
 export const snippet = style([
   sprinkles({
     position: 'relative',
