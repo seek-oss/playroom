@@ -17,6 +17,9 @@ export const fieldContainer = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
+    paddingRight: popoverPadding,
+    paddingLeft: snippetPadding,
+    gap: snippetPadding,
   }),
   {
     position: 'relative',
@@ -39,7 +42,6 @@ export const searchField = style([
     font: 'standard',
   }),
   {
-    paddingInline: vars.space[snippetPadding],
     color: colorPaletteVars.foreground.neutral,
     height: vars.touchableSize,
     background: 'transparent',
