@@ -22,6 +22,7 @@ import {
 } from '../configModules/themes';
 import availableWidths, { type Widths } from '../configModules/widths';
 import { isValidLocation } from '../utils/cursor';
+import { fallbackUuid } from '../utils/fallbackUuid';
 import { formatForInsertion, formatAndInsert } from '../utils/formatting';
 import {
   getDataParam,
@@ -189,7 +190,10 @@ const sortStoredPlayrooms = (storedPlayrooms: State['storedPlayrooms']) =>
     )
   );
 
-const createPlayroomId = () => self.crypto.randomUUID();
+const createPlayroomId = () =>
+  !self.crypto.randomUUID && process.env.NODE_ENV === 'development'
+    ? fallbackUuid()
+    : self.crypto.randomUUID();
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
