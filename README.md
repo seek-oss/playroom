@@ -17,8 +17,6 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 [Braid Design System](https://seek-oss.github.io/braid-design-system/playroom/#?code=N4Igxg9gJgpiBcIA8BBANjATgFwATYgDsYBeAHRAEtCAzCCgPiQBUYAPbBgdRjUgFsY%2BCLgAKaAIYBPTBAj8AhEgD0rDk2XosnEABoQ2ABYxBAZwQBtEBIAOEsCAC6%2BgO6UoR8-AsB2AGwAHI4AvkA) (Themed)
 
-[Bumbag](https://bumbag.style/playroom/)
-
 [Cubes](https://cubes.trampoline.cx/) (Themed)
 
 [Mesh Design System](https://www.meshdesignsystem.com/playroom/) (Themed)
@@ -116,8 +114,9 @@ Playroom allows you to quickly insert predefined snippets of code, providing liv
 ```js
 export default [
   {
-    group: 'Button',
-    name: 'Strong',
+    group: 'Components',
+    name: 'Button',
+    description: 'Strong weight',
     code: `
       <Button weight="strong">
         Button
@@ -127,6 +126,9 @@ export default [
   // etc...
 ];
 ```
+
+The `group` property is optional, but if provided, snippets will be grouped together in the UI under the specified group name.
+The `description` property is also optional and can be used to help differentiate similar snippets.
 
 ## Custom Frame Component
 

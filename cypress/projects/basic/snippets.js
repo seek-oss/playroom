@@ -17,6 +17,7 @@ export default [
   {
     group: 'Bar',
     name: 'Blue',
+    description: 'Blue variant of the Bar component',
     code: '<Bar color="blue">Blue Bar</Bar>',
   },
   {
