@@ -144,9 +144,14 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
           className={clsx({
             [styles.snippetsContainer]: true,
             [styles.noGroupsVerticalPadding]: !hasGroups,
+            [styles.groupHeaderScrollPadding]: hasGroups,
           })}
           label="Filtered snippets"
         >
+          <Command.Empty className={styles.empty}>
+            <Text tone="secondary">No snippets matching “{inputValue}”</Text>
+          </Command.Empty>
+
           {snippetsByGroup.map(([group, groupSnippets]) => (
             <SnippetsGroup key={group} enableGroups={hasGroups} group={group}>
               {groupSnippets.map((snippet) => (

@@ -38,6 +38,7 @@ export const fieldContainer = style([
 export const searchField = style([
   sprinkles({
     border: 0,
+    padding: 'none',
     flexGrow: 1,
     font: 'standard',
   }),
@@ -70,6 +71,8 @@ export const searchField = style([
   },
 ]);
 
+const snippetHeight = vars.buttonSizes.large;
+
 export const snippetsContainer = style([
   sprinkles({
     overflow: 'auto',
@@ -82,11 +85,14 @@ export const snippetsContainer = style([
   },
 ]);
 
+export const groupHeaderScrollPadding = style({
+  scrollPaddingTop: snippetHeight,
+});
+
 export const noGroupsVerticalPadding = sprinkles({
   paddingY: popoverPadding,
 });
 
-const groupHeadingBorder = '1px';
 export const group = style({});
 
 /**
@@ -99,24 +105,39 @@ export const group = style({});
  */
 globalStyle(`${group} > [cmdk-group-heading]`, {
   position: 'sticky',
-  top: calc(groupHeadingBorder).negate().toString(),
+  top: 0,
   zIndex: 1,
 });
 
+const groupHeadingBorder = '1px';
 export const groupHeading = style([
   sprinkles({
     paddingY: 'medium',
     paddingX: snippetPadding,
+    position: 'relative',
   }),
   {
-    marginTop: calc(groupHeadingBorder).negate().toString(),
-    background: colorPaletteVars.background.surface,
-    borderTop: `${groupHeadingBorder} solid ${colorPaletteVars.border.standard}`,
+    '::before': {
+      content: '',
+      position: 'absolute',
+      inset: 0,
+      background: colorPaletteVars.background.surface,
+      opacity: 0.8,
+      zIndex: -1,
+      isolation: 'isolate',
+    },
+    backdropFilter: 'blur(6px)',
     borderBottom: `${groupHeadingBorder} solid ${colorPaletteVars.border.standard}`,
   },
 ]);
 
-export const groupItems = style([sprinkles({ paddingY: popoverPadding })]);
+export const groupItems = style([
+  sprinkles({ paddingY: popoverPadding }),
+  {
+    borderBottom: `${groupHeadingBorder} solid ${colorPaletteVars.border.standard}`,
+  },
+]);
+
 export const snippet = style([
   sprinkles({
     position: 'relative',
@@ -129,7 +150,7 @@ export const snippet = style([
     isolation: 'isolate',
     cursor: 'default',
     scrollMarginBlock: vars.space[popoverPadding],
-    height: vars.buttonSizes.large,
+    height: snippetHeight,
     '::before': {
       content: '',
       position: 'absolute',
@@ -150,10 +171,10 @@ export const snippet = style([
       '&[data-selected="true"]::before': {
         opacity: 1,
       },
-      [`${groupItems} > &`]: {
-        scrollMarginBlockStart: calc(vars.buttonSizes.large)
-          .add(calc(groupHeadingBorder).multiply(2))
-          .add(calc(vars.space[popoverPadding]).multiply(2))
+      [`${groupHeaderScrollPadding} &`]: {
+        scrollMarginTop: calc(vars.space[popoverPadding])
+          .add(groupHeadingBorder)
+          .multiply(2)
           .toString(),
       },
     },
@@ -163,6 +184,13 @@ export const snippet = style([
 export const name = style([
   sprinkles({
     paddingRight: 'xsmall',
+  }),
+]);
+
+export const empty = style([
+  sprinkles({
+    paddingY: 'large',
+    paddingX: snippetPadding,
   }),
 ]);
 
