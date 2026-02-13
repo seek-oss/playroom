@@ -181,7 +181,7 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
                       </>
                     }
                     trigger={
-                      <span>
+                      <span className={styles.tooltipTrigger}>
                         <Text truncate>
                           <span className={styles.name}>{snippet.name}</span>{' '}
                           <Secondary>{snippet.description}</Secondary>

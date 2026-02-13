@@ -17,9 +17,9 @@ export const fieldContainer = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
-    paddingRight: popoverPadding,
-    paddingLeft: snippetPadding,
-    gap: snippetPadding,
+    paddingRight: popoverPadding, // Align close button with popover gutter
+    paddingLeft: snippetPadding, // Align field text with snippet text
+    gap: snippetPadding, // Space between field and close button (mirrors left padding on field)
   }),
   {
     position: 'relative',
@@ -212,5 +212,12 @@ export const popup = style([
 ]);
 
 export const popupWidth = style({
-  width: 'min(400px, 90vw)',
+  width: 'min(350px, 90vw)',
 });
+
+export const tooltipTrigger = style([
+  sprinkles({
+    display: 'block',
+  }),
+  { minWidth: 0 },
+]);
