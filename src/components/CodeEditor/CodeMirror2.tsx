@@ -23,7 +23,7 @@ const SERVER_RENDERED =
 
 let cm: typeof codemirror.default;
 if (!SERVER_RENDERED) {
-  cm = require('codemirror');
+  cm = (await import('codemirror')).default;
 }
 
 interface IDefineModeOptions {
