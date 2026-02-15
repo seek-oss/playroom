@@ -17,6 +17,7 @@ import { StoreContext } from '../../contexts/StoreContext';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { Secondary } from '../Secondary/Secondary';
 import { Text } from '../Text/Text';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 import { snippetPreviewDebounce } from './snippetsPreviewDebounce';
 
@@ -24,16 +25,22 @@ import * as styles from './Snippets.css';
 
 type ReturnedSnippet = Snippet | null;
 
-const getLabel = (snippet: Snippet) => `${snippet.group}\n${snippet.name}`;
+const resolveSnippetId = (snippet: Snippet, index: number) =>
+  `${snippet.group}${snippet.name}${snippet.description}${index}`;
 
-const getValue = (snippet: Snippet) =>
-  `${snippet.group ? `${snippet.group} ` : ''}${snippet.name}`;
+type SnippetWithId = Snippet & { id: string };
+const snippetsById: Record<string, SnippetWithId> = snippets.reduce(
+  (acc, snippet, index) => {
+    const id = resolveSnippetId(snippet, index);
 
-const snippetsByValue: Record<string, Snippet> = snippets.reduce(
-  (acc, snippet) => ({
-    ...acc,
-    [getValue(snippet)]: snippet,
-  }),
+    return {
+      ...acc,
+      [id]: {
+        ...snippet,
+        id,
+      },
+    };
+  },
   {}
 );
 
@@ -41,6 +48,43 @@ type SnippetsContentProps = {
   searchRef: RefObject<HTMLInputElement | null>;
   onSelect: (snippet: ReturnedSnippet) => void;
 };
+
+const snippetsByGroup = Object.entries(
+  snippets.reduce((acc: Record<string, SnippetWithId[]>, snippet, index) => {
+    const group = snippet.group || 'Other';
+    if (!acc[group]) {
+      acc[group] = [];
+    }
+    acc[group].push({ ...snippet, id: resolveSnippetId(snippet, index) });
+    return acc;
+  }, {})
+);
+
+const SnippetsGroup = ({
+  group,
+  children,
+  enableGroups,
+}: {
+  group: string;
+  children: React.ReactNode;
+  enableGroups: boolean;
+}) =>
+  enableGroups ? (
+    <Command.Group
+      heading={
+        <div className={styles.groupHeading}>
+          <Text size="small" weight="strong" tone="secondary">
+            {group}
+          </Text>
+        </div>
+      }
+      className={styles.group}
+    >
+      <div className={styles.groupItems}>{children}</div>
+    </Command.Group>
+  ) : (
+    <>{children}</>
+  );
 
 const initialMatchedSnippet = ' ';
 const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
@@ -51,6 +95,8 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
     dispatch({ type: 'previewSnippet', payload: { snippet } });
   }, snippetPreviewDebounce);
 
+  const hasGroups = snippetsByGroup.length > 1;
+
   return (
     <div className={styles.root}>
       <Command
@@ -58,7 +104,7 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
         loop
         value={matchedSnippet}
         onValueChange={(v) => {
-          debouncedPreview(snippetsByValue[v]);
+          debouncedPreview(snippetsById[v]);
           setMatchedSnippet(v);
         }}
       >
@@ -95,28 +141,57 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
           ) : null}
         </div>
         <Command.List
-          className={styles.snippetsContainer}
+          className={clsx({
+            [styles.snippetsContainer]: true,
+            [styles.noGroupsVerticalPadding]: !hasGroups,
+            [styles.groupHeaderScrollPadding]: hasGroups,
+          })}
           label="Filtered snippets"
         >
-          {snippets.map((snippet, index) => (
-            <Command.Item
-              key={`${snippet.group}_${snippet.name}_${index}`}
-              value={getValue(snippet)}
-              onSelect={() => onSelect(snippet)}
-              title={getLabel(snippet)}
-              className={styles.snippet}
-            >
-              <Text truncate>
-                {snippet.group ? (
-                  <>
-                    <span className={styles.groupName}>{snippet.group}</span>{' '}
-                    <Secondary>{snippet.name}</Secondary>
-                  </>
-                ) : (
-                  snippet.name
-                )}
-              </Text>
-            </Command.Item>
+          <Command.Empty className={styles.empty}>
+            <Text tone="secondary">No snippets matching “{inputValue}”</Text>
+          </Command.Empty>
+
+          {snippetsByGroup.map(([group, groupSnippets]) => (
+            <SnippetsGroup key={group} enableGroups={hasGroups} group={group}>
+              {groupSnippets.map((snippet) => (
+                <Command.Item
+                  key={snippet.id}
+                  value={snippet.id}
+                  onSelect={() => onSelect(snippet)}
+                  className={styles.snippet}
+                >
+                  <Tooltip
+                    delay={true}
+                    open={
+                      /**
+                       * Only show tooltip if likely to truncate, i.e. > 60 characters.
+                       */
+                      [snippet.name, snippet.description].join(' ').length < 60
+                        ? false
+                        : undefined
+                    }
+                    side="right"
+                    sideOffset={16}
+                    label={
+                      <>
+                        {snippet.name}
+                        <br />
+                        {snippet.description}
+                      </>
+                    }
+                    trigger={
+                      <span className={styles.tooltipTrigger}>
+                        <Text truncate>
+                          <span className={styles.name}>{snippet.name}</span>{' '}
+                          <Secondary>{snippet.description}</Secondary>
+                        </Text>
+                      </span>
+                    }
+                  />
+                </Command.Item>
+              ))}
+            </SnippetsGroup>
           ))}
         </Command.List>
       </Command>
