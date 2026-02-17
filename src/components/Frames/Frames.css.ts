@@ -26,7 +26,7 @@ export const root = style([
 
 export const frameWidth = createVar();
 
-const frameActive = style({});
+export const frameActive = style({});
 
 export const frameContainer = style([
   sprinkles({

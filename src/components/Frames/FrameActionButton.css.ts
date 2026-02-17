@@ -49,8 +49,9 @@ export const button = style([
       ['&:hover, &[data-popup-open]:not(:focus-visible)']: {
         color: colorPaletteVars.foreground.neutralInverted,
       },
-      ['&:focus-visible::after']: {
+      ['&:focus-visible']: {
         outline: `2px solid ${colorPaletteVars.outline.focus}`,
+        outlineOffset: vars.space.xxsmall,
       },
       ['&:focus-visible:not(:hover)::after']: {
         background: 'transparent',

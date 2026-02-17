@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
+import type { FrameSettingsValues } from '../../../utils';
 import FrameComponent from '../../configModules/frameComponent';
 import RenderCode from '../RenderCode/RenderCode';
 
@@ -14,18 +15,21 @@ type RenderCodeProps = ComponentProps<typeof RenderCode>;
 type FrameComponentProps = {
   themeName: string | null;
   theme: string;
+  frameSettings?: FrameSettingsValues;
   children?: ReactNode;
 };
 
 interface FrameProps extends Pick<RenderCodeProps, 'code'> {
   themeName: FrameComponentProps['themeName'];
   theme: FrameComponentProps['theme'];
+  frameSettings?: FrameComponentProps['frameSettings'];
   ErrorComponent: ComponentType<{ message: string; delayVisibility?: boolean }>;
 }
 export default function Frame({
   code,
   themeName,
   theme,
+  frameSettings,
   ErrorComponent,
 }: FrameProps) {
   const [error, setError] = useState('');
@@ -54,7 +58,11 @@ export default function Frame({
           delay.current = true;
         }}
       >
-        <FrameComponent themeName={themeName} theme={theme}>
+        <FrameComponent
+          themeName={themeName}
+          theme={theme}
+          frameSettings={frameSettings}
+        >
           <RenderCode code={code} onError={setError} />
         </FrameComponent>
       </ErrorBoundary>

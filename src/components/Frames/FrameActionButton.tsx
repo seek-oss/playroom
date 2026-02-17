@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { forwardRef } from 'react';
 
 import type { ButtonIconProps } from '../ButtonIcon/ButtonIcon';
 import { Tooltip, type TooltipTrigger } from '../Tooltip/Tooltip';
@@ -12,18 +13,27 @@ interface FrameActionButtonProps extends TooltipTrigger {
 }
 
 // Todo - consolidate with ButtonIcon if possible
-export const FrameActionButton = ({
-  icon,
-  label,
-  tone = 'accent',
-  ...restProps
-}: FrameActionButtonProps) => (
-  <Tooltip
-    label={label}
-    trigger={
-      <button {...restProps} className={clsx(styles.button, styles.tone[tone])}>
-        {icon}
-      </button>
-    }
-  />
+export const FrameActionButton = forwardRef<
+  HTMLButtonElement,
+  FrameActionButtonProps
+>(
+  (
+    { icon, label, tone = 'accent', ...restProps }: FrameActionButtonProps,
+    ref
+  ) => (
+    <Tooltip
+      label={label}
+      trigger={
+        <button
+          {...restProps}
+          type="button"
+          ref={ref}
+          className={clsx(styles.button, styles.tone[tone])}
+          aria-label={label}
+        >
+          {icon}
+        </button>
+      }
+    />
+  )
 );

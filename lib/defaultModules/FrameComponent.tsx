@@ -1,3 +1,10 @@
 import type { ReactElement } from 'react';
 
-export default ({ children }: { children: ReactElement }) => <>{children}</>;
+import type { FrameSettingsValues } from '../../utils';
+
+export default ({
+  children,
+}: {
+  children: ReactElement;
+  frameSettings?: FrameSettingsValues;
+}) => <>{children}</>;

@@ -5,6 +5,34 @@ import {
 
 import type { Widths } from '../src/configModules/widths';
 
+export interface PlayroomConfig {
+  components: string;
+  outputPath: string;
+  title?: string;
+  themes?: string;
+  widths?: number[];
+  snippets?: string;
+  scope?: string;
+  typeScriptFiles?: string[];
+  frameComponent?: string;
+  frameSettings?: Array<{ id: string; label: string; defaultValue: boolean }>;
+  exampleCode?: string;
+  cwd?: string;
+  storageKey?: string;
+  port?: number;
+  openBrowser?: boolean;
+  webpackConfig?: () => void;
+  baseUrl?: string;
+  paramType?: 'hash' | 'search';
+  iframeSandbox?: string;
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  reactDocgenTypescriptConfig?: import('react-docgen-typescript').ParserOptions;
+  defaultVisibleThemes?: string[];
+  defaultVisibleWidths?: number[];
+}
+
+export type FrameSettingsValues = Record<string, boolean>;
+
 export interface Snippet {
   group?: string;
   name: string;
