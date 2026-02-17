@@ -9,7 +9,7 @@ import { calc } from '@vanilla-extract/css-utils';
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
-export const foreground = createVar();
+const foreground = createVar();
 
 export const button = style([
   sprinkles({

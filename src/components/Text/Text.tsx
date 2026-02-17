@@ -14,7 +14,7 @@ interface Props {
   children: ReactNode;
 }
 
-export const Truncate = ({ children }: { children: ReactNode }) => (
+const Truncate = ({ children }: { children: ReactNode }) => (
   <span className={styles.truncate}>{children}</span>
 );
 

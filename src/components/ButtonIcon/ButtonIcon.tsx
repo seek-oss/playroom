@@ -1,4 +1,4 @@
-import type { Tooltip as BaseUITooltip } from '@base-ui-components/react/tooltip';
+import type { Tooltip as BaseUITooltip } from '@base-ui/react/tooltip';
 import clsx from 'clsx';
 import { type AllHTMLAttributes, forwardRef, type ComponentProps } from 'react';
 
@@ -57,7 +57,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
   )
 );
 
-export type AnchorElementProps = Omit<
+type AnchorElementProps = Omit<
   AllHTMLAttributes<HTMLAnchorElement>,
   'style' | 'className' | 'size'
 > & {

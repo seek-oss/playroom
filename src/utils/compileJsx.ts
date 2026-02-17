@@ -5,8 +5,8 @@ import { transform } from 'sucrase';
 export const ReactFragmentPragma = 'R_F';
 export const ReactCreateElementPragma = 'R_cE';
 
-export const openFragmentTag = '<>';
-export const closeFragmentTag = '</>';
+const openFragmentTag = '<>';
+const closeFragmentTag = '</>';
 
 const wrapInFragment = (code: string) =>
   `${openFragmentTag}${code}${closeFragmentTag}`;

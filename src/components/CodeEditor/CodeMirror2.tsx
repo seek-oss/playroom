@@ -26,34 +26,34 @@ if (!SERVER_RENDERED) {
   cm = require('codemirror');
 }
 
-export interface IDefineModeOptions {
+interface IDefineModeOptions {
   fn: () => codemirror.Mode<any>;
   name: string;
 }
 
-export interface ISetScrollOptions {
+interface ISetScrollOptions {
   x?: number | null;
   y?: number | null;
 }
 
-export interface ISetSelectionOptions {
+interface ISetSelectionOptions {
   anchor: codemirror.Position;
   head: codemirror.Position;
 }
 
-export interface DomEvent {
+interface DomEvent {
   (editor: codemirror.Editor, event?: any): void;
 }
 
-export interface KeyHandledEvent {
+interface KeyHandledEvent {
   (editor: codemirror.Editor, name: string, event: any): void;
 }
 
-export interface EditorChangeEvent {
+interface EditorChangeEvent {
   (editor: codemirror.Editor, changeObj: codemirror.EditorChange): void;
 }
 
-export interface ICodeMirror {
+interface ICodeMirror {
   autoCursor?: boolean; // default: true
   autoScroll?: boolean; // default: false
   className?: string;
@@ -116,7 +116,7 @@ export interface ICodeMirror {
   scroll?: ISetScrollOptions;
 }
 
-export interface IControlledCodeMirror extends ICodeMirror {
+interface IControlledCodeMirror extends ICodeMirror {
   onBeforeChange: (
     editor: codemirror.Editor,
     data: codemirror.EditorChange,
@@ -125,7 +125,7 @@ export interface IControlledCodeMirror extends ICodeMirror {
   value: string;
 }
 
-export interface IUnControlledCodeMirror extends ICodeMirror {
+interface IUnControlledCodeMirror extends ICodeMirror {
   detach?: boolean;
   editorDidAttach?: (editor: codemirror.Editor) => void;
   editorDidDetach?: (editor: codemirror.Editor) => void;

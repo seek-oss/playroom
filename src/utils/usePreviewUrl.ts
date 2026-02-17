@@ -5,12 +5,11 @@ import playroomConfig from '../config';
 import { themesEnabled } from '../configModules/themes';
 import { StoreContext } from '../contexts/StoreContext';
 
-const baseUrl = window.location.href
-  .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
-  .split('index.html')[0];
+import { useEditorUrl } from './useEditorUrl';
 
 export default (theme?: string) => {
   const [{ code, title, editorHidden }] = useContext(StoreContext);
+  const baseUrl = useEditorUrl();
 
   return createPreviewUrl({
     baseUrl,

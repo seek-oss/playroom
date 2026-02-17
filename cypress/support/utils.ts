@@ -411,7 +411,7 @@ export const loadPlayroomWithAppearance = (
   loadPlayroom(initialCode);
 };
 
-export const typeInSearchField = (text: string) =>
+const typeInSearchField = (text: string) =>
   cy.get('.CodeMirror-search-field').type(text);
 
 export const findInCode = (
@@ -503,9 +503,6 @@ export const assertCodePaneSearchMatchesCount = (lines: number) => {
     cy.get('.cm-searching').should('have.length', lines)
   );
 };
-
-export const assertZeroStateIsVisible = () =>
-  cy.findByTestId('zeroState').should('be.visible');
 
 export const assertColourMode = (mode: 'dark' | 'light') => {
   cy.document().then((doc) => {

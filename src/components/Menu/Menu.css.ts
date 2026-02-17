@@ -106,7 +106,7 @@ export const critical = style({
   color: colorPaletteVars.foreground.critical,
 });
 
-export const positive = style({
+const positive = style({
   color: colorPaletteVars.foreground.positive,
   vars: {
     [highlightColor]: 'transparent',
@@ -226,15 +226,6 @@ export const separator = style([
     backgroundColor: colorPaletteVars.border.standard,
   },
 ]);
-
-export const shortcut = style({
-  display: 'grid',
-  gridAutoFlow: 'column',
-  gridAutoColumns: '1fr',
-  alignItems: 'baseline',
-  justifyItems: 'center',
-  isolation: 'isolate',
-});
 
 const clearItemPadding = 'xsmall';
 export const clearItem = style([

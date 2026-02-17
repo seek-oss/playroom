@@ -1,6 +1,7 @@
-export interface Snippet {
-  group: string;
+interface Snippet {
+  group?: string;
   name: string;
+  description?: string;
   code: string;
 }
 

@@ -2,7 +2,9 @@ import clsx from 'clsx';
 import { X } from 'lucide-react';
 import { useState } from 'react';
 
+import playroomConfig from '../../config';
 import { useDocumentTitle } from '../../utils/useDocumentTitle';
+import { useEditorUrl } from '../../utils/useEditorUrl';
 import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { ErrorMessageReceiver } from '../Frame/frameMessenger';
@@ -60,10 +62,13 @@ export default ({ title, code, themeName }: PreviewProps) => {
   useDocumentTitle({ title, suffix: 'Playroom Preview' });
 
   const [headerHidden, setHeaderHidden] = useState(false);
-  const editorHref = window.location.href.replace(
-    window.location.pathname,
-    window.location.pathname.replace(/\/preview\/$/, '/')
-  );
+  const baseUrl = useEditorUrl();
+
+  const editorHref = new URL(
+    window.location[playroomConfig.paramType],
+    baseUrl.replace(/\/preview\/?$/, '/')
+  ).toString();
+
   const absoluteSrc = new URL(
     frameSrc({ themeName, code }),
     editorHref

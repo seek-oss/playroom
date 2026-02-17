@@ -1,5 +1,8 @@
 import {
+  assertCodePaneContains,
+  assertFirstFrameContains,
   assertPreviewContains,
+  editPreview,
   getFrames,
   loadPlayroom,
   typeCode,
@@ -26,5 +29,18 @@ describe('Smoke', () => {
     );
 
     assertPreviewContains('Foo\nFoo\nBar');
+  });
+
+  it('navigate from preview to edit with explicit index document', () => {
+    cy.visit(
+      'http://localhost:9000/preview/index.html#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
+    );
+
+    assertPreviewContains('Foo\nFoo\nBar');
+
+    editPreview();
+
+    assertFirstFrameContains('Foo\nFoo\nBar');
+    assertCodePaneContains('<Foo><Foo><Bar/></Foo></Foo>');
   });
 });

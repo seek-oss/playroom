@@ -20,19 +20,6 @@ export const root = style([
   },
 ]);
 
-export const syntaxErrorsContainer = style([
-  sprinkles({
-    paddingX: 'xsmall',
-    paddingY: 'xxsmall',
-    display: 'flex',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-  }),
-  {
-    height: vars.buttonSizes.medium,
-  },
-]);
-
 export const button = style([
   sprinkles({
     paddingX: 'xsmall',
@@ -68,7 +55,3 @@ export const button = style([
     },
   },
 ]);
-
-export const snippetsPopupWidth = style({
-  width: 'min(300px, 90vw)',
-});

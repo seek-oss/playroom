@@ -52,7 +52,7 @@ export const ZeroState = () => {
 
   return (
     <ScrollContainer direction="vertical">
-      <div className={styles.root} data-testid="zeroState">
+      <div className={styles.root}>
         <div className={styles.maxWidth}>
           <Stack space="xxxlarge">
             <Text size="large">

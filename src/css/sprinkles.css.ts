@@ -100,7 +100,7 @@ const responsiveProperties = defineProperties({
       },
       strong: {
         fontWeight: vars.font.weight.strong,
-        fontVariationSettings: `"wght" 500`, // Select variable font weight for strong text (Safari doesnt support setting this as a font face descriptor)
+        fontVariationSettings: `"wght" 600`, // Select variable font weight for strong text (Safari doesnt support setting this as a font face descriptor)
       },
     },
     width: { full: '100%', viewport: '100dvw' },

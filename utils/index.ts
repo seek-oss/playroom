@@ -6,8 +6,9 @@ import {
 import type { Widths } from '../src/configModules/widths';
 
 export interface Snippet {
-  group: string;
+  group?: string;
   name: string;
+  description?: string;
   code: string;
 }
 

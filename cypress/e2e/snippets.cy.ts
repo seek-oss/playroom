@@ -86,6 +86,9 @@ describe('Snippets', () => {
     assertFirstFrameContains('Initial code\nFoo\nRed Foo');
     filterSnippets('{downarrow}');
     assertFirstFrameContains('Initial code\nBar\nBar');
+    filterSnippets('variant'); // filter by description
+    assertSnippetCount(1);
+    assertFirstFrameContains('Initial code\nBar\nBlue Bar');
 
     // Close without persisting
     closeSnippets({ source: 'keyboard' });

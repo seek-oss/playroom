@@ -22,6 +22,7 @@ import { StoreContext } from '../../contexts/StoreContext';
 import { compileJsx } from '../../utils/compileJsx';
 import { formatAsRelative } from '../../utils/formatAsRelative';
 import { useCopy } from '../../utils/useCopy';
+import { useEditorUrl } from '../../utils/useEditorUrl';
 import { Box } from '../Box/Box';
 import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
@@ -41,11 +42,6 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import * as styles from './PreviewTiles.css';
 
 const scale = 0.15;
-
-const getBaseUrl = () =>
-  window.location.href
-    .split(playroomConfig.paramType === 'hash' ? '#' : '?')[0]
-    .split('index.html')[0];
 
 const PreviewTileContextMenu = ({
   trigger,
@@ -95,6 +91,7 @@ export const PreviewTiles = ({
     useContext(StoreContext);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const baseUrl = useEditorUrl();
 
   const playroomEntries = useMemo(
     () =>
@@ -184,7 +181,7 @@ export const PreviewTiles = ({
                   lastModifiedDate,
                 }) => {
                   const playroomUrl = createUrl({
-                    baseUrl: getBaseUrl(),
+                    baseUrl,
                     code,
                     themes,
                     widths,

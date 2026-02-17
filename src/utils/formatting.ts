@@ -6,14 +6,14 @@ import type { CursorPosition } from '../contexts/StoreContext';
 
 import { insertAtCursor } from './cursor';
 
-export interface CodeWithCursor {
+interface CodeWithCursor {
   code: string;
   cursor: CursorPosition;
 }
 
 export const isMac = () => Boolean(navigator.platform.match('Mac'));
 
-export const runPrettier = ({
+const runPrettier = ({
   code,
   cursorOffset,
 }: {
@@ -59,10 +59,10 @@ export const cursorOffsetToPosition = (
   };
 };
 
-export const wrapJsx = (code: string) => `<>\n${code}\n</>`;
+const wrapJsx = (code: string) => `<>\n${code}\n</>`;
 
 // Removes `<>\n`  and `\n</>` and unindents the two spaces due to the wrapping
-export const unwrapJsx = (code: string) => {
+const unwrapJsx = (code: string) => {
   if (code.startsWith('<>\n')) {
     // Multi-line: remove indentation, then unwrap
     return code.replace(/\n {2}/g, '\n').slice(3, -5);

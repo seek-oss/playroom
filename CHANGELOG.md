@@ -1,5 +1,107 @@
 # playroom
 
+## 1.1.0
+
+### Minor Changes
+
+- [#477](https://github.com/seek-oss/playroom/pull/477) [`f2b799f`](https://github.com/seek-oss/playroom/commit/f2b799fb69bc1dbc006865b9ec3213589d3b0275) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - **Snippets:** Update `group` treatment and add `description` support
+
+  Improve affordance of snippet `group` by nesting snippets under sticky group headers.
+  Snippets also now support an optional `description` property to help users differentiate similar snippets.
+
+  #### Migration
+
+  While not a breaking change, this update does change the way snippets are rendered and how groups are treated, so some migration may be desired.
+
+  Previously snippets rendered the `group` and `name` on the same line.
+  For example:
+
+  ```json
+  [
+    {
+      "group": "Button",
+      "name": "Small",
+      "code": "..."
+    },
+    {
+      "group": "Button",
+      "name": "Large",
+      "code": "..."
+    }
+  ]
+  ```
+
+  resulted in:
+
+  ```
+  ---------------
+  Button Small
+  Button Large
+  ---------------
+  ```
+
+  Groups are now elevated to sticky headers, with snippets nested underneath:
+
+  ```
+  ---------------
+  Button
+  ---------------
+  Small
+  Large
+  ---------------
+  ```
+
+  To avoid grouping migrate to use `name` and `description` properties instead, and omit `group`:
+
+  ```diff
+   [
+     {
+  -    group: 'Button',
+  +    name: 'Button',
+  -    name: 'Small',
+  +    description: 'Small',
+       code: '...',
+     },
+     {
+  -    group: 'Button',
+  +    name: 'Button',
+  -    name: 'Large',
+  +    description: 'Large',
+       code: '...',
+     },
+   ]
+  ```
+
+  which results in the same UX as previously.
+
+## 1.0.7
+
+### Patch Changes
+
+- [#474](https://github.com/seek-oss/playroom/pull/474) [`7cf78e1`](https://github.com/seek-oss/playroom/commit/7cf78e13ee94f73f2fad127c59404f0b691fa367) Thanks [@mihkeleidast](https://github.com/mihkeleidast)! - Swap @base-ui-components/react for @base-ui/react and update cmdk-base
+
+- [#472](https://github.com/seek-oss/playroom/pull/472) [`f8d7aae`](https://github.com/seek-oss/playroom/commit/f8d7aae46e66f1168c31378df5532dd1401dd040) Thanks [@Marcosld](https://github.com/Marcosld)! - Fallback for randomUUID when not available in development (i.e. non secure context)
+
+## 1.0.6
+
+### Patch Changes
+
+- [#470](https://github.com/seek-oss/playroom/pull/470) [`2b2e5e9`](https://github.com/seek-oss/playroom/commit/2b2e5e9c19f621ca9f826ed8f77c107bc73b43c1) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Support explicit index document when navigating from Preview to edit
+
+## 1.0.5
+
+### Patch Changes
+
+- [#467](https://github.com/seek-oss/playroom/pull/467) [`fad3b7f`](https://github.com/seek-oss/playroom/commit/fad3b7fc3fb7e58ee240595ba99994bc2701d5c2) Thanks [@askoufis](https://github.com/askoufis)! - Remove unused code, remove unused deps, update `sucrase` to latest version
+
+## 1.0.4
+
+### Patch Changes
+
+- [#465](https://github.com/seek-oss/playroom/pull/465) [`63a512b`](https://github.com/seek-oss/playroom/commit/63a512bf8c33d5af15a254dba8d4efd69a886df4) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Only show available themes and widths
+
+  Ensure that themes or widths selected via the URL or from storage are valid options.
+
 ## 1.0.3
 
 ### Patch Changes

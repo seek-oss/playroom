@@ -12,8 +12,8 @@ import { minTouchableBeforePseudo } from '../../css/shared.css';
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { vars } from '../../css/vars.css';
 
-export const sizeVar = createVar();
-export const foreground = createVar();
+const sizeVar = createVar();
+const foreground = createVar();
 
 export const button = style([
   sprinkles({

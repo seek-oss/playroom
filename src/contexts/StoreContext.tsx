@@ -23,6 +23,7 @@ import {
 } from '../configModules/themes';
 import availableWidths, { type Widths } from '../configModules/widths';
 import { isValidLocation } from '../utils/cursor';
+import { fallbackUuid } from '../utils/fallbackUuid';
 import {
   formatForInsertion,
   formatAndInsert,
@@ -46,8 +47,8 @@ const defaultOrientation = 'horizontal';
 const defaultOpenLayout = 'grid';
 
 export type EditorOrientation = 'horizontal' | 'vertical';
-export type ColorScheme = 'light' | 'dark' | 'system';
-export type OpenLayout = 'grid' | 'list';
+type ColorScheme = 'light' | 'dark' | 'system';
+type OpenLayout = 'grid' | 'list';
 
 const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
   document.documentElement[
@@ -203,7 +204,10 @@ const sortStoredPlayrooms = (storedPlayrooms: State['storedPlayrooms']) =>
     )
   );
 
-const createPlayroomId = () => self.crypto.randomUUID();
+const createPlayroomId = () =>
+  !self.crypto.randomUUID && process.env.NODE_ENV === 'development'
+    ? fallbackUuid()
+    : self.crypto.randomUUID();
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -671,8 +675,26 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         openLayout,
         storedPlayrooms,
       ]) => {
-        const selectedWidths = widthsFromUrl || storedSelectedWidths;
-        const selectedThemes = themesFromUrl || storedSelectedThemes;
+        const filteredUrlWidths = widthsFromUrl
+          ? availableWidths.filter((w) => widthsFromUrl.includes(w))
+          : [];
+        const filteredStoredSelectedWidths = storedSelectedWidths
+          ? availableWidths.filter((w) => storedSelectedWidths.includes(w))
+          : [];
+        const selectedWidths = filteredUrlWidths.length
+          ? filteredUrlWidths
+          : filteredStoredSelectedWidths;
+
+        const filteredUrlThemes = themesFromUrl
+          ? availableThemes.filter((t) => themesFromUrl.includes(t))
+          : [];
+        const filteredStoredSelectedThemes = storedSelectedThemes
+          ? availableThemes.filter((t) => storedSelectedThemes.includes(t))
+          : [];
+        const selectedThemes = filteredUrlThemes.length
+          ? filteredUrlThemes
+          : filteredStoredSelectedThemes;
+
         const storedPlayroomValues = Object.entries(storedPlayrooms || {});
         let id = code || title ? createPlayroomId() : '';
 
@@ -703,8 +725,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
             ...(editorWidth ? { editorWidth } : {}),
             ...(assistantEnabled && assistantWidth ? { assistantWidth } : {}),
             ...(editorHidden ? { editorHidden } : {}),
-            ...(themesEnabled && selectedThemes ? { selectedThemes } : {}),
-            ...(selectedWidths ? { selectedWidths } : {}),
+            ...(themesEnabled && selectedThemes.length > 0
+              ? { selectedThemes }
+              : {}),
+            ...(selectedWidths.length > 0 ? { selectedWidths } : {}),
             ...(colorScheme ? { colorScheme } : {}),
             ...(openLayout ? { openLayout } : {}),
             ...(storedPlayrooms

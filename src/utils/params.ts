@@ -28,7 +28,7 @@ export function updateUrlCode(code: string) {
   history.replace(createUrlForData(code));
 }
 
-export function getParamsFromQuery(location = history.location) {
+function getParamsFromQuery(location = history.location) {
   try {
     // Prefer checking `hash`, fall back to `search` in case the user has configured a custom
     // `frameSrc` function that uses search params instead of the hash

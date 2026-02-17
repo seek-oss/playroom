@@ -69,6 +69,15 @@ describe('URL handling', () => {
       ]);
     });
 
+    it('invalid widths and themes', () => {
+      cy.visit(
+        'http://localhost:9001/?code=N4IgLgFgpgtlDOIBcBtEBLAdgNwIYBt0ATAFWjhABpxyoB5TKEAXWoHdjJFUAWABj6UA7ADYAHMwC+QA'
+      );
+
+      typeCode('code');
+      assertFramesMatch([['themeOne', 768]]);
+    });
+
     it('edit title', () => {
       cy.visit(
         'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA'
