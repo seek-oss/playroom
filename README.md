@@ -59,7 +59,7 @@ module.exports = {
   widths: [320, 768, 1024],
   snippets: './playroom/snippets.js',
   frameComponent: './playroom/FrameComponent.js',
-  frameSettings: [{ id: 'darkMode', label: 'Dark Mode', defaultValue: false }],
+  frameSettings: [{ id: 'rtl', label: 'RTL Layout', defaultValue: false }],
   exampleCode: `
     <Button>
       Hello World!
@@ -199,7 +199,7 @@ export { themeB } from './themeB';
 
 ## Frame Settings
 
-Playroom allows you to define configurable boolean toggles that users can control for each frame independently. This is useful for testing components under different conditions (e.g., dark mode, compact mode, RTL layout).
+Playroom allows you to define configurable boolean toggles that users can control for each frame independently. This is useful for testing components under different conditions (e.g., RTL layout, debugging touch targets, etc).
 
 You can configure frame settings via the `frameSettings` option in your config:
 
@@ -208,13 +208,13 @@ module.exports = {
   // ...
   frameSettings: [
     {
-      id: 'darkMode',
-      label: 'Dark Mode',
+      id: 'rtl',
+      label: 'RTL Layout',
       defaultValue: false,
     },
     {
-      id: 'compactMode',
-      label: 'Compact Mode',
+      id: 'showTouchTargets',
+      label: 'Show Touch Targets',
       defaultValue: false,
     },
   ],
@@ -233,8 +233,12 @@ import { ThemeProvider } from '../path/to/your/theming-system';
 
 export default function FrameComponent({ theme, frameSettings, children }) {
   return (
-    <ThemeProvider theme={theme} darkMode={frameSettings?.darkMode}>
-      <div className={frameSettings?.compactMode ? 'compact' : 'normal'}>
+    <ThemeProvider theme={theme} rtl={frameSettings?.rtl}>
+      <div
+        className={
+          frameSettings?.showTouchTargets ? 'showTouchTargets' : undefined
+        }
+      >
         {children}
       </div>
     </ThemeProvider>
