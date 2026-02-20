@@ -213,6 +213,7 @@ export const light = {
   },
   background: {
     accent: lightPalette.blue[800],
+    accentLight: mix(0.1, '#fff', lightPalette.blue[800]),
     secondaryAccent: lightPalette.gray[1000],
     secondaryAccentLight: mix(0.1, '#fff', lightPalette.gray[1000]),
     positive: lightPalette.teal[300],
@@ -262,6 +263,7 @@ export const dark = {
   },
   background: {
     accent: darkPalette.blue[900],
+    accentLight: mix(0.1, '#000', darkPalette.blue[900]),
     secondaryAccent: darkPalette.gray[1000],
     secondaryAccentLight: mix(0.1, '#000', darkPalette.gray[1000]),
     positive: darkPalette.teal[300],

@@ -22,6 +22,7 @@ import availableWidths, { type Widths } from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
 import { compileJsx } from '../../utils/compileJsx';
 import usePreviewUrl from '../../utils/usePreviewUrl';
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import {
   ErrorMessageReceiver,
   // screenshotMessageSender,
@@ -32,7 +33,6 @@ import { Strong } from '../Strong/Strong';
 import { Text } from '../Text/Text';
 import { SharedTooltipContext } from '../Tooltip/Tooltip';
 
-import { FrameActionButton } from './FrameActionButton';
 import Iframe from './Iframe';
 import frameSrc from './frameSrc';
 
@@ -115,8 +115,11 @@ const Frame = ({
         )}
         <SharedTooltipContext>
           <div className={styles.frameActionsContainer}>
-            <FrameActionButton
+            <ButtonIcon
               tone="accent"
+              variant="transparent"
+              size="small"
+              bleed
               icon={<PictureInPicture2 />}
               label="Pop out frame"
               onClick={() => {
@@ -152,9 +155,13 @@ const Frame = ({
                 onOpenChange={setFrameActive}
                 align="end"
                 width="content"
+                sideOffset={3}
                 trigger={
-                  <FrameActionButton
+                  <ButtonIcon
                     tone="accent"
+                    variant="transparent"
+                    size="small"
+                    bleed
                     icon={<Settings2 />}
                     label="Frame settings"
                   />

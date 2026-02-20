@@ -113,7 +113,7 @@ export const frameActionsContainer = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
-    gap: 'xsmall',
+    gap: 'medium',
   }),
   {
     transition: `opacity ${transitionTiming}`,

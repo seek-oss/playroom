@@ -26,6 +26,7 @@ export const colorPaletteVars = createThemeContract({
   },
   background: {
     accent: null,
+    accentLight: null,
     secondaryAccent: null,
     secondaryAccentLight: null,
     positive: null,
