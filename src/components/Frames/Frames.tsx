@@ -156,11 +156,7 @@ const Frame = ({
                   <FrameActionButton
                     tone="accent"
                     icon={<Settings2 />}
-                    label={`Settings for “${
-                      noTheme
-                        ? frame.widthName
-                        : `${frame.theme} - ${frame.widthName}`
-                    }” frame`}
+                    label="Frame settings"
                   />
                 }
               >

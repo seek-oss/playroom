@@ -561,11 +561,11 @@ export const openStoredPlayroomByName = (
   });
 };
 
-const frameSettingsRegEx = /Settings for “.*” frame/;
+const frameSettingsButtonLabel = 'Frame settings';
 export const assertFrameSettingsCount = (count: number) =>
   cy
     .findAllByRole('button', {
-      name: frameSettingsRegEx,
+      name: frameSettingsButtonLabel,
       hidden: true,
     })
     .should('have.length', count);
@@ -573,7 +573,7 @@ export const assertFrameSettingsCount = (count: number) =>
 export const toggleFrameSettingsForFrameIndex = (index: number) =>
   cy
     .findAllByRole('button', {
-      name: frameSettingsRegEx,
+      name: frameSettingsButtonLabel,
       hidden: true,
     })
     .eq(index)

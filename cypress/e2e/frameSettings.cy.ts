@@ -20,9 +20,7 @@ describe('Frame Settings', () => {
     it('should show menu with configured settings on click', () => {
       toggleFrameSettingsForFrameIndex(0);
 
-      cy.findByRole('menu', { name: /Settings for “.*” frame/ }).should(
-        'be.visible'
-      );
+      cy.findByRole('menu', { name: 'Frame settings' }).should('be.visible');
       cy.findByRole('menuitemcheckbox', { name: 'Dark Mode' }).should(
         'be.visible'
       );
