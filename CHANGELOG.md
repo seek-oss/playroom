@@ -1,5 +1,46 @@
 # playroom
 
+## 1.2.0
+
+### Minor Changes
+
+- [#479](https://github.com/seek-oss/playroom/pull/479) [`6cc66fd`](https://github.com/seek-oss/playroom/commit/6cc66fd53f11ba4ea859636e108173f5f3e76dc4) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - frameSettings: Add support to custom frame props
+
+  Add `frameSettings` config option to enable per-frame toggleable settings.
+  Allows playroom owners to define boolean controls (e.g., RTL layout, debugging touch targets, etc) that users can independently toggle for each frame, with values passed to the custom `FrameComponent` for conditional rendering.
+
+  ### Example Usage
+
+  ```js
+  // playroom.config.js
+  export default {
+    ...,
+    frameSettings: [
+      { id: 'rtl', label: 'RTL Layout', defaultValue: false }
+    ],
+  };
+
+  // FrameComponent.tsx
+  export default ({ frameSettings, children }) => (
+    <ThemeProvider rtl={frameSettings?.rtl}>{children}</ThemeProvider>
+  );
+  ```
+
+### Patch Changes
+
+- [#479](https://github.com/seek-oss/playroom/pull/479) [`6cc66fd`](https://github.com/seek-oss/playroom/commit/6cc66fd53f11ba4ea859636e108173f5f3e76dc4) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - **types:** Update `PlayroomConfig` and make available to consumers
+
+  Enable type-safe configuration files by exporting `PlayroomConfig` type.
+
+  ```ts
+  // playroom.config.ts
+  import type { PlayroomConfig } from 'playroom';
+
+  export default {
+    ...
+  } satisfies PlayroomConfig;
+  ```
+
 ## 1.1.0
 
 ### Minor Changes
