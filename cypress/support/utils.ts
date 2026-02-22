@@ -560,3 +560,33 @@ export const openStoredPlayroomByName = (
     cy.findByRole('button', { name: `Open "${name}"` }).click();
   });
 };
+
+const frameSettingsButtonLabel = 'Frame settings';
+export const assertFrameSettingsCount = (count: number) =>
+  cy
+    .findAllByRole('button', {
+      name: frameSettingsButtonLabel,
+      hidden: true,
+    })
+    .should('have.length', count);
+
+export const toggleFrameSettingsForFrameIndex = (index: number) =>
+  cy
+    .findAllByRole('button', {
+      name: frameSettingsButtonLabel,
+      hidden: true,
+    })
+    .eq(index)
+    .click();
+
+export const assertFrameSetting = (settingName: string, value: string) => {
+  cy.findByRole('menuitemcheckbox', { name: settingName }).should(
+    'have.attr',
+    'aria-checked',
+    value
+  );
+};
+
+export const selectFrameSettingForFrameIndex = (settingName: string) => {
+  cy.findByRole('menuitemcheckbox', { name: settingName }).click();
+};

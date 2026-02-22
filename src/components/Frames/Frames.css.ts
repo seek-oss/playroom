@@ -26,7 +26,7 @@ export const root = style([
 
 export const frameWidth = createVar();
 
-const frameActive = style({});
+export const frameActive = style({});
 
 export const frameContainer = style([
   sprinkles({
@@ -113,7 +113,7 @@ export const frameActionsContainer = style([
   sprinkles({
     display: 'flex',
     alignItems: 'center',
-    gap: 'xsmall',
+    gap: 'medium',
   }),
   {
     transition: `opacity ${transitionTiming}`,

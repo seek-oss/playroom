@@ -12,6 +12,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import {
   type CompressParamsOptions,
+  type FrameSettingsValues,
   type Snippet,
   compressParams,
 } from '../../utils';
@@ -105,6 +106,7 @@ interface State {
   colorScheme: ColorScheme;
   openLayout: OpenLayout;
   storedPlayrooms: Record<string, StoredPlayroom>;
+  frameSettings: Record<string, FrameSettingsValues>;
 }
 
 export type Action =
@@ -160,6 +162,10 @@ export type Action =
   | {
       type: 'updateOpenLayout';
       payload: { layout: OpenLayout };
+    }
+  | {
+      type: 'updateFrameSetting';
+      payload: { frameId: string; settingId: string; value: boolean };
     }
   | {
       type: 'openPlayroom';
@@ -520,6 +526,22 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'updateFrameSetting': {
+      const { frameId, settingId, value } = action.payload;
+      const currentFrameSettings = state.frameSettings[frameId] || {};
+
+      return {
+        ...state,
+        frameSettings: {
+          ...state.frameSettings,
+          [frameId]: {
+            ...currentFrameSettings,
+            [settingId]: value,
+          },
+        },
+      };
+    }
+
     case 'updateTitle': {
       const { title } = action.payload;
 
@@ -615,6 +637,7 @@ const initialState: State = {
   colorScheme: 'system',
   openLayout: defaultOpenLayout,
   storedPlayrooms: {},
+  frameSettings: {},
 };
 
 export const StoreContext = createContext<StoreContextValues>([

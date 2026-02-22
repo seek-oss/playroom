@@ -59,6 +59,7 @@ module.exports = {
   widths: [320, 768, 1024],
   snippets: './playroom/snippets.js',
   frameComponent: './playroom/FrameComponent.js',
+  frameSettings: [{ id: 'rtl', label: 'RTL Layout', defaultValue: false }],
   exampleCode: `
     <Button>
       Hello World!
@@ -143,6 +144,13 @@ export default function FrameComponent({ theme, children }) {
 }
 ```
 
+The `FrameComponent` receives the following props:
+
+- `theme` - The currently selected theme (if themes are configured)
+- `themeName` - The name of the currently selected theme
+- `frameSettings` - An object containing the current values of frame settings (if configured)
+- `children` - The rendered playroom code
+
 ## Custom Scope
 
 You can provide extra variables within the scope of your JSX via the `scope` option, which is a path to a file that exports a `useScope` Hook that returns a scope object. For example, if you wanted to expose a context-based `theme` variable to consumers of your Playroom:
@@ -188,6 +196,63 @@ export { themeA } from './themeA';
 export { themeB } from './themeB';
 // etc...
 ```
+
+## Frame Settings
+
+Playroom allows you to define configurable boolean toggles that users can control for each frame independently. This is useful for testing components under different conditions (e.g., RTL layout, debugging touch targets, etc).
+
+You can configure frame settings via the `frameSettings` option in your config:
+
+```js
+module.exports = {
+  // ...
+  frameSettings: [
+    {
+      id: 'rtl',
+      label: 'RTL Layout',
+      defaultValue: false,
+    },
+    {
+      id: 'showTouchTargets',
+      label: 'Show Touch Targets',
+      defaultValue: false,
+    },
+  ],
+};
+```
+
+When frame settings are configured, a settings icon will appear in each frame's action bar enabling users to toggle individual settings.
+
+### Using Frame Settings in Your Frame Component
+
+Frame settings are passed to your custom `FrameComponent` as the `frameSettings` prop, which is an object mapping setting IDs to their boolean values:
+
+```js
+import React from 'react';
+import { ThemeProvider } from '../path/to/your/theming-system';
+
+export default function FrameComponent({ theme, frameSettings, children }) {
+  return (
+    <ThemeProvider theme={theme} rtl={frameSettings?.rtl}>
+      <div
+        className={
+          frameSettings?.showTouchTargets ? 'showTouchTargets' : undefined
+        }
+      >
+        {children}
+      </div>
+    </ThemeProvider>
+  );
+}
+```
+
+### Frame Settings Behavior
+
+- **Per-frame state**: Each frame (theme/width combination) maintains independent settings
+- **Session-only**: Settings are stored in memory and reset on page refresh
+- **Not persisted**: Settings are not included in shared URLs or local storage
+
+This allows users to quickly compare how components behave under different configurations across multiple frames simultaneously.
 
 ## TypeScript Support
 

@@ -34,6 +34,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
   ) => (
     <Tooltip
       label={disabled && disabledReason ? disabledReason : label}
+      sideOffset={size === 'small' ? 4 : undefined}
       trigger={
         <button
           {...restProps}
@@ -83,6 +84,7 @@ export const ButtonIconLink = forwardRef<
   ) => (
     <Tooltip
       label={label}
+      sideOffset={size === 'small' ? 4 : undefined}
       trigger={
         <a
           {...restProps}

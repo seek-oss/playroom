@@ -57,10 +57,9 @@ export const content = style([
     borderRadius: 'inherit',
     background: 'transparent',
     outline: 'none',
-    color: foreground,
     isolation: 'isolate',
     selectors: {
-      [comma(`${button}[data-pressed] &`, `${button}:active &`)]: {
+      [`${button}:active &`]: {
         transform: 'scale(.95)',
       },
       [`${button}:focus-visible &`]: {
@@ -78,24 +77,47 @@ export const content = style([
 export const size = styleVariants(vars.buttonSizes, (buttonSize, name) => ({
   vars: {
     [sizeVar]: buttonSize,
-    [paddingVar]: name === 'small' ? '6px' : vars.space.xsmall,
+    [paddingVar]: name === 'small' ? vars.space.xxsmall : vars.space.xsmall,
   },
 }));
+
+const foregroundStandard = createVar();
+const backgroundStandard = createVar();
+const backgroundStandardHover = createVar();
+
+const foregroundSolid = createVar();
+const backgroundSolid = createVar();
+const backgroundSolidHover = createVar();
+
+const foregroundTransparent = createVar();
+const foregroundTransparentHover = createVar();
+const backgroundTransparentHover = createVar();
 
 export const tone = styleVariants({
   neutral: {
     vars: {
-      [foreground]: colorPaletteVars.foreground.neutral,
+      [foregroundStandard]: colorPaletteVars.foreground.neutral,
+      [backgroundStandard]: colorPaletteVars.background.surface,
+      [backgroundStandardHover]: colorPaletteVars.background.selection,
+      [foregroundSolid]: colorPaletteVars.foreground.neutralInverted,
+      [backgroundSolid]: colorPaletteVars.background.secondaryAccent,
+      [backgroundSolidHover]: colorPaletteVars.background.secondaryAccentLight,
+      [foregroundTransparent]: colorPaletteVars.foreground.neutral,
+      [foregroundTransparentHover]: colorPaletteVars.foreground.neutral,
+      [backgroundTransparentHover]: colorPaletteVars.background.selection,
     },
   },
   accent: {
     vars: {
-      [foreground]: colorPaletteVars.foreground.accent,
-    },
-  },
-  positive: {
-    vars: {
-      [foreground]: colorPaletteVars.foreground.positive,
+      [foregroundStandard]: colorPaletteVars.foreground.accent,
+      [backgroundStandard]: colorPaletteVars.background.surface,
+      [backgroundStandardHover]: colorPaletteVars.background.selection,
+      [foregroundSolid]: colorPaletteVars.foreground.neutralInverted,
+      [backgroundSolid]: colorPaletteVars.foreground.accent,
+      [backgroundSolidHover]: colorPaletteVars.background.accentLight,
+      [foregroundTransparent]: colorPaletteVars.foreground.accent,
+      [foregroundTransparentHover]: colorPaletteVars.foreground.neutralInverted,
+      [backgroundTransparentHover]: colorPaletteVars.background.accent,
     },
   },
 });
@@ -103,43 +125,47 @@ export const tone = styleVariants({
 export const variant = styleVariants({
   standard: [
     {
-      backgroundColor: colorPaletteVars.background.surface,
+      color: foregroundStandard,
+      backgroundColor: backgroundStandard,
       outline: `1px solid ${colorPaletteVars.border.standard}`,
       outlineOffset: -1,
       selectors: {
         [comma(
           `${button}:not([aria-disabled="true"]):hover > &`,
+          `${button}:not([aria-disabled="true"]):focus-visible > &`,
           `${button}:not([aria-disabled="true"])[data-popup-open] > &`
         )]: {
-          backgroundColor: colorPaletteVars.background.selection,
+          backgroundColor: backgroundStandardHover,
         },
       },
     },
   ],
   solid: [
     {
-      vars: {
-        [foreground]: colorPaletteVars.foreground.neutralInverted,
-      },
-      backgroundColor: colorPaletteVars.background.secondaryAccent,
+      color: foregroundSolid,
+      backgroundColor: backgroundSolid,
       selectors: {
         [comma(
           `${button}:not([aria-disabled="true"]):hover > &`,
+          `${button}:not([aria-disabled="true"]):focus-visible > &`,
           `${button}:not([aria-disabled="true"])[data-popup-open] > &`
         )]: {
-          backgroundColor: colorPaletteVars.background.secondaryAccentLight,
+          backgroundColor: backgroundSolidHover,
         },
       },
     },
   ],
   transparent: [
     {
+      color: foregroundTransparent,
       selectors: {
         [comma(
           `${button}:not([aria-disabled="true"]):hover > &`,
+          `${button}:not([aria-disabled="true"]):focus-visible > &`,
           `${button}:not([aria-disabled="true"])[data-popup-open] > &`
         )]: {
-          backgroundColor: colorPaletteVars.background.selection,
+          color: foregroundTransparentHover,
+          backgroundColor: backgroundTransparentHover,
         },
       },
     },

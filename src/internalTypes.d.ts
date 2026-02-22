@@ -1,11 +1,12 @@
-import type { PlayroomConfig } from './publicTypes';
+import type { PlayroomConfig } from '../utils';
 
-interface InternalPlayroomConfig extends PlayroomConfig {
-  cwd: string;
-  storageKey: string;
-  port: number;
-  openBrowser: boolean;
-}
+type InternalPlayroomConfig = PlayroomConfig &
+  Required<
+    Pick<
+      PlayroomConfig,
+      'cwd' | 'storageKey' | 'port' | 'openBrowser' | 'paramType'
+    >
+  >;
 
 declare global {
   const __PLAYROOM_GLOBAL__CONFIG__: InternalPlayroomConfig;
