@@ -1,34 +1,23 @@
-import { zodTextFormat } from 'openai/helpers/zod';
-import type {
-  EasyInputMessage,
-  ResponseCreateParamsNonStreaming,
-  ResponseOutputMessage,
-} from 'openai/resources/responses/responses';
+import type { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { useRef, useState } from 'react';
-import { z } from 'zod';
 
 import { client, model } from '../../configModules/assistantClient';
 
 export type AssistantMessage = {
   id: string;
-  role: EasyInputMessage['role'];
+  role: 'user' | 'assistant' | 'system';
   content: string;
   variants: string[];
   attachment?: string;
 };
 
 interface UseOpenAIChatProps {
-  instructions?: ResponseCreateParamsNonStreaming['instructions'];
+  instructions?: string;
   initialMessages?: AssistantMessage[];
   onUpdate?: (assistantMessage: AssistantMessage) => void;
   onFinish?: (assistantMessage: AssistantMessage) => void;
   onError?: (err: Error) => void;
 }
-
-const AssistantMessageSchema = z.object({
-  message: z.string(),
-  variants: z.array(z.string()),
-});
 
 // Only check if it starts with `{` as the end is not available until
 // streaming finishes
@@ -36,14 +25,9 @@ const isMessageStructuredResponse = (str: string) => str.startsWith('{');
 
 const parseAssistantMessage = ({
   id,
-  role,
   content,
-  type,
-}: ResponseOutputMessage): AssistantMessage => {
-  let parsedMessage =
-    type === 'message' && content[0].type === 'output_text'
-      ? content[0].text
-      : '';
+}: Pick<AssistantMessage, 'id' | 'content'>): AssistantMessage => {
+  let parsedMessage = content;
   let parsedVariants: string[] = [];
 
   if (parsedMessage.startsWith('```json')) {
@@ -62,12 +46,13 @@ const parseAssistantMessage = ({
 
   return {
     id,
-    role,
+    role: 'assistant',
     content: parsedMessage,
     variants: parsedVariants,
   };
 };
 
+type StreamingAssistantMessage = AssistantMessage & { __isStreaming?: boolean };
 export function useChat({
   instructions,
   initialMessages = [],
@@ -75,7 +60,8 @@ export function useChat({
   onFinish,
   onError,
 }: UseOpenAIChatProps) {
-  const [messages, setMessages] = useState<AssistantMessage[]>(initialMessages);
+  const [messages, setMessages] =
+    useState<StreamingAssistantMessage[]>(initialMessages);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const streamControllerRef = useRef<AbortController | null>(null);
@@ -85,6 +71,12 @@ export function useChat({
       streamControllerRef.current.abort();
       streamControllerRef.current = null;
       setLoading(false);
+
+      // If the last message was still streaming, remove it
+      // as it is only valid if the response was not interrupted
+      if (messages[messages.length - 1]?.__isStreaming) {
+        setMessages(messages.slice(0, -1));
+      }
     }
   };
 
@@ -117,110 +109,95 @@ export function useChat({
     setErrorMessage(null);
 
     try {
-      const data = await client.responses.create({
-        model,
-        instructions,
-        input: [
-          ...messages,
-          imageDataUrl
-            ? {
-                ...newMessage,
-                content: [
-                  { type: 'input_text', text: input } as const,
-                  {
-                    type: 'input_image',
-                    image_url: imageDataUrl,
-                    detail: 'auto',
-                  } as const,
-                ],
-              }
-            : newMessage,
-        ],
-        text: {
-          format: zodTextFormat(
-            AssistantMessageSchema,
-            'playroom_assistant_message'
-          ),
+      // Build messages array: system + conversation history + current message
+      const systemMessage = `${
+        instructions ? `${instructions}\n\n` : ''
+      }Please respond in this exact JSON format: {"message": "your response here", "variants": ["variant1", "variant2", "variant3"]}`;
+
+      const chatMessages: ChatCompletionMessageParam[] = [
+        { role: 'system', content: systemMessage },
+        ...messages,
+        {
+          ...newMessage,
+          content: imageDataUrl
+            ? [
+                { type: 'text', text: newMessage.content },
+                {
+                  type: 'image_url',
+                  image_url: { url: imageDataUrl, detail: 'auto' },
+                },
+              ]
+            : newMessage.content,
         },
+      ];
+
+      const stream = await client.chat.completions.create({
+        model,
+        messages: chatMessages,
         stream: true,
       });
 
-      streamControllerRef.current = data.controller;
+      streamControllerRef.current = stream.controller;
 
-      let messageMeta: ResponseOutputMessage | null = null;
+      let messageId = '';
       let messageContent = '';
       let stage: 'awaitingMessage' | 'awaitingVariants' = 'awaitingMessage';
-      for await (const event of data) {
-        switch (event.type) {
-          case 'response.output_item.added': {
-            if (event.item.type === 'message') {
-              messageMeta = event.item;
-            }
-            break;
-          }
-          case 'response.output_text.delta': {
-            messageContent += event.delta;
-            try {
-              let renderable = '';
-              if (stage === 'awaitingMessage') {
-                const endOfMessageIndex = messageContent.indexOf('",\n  "');
-                const hasMessageCompleted = endOfMessageIndex > 0;
-                const messagePart = hasMessageCompleted
-                  ? // Handles when end of message chunk appears in same chunk as variants beginning
-                    messageContent.slice(0, endOfMessageIndex)
-                  : // Handles rendering as much of the message as we have receieved
-                    messageContent;
+      for await (const chunk of stream) {
+        if (!messageId && chunk.id) {
+          messageId = chunk.id;
+        }
 
-                if (hasMessageCompleted) {
-                  // Move onto next stage for next chunk
-                  stage = 'awaitingVariants';
-                }
+        if (chunk.choices[0]?.delta?.content) {
+          messageContent += chunk.choices[0].delta.content;
+          try {
+            let renderable = '';
+            if (stage === 'awaitingMessage') {
+              const endOfMessageIndex = messageContent.indexOf('",\n  "');
+              const hasMessageCompleted = endOfMessageIndex > 0;
+              const messagePart = hasMessageCompleted
+                ? // Handles when end of message chunk appears in same chunk as variants beginning
+                  messageContent.slice(0, endOfMessageIndex)
+                : // Handles rendering as much of the message as we have received
+                  messageContent;
 
-                renderable = `${messagePart}"}`;
+              if (hasMessageCompleted) {
+                // Move onto next stage for next chunk
+                stage = 'awaitingVariants';
+              }
+
+              renderable = `${messagePart}"}`;
+              JSON.parse(renderable);
+            } else {
+              const endOfVariantIndex = messageContent.lastIndexOf('",\n    "');
+
+              if (endOfVariantIndex > 0) {
+                renderable = `${messageContent.slice(0, endOfVariantIndex)}"]}`;
                 JSON.parse(renderable);
-              } else {
-                const endOfVariantIndex =
-                  messageContent.lastIndexOf('",\n    "');
-
-                if (endOfVariantIndex > 0) {
-                  renderable = `${messageContent.slice(
-                    0,
-                    endOfVariantIndex
-                  )}"]}`;
-                  JSON.parse(renderable);
-                }
               }
-
-              if (messageMeta && renderable) {
-                const assistantMessage = parseAssistantMessage({
-                  ...messageMeta,
-                  content: [
-                    {
-                      type: 'output_text',
-                      text: renderable,
-                      annotations: [],
-                    },
-                  ],
-                });
-                setMessages([...newMessages, assistantMessage]);
-                onUpdate?.(assistantMessage);
-              }
-            } catch {}
-            break;
-          }
-          case 'response.output_item.done': {
-            if (event.item.type === 'message') {
-              const assistantMessage = parseAssistantMessage({
-                ...event.item,
-                id: messageMeta?.id || event.item.id,
-              });
-              setMessages([...newMessages, assistantMessage]);
-              setLoading(false);
-              onUpdate?.(assistantMessage);
-              onFinish?.(assistantMessage);
             }
-            break;
-          }
+
+            if (messageId && renderable) {
+              const tempMessage: StreamingAssistantMessage =
+                parseAssistantMessage({
+                  id: messageId,
+                  content: renderable,
+                });
+              // Set streaming flag to remove message if user interrupts before stream finishes
+              tempMessage.__isStreaming = true;
+              setMessages([...newMessages, tempMessage]);
+              onUpdate?.(tempMessage);
+            }
+          } catch {}
+        } else if (chunk.choices[0]?.finish_reason === 'stop') {
+          const finalAssistantMessage = parseAssistantMessage({
+            id: messageId,
+            content: messageContent,
+          });
+
+          setMessages([...newMessages, finalAssistantMessage]);
+          setLoading(false);
+          onUpdate?.(finalAssistantMessage);
+          onFinish?.(finalAssistantMessage);
         }
       }
     } catch (err) {
