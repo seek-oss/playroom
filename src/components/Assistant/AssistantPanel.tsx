@@ -43,6 +43,7 @@ export const AssistantPanel = () => {
   const [activeSuggestion, setActiveSuggestion] = useState<string | null>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const userSelectedSuggestion = useRef(false);
+  const applyingSuggestion = useRef(false);
 
   const { messages, errorMessage, reset, loading } = useAssistant();
 
@@ -78,6 +79,11 @@ export const AssistantPanel = () => {
   }, [loading, assistantHidden]);
 
   useEffect(() => {
+    if (applyingSuggestion.current) {
+      applyingSuggestion.current = false;
+      return;
+    }
+
     if (
       !userSelectedSuggestion.current &&
       !activeSuggestion &&
@@ -150,6 +156,7 @@ export const AssistantPanel = () => {
                               : 'View'
                           }
                           onApply={() => {
+                            applyingSuggestion.current = true;
                             dispatch({
                               type: 'persistSuggestion',
                               payload: {

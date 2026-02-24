@@ -57,7 +57,6 @@ export default () => {
   ] = useContext(StoreContext);
   useDocumentTitle({ title });
 
-  const lastHidden = useRef(editorHidden);
   const hideActionSource = useRef<'editor' | null>(null);
   const editorRef = useRef<HTMLElement | null>(null);
   const assistantRef = useRef<HTMLElement | null>(null);
@@ -73,24 +72,23 @@ export default () => {
   const hasNoStoredPlayrooms = Object.entries(storedPlayrooms).length === 0;
 
   useEffect(() => {
-    if (
-      lastHidden.current !== editorHidden &&
-      hideActionSource.current === 'editor'
-    ) {
-      if (editorHidden) {
-        // Remove in favour of direct DOM attribute when we drop React 18 support
-        editorRef.current?.setAttribute('inert', '');
+    // Remove in favour of direct DOM attribute when we drop React 18 support
+    editorRef.current?.toggleAttribute('inert', !editorVisible);
+
+    if (hideActionSource.current === 'editor') {
+      if (!editorVisible) {
         showCodeButtonRef.current?.focus();
       } else {
-        // Remove in favour of direct DOM attribute when we drop React 18 support
-        editorRef.current?.removeAttribute('inert');
         hideCodeButtonRef.current?.focus();
       }
-
       hideActionSource.current = null;
     }
-    lastHidden.current = editorHidden;
-  }, [editorHidden]);
+  }, [editorVisible]);
+
+  useEffect(() => {
+    // Remove in favour of direct DOM attribute when we drop React 18 support
+    assistantRef.current?.toggleAttribute('inert', !assistantVisible);
+  }, [assistantVisible]);
 
   return (
     <Box
@@ -211,12 +209,11 @@ export default () => {
           position="relative"
           className={styles.assistant}
           ref={assistantRef}
-          inert={!assistantVisible}
           opacity={!assistantVisible ? 0 : undefined}
           pointerEvents={!assistantVisible ? 'none' : undefined}
         >
           <ResizeHandle
-            ref={assistantRef}
+            targetRef={assistantRef}
             position="left"
             onResize={(newValue) => {
               dispatch({
