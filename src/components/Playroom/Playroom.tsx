@@ -4,7 +4,7 @@ import { CodeXml, PanelBottomClose, PanelLeftClose } from 'lucide-react';
 import {
   type ComponentProps,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -53,7 +53,6 @@ export default () => {
   ] = useContext(StoreContext);
   useDocumentTitle({ title });
 
-  const lastHidden = useRef(editorHidden);
   const hideActionSource = useRef<'editor' | null>(null);
   const editorRef = useRef<HTMLElement | null>(null);
   const showCodeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -65,25 +64,19 @@ export default () => {
   const editorVisible = panelsVisible && !editorHidden;
   const hasNoStoredPlayrooms = Object.entries(storedPlayrooms).length === 0;
 
-  useEffect(() => {
-    if (
-      lastHidden.current !== editorHidden &&
-      hideActionSource.current === 'editor'
-    ) {
-      if (editorHidden) {
-        // Remove in favour of direct DOM attribute when we drop React 18 support
-        editorRef.current?.setAttribute('inert', '');
+  useLayoutEffect(() => {
+    // Remove in favour of direct DOM attribute when we drop React 18 support
+    editorRef.current?.toggleAttribute('inert', !editorVisible);
+
+    if (hideActionSource.current === 'editor') {
+      if (!editorVisible) {
         showCodeButtonRef.current?.focus();
       } else {
-        // Remove in favour of direct DOM attribute when we drop React 18 support
-        editorRef.current?.removeAttribute('inert');
         hideCodeButtonRef.current?.focus();
       }
-
       hideActionSource.current = null;
     }
-    lastHidden.current = editorHidden;
-  }, [editorHidden]);
+  }, [editorVisible]);
 
   return (
     <Box

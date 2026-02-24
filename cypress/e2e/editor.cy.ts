@@ -15,6 +15,7 @@ import {
   jumpToLine,
   cmdPlus,
   moveBy,
+  editorPositionViaMenu,
 } from '../support/utils';
 
 describe('Editor', () => {
@@ -68,7 +69,7 @@ describe('Editor', () => {
     `);
   });
 
-  it('editor visibility', () => {
+  it.only('editor visibility', () => {
     loadPlayroom();
     // Hide code
     cy.findByRole('button', { name: 'Hide code' }).click();
@@ -79,6 +80,25 @@ describe('Editor', () => {
     cy.findByRole('button', { name: 'Show code' }).click();
     getCodeEditor().should('be.visible');
     cy.findByRole('button', { name: 'Hide code' }).should('have.focus');
+
+    // Test editor is interactive after toggling visibility by editor buttons
+    getCodeEditor().click();
+    typeCode('TEST');
+    assertCodePaneContains('TEST');
+
+    // Hide code
+    cy.findByRole('button', { name: 'Hide code' }).click();
+    getCodeEditor().should('not.be.visible');
+    cy.findByRole('button', { name: 'Show code' }).should('have.focus');
+
+    // Show code by menu
+    editorPositionViaMenu('bottom');
+    getCodeEditor().should('be.visible');
+
+    // Test editor is interactive after toggling visibility by menu
+    getCodeEditor().click();
+    typeCode('MENU');
+    assertCodePaneContains('TESTMENU');
   });
 
   describe('Editor actions', () => {
