@@ -69,7 +69,7 @@ describe('Editor', () => {
     `);
   });
 
-  it.only('editor visibility', () => {
+  it('editor visibility', () => {
     loadPlayroom();
     // Hide code
     cy.findByRole('button', { name: 'Hide code' }).click();
