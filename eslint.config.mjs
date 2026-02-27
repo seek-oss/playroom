@@ -37,6 +37,30 @@ export default defineConfig([
       'no-process-exit': 0,
     },
   },
+  /** Should feed back upstream to eslint-config-seek */
+  {
+    files: ['cypress/**/*.cy.{js,ts}'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "CallExpression[callee.object.name='it'][callee.property.name='only']",
+          message: 'Focused tests with it.only() are not allowed',
+        },
+        {
+          selector:
+            "CallExpression[callee.object.name='describe'][callee.property.name='only']",
+          message: 'Focused tests with describe.only() are not allowed',
+        },
+        {
+          selector:
+            "CallExpression[callee.object.name='context'][callee.property.name='only']",
+          message: 'Focused tests with context.only() are not allowed',
+        },
+      ],
+    },
+  },
   {
     ignores: ['**/dist'],
   },

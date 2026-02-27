@@ -1,5 +1,13 @@
 # playroom
 
+## 1.2.1
+
+### Patch Changes
+
+- [#481](https://github.com/seek-oss/playroom/pull/481) [`5ee8ccb`](https://github.com/seek-oss/playroom/commit/5ee8ccbb715e084d23ec440241b1affd06354ec7) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Editor: Ensure interactivity after toggling visibility via menu
+
+  Fixes an issue where the editor would remain `inert` when hidden via the "Hide Code" button and then shown via the menu.
+
 ## 1.2.0
 
 ### Minor Changes

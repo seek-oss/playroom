@@ -4,7 +4,7 @@ import { CodeXml, PanelBottomClose, PanelLeftClose } from 'lucide-react';
 import {
   type ComponentProps,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -71,7 +71,7 @@ export default () => {
     assistantEnabled && panelsVisible && !assistantHidden;
   const hasNoStoredPlayrooms = Object.entries(storedPlayrooms).length === 0;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Remove in favour of direct DOM attribute when we drop React 18 support
     editorRef.current?.toggleAttribute('inert', !editorVisible);
 
@@ -85,7 +85,7 @@ export default () => {
     }
   }, [editorVisible]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Remove in favour of direct DOM attribute when we drop React 18 support
     assistantRef.current?.toggleAttribute('inert', !assistantVisible);
   }, [assistantVisible]);
