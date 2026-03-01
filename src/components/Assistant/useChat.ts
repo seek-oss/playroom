@@ -14,9 +14,6 @@ export type AssistantMessage = {
 interface UseOpenAIChatProps {
   instructions?: string;
   initialMessages?: AssistantMessage[];
-  onUpdate?: (assistantMessage: AssistantMessage) => void;
-  onFinish?: (assistantMessage: AssistantMessage) => void;
-  onError?: (err: Error) => void;
 }
 
 // Only check if it starts with `{` as the end is not available until
@@ -56,9 +53,6 @@ type StreamingAssistantMessage = AssistantMessage & { __isStreaming?: boolean };
 export function useChat({
   instructions,
   initialMessages = [],
-  onUpdate,
-  onFinish,
-  onError,
 }: UseOpenAIChatProps) {
   const [messages, setMessages] =
     useState<StreamingAssistantMessage[]>(initialMessages);
@@ -135,6 +129,7 @@ export function useChat({
         model,
         messages: chatMessages,
         stream: true,
+        max_tokens: 8192,
       });
 
       streamControllerRef.current = stream.controller;
@@ -185,7 +180,6 @@ export function useChat({
               // Set streaming flag to remove message if user interrupts before stream finishes
               tempMessage.__isStreaming = true;
               setMessages([...newMessages, tempMessage]);
-              onUpdate?.(tempMessage);
             }
           } catch {}
         } else if (chunk.choices[0]?.finish_reason === 'stop') {
@@ -196,18 +190,38 @@ export function useChat({
 
           setMessages([...newMessages, finalAssistantMessage]);
           setLoading(false);
-          onUpdate?.(finalAssistantMessage);
-          onFinish?.(finalAssistantMessage);
+        } else if (chunk.choices[0]?.finish_reason === 'length') {
+          // const truncatedMessage = {
+          //   id: self.crypto.randomUUID(),
+          //   role: 'system' as const,
+          //   content: `Here is where you were cut off. If the user wants to continue:\n\n${messageContent}`,
+          //   variants: [],
+          // };
+
+          setMessages(() => [
+            ...newMessages,
+            // truncatedMessage,
+            {
+              id: self.crypto.randomUUID(),
+              role: 'assistant',
+              content: 'Sorry, I got cut off because I reached my token limit.',
+              variants: [],
+            },
+          ]);
+          setLoading(false);
+        } else {
+          throw new Error(
+            `Unhandled finish reason: ${chunk.choices[0]?.finish_reason}`
+          );
         }
       }
     } catch (err) {
-      const errorMsg =
+      setErrorMessage(
         err instanceof Error
           ? err.message
-          : 'An error occurred while generating UI';
-      setErrorMessage(errorMsg);
+          : 'An error occurred while generating UI'
+      );
       setLoading(false);
-      onError?.(err instanceof Error ? err : new Error('Unknown error'));
     }
   };
 
