@@ -50,7 +50,7 @@
     "format": "pnpm lint:eslint --fix && prettier --write '**/*.{js,md,ts,tsx}'",
     "version": "changeset version",
     "release": "pnpm package && changeset publish",
-    "package": "tsdown && vite build",
+    "package": "tsdown && tsdown --config ./tsdown.src.config.ts",
     "test": "jest src lib",
     "post-commit-status": "node scripts/postCommitStatus.js",
     "deploy-preview": "surge -p ./cypress/projects/themed/dist",
@@ -143,13 +143,11 @@
     "lint-staged": "^15.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "rollup-plugin-node-externals": "^8.1.2",
     "serve": "^14.2.5",
     "start-server-and-test": "^2.0.11",
     "surge": "^0.24.6",
     "tsdown": "^0.20.0",
-    "typescript": ">=5.0.0",
-    "vite": "^7.3.1"
+    "typescript": ">=5.0.0"
   },
   "peerDependencies": {
     "react": "^18 || ^19",
