@@ -15,6 +15,12 @@
     "lib": ["dom", "es2022"],
     "target": "es2022"
   },
-  "include": ["src", "lib", "utils", "tsdown.config.ts"],
+  "include": [
+    "src",
+    "lib",
+    "utils",
+    "tsdown.config.ts",
+    "tsdown.src.config.ts"
+  ],
   "exclude": ["cypress", "node_modules"]
 }
