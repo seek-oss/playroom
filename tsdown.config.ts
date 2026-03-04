@@ -6,7 +6,7 @@ export default defineConfig([
     entry: ['utils/index.ts'],
     format: ['cjs', 'esm'],
     dts: true,
-    outDir: 'dist',
+    outDir: 'dist/utils',
     exports: true,
     // Doesn't affect the bundle but suppresses a warning we don't care about
     external: ['__PLAYROOM_ALIAS__FRAME_COMPONENT__'],
@@ -23,11 +23,11 @@ export default defineConfig([
     },
     format: ['esm'],
     dts: false,
-    outDir: 'app',
+    outDir: 'dist/app',
     exports: false,
     platform: 'browser',
     plugins: [vanillaExtractPlugin()],
-    copy: ['src/entries/template.html'],
+    copy: ['src/entries/template.html', { from: 'images', to: 'dist' }],
     // Doesn't affect the bundle but suppresses a warning we don't care about
     external: [
       /\.png/,

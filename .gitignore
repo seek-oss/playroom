@@ -1,5 +1,4 @@
 dist/
-app/
 cypress/videos/
 cypress/screenshots/
 cypress/plugins/
