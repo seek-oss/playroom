@@ -20,7 +20,7 @@
     "lib",
     "utils",
     "tsdown.config.ts",
-    "tsdown.src.config.ts"
+    "tsdown.app.config.ts"
   ],
   "exclude": ["cypress", "node_modules"]
 }
