@@ -17,6 +17,7 @@ export default defineConfig({
   exports: false,
   platform: 'browser',
   plugins: [vanillaExtractPlugin()],
+  copy: ['src/entries/template.html'],
   // Doesn't affect the bundle but suppresses a warning we don't care about
   external: [
     /\.png/,
