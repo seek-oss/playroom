@@ -57,6 +57,9 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Build
+        run: pnpm package
+
       - name: Cypress
         run: |
           pnpm cypress:verify
