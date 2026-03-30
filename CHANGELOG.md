@@ -1,5 +1,14 @@
 # playroom
 
+## 1.2.2
+
+### Patch Changes
+
+- [#485](https://github.com/seek-oss/playroom/pull/485) [`c1909bf`](https://github.com/seek-oss/playroom/commit/c1909bf380eae30a8223d45ba77dfde2a88b70a3) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Snippets: Improve search filtering
+
+  Ensure that the snippets filtering functionality prioritises `name` over `description` and exact words matches over partial matches.
+  To further improve the predictability, Pascal Case names are treated as separate words.
+
 ## 1.2.1
 
 ### Patch Changes
