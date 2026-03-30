@@ -78,6 +78,7 @@ export const snippetsContainer = style([
     overflow: 'auto',
     paddingX: 'none',
     margin: 'none',
+    boxSizing: 'border-box',
   }),
   {
     listStyle: 'none',

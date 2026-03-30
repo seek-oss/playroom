@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { Command } from 'cmdk-base';
 import { X } from 'lucide-react';
 import {
+  useMemo,
   useState,
   useRef,
   useContext,
@@ -86,6 +87,125 @@ const SnippetsGroup = ({
     <>{children}</>
   );
 
+const SnippetItem = ({
+  snippet,
+  onSelect,
+}: {
+  snippet: SnippetWithId;
+  onSelect: (snippet: SnippetWithId) => void;
+}) => (
+  <Command.Item
+    key={snippet.id}
+    value={snippet.id}
+    onSelect={() => onSelect(snippet)}
+    className={styles.snippet}
+  >
+    <Tooltip
+      delay={true}
+      open={
+        /**
+         * Only show tooltip if likely to truncate, i.e. > 50 characters.
+         */
+        [snippet.name, snippet.description].join(' ').length < 50
+          ? false
+          : undefined
+      }
+      side="right"
+      sideOffset={16}
+      label={
+        <>
+          {snippet.name}
+          <br />
+          {snippet.description}
+        </>
+      }
+      trigger={
+        <span className={styles.tooltipTrigger}>
+          <Text truncate>
+            <span className={styles.name}>{snippet.name}</span>{' '}
+            <Secondary>{snippet.description}</Secondary>
+          </Text>
+        </span>
+      }
+    />
+  </Command.Item>
+);
+
+const resolveScore = (
+  item: string,
+  search: string,
+  modifier: number = 0
+): number => {
+  const lowerItem = item.toLowerCase();
+
+  if (lowerItem === search) {
+    // Is exact match
+    return 1 + modifier;
+  } else if (
+    lowerItem.split(/\s+/).some((word) => word === search) ||
+    /*
+     * Compare to unmodified item, allowing PascalCase to be treated as separate words.
+     * Regex also handles uppercase acronyms, e.g., 'MyHTMLComponent' => ['My', 'HTML', 'Component']
+     */
+    item
+      .split(/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/)
+      .some((word) => word.toLowerCase() === search)
+  ) {
+    // Contains word that is exact match
+    return 0.95 + modifier;
+  } else if (lowerItem.startsWith(search)) {
+    // Starts with match
+    return 0.9 + modifier;
+  } else if (lowerItem.split(/\s+/).some((word) => word.startsWith(search))) {
+    // Contains word that starts with match
+    return 0.85 + modifier;
+  } else if (lowerItem.includes(search)) {
+    // Contains search character sequence
+    return 0.75 + modifier;
+  }
+
+  return 0;
+};
+
+const scoreSnippet = (snippet: SnippetWithId, search: string): number => {
+  const name = snippet.name;
+  const description = snippet.description;
+  const searchTerm = search.toLowerCase().trim();
+
+  if (!searchTerm) {
+    return 1;
+  }
+
+  const scoreForName = resolveScore(name, searchTerm);
+  if (scoreForName > 0) {
+    return scoreForName;
+  }
+
+  if (description) {
+    const scoreForDescription = resolveScore(description, searchTerm, -0.04);
+    if (scoreForDescription > 0) {
+      return scoreForDescription;
+    }
+  }
+
+  // Loose subsequence: every character of search must appear in order in value
+  let position = 0;
+  for (const char of searchTerm) {
+    const idx = `${name}${description ? ` ${description}` : ''}`
+      .toLowerCase()
+      .indexOf(char, position);
+    if (idx === -1) {
+      return 0;
+    }
+    position = idx + 1;
+  }
+  return 0.3;
+};
+
+const allSnippets: SnippetWithId[] = snippetsByGroup.flatMap(
+  ([, items]) => items
+);
+
 const initialMatchedSnippet = ' ';
 const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
   const [matchedSnippet, setMatchedSnippet] = useState(initialMatchedSnippet);
@@ -96,12 +216,23 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
   }, snippetPreviewDebounce);
 
   const hasGroups = snippetsByGroup.length > 1;
+  const filteredSnippets = useMemo(() => {
+    const s = inputValue.trim();
+    if (!s) return null;
+    return allSnippets
+      .map((snippet) => ({ snippet, score: scoreSnippet(snippet, s) }))
+      .filter(({ score }) => score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map(({ snippet }) => snippet);
+  }, [inputValue]);
+  const isFiltering = filteredSnippets !== null;
 
   return (
     <div className={styles.root}>
       <Command
         label="Search snippets"
         loop
+        shouldFilter={false}
         value={matchedSnippet}
         onValueChange={(v) => {
           debouncedPreview(snippetsById[v]);
@@ -143,7 +274,7 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
         <Command.List
           className={clsx({
             [styles.snippetsContainer]: true,
-            [styles.noGroupsVerticalPadding]: !hasGroups,
+            [styles.noGroupsVerticalPadding]: !hasGroups || isFiltering,
             [styles.groupHeaderScrollPadding]: hasGroups,
           })}
           label="Filtered snippets"
@@ -152,47 +283,29 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
             <Text tone="secondary">No snippets matching “{inputValue}”</Text>
           </Command.Empty>
 
-          {snippetsByGroup.map(([group, groupSnippets]) => (
-            <SnippetsGroup key={group} enableGroups={hasGroups} group={group}>
-              {groupSnippets.map((snippet) => (
-                <Command.Item
+          {isFiltering
+            ? filteredSnippets.map((snippet) => (
+                <SnippetItem
                   key={snippet.id}
-                  value={snippet.id}
-                  onSelect={() => onSelect(snippet)}
-                  className={styles.snippet}
+                  snippet={snippet}
+                  onSelect={onSelect}
+                />
+              ))
+            : snippetsByGroup.map(([group, groupSnippets]) => (
+                <SnippetsGroup
+                  key={group}
+                  enableGroups={hasGroups}
+                  group={group}
                 >
-                  <Tooltip
-                    delay={true}
-                    open={
-                      /**
-                       * Only show tooltip if likely to truncate, i.e. > 60 characters.
-                       */
-                      [snippet.name, snippet.description].join(' ').length < 60
-                        ? false
-                        : undefined
-                    }
-                    side="right"
-                    sideOffset={16}
-                    label={
-                      <>
-                        {snippet.name}
-                        <br />
-                        {snippet.description}
-                      </>
-                    }
-                    trigger={
-                      <span className={styles.tooltipTrigger}>
-                        <Text truncate>
-                          <span className={styles.name}>{snippet.name}</span>{' '}
-                          <Secondary>{snippet.description}</Secondary>
-                        </Text>
-                      </span>
-                    }
-                  />
-                </Command.Item>
+                  {groupSnippets.map((snippet) => (
+                    <SnippetItem
+                      key={snippet.id}
+                      snippet={snippet}
+                      onSelect={onSelect}
+                    />
+                  ))}
+                </SnippetsGroup>
               ))}
-            </SnippetsGroup>
-          ))}
         </Command.List>
       </Command>
     </div>
