@@ -271,7 +271,7 @@ export default function Frames({ code }: FramesProps) {
     { selectedWidths, selectedThemes, title, frameSettings, inspectMode },
     dispatch,
   ] = useContext(StoreContext);
-  const { scrollToLine, highlightLine } = useEditor();
+  const { scrollToLine, highlightLine, fadeHighlight } = useEditor();
   const themes = selectedThemes.length > 0 ? selectedThemes : availableThemes;
   const widths = selectedWidths.length > 0 ? selectedWidths : availableWidths;
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
@@ -313,7 +313,11 @@ export default function Frames({ code }: FramesProps) {
         });
       }
     });
-  }, [inspectMode]);
+
+    if (!inspectMode) {
+      fadeHighlight();
+    }
+  }, [inspectMode, fadeHighlight]);
 
   const handleInspectHover = useCallback(
     (line: number | null) => {
@@ -340,8 +344,7 @@ export default function Frames({ code }: FramesProps) {
 
   const handleInspectExit = useCallback(() => {
     dispatch({ type: 'disableInspectMode' });
-    highlightLine(null);
-  }, [dispatch, highlightLine]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!inspectMode) return;

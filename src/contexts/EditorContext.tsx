@@ -14,6 +14,7 @@ interface EditorValue {
   runCommand: (command: EditorCommand) => void;
   scrollToLine: (line: number) => void;
   highlightLine: (line: number | null) => void;
+  fadeHighlight: () => void;
 }
 
 const EditorContext = createContext<EditorValue | null>(null);
@@ -58,14 +59,26 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
     }, 150);
   }, []);
 
+  const fadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const highlightLine = useCallback((line: number | null) => {
     if (!editorRef.current) return;
+
+    if (fadeTimerRef.current) {
+      clearTimeout(fadeTimerRef.current);
+      fadeTimerRef.current = null;
+    }
 
     if (highlightLineRef.current) {
       editorRef.current.removeLineClass(
         highlightLineRef.current,
         'background',
         'cm-inspect-highlight'
+      );
+      editorRef.current.removeLineClass(
+        highlightLineRef.current,
+        'background',
+        'cm-inspect-highlight-fade'
       );
       highlightLineRef.current = null;
     }
@@ -76,12 +89,50 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
         'background',
         'cm-inspect-highlight'
       );
+    } else if (line === null && highlightLineRef.current === null) {
+      return;
     }
+  }, []);
+
+  const fadeHighlight = useCallback(() => {
+    if (!editorRef.current || !highlightLineRef.current) {
+      return;
+    }
+
+    editorRef.current.removeLineClass(
+      highlightLineRef.current,
+      'background',
+      'cm-inspect-highlight'
+    );
+    editorRef.current.addLineClass(
+      highlightLineRef.current,
+      'background',
+      'cm-inspect-highlight-fade'
+    );
+
+    fadeTimerRef.current = setTimeout(() => {
+      if (!editorRef.current || !highlightLineRef.current) {
+        return;
+      }
+      editorRef.current.removeLineClass(
+        highlightLineRef.current,
+        'background',
+        'cm-inspect-highlight-fade'
+      );
+      highlightLineRef.current = null;
+      fadeTimerRef.current = null;
+    }, 1000);
   }, []);
 
   return (
     <EditorContext.Provider
-      value={{ registerEditor, runCommand, scrollToLine, highlightLine }}
+      value={{
+        registerEditor,
+        runCommand,
+        scrollToLine,
+        highlightLine,
+        fadeHighlight,
+      }}
     >
       {children}
     </EditorContext.Provider>

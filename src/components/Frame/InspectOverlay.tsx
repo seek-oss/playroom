@@ -4,6 +4,8 @@ import { PlayroomInspectSource } from './frameMessenger';
 
 import * as styles from './InspectOverlay.css';
 
+const INSPECT_LINE_KEY = 'data-playroom-line';
+
 interface HighlightRect {
   top: number;
   left: number;
@@ -21,30 +23,103 @@ function getVisibleRect(el: Element): HighlightRect | null {
       height: rect.height,
     };
   }
-  // For display:contents elements, compute bounding box from children
-  const children = el.children;
-  if (children.length === 0) {
-    return null;
+  return null;
+}
+
+function getPropsKey(el: Element): string | undefined {
+  return Object.keys(el).find((k) => k.startsWith('__reactProps$'));
+}
+
+function getFiberKey(el: Element): string | undefined {
+  return Object.keys(el).find((k) => k.startsWith('__reactFiber$'));
+}
+
+interface InspectResult {
+  line: number;
+  element: Element;
+}
+
+function findInspectTarget(el: Element): InspectResult | null {
+  // Check __reactProps$ on the hovered DOM element
+  const propsKey = getPropsKey(el);
+  if (propsKey) {
+    const props = (el as any)[propsKey];
+    if (props?.[INSPECT_LINE_KEY] != null) {
+      return { line: Number(props[INSPECT_LINE_KEY]), element: el };
+    }
   }
 
-  let top = Infinity;
-  let left = Infinity;
-  let bottom = -Infinity;
-  let right = -Infinity;
-
-  for (const child of Array.from(children)) {
-    const childRect = child.getBoundingClientRect();
-    if (childRect.width === 0 && childRect.height === 0) continue;
-    top = Math.min(top, childRect.top);
-    left = Math.min(left, childRect.left);
-    bottom = Math.max(bottom, childRect.bottom);
-    right = Math.max(right, childRect.right);
+  // Walk up DOM tree
+  let child: Element = el;
+  let current: Element | null = el.parentElement;
+  while (current) {
+    const pk = getPropsKey(current);
+    if (pk) {
+      const props = (current as any)[pk];
+      // Check children for component boundaries matching our hovered subtree
+      const childLine = findLineForChild(props?.children, child, current);
+      if (childLine != null) {
+        return { line: childLine, element: child };
+      }
+      if (props?.[INSPECT_LINE_KEY] != null) {
+        return { line: Number(props[INSPECT_LINE_KEY]), element: current };
+      }
+    }
+    child = current;
+    current = current.parentElement;
   }
 
-  if (top === Infinity) {
-    return null;
+  return null;
+}
+
+function findLineForChild(
+  children: any,
+  child: Element,
+  parent: Element
+): number | null {
+  if (!children) return null;
+
+  const flatChildren = flattenChildren(children);
+  const fiberKey = getFiberKey(child);
+  if (!fiberKey) return null;
+
+  let fiber = (child as any)[fiberKey];
+  while (fiber) {
+    if (fiber.stateNode === parent) break;
+
+    if (typeof fiber.type === 'function' || typeof fiber.type === 'object') {
+      for (const reactChild of flatChildren) {
+        if (!reactChild || typeof reactChild !== 'object') continue;
+        if (
+          reactChild.type === fiber.type &&
+          reactChild.props?.[INSPECT_LINE_KEY] != null
+        ) {
+          return Number(reactChild.props[INSPECT_LINE_KEY]);
+        }
+      }
+    }
+    fiber = fiber.return;
   }
-  return { top, left, width: right - left, height: bottom - top };
+
+  return null;
+}
+
+function flattenChildren(children: any): any[] {
+  if (!children) return [];
+  const arr = Array.isArray(children) ? children : [children];
+  const result: any[] = [];
+  for (const child of arr) {
+    if (!child || typeof child !== 'object') continue;
+    if (
+      child.type === Symbol.for('react.fragment') ||
+      child.type === Symbol.for('react.transitional.element')
+    ) {
+      result.push(...flattenChildren(child.props?.children));
+    } else {
+      result.push(child);
+    }
+  }
+  return result;
 }
 
 export const InspectOverlay = () => {
@@ -122,8 +197,8 @@ export const InspectOverlay = () => {
       return;
     }
 
-    const annotated = el.closest('[data-playroom-line]');
-    if (!annotated) {
+    const target = findInspectTarget(el);
+    if (!target) {
       setHighlightRect(null);
       if (lastLineRef.current !== null) {
         lastLineRef.current = null;
@@ -135,14 +210,12 @@ export const InspectOverlay = () => {
       return;
     }
 
-    const visibleRect = getVisibleRect(annotated);
-    setHighlightRect(visibleRect);
+    setHighlightRect(getVisibleRect(target.element));
 
-    const line = Number(annotated.getAttribute('data-playroom-line'));
-    if (line !== lastLineRef.current) {
-      lastLineRef.current = line;
+    if (target.line !== lastLineRef.current) {
+      lastLineRef.current = target.line;
       window.parent.postMessage(
-        { source: PlayroomInspectSource, type: 'hover', line },
+        { source: PlayroomInspectSource, type: 'hover', line: target.line },
         '*'
       );
     }
@@ -158,11 +231,10 @@ export const InspectOverlay = () => {
     overlay.style.pointerEvents = '';
 
     if (el) {
-      const annotated = el.closest('[data-playroom-line]');
-      if (annotated) {
-        const line = Number(annotated.getAttribute('data-playroom-line'));
+      const target = findInspectTarget(el);
+      if (target) {
         window.parent.postMessage(
-          { source: PlayroomInspectSource, type: 'select', line },
+          { source: PlayroomInspectSource, type: 'select', line: target.line },
           '*'
         );
       }
