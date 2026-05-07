@@ -336,6 +336,7 @@ export default function Frames({ code }: FramesProps) {
 
   const handleInspectSelect = useCallback(
     (line: number) => {
+      dispatch({ type: 'showPanels' });
       dispatch({ type: 'showEditor' });
       dispatch({
         type: 'updateCursorPosition',

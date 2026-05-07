@@ -135,6 +135,7 @@ export type Action =
   | { type: 'updateEditorHeight'; payload: { size: number } }
   | { type: 'updateEditorWidth'; payload: { size: number } }
   | { type: 'togglePanelVisibility' }
+  | { type: 'showPanels' }
   | {
       type: 'updateSelectedThemes';
       payload: { themes: typeof availableThemes };
@@ -406,6 +407,13 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         panelsVisible: !state.panelsVisible,
+      };
+    }
+
+    case 'showPanels': {
+      return {
+        ...state,
+        panelsVisible: true,
       };
     }
 
