@@ -20,6 +20,7 @@ export const highlight = style([
     borderRadius: 'small',
   }),
   {
+    zIndex: 99999,
     background: colorPaletteVars.background.inspectOverlay,
     transition: 'all 50ms ease',
   },
