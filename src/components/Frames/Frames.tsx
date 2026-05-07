@@ -352,7 +352,9 @@ export default function Frames({ code }: FramesProps) {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!inspectMode) return;
+    if (!inspectMode) {
+      return;
+    }
 
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;

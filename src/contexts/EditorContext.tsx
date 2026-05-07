@@ -62,7 +62,9 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
   const fadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const highlightLine = useCallback((line: number | null) => {
-    if (!editorRef.current) return;
+    if (!editorRef.current) {
+      return;
+    }
 
     if (fadeTimerRef.current) {
       clearTimeout(fadeTimerRef.current);

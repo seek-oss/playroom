@@ -218,7 +218,9 @@ const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
   const hasGroups = snippetsByGroup.length > 1;
   const filteredSnippets = useMemo(() => {
     const s = inputValue.trim();
-    if (!s) return null;
+    if (!s) {
+      return null;
+    }
     return allSnippets
       .map((snippet) => ({ snippet, score: scoreSnippet(snippet, s) }))
       .filter(({ score }) => score > 0)

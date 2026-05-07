@@ -147,7 +147,9 @@ export const InspectMessageReceiver = ({
 }: InspectMessageReceiverProps) => {
   useEffect(() => {
     const handler = (event: MessageEvent) => {
-      if (event.data?.source !== PlayroomInspectSource) return;
+      if (event.data?.source !== PlayroomInspectSource) {
+        return;
+      }
 
       switch (event.data.type) {
         case 'hover':

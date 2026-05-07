@@ -4,8 +4,6 @@ import { PlayroomInspectSource } from './frameMessenger';
 
 import * as styles from './InspectOverlay.css';
 
-const INSPECT_LINE_KEY = 'data-playroom-line';
-
 interface HighlightRect {
   top: number;
   left: number;
@@ -26,12 +24,23 @@ function getVisibleRect(el: Element): HighlightRect | null {
   return null;
 }
 
-function getPropsKey(el: Element): string | undefined {
-  return Object.keys(el).find((k) => k.startsWith('__reactProps$'));
-}
-
 function getFiberKey(el: Element): string | undefined {
   return Object.keys(el).find((k) => k.startsWith('__reactFiber$'));
+}
+
+function isLineMarker(fiber: any): boolean {
+  return fiber.type?.__playroomLineMarker === true;
+}
+
+function findHostElement(fiber: any): Element | null {
+  let current = fiber.child;
+  while (current) {
+    if (current.stateNode instanceof Element) {
+      return current.stateNode;
+    }
+    current = current.child;
+  }
+  return null;
 }
 
 interface InspectResult {
@@ -40,86 +49,24 @@ interface InspectResult {
 }
 
 function findInspectTarget(el: Element): InspectResult | null {
-  // Check __reactProps$ on the hovered DOM element
-  const propsKey = getPropsKey(el);
-  if (propsKey) {
-    const props = (el as any)[propsKey];
-    if (props?.[INSPECT_LINE_KEY] != null) {
-      return { line: Number(props[INSPECT_LINE_KEY]), element: el };
-    }
+  const fiberKey = getFiberKey(el);
+  if (!fiberKey) {
+    return null;
   }
 
-  // Walk up DOM tree
-  let child: Element = el;
-  let current: Element | null = el.parentElement;
-  while (current) {
-    const pk = getPropsKey(current);
-    if (pk) {
-      const props = (current as any)[pk];
-      // Check children for component boundaries matching our hovered subtree
-      const childLine = findLineForChild(props?.children, child, current);
-      if (childLine != null) {
-        return { line: childLine, element: child };
-      }
-      if (props?.[INSPECT_LINE_KEY] != null) {
-        return { line: Number(props[INSPECT_LINE_KEY]), element: current };
-      }
-    }
-    child = current;
-    current = current.parentElement;
-  }
-
-  return null;
-}
-
-function findLineForChild(
-  children: any,
-  child: Element,
-  parent: Element
-): number | null {
-  if (!children) return null;
-
-  const flatChildren = flattenChildren(children);
-  const fiberKey = getFiberKey(child);
-  if (!fiberKey) return null;
-
-  let fiber = (child as any)[fiberKey];
+  let fiber = (el as any)[fiberKey];
   while (fiber) {
-    if (fiber.stateNode === parent) break;
-
-    if (typeof fiber.type === 'function' || typeof fiber.type === 'object') {
-      for (const reactChild of flatChildren) {
-        if (!reactChild || typeof reactChild !== 'object') continue;
-        if (
-          reactChild.type === fiber.type &&
-          reactChild.props?.[INSPECT_LINE_KEY] != null
-        ) {
-          return Number(reactChild.props[INSPECT_LINE_KEY]);
-        }
+    if (isLineMarker(fiber)) {
+      const line = fiber.memoizedProps.line;
+      const element = findHostElement(fiber);
+      if (element) {
+        return { line, element };
       }
     }
     fiber = fiber.return;
   }
 
   return null;
-}
-
-function flattenChildren(children: any): any[] {
-  if (!children) return [];
-  const arr = Array.isArray(children) ? children : [children];
-  const result: any[] = [];
-  for (const child of arr) {
-    if (!child || typeof child !== 'object') continue;
-    if (
-      child.type === Symbol.for('react.fragment') ||
-      child.type === Symbol.for('react.transitional.element')
-    ) {
-      result.push(...flattenChildren(child.props?.children));
-    } else {
-      result.push(child);
-    }
-  }
-  return result;
 }
 
 export const InspectOverlay = () => {
@@ -155,29 +102,6 @@ export const InspectOverlay = () => {
       window.removeEventListener('scroll', handleScroll, true);
     };
   }, []);
-
-  // Fallback: detect when annotated elements appear in the DOM
-  useEffect(() => {
-    if (enabled) {
-      return;
-    }
-
-    const observer = new MutationObserver(() => {
-      if (document.querySelector('[data-playroom-line]')) {
-        setEnabled(true);
-        observer.disconnect();
-      }
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['data-playroom-line'],
-    });
-
-    return () => observer.disconnect();
-  }, [enabled]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     const overlay = e.currentTarget as HTMLElement;

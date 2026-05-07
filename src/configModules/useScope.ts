@@ -8,16 +8,22 @@ import {
 
 import components from './components';
 
-const INSPECT_LINE_KEY = 'data-playroom-line';
+const LineMarker: any = ({
+  children,
+}: {
+  line: number;
+  children: React.ReactNode;
+}) => children;
+LineMarker.__playroomLineMarker = true;
 
 const inspectCreateElement = (type: any, props: any, ...children: any[]) => {
   if (props && props.__source) {
     const { __source, __self, ...restProps } = props;
     const line = __source.lineNumber - 1;
     return createElement(
-      type,
-      { ...restProps, [INSPECT_LINE_KEY]: line },
-      ...children
+      LineMarker,
+      { line },
+      createElement(type, restProps, ...children)
     );
   }
   return createElement(type, props, ...children);
