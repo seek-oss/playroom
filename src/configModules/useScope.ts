@@ -8,6 +8,28 @@ import {
 
 import components from './components';
 
+const displayContents = { display: 'contents' };
+
+const inspectCreateElement = (type: any, props: any, ...children: any[]) => {
+  if (props && props.__source) {
+    const { __source, __self, ...restProps } = props;
+    const line = __source.lineNumber - 1;
+    if (typeof type === 'string') {
+      return createElement(
+        type,
+        { ...restProps, 'data-playroom-line': line },
+        ...children
+      );
+    }
+    return createElement(
+      'span',
+      { 'data-playroom-line': line, style: displayContents },
+      createElement(type, restProps, ...children)
+    );
+  }
+  return createElement(type, props, ...children);
+};
+
 export default () => {
   const userScope = {
     ...(userScopeFromConfig() ?? {}),
@@ -29,7 +51,7 @@ export default () => {
   return {
     ...userScope,
     React,
-    [ReactCreateElementPragma]: createElement,
+    [ReactCreateElementPragma]: inspectCreateElement,
     [ReactFragmentPragma]: Fragment,
   };
 };

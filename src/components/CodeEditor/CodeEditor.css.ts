@@ -332,3 +332,7 @@ globalStyle('.CodeMirror-dialog button:focus-visible', {
 globalStyle('.CodeMirror-dialog button:hover', {
   background: colorPaletteVars.background.selection,
 });
+
+globalStyle('.cm-inspect-highlight', {
+  backgroundColor: colorPaletteVars.background.inspectOverlay,
+});

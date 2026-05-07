@@ -1,5 +1,6 @@
 import type { FrameSettingsValues } from '../../utils';
 import Frame from '../components/Frame/Frame';
+import { InspectOverlay } from '../components/Frame/InspectOverlay';
 import {
   ErrorMessageSender,
   ScreenshotMessageReceiver,
@@ -40,6 +41,7 @@ renderElement(
             frameSettings={mergedFrameSettings}
             ErrorComponent={ErrorMessageSender}
           />
+          <InspectOverlay />
         </>
       );
     }}

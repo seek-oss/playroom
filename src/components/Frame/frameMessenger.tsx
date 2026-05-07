@@ -116,3 +116,59 @@ export const ScreenshotMessageReceiver = () => {
 
   return null;
 };
+
+/**
+ * -------------------
+ *  Inspect Message
+ * -------------------
+ */
+const PlayroomInspectSource = 'Playroom Inspect';
+
+export const inspectMessageSender = ({
+  messageWindow,
+  action,
+}: {
+  messageWindow: Window;
+  action: 'enable' | 'disable';
+}) => {
+  messageWindow.postMessage({ source: PlayroomInspectSource, action }, '*');
+};
+
+interface InspectMessageReceiverProps {
+  onHover: (line: number | null) => void;
+  onSelect: (line: number) => void;
+  onExit: () => void;
+}
+
+export const InspectMessageReceiver = ({
+  onHover,
+  onSelect,
+  onExit,
+}: InspectMessageReceiverProps) => {
+  useEffect(() => {
+    const handler = (event: MessageEvent) => {
+      if (event.data?.source !== PlayroomInspectSource) return;
+
+      switch (event.data.type) {
+        case 'hover':
+          onHover(event.data.line ?? null);
+          break;
+        case 'select':
+          if (typeof event.data.line === 'number') {
+            onSelect(event.data.line);
+          }
+          break;
+        case 'exit':
+          onExit();
+          break;
+      }
+    };
+
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, [onHover, onSelect, onExit]);
+
+  return null;
+};
+
+export { PlayroomInspectSource };

@@ -86,6 +86,7 @@ interface State {
   previewRenderCode?: string;
   previewEditorCode?: string;
   highlightLineNumber?: number;
+  inspectMode: boolean;
   snippetsOpen: boolean;
   openDialogOpen: boolean;
   hasSyntaxError?: boolean;
@@ -176,7 +177,9 @@ export type Action =
       payload: {
         id: string;
       };
-    };
+    }
+  | { type: 'enableInspectMode' }
+  | { type: 'disableInspectMode' };
 
 const resetPreview = ({
   previewRenderCode,
@@ -529,6 +532,20 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'enableInspectMode': {
+      return {
+        ...state,
+        inspectMode: true,
+      };
+    }
+
+    case 'disableInspectMode': {
+      return {
+        ...state,
+        inspectMode: false,
+      };
+    }
+
     default:
       return state;
   }
@@ -540,6 +557,7 @@ const initialState: State = {
   id: '',
   code: exampleCode,
   cursorPosition: { line: 0, ch: 0 },
+  inspectMode: false,
   snippetsOpen: false,
   openDialogOpen: false,
   editorHidden: false,

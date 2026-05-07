@@ -21,6 +21,16 @@ export const compileJsx = memoizeOne(
     }).code
 );
 
+export const compileJsxForInspect = memoizeOne(
+  (code: string) =>
+    transform(wrapInFragment(code.trim()), {
+      transforms: ['jsx'],
+      jsxPragma: ReactCreateElementPragma,
+      jsxFragmentPragma: ReactFragmentPragma,
+      production: false,
+    }).code
+);
+
 const parseWithBabel = memoizeOne((code: string) =>
   parseExpression(wrapInFragment(code), {
     plugins: ['jsx'],
