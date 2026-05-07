@@ -241,6 +241,17 @@ export const InspectOverlay = () => {
     }
   }, []);
 
+  const handleMouseLeave = useCallback(() => {
+    setHighlightRect(null);
+    if (lastLineRef.current !== null) {
+      lastLineRef.current = null;
+      window.parent.postMessage(
+        { source: PlayroomInspectSource, type: 'hover', line: null },
+        '*'
+      );
+    }
+  }, []);
+
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       e.preventDefault();
@@ -251,7 +262,9 @@ export const InspectOverlay = () => {
     }
   }, []);
 
-  if (!enabled) return null;
+  if (!enabled) {
+    return null;
+  }
 
   return (
     <>
@@ -269,6 +282,7 @@ export const InspectOverlay = () => {
       <div
         className={styles.overlay}
         onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         tabIndex={0}

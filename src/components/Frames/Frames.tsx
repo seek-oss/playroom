@@ -27,6 +27,7 @@ import { StoreContext } from '../../contexts/StoreContext';
 import { compileJsx, compileJsxForInspect } from '../../utils/compileJsx';
 import usePreviewUrl from '../../utils/usePreviewUrl';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
+import { primaryMod } from '../CodeEditor/editorCommands';
 import {
   ErrorMessageReceiver,
   InspectMessageReceiver,
@@ -111,7 +112,7 @@ const Frame = ({
     <div
       className={clsx({
         [styles.frameContainer]: true,
-        [styles.frameActive]: frameActive,
+        [styles.frameActive]: frameActive || inspectMode,
       })}
       style={assignInlineVars({
         [styles.frameWidth]:
@@ -135,11 +136,13 @@ const Frame = ({
           <div className={styles.frameActionsContainer}>
             <ButtonIcon
               tone="accent"
-              variant={inspectMode ? 'standard' : 'transparent'}
+              variant="transparent"
+              active={inspectMode}
               size="small"
               bleed
               icon={<Crosshair />}
               label="Inspect element"
+              shortcut={[primaryMod, 'Shift', 'C']}
               onClick={() => {
                 dispatch({
                   type: inspectMode
@@ -333,6 +336,7 @@ export default function Frames({ code }: FramesProps) {
 
   const handleInspectSelect = useCallback(
     (line: number) => {
+      dispatch({ type: 'showEditor' });
       dispatch({
         type: 'updateCursorPosition',
         payload: { position: { line, ch: 0 } },
@@ -356,21 +360,12 @@ export default function Frames({ code }: FramesProps) {
       }
     };
 
-    const handleMouseLeave = () => {
-      dispatch({ type: 'disableInspectMode' });
-    };
-
     const frameId = requestAnimationFrame(() => {
       window.addEventListener('click', handleClick);
-      document.documentElement.addEventListener('mouseleave', handleMouseLeave);
     });
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener('click', handleClick);
-      document.documentElement.removeEventListener(
-        'mouseleave',
-        handleMouseLeave
-      );
     };
   }, [inspectMode, dispatch]);
 

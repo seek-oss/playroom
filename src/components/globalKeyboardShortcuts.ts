@@ -45,6 +45,15 @@ export const useGlobalKeyboardShortcutsForWindow = (win: Window | null) => {
             }
             break;
           }
+          case 'c': {
+            if (e.shiftKey) {
+              e.preventDefault();
+              dispatch({
+                type: inspectMode ? 'disableInspectMode' : 'enableInspectMode',
+              });
+            }
+            break;
+          }
         }
         return;
       }

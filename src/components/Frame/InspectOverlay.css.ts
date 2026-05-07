@@ -17,7 +17,6 @@ export const highlight = style([
   sprinkles({
     position: 'fixed',
     pointerEvents: 'none',
-    borderRadius: 'small',
   }),
   {
     zIndex: 99999,

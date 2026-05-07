@@ -23,6 +23,7 @@ import {
   Eye,
   EyeClosed,
   ChevronDown,
+  Crosshair,
 } from 'lucide-react';
 import {
   type ComponentProps,
@@ -210,6 +211,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
       openDialogOpen,
       code,
       id,
+      inspectMode,
     },
     dispatch,
   ] = useContext(StoreContext);
@@ -316,6 +318,20 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
             </MenuRadioItem>
           </MenuRadioGroup>
         </Menu>
+
+        <MenuItem
+          icon={Crosshair}
+          onClick={() =>
+            dispatch({
+              type: inspectMode ? 'disableInspectMode' : 'enableInspectMode',
+            })
+          }
+          disabled={!hasCode}
+          disabledReason="No active Playroom to inspect"
+          shortcut={[primaryMod, 'Shift', 'C']}
+        >
+          Inspect
+        </MenuItem>
 
         <MenuItem
           icon={panelsVisible ? Eye : EyeClosed}

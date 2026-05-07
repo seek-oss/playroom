@@ -334,11 +334,11 @@ globalStyle('.CodeMirror-dialog button:hover', {
 });
 
 globalStyle('.cm-inspect-highlight', {
-  backgroundColor: `${colorPaletteVars.background.inspectOverlay} !important`,
+  backgroundColor: `${colorPaletteVars.background.textSelection} !important`,
 });
 
 const inspectFadeOut = keyframes({
-  from: { backgroundColor: colorPaletteVars.background.inspectOverlay },
+  from: { backgroundColor: colorPaletteVars.background.textSelection },
   to: { backgroundColor: 'transparent' },
 });
 
