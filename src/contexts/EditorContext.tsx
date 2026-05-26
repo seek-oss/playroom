@@ -49,12 +49,24 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
       if (!editorRef.current) {
         return;
       }
+
+      const rect = editorRef.current
+        .getWrapperElement()
+        .getBoundingClientRect();
+      const topVisibleLine = editorRef.current.lineAtHeight(rect.top, 'window');
+      const bottomVisibleLine = editorRef.current.lineAtHeight(
+        rect.bottom,
+        'window'
+      );
+      const targetLineInView =
+        line > topVisibleLine && line < bottomVisibleLine;
+
       const coords = editorRef.current.charCoords({ line, ch: 0 }, 'local');
       const scrollInfo = editorRef.current.getScrollInfo();
       const targetTop = coords.top - scrollInfo.clientHeight / 2;
       editorRef.current.getScrollerElement().scrollTo({
         top: targetTop,
-        behavior: 'smooth',
+        behavior: targetLineInView ? 'smooth' : 'auto',
       });
     }, 150);
   }, []);
