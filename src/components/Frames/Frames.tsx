@@ -24,7 +24,7 @@ import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths, { type Widths } from '../../configModules/widths';
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
-import { compileJsx, compileJsxForInspect } from '../../utils/compileJsx';
+import { compileJsxForInspect } from '../../utils/compileJsx';
 import usePreviewUrl from '../../utils/usePreviewUrl';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { primaryMod } from '../CodeEditor/editorCommands';
@@ -290,9 +290,7 @@ export default function Frames({ code }: FramesProps) {
   );
 
   try {
-    renderCode.current = inspectMode
-      ? compileJsxForInspect(code)
-      : compileJsx(code);
+    renderCode.current = compileJsxForInspect(code);
   } catch {}
 
   const registerIframeRef = useCallback(

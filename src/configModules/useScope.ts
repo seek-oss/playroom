@@ -8,17 +8,15 @@ import {
 
 import components from './components';
 
-const INSPECT_LINE_KEY = 'data-playroom-line';
-
 const inspectCreateElement = (type: any, props: any, ...children: any[]) => {
   if (props && props.__source) {
     const { __source, __self, ...restProps } = props;
     const line = __source.lineNumber - 1;
-    return createElement(
-      type,
-      { ...restProps, [INSPECT_LINE_KEY]: line },
-      ...children
-    );
+    const lineProp =
+      typeof type === 'string'
+        ? { 'data-playroomline': line }
+        : { __playroomLine: line };
+    return createElement(type, { ...restProps, ...lineProp }, ...children);
   }
   return createElement(type, props, ...children);
 };
