@@ -5,6 +5,7 @@ export default defineConfig([
   ...eslintConfigSeek,
   {
     rules: {
+      curly: 'error',
       'import-x/order': [
         'error',
         {
