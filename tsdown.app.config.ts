@@ -13,13 +13,11 @@ export default defineConfig({
   },
   format: ['esm'],
   dts: true,
-  clean: false,
-  outDir: 'dist/src',
+  outDir: 'app',
   exports: false,
   platform: 'browser',
   plugins: [vanillaExtractPlugin()],
   // Doesn't affect the bundle but suppresses a warning we don't care about
-  copy: [{ from: 'images', to: 'dist' }],
   external: [
     /\.png/,
     '__PLAYROOM_ALIAS__FRAME_COMPONENT__',
