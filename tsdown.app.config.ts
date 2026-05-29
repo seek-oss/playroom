@@ -12,7 +12,7 @@ export default defineConfig({
     'defaultModules/useScope': 'src/defaultModules/useScope.ts',
   },
   format: ['esm'],
-  dts: true,
+  dts: false,
   outDir: 'app',
   exports: false,
   platform: 'browser',
