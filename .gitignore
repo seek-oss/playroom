@@ -1,5 +1,4 @@
 dist/
-src-dist/
 cypress/videos/
 cypress/screenshots/
 cypress/plugins/

@@ -1,7 +1,8 @@
 // @ts-expect-error
 import ppt from 'parse-prop-types';
 
-const parsePropTypes = ppt.default;
+// interop with esm build and cjs in jest
+const parsePropTypes = typeof ppt === 'function' ? ppt : ppt.default;
 
 import configComponents from '../configModules/components';
 
