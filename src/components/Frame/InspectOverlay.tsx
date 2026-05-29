@@ -269,6 +269,7 @@ export const InspectOverlay = () => {
       )}
       <div
         className={styles.overlay}
+        data-testid="inspect-overlay"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}

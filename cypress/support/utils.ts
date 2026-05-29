@@ -566,7 +566,6 @@ export const assertFrameSettingsCount = (count: number) =>
   cy
     .findAllByRole('button', {
       name: frameSettingsButtonLabel,
-      hidden: true,
     })
     .should('have.length', count);
 
@@ -574,7 +573,6 @@ export const toggleFrameSettingsForFrameIndex = (index: number) =>
   cy
     .findAllByRole('button', {
       name: frameSettingsButtonLabel,
-      hidden: true,
     })
     .eq(index)
     .click();
@@ -590,3 +588,67 @@ export const assertFrameSetting = (settingName: string, value: string) => {
 export const selectFrameSettingForFrameIndex = (settingName: string) => {
   cy.findByRole('menuitemcheckbox', { name: settingName }).click();
 };
+
+export const getInspectButton = () =>
+  cy.findAllByRole('button', { name: 'Inspect element' }).first();
+
+export const toggleInspectMode = (options: {
+  source: 'button' | 'keyboard';
+}) => {
+  switch (options.source) {
+    case 'button': {
+      getInspectButton().click();
+      break;
+    }
+    case 'keyboard': {
+      cy.get('body').type(cmdPlus('shift+c'));
+      break;
+    }
+    default: {
+      throw new Error('No source provided');
+    }
+  }
+};
+
+export const assertInspectModeActive = () =>
+  getInspectButton().should('have.attr', 'aria-pressed', 'true');
+
+export const assertInspectModeInactive = () =>
+  getInspectButton().should('have.attr', 'aria-pressed', 'false');
+
+export const simulateInspectMessage = (
+  type: 'hover' | 'select' | 'exit',
+  line?: number | null
+) =>
+  cy.window().then((win) => {
+    win.postMessage(
+      { source: 'Playroom Inspect', type, ...(type !== 'exit' && { line }) },
+      '*'
+    );
+  });
+
+export const assertInspectOverlayInFrame = () =>
+  getFrames()
+    .first()
+    .its('0.contentDocument.body')
+    .find('[data-testid="inspect-overlay"]')
+    .should('exist');
+
+export const getFirstFrameBody = () =>
+  getFrames().first().its('0.contentDocument.body');
+
+export const hoverTargetInFrame = (selector: string) =>
+  getFirstFrameBody()
+    .find(selector)
+    .then(($target) => {
+      const rect = $target[0].getBoundingClientRect();
+      const clientX = rect.left + rect.width / 2;
+      const clientY = rect.top + rect.height / 2;
+
+      cy.wrap($target[0].ownerDocument.body)
+        .find('[data-testid="inspect-overlay"]')
+        .trigger('mousemove', { clientX, clientY });
+    });
+
+export const getInspectHighlight = () =>
+  getFirstFrameBody().find('[data-testid="inspect-overlay"]').prev(); // Get the highlight element
