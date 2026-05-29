@@ -5,22 +5,20 @@
   "bin": {
     "playroom": "bin/cli.cjs"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.cts",
+  "main": "./dist/utils/index.cjs",
+  "module": "./dist/utils/index.mjs",
+  "types": "./dist/utils/index.d.cts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
+      "require": "./dist/utils/index.cjs",
+      "import": "./dist/utils/index.mjs"
     },
     "./package.json": "./package.json"
   },
   "files": [
     "CHANGELOG.md",
     ".babelrc",
-    "images",
     "lib",
-    "app",
     "utils",
     "dist"
   ],

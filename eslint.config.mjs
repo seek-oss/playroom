@@ -62,7 +62,7 @@ export default defineConfig([
     },
   },
   {
-    ignores: ['**/dist', '**/app'],
+    ignores: ['**/dist'],
   },
   {
     languageOptions: {
