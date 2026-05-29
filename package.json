@@ -17,9 +17,7 @@
   },
   "files": [
     "CHANGELOG.md",
-    ".babelrc",
     "lib",
-    "utils",
     "dist"
   ],
   "scripts": {
