@@ -4,7 +4,7 @@ import ppt from 'parse-prop-types';
 // interop with esm build and cjs in jest
 const parsePropTypes = typeof ppt === 'function' ? ppt : ppt.default;
 
-const configComponents = (await import('../configModules/components')).default;
+import configComponents from '../configModules/components';
 
 const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
 
