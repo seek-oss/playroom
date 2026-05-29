@@ -1,6 +1,6 @@
 import CodeMirror, { type Editor, Pos } from 'codemirror';
 
-import 'codemirror/addon/search/searchcursor';
+import 'codemirror/addon/search/searchcursor.js';
 
 import type { Direction, Selection } from './types';
 

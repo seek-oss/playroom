@@ -1,5 +1,7 @@
 // @ts-expect-error
-import parsePropTypes from 'parse-prop-types';
+import ppt from 'parse-prop-types';
+
+const parsePropTypes = ppt.default;
 
 import configComponents from '../configModules/components';
 
