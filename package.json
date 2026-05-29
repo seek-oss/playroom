@@ -105,6 +105,7 @@
     "scope-eval": "^1.0.0",
     "sucrase": "^3.35.1",
     "tinyglobby": "^0.2.12",
+    "typescript": ">=5.0.0",
     "use-debounce": "^10.0.0",
     "webpack": "^5.75.0",
     "webpack-dev-server": "^5.0.2",
@@ -142,8 +143,7 @@
     "serve": "^14.2.5",
     "start-server-and-test": "^2.0.11",
     "surge": "^0.24.6",
-    "tsdown": "^0.20.0",
-    "typescript": ">=5.0.0"
+    "tsdown": "^0.20.0"
   },
   "peerDependencies": {
     "react": "^18 || ^19",

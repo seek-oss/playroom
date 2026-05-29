@@ -107,6 +107,9 @@ importers:
       tinyglobby:
         specifier: ^0.2.12
         version: 0.2.14
+      typescript:
+        specifier: '>=5.0.0'
+        version: 5.8.2
       use-debounce:
         specifier: ^10.0.0
         version: 10.0.4(react@19.0.0)
@@ -216,9 +219,6 @@ importers:
       tsdown:
         specifier: ^0.20.0
         version: 0.20.0(typescript@5.8.2)
-      typescript:
-        specifier: '>=5.0.0'
-        version: 5.8.2
 
 packages:
 
