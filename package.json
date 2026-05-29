@@ -50,7 +50,7 @@
     "format": "pnpm lint:eslint --fix && prettier --write '**/*.{js,md,ts,tsx}'",
     "version": "changeset version",
     "release": "pnpm package && changeset publish",
-    "package": "tsdown && tsdown --config ./tsdown.app.config.ts",
+    "package": "tsdown",
     "test": "jest src lib",
     "post-commit-status": "node scripts/postCommitStatus.js",
     "deploy-preview": "surge -p ./cypress/projects/themed/dist",
