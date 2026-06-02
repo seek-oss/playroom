@@ -53,6 +53,14 @@ function useParams<ReturnType>(
     []
   );
 
+  useEffect(() => {
+    const handleHashChange = () => {
+      setParams(getParamsFromQuery());
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   return selector(params);
 }
 
@@ -70,13 +78,15 @@ export const UrlParams = ({
     themeName: string;
     theme: any;
     code: string;
+    cssCode: string;
     title: string;
   }) => ReactNode;
   decodeUrl?: boolean;
 }) => {
-  const { themeName, code, title } = useParams((rawParams) => {
+  const { themeName, code, cssCode, title } = useParams((rawParams) => {
     const rawThemeName = rawParams.get('themeName');
     const rawCode = rawParams.get('code');
+    const rawCssCode = rawParams.get('cssCode');
 
     if (decodeUrl && rawCode) {
       const result = JSON.parse(
@@ -85,6 +95,7 @@ export const UrlParams = ({
 
       return {
         code: compileJsx(result.code),
+        cssCode: result.cssCode || '',
         themeName: result.theme,
         title: result.title,
       };
@@ -93,6 +104,7 @@ export const UrlParams = ({
     return {
       themeName: rawThemeName || '',
       code: rawCode || '',
+      cssCode: rawCssCode || '',
     };
   });
 
@@ -103,6 +115,7 @@ export const UrlParams = ({
   return children({
     themeName,
     code,
+    cssCode,
     theme: resolvedTheme,
     title,
   });

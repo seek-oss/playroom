@@ -50,6 +50,7 @@ const Frame = ({
   frame,
   // title,
   code,
+  cssCode,
   scrollingPanelRef,
   frameId,
   frameSettings = {},
@@ -58,6 +59,7 @@ const Frame = ({
   frame: { theme: string; width: Widths[number]; widthName: string };
   title?: string;
   code: string;
+  cssCode?: string;
   scrollingPanelRef: RefObject<HTMLDivElement | null>;
   frameId: string;
   frameSettings: FrameSettingsValues;
@@ -217,6 +219,7 @@ const Frame = ({
           src={frameSrc({
             themeName: frame.theme,
             code,
+            cssCode,
             frameSettings,
           })}
           data-testid="frameIframe"
@@ -231,8 +234,9 @@ const Frame = ({
 
 interface FramesProps {
   code: string;
+  cssCode?: string;
 }
-export default function Frames({ code }: FramesProps) {
+export default function Frames({ code, cssCode }: FramesProps) {
   const [{ selectedWidths, selectedThemes, title, frameSettings }, dispatch] =
     useContext(StoreContext);
   const themes = selectedThemes.length > 0 ? selectedThemes : availableThemes;
@@ -266,6 +270,7 @@ export default function Frames({ code }: FramesProps) {
               key={frameId}
               frame={frame}
               code={renderCode.current}
+              cssCode={cssCode}
               title={title}
               scrollingPanelRef={scrollingPanelRef}
               frameId={frameId}

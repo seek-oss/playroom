@@ -82,6 +82,7 @@ type StoredPlayroom = {
 interface State {
   id: string;
   code: string;
+  cssCode: string;
   title?: string;
   previewRenderCode?: string;
   previewEditorCode?: string;
@@ -92,6 +93,7 @@ interface State {
   syntaxErrorLineNumber?: number;
   cursorPosition: CursorPosition;
   editorHidden: boolean;
+  cssEditorVisible: boolean;
   editorOrientation: EditorOrientation;
   editorHeight: string;
   editorWidth: string;
@@ -119,6 +121,8 @@ export type Action =
   | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
+  | { type: 'updateCssCode'; payload: { cssCode: string } }
+  | { type: 'toggleCssEditor' }
   | {
       type: 'setHasSyntaxError';
       payload: { value: boolean; lineNumber?: number };
@@ -337,6 +341,26 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'updateCssCode': {
+      const { cssCode } = action.payload;
+
+      return {
+        ...state,
+        cssCode,
+        id:
+          !state.id && cssCode.trim().length > 0
+            ? createPlayroomId()
+            : state.id,
+      };
+    }
+
+    case 'toggleCssEditor': {
+      return {
+        ...state,
+        cssEditorVisible: !state.cssEditorVisible,
+      };
+    }
+
     case 'updateColorScheme': {
       const { colorScheme } = action.payload;
       store.setItem('colorScheme', colorScheme);
@@ -539,10 +563,12 @@ type StoreContextValues = [State, Dispatch<Action>];
 const initialState: State = {
   id: '',
   code: exampleCode,
+  cssCode: '',
   cursorPosition: { line: 0, ch: 0 },
   snippetsOpen: false,
   openDialogOpen: false,
   editorHidden: false,
+  cssEditorVisible: false,
   editorOrientation: defaultOrientation,
   editorHeight: defaultEditorSize,
   editorWidth: defaultEditorSize,
@@ -587,6 +613,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const {
       code,
+      cssCode,
       themes: themesFromUrl,
       widths: widthsFromUrl,
       title,
@@ -654,6 +681,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
           payload: {
             ...(id ? { id } : {}),
             ...(code ? { code } : {}),
+            ...(cssCode ? { cssCode, cssEditorVisible: true } : {}),
             ...(editorOrientation ? { editorOrientation } : {}),
             ...(editorHeight ? { editorHeight } : {}),
             ...(editorWidth ? { editorWidth } : {}),
@@ -697,6 +725,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     debouncedCodeUpdate({
       code: state.code,
+      cssCode: state.cssCode,
       themes: state.selectedThemes,
       widths: state.selectedWidths,
       title: state.title,
@@ -704,6 +733,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [
     state.code,
+    state.cssCode,
     state.selectedThemes,
     state.selectedWidths,
     state.title,

@@ -10,7 +10,7 @@ import { UrlParams } from '../utils/params';
 
 renderElement(
   <UrlParams>
-    {({ code, themeName, theme }) => {
+    {({ code, cssCode, themeName, theme }) => {
       const frameSettings = playroomConfig.frameSettings || [];
       // Build default frame settings from config
       const defaultFrameSettings = frameSettings.reduce((acc, setting) => {
@@ -32,6 +32,9 @@ renderElement(
 
       return (
         <>
+          {cssCode ? (
+            <style dangerouslySetInnerHTML={{ __html: cssCode }} />
+          ) : null}
           <ScreenshotMessageReceiver />
           <Frame
             code={code}

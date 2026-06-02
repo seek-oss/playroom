@@ -5,6 +5,7 @@ import playroomConfig from '../../config';
 
 interface FrameParams {
   code: string;
+  cssCode?: string;
   themeName: string;
   frameSettings?: FrameSettingsValues;
 }
@@ -13,6 +14,7 @@ type FrameSrcHandler = (frameParams: FrameParams) => string;
 
 const defaultFrameSrc: FrameSrcHandler = ({
   code,
+  cssCode,
   themeName,
   frameSettings,
 }) => {
@@ -20,6 +22,10 @@ const defaultFrameSrc: FrameSrcHandler = ({
     themeName,
     code,
   });
+
+  if (cssCode) {
+    params.set('cssCode', cssCode);
+  }
 
   if (frameSettings && Object.keys(frameSettings).length > 0) {
     params.set('frameSettings', JSON.stringify(frameSettings));

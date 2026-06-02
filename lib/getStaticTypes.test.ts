@@ -12,6 +12,7 @@ describe('getStaticTypes', () => {
     expect(result).toMatchInlineSnapshot(`
       {
         "Bar": {
+          "className": [],
           "color": [
             "red",
             "blue",
@@ -19,6 +20,7 @@ describe('getStaticTypes', () => {
           ],
         },
         "Foo": {
+          "className": [],
           "color": [
             "red",
             "blue",

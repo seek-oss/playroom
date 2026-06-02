@@ -17,6 +17,7 @@ import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { Box } from '../Box/Box';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { CodeEditor } from '../CodeEditor/CodeEditor';
+import { CssEditor } from '../CssEditor/CssEditor';
 import { EditorActions } from '../EditorActions/EditorActions';
 import Frames from '../Frames/Frames';
 import { Header } from '../Header/Header';
@@ -42,6 +43,8 @@ export default () => {
       editorWidth,
       panelsVisible,
       editorHidden,
+      cssEditorVisible,
+      cssCode,
       code,
       previewRenderCode,
       previewEditorCode,
@@ -97,7 +100,7 @@ export default () => {
       <Box position="relative" className={styles.frames}>
         <Box className={styles.framesContainer}>
           {hasNoStoredPlayrooms || id || previewEditorCode ? (
-            <Frames code={previewRenderCode || code} />
+            <Frames code={previewRenderCode || code} cssCode={cssCode} />
           ) : (
             <ZeroState />
           )}
@@ -148,14 +151,36 @@ export default () => {
           }}
         />
         <div className={styles.editorContainer}>
-          <CodeEditor
-            code={code}
-            editorHidden={editorHidden}
-            onChange={(newCode: string) =>
-              dispatch({ type: 'updateCode', payload: { code: newCode } })
-            }
-            previewCode={previewEditorCode}
-          />
+          <div
+            className={styles.editorSplit}
+            style={{
+              gridTemplateColumns: cssEditorVisible ? '1fr 1fr' : '1fr',
+            }}
+          >
+            <div className={styles.editorPane}>
+              <CodeEditor
+                code={code}
+                editorHidden={editorHidden}
+                onChange={(newCode: string) =>
+                  dispatch({ type: 'updateCode', payload: { code: newCode } })
+                }
+                previewCode={previewEditorCode}
+              />
+            </div>
+            {cssEditorVisible && (
+              <div className={styles.cssEditorPane}>
+                <CssEditor
+                  cssCode={cssCode}
+                  onChange={(newCss: string) =>
+                    dispatch({
+                      type: 'updateCssCode',
+                      payload: { cssCode: newCss },
+                    })
+                  }
+                />
+              </div>
+            )}
+          </div>
           <aside
             className={clsx({
               [styles.hideCodeContainer]: true,

@@ -44,6 +44,7 @@ export type Snippets = Snippet[];
 
 export interface CompressParamsOptions {
   code?: string;
+  cssCode?: string;
   themes?: string[];
   widths?: Widths;
   theme?: string;
@@ -53,6 +54,7 @@ export interface CompressParamsOptions {
 
 export const compressParams = ({
   code,
+  cssCode,
   themes,
   widths,
   theme,
@@ -61,6 +63,7 @@ export const compressParams = ({
 }: CompressParamsOptions): string => {
   const data = JSON.stringify({
     ...(code ? { code } : {}),
+    ...(cssCode ? { cssCode } : {}),
     ...(themes && themes.length > 0 ? { themes } : {}),
     ...(widths && widths.length > 0 ? { widths } : {}),
     ...(theme ? { theme } : {}),
@@ -74,6 +77,7 @@ export const compressParams = ({
 export const decompressParams = (param: string | null) => {
   const {
     code,
+    cssCode,
     title,
     widths,
     themes,
@@ -85,6 +89,7 @@ export const decompressParams = (param: string | null) => {
 
   return {
     ...(code ? { code } : {}),
+    ...(cssCode ? { cssCode } : {}),
     ...(themes && themes.length > 0 ? { themes } : {}),
     ...(widths && widths.length > 0 ? { widths } : {}),
     ...(theme ? { theme } : {}),
