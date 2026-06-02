@@ -326,7 +326,6 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
               type: inspectMode ? 'disableInspectMode' : 'enableInspectMode',
             })
           }
-          disabled={!hasCode}
           disabledReason="No active Playroom to inspect"
           shortcut={[primaryMod, 'Shift', 'C']}
         >
