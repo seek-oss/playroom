@@ -124,23 +124,31 @@ export const ScreenshotMessageReceiver = () => {
  */
 const PlayroomInspectSource = 'Playroom Inspect';
 
-export const inspectMessageSender = ({
-  messageWindow,
-  action,
-}: {
-  messageWindow: Window;
-  action: 'enable' | 'disable';
-}) => {
-  messageWindow.postMessage({ source: PlayroomInspectSource, action }, '*');
+type InspectMessage =
+  | { type: 'enable' }
+  | { type: 'disable' }
+  | { type: 'hover'; line: number | null }
+  | { type: 'select'; line: number }
+  | { type: 'exit' };
+
+export const inspectMessageSender = (
+  messageWindow: Window,
+  message: InspectMessage
+) => {
+  messageWindow.postMessage({ source: PlayroomInspectSource, ...message });
 };
 
 interface InspectMessageReceiverProps {
-  onHover: (line: number | null) => void;
-  onSelect: (line: number) => void;
-  onExit: () => void;
+  onEnable?: () => void;
+  onDisable?: () => void;
+  onHover?: (line: number | null) => void;
+  onSelect?: (line: number) => void;
+  onExit?: () => void;
 }
 
 export const InspectMessageReceiver = ({
+  onEnable,
+  onDisable,
   onHover,
   onSelect,
   onExit,
@@ -152,25 +160,29 @@ export const InspectMessageReceiver = ({
       }
 
       switch (event.data.type) {
+        case 'enable':
+          onEnable?.();
+          break;
+        case 'disable':
+          onDisable?.();
+          break;
         case 'hover':
-          onHover(event.data.line ?? null);
+          onHover?.(event.data.line ?? null);
           break;
         case 'select':
           if (typeof event.data.line === 'number') {
-            onSelect(event.data.line);
+            onSelect?.(event.data.line);
           }
           break;
         case 'exit':
-          onExit();
+          onExit?.();
           break;
       }
     };
 
     window.addEventListener('message', handler);
     return () => window.removeEventListener('message', handler);
-  }, [onHover, onSelect, onExit]);
+  }, [onEnable, onDisable, onHover, onSelect, onExit]);
 
   return null;
 };
-
-export { PlayroomInspectSource };

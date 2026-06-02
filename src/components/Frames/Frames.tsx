@@ -305,13 +305,10 @@ export default function Frames({ code }: FramesProps) {
   );
 
   useEffect(() => {
-    const action = inspectMode ? 'enable' : 'disable';
+    const type = inspectMode ? 'enable' : 'disable';
     iframeRefs.current.forEach((iframe) => {
       if (iframe.contentWindow) {
-        inspectMessageSender({
-          messageWindow: iframe.contentWindow,
-          action,
-        });
+        inspectMessageSender(iframe.contentWindow, { type });
       }
     });
 

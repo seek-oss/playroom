@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { PlayroomInspectSource } from './frameMessenger';
+import { InspectMessageReceiver, inspectMessageSender } from './frameMessenger';
 
 import * as styles from './InspectOverlay.css';
 
@@ -140,31 +140,10 @@ export const InspectOverlay = () => {
   );
   const lastLineRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data?.source !== PlayroomInspectSource) {
-        return;
-      }
-
-      if (event.data.action === 'enable') {
-        setEnabled(true);
-      } else if (event.data.action === 'disable') {
-        setEnabled(false);
-        setHighlightRect(null);
-        lastLineRef.current = null;
-      }
-    };
-
-    const handleScroll = () => {
-      setHighlightRect(null);
-    };
-
-    window.addEventListener('message', handleMessage);
-    window.addEventListener('scroll', handleScroll, true);
-    return () => {
-      window.removeEventListener('message', handleMessage);
-      window.removeEventListener('scroll', handleScroll, true);
-    };
+  const handleDisable = useCallback(() => {
+    setEnabled(false);
+    setHighlightRect(null);
+    lastLineRef.current = null;
   }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -177,10 +156,7 @@ export const InspectOverlay = () => {
       setHighlightRect(null);
       if (lastLineRef.current !== null) {
         lastLineRef.current = null;
-        window.parent.postMessage(
-          { source: PlayroomInspectSource, type: 'hover', line: null },
-          '*'
-        );
+        inspectMessageSender(window.parent, { type: 'hover', line: null });
       }
       return;
     }
@@ -190,10 +166,7 @@ export const InspectOverlay = () => {
       setHighlightRect(null);
       if (lastLineRef.current !== null) {
         lastLineRef.current = null;
-        window.parent.postMessage(
-          { source: PlayroomInspectSource, type: 'hover', line: null },
-          '*'
-        );
+        inspectMessageSender(window.parent, { type: 'hover', line: null });
       }
       return;
     }
@@ -202,10 +175,10 @@ export const InspectOverlay = () => {
 
     if (target.line !== lastLineRef.current) {
       lastLineRef.current = target.line;
-      window.parent.postMessage(
-        { source: PlayroomInspectSource, type: 'hover', line: target.line },
-        '*'
-      );
+      inspectMessageSender(window.parent, {
+        type: 'hover',
+        line: target.line,
+      });
     }
   }, []);
 
@@ -221,10 +194,10 @@ export const InspectOverlay = () => {
     if (el) {
       const target = findInspectTarget(el);
       if (target) {
-        window.parent.postMessage(
-          { source: PlayroomInspectSource, type: 'select', line: target.line },
-          '*'
-        );
+        inspectMessageSender(window.parent, {
+          type: 'select',
+          line: target.line,
+        });
       }
     }
   }, []);
@@ -233,50 +206,59 @@ export const InspectOverlay = () => {
     setHighlightRect(null);
     if (lastLineRef.current !== null) {
       lastLineRef.current = null;
-      window.parent.postMessage(
-        { source: PlayroomInspectSource, type: 'hover', line: null },
-        '*'
-      );
+      inspectMessageSender(window.parent, { type: 'hover', line: null });
     }
   }, []);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       e.preventDefault();
-      window.parent.postMessage(
-        { source: PlayroomInspectSource, type: 'exit' },
-        '*'
-      );
+      inspectMessageSender(window.parent, { type: 'exit' });
     }
   }, []);
 
-  if (!enabled) {
-    return null;
-  }
+  const handleScroll = useCallback(() => {
+    setHighlightRect(null);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, true);
+    return () => {
+      window.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [handleScroll]);
 
   return (
     <>
-      {highlightRect && (
-        <div
-          className={styles.highlight}
-          style={{
-            top: highlightRect.top,
-            left: highlightRect.left,
-            width: highlightRect.width,
-            height: highlightRect.height,
-          }}
-        />
-      )}
-      <div
-        className={styles.overlay}
-        data-testid="inspect-overlay"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        tabIndex={0}
-        autoFocus
+      <InspectMessageReceiver
+        onEnable={() => setEnabled(true)}
+        onDisable={enabled ? handleDisable : undefined}
       />
+      {enabled && (
+        <>
+          {highlightRect && (
+            <div
+              className={styles.highlight}
+              style={{
+                top: highlightRect.top,
+                left: highlightRect.left,
+                width: highlightRect.width,
+                height: highlightRect.height,
+              }}
+            />
+          )}
+          <div
+            className={styles.overlay}
+            data-testid="inspect-overlay"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
+            onKeyDown={handleKeyDown}
+            tabIndex={0}
+            autoFocus
+          />
+        </>
+      )}
     </>
   );
 };
