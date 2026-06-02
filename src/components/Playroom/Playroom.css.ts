@@ -101,6 +101,26 @@ export const editorContainer = sprinkles({
   overflow: 'hidden',
 });
 
+export const editorSplit = style({
+  display: 'grid',
+  height: '100%',
+  width: '100%',
+  gap: 0,
+});
+
+export const editorPane = style({
+  position: 'relative',
+  overflow: 'hidden',
+  minWidth: 0,
+});
+
+export const cssEditorPane = style({
+  position: 'relative',
+  overflow: 'hidden',
+  minWidth: 0,
+  borderLeft: `1px solid ${colorPaletteVars.border.standard}`,
+});
+
 export const editorOverlays = style([
   sprinkles({
     position: 'absolute',

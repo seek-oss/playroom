@@ -23,6 +23,7 @@ describe('componentsToHints', () => {
       {
         "Bar": {
           "attrs": {
+            "className": null,
             "color": [
               "red",
               "blue",
@@ -31,6 +32,7 @@ describe('componentsToHints', () => {
         },
         "Foo": {
           "attrs": {
+            "className": null,
             "color": [
               "red",
               "blue",

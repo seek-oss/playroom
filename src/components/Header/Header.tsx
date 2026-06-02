@@ -23,6 +23,7 @@ import {
   Eye,
   EyeClosed,
   ChevronDown,
+  Paintbrush,
 } from 'lucide-react';
 import {
   type ComponentProps,
@@ -205,6 +206,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
     {
       editorOrientation,
       editorHidden,
+      cssEditorVisible,
       panelsVisible,
       colorScheme,
       openDialogOpen,
@@ -316,6 +318,14 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
             </MenuRadioItem>
           </MenuRadioGroup>
         </Menu>
+
+        <MenuCheckboxItem
+          icon={Paintbrush}
+          checked={cssEditorVisible}
+          onCheckedChange={() => dispatch({ type: 'toggleCssEditor' })}
+        >
+          CSS Editor
+        </MenuCheckboxItem>
 
         <MenuItem
           icon={panelsVisible ? Eye : EyeClosed}

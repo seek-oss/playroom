@@ -17,8 +17,13 @@ if (selectedElement) {
 
 renderElement(
   <UrlParams decodeUrl>
-    {({ code, themeName, title }) => (
-      <Preview title={title} code={code} themeName={themeName} />
+    {({ code, cssCode, themeName, title }) => (
+      <>
+        {cssCode ? (
+          <style dangerouslySetInnerHTML={{ __html: cssCode }} />
+        ) : null}
+        <Preview title={title} code={code} themeName={themeName} />
+      </>
     )}
   </UrlParams>
 );
