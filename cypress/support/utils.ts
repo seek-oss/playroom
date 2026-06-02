@@ -39,6 +39,9 @@ const clearCode = () => {
   typeCode('{backspace}');
 };
 
+const getFirstFrameBody = () =>
+  getFrames().first().its('0.contentDocument.body');
+
 export const typeCode = (code: string, delay?: number) =>
   getCodeEditor().focused().type(code, { delay });
 
@@ -243,12 +246,9 @@ export const assertSnippetCount = (count: number) =>
   getSnippets().should('have.length', count);
 
 export const assertFirstFrameContains = (text: string) =>
-  getFrames()
-    .first()
-    .its('0.contentDocument.body')
-    .should((frameBody) => {
-      expect(frameBody.innerText).to.eq(text);
-    });
+  getFirstFrameBody().should((frameBody) => {
+    expect(frameBody.innerText).to.eq(text);
+  });
 
 export const assertFirstFrameError = (error: string) =>
   getFrameErrors()
@@ -628,14 +628,7 @@ export const simulateInspectMessage = (
   });
 
 export const assertInspectOverlayInFrame = () =>
-  getFrames()
-    .first()
-    .its('0.contentDocument.body')
-    .find('[data-testid="inspect-overlay"]')
-    .should('exist');
-
-export const getFirstFrameBody = () =>
-  getFrames().first().its('0.contentDocument.body');
+  getFirstFrameBody().find('[data-testid="inspect-overlay"]').should('exist');
 
 export const hoverTargetInFrame = (selector: string) =>
   getFirstFrameBody()
