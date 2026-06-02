@@ -4,9 +4,9 @@ import {
   // Camera,
   // ClipboardCopy,
   // Download,
-  Crosshair,
   PictureInPicture2,
   Settings2,
+  SquareDashedMousePointerIcon,
 } from 'lucide-react';
 import {
   type ReactNode,
@@ -140,7 +140,7 @@ const Frame = ({
               active={inspectMode}
               size="small"
               bleed
-              icon={<Crosshair />}
+              icon={<SquareDashedMousePointerIcon />}
               label="Inspect element"
               shortcut={[primaryMod, 'Shift', 'C']}
               onClick={() => {

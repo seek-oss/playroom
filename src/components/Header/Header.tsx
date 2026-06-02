@@ -23,7 +23,7 @@ import {
   Eye,
   EyeClosed,
   ChevronDown,
-  Crosshair,
+  SquareDashedMousePointerIcon,
 } from 'lucide-react';
 import {
   type ComponentProps,
@@ -320,7 +320,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
         </Menu>
 
         <MenuItem
-          icon={Crosshair}
+          icon={SquareDashedMousePointerIcon}
           onClick={() =>
             dispatch({
               type: inspectMode ? 'disableInspectMode' : 'enableInspectMode',
