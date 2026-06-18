@@ -39,7 +39,7 @@ const clearCode = () => {
   typeCode('{backspace}');
 };
 
-const getFirstFrameBody = () =>
+export const getFirstFrameBody = () =>
   getFrames().first().its('0.contentDocument.body');
 
 export const typeCode = (code: string, delay?: number) =>
