@@ -58,6 +58,16 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
         rect.bottom,
         'window'
       );
+
+      const visibleRange = bottomVisibleLine - topVisibleLine;
+      const topLines = topVisibleLine + visibleRange * 0.1;
+      const bottomLines = bottomVisibleLine - visibleRange * 0.1;
+      const centerLines = line >= topLines && line <= bottomLines;
+
+      if (centerLines) {
+        return;
+      }
+
       const targetLineInView =
         line > topVisibleLine && line < bottomVisibleLine;
 
