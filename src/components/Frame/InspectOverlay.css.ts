@@ -22,5 +22,6 @@ export const highlight = style([
     zIndex: 99999,
     background: colorPaletteVars.background.inspectOverlay,
     transition: 'all 50ms ease',
+    transitionDelay: '50ms',
   },
 ]);
