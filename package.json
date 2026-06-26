@@ -16,9 +16,9 @@
     "./package.json": "./package.json"
   },
   "imports": {
-    "#entries/index": "./dist/app/playroomIndex.mjs",
-    "#entries/frame": "./dist/app/playroomFrame.mjs",
-    "#entries/preview": "./dist/app/playroomPreview.mjs",
+    "#entries/index": "./dist/app/entries/index.mjs",
+    "#entries/frame": "./dist/app/entries/frame.mjs",
+    "#entries/preview": "./dist/app/entries/preview.mjs",
     "#defaultModules/FrameComponent": "./dist/app/defaultModules/FrameComponent.mjs",
     "#defaultModules/snippets": "./dist/app/defaultModules/snippets.mjs",
     "#defaultModules/themes": "./dist/app/defaultModules/themes.mjs",

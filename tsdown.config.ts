@@ -13,9 +13,9 @@ export default defineConfig([
   },
   {
     entry: {
-      index: 'src/entries/index.tsx',
-      frame: 'src/entries/frame.tsx',
-      preview: 'src/entries/preview.tsx',
+      'entries/index': 'src/entries/index.tsx',
+      'entries/frame': 'src/entries/frame.tsx',
+      'entries/preview': 'src/entries/preview.tsx',
       'defaultModules/FrameComponent': 'src/defaultModules/FrameComponent.tsx',
       'defaultModules/snippets': 'src/defaultModules/snippets.ts',
       'defaultModules/themes': 'src/defaultModules/themes.ts',
