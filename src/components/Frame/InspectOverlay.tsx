@@ -30,11 +30,14 @@ function getFiberKey(el: Element): string | undefined {
 
 function getLineFromFiber(fiber: any): number | null {
   const props = fiber.memoizedProps;
-  const line =
-    typeof fiber.type === 'string'
-      ? props?.['data-playroomline']
-      : props?.__playroomLine;
-  return typeof line === 'number' ? line : null;
+  const key =
+    typeof fiber.type === 'string' ? 'data-playroomline' : '__playroomLine';
+  const line = props?.[key];
+  if (typeof line === 'number') {
+    return line;
+  }
+  const altLine = fiber.alternate?.memoizedProps?.[key];
+  return typeof altLine === 'number' ? altLine : null;
 }
 
 function findHostElement(fiber: any): Element | null {

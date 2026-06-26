@@ -7,14 +7,17 @@ import buildScope from '../../configModules/useScope';
 
 interface Props {
   code: string;
+  inspectMode: boolean;
   onError: (error: string) => void;
 }
 
 const EvalCode = ({
   code,
+  inspectMode,
   onSuccess,
 }: {
   code: string;
+  inspectMode: boolean;
   onSuccess?: () => void;
 }) => {
   useLayoutEffect(() => {
@@ -23,10 +26,10 @@ const EvalCode = ({
     }
   }, [onSuccess]);
 
-  return scopeEval(code, buildScope());
+  return scopeEval(code, buildScope(inspectMode));
 };
 
-export default function RenderCode({ code, onError }: Props) {
+export default function RenderCode({ code, inspectMode, onError }: Props) {
   const lastCode = useRef('');
 
   const onSuccess = () => {
@@ -35,7 +38,9 @@ export default function RenderCode({ code, onError }: Props) {
 
   return (
     <ErrorBoundary
-      fallbackRender={() => <EvalCode code={lastCode.current} />}
+      fallbackRender={() => (
+        <EvalCode code={lastCode.current} inspectMode={inspectMode} />
+      )}
       resetKeys={[code]}
       onError={(e) => {
         onError(e.message);
@@ -44,7 +49,7 @@ export default function RenderCode({ code, onError }: Props) {
         onError('');
       }}
     >
-      <EvalCode code={code} onSuccess={onSuccess} />
+      <EvalCode code={code} inspectMode={inspectMode} onSuccess={onSuccess} />
     </ErrorBoundary>
   );
 }
