@@ -12,22 +12,16 @@ export default defineConfig([
     external: ['__PLAYROOM_ALIAS__FRAME_COMPONENT__'],
   },
   {
-    entry: {
-      index: 'src/entries/index.tsx',
-      frame: 'src/entries/frame.tsx',
-      preview: 'src/entries/preview.tsx',
-      'defaultModules/FrameComponent': 'src/defaultModules/FrameComponent.tsx',
-      'defaultModules/snippets': 'src/defaultModules/snippets.ts',
-      'defaultModules/themes': 'src/defaultModules/themes.ts',
-      'defaultModules/useScope': 'src/defaultModules/useScope.ts',
-    },
     format: ['esm'],
     dts: false,
     outDir: 'dist/app',
-    exports: false,
     platform: 'browser',
-    plugins: [vanillaExtractPlugin()],
-    copy: ['src/entries/template.html', { from: 'images', to: 'dist' }],
+    plugins: [
+      vanillaExtractPlugin({
+        identifiers: process.env.PLAYROOM_DEV === 'true' ? 'debug' : 'short',
+      }),
+    ],
+    copy: [{ from: 'static', to: 'dist' }],
     // Doesn't affect the bundle but suppresses a warning we don't care about
     external: [
       /\.png/,

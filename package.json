@@ -15,6 +15,15 @@
     },
     "./package.json": "./package.json"
   },
+  "imports": {
+    "#entries/index": "./dist/app/playroomIndex.mjs",
+    "#entries/frame": "./dist/app/playroomFrame.mjs",
+    "#entries/preview": "./dist/app/playroomPreview.mjs",
+    "#defaultModules/FrameComponent": "./dist/app/defaultModules/FrameComponent.mjs",
+    "#defaultModules/snippets": "./dist/app/defaultModules/snippets.mjs",
+    "#defaultModules/themes": "./dist/app/defaultModules/themes.mjs",
+    "#defaultModules/useScope": "./dist/app/defaultModules/useScope.mjs"
+  },
   "files": [
     "CHANGELOG.md",
     "lib",
@@ -47,7 +56,7 @@
     "version": "changeset version",
     "release": "pnpm package && changeset publish",
     "package": "tsdown",
-    "package:watch": "tsdown --watch --clean=false",
+    "package:watch": "PLAYROOM_DEV=true tsdown --watch --clean=false",
     "test": "jest src lib",
     "post-commit-status": "node scripts/postCommitStatus.js",
     "deploy-preview": "surge -p ./cypress/projects/themed/dist",
@@ -125,8 +134,8 @@
     "@types/jest": "^29.2.4",
     "@types/node": "^20.19.30",
     "@types/prettier": "^2.7.1",
-    "@types/react": "^18.0.0 || ^19.0.0",
-    "@types/react-dom": "^18.0.0 || ^19.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vanilla-extract/css": "^1.9.2",
     "@vanilla-extract/css-utils": "^0.1.3",
     "@vanilla-extract/dynamic": "^2.1.2",

@@ -1,5 +1,5 @@
-import faviconInvertedPath from '../../images/favicon-inverted.png';
-import faviconPath from '../../images/favicon.png';
+import faviconInvertedPath from '../../static/favicon-inverted.png';
+import faviconPath from '../../static/favicon.png';
 import Playroom from '../components/Playroom/Playroom';
 import { EditorProvider } from '../contexts/EditorContext';
 import { StoreProvider } from '../contexts/StoreContext';
