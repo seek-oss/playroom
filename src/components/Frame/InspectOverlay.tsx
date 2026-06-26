@@ -97,13 +97,18 @@ function findDeepestElementMatch(
 }
 
 function findInspectTarget(el: Element): InspectResult | null {
-  const fiberKey = getFiberKey(el);
-  if (!fiberKey) {
+  let target: Element | null = el;
+  while (target && !getFiberKey(target)) {
+    target = target.parentElement;
+  }
+  if (!target) {
     return null;
   }
 
+  const fiberKey = getFiberKey(target)!;
+
   const fiberPath: any[] = [];
-  let fiber = (el as any)[fiberKey];
+  let fiber = (target as any)[fiberKey];
 
   while (fiber) {
     fiberPath.push(fiber);
@@ -118,7 +123,7 @@ function findInspectTarget(el: Element): InspectResult | null {
         const targetFiber = fiberPath.find((f) => f.type === deeperMatch.type);
         if (targetFiber) {
           const hostEl = findHostElement(targetFiber);
-          if (hostEl) {
+          if (hostEl && hostEl.contains(el)) {
             return { line: deeperMatch.line, element: hostEl };
           }
         }
