@@ -14,7 +14,7 @@ const parent = {
 };
 
 export const Foo = withPropTypes(({ color = 'black', children }) => (
-  <div style={{ color }}>
+  <div data-testid="foo-component" style={{ color }}>
     Foo{children ? <div style={parent}>{children}</div> : null}
   </div>
 ));

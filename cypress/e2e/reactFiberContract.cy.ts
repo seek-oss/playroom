@@ -8,13 +8,13 @@ import {
 describe('React Fiber Contract', () => {
   beforeEach(() => {
     loadPlayroom();
-    typeCode('<Foo /><div data-testid="fiber-test">hello</div>');
+    typeCode('<Foo /><div data-testid="fiber-test">hello');
     assertFirstFrameContains('Foo\nhello');
   });
 
   it('exposes __reactFiber$ on host elements rendered by custom components', () => {
     getFirstFrameBody()
-      .contains('Foo')
+      .find('[data-testid="foo-component"]')
       .should(($el) => {
         const fiberKey = Object.keys($el[0]).find((k) =>
           k.startsWith('__reactFiber$')
