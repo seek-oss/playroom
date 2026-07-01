@@ -1,4 +1,4 @@
-import { style, globalStyle } from '@vanilla-extract/css';
+import { style, globalStyle, keyframes } from '@vanilla-extract/css';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { fontSizeDefinitions, vars } from '../../css/vars.css';
@@ -331,4 +331,17 @@ globalStyle('.CodeMirror-dialog button:focus-visible', {
 
 globalStyle('.CodeMirror-dialog button:hover', {
   background: colorPaletteVars.background.selection,
+});
+
+globalStyle('.cm-inspect-highlight', {
+  backgroundColor: `${colorPaletteVars.background.textSelection} !important`,
+});
+
+const inspectFadeOut = keyframes({
+  from: { backgroundColor: colorPaletteVars.background.textSelection },
+  to: { backgroundColor: 'transparent' },
+});
+
+globalStyle('.cm-inspect-highlight-fade', {
+  animation: `${inspectFadeOut} 1s ease forwards`,
 });

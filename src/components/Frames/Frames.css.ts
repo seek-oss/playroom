@@ -119,8 +119,13 @@ export const frameActionsContainer = style([
     transition: `opacity ${transitionTiming}`,
     selectors: {
       [`${frameContainer}:not(:hover, :focus-within, ${frameActive}) &`]: {
-        opacity: 0,
+        opacity: 0.3,
+        filter: 'saturate(0)',
       },
+      [`html[data-playroom-dark] ${frameContainer}:not(:hover, :focus-within, ${frameActive}) &`]:
+        {
+          opacity: 0.6,
+        },
     },
   },
 ]);

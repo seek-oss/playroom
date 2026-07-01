@@ -225,6 +225,7 @@ export const light = {
     tooltip: lightPalette.gray[1000],
     textSelection: lightPalette.blue[400],
     previewBanner: surfaceLight,
+    inspectOverlay: transparentize(0.5, lightPalette.blue[500]),
   },
   border: {
     standard: lightPalette.gray[400],
@@ -275,6 +276,7 @@ export const dark = {
     tooltip: 'hsla(0,0%,0%,1)',
     textSelection: darkPalette.blue[400],
     previewBanner: surfaceLight,
+    inspectOverlay: transparentize(0.5, darkPalette.blue[500]),
   },
   border: {
     standard: darkPalette.gray[400],

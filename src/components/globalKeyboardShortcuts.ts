@@ -5,8 +5,10 @@ import { StoreContext } from '../contexts/StoreContext';
 import { isMac } from '../utils/formatting';
 
 export const useGlobalKeyboardShortcutsForWindow = (win: Window | null) => {
-  const [{ editorHidden, openDialogOpen, snippetsOpen }, dispatch] =
-    useContext(StoreContext);
+  const [
+    { editorHidden, openDialogOpen, snippetsOpen, inspectMode },
+    dispatch,
+  ] = useContext(StoreContext);
   const { runCommand } = useEditor();
   const formattable = !editorHidden && !openDialogOpen && !snippetsOpen;
 
@@ -16,6 +18,12 @@ export const useGlobalKeyboardShortcutsForWindow = (win: Window | null) => {
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && inspectMode) {
+        e.preventDefault();
+        dispatch({ type: 'disableInspectMode' });
+        return;
+      }
+
       const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
 
       if (cmdOrCtrl) {
@@ -37,6 +45,15 @@ export const useGlobalKeyboardShortcutsForWindow = (win: Window | null) => {
             }
             break;
           }
+          case 'c': {
+            if (e.shiftKey) {
+              e.preventDefault();
+              dispatch({
+                type: inspectMode ? 'disableInspectMode' : 'enableInspectMode',
+              });
+            }
+            break;
+          }
         }
         return;
       }
@@ -47,5 +64,5 @@ export const useGlobalKeyboardShortcutsForWindow = (win: Window | null) => {
     return () => {
       win.removeEventListener('keydown', handleKeyDown);
     };
-  }, [dispatch, formattable, runCommand, win]);
+  }, [dispatch, formattable, inspectMode, runCommand, win]);
 };
