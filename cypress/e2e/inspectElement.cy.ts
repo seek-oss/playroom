@@ -98,6 +98,23 @@ describe('Inspect Element', () => {
         .and('have.css', 'height', '100px');
     });
 
+    it('highlights parent element when hovering content rendered via dangerouslySetInnerHTML', () => {
+      loadPlayroom(`
+        <Foo />
+        <div data-test-target style={{ height: 80 }} dangerouslySetInnerHTML={{ __html: '<span data-inner>Inner HTML</span>' }} />
+      `);
+
+      assertFirstFrameContains('Foo\nInner HTML');
+      toggleInspectMode({ source: 'button' });
+      assertInspectOverlayInFrame();
+
+      hoverTargetInFrame('[data-inner]');
+
+      getInspectHighlight()
+        .should('be.visible')
+        .and('have.css', 'height', '80px');
+    });
+
     it('shows the editor when panels were hidden', () => {
       loadPlayroom(`
         <Foo />
