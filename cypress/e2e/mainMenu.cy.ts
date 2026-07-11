@@ -85,6 +85,16 @@ describe('Main Menu', () => {
   });
 
   describe('Frames', () => {
+    it('Named widths', () => {
+      loadPlayroom();
+      openMainMenuSubMenu('Frames');
+
+      cy.findByRole('menuitemcheckbox', { name: '(sm) 320' }).should('exist');
+      cy.findByRole('menuitemcheckbox', { name: '(md) 375' }).should('exist');
+      cy.findByRole('menuitemcheckbox', { name: '(lg) 768' }).should('exist');
+      cy.findByRole('menuitemcheckbox', { name: '(xl) 1024' }).should('exist');
+    });
+
     it('Widths', () => {
       const widths: Widths = [320, 375, 768, 1024, 'Fit to window'];
       const widthToSelect = widths[1];
