@@ -1,5 +1,14 @@
 # playroom
 
+## 1.3.1
+
+### Patch Changes
+
+- [#494](https://github.com/seek-oss/playroom/pull/494) [`1b28372`](https://github.com/seek-oss/playroom/commit/1b28372e843b9494ef2e15cd74d4d79260d80f6c) Thanks [@askoufis](https://github.com/askoufis)! - Restrict `typescript` dependency range to `^5.0.0 || ^6.0.0`
+
+  TypeScript v7 does not have a compatible API with v5 and v6.
+  The dependency now accurately reflects the supported versions of TypeScript.
+
 ## 1.3.0
 
 ### Minor Changes
