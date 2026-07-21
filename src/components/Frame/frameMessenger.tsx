@@ -116,3 +116,73 @@ export const ScreenshotMessageReceiver = () => {
 
   return null;
 };
+
+/**
+ * -------------------
+ *  Inspect Message
+ * -------------------
+ */
+const PlayroomInspectSource = 'Playroom Inspect';
+
+type InspectMessage =
+  | { type: 'enable' }
+  | { type: 'disable' }
+  | { type: 'hover'; line: number | null }
+  | { type: 'select'; line: number }
+  | { type: 'exit' };
+
+export const inspectMessageSender = (
+  messageWindow: Window,
+  message: InspectMessage
+) => {
+  messageWindow.postMessage({ source: PlayroomInspectSource, ...message });
+};
+
+interface InspectMessageReceiverProps {
+  onEnable?: () => void;
+  onDisable?: () => void;
+  onHover?: (line: number | null) => void;
+  onSelect?: (line: number) => void;
+  onExit?: () => void;
+}
+
+export const InspectMessageReceiver = ({
+  onEnable,
+  onDisable,
+  onHover,
+  onSelect,
+  onExit,
+}: InspectMessageReceiverProps) => {
+  useEffect(() => {
+    const handler = (event: MessageEvent) => {
+      if (event.data?.source !== PlayroomInspectSource) {
+        return;
+      }
+
+      switch (event.data.type) {
+        case 'enable':
+          onEnable?.();
+          break;
+        case 'disable':
+          onDisable?.();
+          break;
+        case 'hover':
+          onHover?.(event.data.line ?? null);
+          break;
+        case 'select':
+          if (typeof event.data.line === 'number') {
+            onSelect?.(event.data.line);
+          }
+          break;
+        case 'exit':
+          onExit?.();
+          break;
+      }
+    };
+
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, [onEnable, onDisable, onHover, onSelect, onExit]);
+
+  return null;
+};

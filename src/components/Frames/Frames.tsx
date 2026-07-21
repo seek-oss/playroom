@@ -6,11 +6,14 @@ import {
   // Download,
   PictureInPicture2,
   Settings2,
+  SquareDashedMousePointerIcon,
 } from 'lucide-react';
 import {
   type ReactNode,
   type RefObject,
+  useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -19,12 +22,16 @@ import type { FrameSettingsValues } from '../../../utils';
 import playroomConfig from '../../config';
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths, { type Widths } from '../../configModules/widths';
+import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
-import { compileJsx } from '../../utils/compileJsx';
+import { compileJsxForInspect } from '../../utils/compileJsx';
 import usePreviewUrl from '../../utils/usePreviewUrl';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
+import { primaryMod } from '../CodeEditor/editorCommands';
 import {
   ErrorMessageReceiver,
+  InspectMessageReceiver,
+  inspectMessageSender,
   // screenshotMessageSender,
 } from '../Frame/frameMessenger';
 import { Menu, MenuCheckboxItem } from '../Menu/Menu';
@@ -53,7 +60,9 @@ const Frame = ({
   scrollingPanelRef,
   frameId,
   frameSettings = {},
+  inspectMode,
   dispatch,
+  registerIframeRef,
 }: {
   frame: { theme: string; width: Widths[number]; widthName: string };
   title?: string;
@@ -61,12 +70,22 @@ const Frame = ({
   scrollingPanelRef: RefObject<HTMLDivElement | null>;
   frameId: string;
   frameSettings: FrameSettingsValues;
+  inspectMode: boolean;
   dispatch: (action: any) => void;
+  registerIframeRef: (frameId: string, el: HTMLIFrameElement | null) => void;
 }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [frameActive, setFrameActive] = useState(false);
   const noTheme = frame.theme === '__PLAYROOM__NO_THEME__';
   const previewUrl = usePreviewUrl(frame.theme);
+
+  const setIframeRef = useCallback(
+    (el: HTMLIFrameElement | null) => {
+      iframeRef.current = el;
+      registerIframeRef(frameId, el);
+    },
+    [registerIframeRef, frameId]
+  );
 
   // const downloadHandler = () => {
   //   if (iframeRef.current?.contentWindow) {
@@ -93,7 +112,7 @@ const Frame = ({
     <div
       className={clsx({
         [styles.frameContainer]: true,
-        [styles.frameActive]: frameActive,
+        [styles.frameActive]: frameActive || inspectMode,
       })}
       style={assignInlineVars({
         [styles.frameWidth]:
@@ -115,6 +134,23 @@ const Frame = ({
         )}
         <SharedTooltipContext>
           <div className={styles.frameActionsContainer}>
+            <ButtonIcon
+              tone="accent"
+              variant="transparent"
+              active={inspectMode}
+              size="small"
+              bleed
+              icon={<SquareDashedMousePointerIcon />}
+              label="Inspect element"
+              shortcut={[primaryMod, 'Shift', 'C']}
+              onClick={() => {
+                dispatch({
+                  type: inspectMode
+                    ? 'disableInspectMode'
+                    : 'enableInspectMode',
+                });
+              }}
+            />
             <ButtonIcon
               tone="accent"
               variant="transparent"
@@ -212,7 +248,7 @@ const Frame = ({
       </div>
       <div className={styles.frameWrapper}>
         <Iframe
-          ref={iframeRef}
+          ref={setIframeRef}
           intersectionRootRef={scrollingPanelRef}
           src={frameSrc({
             themeName: frame.theme,
@@ -232,12 +268,17 @@ const Frame = ({
 interface FramesProps {
   code: string;
 }
+
 export default function Frames({ code }: FramesProps) {
-  const [{ selectedWidths, selectedThemes, title, frameSettings }, dispatch] =
-    useContext(StoreContext);
+  const [
+    { selectedWidths, selectedThemes, title, frameSettings, inspectMode },
+    dispatch,
+  ] = useContext(StoreContext);
+  const { scrollToLine, highlightLine, fadeHighlight } = useEditor();
   const themes = selectedThemes.length > 0 ? selectedThemes : availableThemes;
   const widths = selectedWidths.length > 0 ? selectedWidths : availableWidths;
   const scrollingPanelRef = useRef<HTMLDivElement | null>(null);
+  const iframeRefs = useRef<Map<string, HTMLIFrameElement>>(new Map());
   const renderCode = useRef<string>('');
 
   const frames = widths.flatMap((width) =>
@@ -249,32 +290,118 @@ export default function Frames({ code }: FramesProps) {
   );
 
   try {
-    renderCode.current = compileJsx(code);
+    renderCode.current = compileJsxForInspect(code);
   } catch {}
-  return (
-    <ScrollContainer
-      ref={scrollingPanelRef}
-      direction="horizontal"
-      fadeSize="small"
-    >
-      <div className={styles.root}>
-        {frames.map((frame) => {
-          const frameId = `${frame.theme}-${frame.width}`;
 
-          return (
-            <Frame
-              key={frameId}
-              frame={frame}
-              code={renderCode.current}
-              title={title}
-              scrollingPanelRef={scrollingPanelRef}
-              frameId={frameId}
-              frameSettings={frameSettings[frameId]}
-              dispatch={dispatch}
-            />
-          );
-        })}
-      </div>
-    </ScrollContainer>
+  const registerIframeRef = useCallback(
+    (frameId: string, el: HTMLIFrameElement | null) => {
+      if (el) {
+        iframeRefs.current.set(frameId, el);
+      } else {
+        iframeRefs.current.delete(frameId);
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    const type = inspectMode ? 'enable' : 'disable';
+    iframeRefs.current.forEach((iframe) => {
+      if (iframe.contentWindow) {
+        inspectMessageSender(iframe.contentWindow, { type });
+      }
+    });
+
+    if (!inspectMode) {
+      fadeHighlight();
+    }
+  }, [inspectMode, fadeHighlight]);
+
+  const handleInspectHover = useCallback(
+    (line: number | null) => {
+      if (typeof line === 'number') {
+        scrollToLine(line);
+        highlightLine(line);
+      } else {
+        highlightLine(null);
+      }
+    },
+    [scrollToLine, highlightLine]
+  );
+
+  const handleInspectSelect = useCallback(
+    (line: number) => {
+      dispatch({ type: 'showPanels' });
+      dispatch({ type: 'showEditor' });
+      dispatch({
+        type: 'updateCursorPosition',
+        payload: { position: { line, ch: 0 } },
+      });
+      dispatch({ type: 'disableInspectMode' });
+    },
+    [dispatch]
+  );
+
+  const handleInspectExit = useCallback(() => {
+    dispatch({ type: 'disableInspectMode' });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!inspectMode) {
+      return;
+    }
+
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('iframe')) {
+        dispatch({ type: 'disableInspectMode' });
+      }
+    };
+
+    const frameId = requestAnimationFrame(() => {
+      window.addEventListener('click', handleClick);
+    });
+    return () => {
+      cancelAnimationFrame(frameId);
+      window.removeEventListener('click', handleClick);
+    };
+  }, [inspectMode, dispatch]);
+
+  return (
+    <>
+      {inspectMode && (
+        <InspectMessageReceiver
+          onHover={handleInspectHover}
+          onSelect={handleInspectSelect}
+          onExit={handleInspectExit}
+        />
+      )}
+      <ScrollContainer
+        ref={scrollingPanelRef}
+        direction="horizontal"
+        fadeSize="small"
+      >
+        <div className={styles.root}>
+          {frames.map((frame) => {
+            const frameId = `${frame.theme}-${frame.width}`;
+
+            return (
+              <Frame
+                key={frameId}
+                frame={frame}
+                code={renderCode.current}
+                title={title}
+                scrollingPanelRef={scrollingPanelRef}
+                frameId={frameId}
+                frameSettings={frameSettings[frameId]}
+                inspectMode={inspectMode}
+                dispatch={dispatch}
+                registerIframeRef={registerIframeRef}
+              />
+            );
+          })}
+        </div>
+      </ScrollContainer>
+    </>
   );
 }

@@ -89,6 +89,7 @@ interface State {
   previewRenderCode?: string;
   previewEditorCode?: string;
   highlightLineNumber?: number;
+  inspectMode: boolean;
   snippetsOpen: boolean;
   openDialogOpen: boolean;
   hasSyntaxError?: boolean;
@@ -148,6 +149,7 @@ export type Action =
   | { type: 'updateEditorWidth'; payload: { size: number } }
   | { type: 'updateAssistantWidth'; payload: { size: number } }
   | { type: 'togglePanelVisibility' }
+  | { type: 'showPanels' }
   | {
       type: 'updateSelectedThemes';
       payload: { themes: typeof availableThemes };
@@ -190,7 +192,9 @@ export type Action =
       payload: {
         id: string;
       };
-    };
+    }
+  | { type: 'enableInspectMode' }
+  | { type: 'disableInspectMode' };
 
 const resetPreview = ({
   previewRenderCode,
@@ -486,6 +490,13 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'showPanels': {
+      return {
+        ...state,
+        panelsVisible: true,
+      };
+    }
+
     case 'updateSelectedThemes': {
       const { themes } = action.payload;
       const selectedThemes = availableThemes.filter((t) => themes.includes(t));
@@ -609,6 +620,20 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'enableInspectMode': {
+      return {
+        ...state,
+        inspectMode: true,
+      };
+    }
+
+    case 'disableInspectMode': {
+      return {
+        ...state,
+        inspectMode: false,
+      };
+    }
+
     default:
       return state;
   }
@@ -620,6 +645,7 @@ const initialState: State = {
   id: '',
   code: exampleCode,
   cursorPosition: { line: 0, ch: 0 },
+  inspectMode: false,
   snippetsOpen: false,
   openDialogOpen: false,
   editorHidden: false,
