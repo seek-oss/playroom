@@ -24,19 +24,19 @@ import './registerKeymaps';
 
 import * as styles from './CodeEditor.css';
 
-import 'codemirror/mode/jsx/jsx';
-import 'codemirror/addon/edit/closetag';
-import 'codemirror/addon/edit/closebrackets';
-import 'codemirror/addon/hint/show-hint';
-import 'codemirror/addon/hint/xml-hint';
-import 'codemirror/addon/dialog/dialog';
-import 'codemirror/addon/search/jump-to-line';
-import 'codemirror/addon/search/search';
-import 'codemirror/addon/search/searchcursor';
-import 'codemirror/addon/selection/active-line';
-import 'codemirror/addon/fold/foldcode';
-import 'codemirror/addon/fold/foldgutter';
-import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/mode/jsx/jsx.js';
+import 'codemirror/addon/edit/closetag.js';
+import 'codemirror/addon/edit/closebrackets.js';
+import 'codemirror/addon/hint/show-hint.js';
+import 'codemirror/addon/hint/xml-hint.js';
+import 'codemirror/addon/dialog/dialog.js';
+import 'codemirror/addon/search/jump-to-line.js';
+import 'codemirror/addon/search/search.js';
+import 'codemirror/addon/search/searchcursor.js';
+import 'codemirror/addon/selection/active-line.js';
+import 'codemirror/addon/fold/foldcode.js';
+import 'codemirror/addon/fold/foldgutter.js';
+import 'codemirror/addon/fold/brace-fold.js';
 
 const editorCommands = editorCommandList.reduce(
   (acc, { shortcut, command }) => ({

@@ -1,6 +1,6 @@
-import babel from 'prettier/parser-babel';
-import postcss from 'prettier/parser-postcss';
-import prettier from 'prettier/standalone';
+import babel from 'prettier/parser-babel.js';
+import postcss from 'prettier/parser-postcss.js';
+import prettier from 'prettier/standalone.js';
 
 import type { CursorPosition } from '../contexts/StoreContext';
 
