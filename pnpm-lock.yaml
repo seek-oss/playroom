@@ -147,7 +147,7 @@ importers:
         specifier: ^0.2.12
         version: 0.2.14
       typescript:
-        specifier: '>=5.0.0'
+        specifier: ^5.0.0 || ^6.0.0
         version: 5.8.2
       use-debounce:
         specifier: ^10.0.0
