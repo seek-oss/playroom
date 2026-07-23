@@ -1,7 +1,5 @@
-import {
-  compressToEncodedURIComponent,
-  decompressFromEncodedURIComponent,
-} from 'lz-string';
+// Use a default import for ESM compatibility
+import lzString from 'lz-string';
 
 import type { Widths } from '../src/configModules/widths';
 
@@ -68,7 +66,7 @@ export const compressParams = ({
     ...(editorHidden ? { editorHidden } : {}),
   });
 
-  return compressToEncodedURIComponent(data);
+  return lzString.compressToEncodedURIComponent(data);
 };
 
 export const decompressParams = (param: string | null) => {
@@ -80,7 +78,7 @@ export const decompressParams = (param: string | null) => {
     theme,
     editorHidden,
   }: CompressParamsOptions = param
-    ? JSON.parse(decompressFromEncodedURIComponent(param))
+    ? JSON.parse(lzString.decompressFromEncodedURIComponent(param))
     : {};
 
   return {
