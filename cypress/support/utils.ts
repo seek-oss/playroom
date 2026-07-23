@@ -125,7 +125,9 @@ export const selectWidthPreference = (
   options: { source: 'menu' | 'header' }
 ) => {
   toggleFramesMenuForSource(options.source, 'open');
-  cy.findByRole('menuitemcheckbox', { name: `${width}` }).click();
+  cy.findByRole('menuitemcheckbox', {
+    name: typeof width === 'number' ? new RegExp(`${width}$`) : width,
+  }).click();
   toggleFramesMenuForSource(options.source, 'close');
 };
 export const selectThemePreference = (
