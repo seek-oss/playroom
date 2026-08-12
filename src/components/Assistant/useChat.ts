@@ -209,6 +209,10 @@ export function useChat({
             },
           ]);
           setLoading(false);
+        } else if (!chunk.choices[0]?.finish_reason) {
+          // Some gateways emit trailing chunks after `stop` with an empty
+          // delta and no finish_reason; ignore those instead of erroring.
+          continue;
         } else {
           throw new Error(
             `Unhandled finish reason: ${chunk.choices[0]?.finish_reason}`
