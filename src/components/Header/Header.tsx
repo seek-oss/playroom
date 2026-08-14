@@ -327,7 +327,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
             })
           }
           disabledReason="No active Playroom to inspect"
-          shortcut={[primaryMod, 'Shift', 'C']}
+          shortcut={[primaryMod, 'Shift', 'E']}
         >
           Inspect Element
         </MenuItem>

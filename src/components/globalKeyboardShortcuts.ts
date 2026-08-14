@@ -45,7 +45,7 @@ export const useGlobalKeyboardShortcutsForWindow = (win: Window | null) => {
             }
             break;
           }
-          case 'c': {
+          case 'e': {
             if (e.shiftKey) {
               e.preventDefault();
               dispatch({

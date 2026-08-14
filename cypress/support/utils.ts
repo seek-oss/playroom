@@ -601,7 +601,7 @@ export const toggleInspectMode = (options: {
       break;
     }
     case 'keyboard': {
-      cy.get('body').type(cmdPlus('shift+c'));
+      cy.get('body').type(cmdPlus('shift+e'));
       break;
     }
     default: {

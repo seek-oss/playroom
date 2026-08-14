@@ -142,7 +142,7 @@ const Frame = ({
               bleed
               icon={<SquareDashedMousePointerIcon />}
               label="Inspect element"
-              shortcut={[primaryMod, 'Shift', 'C']}
+              shortcut={[primaryMod, 'Shift', 'E']}
               onClick={() => {
                 dispatch({
                   type: inspectMode
