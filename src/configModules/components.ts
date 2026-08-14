@@ -1,3 +1,6 @@
+// Import as a side-effect here so parse-prop-types would patch "prop-types" before components import.
+import 'parse-prop-types';
+
 import * as sourceComponents from '__PLAYROOM_ALIAS__COMPONENTS__';
 
 // Exclude undefined components, e.g. an exported TypeScript type.
