@@ -315,14 +315,16 @@ export const selectNextLines = (
 
 export const assertCodePaneContains = (text: string) => {
   getCodeEditor().within(() => {
-    // Accumulate text from individual line elements as they don't include line numbers
-    const lines: string[] = [];
-    cy.get('.CodeMirror-line').each(($el) => lines.push($el.text()));
-
-    cy.then(() => {
+    // Assert inside `.should` so Cypress retries while CodeMirror paints.
+    // Line elements are used so gutter line numbers are excluded.
+    cy.get('.CodeMirror-line').should((lines) => {
       // removes code mirrors invisible last line character placeholder
       // which is inserted to preserve prettier's new line at end of string.
-      const code = lines.join('\n').replace(/[\u200b]$/, '');
+      const code = lines
+        .toArray()
+        .map((el) => el.textContent ?? '')
+        .join('\n')
+        .replace(/[\u200b]$/, '');
       expect(code).to.equal(text);
     });
   });
@@ -375,10 +377,23 @@ export const assertPreviewContains = (text: string) =>
       expect(frameBody.innerText).to.eq(text);
     });
 
-const _loadPlayroom = (baseUrl: string, initialCode?: string) => {
-  const visitUrl = initialCode
-    ? createUrl({ baseUrl, code: dedent(initialCode) })
-    : baseUrl;
+type LoadPlayroomOptions = {
+  title?: string;
+};
+
+const _loadPlayroom = (
+  baseUrl: string,
+  initialCode?: string,
+  options?: LoadPlayroomOptions
+) => {
+  const visitUrl =
+    initialCode || options?.title
+      ? createUrl({
+          baseUrl,
+          ...(initialCode ? { code: dedent(initialCode) } : {}),
+          ...(options?.title ? { title: options.title } : {}),
+        })
+      : baseUrl;
 
   return cy.visit(visitUrl).then((window) => {
     if (!initialCode) {
@@ -389,11 +404,15 @@ const _loadPlayroom = (baseUrl: string, initialCode?: string) => {
     indexedDB.deleteDatabase(storageKey);
   });
 };
-export const loadPlayroom = (initialCode?: string) =>
-  _loadPlayroom('http://localhost:9000', initialCode);
+export const loadPlayroom = (
+  initialCode?: string,
+  options?: LoadPlayroomOptions
+) => _loadPlayroom('http://localhost:9000', initialCode, options);
 
-export const loadThemedPlayroom = (initialCode?: string) =>
-  _loadPlayroom('http://localhost:9001', initialCode);
+export const loadThemedPlayroom = (
+  initialCode?: string,
+  options?: LoadPlayroomOptions
+) => _loadPlayroom('http://localhost:9001', initialCode, options);
 
 export const loadPlayroomWithAppearance = (
   appearance: 'light' | 'dark',
