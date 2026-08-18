@@ -1,4 +1,5 @@
 import { createBrowserHistory } from 'history';
+// Use a default import for better compatibility with ESM consumers
 import lzString from 'lz-string';
 import { useState, useEffect, type ReactNode } from 'react';
 

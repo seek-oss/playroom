@@ -212,12 +212,14 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
       code,
       id,
       inspectMode,
+      title: storeTitle,
     },
     dispatch,
   ] = useContext(StoreContext);
 
   const hasCode = code.trim().length > 0;
-  const { title, ...params } = resolveDataFromUrl();
+  const { title: urlTitle, ...params } = resolveDataFromUrl();
+  const title = storeTitle || urlTitle;
   const duplicateUrl = createUrlForData(
     compressParams({
       ...params,
@@ -327,7 +329,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
             })
           }
           disabledReason="No active Playroom to inspect"
-          shortcut={[primaryMod, 'Shift', 'C']}
+          shortcut={[primaryMod, 'Shift', 'E']}
         >
           Inspect Element
         </MenuItem>
