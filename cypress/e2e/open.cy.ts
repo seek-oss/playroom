@@ -4,6 +4,7 @@ import {
   assertStoredPlayrooms,
   assertTitle,
   changeTitle,
+  cmdPlus,
   getCodeEditor,
   loadPlayroom,
   openMainMenu,
@@ -35,6 +36,13 @@ describe('Open', () => {
 
     // Open first design via menu
     openStoredPlayroomByName('First design', { source: 'menu' });
+    assertTitle('First design');
+    assertCodePaneContains('First design');
+    assertFirstFrameContains('First design');
+
+    // Undo should not restore the previously opened playroom
+    getCodeEditor().click();
+    typeCode(cmdPlus('z'));
     assertTitle('First design');
     assertCodePaneContains('First design');
     assertFirstFrameContains('First design');

@@ -294,6 +294,7 @@ export const CodeEditor = ({
       code !== editorInstanceRef.current.getValue()
     ) {
       editorInstanceRef.current.setValue(code);
+      editorInstanceRef.current.clearHistory();
       editorInstanceRef.current.setCursor(
         cursorPosition.line,
         cursorPosition.ch
