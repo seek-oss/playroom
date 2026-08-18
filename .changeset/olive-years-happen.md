@@ -2,4 +2,4 @@
 'playroom': patch
 ---
 
-Fix regex for Playroom CSS issuer path
+webpack: Ensure Vanilla Extract stylesheets are handled on Windows
