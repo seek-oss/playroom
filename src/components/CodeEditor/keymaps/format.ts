@@ -8,7 +8,7 @@ export const formatCode = (cm: Editor) => {
 
   formatCodeUtil({ code: currentValue, cursor }).then(
     ({ code: formattedCode, cursor: formattedCursor }) => {
-      if (formattedCode !== currentValue) {
+      if (formattedCode !== cm.getValue()) {
         cm.setValue(formattedCode);
         cm.setCursor(formattedCursor);
       }
