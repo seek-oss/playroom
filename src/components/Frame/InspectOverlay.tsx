@@ -70,7 +70,7 @@ interface ElementMatch {
 
 function findDeepestElementMatch(
   element: any,
-  fiberTypes: Set<any>
+  fiberTypes: Set<any>,
 ): ElementMatch | null {
   if (!element || typeof element !== 'object') {
     return null;
@@ -144,7 +144,7 @@ function findInspectTarget(el: Element): InspectResult | null {
 export const InspectOverlay = () => {
   const [enabled, setEnabled] = useState(false);
   const [highlightRect, setHighlightRect] = useState<HighlightRect | null>(
-    null
+    null,
   );
   const lastLineRef = useRef<number | null>(null);
 

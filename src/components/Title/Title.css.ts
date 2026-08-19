@@ -42,7 +42,7 @@ export const textField = style([
     selectors: {
       [comma(
         '&:hover:not(:focus-visible)',
-        '&:hover:not(:focus-visible)::placeholder'
+        '&:hover:not(:focus-visible)::placeholder',
       )]: {
         background: colorPaletteVars.background.selection,
         opacity: 1,

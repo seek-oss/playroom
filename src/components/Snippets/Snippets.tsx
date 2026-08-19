@@ -15,6 +15,8 @@ import { useDebouncedCallback } from 'use-debounce';
 import type { Snippet } from '../../../utils';
 import snippets from '../../configModules/snippets';
 import { StoreContext } from '../../contexts/StoreContext';
+import { isValidLocation } from '../../utils/cursor';
+import { formatAndInsert, formatForInsertion } from '../../utils/formatting';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { Secondary } from '../Secondary/Secondary';
 import { Text } from '../Text/Text';
@@ -42,7 +44,7 @@ const snippetsById: Record<string, SnippetWithId> = snippets.reduce(
       },
     };
   },
-  {}
+  {},
 );
 
 type SnippetsContentProps = {
@@ -58,7 +60,7 @@ const snippetsByGroup = Object.entries(
     }
     acc[group].push({ ...snippet, id: resolveSnippetId(snippet, index) });
     return acc;
-  }, {})
+  }, {}),
 );
 
 const SnippetsGroup = ({
@@ -134,7 +136,7 @@ const SnippetItem = ({
 const resolveScore = (
   item: string,
   search: string,
-  modifier: number = 0
+  modifier: number = 0,
 ): number => {
   const lowerItem = item.toLowerCase();
 
@@ -203,17 +205,33 @@ const scoreSnippet = (snippet: SnippetWithId, search: string): number => {
 };
 
 const allSnippets: SnippetWithId[] = snippetsByGroup.flatMap(
-  ([, items]) => items
+  ([, items]) => items,
 );
 
 const initialMatchedSnippet = ' ';
 const Content = ({ searchRef, onSelect }: SnippetsContentProps) => {
   const [matchedSnippet, setMatchedSnippet] = useState(initialMatchedSnippet);
   const [inputValue, setInputValue] = useState('');
-  const [, dispatch] = useContext(StoreContext);
-  const debouncedPreview = useDebouncedCallback((snippet: ReturnedSnippet) => {
-    dispatch({ type: 'previewSnippet', payload: { snippet } });
-  }, snippetPreviewDebounce);
+  const [{ code: stateCode, cursorPosition }, dispatch] =
+    useContext(StoreContext);
+  const debouncedPreview = useDebouncedCallback(
+    async (snippet: ReturnedSnippet) => {
+      let previewRenderCode;
+      if (snippet) {
+        const { code } = await formatAndInsert({
+          code: stateCode,
+          snippet: snippet.code,
+          cursor: cursorPosition,
+        });
+        previewRenderCode = code;
+      }
+      dispatch({
+        type: 'previewSnippet',
+        payload: { previewRenderCode },
+      });
+    },
+    snippetPreviewDebounce,
+  );
 
   const hasGroups = snippetsByGroup.length > 1;
   const filteredSnippets = useMemo(() => {
@@ -320,12 +338,20 @@ type SnippetsProps = {
 };
 
 export const Snippets = ({ trigger, sideOffset }: SnippetsProps) => {
-  const [{ snippetsOpen }, dispatch] = useContext(StoreContext);
+  const [
+    { snippetsOpen, code: stateCode, cursorPosition, hasSyntaxError },
+    dispatch,
+  ] = useContext(StoreContext);
   const searchRef = useRef<HTMLInputElement | null>(null);
 
-  const handleSelect = (snippet: ReturnedSnippet) => {
+  const handleSelect = async (snippet: ReturnedSnippet) => {
     if (snippet) {
-      dispatch({ type: 'persistSnippet', payload: { snippet } });
+      const { code, cursor } = await formatAndInsert({
+        code: stateCode,
+        snippet: snippet.code,
+        cursor: cursorPosition,
+      });
+      dispatch({ type: 'persistSnippet', payload: { code, cursor } });
     } else {
       dispatch({ type: 'closeSnippets' });
     }
@@ -335,9 +361,23 @@ export const Snippets = ({ trigger, sideOffset }: SnippetsProps) => {
     <BaseUIPopover.Root
       open={snippetsOpen}
       modal
-      onOpenChange={(open) =>
-        dispatch({ type: open ? 'openSnippets' : 'closeSnippets' })
-      }
+      onOpenChange={async (open) => {
+        if (!open) {
+          dispatch({ type: 'closeSnippets' });
+          return;
+        }
+        if (hasSyntaxError) {
+          return;
+        }
+        if (!isValidLocation({ code: stateCode, cursor: cursorPosition })) {
+          return;
+        }
+        const { code, cursor } = await formatForInsertion({
+          code: stateCode,
+          cursor: cursorPosition,
+        });
+        dispatch({ type: 'openSnippets', payload: { code, cursor } });
+      }}
     >
       <BaseUIPopover.Trigger render={trigger} />
       <BaseUIPopover.Portal>

@@ -34,13 +34,13 @@ export default (inspectMode = false) => {
 
   if (ReactCreateElementPragma in userScope) {
     throw new Error(
-      `'${ReactCreateElementPragma}' is used internally by Playroom and is not allowed in scope`
+      `'${ReactCreateElementPragma}' is used internally by Playroom and is not allowed in scope`,
     );
   }
 
   if (ReactFragmentPragma in userScope) {
     throw new Error(
-      `'${ReactFragmentPragma}' is used internally by Playroom and is not allowed in scope`
+      `'${ReactFragmentPragma}' is used internally by Playroom and is not allowed in scope`,
     );
   }
 

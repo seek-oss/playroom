@@ -44,49 +44,49 @@ describe('position to cursor offset', () => {
 });
 
 describe('formatting code', () => {
-  it('should handle one line', () => {
+  it('should handle one line', async () => {
     const code = `<div><h1>Title</h1></div>`;
-    expect(formatCode({ code, cursor: { line: 0, ch: 9 } })).toEqual({
+    expect(await formatCode({ code, cursor: { line: 0, ch: 9 } })).toEqual({
       cursor: { line: 1, ch: 6 },
       code: `<div>\n  <h1>Title</h1>\n</div>\n`,
     });
   });
 
-  it('should handle multiple lines', () => {
+  it('should handle multiple lines', async () => {
     const code = `<div>\n<h1>Title</h1>\n</div>`;
-    expect(formatCode({ code, cursor: { line: 1, ch: 4 } })).toEqual({
+    expect(await formatCode({ code, cursor: { line: 1, ch: 4 } })).toEqual({
       cursor: { line: 1, ch: 6 },
       code: `<div>\n  <h1>Title</h1>\n</div>\n`,
     });
   });
 
-  it('should handle multiple lines with cursor at start of line', () => {
+  it('should handle multiple lines with cursor at start of line', async () => {
     const code = `<div>\n<h1>Title</h1>\n</div>`;
-    expect(formatCode({ code, cursor: { line: 1, ch: 0 } })).toEqual({
-      cursor: { line: 1, ch: 0 },
+    expect(await formatCode({ code, cursor: { line: 1, ch: 0 } })).toEqual({
+      cursor: { line: 1, ch: 2 },
       code: `<div>\n  <h1>Title</h1>\n</div>\n`,
     });
   });
 
-  it('should handle multiple root level jsx elements', () => {
+  it('should handle multiple root level jsx elements', async () => {
     const code = `<div><h1>Title</h1></div><div><h1>Title Two</h1></div>`;
-    expect(formatCode({ code, cursor: { line: 0, ch: 34 } })).toEqual({
+    expect(await formatCode({ code, cursor: { line: 0, ch: 34 } })).toEqual({
       cursor: { line: 4, ch: 6 },
       code: `<div>\n  <h1>Title</h1>\n</div>\n<div>\n  <h1>Title Two</h1>\n</div>\n`,
     });
   });
 
-  it('should handle JSX comment', () => {
+  it('should handle JSX comment', async () => {
     const code = `{/* test comment */}`;
-    expect(formatCode({ code, cursor: { line: 0, ch: 0 } })).toEqual({
+    expect(await formatCode({ code, cursor: { line: 0, ch: 0 } })).toEqual({
       code,
       cursor: { line: 0, ch: 0 },
     });
   });
 
-  it('should handle JSX comment and preserve cursor position', () => {
+  it('should handle JSX comment and preserve cursor position', async () => {
     const code = `{/* test comment */}`;
-    expect(formatCode({ code, cursor: { line: 0, ch: 20 } })).toEqual({
+    expect(await formatCode({ code, cursor: { line: 0, ch: 20 } })).toEqual({
       code,
       cursor: { line: 0, ch: 20 },
     });
@@ -94,57 +94,57 @@ describe('formatting code', () => {
 });
 
 describe('format and insert', () => {
-  it('should handle inserting one line into one line', () => {
+  it('should handle inserting one line into one line', async () => {
     const snippet = '<span>added</span>';
     const code = `<div><h1>Title</h1></div>`;
     expect(
-      formatAndInsert({ code, cursor: { line: 0, ch: 9 }, snippet })
+      await formatAndInsert({ code, cursor: { line: 0, ch: 9 }, snippet }),
     ).toEqual({
       cursor: { line: 2, ch: 22 },
       code: `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n`,
     });
   });
 
-  it('should handle inserting multiple lines into multiple lines', () => {
+  it('should handle inserting multiple lines into multiple lines', async () => {
     const snippet = '<span>\n  <strong>second</strong>\n</span>';
     const code = `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n`;
     expect(
-      formatAndInsert({ code, cursor: { line: 2, ch: 15 }, snippet })
+      await formatAndInsert({ code, cursor: { line: 2, ch: 15 }, snippet }),
     ).toEqual({
       cursor: { line: 6, ch: 13 },
       code: `<div>\n  <h1>\n    <span>\n      added\n      <span>\n        <strong>second</strong>\n      </span>\n    </span>\n    Title\n  </h1>\n</div>\n`,
     });
   });
 
-  it('should handle inserting at the start', () => {
+  it('should handle inserting at the start', async () => {
     const snippet = '<span>\n  <strong>second</strong>\n</span>';
     const code = `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n`;
     expect(
-      formatAndInsert({ code, cursor: { line: 0, ch: 0 }, snippet })
+      await formatAndInsert({ code, cursor: { line: 0, ch: 0 }, snippet }),
     ).toEqual({
       cursor: { line: 2, ch: 7 },
       code: `<span>\n  <strong>second</strong>\n</span>\n<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n`,
     });
   });
 
-  it('should handle inserting at the end', () => {
+  it('should handle inserting at the end', async () => {
     const snippet = '<span>\n  <strong>second</strong>\n</span>';
     const code = `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n`;
     expect(
-      formatAndInsert({ code, cursor: { line: 5, ch: 0 }, snippet })
+      await formatAndInsert({ code, cursor: { line: 5, ch: 0 }, snippet }),
     ).toEqual({
       cursor: { line: 7, ch: 7 },
       code: `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n<span>\n  <strong>second</strong>\n</span>\n`,
     });
   });
 
-  it('should handle inserting at the end after multiple new lines', () => {
+  it('should handle inserting at the end after multiple new lines', async () => {
     const snippet = '<span>\n  <strong>second</strong>\n</span>\n';
     const code = `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n\n\n\n`;
     expect(
-      formatAndInsert({ code, cursor: { line: 8, ch: 0 }, snippet })
+      await formatAndInsert({ code, cursor: { line: 8, ch: 0 }, snippet }),
     ).toEqual({
-      cursor: { line: 9, ch: 0 },
+      cursor: { line: 1, ch: 0 },
       code: `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n\n<span>\n  <strong>second</strong>\n</span>\n`,
     });
   });

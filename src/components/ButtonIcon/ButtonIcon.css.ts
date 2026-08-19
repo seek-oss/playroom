@@ -134,7 +134,7 @@ export const variant = styleVariants({
           `${button}:not([aria-disabled="true"]):hover > &`,
           `${button}:not([aria-disabled="true"]):focus-visible > &`,
           `${button}:not([aria-disabled="true"])[data-popup-open] > &`,
-          `${button}:not([aria-disabled="true"])[data-active] > &`
+          `${button}:not([aria-disabled="true"])[data-active] > &`,
         )]: {
           backgroundColor: backgroundStandardHover,
         },
@@ -150,7 +150,7 @@ export const variant = styleVariants({
           `${button}:not([aria-disabled="true"]):hover > &`,
           `${button}:not([aria-disabled="true"]):focus-visible > &`,
           `${button}:not([aria-disabled="true"])[data-popup-open] > &`,
-          `${button}:not([aria-disabled="true"])[data-active] > &`
+          `${button}:not([aria-disabled="true"])[data-active] > &`,
         )]: {
           backgroundColor: backgroundSolidHover,
         },
@@ -165,7 +165,7 @@ export const variant = styleVariants({
           `${button}:not([aria-disabled="true"]):hover > &`,
           `${button}:not([aria-disabled="true"]):focus-visible > &`,
           `${button}:not([aria-disabled="true"])[data-popup-open] > &`,
-          `${button}:not([aria-disabled="true"])[data-active] > &`
+          `${button}:not([aria-disabled="true"])[data-active] > &`,
         )]: {
           color: foregroundTransparentHover,
           backgroundColor: backgroundTransparentHover,

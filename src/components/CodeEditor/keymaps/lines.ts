@@ -13,7 +13,7 @@ type ContentUpdate = [string, [CodeMirror.Position, CodeMirror.Position?]];
 const getNewPosition = (
   range: CodeMirror.Range,
   direction: Direction,
-  extraLines: number
+  extraLines: number,
 ) => {
   const currentLine = range[directionToMethod[direction]]().line;
 
@@ -42,7 +42,7 @@ export const duplicateLine = (direction: Direction) => (cm: Editor) => {
     const newLineCount = range.to().line - range.from().line + 1;
     const existingContent = cm.getRange(
       new Pos(range.from().line, 0),
-      new Pos(range.to().line)
+      new Pos(range.to().line),
     );
 
     const newContentParts = [existingContent, '\n'];
@@ -131,7 +131,7 @@ export const swapLineUp = function (cm: Editor) {
           `\n${line}`,
           new Pos(cm.lastLine()),
           undefined,
-          '+swapLine'
+          '+swapLine',
         );
       } else {
         cm.replaceRange(`${line}\n`, new Pos(to, 0), undefined, '+swapLine');
@@ -181,7 +181,7 @@ export const swapLineDown = function (cm: Editor) {
           '',
           new Pos(from, 0),
           new Pos(from + 1, 0),
-          '+swapLine'
+          '+swapLine',
         );
       }
 

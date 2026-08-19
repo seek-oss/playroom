@@ -13,11 +13,13 @@ interface BaseProps {
 }
 
 interface ButtonProps
-  extends Omit<AllHTMLAttributes<HTMLButtonElement>, 'as' | 'size' | 'height'>,
+  extends
+    Omit<AllHTMLAttributes<HTMLButtonElement>, 'as' | 'size' | 'height'>,
     BaseProps {}
 
 interface LinkProps
-  extends Omit<AllHTMLAttributes<HTMLAnchorElement>, 'as' | 'size' | 'height'>,
+  extends
+    Omit<AllHTMLAttributes<HTMLAnchorElement>, 'as' | 'size' | 'height'>,
     BaseProps {}
 
 type Props = ButtonProps | LinkProps;

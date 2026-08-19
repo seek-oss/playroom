@@ -40,7 +40,7 @@ export const wrapInTag = (cm: Editor) => {
       from.ch + 1 + (isMultiLineSelection ? existingIndent : 0);
     const newStartCursor = new Pos(
       from.line + linesAdded,
-      startCursorCharacterPosition
+      startCursorCharacterPosition,
     );
 
     const newEndCursor = isMultiLineSelection
@@ -70,13 +70,13 @@ export const wrapInTag = (cm: Editor) => {
 
         const openTagIndentLevel = ' '.repeat(range.existingIndent);
         const closeTagIndentLevel = ' '.repeat(
-          range.from.ch + range.existingIndent
+          range.from.ch + range.existingIndent,
         );
 
         cm.replaceRange(
           `${openTagIndentLevel}<>\n${formattedExistingContent}\n${closeTagIndentLevel}</>`,
           range.from,
-          range.to
+          range.to,
         );
       } else {
         cm.replaceRange(`<>${existingContent}</>`, range.from, range.to);

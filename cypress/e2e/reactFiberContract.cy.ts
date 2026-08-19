@@ -17,14 +17,14 @@ describe('React Fiber Contract', () => {
       .find('[data-testid="foo-component"]')
       .should(($el) => {
         const fiberKey = Object.keys($el[0]).find((k) =>
-          k.startsWith('__reactFiber$')
+          k.startsWith('__reactFiber$'),
         );
 
         expect(
           fiberKey,
           'Expected __reactFiber$ property on DOM element rendered by a custom component. ' +
             "Playroom's Inspect Element feature depends on this React internal to walk the fiber tree. " +
-            'If this fails after a React upgrade, update getFiberKey() in src/components/Frame/InspectOverlay.tsx.'
+            'If this fails after a React upgrade, update getFiberKey() in src/components/Frame/InspectOverlay.tsx.',
         ).to.not.equal(undefined);
       });
   });
@@ -34,14 +34,14 @@ describe('React Fiber Contract', () => {
       .find('[data-testid="fiber-test"]')
       .should(($el) => {
         const fiberKey = Object.keys($el[0]).find((k) =>
-          k.startsWith('__reactFiber$')
+          k.startsWith('__reactFiber$'),
         );
 
         expect(
           fiberKey,
           'Expected __reactFiber$ property on a standard <div> element. ' +
             "Playroom's Inspect Element feature depends on this React internal to walk the fiber tree. " +
-            'If this fails after a React upgrade, update getFiberKey() in src/components/Frame/InspectOverlay.tsx.'
+            'If this fails after a React upgrade, update getFiberKey() in src/components/Frame/InspectOverlay.tsx.',
         ).to.not.equal(undefined);
       });
   });
@@ -52,30 +52,30 @@ describe('React Fiber Contract', () => {
       .should(($el) => {
         const element: Record<string, unknown> = $el[0] as never;
         const fiberKey = Object.keys(element).find((k) =>
-          k.startsWith('__reactFiber$')
+          k.startsWith('__reactFiber$'),
         );
 
         expect(fiberKey, 'Expected __reactFiber$ key to exist').to.be.a(
-          'string'
+          'string',
         );
 
         const fiber = element[fiberKey as string] as Record<string, unknown>;
 
         expect(fiber, 'Fiber node must be a non-null object').to.not.equal(
-          null
+          null,
         );
         expect(fiber, 'Fiber node must be a non-null object').to.be.an(
-          'object'
+          'object',
         );
 
         expect(
           fiber,
-          'Fiber node must have memoizedProps (used to read data-playroomline)'
+          'Fiber node must have memoizedProps (used to read data-playroomline)',
         ).to.have.property('memoizedProps');
 
         expect(
           fiber,
-          'Fiber node must have return (used to walk up the fiber tree)'
+          'Fiber node must have return (used to walk up the fiber tree)',
         ).to.have.property('return');
       });
   });

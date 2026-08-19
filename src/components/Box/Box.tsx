@@ -4,7 +4,8 @@ import { forwardRef, type AllHTMLAttributes, type ElementType } from 'react';
 import { sprinkles, type Sprinkles } from '../../css/sprinkles.css';
 
 interface BoxProps
-  extends Omit<
+  extends
+    Omit<
       AllHTMLAttributes<HTMLElement>,
       'width' | 'height' | 'className' | 'data'
     >,
@@ -28,5 +29,5 @@ export const Box = forwardRef<HTMLElement, BoxProps>(
     const Component = component;
 
     return <Component ref={ref} className={classes} {...restProps} />;
-  }
+  },
 );

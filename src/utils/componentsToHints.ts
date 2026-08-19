@@ -14,7 +14,7 @@ type Hints = Record<
 
 export const __private_create_hints = (
   components: typeof configComponents,
-  types: typeof staticTypes = {}
+  types: typeof staticTypes = {},
 ) => {
   const componentNames = Object.keys(components).sort();
 
@@ -33,24 +33,27 @@ export const __private_create_hints = (
     }
 
     const { children, ...filteredPropTypes } = parsePropTypes(
-      components[componentName]
+      components[componentName],
     );
     const propNames = Object.keys(filteredPropTypes);
 
     return {
       ...componentAcc,
       [componentName]: {
-        attrs: propNames.reduce((propAcc, propName) => {
-          const propType = filteredPropTypes[propName].type;
+        attrs: propNames.reduce(
+          (propAcc, propName) => {
+            const propType = filteredPropTypes[propName].type;
 
-          return {
-            ...propAcc,
-            [propName]:
-              propType.name === 'oneOf'
-                ? propType.value.filter((x: any) => typeof x === 'string')
-                : null,
-          };
-        }, {} as Hints[string]['attrs']),
+            return {
+              ...propAcc,
+              [propName]:
+                propType.name === 'oneOf'
+                  ? propType.value.filter((x: any) => typeof x === 'string')
+                  : null,
+            };
+          },
+          {} as Hints[string]['attrs'],
+        ),
       },
     };
   }, {} as Hints);

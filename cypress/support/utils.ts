@@ -54,7 +54,7 @@ export const selectHint = (index?: number) => {
           typeof index !== 'undefined' && index > 1
             ? new Array(index - 1).fill('{downarrow}').join('')
             : ''
-        }{enter}`
+        }{enter}`,
       );
     });
 };
@@ -84,7 +84,7 @@ export const openMainMenuSubMenu = (name: string) => {
   cy.findByRole('menuitem', { name }).should(
     'have.attr',
     'aria-expanded',
-    'true'
+    'true',
   );
   cy.findByRole('menuitem', { name }).then((el) => {
     const subMenuId = el.attr('aria-controls')?.replace(/:/g, '\\:'); // escape colons for Cypress
@@ -99,7 +99,7 @@ export const openEditorActionsMenu = () => {
 
 const toggleFramesMenuForSource = (
   source: 'menu' | 'header',
-  state: 'open' | 'close'
+  state: 'open' | 'close',
 ) => {
   switch (source) {
     case 'header': {
@@ -122,7 +122,7 @@ const toggleFramesMenuForSource = (
 
 export const selectWidthPreference = (
   width: Widths[number],
-  options: { source: 'menu' | 'header' }
+  options: { source: 'menu' | 'header' },
 ) => {
   toggleFramesMenuForSource(options.source, 'open');
   cy.findByRole('menuitemcheckbox', { name: `${width}` }).click();
@@ -130,7 +130,7 @@ export const selectWidthPreference = (
 };
 export const selectThemePreference = (
   theme: string,
-  options: { source: 'menu' | 'header' }
+  options: { source: 'menu' | 'header' },
 ) => {
   toggleFramesMenuForSource(options.source, 'open');
   cy.findByRole('menuitemcheckbox', { name: theme }).click();
@@ -174,7 +174,7 @@ export const gotoThemedPreview = (themeName: string) => {
 export const assertPreviewForTheme = (themeName: string) => {
   cy.location().should((loc) => {
     const resolvedParams = decompressParams(
-      new URLSearchParams(loc.search).get('code')
+      new URLSearchParams(loc.search).get('code'),
     );
     expect(resolvedParams.theme).to.eq(themeName);
   });
@@ -191,7 +191,7 @@ type ToggleSnippetsOptions = {
 };
 const toggleSnippets = (
   state: 'open' | 'close',
-  options: ToggleSnippetsOptions
+  options: ToggleSnippetsOptions,
 ) => {
   switch (options.source) {
     case 'editorAction': {
@@ -297,7 +297,7 @@ export const moveByWords = (numWords: number) => {
   const absoluteNumWords = Math.abs(numWords);
 
   typeCode(
-    `{${navigationModifier}+${arrowDirection}}`.repeat(absoluteNumWords)
+    `{${navigationModifier}+${arrowDirection}}`.repeat(absoluteNumWords),
   );
 };
 
@@ -307,7 +307,7 @@ export const moveToEndOfLine = () => {
 
 export const selectNextLines = (
   numLines: number,
-  direction: Direction = 'down'
+  direction: Direction = 'down',
 ) => {
   const arrowCode = direction === 'down' ? 'downArrow' : 'upArrow';
   typeCode(`{shift+${arrowCode}}`.repeat(numLines));
@@ -332,10 +332,10 @@ export const assertCodePaneContains = (text: string) => {
 
 export const assertCodePaneLineCount = (
   lines: number,
-  wait: boolean = false
+  wait: boolean = false,
 ) => {
   getCodeEditor().within(() =>
-    cy.get('.CodeMirror-line').should('have.length', lines)
+    cy.get('.CodeMirror-line').should('have.length', lines),
   );
 
   // Wait after check to ensure original focus is restored
@@ -345,7 +345,7 @@ export const assertCodePaneLineCount = (
 };
 
 export const assertFramesMatch = (
-  frames: Widths | Array<[frameTheme: string, frameWidth: Widths[number]]>
+  frames: Widths | Array<[frameTheme: string, frameWidth: Widths[number]]>,
 ) => {
   const formattedFrames = frames.map((frame) => {
     if (frame === 'Fit to window') {
@@ -384,7 +384,7 @@ type LoadPlayroomOptions = {
 const _loadPlayroom = (
   baseUrl: string,
   initialCode?: string,
-  options?: LoadPlayroomOptions
+  options?: LoadPlayroomOptions,
 ) => {
   const visitUrl =
     initialCode || options?.title
@@ -406,17 +406,17 @@ const _loadPlayroom = (
 };
 export const loadPlayroom = (
   initialCode?: string,
-  options?: LoadPlayroomOptions
+  options?: LoadPlayroomOptions,
 ) => _loadPlayroom('http://localhost:9000', initialCode, options);
 
 export const loadThemedPlayroom = (
   initialCode?: string,
-  options?: LoadPlayroomOptions
+  options?: LoadPlayroomOptions,
 ) => _loadPlayroom('http://localhost:9001', initialCode, options);
 
 export const loadPlayroomWithAppearance = (
   appearance: 'light' | 'dark',
-  initialCode?: string
+  initialCode?: string,
 ) => {
   cy.window().then((win) => {
     cy.stub(win, 'matchMedia')
@@ -435,7 +435,7 @@ const typeInSearchField = (text: string) =>
 
 export const findInCode = (
   term: string,
-  options: { source: 'keyboard' | 'editorAction' }
+  options: { source: 'keyboard' | 'editorAction' },
 ) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
@@ -460,7 +460,7 @@ export const findInCode = (
 export const replaceInCode = (
   term: string,
   replaceWith: string | null,
-  options: { source: 'keyboard' | 'editorAction' }
+  options: { source: 'keyboard' | 'editorAction' },
 ) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
@@ -488,7 +488,7 @@ export const replaceInCode = (
 
 export const jumpToLine = (
   line: number,
-  options: { source: 'keyboard' | 'editorAction' }
+  options: { source: 'keyboard' | 'editorAction' },
 ) => {
   // Wait necessary to ensure code pane is focussed
   cy.wait(CYPRESS_DEFAULT_WAIT_TIME); // eslint-disable-line cypress/no-unnecessary-waiting
@@ -519,20 +519,20 @@ export const jumpToCharacter = (line: number, character: number) => {
 
 export const assertCodePaneSearchMatchesCount = (lines: number) => {
   getCodeEditor().within(() =>
-    cy.get('.cm-searching').should('have.length', lines)
+    cy.get('.cm-searching').should('have.length', lines),
   );
 };
 
 export const assertColourMode = (mode: 'dark' | 'light') => {
   cy.document().then((doc) => {
     expect(doc.documentElement.getAttribute('data-playroom-dark')).to.equal(
-      mode === 'dark' ? '' : null
+      mode === 'dark' ? '' : null,
     );
   });
 };
 
 export const editorPositionViaMenu = (
-  position: 'bottom' | 'left' | 'hidden'
+  position: 'bottom' | 'left' | 'hidden',
 ) => {
   openMainMenuSubMenu('Editor Position');
   cy.findByRole('menuitemradio', {
@@ -557,7 +557,7 @@ export const assertStoredPlayrooms = (count: number) => {
 
 export const openStoredPlayroomByName = (
   name: string,
-  options: { source: 'keyboard' | 'menu' }
+  options: { source: 'keyboard' | 'menu' },
 ) => {
   switch (options.source) {
     case 'keyboard': {
@@ -600,7 +600,7 @@ export const assertFrameSetting = (settingName: string, value: string) => {
   cy.findByRole('menuitemcheckbox', { name: settingName }).should(
     'have.attr',
     'aria-checked',
-    value
+    value,
   );
 };
 
@@ -637,12 +637,12 @@ export const assertInspectModeInactive = () =>
 
 export const simulateInspectMessage = (
   type: 'hover' | 'select' | 'exit',
-  line?: number | null
+  line?: number | null,
 ) =>
   cy.window().then((win) => {
     win.postMessage(
       { source: 'Playroom Inspect', type, ...(type !== 'exit' && { line }) },
-      '*'
+      '*',
     );
   });
 
