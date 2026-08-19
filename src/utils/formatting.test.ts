@@ -98,7 +98,7 @@ describe('format and insert', () => {
     const snippet = '<span>added</span>';
     const code = `<div><h1>Title</h1></div>`;
     expect(
-      formatAndInsert({ code, cursor: { line: 0, ch: 9 }, snippet })
+      formatAndInsert({ code, cursor: { line: 0, ch: 9 }, snippet }),
     ).toEqual({
       cursor: { line: 2, ch: 22 },
       code: `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n`,
@@ -109,7 +109,7 @@ describe('format and insert', () => {
     const snippet = '<span>\n  <strong>second</strong>\n</span>';
     const code = `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n`;
     expect(
-      formatAndInsert({ code, cursor: { line: 2, ch: 15 }, snippet })
+      formatAndInsert({ code, cursor: { line: 2, ch: 15 }, snippet }),
     ).toEqual({
       cursor: { line: 6, ch: 13 },
       code: `<div>\n  <h1>\n    <span>\n      added\n      <span>\n        <strong>second</strong>\n      </span>\n    </span>\n    Title\n  </h1>\n</div>\n`,
@@ -120,7 +120,7 @@ describe('format and insert', () => {
     const snippet = '<span>\n  <strong>second</strong>\n</span>';
     const code = `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n`;
     expect(
-      formatAndInsert({ code, cursor: { line: 0, ch: 0 }, snippet })
+      formatAndInsert({ code, cursor: { line: 0, ch: 0 }, snippet }),
     ).toEqual({
       cursor: { line: 2, ch: 7 },
       code: `<span>\n  <strong>second</strong>\n</span>\n<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n`,
@@ -131,7 +131,7 @@ describe('format and insert', () => {
     const snippet = '<span>\n  <strong>second</strong>\n</span>';
     const code = `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n`;
     expect(
-      formatAndInsert({ code, cursor: { line: 5, ch: 0 }, snippet })
+      formatAndInsert({ code, cursor: { line: 5, ch: 0 }, snippet }),
     ).toEqual({
       cursor: { line: 7, ch: 7 },
       code: `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n<span>\n  <strong>second</strong>\n</span>\n`,
@@ -142,7 +142,7 @@ describe('format and insert', () => {
     const snippet = '<span>\n  <strong>second</strong>\n</span>\n';
     const code = `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n\n\n\n`;
     expect(
-      formatAndInsert({ code, cursor: { line: 8, ch: 0 }, snippet })
+      formatAndInsert({ code, cursor: { line: 8, ch: 0 }, snippet }),
     ).toEqual({
       cursor: { line: 9, ch: 0 },
       code: `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n\n<span>\n  <strong>second</strong>\n</span>\n`,

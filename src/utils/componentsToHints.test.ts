@@ -50,7 +50,7 @@ describe('componentsToHints', () => {
       {
         Bar: { color: ['red', 'blue', 'black'] },
         Foo: { color: ['red', 'blue', 'black'] },
-      }
+      },
     );
 
     expect(result).toMatchInlineSnapshot(`

@@ -30,7 +30,7 @@ describe('Main Menu', () => {
       <div>Third line</div>
     `);
     assertCodePaneContains(
-      '<div>First line</div>\n<div>Second line</div>\n<div>Third line</div>'
+      '<div>First line</div>\n<div>Second line</div>\n<div>Third line</div>',
     );
     changeTitle('Initial Title');
     openMainMenu();
@@ -102,7 +102,7 @@ describe('Main Menu', () => {
       const themes: string[] = ['themeOne', 'themeTwo'];
 
       const allFrames = widths.flatMap((width) =>
-        themes.map<[string, Widths[number]]>((theme) => [theme, width])
+        themes.map<[string, Widths[number]]>((theme) => [theme, width]),
       );
 
       loadThemedPlayroom();

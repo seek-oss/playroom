@@ -63,14 +63,14 @@ interface ICodeMirror {
   editorDidMount?: (
     editor: codemirror.Editor,
     value: string,
-    cb: () => void
+    cb: () => void,
   ) => void;
   editorWillUnmount?: (lib: any) => void;
   onBlur?: DomEvent;
   onChange?: (
     editor: codemirror.Editor,
     data: codemirror.EditorChange,
-    value: string
+    value: string,
   ) => void;
   onContextMenu?: DomEvent;
   onCopy?: DomEvent;
@@ -88,7 +88,7 @@ interface ICodeMirror {
     editor: codemirror.Editor,
     lineNumber: number,
     gutter: string,
-    event: Event
+    event: Event,
   ) => void;
   onInputRead?: EditorChangeEvent;
   onKeyDown?: DomEvent;
@@ -100,7 +100,7 @@ interface ICodeMirror {
   onRenderLine?: (
     editor: codemirror.Editor,
     line: codemirror.LineHandle,
-    element: HTMLElement
+    element: HTMLElement,
   ) => void;
   onScroll?: (editor: codemirror.Editor, data: codemirror.ScrollInfo) => void;
   onSelection?: (editor: codemirror.Editor, data: any) => void;
@@ -109,7 +109,7 @@ interface ICodeMirror {
   onViewportChange?: (
     editor: codemirror.Editor,
     start: number,
-    end: number
+    end: number,
   ) => void;
   options?: codemirror.EditorConfiguration;
   selection?: { ranges: Array<ISetSelectionOptions>; focus?: boolean };
@@ -120,7 +120,7 @@ interface IControlledCodeMirror extends ICodeMirror {
   onBeforeChange: (
     editor: codemirror.Editor,
     data: codemirror.EditorChange,
-    value: string
+    value: string,
   ) => void;
   value: string;
 }
@@ -133,7 +133,7 @@ interface IUnControlledCodeMirror extends ICodeMirror {
     editor: codemirror.Editor,
     data: codemirror.EditorChange,
     value: string,
-    next: () => void
+    next: () => void,
   ) => void;
   value?: string;
 }
@@ -144,11 +144,11 @@ declare interface ICommon {
   applyNext: (
     props: IControlledCodeMirror | IUnControlledCodeMirror,
     next?: IControlledCodeMirror | IUnControlledCodeMirror,
-    preserved?: IPreservedOptions
+    preserved?: IPreservedOptions,
   ) => void;
   applyUserDefined: (
     props: IControlledCodeMirror | IUnControlledCodeMirror,
-    preserved?: IPreservedOptions
+    preserved?: IPreservedOptions,
   ) => void;
 }
 
@@ -180,7 +180,7 @@ class Shared implements ICommon {
   delegateCursor(
     position: codemirror.Position,
     scroll?: boolean,
-    focus?: boolean
+    focus?: boolean,
   ) {
     const doc = this.editor.getDoc() as codemirror.Doc;
 
@@ -211,7 +211,7 @@ class Shared implements ICommon {
     if (props && props.selection && props.selection.ranges) {
       this.delegateSelection(
         props.selection.ranges,
-        props.selection.focus || false
+        props.selection.focus || false,
       );
     }
 
@@ -220,7 +220,7 @@ class Shared implements ICommon {
       this.delegateCursor(
         props.cursor,
         props.autoScroll || false,
-        this.editor.getOption('autofocus') || false
+        this.editor.getOption('autofocus') || false,
       );
     }
 
@@ -233,7 +233,7 @@ class Shared implements ICommon {
   public applyNext(
     props: IControlledCodeMirror | IUnControlledCodeMirror,
     next?: IControlledCodeMirror | IUnControlledCodeMirror,
-    preserved?: any
+    preserved?: any,
   ) {
     // handle new ranges
     if (props && props.selection && props.selection.ranges) {
@@ -245,7 +245,7 @@ class Shared implements ICommon {
       ) {
         this.delegateSelection(
           next.selection.ranges,
-          next.selection.focus || false
+          next.selection.focus || false,
         );
       }
     }
@@ -256,7 +256,7 @@ class Shared implements ICommon {
         this.delegateCursor(
           preserved.cursor || next.cursor,
           next.autoScroll || false,
-          next.autoCursor || false
+          next.autoCursor || false,
         );
       }
     }
@@ -271,13 +271,13 @@ class Shared implements ICommon {
 
   public applyUserDefined(
     props: IControlledCodeMirror | IUnControlledCodeMirror,
-    preserved?: any
+    preserved?: any,
   ) {
     if (preserved && preserved.cursor) {
       this.delegateCursor(
         preserved.cursor,
         props.autoScroll || false,
-        this.editor.getOption('autofocus') || false
+        this.editor.getOption('autofocus') || false,
       );
     }
   }
@@ -313,7 +313,7 @@ class Shared implements ICommon {
                 this.props.onCursor &&
                   this.props.onCursor(
                     this.editor,
-                    this.editor.getDoc().getCursor()
+                    this.editor.getDoc().getCursor(),
                   );
               });
             }
@@ -391,7 +391,7 @@ class Shared implements ICommon {
                     this.editor,
                     lineNumber,
                     gutter,
-                    event
+                    event,
                   );
               });
             }
@@ -558,14 +558,14 @@ export class UnControlled extends React.Component<
       cm.defaults,
       // @ts-expect-error
       this.editor.options,
-      _options
+      _options,
     ) as codemirror.EditorConfiguration;
     type Option = keyof typeof userDefinedOptions;
 
     const optionDelta = Object.keys(userDefinedOptions).some(
       (key) =>
         this.editor.getOption(key as Option) !==
-        userDefinedOptions[key as Option]
+        userDefinedOptions[key as Option],
     );
 
     if (optionDelta) {
@@ -577,7 +577,7 @@ export class UnControlled extends React.Component<
           ) {
             this.editor.setOption(
               key as any,
-              userDefinedOptions[key as Option]
+              userDefinedOptions[key as Option],
             );
           }
         }
@@ -592,7 +592,7 @@ export class UnControlled extends React.Component<
       doc.replaceRange(
         props.value || '',
         { line: 0, ch: 0 },
-        { line: lastLine, ch: lastChar }
+        { line: lastLine, ch: lastChar },
       );
     }
 
@@ -623,7 +623,7 @@ export class UnControlled extends React.Component<
           this.editor,
           data,
           this.editor.getValue(),
-          this.onBeforeChangeCb
+          this.onBeforeChangeCb,
         );
       }
     });
@@ -658,7 +658,7 @@ export class UnControlled extends React.Component<
       this.props.editorDidMount(
         this.editor,
         this.editor.getValue(),
-        this.initCb
+        this.initCb,
       );
     }
   }

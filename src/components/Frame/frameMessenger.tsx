@@ -133,7 +133,7 @@ type InspectMessage =
 
 export const inspectMessageSender = (
   messageWindow: Window,
-  message: InspectMessage
+  message: InspectMessage,
 ) => {
   messageWindow.postMessage({ source: PlayroomInspectSource, ...message });
 };

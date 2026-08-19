@@ -224,7 +224,7 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
     compressParams({
       ...params,
       title: title ? `(Copy) ${title}` : undefined,
-    })
+    }),
   );
 
   useGlobalKeyboardShortcutsForWindow(window);
@@ -407,7 +407,7 @@ export const Header = () => {
   const hasCode = code.trim().length > 0;
 
   const previewUrl = usePreviewUrl(
-    themesEnabled ? selectedThemes[0] : undefined
+    themesEnabled ? selectedThemes[0] : undefined,
   );
 
   // Remove in favour of direct DOM attribute when we drop React 18 support

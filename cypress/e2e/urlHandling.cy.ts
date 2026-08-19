@@ -10,7 +10,7 @@ describe('URL handling', () => {
   describe('where paramType is hash', () => {
     it('code', () => {
       cy.visit(
-        'http://localhost:9000/#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
+        'http://localhost:9000/#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g',
       );
 
       assertFirstFrameContains('Foo\nFoo\nBar');
@@ -19,7 +19,7 @@ describe('URL handling', () => {
 
     it('widths', () => {
       cy.visit(
-        'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
+        'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA',
       );
 
       typeCode('code');
@@ -28,7 +28,7 @@ describe('URL handling', () => {
 
     it('title', () => {
       cy.visit(
-        'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA'
+        'http://localhost:9000/#?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA',
       );
 
       assertTitle('Test');
@@ -37,7 +37,7 @@ describe('URL handling', () => {
 
     it('editor hidden', () => {
       cy.visit(
-        'http://localhost:9000/#?code=N4IgpgJglgLg9gJwBJQhMA7EAuGCCuYAvkA'
+        'http://localhost:9000/#?code=N4IgpgJglgLg9gJwBJQhMA7EAuGCCuYAvkA',
       );
 
       cy.get('textarea').should('not.be.focused');
@@ -48,7 +48,7 @@ describe('URL handling', () => {
   describe('where paramType is search', () => {
     it('code', () => {
       cy.visit(
-        'http://localhost:9001/?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
+        'http://localhost:9001/?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g',
       );
 
       assertFirstFrameContains('Foo\nFoo\nBar');
@@ -57,7 +57,7 @@ describe('URL handling', () => {
 
     it('widths and themes', () => {
       cy.visit(
-        'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA'
+        'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoGYDsBWANJgNgA4BdAXyA',
       );
 
       typeCode('code');
@@ -71,7 +71,7 @@ describe('URL handling', () => {
 
     it('invalid widths and themes', () => {
       cy.visit(
-        'http://localhost:9001/?code=N4IgLgFgpgtlDOIBcBtEBLAdgNwIYBt0ATAFWjhABpxyoB5TKEAXWoHdjJFUAWABj6UA7ADYAHMwC+QA'
+        'http://localhost:9001/?code=N4IgLgFgpgtlDOIBcBtEBLAdgNwIYBt0ATAFWjhABpxyoB5TKEAXWoHdjJFUAWABj6UA7ADYAHMwC+QA',
       );
 
       typeCode('code');
@@ -80,7 +80,7 @@ describe('URL handling', () => {
 
     it('edit title', () => {
       cy.visit(
-        'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA'
+        'http://localhost:9001/?code=N4Ig7glgJgLgFgZxALgNoF0A0IYRgGwFMUQAVQhGEAXyA',
       );
 
       assertTitle('Test');
@@ -89,7 +89,7 @@ describe('URL handling', () => {
 
     it('preview title', () => {
       cy.visit(
-        'http://localhost:9001/preview/?code=N4Igxg9gJgpiBcIA8AxCEB8aJIPTYwB0A7EAGhABcALGAWzkRvpgHli4LKBLSgG0YgAKjADOlEAF8gA'
+        'http://localhost:9001/preview/?code=N4Igxg9gJgpiBcIA8AxCEB8aJIPTYwB0A7EAGhABcALGAWzkRvpgHli4LKBLSgG0YgAKjADOlEAF8gA',
       );
 
       cy.title().should('eq', 'Test | Playroom Preview');
@@ -97,7 +97,7 @@ describe('URL handling', () => {
 
     it('editor hidden', () => {
       cy.visit(
-        'http://localhost:9001/?code=N4IgpgJglgLg9gJwBJQhMA7EAuGCCuYAvkA'
+        'http://localhost:9001/?code=N4IgpgJglgLg9gJwBJQhMA7EAuGCCuYAvkA',
       );
 
       cy.get('textarea').should('not.be.focused');

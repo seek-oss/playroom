@@ -40,7 +40,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
       type = 'button',
       ...restProps
     },
-    ref
+    ref,
   ) => (
     <Tooltip
       label={
@@ -80,7 +80,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
         </button>
       }
     />
-  )
+  ),
 );
 
 type AnchorElementProps = Omit<
@@ -105,7 +105,7 @@ export const ButtonIconLink = forwardRef<
       target,
       ...restProps
     },
-    ref
+    ref,
   ) => (
     <Tooltip
       label={label}
@@ -130,5 +130,5 @@ export const ButtonIconLink = forwardRef<
         </a>
       }
     />
-  )
+  ),
 );

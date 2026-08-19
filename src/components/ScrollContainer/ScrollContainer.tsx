@@ -17,7 +17,7 @@ const scrollOffset = 2; // 2 instead of 1 to account for rounding errors in some
 
 const maskOverflow = (
   element: HTMLElement,
-  direction: keyof typeof styles.direction
+  direction: keyof typeof styles.direction,
 ) =>
   setTimeout(() => {
     const atTop = element.scrollTop <= 0;
@@ -47,14 +47,14 @@ interface ScrollContainerProps {
 }
 
 function useNormalizedRef<TElement>(
-  externalRef: ForwardedRef<TElement>
+  externalRef: ForwardedRef<TElement>,
 ): RefObject<TElement | null> {
   const internalRef = useRef<TElement | null>(null);
 
   useImperativeHandle<TElement | null, TElement | null>(
     externalRef,
     () => internalRef.current,
-    []
+    [],
   );
 
   return internalRef;
@@ -68,7 +68,7 @@ export const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
       fadeSize = 'medium',
       hideScrollbar = false,
     },
-    ref
+    ref,
   ) => {
     const fallbackRef = useRef<HTMLDivElement>(null);
     const containerRef = useNormalizedRef(ref || fallbackRef);
@@ -81,7 +81,7 @@ export const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
           maskOverflow(containerRef.current, direction);
         }
       }, [containerRef, direction]),
-      100
+      100,
     );
 
     useLayoutEffect(() => {
@@ -108,5 +108,5 @@ export const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
         {children}
       </div>
     );
-  }
+  },
 );

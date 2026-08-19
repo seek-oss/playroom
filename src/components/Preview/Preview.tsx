@@ -66,12 +66,12 @@ export default ({ title, code, themeName }: PreviewProps) => {
 
   const editorHref = new URL(
     window.location[playroomConfig.paramType],
-    baseUrl.replace(/\/preview\/?$/, '/')
+    baseUrl.replace(/\/preview\/?$/, '/'),
   ).toString();
 
   const absoluteSrc = new URL(
     frameSrc({ themeName, code }),
-    editorHref
+    editorHref,
   ).toString();
 
   const isEmbedded =

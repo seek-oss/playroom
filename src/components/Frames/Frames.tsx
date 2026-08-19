@@ -84,7 +84,7 @@ const Frame = ({
       iframeRef.current = el;
       registerIframeRef(frameId, el);
     },
-    [registerIframeRef, frameId]
+    [registerIframeRef, frameId],
   );
 
   // const downloadHandler = () => {
@@ -177,7 +177,7 @@ const Frame = ({
                     `top=${
                       height ? screen.availHeight / 2 - height * 0.75 : ''
                     }`,
-                  ].join(',')
+                  ].join(','),
                   /**
                    * Not setting `noopener` and `noreferrer` so we can control the popup
                    * dimensions in Safari.
@@ -286,7 +286,7 @@ export default function Frames({ code }: FramesProps) {
       theme,
       width,
       widthName: `${width}${/\d$/.test(width.toString()) ? 'px' : ''}`,
-    }))
+    })),
   );
 
   try {
@@ -301,7 +301,7 @@ export default function Frames({ code }: FramesProps) {
         iframeRefs.current.delete(frameId);
       }
     },
-    []
+    [],
   );
 
   useEffect(() => {
@@ -326,7 +326,7 @@ export default function Frames({ code }: FramesProps) {
         highlightLine(null);
       }
     },
-    [scrollToLine, highlightLine]
+    [scrollToLine, highlightLine],
   );
 
   const handleInspectSelect = useCallback(
@@ -339,7 +339,7 @@ export default function Frames({ code }: FramesProps) {
       });
       dispatch({ type: 'disableInspectMode' });
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleInspectExit = useCallback(() => {

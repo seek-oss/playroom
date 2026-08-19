@@ -22,10 +22,10 @@ describe('Frame Settings', () => {
 
       cy.findByRole('menu', { name: 'Frame settings' }).should('be.visible');
       cy.findByRole('menuitemcheckbox', { name: 'Dark Mode' }).should(
-        'be.visible'
+        'be.visible',
       );
       cy.findByRole('menuitemcheckbox', { name: 'Compact Mode' }).should(
-        'be.visible'
+        'be.visible',
       );
     });
 

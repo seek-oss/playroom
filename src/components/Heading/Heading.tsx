@@ -30,6 +30,6 @@ export const Heading = forwardRef<HTMLHeadingElement, Props>(
         }),
         ref,
       },
-      children
-    )
+      children,
+    ),
 );

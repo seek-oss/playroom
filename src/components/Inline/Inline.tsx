@@ -24,7 +24,7 @@ export const Inline = ({ children, space, alignY, nowrap = false }: Props) => (
       styles.gap,
       styles.spaceScale[space],
       alignY ? styles.horizontalAlignmentScale[alignY] : undefined,
-      !nowrap ? styles.wrap : undefined
+      !nowrap ? styles.wrap : undefined,
     )}
   >
     {children}

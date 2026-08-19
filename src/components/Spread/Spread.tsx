@@ -23,7 +23,7 @@ export const Spread = ({ children, space, alignY }: Props) => (
       styles.gap,
       styles.spaceScale[space],
       styles.fitContent,
-      alignY ? styles.horizontalAlignmentScale[alignY] : undefined
+      alignY ? styles.horizontalAlignmentScale[alignY] : undefined,
     )}
   >
     {children}

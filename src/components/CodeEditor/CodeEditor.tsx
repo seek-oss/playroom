@@ -43,7 +43,7 @@ const editorCommands = editorCommandList.reduce(
     ...acc,
     [shortcut.join('-')]: command,
   }),
-  {}
+  {},
 );
 
 const extraKeys: EditorConfiguration['extraKeys'] = {
@@ -72,7 +72,7 @@ const extraKeys: EditorConfiguration['extraKeys'] = {
 const validateCodeInEditor = (
   editorInstance: Editor,
   code: string,
-  dispatch: Dispatch<Action>
+  dispatch: Dispatch<Action>,
 ) => {
   const maybeValid = validateCode(code);
 
@@ -96,7 +96,7 @@ const validateCodeInEditor = (
 
 const positionErrorMarkerAtCursor = (
   cursorMarker: HTMLButtonElement,
-  editor: Editor
+  editor: Editor,
 ) => {
   const cursorPos = editor.cursorCoords(true, 'local');
   const scrollOffset = editor.getScrollInfo();
@@ -144,7 +144,7 @@ export const CodeEditor = ({
       editorInstanceRef.current?.setGutterMarker(
         syntaxErrorLineNumber,
         'errorGutter',
-        marker
+        marker,
       );
 
       // Using timeout to transition in after delay, aligned with error message
@@ -170,7 +170,7 @@ export const CodeEditor = ({
     if (invalidSnippetLocation) {
       invalidSnippetTimeout = setTimeout(
         () => setInvalidSnippetLocation(false),
-        2000
+        2000,
       );
 
       editorInstanceRef.current?.addKeyMap(closeInvalidSnippetKeymap);
@@ -202,7 +202,7 @@ export const CodeEditor = ({
           } else if (cursorErrorMarkerRef.current) {
             positionErrorMarkerAtCursor(
               cursorErrorMarkerRef.current,
-              editorInstanceRef.current
+              editorInstanceRef.current,
             );
             setInvalidSnippetLocation(true);
           }
@@ -212,7 +212,7 @@ export const CodeEditor = ({
         if (
           cmdOrCtrl &&
           document.activeElement?.classList.contains(
-            'CodeMirror-search-field'
+            'CodeMirror-search-field',
           ) &&
           e.key === 'f'
         ) {
@@ -246,14 +246,14 @@ export const CodeEditor = ({
       insertionPointLine = editorInstanceRef.current.addLineClass(
         highlightLineNumber,
         'background',
-        styles.insertionPoint
+        styles.insertionPoint,
       );
       editorInstanceRef.current.scrollIntoView(
         {
           line: highlightLineNumber,
           ch: 0,
         },
-        200
+        200,
       );
     }
 
@@ -265,7 +265,7 @@ export const CodeEditor = ({
       if (insertionPointLine) {
         editorInstanceRef.current?.removeLineClass(
           insertionPointLine,
-          'background'
+          'background',
         );
       }
       editorInstanceRef.current?.focus();
@@ -297,7 +297,7 @@ export const CodeEditor = ({
       editorInstanceRef.current.clearHistory();
       editorInstanceRef.current.setCursor(
         cursorPosition.line,
-        cursorPosition.ch
+        cursorPosition.ch,
       );
       editorInstanceRef.current.focus();
       validateCodeInEditor(editorInstanceRef.current, code, dispatch);
@@ -315,7 +315,7 @@ export const CodeEditor = ({
             editorInstanceRef.current.focus();
             editorInstanceRef.current.setCursor(
               cursorPosition.line,
-              cursorPosition.ch
+              cursorPosition.ch,
             );
           }
           registerEditor(editorInstance);
