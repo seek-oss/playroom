@@ -65,5 +65,5 @@ renderElement(
     {({ code, themeName, theme }) => (
       <FrameContent code={code} themeName={themeName} theme={theme} />
     )}
-  </UrlParams>
+  </UrlParams>,
 );

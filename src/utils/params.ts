@@ -34,7 +34,7 @@ function getParamsFromQuery(location = history.location) {
     // Prefer checking `hash`, fall back to `search` in case the user has configured a custom
     // `frameSrc` function that uses search params instead of the hash
     return new URLSearchParams(
-      location.hash.startsWith('#?') ? location.hash.slice(1) : location.search
+      location.hash.startsWith('#?') ? location.hash.slice(1) : location.search,
     );
   } catch {
     return new URLSearchParams();
@@ -42,7 +42,7 @@ function getParamsFromQuery(location = history.location) {
 }
 
 function useParams<ReturnType>(
-  selector: (rawParams: URLSearchParams) => ReturnType
+  selector: (rawParams: URLSearchParams) => ReturnType,
 ): ReturnType {
   const [params, setParams] = useState(getParamsFromQuery);
 
@@ -51,7 +51,7 @@ function useParams<ReturnType>(
       history.listen((location) => {
         setParams(getParamsFromQuery(location.location));
       }),
-    []
+    [],
   );
 
   return selector(params);
@@ -81,7 +81,7 @@ export const UrlParams = ({
 
     if (decodeUrl && rawCode) {
       const result = JSON.parse(
-        lzString.decompressFromEncodedURIComponent(String(rawCode)) ?? ''
+        lzString.decompressFromEncodedURIComponent(String(rawCode)) ?? '',
       );
 
       return {

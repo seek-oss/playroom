@@ -197,7 +197,7 @@ globalStyle(
   {
     color: colorPaletteVars.foreground.neutral,
     opacity: inactiveNumberLineOpacity,
-  }
+  },
 );
 
 globalStyle('.cm-s-neo .CodeMirror-linenumber', {
@@ -210,7 +210,7 @@ globalStyle(
   '.cm-s-neo .CodeMirror-linenumber:not(:hover):not(.cm-s-neo .CodeMirror-activeline .CodeMirror-linenumber)',
   {
     opacity: inactiveNumberLineOpacity,
-  }
+  },
 );
 
 globalStyle('.cm-s-neo .cm-tag', {
@@ -225,7 +225,7 @@ globalStyle(
   ].join(','),
   {
     color: colorPaletteVars.code.attribute,
-  }
+  },
 );
 
 globalStyle('.cm-s-neo .cm-string', {

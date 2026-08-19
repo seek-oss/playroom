@@ -56,7 +56,7 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
       const topVisibleLine = editorRef.current.lineAtHeight(rect.top, 'window');
       const bottomVisibleLine = editorRef.current.lineAtHeight(
         rect.bottom,
-        'window'
+        'window',
       );
 
       const visibleRange = bottomVisibleLine - topVisibleLine;
@@ -97,12 +97,12 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
       editorRef.current.removeLineClass(
         highlightLineRef.current,
         'background',
-        'cm-inspect-highlight'
+        'cm-inspect-highlight',
       );
       editorRef.current.removeLineClass(
         highlightLineRef.current,
         'background',
-        'cm-inspect-highlight-fade'
+        'cm-inspect-highlight-fade',
       );
       highlightLineRef.current = null;
     }
@@ -111,7 +111,7 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
       highlightLineRef.current = editorRef.current.addLineClass(
         line,
         'background',
-        'cm-inspect-highlight'
+        'cm-inspect-highlight',
       );
     } else if (line === null && highlightLineRef.current === null) {
       return;
@@ -126,12 +126,12 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
     editorRef.current.removeLineClass(
       highlightLineRef.current,
       'background',
-      'cm-inspect-highlight'
+      'cm-inspect-highlight',
     );
     editorRef.current.addLineClass(
       highlightLineRef.current,
       'background',
-      'cm-inspect-highlight-fade'
+      'cm-inspect-highlight-fade',
     );
 
     fadeTimerRef.current = setTimeout(() => {
@@ -141,7 +141,7 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
       editorRef.current.removeLineClass(
         highlightLineRef.current,
         'background',
-        'cm-inspect-highlight-fade'
+        'cm-inspect-highlight-fade',
       );
       highlightLineRef.current = null;
       fadeTimerRef.current = null;

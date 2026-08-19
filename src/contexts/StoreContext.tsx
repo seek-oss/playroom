@@ -54,7 +54,7 @@ const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
 
 function convertAndStoreSizeAsPercentage(
   mode: 'height' | 'width',
-  size: number
+  size: number,
 ): string {
   const viewportSize =
     mode === 'height' ? window.innerHeight : window.innerWidth;
@@ -64,7 +64,7 @@ function convertAndStoreSizeAsPercentage(
 
   store.setItem(
     `${mode === 'height' ? 'editorHeight' : 'editorWidth'}`,
-    roundedSizePercentage
+    roundedSizePercentage,
   );
 
   return `${sizePercentage}%`;
@@ -196,8 +196,8 @@ const sortStoredPlayrooms = (storedPlayrooms: State['storedPlayrooms']) =>
   Object.fromEntries(
     Object.entries(storedPlayrooms).sort(
       ([, { lastModifiedDate: aDate }], [, { lastModifiedDate: bDate }]) =>
-        bDate.getTime() - aDate.getTime()
-    )
+        bDate.getTime() - aDate.getTime(),
+    ),
   );
 
 const createPlayroomId = () =>
@@ -377,7 +377,7 @@ const reducer = (state: State, action: Action): State => {
 
       const updatedHeightPercentage = convertAndStoreSizeAsPercentage(
         'height',
-        size
+        size,
       );
 
       return {
@@ -390,7 +390,7 @@ const reducer = (state: State, action: Action): State => {
       const { size } = action.payload;
       const updatedWidthPercentage = convertAndStoreSizeAsPercentage(
         'width',
-        size
+        size,
       );
 
       return {
@@ -607,7 +607,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         });
       }
     },
-    500
+    500,
   );
 
   useEffect(() => {
@@ -667,7 +667,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         // assume same id to enable updating to handle refresh case.
         if (storedPlayrooms) {
           const matchingPlayroom = storedPlayroomValues.find(
-            ([_, { dataParam }]) => dataParamFromUrl === dataParam
+            ([_, { dataParam }]) => dataParamFromUrl === dataParam,
           );
 
           if (matchingPlayroom) {
@@ -698,7 +698,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         });
 
         setReady(true);
-      }
+      },
     );
   }, []);
 

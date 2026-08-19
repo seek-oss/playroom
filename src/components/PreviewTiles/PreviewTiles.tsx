@@ -117,7 +117,7 @@ export const PreviewTiles = ({
           lastModifiedDate: storedPlayroom.lastModifiedDate,
         };
       }),
-    [storedPlayrooms, selectedThemes]
+    [storedPlayrooms, selectedThemes],
   );
 
   return (
@@ -272,7 +272,7 @@ export const PreviewTiles = ({
                       onDelete={() => setConfirmDeleteId(id)}
                     />
                   );
-                }
+                },
               )}
             </ul>
           </ScrollContainer>

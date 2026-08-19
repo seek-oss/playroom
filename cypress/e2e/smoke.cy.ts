@@ -17,7 +17,7 @@ describe('Smoke', () => {
 
   it('preview mode loads correctly', () => {
     cy.visit(
-      'http://localhost:9000/preview#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
+      'http://localhost:9000/preview#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g',
     );
 
     assertPreviewContains('Foo\nFoo\nBar');
@@ -25,7 +25,7 @@ describe('Smoke', () => {
 
   it('preview mode works with TypeScript components', () => {
     cy.visit(
-      'http://localhost:9002/preview#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
+      'http://localhost:9002/preview#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g',
     );
 
     assertPreviewContains('Foo\nFoo\nBar');
@@ -33,7 +33,7 @@ describe('Smoke', () => {
 
   it('navigate from preview to edit with explicit index document', () => {
     cy.visit(
-      'http://localhost:9000/preview/index.html#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g'
+      'http://localhost:9000/preview/index.html#?code=N4Igxg9gJgpiBcIA8AxCEB8r1YEIEMAnAei2LUyXJxAF8g',
     );
 
     assertPreviewContains('Foo\nFoo\nBar');

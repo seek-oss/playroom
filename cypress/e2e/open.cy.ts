@@ -25,7 +25,7 @@ describe('Open', () => {
     // New playroom
     openMainMenu();
     cy.findByRole('link', { name: 'New Playroom' }).then((link) =>
-      cy.visit(link.prop('href'))
+      cy.visit(link.prop('href')),
     );
 
     // Create second design

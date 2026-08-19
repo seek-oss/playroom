@@ -42,7 +42,7 @@ const snippetsById: Record<string, SnippetWithId> = snippets.reduce(
       },
     };
   },
-  {}
+  {},
 );
 
 type SnippetsContentProps = {
@@ -58,7 +58,7 @@ const snippetsByGroup = Object.entries(
     }
     acc[group].push({ ...snippet, id: resolveSnippetId(snippet, index) });
     return acc;
-  }, {})
+  }, {}),
 );
 
 const SnippetsGroup = ({
@@ -134,7 +134,7 @@ const SnippetItem = ({
 const resolveScore = (
   item: string,
   search: string,
-  modifier: number = 0
+  modifier: number = 0,
 ): number => {
   const lowerItem = item.toLowerCase();
 
@@ -203,7 +203,7 @@ const scoreSnippet = (snippet: SnippetWithId, search: string): number => {
 };
 
 const allSnippets: SnippetWithId[] = snippetsByGroup.flatMap(
-  ([, items]) => items
+  ([, items]) => items,
 );
 
 const initialMatchedSnippet = ' ';

@@ -22,7 +22,7 @@ export const Stack = ({ children, space, align }: Props) => (
     className={clsx(
       styles.gap,
       styles.spaceScale[space],
-      align ? styles.horizontalAlignmentScale[align] : null
+      align ? styles.horizontalAlignmentScale[align] : null,
     )}
   >
     {children}

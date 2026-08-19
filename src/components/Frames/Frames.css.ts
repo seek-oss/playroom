@@ -101,7 +101,7 @@ export const frame = style([
     selectors: {
       [comma(
         `${frameHeadingContainer}:hover ~ ${frameWrapper} &`,
-        `${frameHeadingContainer}:focus-within ~ ${frameWrapper}&`
+        `${frameHeadingContainer}:focus-within ~ ${frameWrapper}&`,
       )]: {
         outlineColor: `${colorPaletteVars.foreground.accent}`,
       },

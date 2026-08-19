@@ -43,7 +43,7 @@ export const root = style([
     gridTemplateRows: space(
       'min-content',
       'auto',
-      fallbackVar(editorHeight, '0px')
+      fallbackVar(editorHeight, '0px'),
     ),
     isolation: 'isolate',
   },
@@ -58,7 +58,7 @@ export const editorOrientation = styleVariants({
       gridTemplateAreas: newline(
         '"header header"',
         '"frames frames"',
-        '"editor editor"'
+        '"editor editor"',
       ),
     },
   ],
@@ -70,7 +70,7 @@ export const editorOrientation = styleVariants({
       gridTemplateAreas: newline(
         '"header header"',
         '"editor frames"',
-        '"editor frames"'
+        '"editor frames"',
       ),
     },
   ],

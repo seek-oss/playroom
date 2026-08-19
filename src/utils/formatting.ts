@@ -34,7 +34,7 @@ const runPrettier = ({
 
 export const positionToCursorOffset = (
   code: string,
-  { line, ch }: CursorPosition
+  { line, ch }: CursorPosition,
 ) =>
   code.split('\n').reduce((pos, currLine, index) => {
     if (index < line) {
@@ -47,7 +47,7 @@ export const positionToCursorOffset = (
 
 export const cursorOffsetToPosition = (
   code: string,
-  cursorOffset: number
+  cursorOffset: number,
 ): CursorPosition => {
   const substring = code.slice(0, cursorOffset);
   const line = substring.split('\n').length - 1;
@@ -108,7 +108,7 @@ export const formatCode = ({
   const formattedCode = unwrapJsx(formatResult.formatted);
   const position = cursorOffsetToPosition(
     formatResult.formatted,
-    formatResult.cursorOffset
+    formatResult.cursorOffset,
   );
 
   const isMultiLine = formatResult.formatted.startsWith('<>\n');

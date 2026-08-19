@@ -28,5 +28,5 @@ export const Box = forwardRef<HTMLElement, BoxProps>(
     const Component = component;
 
     return <Component ref={ref} className={classes} {...restProps} />;
-  }
+  },
 );

@@ -44,7 +44,7 @@ export const ZeroState = () => {
           lastModified: formatAsRelative(storedPlayroom.lastModifiedDate),
         };
       }),
-    [storedPlayrooms]
+    [storedPlayrooms],
   );
 
   const hasStoredPlayrooms = playroomEntries.length > 0;
@@ -145,7 +145,7 @@ export const ZeroState = () => {
                             {lastModified}
                           </Text>
                         </button>
-                      )
+                      ),
                     )}
                 </Stack>
               </Stack>
