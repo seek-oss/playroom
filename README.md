@@ -84,6 +84,21 @@ module.exports = {
 };
 ```
 
+Widths can also be named by providing an object. The names are displayed in
+the frame selector while width preferences and shared URLs continue to use the
+numeric values.
+
+```js
+module.exports = {
+  // ...
+  widths: {
+    sm: 320,
+    md: 768,
+    lg: 1024,
+  },
+};
+```
+
 _Note: `port` and `openBrowser` options will be set to `9000` and `true` (respectively) by default whenever they are omitted from the config above._
 
 Your `components` file is expected to export a single object or a series of named exports. For example:

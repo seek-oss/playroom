@@ -15,6 +15,12 @@ module.exports = {
       defaultValue: false,
     },
   ],
+  widths: {
+    sm: 320,
+    md: 375,
+    lg: 768,
+    xl: 1024,
+  },
   outputPath: './dist',
   openBrowser: false,
   port: 9000,

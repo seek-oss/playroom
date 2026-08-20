@@ -1,14 +1,14 @@
 // Use a default import for better compatibility with ESM consumers
 import lzString from 'lz-string';
 
-import type { Widths } from '../src/configModules/widths';
+import type { WidthConfig, Widths } from '../src/configModules/widths';
 
 export interface PlayroomConfig {
   components: string;
   outputPath: string;
   title?: string;
   themes?: string;
-  widths?: number[];
+  widths?: WidthConfig;
   snippets?: string;
   scope?: string;
   typeScriptFiles?: string[];
