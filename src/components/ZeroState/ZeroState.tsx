@@ -4,7 +4,9 @@ import { useContext, useMemo } from 'react';
 
 import { decompressParams } from '../../../utils';
 import { StoreContext } from '../../contexts/StoreContext';
+import { isValidLocation } from '../../utils/cursor';
 import { formatAsRelative } from '../../utils/formatAsRelative';
+import { formatForInsertion } from '../../utils/formatting';
 import { Button } from '../Button/Button';
 import { primaryMod } from '../CodeEditor/editorCommands';
 import { Inline } from '../Inline/Inline';
@@ -20,7 +22,10 @@ import * as styles from './ZeroState.css';
 
 export const ZeroState = () => {
   const hasSnippets = snippets && snippets.length > 0;
-  const [{ storedPlayrooms }, dispatch] = useContext(StoreContext);
+  const [
+    { storedPlayrooms, code: stateCode, cursorPosition, hasSyntaxError },
+    dispatch,
+  ] = useContext(StoreContext);
 
   const playroomEntries = useMemo(
     () =>
@@ -79,7 +84,27 @@ export const ZeroState = () => {
                 {hasSnippets ? (
                   <Button
                     height="content"
-                    onClick={() => dispatch({ type: 'openSnippets' })}
+                    onClick={async () => {
+                      if (hasSyntaxError) {
+                        return;
+                      }
+                      if (
+                        !isValidLocation({
+                          code: stateCode,
+                          cursor: cursorPosition,
+                        })
+                      ) {
+                        return;
+                      }
+                      const formatted = await formatForInsertion({
+                        code: stateCode,
+                        cursor: cursorPosition,
+                      });
+                      dispatch({
+                        type: 'openSnippets',
+                        payload: formatted,
+                      });
+                    }}
                   >
                     <Stack space="xsmall">
                       <BetweenHorizontalStart size={20} />

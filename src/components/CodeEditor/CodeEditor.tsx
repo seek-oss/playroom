@@ -9,7 +9,7 @@ import { type Action, StoreContext } from '../../contexts/StoreContext';
 import { validateCode } from '../../utils/compileJsx';
 import { hints } from '../../utils/componentsToHints';
 import { isValidLocation } from '../../utils/cursor';
-import { isMac } from '../../utils/formatting';
+import { isMac, formatForInsertion } from '../../utils/formatting';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 import { UnControlled as ReactCodeMirror } from './CodeMirror2';
@@ -185,20 +185,30 @@ export const CodeEditor = ({
   }, [invalidSnippetLocation]);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = async (e: KeyboardEvent) => {
       if (editorInstanceRef && editorInstanceRef.current) {
         const cmdOrCtrl = isMac() ? e.metaKey : e.ctrlKey;
 
         if (cmdOrCtrl && e.key === 'k') {
           e.preventDefault();
 
+          const currentCode = editorInstanceRef.current.getValue();
+          const cursor = editorInstanceRef.current.getCursor();
+
           const validCursorPosition = isValidLocation({
-            code: editorInstanceRef.current.getValue(),
-            cursor: editorInstanceRef.current.getCursor(),
+            code: currentCode,
+            cursor,
           });
 
           if (validCursorPosition) {
-            dispatch({ type: 'openSnippets' });
+            const formatted = await formatForInsertion({
+              code: currentCode,
+              cursor,
+            });
+            dispatch({
+              type: 'openSnippets',
+              payload: formatted,
+            });
           } else if (cursorErrorMarkerRef.current) {
             positionErrorMarkerAtCursor(
               cursorErrorMarkerRef.current,

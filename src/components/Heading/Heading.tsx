@@ -15,7 +15,7 @@ const resolveComponentFromLevel = (level: Props['level']) =>
     1: 'h1' as const,
     2: 'h2' as const,
     3: 'h3' as const,
-  }[level]);
+  })[level];
 
 export const Heading = forwardRef<HTMLHeadingElement, Props>(
   ({ as: component, id, level, children }, ref) =>

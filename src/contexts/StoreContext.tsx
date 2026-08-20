@@ -13,7 +13,6 @@ import { useDebouncedCallback } from 'use-debounce';
 import {
   type CompressParamsOptions,
   type FrameSettingsValues,
-  type Snippet,
   compressParams,
 } from '../../utils';
 import playroomConfig from '../config';
@@ -22,9 +21,7 @@ import {
   themesEnabled,
 } from '../configModules/themes';
 import availableWidths, { type Widths } from '../configModules/widths';
-import { isValidLocation } from '../utils/cursor';
 import { fallbackUuid } from '../utils/fallbackUuid';
-import { formatForInsertion, formatAndInsert } from '../utils/formatting';
 import {
   getDataParam,
   resolveDataFromUrl,
@@ -112,11 +109,20 @@ export type Action =
       type: 'updateCursorPosition';
       payload: { position: CursorPosition; code?: string };
     }
-  | { type: 'persistSnippet'; payload: { snippet: Snippet } }
-  | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
+  | {
+      type: 'persistSnippet';
+      payload: { code: string; cursor: CursorPosition };
+    }
+  | {
+      type: 'previewSnippet';
+      payload: { previewRenderCode: string | undefined };
+    }
   | { type: 'openPlayroomDialog' }
   | { type: 'closePlayroomDialog' }
-  | { type: 'openSnippets' }
+  | {
+      type: 'openSnippets';
+      payload: { code: string; cursor: CursorPosition };
+    }
   | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
@@ -235,13 +241,7 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case 'persistSnippet': {
-      const { snippet } = action.payload;
-
-      const { code, cursor } = formatAndInsert({
-        code: state.code,
-        snippet: snippet.code,
-        cursor: state.cursorPosition,
-      });
+      const { code, cursor } = action.payload;
 
       return {
         ...resetPreview(state),
@@ -263,43 +263,14 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case 'previewSnippet': {
-      const { snippet } = action.payload;
-
-      const previewRenderCode = snippet
-        ? formatAndInsert({
-            code: state.code,
-            snippet: snippet.code,
-            cursor: state.cursorPosition,
-          }).code
-        : undefined;
-
       return {
         ...state,
-        previewRenderCode,
+        previewRenderCode: action.payload.previewRenderCode,
       };
     }
 
     case 'openSnippets': {
-      if (state.hasSyntaxError) {
-        return {
-          ...state,
-          snippetsOpen: false,
-        };
-      }
-
-      const validCursorPosition = isValidLocation({
-        code: state.code,
-        cursor: state.cursorPosition,
-      });
-
-      if (!validCursorPosition) {
-        return state;
-      }
-
-      const { code, cursor } = formatForInsertion({
-        code: state.code,
-        cursor: state.cursorPosition,
-      });
+      const { code, cursor } = action.payload;
 
       return {
         ...state,

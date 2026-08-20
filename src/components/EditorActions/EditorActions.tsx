@@ -34,8 +34,7 @@ import { SharedTooltipContext, Tooltip } from '../Tooltip/Tooltip';
 
 import * as styles from './EditorActions.css';
 
-interface EditorActionButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface EditorActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   name?: string;
   shortcut?: KeyCombination;
   icon: LucideIcon;

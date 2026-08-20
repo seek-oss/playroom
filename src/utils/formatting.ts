@@ -1,6 +1,7 @@
-import babel from 'prettier/parser-babel';
-import postcss from 'prettier/parser-postcss';
-import prettier from 'prettier/standalone';
+import * as babel from 'prettier/plugins/babel';
+import * as estree from 'prettier/plugins/estree';
+import * as postcss from 'prettier/plugins/postcss';
+import * as prettier from 'prettier/standalone';
 
 import type { CursorPosition } from '../contexts/StoreContext';
 
@@ -13,7 +14,7 @@ interface CodeWithCursor {
 
 export const isMac = () => Boolean(navigator.platform.match('Mac'));
 
-const runPrettier = ({
+const runPrettier = async ({
   code,
   cursorOffset,
 }: {
@@ -21,13 +22,12 @@ const runPrettier = ({
   cursorOffset: number;
 }) => {
   try {
-    return prettier.formatWithCursor(code, {
+    return await prettier.formatWithCursor(code, {
       cursorOffset,
       parser: 'babel',
-      plugins: [babel, postcss],
+      plugins: [babel, estree, postcss],
     });
   } catch {
-    // Just a formatting error so we pass
     return null;
   }
 };
@@ -75,10 +75,10 @@ const unwrapJsx = (code: string) => {
 // Handles running prettier, ensuring multiple root level JSX values are valid
 // by wrapping the code in <>{code}</> then finally removing the layer of indentation
 // all while maintaining the cursor position.
-export const formatCode = ({
+export const formatCode = async ({
   code,
   cursor,
-}: CodeWithCursor): CodeWithCursor => {
+}: CodeWithCursor): Promise<CodeWithCursor> => {
   // Since we're automatically adding a line due to the wrapping we need to
   // remove one
   const WRAPPED_LINE_OFFSET = 1;
@@ -92,7 +92,7 @@ export const formatCode = ({
     ch: cursor.ch,
   });
 
-  const formatResult = runPrettier({
+  const formatResult = await runPrettier({
     code: wrappedCode,
     cursorOffset: currentCursorPosition,
   });
@@ -122,7 +122,7 @@ export const formatCode = ({
   };
 };
 
-export const formatAndInsert = ({
+export const formatAndInsert = async ({
   code,
   cursor,
   snippet,
@@ -130,7 +130,7 @@ export const formatAndInsert = ({
   code: string;
   cursor: CursorPosition;
   snippet: string;
-}): CodeWithCursor => {
+}): Promise<CodeWithCursor> => {
   const { line, ch } = cursor;
   const snippetLines = snippet.split('\n');
   const lastLineOfSnippet = snippetLines[snippetLines.length - 1];
@@ -153,17 +153,18 @@ export const formatAndInsert = ({
   });
 };
 
-export const formatForInsertion = ({
+export const formatForInsertion = async ({
   code,
   cursor,
-}: CodeWithCursor): CodeWithCursor => {
+}: CodeWithCursor): Promise<CodeWithCursor> => {
   const snippet =
     '<AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789 />';
-  const { code: formattedCode, cursor: formattedCursor } = formatAndInsert({
-    code,
-    snippet,
-    cursor,
-  });
+  const { code: formattedCode, cursor: formattedCursor } =
+    await formatAndInsert({
+      code,
+      snippet,
+      cursor,
+    });
 
   return {
     code: formattedCode.replace(snippet, ''),

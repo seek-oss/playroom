@@ -5,11 +5,7 @@ import * as styles from './Stack.css';
 
 type ReactNodeArray = ReactNodeNoStrings[];
 type ReactNodeNoStrings =
-  | ReactElement
-  | ReactNodeArray
-  | boolean
-  | null
-  | undefined;
+  ReactElement | ReactNodeArray | boolean | null | undefined;
 
 interface Props {
   children: ReactNodeNoStrings;
