@@ -1,5 +1,32 @@
 # playroom
 
+## 1.3.1
+
+### Patch Changes
+
+- [#499](https://github.com/seek-oss/playroom/pull/499) [`19365b6`](https://github.com/seek-oss/playroom/commit/19365b6c1bc53961b46f16fc006027cdead52d4f) Thanks [@askoufis](https://github.com/askoufis)! - `utils`: Improve ESM compatibility
+
+- [#500](https://github.com/seek-oss/playroom/pull/500) [`c6108a0`](https://github.com/seek-oss/playroom/commit/c6108a0deba2de5c4c87b0491bd7277e3338d234) Thanks [@askoufis](https://github.com/askoufis)! - **Duplicate**: Prefer the current title from app state when building the duplicate URL
+
+  Avoids using a stale title from the URL while the debounced URL update is still pending.
+
+- [#498](https://github.com/seek-oss/playroom/pull/498) [`514e3b0`](https://github.com/seek-oss/playroom/commit/514e3b0d2912d4a3744855116368787e3e3d46c6) Thanks [@SEEKilian](https://github.com/SEEKilian)! - **Inspect**: Change keyboard shortcut to `Cmd/Ctrl+Shift+E`
+
+  Avoids conflicting with the browser's native Inspect Element shortcut
+
+- [#494](https://github.com/seek-oss/playroom/pull/494) [`1b28372`](https://github.com/seek-oss/playroom/commit/1b28372e843b9494ef2e15cd74d4d79260d80f6c) Thanks [@askoufis](https://github.com/askoufis)! - Restrict `typescript` dependency range to `^5.0.0 || ^6.0.0`
+
+  TypeScript v7 does not have a compatible API with v5 and v6.
+  The dependency now accurately reflects the supported versions of TypeScript.
+
+- [#495](https://github.com/seek-oss/playroom/pull/495) [`9509f85`](https://github.com/seek-oss/playroom/commit/9509f85ce53062f8f8eb4f207dbae13af43509f0) Thanks [@tiplutom](https://github.com/tiplutom)! - webpack: Ensure Vanilla Extract stylesheets are handled on Windows
+
+- [#490](https://github.com/seek-oss/playroom/pull/490) [`97caa42`](https://github.com/seek-oss/playroom/commit/97caa42a0e913ae4410f5c5888f28e5bc0b647f2) Thanks [@pete-seeker](https://github.com/pete-seeker)! - Editor: Ensure undo doesn't restore previously opened playroom
+
+  Fixes an issue where using `cmd-z` in the editor would undo to a previously opened playroom.
+
+- [#502](https://github.com/seek-oss/playroom/pull/502) [`3931376`](https://github.com/seek-oss/playroom/commit/3931376b401929932cce8ac8471492945ba0830a) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - editor: Update Prettier to v3
+
 ## 1.3.0
 
 ### Minor Changes
