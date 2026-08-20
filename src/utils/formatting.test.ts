@@ -144,6 +144,13 @@ describe('format and insert', () => {
     expect(
       await formatAndInsert({ code, cursor: { line: 8, ch: 0 }, snippet }),
     ).toEqual({
+      /**
+       * The expected cursor position should be line 9 character 0, however the upgrade to
+       * Prettier v3 has exposed some differences in how whitespace is handled.
+       * https://github.com/prettier/prettier/issues/15793
+       *
+       * Does not impact the UI as we handle the cursor position in the editor explicitly.
+       */
       cursor: { line: 1, ch: 0 },
       code: `<div>\n  <h1>\n    <span>added</span>Title\n  </h1>\n</div>\n\n<span>\n  <strong>second</strong>\n</span>\n`,
     });
