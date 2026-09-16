@@ -1,3 +1,5 @@
 allowBuilds:
+  '@parcel/watcher': true
   cypress: true
   esbuild: true
+  unrs-resolver: true

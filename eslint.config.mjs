@@ -32,7 +32,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['bin/**/*.cjs', 'lib/**/*.js'],
+    files: ['bin/**/*.mts', 'lib/**/*.{ts,mts}'],
     rules: {
       'no-console': 0,
       'no-process-exit': 0,
