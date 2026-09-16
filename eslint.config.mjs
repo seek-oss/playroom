@@ -1,5 +1,5 @@
 import { defineConfig } from 'eslint/config';
-import eslintConfigSeek from 'eslint-config-seek';
+import eslintConfigSeek from 'eslint-config-seek/vitest';
 
 export default defineConfig([
   ...eslintConfigSeek,

@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 /*
 componentsToHints uses parsePropTypes,
 which has side effects that break tests if they are not imported first
@@ -6,11 +7,11 @@ Todo - revisit componentsToHints to optimise
 */
 
 // eslint-disable-next-line import-x/order
-import { __private_create_hints } from './componentsToHints';
+import { __private_create_hints } from './componentsToHints.ts';
 
 // @ts-expect-error
-import * as PropTypeComponents from '../../cypress/projects/themed/components';
-import * as TypeScriptComponents from '../../cypress/projects/typescript/components';
+import * as PropTypeComponents from '../../cypress/projects/themed/components.jsx';
+import * as TypeScriptComponents from '../../cypress/projects/typescript/components.jsx';
 
 describe('componentsToHints', () => {
   it('should support javascript components with proptypes', () => {
