@@ -1,4 +1,5 @@
 import dedent from 'dedent';
+import { describe, expect, test } from 'vitest';
 
 import { type ErrorWithLocation, compileJsx, validateCode } from './compileJsx';
 
@@ -32,7 +33,9 @@ describe('compileJsx', () => {
         <Bar />
         <Foo--BarBaz>
       `),
-    ).toThrowErrorMatchingInlineSnapshot(`"Unterminated JSX contents (3:25)"`);
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[SyntaxError: Unterminated JSX contents (3:25)]`,
+    );
   });
 });
 

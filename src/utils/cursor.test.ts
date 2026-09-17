@@ -1,4 +1,5 @@
 import dedent from 'dedent';
+import { describe, expect, it } from 'vitest';
 
 import { isValidLocation } from './cursor';
 
@@ -48,7 +49,7 @@ describe('cursor', () => {
           output: false,
         },
       ].forEach(({ should, input, output }) => {
-        // eslint-disable-next-line jest/valid-title
+        // eslint-disable-next-line vitest/valid-title
         it(should, () => {
           expect(isValidLocation(input)).toEqual(output);
         });

@@ -1,5 +1,5 @@
 module.exports = {
-  components: './components',
+  components: './components.jsx',
   frameComponent: './FrameComponent',
   scope: './useScope',
   snippets: './snippets',

@@ -1,5 +1,7 @@
 import { resolve } from 'node:path';
 
+import { describe, expect, it } from 'vitest';
+
 import getStaticTypes from './getStaticTypes.mts';
 
 describe('getStaticTypes', () => {
