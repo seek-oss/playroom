@@ -2,6 +2,12 @@ import type { Tooltip as BaseUITooltip } from '@base-ui/react/tooltip';
 import clsx from 'clsx';
 import { type AllHTMLAttributes, forwardRef, type ComponentProps } from 'react';
 
+import { Inline } from '../Inline/Inline';
+import {
+  KeyboardShortcut,
+  type KeyCombination,
+} from '../KeyboardShortcut/KeyboardShortcut';
+import { Secondary } from '../Secondary/Secondary';
 import { Tooltip, type TooltipTrigger } from '../Tooltip/Tooltip';
 
 import * as styles from './ButtonIcon.css';
@@ -11,8 +17,10 @@ type ButtonIconBaseProps = {
   label: string;
   size?: keyof typeof styles.size;
   tone?: keyof typeof styles.tone;
+  shortcut?: KeyCombination;
   variant?: keyof typeof styles.variant;
   bleed?: boolean;
+  active?: boolean;
   disabledReason?: string;
 };
 export type ButtonIconProps = TooltipTrigger & ButtonIconBaseProps;
@@ -25,15 +33,30 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
       tone = 'neutral',
       variant = 'standard',
       bleed,
+      shortcut,
+      active,
       disabled,
       disabledReason,
       type = 'button',
       ...restProps
     },
-    ref
+    ref,
   ) => (
     <Tooltip
-      label={disabled && disabledReason ? disabledReason : label}
+      label={
+        disabled && disabledReason ? (
+          disabledReason
+        ) : (
+          <Inline space="xxsmall" nowrap>
+            <span>{label}</span>
+            {shortcut ? (
+              <Secondary>
+                <KeyboardShortcut shortcut={shortcut} hideOnMobile={false} />
+              </Secondary>
+            ) : null}
+          </Inline>
+        )
+      }
       sideOffset={size === 'small' ? 4 : undefined}
       trigger={
         <button
@@ -41,7 +64,9 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
           type={type}
           ref={ref}
           aria-disabled={disabled}
+          aria-pressed={active}
           aria-label={label}
+          data-active={active || undefined}
           className={clsx({
             [styles.button]: true,
             [styles.tone[tone]]: true,
@@ -55,7 +80,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
         </button>
       }
     />
-  )
+  ),
 );
 
 type AnchorElementProps = Omit<
@@ -80,7 +105,7 @@ export const ButtonIconLink = forwardRef<
       target,
       ...restProps
     },
-    ref
+    ref,
   ) => (
     <Tooltip
       label={label}
@@ -105,5 +130,5 @@ export const ButtonIconLink = forwardRef<
         </a>
       }
     />
-  )
+  ),
 );

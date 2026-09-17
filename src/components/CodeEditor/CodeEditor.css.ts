@@ -1,4 +1,4 @@
-import { style, globalStyle } from '@vanilla-extract/css';
+import { style, globalStyle, keyframes } from '@vanilla-extract/css';
 
 import { colorPaletteVars, sprinkles } from '../../css/sprinkles.css';
 import { fontSizeDefinitions, vars } from '../../css/vars.css';
@@ -197,7 +197,7 @@ globalStyle(
   {
     color: colorPaletteVars.foreground.neutral,
     opacity: inactiveNumberLineOpacity,
-  }
+  },
 );
 
 globalStyle('.cm-s-neo .CodeMirror-linenumber', {
@@ -210,7 +210,7 @@ globalStyle(
   '.cm-s-neo .CodeMirror-linenumber:not(:hover):not(.cm-s-neo .CodeMirror-activeline .CodeMirror-linenumber)',
   {
     opacity: inactiveNumberLineOpacity,
-  }
+  },
 );
 
 globalStyle('.cm-s-neo .cm-tag', {
@@ -225,7 +225,7 @@ globalStyle(
   ].join(','),
   {
     color: colorPaletteVars.code.attribute,
-  }
+  },
 );
 
 globalStyle('.cm-s-neo .cm-string', {
@@ -331,4 +331,17 @@ globalStyle('.CodeMirror-dialog button:focus-visible', {
 
 globalStyle('.CodeMirror-dialog button:hover', {
   background: colorPaletteVars.background.selection,
+});
+
+globalStyle('.cm-inspect-highlight', {
+  backgroundColor: `${colorPaletteVars.background.textSelection} !important`,
+});
+
+const inspectFadeOut = keyframes({
+  from: { backgroundColor: colorPaletteVars.background.textSelection },
+  to: { backgroundColor: 'transparent' },
+});
+
+globalStyle('.cm-inspect-highlight-fade', {
+  animation: `${inspectFadeOut} 1s ease forwards`,
 });

@@ -5,11 +5,11 @@ import { BasicContext } from './context';
 export default ({ children, frameSettings }) => {
   const darkMode = useMemo(
     () => frameSettings.darkMode,
-    [frameSettings.darkMode]
+    [frameSettings.darkMode],
   );
   const compactMode = useMemo(
     () => frameSettings.compactMode,
-    [frameSettings.compactMode]
+    [frameSettings.compactMode],
   );
 
   useEffect(() => {

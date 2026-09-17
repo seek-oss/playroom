@@ -32,7 +32,7 @@ export const horizontalAlignmentScale = styleVariants(
   },
   (alignment) => ({
     alignItems: alignment,
-  })
+  }),
 );
 export const fitContent = style({});
 globalStyle(`${fitContent} > *`, {

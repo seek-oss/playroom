@@ -18,7 +18,7 @@ interface IframeProps extends AllHTMLAttributes<HTMLIFrameElement> {
 
 export default forwardRef<HTMLIFrameElement, IframeProps>(function Iframe(
   { intersectionRootRef, style, src, rootMargin, ...restProps },
-  forwardedRef
+  forwardedRef,
 ) {
   const [loaded, setLoaded] = useState(false);
   const [renderedSrc, setRenderedSrc] = useState<string | null>(null);
@@ -54,7 +54,7 @@ export default forwardRef<HTMLIFrameElement, IframeProps>(function Iframe(
   useGlobalKeyboardShortcutsForWindow(
     loaded && iframeRef.current?.contentWindow
       ? iframeRef.current?.contentWindow
-      : null
+      : null,
   );
 
   return (
@@ -87,7 +87,7 @@ export default forwardRef<HTMLIFrameElement, IframeProps>(function Iframe(
 // https://github.com/streamich/react-use/blob/d2028ae44c79628475f0ef1736c4a48ca310247a/src/useIntersection.ts#L3-L28
 function useIntersection(
   ref: RefObject<HTMLElement | null>,
-  options: IntersectionObserverInit
+  options: IntersectionObserverInit,
 ): IntersectionObserverEntry | null {
   const [intersectionObserverEntry, setIntersectionObserverEntry] =
     useState<IntersectionObserverEntry | null>(null);

@@ -12,7 +12,7 @@ const fontScale = Object.fromEntries(
   Object.entries(fontSizeDefinitions).map(([size, definition]) => [
     size,
     `normal ${definition.map((v) => `${v}px`).join('/')} ${fontFamily}`,
-  ])
+  ]),
 );
 
 export const vars = createGlobalTheme(':root', {

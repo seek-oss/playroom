@@ -16,7 +16,7 @@ const writeSummary = async ({ title, link }) => {
 
     if (!GITHUB_TOKEN || !GITHUB_SHA) {
       throw new Error(
-        'GITHUB_TOKEN and GITHUB_SHA environment variables must be present'
+        'GITHUB_TOKEN and GITHUB_SHA environment variables must be present',
       );
     }
 

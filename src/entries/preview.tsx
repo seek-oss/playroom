@@ -20,5 +20,5 @@ renderElement(
     {({ code, themeName, title }) => (
       <Preview title={title} code={code} themeName={themeName} />
     )}
-  </UrlParams>
+  </UrlParams>,
 );

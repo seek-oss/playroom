@@ -50,7 +50,7 @@ function getCommentStartInfo(commentType: CommentType, fullContent: string) {
 function getSelectionPositionRelativeToCommentStart(
   selectionEndpoint: CodeMirror.Position,
   commentStartIndex: number,
-  commentStartUsed: string
+  commentStartUsed: string,
 ): 'before' | 'during' | 'after' {
   if (selectionEndpoint.ch < commentStartIndex) {
     return 'before';
@@ -91,14 +91,14 @@ function getSelectionFromOffset({
 
   const { commentStartUsed, commentStartIndex } = getCommentStartInfo(
     commentType,
-    fullContent
+    fullContent,
   );
 
   const fromPositionRelativeToCommentStart =
     getSelectionPositionRelativeToCommentStart(
       from,
       commentStartIndex,
-      commentStartUsed
+      commentStartUsed,
     );
 
   switch (fromPositionRelativeToCommentStart) {
@@ -147,14 +147,14 @@ function getSelectionToOffset({
 
   const { commentStartUsed, commentStartIndex } = getCommentStartInfo(
     commentType,
-    fullContent
+    fullContent,
   );
 
   const toPositionRelativeToCommentStart =
     getSelectionPositionRelativeToCommentStart(
       to,
       commentStartIndex,
-      commentStartUsed
+      commentStartUsed,
     );
 
   switch (toPositionRelativeToCommentStart) {
@@ -179,7 +179,7 @@ function getUpdatedContent(existingContent: string, range: TagRange) {
       uncommentType === 'block'
         ? OPENING_AND_CLOSING_BLOCK_COMMENT_SYNTAX
         : OPENING_LINE_COMMENT_SYNTAX_WITH_LEADING_WHITESPACE,
-      uncommentType === 'block' ? '' : LINE_COMMENT_LEADING_WHITESPACE
+      uncommentType === 'block' ? '' : LINE_COMMENT_LEADING_WHITESPACE,
     );
 
     return existingContentWithoutComment;
@@ -202,7 +202,7 @@ const isOnlyWhitespace = (input: string) => /^\s+$/.test(input);
 
 const isFullExpressionSlot = (tokens: CodeMirror.Token[]) => {
   const formattedLineTokens = tokens.filter(
-    (token) => token.type !== 'comment' && !isOnlyWhitespace(token.string)
+    (token) => token.type !== 'comment' && !isOnlyWhitespace(token.string),
   );
 
   return (
@@ -223,7 +223,7 @@ interface TagRange {
 const determineCommentType = (
   cm: Editor,
   from: CodeMirror.Position,
-  to: CodeMirror.Position
+  to: CodeMirror.Position,
 ): CommentType => {
   const lineContent = cm.getLine(from.line);
 
@@ -235,7 +235,7 @@ const determineCommentType = (
 
   const containsTag = lineTokens.some((token) => token.type === 'tag');
   const containsAttribute = lineTokens.some(
-    (token) => token.type === 'attribute'
+    (token) => token.type === 'attribute',
   );
 
   const isJavaScriptMode =
@@ -342,7 +342,7 @@ export const toggleComment = (cm: Editor) => {
       cm.replaceRange(
         getUpdatedContent(existingContent, range),
         newRangeFrom,
-        newRangeTo
+        newRangeTo,
       );
     }
 

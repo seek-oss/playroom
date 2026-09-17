@@ -1,10 +1,11 @@
 import { defineConfig } from 'eslint/config';
-import eslintConfigSeek from 'eslint-config-seek';
+import eslintConfigSeek from 'eslint-config-seek/vitest';
 
 export default defineConfig([
   ...eslintConfigSeek,
   {
     rules: {
+      curly: 'error',
       'import-x/order': [
         'error',
         {
@@ -31,7 +32,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['bin/**/*.cjs', 'lib/**/*.js'],
+    files: ['bin/**/*.mts', 'lib/**/*.{ts,mts}'],
     rules: {
       'no-console': 0,
       'no-process-exit': 0,

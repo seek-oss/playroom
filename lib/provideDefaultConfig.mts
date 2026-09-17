@@ -1,11 +1,18 @@
-const { execSync } = require('child_process');
+import { execSync } from 'node:child_process';
 
-const readPackage = require('read-pkg-up');
+import readPackage from 'read-pkg-up';
 
-/**
- * @returns {string | null} The current git branch name, or null if no branch is found
- */
-const getGitBranch = () => {
+import type { PlayroomConfig } from '../utils/index.ts';
+
+export type ResolvedPlayroomConfig = PlayroomConfig &
+  Required<
+    Pick<
+      PlayroomConfig,
+      'cwd' | 'storageKey' | 'port' | 'openBrowser' | 'paramType' | 'baseUrl'
+    >
+  >;
+
+const getGitBranch = (): string | null => {
   try {
     return execSync('git branch --show-current').toString().trim();
   } catch {
@@ -15,7 +22,7 @@ const getGitBranch = () => {
 
 const generateStorageKey = () => {
   const pkg = readPackage.sync();
-  const packageName = (pkg && pkg.packageJson && pkg.packageJson.name) || null;
+  const packageName = pkg?.packageJson?.name || null;
   const branchName = getGitBranch();
 
   const packageLabel = packageName ? `package:${packageName}` : null;
@@ -24,11 +31,16 @@ const generateStorageKey = () => {
   return ['playroom', packageLabel, branchLabel].filter(Boolean).join('__');
 };
 
-module.exports = ({ storageKey, ...restConfig }) => ({
+export default ({
+  storageKey,
+  cwd,
+  ...restConfig
+}: PlayroomConfig): ResolvedPlayroomConfig => ({
   port: 9000,
   openBrowser: true,
   storageKey: storageKey || generateStorageKey(),
   baseUrl: '',
   paramType: 'hash',
   ...restConfig,
+  cwd: cwd ?? process.cwd(),
 });

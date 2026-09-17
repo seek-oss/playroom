@@ -37,5 +37,5 @@ export const Text = ({
         [styles.align[align!]]: align,
       }),
     },
-    truncate ? <Truncate>{children}</Truncate> : children
+    truncate ? <Truncate>{children}</Truncate> : children,
   );

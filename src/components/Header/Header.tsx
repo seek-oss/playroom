@@ -23,6 +23,7 @@ import {
   Eye,
   EyeClosed,
   ChevronDown,
+  SquareDashedMousePointerIcon,
 } from 'lucide-react';
 import {
   type ComponentProps,
@@ -210,17 +211,20 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
       openDialogOpen,
       code,
       id,
+      inspectMode,
+      title: storeTitle,
     },
     dispatch,
   ] = useContext(StoreContext);
 
   const hasCode = code.trim().length > 0;
-  const { title, ...params } = resolveDataFromUrl();
+  const { title: urlTitle, ...params } = resolveDataFromUrl();
+  const title = storeTitle || urlTitle;
   const duplicateUrl = createUrlForData(
     compressParams({
       ...params,
       title: title ? `(Copy) ${title}` : undefined,
-    })
+    }),
   );
 
   useGlobalKeyboardShortcutsForWindow(window);
@@ -318,6 +322,19 @@ const HeaderMenu = ({ onShareClick }: { onShareClick: () => void }) => {
         </Menu>
 
         <MenuItem
+          icon={SquareDashedMousePointerIcon}
+          onClick={() =>
+            dispatch({
+              type: inspectMode ? 'disableInspectMode' : 'enableInspectMode',
+            })
+          }
+          disabledReason="No active Playroom to inspect"
+          shortcut={[primaryMod, 'Shift', 'E']}
+        >
+          Inspect Element
+        </MenuItem>
+
+        <MenuItem
           icon={panelsVisible ? Eye : EyeClosed}
           onClick={() => dispatch({ type: 'togglePanelVisibility' })}
           shortcut={[primaryMod, '\\']}
@@ -390,7 +407,7 @@ export const Header = () => {
   const hasCode = code.trim().length > 0;
 
   const previewUrl = usePreviewUrl(
-    themesEnabled ? selectedThemes[0] : undefined
+    themesEnabled ? selectedThemes[0] : undefined,
   );
 
   // Remove in favour of direct DOM attribute when we drop React 18 support

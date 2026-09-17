@@ -10,7 +10,7 @@ type NativeTouchOrMouseMove = Parameters<
 
 const resolvePosition = (
   event: MouseEvent | TouchEvent,
-  pagePos: 'pageX' | 'pageY'
+  pagePos: 'pageX' | 'pageY',
 ) => {
   let position = 0;
 
@@ -45,7 +45,7 @@ export const ResizeHandle = ({
   const elementSize = isVertical ? 'offsetWidth' : 'offsetHeight';
 
   const startHandler = (
-    event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>
+    event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>,
   ) => {
     const startPosition = resolvePosition(event.nativeEvent, pagePos);
     const startSize = targetRef.current?.[elementSize] ?? 0;

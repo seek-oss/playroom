@@ -19,7 +19,7 @@ type FrameComponentProps = {
   children?: ReactNode;
 };
 
-interface FrameProps extends Pick<RenderCodeProps, 'code'> {
+interface FrameProps extends Pick<RenderCodeProps, 'code' | 'inspectMode'> {
   themeName: FrameComponentProps['themeName'];
   theme: FrameComponentProps['theme'];
   frameSettings?: FrameComponentProps['frameSettings'];
@@ -27,6 +27,7 @@ interface FrameProps extends Pick<RenderCodeProps, 'code'> {
 }
 export default function Frame({
   code,
+  inspectMode,
   themeName,
   theme,
   frameSettings,
@@ -63,7 +64,11 @@ export default function Frame({
           theme={theme}
           frameSettings={frameSettings}
         >
-          <RenderCode code={code} onError={setError} />
+          <RenderCode
+            code={code}
+            inspectMode={inspectMode}
+            onError={setError}
+          />
         </FrameComponent>
       </ErrorBoundary>
       <ErrorComponent message={error} delayVisibility={delay.current} />

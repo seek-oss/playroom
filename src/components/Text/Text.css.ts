@@ -25,9 +25,9 @@ export const size = Object.fromEntries(
         leading,
         fontMetrics: plusJakartaSansMetrics,
       },
-      name
+      name,
     ),
-  ])
+  ]),
 );
 
 export const align = {

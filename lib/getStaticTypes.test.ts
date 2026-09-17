@@ -1,7 +1,8 @@
 import { resolve } from 'node:path';
 
-// @ts-expect-error No types
-import getStaticTypes from './getStaticTypes';
+import { describe, expect, it } from 'vitest';
+
+import getStaticTypes from './getStaticTypes.mts';
 
 describe('getStaticTypes', () => {
   it('should get static types from typescript components', async () => {

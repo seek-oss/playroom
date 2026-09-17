@@ -41,4 +41,11 @@ export default defineConfig([
       '__PLAYROOM_ALIAS__COMPONENTS__',
     ],
   },
+  {
+    entry: ['bin/cli.mts'],
+    format: ['esm'],
+    dts: false,
+    outDir: 'dist',
+    platform: 'node',
+  },
 ]);

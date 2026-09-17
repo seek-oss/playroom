@@ -34,8 +34,7 @@ import { SharedTooltipContext, Tooltip } from '../Tooltip/Tooltip';
 
 import * as styles from './EditorActions.css';
 
-interface EditorActionButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface EditorActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   name?: string;
   shortcut?: KeyCombination;
   icon: LucideIcon;
@@ -101,13 +100,13 @@ const EditorActionButton = forwardRef<
 
 const menuSideOffset = 2;
 const overflowCommands = editorCommandList.filter(
-  ({ command }) => command !== 'formatCode' && command !== 'findPersistent'
+  ({ command }) => command !== 'formatCode' && command !== 'findPersistent',
 );
 const formatCommand = editorCommandList.find(
-  ({ command }) => command === 'formatCode'
+  ({ command }) => command === 'formatCode',
 );
 const searchCommand = editorCommandList.find(
-  ({ command }) => command === 'findPersistent'
+  ({ command }) => command === 'findPersistent',
 );
 const syntaxErrorMessage = 'Code contains syntax errors.';
 
@@ -209,7 +208,7 @@ export const EditorActions = () => {
                 >
                   {label}
                 </MenuItem>
-              )
+              ),
             )}
           </Menu>
         </div>

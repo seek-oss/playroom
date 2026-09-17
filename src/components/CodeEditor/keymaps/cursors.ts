@@ -28,7 +28,7 @@ function wordAt(cm: Editor, pos: CodeMirror.Position) {
 
 function rangeIsAlreadySelected(
   ranges: CodeMirror.Range[],
-  checkRange: Pick<CodeMirror.Range, 'from' | 'to'>
+  checkRange: Pick<CodeMirror.Range, 'from' | 'to'>,
 ) {
   for (const range of ranges) {
     const startsFromStart =

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "module": "es2022",
@@ -13,8 +14,16 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "lib": ["dom", "es2022"],
-    "target": "es2022"
+    "target": "es2022",
+    "customConditions": ["@playroom/dev"]
   },
-  "include": ["src", "lib", "utils", "tsdown.config.ts"],
+  "include": [
+    "src",
+    "lib",
+    "utils",
+    "bin",
+    "tsdown.config.ts",
+    "vitest.config.mts"
+  ],
   "exclude": ["cypress", "node_modules"]
 }

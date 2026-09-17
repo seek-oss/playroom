@@ -18,7 +18,17 @@ export const compileJsx = memoizeOne(
       jsxPragma: ReactCreateElementPragma,
       jsxFragmentPragma: ReactFragmentPragma,
       production: true,
-    }).code
+    }).code,
+);
+
+export const compileJsxForInspect = memoizeOne(
+  (code: string) =>
+    transform(wrapInFragment(code.trim()), {
+      transforms: ['jsx'],
+      jsxPragma: ReactCreateElementPragma,
+      jsxFragmentPragma: ReactFragmentPragma,
+      production: false,
+    }).code,
 );
 
 const parseWithBabel = memoizeOne((code: string) =>
@@ -26,7 +36,7 @@ const parseWithBabel = memoizeOne((code: string) =>
     plugins: ['jsx'],
     sourceType: 'script',
     strictMode: true,
-  })
+  }),
 );
 
 export interface ErrorWithLocation extends Error {

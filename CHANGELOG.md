@@ -1,5 +1,11 @@
 # playroom
 
+## 1.3.0
+
+### Minor Changes
+
+- [#487](https://github.com/seek-oss/playroom/pull/487) [`3e6d365`](https://github.com/seek-oss/playroom/commit/3e6d365a348a9b8c0c56a3f0f59b3f6015a0850b) Thanks [@michaeltaranto](https://github.com/michaeltaranto)! - Inspect: Add inspector to connect rendered element to code line
+
 ## 1.2.2
 
 ### Patch Changes

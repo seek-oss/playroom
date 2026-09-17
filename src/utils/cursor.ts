@@ -35,5 +35,5 @@ export const isValidLocation = ({
           code,
           cursor,
           snippet: breakoutString,
-        })
+        }),
       ) === true;

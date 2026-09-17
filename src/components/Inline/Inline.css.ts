@@ -30,5 +30,5 @@ export const horizontalAlignmentScale = styleVariants(
   },
   (alignment) => ({
     alignItems: alignment,
-  })
+  }),
 );

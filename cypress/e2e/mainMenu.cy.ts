@@ -30,7 +30,7 @@ describe('Main Menu', () => {
       <div>Third line</div>
     `);
     assertCodePaneContains(
-      '<div>First line</div>\n<div>Second line</div>\n<div>Third line</div>'
+      '<div>First line</div>\n<div>Second line</div>\n<div>Third line</div>',
     );
     changeTitle('Initial Title');
     openMainMenu();
@@ -51,9 +51,7 @@ describe('Main Menu', () => {
   });
 
   it('Duplicate playroom', () => {
-    cy.visit(
-      'http://localhost:9000/#?code=N4Igxg9gJgpiBcIA8ALAjAPgCowM4BcACAYWhiQHp0MQAaEfFGAWzwQG0BdegdwEsojXB24M%2B%2BADZxEOAoSzipIAL5A'
-    );
+    loadPlayroom('<h1>Test Code</h1>', { title: 'Test Title' });
     assertCodePaneContains('<h1>Test Code</h1>');
     openMainMenu();
     cy.findByRole('link', { name: 'Duplicate' }).then((link) => {
@@ -104,7 +102,7 @@ describe('Main Menu', () => {
       const themes: string[] = ['themeOne', 'themeTwo'];
 
       const allFrames = widths.flatMap((width) =>
-        themes.map<[string, Widths[number]]>((theme) => [theme, width])
+        themes.map<[string, Widths[number]]>((theme) => [theme, width]),
       );
 
       loadThemedPlayroom();

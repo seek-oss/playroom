@@ -13,7 +13,6 @@ import { useDebouncedCallback } from 'use-debounce';
 import {
   type CompressParamsOptions,
   type FrameSettingsValues,
-  type Snippet,
   compressParams,
 } from '../../utils';
 import playroomConfig from '../config';
@@ -22,9 +21,7 @@ import {
   themesEnabled,
 } from '../configModules/themes';
 import availableWidths, { type Widths } from '../configModules/widths';
-import { isValidLocation } from '../utils/cursor';
 import { fallbackUuid } from '../utils/fallbackUuid';
-import { formatForInsertion, formatAndInsert } from '../utils/formatting';
 import {
   getDataParam,
   resolveDataFromUrl,
@@ -54,7 +51,7 @@ const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
 
 function convertAndStoreSizeAsPercentage(
   mode: 'height' | 'width',
-  size: number
+  size: number,
 ): string {
   const viewportSize =
     mode === 'height' ? window.innerHeight : window.innerWidth;
@@ -64,7 +61,7 @@ function convertAndStoreSizeAsPercentage(
 
   store.setItem(
     `${mode === 'height' ? 'editorHeight' : 'editorWidth'}`,
-    roundedSizePercentage
+    roundedSizePercentage,
   );
 
   return `${sizePercentage}%`;
@@ -86,6 +83,7 @@ interface State {
   previewRenderCode?: string;
   previewEditorCode?: string;
   highlightLineNumber?: number;
+  inspectMode: boolean;
   snippetsOpen: boolean;
   openDialogOpen: boolean;
   hasSyntaxError?: boolean;
@@ -111,11 +109,20 @@ export type Action =
       type: 'updateCursorPosition';
       payload: { position: CursorPosition; code?: string };
     }
-  | { type: 'persistSnippet'; payload: { snippet: Snippet } }
-  | { type: 'previewSnippet'; payload: { snippet: Snippet | null } }
+  | {
+      type: 'persistSnippet';
+      payload: { code: string; cursor: CursorPosition };
+    }
+  | {
+      type: 'previewSnippet';
+      payload: { previewRenderCode: string | undefined };
+    }
   | { type: 'openPlayroomDialog' }
   | { type: 'closePlayroomDialog' }
-  | { type: 'openSnippets' }
+  | {
+      type: 'openSnippets';
+      payload: { code: string; cursor: CursorPosition };
+    }
   | { type: 'closeSnippets' }
   | { type: 'hideEditor' }
   | { type: 'showEditor' }
@@ -134,6 +141,7 @@ export type Action =
   | { type: 'updateEditorHeight'; payload: { size: number } }
   | { type: 'updateEditorWidth'; payload: { size: number } }
   | { type: 'togglePanelVisibility' }
+  | { type: 'showPanels' }
   | {
       type: 'updateSelectedThemes';
       payload: { themes: typeof availableThemes };
@@ -176,7 +184,9 @@ export type Action =
       payload: {
         id: string;
       };
-    };
+    }
+  | { type: 'enableInspectMode' }
+  | { type: 'disableInspectMode' };
 
 const resetPreview = ({
   previewRenderCode,
@@ -192,8 +202,8 @@ const sortStoredPlayrooms = (storedPlayrooms: State['storedPlayrooms']) =>
   Object.fromEntries(
     Object.entries(storedPlayrooms).sort(
       ([, { lastModifiedDate: aDate }], [, { lastModifiedDate: bDate }]) =>
-        bDate.getTime() - aDate.getTime()
-    )
+        bDate.getTime() - aDate.getTime(),
+    ),
   );
 
 const createPlayroomId = () =>
@@ -231,13 +241,7 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case 'persistSnippet': {
-      const { snippet } = action.payload;
-
-      const { code, cursor } = formatAndInsert({
-        code: state.code,
-        snippet: snippet.code,
-        cursor: state.cursorPosition,
-      });
+      const { code, cursor } = action.payload;
 
       return {
         ...resetPreview(state),
@@ -259,43 +263,14 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case 'previewSnippet': {
-      const { snippet } = action.payload;
-
-      const previewRenderCode = snippet
-        ? formatAndInsert({
-            code: state.code,
-            snippet: snippet.code,
-            cursor: state.cursorPosition,
-          }).code
-        : undefined;
-
       return {
         ...state,
-        previewRenderCode,
+        previewRenderCode: action.payload.previewRenderCode,
       };
     }
 
     case 'openSnippets': {
-      if (state.hasSyntaxError) {
-        return {
-          ...state,
-          snippetsOpen: false,
-        };
-      }
-
-      const validCursorPosition = isValidLocation({
-        code: state.code,
-        cursor: state.cursorPosition,
-      });
-
-      if (!validCursorPosition) {
-        return state;
-      }
-
-      const { code, cursor } = formatForInsertion({
-        code: state.code,
-        cursor: state.cursorPosition,
-      });
+      const { code, cursor } = action.payload;
 
       return {
         ...state,
@@ -373,7 +348,7 @@ const reducer = (state: State, action: Action): State => {
 
       const updatedHeightPercentage = convertAndStoreSizeAsPercentage(
         'height',
-        size
+        size,
       );
 
       return {
@@ -386,7 +361,7 @@ const reducer = (state: State, action: Action): State => {
       const { size } = action.payload;
       const updatedWidthPercentage = convertAndStoreSizeAsPercentage(
         'width',
-        size
+        size,
       );
 
       return {
@@ -403,6 +378,13 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         panelsVisible: !state.panelsVisible,
+      };
+    }
+
+    case 'showPanels': {
+      return {
+        ...state,
+        panelsVisible: true,
       };
     }
 
@@ -529,6 +511,20 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'enableInspectMode': {
+      return {
+        ...state,
+        inspectMode: true,
+      };
+    }
+
+    case 'disableInspectMode': {
+      return {
+        ...state,
+        inspectMode: false,
+      };
+    }
+
     default:
       return state;
   }
@@ -540,6 +536,7 @@ const initialState: State = {
   id: '',
   code: exampleCode,
   cursorPosition: { line: 0, ch: 0 },
+  inspectMode: false,
   snippetsOpen: false,
   openDialogOpen: false,
   editorHidden: false,
@@ -581,7 +578,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         });
       }
     },
-    500
+    500,
   );
 
   useEffect(() => {
@@ -641,7 +638,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         // assume same id to enable updating to handle refresh case.
         if (storedPlayrooms) {
           const matchingPlayroom = storedPlayroomValues.find(
-            ([_, { dataParam }]) => dataParamFromUrl === dataParam
+            ([_, { dataParam }]) => dataParamFromUrl === dataParam,
           );
 
           if (matchingPlayroom) {
@@ -672,7 +669,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         });
 
         setReady(true);
-      }
+      },
     );
   }, []);
 

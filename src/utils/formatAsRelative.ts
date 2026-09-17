@@ -27,7 +27,7 @@ const rtf = new Intl.RelativeTimeFormat('en', {
 export const formatAsRelative = (date: Date) => {
   const secondsDiff = Math.round((date.getTime() - Date.now()) / 1000);
   const unitIndex = unitsInSec.findIndex(
-    (cutoff) => cutoff > Math.abs(secondsDiff)
+    (cutoff) => cutoff > Math.abs(secondsDiff),
   );
   const divisor = unitIndex ? unitsInSec[unitIndex - 1] : 1;
 

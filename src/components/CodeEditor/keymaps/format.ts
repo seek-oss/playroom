@@ -4,13 +4,14 @@ import { formatCode as formatCodeUtil } from '../../../utils/formatting';
 
 export const formatCode = (cm: Editor) => {
   const currentValue = cm.getValue();
-  const { code: formattedCode, cursor: formattedCursor } = formatCodeUtil({
-    code: currentValue,
-    cursor: cm.getCursor(),
-  });
+  const cursor = cm.getCursor();
 
-  if (formattedCode !== currentValue) {
-    cm.setValue(formattedCode);
-    cm.setCursor(formattedCursor);
-  }
+  formatCodeUtil({ code: currentValue, cursor }).then(
+    ({ code: formattedCode, cursor: formattedCursor }) => {
+      if (formattedCode !== cm.getValue()) {
+        cm.setValue(formattedCode);
+        cm.setCursor(formattedCursor);
+      }
+    },
+  );
 };

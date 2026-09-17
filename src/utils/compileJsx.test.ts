@@ -1,4 +1,5 @@
 import dedent from 'dedent';
+import { describe, expect, test } from 'vitest';
 
 import { type ErrorWithLocation, compileJsx, validateCode } from './compileJsx';
 
@@ -8,7 +9,7 @@ describe('compileJsx', () => {
       compileJsx(dedent`
         <Foo />
         <Bar />
-      `)
+      `),
     ).toMatchInlineSnapshot(`
       "R_cE(R_F, null, R_cE(Foo, null )
       , R_cE(Bar, null ))"
@@ -19,9 +20,9 @@ describe('compileJsx', () => {
     expect(
       compileJsx(`
         <Foo--BarBaz ::invalid />
-      `)
+      `),
     ).toMatchInlineSnapshot(
-      `"R_cE(R_F, null, R_cE(Foo--BarBaz ::invalid, null ))"`
+      `"R_cE(R_F, null, R_cE(Foo--BarBaz ::invalid, null ))"`,
     );
   });
 
@@ -31,8 +32,10 @@ describe('compileJsx', () => {
         <Foo />
         <Bar />
         <Foo--BarBaz>
-      `)
-    ).toThrowErrorMatchingInlineSnapshot(`"Unterminated JSX contents (3:25)"`);
+      `),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[SyntaxError: Unterminated JSX contents (3:25)]`,
+    );
   });
 });
 
@@ -42,7 +45,7 @@ describe('validateCode', () => {
       validateCode(`
         <Foo />
         <Bar />
-      `)
+      `),
     ).toBe(true);
   });
 
@@ -54,7 +57,7 @@ describe('validateCode', () => {
                    ^ column 20
     `);
     expect(error).toMatchInlineSnapshot(
-      `[SyntaxError: Unexpected token (4:20)]`
+      `[SyntaxError: Unexpected token (4:20)]`,
     );
     expect((error as ErrorWithLocation).loc).toMatchInlineSnapshot(`
       Position {

@@ -19,5 +19,5 @@ renderElement(
     <EditorProvider>
       <Playroom />
     </EditorProvider>
-  </StoreProvider>
+  </StoreProvider>,
 );

@@ -40,7 +40,7 @@ type MenuItemProps = Omit<
 export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
   (
     { children, shortcut, icon: Icon, disabled, disabledReason, ...restProps },
-    ref
+    ref,
   ) => {
     const isSubMenuTrigger = useContext(SubMenuTriggerContext);
 
@@ -77,7 +77,7 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
     ) : (
       item
     );
-  }
+  },
 );
 
 export const linkArrowSize = 12;
@@ -251,7 +251,7 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
       onClose,
       onOpenChange,
     },
-    triggerRef
+    triggerRef,
   ) => {
     const isSubMenu = useContext(SubMenuContext);
     const MenuRoot = isSubMenu ? BaseUIMenu.SubmenuRoot : BaseUIMenu.Root;
@@ -305,7 +305,7 @@ export const Menu = forwardRef<HTMLButtonElement, Props>(
         </MenuRoot>
       </SubMenuContext.Provider>
     );
-  }
+  },
 );
 
 type MenuClearItemProps = Omit<

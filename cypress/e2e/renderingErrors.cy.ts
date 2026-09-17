@@ -51,7 +51,7 @@ describe('Handling rendering errors', () => {
 
           return <div>VALID</div>;
         })
-      }`
+      }`,
     );
 
     typeCode(`{meta+downarrow}{enter}{enter}Rendered{enter}<Test />`, 150);

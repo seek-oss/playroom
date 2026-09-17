@@ -1,25 +1,21 @@
-const portfinder = require('portfinder');
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
+import portfinder from 'portfinder';
+import webpack from 'webpack';
+import WebpackDevServer from 'webpack-dev-server';
 
-const makeWebpackConfig = require('./makeWebpackConfig');
+import makeWebpackConfig from './makeWebpackConfig.mts';
+import type { ResolvedPlayroomConfig } from './provideDefaultConfig.mts';
 
-module.exports = async (config, callback) => {
+export default async (
+  config: ResolvedPlayroomConfig,
+  callback?: () => void,
+) => {
   const webpackConfig = await makeWebpackConfig(
     { ...config, baseUrl: '' },
-    {
-      production: false,
-      infrastructureLogging: {
-        level: 'none',
-      },
-      stats: {
-        errorDetails: true,
-      },
-    }
+    { production: false },
   );
   const { port, openBrowser } = config;
 
-  portfinder.getPort({ port }, function (portErr, availablePort) {
+  portfinder.getPort({ port }, (portErr, availablePort) => {
     if (portErr) {
       console.error('portErr: ', portErr);
       return;

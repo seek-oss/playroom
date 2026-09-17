@@ -31,7 +31,7 @@ export const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
       delay = false,
       ...restProps
     },
-    triggerRef
+    triggerRef,
   ) => {
     const descriptionId = useId();
 
@@ -56,7 +56,7 @@ export const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
         </BaseUITooltip.Portal>
       </BaseUITooltip.Root>
     );
-  }
+  },
 );
 
 export const SharedTooltipContext = BaseUITooltip.Provider;

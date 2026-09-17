@@ -189,7 +189,7 @@ const darkPalette = {
 const surfaceLight = mix(
   0.5,
   lightPalette.background[200],
-  lightPalette.background[100]
+  lightPalette.background[100],
 );
 
 export const light = {
@@ -225,6 +225,7 @@ export const light = {
     tooltip: lightPalette.gray[1000],
     textSelection: lightPalette.blue[400],
     previewBanner: surfaceLight,
+    inspectOverlay: transparentize(0.5, lightPalette.blue[500]),
   },
   border: {
     standard: lightPalette.gray[400],
@@ -237,7 +238,7 @@ export const light = {
   shadows: {
     small: comma(
       '0 1px 2px rgb(18, 21, 26, 0.05)',
-      '0 6px 18px -6px rgb(18, 21, 26, 0.08)'
+      '0 6px 18px -6px rgb(18, 21, 26, 0.08)',
     ),
   },
 };
@@ -275,6 +276,7 @@ export const dark = {
     tooltip: 'hsla(0,0%,0%,1)',
     textSelection: darkPalette.blue[400],
     previewBanner: surfaceLight,
+    inspectOverlay: transparentize(0.5, darkPalette.blue[500]),
   },
   border: {
     standard: darkPalette.gray[400],
@@ -287,7 +289,7 @@ export const dark = {
   shadows: {
     small: comma(
       `0 1px 2px ${transparentize(0.85, '#000')}`,
-      `0 6px 18px -6px ${transparentize(0.92, '#000')}`
+      `0 6px 18px -6px ${transparentize(0.92, '#000')}`,
     ),
   },
 };

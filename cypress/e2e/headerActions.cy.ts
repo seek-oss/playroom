@@ -37,7 +37,7 @@ describe('Header actions', () => {
     const themes: string[] = ['themeOne', 'themeTwo'];
 
     const allFrames = widths.flatMap((width) =>
-      themes.map<[string, Widths[number]]>((theme) => [theme, width])
+      themes.map<[string, Widths[number]]>((theme) => [theme, width]),
     );
 
     loadThemedPlayroom();

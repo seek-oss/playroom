@@ -66,7 +66,7 @@ export const item = style([
     selectors: {
       [comma(
         '&[data-popup-open]:not([aria-disabled])::before',
-        '&[data-highlighted]:not([aria-disabled])::before'
+        '&[data-highlighted]:not([aria-disabled])::before',
       )]: {
         backgroundColor: highlightColor,
       },
