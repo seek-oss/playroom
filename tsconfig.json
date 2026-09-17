@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "module": "es2022",
@@ -15,6 +16,6 @@
     "lib": ["dom", "es2022"],
     "target": "es2022"
   },
-  "include": ["src", "lib", "utils", "tsdown.config.ts"],
+  "include": ["src", "lib", "utils", "bin", "tsdown.config.ts"],
   "exclude": ["cypress", "node_modules"]
 }

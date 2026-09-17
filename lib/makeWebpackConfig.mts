@@ -1,17 +1,24 @@
-const path = require('path');
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const FriendlyErrorsWebpackPlugin = require('@soda/friendly-errors-webpack-plugin');
-const { cssFileFilter } = require('@vanilla-extract/integration');
-const { VanillaExtractPlugin } = require('@vanilla-extract/webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const webpack = require('webpack');
-const { mergeWithRules } = require('webpack-merge');
+import FriendlyErrorsWebpackPlugin from '@soda/friendly-errors-webpack-plugin';
+import { cssFileFilter } from '@vanilla-extract/integration';
+import { VanillaExtractPlugin } from '@vanilla-extract/webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import webpack, { type Configuration } from 'webpack';
+import { mergeWithRules } from 'webpack-merge';
 
-const getStaticTypes = require('./getStaticTypes');
-const makeDefaultWebpackConfig = require('./makeDefaultWebpackConfig');
+import getStaticTypes from './getStaticTypes.mts';
+import makeDefaultWebpackConfig from './makeDefaultWebpackConfig.mts';
+import type { ResolvedPlayroomConfig } from './provideDefaultConfig.mts';
 
-const playroomPath = path.resolve(__dirname, '..');
+const require = createRequire(import.meta.url);
+const playroomPath = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+);
 const includePaths = [
   path.resolve(playroomPath, 'lib'),
   path.resolve(playroomPath, 'src'),
@@ -20,18 +27,25 @@ const includePaths = [
 
 const isPlayroomRepo = !playroomPath.includes('node_modules');
 
-module.exports = async (playroomConfig, options) => {
-  const relativeResolve = (requirePath) =>
+interface MakeWebpackConfigOptions {
+  production?: boolean;
+}
+
+export default async (
+  playroomConfig: ResolvedPlayroomConfig,
+  options: MakeWebpackConfigOptions,
+): Promise<Configuration> => {
+  const relativeResolve = (requirePath: string) =>
     require.resolve(requirePath, { paths: [playroomConfig.cwd] });
 
   const staticTypes = await getStaticTypes(playroomConfig);
 
-  const ourConfig = {
+  const ourConfig: Configuration = {
     mode: options.production ? 'production' : 'development',
     entry: {
-      index: [require.resolve('../src/entries/index.tsx')],
-      frame: [require.resolve('../src/entries/frame.tsx')],
-      preview: [require.resolve('../src/entries/preview.tsx')],
+      index: [path.join(playroomPath, 'src/entries/index.tsx')],
+      frame: [path.join(playroomPath, 'src/entries/frame.tsx')],
+      preview: [path.join(playroomPath, 'src/entries/preview.tsx')],
     },
     output: {
       filename: '[name].[contenthash].js',
@@ -50,16 +64,16 @@ module.exports = async (playroomConfig, options) => {
         ),
         __PLAYROOM_ALIAS__SNIPPETS__: playroomConfig.snippets
           ? relativeResolve(playroomConfig.snippets)
-          : require.resolve('./defaultModules/snippets.ts'),
+          : path.join(playroomPath, 'lib/defaultModules/snippets.ts'),
         __PLAYROOM_ALIAS__THEMES__: playroomConfig.themes
           ? relativeResolve(playroomConfig.themes)
-          : require.resolve('./defaultModules/themes.ts'),
+          : path.join(playroomPath, 'lib/defaultModules/themes.ts'),
         __PLAYROOM_ALIAS__FRAME_COMPONENT__: playroomConfig.frameComponent
           ? relativeResolve(playroomConfig.frameComponent)
-          : require.resolve('./defaultModules/FrameComponent.tsx'),
+          : path.join(playroomPath, 'lib/defaultModules/FrameComponent.tsx'),
         __PLAYROOM_ALIAS__USE_SCOPE__: playroomConfig.scope
           ? relativeResolve(playroomConfig.scope)
-          : require.resolve('./defaultModules/useScope.ts'),
+          : path.join(playroomPath, 'lib/defaultModules/useScope.ts'),
       },
     },
     module: {
@@ -146,9 +160,9 @@ module.exports = async (playroomConfig, options) => {
         chunksSortMode: 'none',
         chunks: ['index'],
         filename: 'index.html',
-        favicon: path.join(__dirname, '../images/favicon.png'),
+        favicon: path.join(playroomPath, 'images/favicon.png'),
         base: playroomConfig.baseUrl,
-        template: path.join(__dirname, '../src/entries/template.html'),
+        template: path.join(playroomPath, 'src/entries/template.html'),
       }),
       new HtmlWebpackPlugin({
         title: 'Playroom Frame',
@@ -161,18 +175,15 @@ module.exports = async (playroomConfig, options) => {
         chunksSortMode: 'none',
         chunks: ['preview'],
         filename: 'preview/index.html',
-        favicon: path.join(__dirname, '../images/favicon.png'),
+        favicon: path.join(playroomPath, 'images/favicon.png'),
         publicPath: '../',
-        template: path.join(__dirname, '../src/entries/template.html'),
+        template: path.join(playroomPath, 'src/entries/template.html'),
       }),
       new VanillaExtractPlugin({
-        test: (filePath) => {
+        test: (filePath: string) =>
           // Only apply VanillaExtract plugin to playroom and its dependency's Vanilla Extract modules
-          return (
-            cssFileFilter.test(filePath) &&
-            includePaths.some((includePath) => filePath.startsWith(includePath))
-          );
-        },
+          cssFileFilter.test(filePath) &&
+          includePaths.some((includePath) => filePath.startsWith(includePath)),
       }),
       new MiniCssExtractPlugin({ ignoreOrder: true }),
       ...(options.production ? [] : [new FriendlyErrorsWebpackPlugin()]),
@@ -184,14 +195,12 @@ module.exports = async (playroomConfig, options) => {
     ? await playroomConfig.webpackConfig()
     : makeDefaultWebpackConfig(playroomConfig);
 
-  const mergedConfig = mergeWithRules({
+  return mergeWithRules({
     module: {
       rules: {
         test: 'match',
         use: 'replace',
       },
     },
-  })(ourConfig, theirConfig);
-
-  return mergedConfig;
+  })(ourConfig, theirConfig as Configuration);
 };

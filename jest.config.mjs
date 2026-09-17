@@ -1,4 +1,7 @@
 export default {
+  transform: {
+    '^.+\\.m?[jt]sx?$': 'babel-jest',
+  },
   moduleNameMapper: {
     // Stubbing to basic config. Unit tests should not rely on
     // a Playroom config object, instead test private functions
