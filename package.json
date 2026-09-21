@@ -5,23 +5,56 @@
   "bin": {
     "playroom": "./bin/cli.mts"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/utils/index.cjs",
+  "module": "./dist/utils/index.mjs",
+  "types": "./dist/utils/index.d.cts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/utils/index.mjs",
+      "require": "./dist/utils/index.cjs"
     },
     "./package.json": "./package.json"
   },
+  "imports": {
+    "#entries/index": {
+      "@playroom/dev": "./src/entries/index.tsx",
+      "import": "./dist/app/entries/index.mjs"
+    },
+    "#entries/frame": {
+      "@playroom/dev": "./src/entries/frame.tsx",
+      "import": "./dist/app/entries/frame.mjs"
+    },
+    "#entries/preview": {
+      "@playroom/dev": "./src/entries/preview.tsx",
+      "import": "./dist/app/entries/preview.mjs"
+    },
+    "#defaultModules/FrameComponent": {
+      "@playroom/dev": "./src/defaultModules/FrameComponent.tsx",
+      "import": "./dist/app/defaultModules/FrameComponent.mjs"
+    },
+    "#defaultModules/snippets": {
+      "@playroom/dev": "./src/defaultModules/snippets.ts",
+      "import": "./dist/app/defaultModules/snippets.mjs"
+    },
+    "#defaultModules/themes": {
+      "@playroom/dev": "./src/defaultModules/themes.ts",
+      "import": "./dist/app/defaultModules/themes.mjs"
+    },
+    "#defaultModules/useScope": {
+      "@playroom/dev": "./src/defaultModules/useScope.ts",
+      "import": "./dist/app/defaultModules/useScope.mjs"
+    },
+    "#webpack/devConfig": {
+      "@playroom/dev": "./lib/webpackDevConfig.mts",
+      "import": "./lib/webpackDevConfig.stub.mts"
+    },
+    "#static/*": {
+      "@playroom/dev": "./static/*",
+      "import": "./dist/static/*"
+    }
+  },
   "files": [
     "CHANGELOG.md",
-    ".babelrc",
-    "images",
-    "lib",
-    "src",
-    "utils",
     "dist"
   ],
   "scripts": {
@@ -29,14 +62,15 @@
     "cypress:dev": "start-server-and-test start:all '9000|9001|9002' 'cypress open --browser electron --e2e'",
     "cypress:verify": "cypress verify",
     "start": "pnpm start:basic",
-    "start:basic": "./bin/cli.mts start --config cypress/projects/basic/playroom.config.js",
-    "build:basic": "./bin/cli.mts build --config cypress/projects/basic/playroom.config.js",
+    "cli:dev": "node --conditions=@playroom/dev ./bin/cli.mts",
+    "start:basic": "pnpm cli:dev start --config cypress/projects/basic/playroom.config.js",
+    "build:basic": "node dist/cli.mjs build --config cypress/projects/basic/playroom.config.js",
     "serve:basic": "PORT=9000 serve --config ../serve.json --no-request-logging cypress/projects/basic/dist",
-    "start:themed": "./bin/cli.mts start --config cypress/projects/themed/playroom.config.js",
-    "build:themed": "./bin/cli.mts build --config cypress/projects/themed/playroom.config.js",
+    "start:themed": "pnpm cli:dev start --config cypress/projects/themed/playroom.config.js",
+    "build:themed": "pnpm cli:dev build --config cypress/projects/themed/playroom.config.js",
     "serve:themed": "PORT=9001 serve --config ../serve.json --no-request-logging cypress/projects/themed/dist",
-    "start:typescript": "./bin/cli.mts start --config cypress/projects/typescript/playroom.config.js",
-    "build:typescript": "./bin/cli.mts build --config cypress/projects/typescript/playroom.config.js",
+    "start:typescript": "pnpm cli:dev start --config cypress/projects/typescript/playroom.config.js",
+    "build:typescript": "pnpm cli:dev build --config cypress/projects/typescript/playroom.config.js",
     "serve:typescript": "PORT=9002 serve --config ../serve.json --no-request-logging cypress/projects/typescript/dist",
     "start:all": "concurrently 'npm:start:*(!all)'",
     "build:all": "concurrently 'npm:build:*(!all)'",
@@ -78,20 +112,11 @@
     "@babel/parser": "^7.23.4",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
-    "@babel/preset-typescript": "^7.18.6",
     "@base-ui/react": "^1.1.0",
-    "@capsizecss/metrics": "^3.5.0",
-    "@capsizecss/vanilla-extract": "^2.0.4",
     "@soda/friendly-errors-webpack-plugin": "^1.8.1",
-    "@types/codemirror": "^5.60.5",
-    "@types/react": "^18.0.0 || ^19.0.0",
-    "@types/react-dom": "^18.0.0 || ^19.0.0",
-    "@vanilla-extract/css": "^1.9.2",
     "@vanilla-extract/css-utils": "^0.1.3",
     "@vanilla-extract/dynamic": "^2.1.2",
-    "@vanilla-extract/integration": "^8.0.4",
     "@vanilla-extract/sprinkles": "^1.5.1",
-    "@vanilla-extract/webpack-plugin": "^2.3.6",
     "@zumer/snapdom": "^1.9.14",
     "babel-loader": "^9.1.0",
     "clsx": "^2.1.1",
@@ -127,13 +152,22 @@
   },
   "devDependencies": {
     "@actions/core": "^1.10.0",
+    "@babel/preset-typescript": "^7.18.6",
+    "@capsizecss/metrics": "^3.5.0",
+    "@capsizecss/vanilla-extract": "^2.0.4",
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.28.1",
     "@octokit/rest": "^19.0.5",
     "@testing-library/cypress": "^10.1.0",
+    "@types/codemirror": "^5.60.5",
     "@types/command-line-args": "^5.2.3",
     "@types/command-line-usage": "^5.0.4",
-    "@types/node": "^18.11.9",
+    "@types/node": "^20.19.30",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vanilla-extract/css": "^1.9.2",
+    "@vanilla-extract/rollup-plugin": "^1.5.1",
+    "@vanilla-extract/webpack-plugin": "^2.3.27",
     "@vitejs/plugin-react": "^6.1.1",
     "concurrently": "^9.1.2",
     "cypress": "^15.5.0",
@@ -146,7 +180,7 @@
     "serve": "^14.2.5",
     "start-server-and-test": "^2.0.11",
     "surge": "^0.24.6",
-    "tsdown": "^0.12.7",
+    "tsdown": "^0.20.0",
     "vitest": "^5.0.0"
   },
   "peerDependencies": {
