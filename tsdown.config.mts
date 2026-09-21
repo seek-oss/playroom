@@ -8,8 +8,10 @@ export default defineConfig([
     dts: true,
     outDir: 'dist/utils',
     exports: true,
-    // Doesn't affect the bundle but suppresses a warning we don't care about
-    external: ['__PLAYROOM_ALIAS__FRAME_COMPONENT__'],
+    deps: {
+      // Doesn't affect the bundle but suppresses a warning we don't care about
+      neverBundle: ['__PLAYROOM_ALIAS__FRAME_COMPONENT__'],
+    },
   },
   {
     entry: {
@@ -31,15 +33,19 @@ export default defineConfig([
       }),
     ],
     copy: [{ from: 'static', to: 'dist' }],
-    // Doesn't affect the bundle but suppresses a warning we don't care about
-    external: [
-      /\.png/,
-      '__PLAYROOM_ALIAS__FRAME_COMPONENT__',
-      '__PLAYROOM_ALIAS__THEMES__',
-      '__PLAYROOM_ALIAS__SNIPPETS__',
-      '__PLAYROOM_ALIAS__USE_SCOPE__',
-      '__PLAYROOM_ALIAS__COMPONENTS__',
-    ],
+    deps: {
+      // Doesn't affect the bundle but suppresses a warning we don't care about
+      neverBundle: [
+        /\.png/,
+        '__PLAYROOM_ALIAS__FRAME_COMPONENT__',
+        '__PLAYROOM_ALIAS__THEMES__',
+        '__PLAYROOM_ALIAS__SNIPPETS__',
+        '__PLAYROOM_ALIAS__USE_SCOPE__',
+        '__PLAYROOM_ALIAS__COMPONENTS__',
+      ],
+      // Bundle the sprinkles runtime so consumers don't need
+      onlyBundle: ['@vanilla-extract/sprinkles'],
+    },
   },
   {
     entry: ['bin/cli.mts'],
