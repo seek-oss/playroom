@@ -81,6 +81,7 @@ module.exports = {
   defaultVisibleThemes: [
     // subset of themes to display on first load
   ],
+  defaultEditorPosition: 'left', // default is 'bottom'
 };
 ```
 
@@ -95,6 +96,8 @@ export { Button } from '../Button'; // Re-exporting a named export
 ```
 
 The `iframeSandbox` option can be used to set the [`sandbox` attribute](https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/) on Playroom's iframe. A minimum of `allow-scripts` is required for Playroom to work.
+
+The `defaultEditorPosition` option sets where the code editor sits on first load, matching the "Editor Position" menu: `'left'` or `'bottom'` (default). Once a user picks a position from the menu, their own preference is remembered and takes precedence over this option.
 
 Now that your project is configured, you can start a local development server:
 
