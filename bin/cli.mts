@@ -1,4 +1,4 @@
-#!/usr/bin/env node --conditions=@playroom/dev
+#!/usr/bin/env node
 import path from 'node:path';
 import url from 'node:url';
 
