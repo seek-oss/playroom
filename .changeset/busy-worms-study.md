@@ -2,4 +2,4 @@
 'playroom': minor
 ---
 
-Improve user-side performance and install size by prebundling source
+Bundle playroom application and CLI as JavaScript instead of TypeScript, improving performance and reducing dependency count
