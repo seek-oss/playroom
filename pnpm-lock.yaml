@@ -225,9 +225,6 @@ importers:
       tsdown:
         specifier: ^0.20.0
         version: 0.20.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(typescript@5.8.2)
-      tsx:
-        specifier: ^4.23.13
-        version: 4.23.13
       vitest:
         specifier: ^5.0.0
         version: 5.0.0(@types/node@20.19.43)(vite@8.3.0(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0))
@@ -9644,6 +9641,7 @@ snapshots:
       '@esbuild/win32-arm64': 0.28.2
       '@esbuild/win32-ia32': 0.28.2
       '@esbuild/win32-x64': 0.28.2
+    optional: true
 
   escalade@3.2.0: {}
 
@@ -12402,6 +12400,7 @@ snapshots:
       esbuild: 0.28.2
     optionalDependencies:
       fsevents: 2.3.3
+    optional: true
 
   tunnel-agent@0.6.0:
     dependencies:
