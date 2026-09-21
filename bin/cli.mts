@@ -4,7 +4,7 @@ import url from 'node:url';
 
 import commandLineArgs from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
-import findUp from 'find-up';
+import { findUp } from 'find-up';
 
 import playroomFactory from '../lib/index.mts';
 import type { PlayroomConfig } from '../utils/index.ts';

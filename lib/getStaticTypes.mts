@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import findUp from 'find-up';
+import { findUp } from 'find-up';
 import { glob } from 'tinyglobby';
 import ts from 'typescript';
 

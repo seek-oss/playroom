@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
-import readPackage from 'read-pkg-up';
+import { findUpSync } from 'find-up';
 
 import type { PlayroomConfig } from '../utils/index.ts';
 
@@ -21,8 +22,15 @@ const getGitBranch = (): string | null => {
 };
 
 const generateStorageKey = () => {
-  const pkg = readPackage.sync();
-  const packageName = pkg?.packageJson?.name || null;
+  const packageJsonPath = findUpSync('package.json');
+  if (!packageJsonPath) {
+    throw new Error("Unable to find 'package.json'");
+  }
+
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8')) as {
+    name?: string;
+  };
+  const packageName = packageJson?.name || null;
   const branchName = getGitBranch();
 
   const packageLabel = packageName ? `package:${packageName}` : null;
