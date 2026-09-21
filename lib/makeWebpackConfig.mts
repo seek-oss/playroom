@@ -6,7 +6,10 @@ import FriendlyErrorsWebpackPlugin from '@soda/friendly-errors-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import webpack, { type Configuration } from 'webpack';
-import { mergeWithRules } from 'webpack-merge';
+import { merge, mergeWithRules } from 'webpack-merge';
+
+// Only used for playroom development. Resolves to a stub during packaging.
+import webpackDevConfig from '#webpack/devConfig';
 
 import getStaticTypes from './getStaticTypes.mts';
 import makeDefaultWebpackConfig from './makeDefaultWebpackConfig.mts';
@@ -23,8 +26,11 @@ const includePaths = [
   path.resolve(playroomPath, 'utils'),
 ];
 
-const faviconPath = path.resolve(playroomPath, 'dist/static/favicon.png');
-const templatePath = path.resolve(playroomPath, 'dist/static/template.html');
+const resolvePlayroomModule = (specifier: string) =>
+  fileURLToPath(import.meta.resolve(specifier));
+
+const faviconPath = resolvePlayroomModule('#static/favicon.png');
+const templatePath = resolvePlayroomModule('#static/template.html');
 
 interface MakeWebpackConfigOptions {
   production?: boolean;
@@ -42,9 +48,9 @@ export default async (
   const ourConfig: Configuration = {
     mode: options.production ? 'production' : 'development',
     entry: {
-      index: [import.meta.resolve('#entries/index')],
-      frame: [import.meta.resolve('#entries/frame')],
-      preview: [import.meta.resolve('#entries/preview')],
+      index: [resolvePlayroomModule('#entries/index')],
+      frame: [resolvePlayroomModule('#entries/frame')],
+      preview: [resolvePlayroomModule('#entries/preview')],
     },
     output: {
       filename: '[name].[contenthash].js',
@@ -56,7 +62,6 @@ export default async (
         path: false,
         fs: false,
       },
-      conditionNames: ['...', '@playroom/dev'],
       extensions: ['.mjs', '.tsx', '.ts', '.jsx', '.js', '.json'],
       alias: {
         __PLAYROOM_ALIAS__COMPONENTS__: relativeResolve(
@@ -64,16 +69,16 @@ export default async (
         ),
         __PLAYROOM_ALIAS__SNIPPETS__: playroomConfig.snippets
           ? relativeResolve(playroomConfig.snippets)
-          : import.meta.resolve('#defaultModules/snippets'),
+          : resolvePlayroomModule('#defaultModules/snippets'),
         __PLAYROOM_ALIAS__THEMES__: playroomConfig.themes
           ? relativeResolve(playroomConfig.themes)
-          : import.meta.resolve('#defaultModules/themes'),
+          : resolvePlayroomModule('#defaultModules/themes'),
         __PLAYROOM_ALIAS__FRAME_COMPONENT__: playroomConfig.frameComponent
           ? relativeResolve(playroomConfig.frameComponent)
-          : import.meta.resolve('#defaultModules/FrameComponent'),
+          : resolvePlayroomModule('#defaultModules/FrameComponent'),
         __PLAYROOM_ALIAS__USE_SCOPE__: playroomConfig.scope
           ? relativeResolve(playroomConfig.scope)
-          : import.meta.resolve('#defaultModules/useScope'),
+          : resolvePlayroomModule('#defaultModules/useScope'),
       },
     },
     module: {
@@ -97,7 +102,10 @@ export default async (
         },
         {
           test: /\.css$/i,
-          include: includePaths,
+          include: [
+            ...includePaths,
+            path.dirname(require.resolve('codemirror/package.json')),
+          ],
           use: [
             MiniCssExtractPlugin.loader,
             {
@@ -134,7 +142,7 @@ export default async (
         chunksSortMode: 'none',
         chunks: ['index'],
         filename: 'index.html',
-        favicon: path.join(playroomPath, 'images/favicon.png'),
+        favicon: faviconPath,
         base: playroomConfig.baseUrl,
         template: templatePath,
       }),
@@ -163,7 +171,7 @@ export default async (
     ? await playroomConfig.webpackConfig()
     : makeDefaultWebpackConfig(playroomConfig);
 
-  return mergeWithRules({
+  const mergedConfig = mergeWithRules({
     module: {
       rules: {
         test: 'match',
@@ -171,4 +179,6 @@ export default async (
       },
     },
   })(ourConfig, theirConfig as Configuration);
+
+  return merge(mergedConfig, webpackDevConfig);
 };

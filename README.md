@@ -302,7 +302,7 @@ Playroom is built to work on the latest stable versions of all major browsers. S
 
 ## Contributing
 
-Run a watched build with `pnpm package:watch` then start a dev server with `pnpm start` (or any of the other `start:`-prefixed scripts).
+Start a dev server with `pnpm start` (or any of the other `start:`-prefixed scripts).
 Changes made to source code will be reflected in the local app.
 
 Run unit tests with `pnpm test` and cypress tests with either `cypress` (headless) or `cypress:dev` (headful, useful for debugging).
