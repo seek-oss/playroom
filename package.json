@@ -114,9 +114,7 @@
     "@babel/preset-react": "^7.18.6",
     "@base-ui/react": "^1.1.0",
     "@soda/friendly-errors-webpack-plugin": "^1.8.1",
-    "@vanilla-extract/css-utils": "^0.1.3",
     "@vanilla-extract/dynamic": "^2.1.2",
-    "@vanilla-extract/sprinkles": "^1.5.1",
     "@zumer/snapdom": "^3.0.0",
     "babel-loader": "^10.1.1",
     "clsx": "^2.1.1",
@@ -165,7 +163,9 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vanilla-extract/css": "^1.9.2",
+    "@vanilla-extract/css-utils": "^0.1.3",
     "@vanilla-extract/rollup-plugin": "^1.5.1",
+    "@vanilla-extract/sprinkles": "^1.5.1",
     "@vanilla-extract/webpack-plugin": "^2.3.27",
     "@vitejs/plugin-react": "^6.1.1",
     "concurrently": "^9.1.2",
@@ -179,7 +179,7 @@
     "serve": "^14.2.5",
     "start-server-and-test": "^2.0.11",
     "surge": "^0.24.6",
-    "tsdown": "^0.20.0",
+    "tsdown": "^0.23.0",
     "vitest": "^5.0.0"
   },
   "peerDependencies": {
