@@ -3,12 +3,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import FriendlyErrorsWebpackPlugin from '@soda/friendly-errors-webpack-plugin';
-import { cssFileFilter } from '@vanilla-extract/integration';
-import { VanillaExtractPlugin } from '@vanilla-extract/webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import webpack, { type Configuration } from 'webpack';
-import { mergeWithRules } from 'webpack-merge';
+import { merge, mergeWithRules } from 'webpack-merge';
+
+// Only used for playroom development. Resolves to a stub during packaging.
+import webpackDevConfig from '#webpack/devConfig';
 
 import getStaticTypes from './getStaticTypes.mts';
 import makeDefaultWebpackConfig from './makeDefaultWebpackConfig.mts';
@@ -21,11 +22,15 @@ const playroomPath = path.resolve(
 );
 const includePaths = [
   path.resolve(playroomPath, 'lib'),
-  path.resolve(playroomPath, 'src'),
+  path.resolve(playroomPath, 'dist'),
   path.resolve(playroomPath, 'utils'),
 ];
 
-const isPlayroomRepo = !playroomPath.includes('node_modules');
+const resolvePlayroomModule = (specifier: string) =>
+  fileURLToPath(import.meta.resolve(specifier));
+
+const faviconPath = resolvePlayroomModule('#static/favicon.png');
+const templatePath = resolvePlayroomModule('#static/template.html');
 
 interface MakeWebpackConfigOptions {
   production?: boolean;
@@ -43,9 +48,9 @@ export default async (
   const ourConfig: Configuration = {
     mode: options.production ? 'production' : 'development',
     entry: {
-      index: [path.join(playroomPath, 'src/entries/index.tsx')],
-      frame: [path.join(playroomPath, 'src/entries/frame.tsx')],
-      preview: [path.join(playroomPath, 'src/entries/preview.tsx')],
+      index: [resolvePlayroomModule('#entries/index')],
+      frame: [resolvePlayroomModule('#entries/frame')],
+      preview: [resolvePlayroomModule('#entries/preview')],
     },
     output: {
       filename: '[name].[contenthash].js',
@@ -64,22 +69,22 @@ export default async (
         ),
         __PLAYROOM_ALIAS__SNIPPETS__: playroomConfig.snippets
           ? relativeResolve(playroomConfig.snippets)
-          : path.join(playroomPath, 'lib/defaultModules/snippets.ts'),
+          : resolvePlayroomModule('#defaultModules/snippets'),
         __PLAYROOM_ALIAS__THEMES__: playroomConfig.themes
           ? relativeResolve(playroomConfig.themes)
-          : path.join(playroomPath, 'lib/defaultModules/themes.ts'),
+          : resolvePlayroomModule('#defaultModules/themes'),
         __PLAYROOM_ALIAS__FRAME_COMPONENT__: playroomConfig.frameComponent
           ? relativeResolve(playroomConfig.frameComponent)
-          : path.join(playroomPath, 'lib/defaultModules/FrameComponent.tsx'),
+          : resolvePlayroomModule('#defaultModules/FrameComponent'),
         __PLAYROOM_ALIAS__USE_SCOPE__: playroomConfig.scope
           ? relativeResolve(playroomConfig.scope)
-          : path.join(playroomPath, 'lib/defaultModules/useScope.ts'),
+          : resolvePlayroomModule('#defaultModules/useScope'),
       },
     },
     module: {
       rules: [
         {
-          test: /\.(ts|tsx)$/,
+          test: /\.m?js$/,
           include: includePaths,
           use: [
             {
@@ -90,40 +95,17 @@ export default async (
                     require.resolve('@babel/preset-env'),
                     { shippedProposals: true },
                   ],
-                  [
-                    require.resolve('@babel/preset-react'),
-                    { runtime: 'automatic' },
-                  ],
-                  require.resolve('@babel/preset-typescript'),
                 ],
               },
             },
           ],
         },
         {
-          test: /\.js$/,
-          include: includePaths,
-          use: [
-            {
-              loader: require.resolve('babel-loader'),
-              options: {
-                presets: [
-                  [
-                    require.resolve('@babel/preset-env'),
-                    { shippedProposals: true },
-                  ],
-                  [
-                    require.resolve('@babel/preset-react'),
-                    { runtime: 'automatic' },
-                  ],
-                ],
-              },
-            },
+          test: /\.css$/i,
+          include: [
+            ...includePaths,
+            path.dirname(require.resolve('codemirror/package.json')),
           ],
-        },
-        {
-          test: /(\.vanilla)?\.css$/i,
-          issuer: isPlayroomRepo ? undefined : /node_modules[\\/]playroom/,
           use: [
             MiniCssExtractPlugin.loader,
             {
@@ -160,9 +142,9 @@ export default async (
         chunksSortMode: 'none',
         chunks: ['index'],
         filename: 'index.html',
-        favicon: path.join(playroomPath, 'images/favicon.png'),
+        favicon: faviconPath,
         base: playroomConfig.baseUrl,
-        template: path.join(playroomPath, 'src/entries/template.html'),
+        template: templatePath,
       }),
       new HtmlWebpackPlugin({
         title: 'Playroom Frame',
@@ -175,15 +157,9 @@ export default async (
         chunksSortMode: 'none',
         chunks: ['preview'],
         filename: 'preview/index.html',
-        favicon: path.join(playroomPath, 'images/favicon.png'),
+        favicon: faviconPath,
         publicPath: '../',
-        template: path.join(playroomPath, 'src/entries/template.html'),
-      }),
-      new VanillaExtractPlugin({
-        test: (filePath: string) =>
-          // Only apply VanillaExtract plugin to playroom and its dependency's Vanilla Extract modules
-          cssFileFilter.test(filePath) &&
-          includePaths.some((includePath) => filePath.startsWith(includePath)),
+        template: templatePath,
       }),
       new MiniCssExtractPlugin({ ignoreOrder: true }),
       ...(options.production ? [] : [new FriendlyErrorsWebpackPlugin()]),
@@ -195,7 +171,7 @@ export default async (
     ? await playroomConfig.webpackConfig()
     : makeDefaultWebpackConfig(playroomConfig);
 
-  return mergeWithRules({
+  const mergedConfig = mergeWithRules({
     module: {
       rules: {
         test: 'match',
@@ -203,4 +179,6 @@ export default async (
       },
     },
   })(ourConfig, theirConfig as Configuration);
+
+  return merge(mergedConfig, webpackDevConfig);
 };

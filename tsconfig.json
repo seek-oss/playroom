@@ -14,7 +14,8 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "lib": ["dom", "es2022"],
-    "target": "es2022"
+    "target": "es2022",
+    "customConditions": ["@playroom/dev"]
   },
   "include": [
     "src",
