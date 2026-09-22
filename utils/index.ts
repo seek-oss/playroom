@@ -3,6 +3,8 @@ import lzString from 'lz-string';
 
 import type { Widths } from '../src/configModules/widths';
 
+export type EditorPosition = 'left' | 'bottom';
+
 export interface PlayroomConfig {
   components: string;
   outputPath: string;
@@ -27,6 +29,7 @@ export interface PlayroomConfig {
   reactDocgenTypescriptConfig?: import('react-docgen-typescript').ParserOptions;
   defaultVisibleThemes?: string[];
   defaultVisibleWidths?: number[];
+  defaultEditorPosition?: EditorPosition;
 }
 
 export type FrameSettingsValues = Record<string, boolean>;

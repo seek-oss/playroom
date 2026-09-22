@@ -36,12 +36,14 @@ const store = localforage.createInstance({
 });
 
 const defaultEditorSize = '40%';
-const defaultOrientation = 'horizontal';
 const defaultOpenLayout = 'grid';
 
 export type EditorOrientation = 'horizontal' | 'vertical';
 type ColorScheme = 'light' | 'dark' | 'system';
 type OpenLayout = 'grid' | 'list';
+
+const initialEditorOrientation: EditorOrientation =
+  playroomConfig.defaultEditorPosition === 'left' ? 'vertical' : 'horizontal';
 
 const applyColorScheme = (colorScheme: Exclude<ColorScheme, 'system'>) => {
   document.documentElement[
@@ -540,7 +542,7 @@ const initialState: State = {
   snippetsOpen: false,
   openDialogOpen: false,
   editorHidden: false,
-  editorOrientation: defaultOrientation,
+  editorOrientation: initialEditorOrientation,
   editorHeight: defaultEditorSize,
   editorWidth: defaultEditorSize,
   panelsVisible: true,
