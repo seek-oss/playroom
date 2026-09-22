@@ -1,9 +1,7 @@
 import portfinder from 'portfinder';
-import { createServer } from 'vite';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
-import makeViteConfig from './makeViteConfig.mts';
 import makeWebpackConfig from './makeWebpackConfig.mts';
 import type { ResolvedPlayroomConfig } from './provideDefaultConfig.mts';
 
@@ -65,6 +63,8 @@ export default async (
       }
     });
   } else if (resolvedBundler === 'vite') {
+    const { createServer } = await import('vite');
+    const makeViteConfig = (await import('./makeViteConfig.mts')).default;
     const viteConfig = await makeViteConfig(
       { ...config, port: availablePort, baseUrl: '' },
       {

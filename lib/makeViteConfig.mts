@@ -81,7 +81,7 @@ export default async (
     },
   };
 
-  const theirConfig = await playroomConfig.viteConfig?.();
+  const theirConfig = (await playroomConfig.viteConfig?.()) ?? {};
   const mergedConfig = mergeConfig(ourConfig, theirConfig);
 
   return mergeConfig(mergedConfig, viteDevConfig);

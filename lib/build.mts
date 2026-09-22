@@ -1,7 +1,5 @@
-import { build } from 'vite';
 import webpack from 'webpack';
 
-import makeViteConfig from './makeViteConfig.mts';
 import makeWebpackConfig from './makeWebpackConfig.mts';
 import type { ResolvedPlayroomConfig } from './provideDefaultConfig.mts';
 
@@ -39,6 +37,8 @@ export default async (
       return callback();
     });
   } else if (resolvedBundler === 'vite') {
+    const { build } = await import('vite');
+    const makeViteConfig = (await import('./makeViteConfig.mts')).default;
     const viteConfig = await makeViteConfig(
       { ...config, baseUrl: '' },
       {

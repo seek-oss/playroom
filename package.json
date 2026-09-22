@@ -150,7 +150,6 @@
     "tinyglobby": "^0.2.12",
     "typescript": "^5.0.0 || ^6.0.0",
     "use-debounce": "^10.0.0",
-    "vite": "^8.3.0",
     "webpack": "^5.75.0",
     "webpack-dev-server": "^5.0.2",
     "webpack-merge": "^6.0.1"
@@ -189,11 +188,18 @@
     "start-server-and-test": "^2.0.11",
     "surge": "^0.24.6",
     "tsdown": "^0.23.0",
+    "vite": "^8.3.0",
     "vitest": "^5.0.0"
   },
   "peerDependencies": {
     "react": "^18 || ^19",
-    "react-dom": "^18 || ^19"
+    "react-dom": "^18 || ^19",
+    "vite": "^7 || ^8"
+  },
+  "peerDependenciesMeta": {
+    "vite": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=18.12.0"
