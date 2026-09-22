@@ -22,7 +22,7 @@
     "lib",
     "utils",
     "bin",
-    "tsdown.config.ts",
+    "tsdown.config.mts",
     "vitest.config.mts"
   ],
   "exclude": ["cypress", "node_modules"]
