@@ -15,7 +15,8 @@
     "jsx": "react-jsx",
     "lib": ["dom", "es2022"],
     "target": "es2022",
-    "customConditions": ["@playroom/dev"]
+    "customConditions": ["@playroom/dev"],
+    "types": ["vite/client"]
   },
   "include": [
     "src",
