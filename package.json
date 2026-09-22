@@ -163,6 +163,7 @@
     "@changesets/cli": "^2.28.1",
     "@octokit/rest": "^19.0.5",
     "@testing-library/cypress": "^10.1.0",
+    "@tsdown/css": "^0.23.0",
     "@types/codemirror": "^5.60.5",
     "@types/command-line-args": "^5.2.3",
     "@types/command-line-usage": "^5.0.4",
