@@ -44,6 +44,7 @@ export default async (
           preview: resolvePlayroomModule('#static/vite/preview/index.html'),
         },
       },
+      assetsInlineLimit: 0,
     },
 
     server: playroomConfig.port
