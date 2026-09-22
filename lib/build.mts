@@ -11,7 +11,12 @@ export default async (
   config: ResolvedPlayroomConfig,
   callback: (error?: string) => void = noop,
 ) => {
-  if (config.bundler === 'webpack') {
+  const resolvedBundler =
+    config.bundler === 'vite' || Boolean(config.viteConfig)
+      ? 'vite'
+      : 'webpack';
+
+  if (resolvedBundler === 'webpack') {
     const webpackConfig = await makeWebpackConfig(config, { production: true });
 
     webpack(webpackConfig, (err, stats) => {
@@ -33,7 +38,7 @@ export default async (
 
       return callback();
     });
-  } else if (config.bundler === 'vite') {
+  } else if (resolvedBundler === 'vite') {
     const viteConfig = await makeViteConfig(
       { ...config, baseUrl: '' },
       {
@@ -48,9 +53,5 @@ export default async (
       console.error(e);
       return callback(e.toString());
     }
-  } else {
-    throw new Error(
-      `Unknown bundler "${config.bundler}. Add the 'bundler' field with a value of 'webpack' or 'vite' to your playroom config."`,
-    );
   }
 };

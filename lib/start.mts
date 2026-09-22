@@ -23,7 +23,12 @@ export default async (
     return;
   }
 
-  if (config.bundler === 'webpack') {
+  const resolvedBundler =
+    config.bundler === 'vite' || Boolean(config.viteConfig)
+      ? 'vite'
+      : 'webpack';
+
+  if (resolvedBundler === 'webpack') {
     const webpackConfig = await makeWebpackConfig(
       { ...config, baseUrl: '' },
       { production: false },
@@ -59,7 +64,7 @@ export default async (
         callback();
       }
     });
-  } else if (config.bundler === 'vite') {
+  } else if (resolvedBundler === 'vite') {
     const viteConfig = await makeViteConfig(
       { ...config, port: availablePort, baseUrl: '' },
       {
@@ -70,9 +75,5 @@ export default async (
     const server = await createServer(viteConfig);
     await server.listen();
     server.printUrls();
-  } else {
-    throw new Error(
-      `Unknown bundler "${config.bundler}. Add the 'bundler' field with a value of 'webpack' or 'vite' to your playroom config."`,
-    );
   }
 };
