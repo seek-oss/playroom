@@ -116,6 +116,9 @@ importers:
       use-debounce:
         specifier: ^10.0.0
         version: 10.0.4(react@19.0.0)
+      vite:
+        specifier: ^8.3.0
+        version: 8.3.0(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0)
       webpack:
         specifier: ^5.75.0
         version: 5.98.0(esbuild@0.28.2)
@@ -180,6 +183,9 @@ importers:
       '@vanilla-extract/sprinkles':
         specifier: ^1.5.1
         version: 1.6.3(@vanilla-extract/css@1.21.2)
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(supports-color@8.1.1)(terser@5.39.0)(tsx@4.23.13)(vite@8.3.0(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0))(yaml@2.7.0)
       '@vanilla-extract/webpack-plugin':
         specifier: ^2.3.27
         version: 2.3.27(supports-color@8.1.1)(webpack@5.98.0(esbuild@0.28.2))
@@ -2029,6 +2035,9 @@ packages:
   '@vanilla-extract/babel-plugin-debug-ids@1.2.2':
     resolution: {integrity: sha512-MeDWGICAF9zA/OZLOKwhoRlsUW+fiMwnfuOAqFVohL31Agj7Q/RBWAYweqjHLgFBCsdnr6XIfwjJnmb2znEWxw==}
 
+  '@vanilla-extract/compiler@0.7.2':
+    resolution: {integrity: sha512-VslwMJ01taDhJmMo0+A0SWn2dloMnYi0+BbvLuXXlqK4ufVRwXsq/U/Fp8ANkw3jevmQXy+JL7VtIQdjEtylDQ==}
+
   '@vanilla-extract/css-utils@0.1.4':
     resolution: {integrity: sha512-3WRxMGa/VQaL32jZqRUpnnoVFSws5iPIUpQr+XlT4jXhtMeKYcA20rFK2k2Amkg04sqrO84A8hNMeABWZQesEg==}
 
@@ -2053,6 +2062,11 @@ packages:
     resolution: {integrity: sha512-oCHlQeYOBIJIA2yWy2GnY5wE2A7hGHDyJplJo4lb+KEIBcJWRnDJDg8ywDwQS5VfWJrBBO3drzYZPFpWQjAMiQ==}
     peerDependencies:
       '@vanilla-extract/css': ^1.0.0
+
+  '@vanilla-extract/vite-plugin@5.2.6':
+    resolution: {integrity: sha512-mGk0YEan+NyeoxEO51LfxOdtw2JBI+Yb840FGg+zvG6tVU3YfDgKGPiGuk5oT8jqzfsm7H89DyjOVCpl6Bnn0w==}
+    peerDependencies:
+      vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
 
   '@vanilla-extract/webpack-plugin@2.3.27':
     resolution: {integrity: sha512-i/GFQPifTkGYXYpkVYzScBPwXB82f+5GMLg9rh9UBgTG6M/YUebIDVjVOC9Mn5VMvc8Fk2w/FmagDRLugHA09w==}
@@ -5838,6 +5852,11 @@ packages:
     resolution: {integrity: sha512-ZZKSmDAEFOijERBLkmYfJ+vmk3w+7hOLYDNkRCuRuMJGEmqYNCNLyBBFwWKVMhfwaEF3WOd0Zlw86U/WC/+nYw==}
     engines: {'0': node >=0.6.0}
 
+  vite-node@6.0.0:
+    resolution: {integrity: sha512-oj4PVrT+pDh6GYf5wfUXkcZyekYS8kKPfLPXVl8qe324Ec6l4K2DUKNadRbZ3LQl0qGcDz+PyOo7ZAh00Y+JjQ==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    hasBin: true
+
   vite@8.3.0:
     resolution: {integrity: sha512-lhZBVvEHefgE+HQZC9O7EBJgCU/nVzFNl7vkS4RE0APtWLP02/8QVIkQtzBxPquh7lq5/78NHipTj7ODQ6XuyQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -8010,6 +8029,28 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@vanilla-extract/compiler@0.7.2(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(supports-color@8.1.1)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0)':
+    dependencies:
+      '@vanilla-extract/css': 1.21.2
+      '@vanilla-extract/integration': 8.0.10(supports-color@8.1.1)
+      vite: 8.3.0(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0)
+      vite-node: 6.0.0(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0)
+    transitivePeerDependencies:
+      - '@types/node'
+      - '@vitejs/devtools'
+      - babel-plugin-macros
+      - esbuild
+      - jiti
+      - less
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
+
   '@vanilla-extract/css-utils@0.1.4': {}
 
   '@vanilla-extract/css@1.21.2':
@@ -8062,6 +8103,27 @@ snapshots:
   '@vanilla-extract/sprinkles@1.6.3(@vanilla-extract/css@1.21.2)':
     dependencies:
       '@vanilla-extract/css': 1.21.2
+
+  '@vanilla-extract/vite-plugin@5.2.6(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(supports-color@8.1.1)(terser@5.39.0)(tsx@4.23.13)(vite@8.3.0(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0))(yaml@2.7.0)':
+    dependencies:
+      '@vanilla-extract/compiler': 0.7.2(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(supports-color@8.1.1)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0)
+      '@vanilla-extract/integration': 8.0.10(supports-color@8.1.1)
+      vite: 8.3.0(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0)
+    transitivePeerDependencies:
+      - '@types/node'
+      - '@vitejs/devtools'
+      - babel-plugin-macros
+      - esbuild
+      - jiti
+      - less
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
 
   '@vanilla-extract/webpack-plugin@2.3.27(supports-color@8.1.1)(webpack@5.98.0(esbuild@0.28.2))':
     dependencies:
@@ -12103,6 +12165,27 @@ snapshots:
       assert-plus: 1.0.0
       core-util-is: 1.0.2
       extsprintf: 1.3.0
+
+  vite-node@6.0.0(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0):
+    dependencies:
+      cac: 7.0.0
+      es-module-lexer: 2.3.2
+      obug: 2.2.1
+      pathe: 2.0.3
+      vite: 8.3.0(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0)
+    transitivePeerDependencies:
+      - '@types/node'
+      - '@vitejs/devtools'
+      - esbuild
+      - jiti
+      - less
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - terser
+      - tsx
+      - yaml
 
   vite@8.3.0(@types/node@20.19.43)(esbuild@0.28.2)(jiti@2.4.2)(terser@5.39.0)(tsx@4.23.13)(yaml@2.7.0):
     dependencies:

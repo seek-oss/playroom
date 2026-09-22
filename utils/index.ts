@@ -21,6 +21,8 @@ export interface PlayroomConfig {
   storageKey?: string;
   port?: number;
   openBrowser?: boolean;
+  bundler: 'webpack' | 'vite';
+  viteConfig?: () => Promise<any>;
   webpackConfig?: () => void;
   baseUrl?: string;
   paramType?: 'hash' | 'search';
