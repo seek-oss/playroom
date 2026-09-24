@@ -9,17 +9,29 @@ export default async (
   config: ResolvedPlayroomConfig,
   callback?: () => void,
 ) => {
-  const webpackConfig = await makeWebpackConfig(
-    { ...config, baseUrl: '' },
-    { production: false },
-  );
   const { port, openBrowser } = config;
 
-  portfinder.getPort({ port }, (portErr, availablePort) => {
-    if (portErr) {
-      console.error('portErr: ', portErr);
-      return;
-    }
+  let availablePort;
+  try {
+    availablePort = await portfinder.getPortPromise({
+      port,
+    });
+  } catch (portErr) {
+    console.error('portErr: ', portErr);
+    return;
+  }
+
+  const resolvedBundler =
+    config.bundler === 'vite' || Boolean(config.viteConfig)
+      ? 'vite'
+      : 'webpack';
+
+  if (resolvedBundler === 'webpack') {
+    const webpackConfig = await makeWebpackConfig(
+      { ...config, baseUrl: '' },
+      { production: false },
+    );
+
     const webpackDevServerConfig = {
       hot: true,
       port: availablePort,
@@ -50,5 +62,18 @@ export default async (
         callback();
       }
     });
-  });
+  } else if (resolvedBundler === 'vite') {
+    const { createServer } = await import('vite');
+    const makeViteConfig = (await import('./makeViteConfig.mts')).default;
+    const viteConfig = await makeViteConfig(
+      { ...config, port: availablePort, baseUrl: '' },
+      {
+        production: false,
+      },
+    );
+
+    const server = await createServer(viteConfig);
+    await server.listen();
+    server.printUrls();
+  }
 };

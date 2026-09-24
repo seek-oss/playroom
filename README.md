@@ -12,6 +12,7 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 - Create quick mock-ups and interactive prototypes with real code.
 - Exercise and evaluate the flexibility of your design system.
 - Share your work with others by simply copying the URL.
+- Supports both [vite](https://vitejs.dev/) and [webpack](https://webpack.js.org/).
 
 ## Demos
 
@@ -86,6 +87,24 @@ module.exports = {
 ```
 
 _Note: `port` and `openBrowser` options will be set to `9000` and `true` (respectively) by default whenever they are omitted from the config above._
+
+### Vite support
+
+To use `vite` as the bundler, install it via `npm install --save-dev vite`.
+
+Then define either `bundler: 'vite'` or `viteConfig` in your playroom configuration:
+
+```js
+module.exports = {
+  // ... other playroom configuration, see above
+  bundler: 'vite',
+  viteConfig: () => ({
+    // Custom vite config goes here...
+  }),
+};
+```
+
+---
 
 Your `components` file is expected to export a single object or a series of named exports. For example:
 

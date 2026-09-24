@@ -46,6 +46,9 @@ export default defineConfig([
       // Bundle the sprinkles runtime so consumers don't need
       onlyBundle: ['@vanilla-extract/sprinkles'],
     },
+    css: {
+      inject: true,
+    },
   },
   {
     entry: ['bin/cli.mts'],

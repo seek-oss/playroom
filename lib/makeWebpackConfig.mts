@@ -21,6 +21,7 @@ const playroomPath = path.resolve(
   '..',
 );
 const includePaths = [
+  path.resolve(playroomPath, 'src'),
   path.resolve(playroomPath, 'lib'),
   path.resolve(playroomPath, 'dist'),
   path.resolve(playroomPath, 'utils'),

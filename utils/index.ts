@@ -21,6 +21,9 @@ export interface PlayroomConfig {
   storageKey?: string;
   port?: number;
   openBrowser?: boolean;
+  bundler?: 'webpack' | 'vite';
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  viteConfig?: () => Promise<import('vite').UserConfig>;
   webpackConfig?: () => void;
   baseUrl?: string;
   paramType?: 'hash' | 'search';
