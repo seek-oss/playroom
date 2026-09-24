@@ -40,7 +40,7 @@ import {
   themeNames,
   themesEnabled,
 } from '../../configModules/themes';
-import availableWidths from '../../configModules/widths';
+import availableWidths, { getWidthName } from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
 import { createUrlForData, resolveDataFromUrl } from '../../utils/params';
 import { useCopy } from '../../utils/useCopy';
@@ -132,28 +132,32 @@ const FramesMenu = () => {
           </MenuClearItem>
         }
       >
-        {availableWidths.map((width) => (
-          <MenuCheckboxItem
-            icon={getIconForWidth(width)}
-            key={width}
-            checked={hasFilteredWidths && selectedWidths.includes(width)}
-            onCheckedChange={(checked: boolean) => {
-              const newWidths =
-                selectedWidths.length === 0 ? [width] : selectedWidths;
+        {availableWidths.map((width) => {
+          const widthName = getWidthName(width);
 
-              dispatch({
-                type: 'updateSelectedWidths',
-                payload: {
-                  widths: checked
-                    ? [...newWidths, width]
-                    : newWidths.filter((w) => w !== width),
-                },
-              });
-            }}
-          >
-            {width}
-          </MenuCheckboxItem>
-        ))}
+          return (
+            <MenuCheckboxItem
+              icon={getIconForWidth(width)}
+              key={width}
+              checked={hasFilteredWidths && selectedWidths.includes(width)}
+              onCheckedChange={(checked: boolean) => {
+                const newWidths =
+                  selectedWidths.length === 0 ? [width] : selectedWidths;
+
+                dispatch({
+                  type: 'updateSelectedWidths',
+                  payload: {
+                    widths: checked
+                      ? [...newWidths, width]
+                      : newWidths.filter((w) => w !== width),
+                  },
+                });
+              }}
+            >
+              {widthName ? `(${widthName}) ${width}` : width}
+            </MenuCheckboxItem>
+          );
+        })}
       </MenuGroup>
 
       {themesEnabled ? (

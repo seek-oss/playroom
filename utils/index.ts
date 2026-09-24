@@ -1,7 +1,7 @@
 // Use a default import for better compatibility with ESM consumers
 import lzString from 'lz-string';
 
-import type { Widths } from '../src/configModules/widths';
+import type { WidthConfig, Widths } from '../src/configModules/widths';
 
 export type EditorPosition = 'left' | 'bottom';
 
@@ -10,7 +10,7 @@ export interface PlayroomConfig {
   outputPath: string;
   title?: string;
   themes?: string;
-  widths?: number[];
+  widths?: WidthConfig;
   snippets?: string;
   scope?: string;
   typeScriptFiles?: string[];
