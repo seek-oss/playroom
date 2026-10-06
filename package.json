@@ -1,77 +1,21 @@
 {
-  "name": "playroom",
-  "version": "1.4.0",
-  "description": "Design with code, powered by your own component library",
-  "bin": {
-    "playroom": "./bin/cli.mts"
-  },
-  "main": "./dist/utils/index.cjs",
-  "module": "./dist/utils/index.mjs",
-  "types": "./dist/utils/index.d.cts",
-  "exports": {
-    ".": {
-      "import": "./dist/utils/index.mjs",
-      "require": "./dist/utils/index.cjs"
-    },
-    "./package.json": "./package.json"
-  },
-  "imports": {
-    "#entries/index": {
-      "@playroom/dev": "./src/entries/index.tsx",
-      "import": "./dist/app/entries/index.mjs"
-    },
-    "#entries/frame": {
-      "@playroom/dev": "./src/entries/frame.tsx",
-      "import": "./dist/app/entries/frame.mjs"
-    },
-    "#entries/preview": {
-      "@playroom/dev": "./src/entries/preview.tsx",
-      "import": "./dist/app/entries/preview.mjs"
-    },
-    "#defaultModules/FrameComponent": {
-      "@playroom/dev": "./src/defaultModules/FrameComponent.tsx",
-      "import": "./dist/app/defaultModules/FrameComponent.mjs"
-    },
-    "#defaultModules/snippets": {
-      "@playroom/dev": "./src/defaultModules/snippets.ts",
-      "import": "./dist/app/defaultModules/snippets.mjs"
-    },
-    "#defaultModules/themes": {
-      "@playroom/dev": "./src/defaultModules/themes.ts",
-      "import": "./dist/app/defaultModules/themes.mjs"
-    },
-    "#defaultModules/useScope": {
-      "@playroom/dev": "./src/defaultModules/useScope.ts",
-      "import": "./dist/app/defaultModules/useScope.mjs"
-    },
-    "#webpack/devConfig": {
-      "@playroom/dev": "./lib/webpackDevConfig.mts",
-      "import": "./lib/webpackDevConfig.stub.mts"
-    },
-    "#static/*": {
-      "@playroom/dev": "./static/*",
-      "import": "./dist/static/*"
-    }
-  },
-  "files": [
-    "CHANGELOG.md",
-    "dist"
-  ],
+  "name": "@playroom/monorepo",
+  "private": true,
   "scripts": {
     "cypress": "start-server-and-test build-and-serve:all '9000|9001|9002' 'cypress run'",
     "cypress:dev": "start-server-and-test start:all '9000|9001|9002' 'cypress open --browser electron --e2e'",
     "cypress:verify": "cypress verify",
     "start": "pnpm start:basic",
-    "cli:dev": "node --conditions=@playroom/dev ./bin/cli.mts",
-    "start:basic": "pnpm cli:dev start --config cypress/projects/basic/playroom.config.js",
-    "build:basic": "node dist/cli.mjs build --config cypress/projects/basic/playroom.config.js",
-    "serve:basic": "PORT=9000 serve --config ../serve.json --no-request-logging cypress/projects/basic/dist",
-    "start:themed": "pnpm cli:dev start --config cypress/projects/themed/playroom.config.js",
-    "build:themed": "pnpm cli:dev build --config cypress/projects/themed/playroom.config.js",
-    "serve:themed": "PORT=9001 serve --config ../serve.json --no-request-logging cypress/projects/themed/dist",
-    "start:typescript": "pnpm cli:dev start --config cypress/projects/typescript/playroom.config.js",
-    "build:typescript": "pnpm cli:dev build --config cypress/projects/typescript/playroom.config.js",
-    "serve:typescript": "PORT=9002 serve --config ../serve.json --no-request-logging cypress/projects/typescript/dist",
+    "cli:dev": "node --conditions=@playroom/dev ./packages/playroom/bin/cli.mts",
+    "start:basic": "pnpm cli:dev start --config fixtures/basic/playroom.config.js",
+    "build:basic": "node packages/playroom/dist/cli.mjs build --config fixtures/basic/playroom.config.js",
+    "serve:basic": "PORT=9000 serve --config ../serve.json --no-request-logging fixtures/basic/dist",
+    "start:themed": "pnpm cli:dev start --config fixtures/themed/playroom.config.js",
+    "build:themed": "pnpm cli:dev build --config fixtures/themed/playroom.config.js",
+    "serve:themed": "PORT=9001 serve --config ../serve.json --no-request-logging fixtures/themed/dist",
+    "start:typescript": "pnpm cli:dev start --config fixtures/typescript/playroom.config.js",
+    "build:typescript": "pnpm cli:dev build --config fixtures/typescript/playroom.config.js",
+    "serve:typescript": "PORT=9002 serve --config ../serve.json --no-request-logging fixtures/typescript/dist",
     "start:all": "concurrently 'npm:start:*(!all)'",
     "build:all": "concurrently 'npm:build:*(!all)'",
     "serve:all": "concurrently 'npm:serve:*(!all)'",
@@ -84,17 +28,17 @@
     "format": "pnpm lint:eslint --fix && prettier --write .",
     "version": "changeset version",
     "release": "pnpm package && changeset publish",
-    "package": "tsdown",
+    "package": "pnpm --filter playroom package",
     "test": "vitest --run",
     "post-commit-status": "node scripts/postCommitStatus.js",
-    "deploy-preview": "surge -p ./cypress/projects/themed/dist",
+    "deploy-preview": "surge -p ./fixtures/themed/dist",
     "prepare": "husky",
     "changeset": "changeset"
   },
   "lint-staged": {
     "**/*": [
       "eslint",
-      "prettier --write"
+      "prettier --write --ignore-unknown"
     ]
   },
   "repository": {
@@ -103,96 +47,40 @@
   },
   "author": "SEEK",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/seek-oss/playroom/issues"
-  },
-  "homepage": "https://github.com/seek-oss/playroom#readme",
-  "dependencies": {
-    "@babel/core": "^7.20.5",
-    "@babel/parser": "^7.23.4",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
-    "@base-ui/react": "^1.1.0",
-    "@soda/friendly-errors-webpack-plugin": "^1.8.1",
-    "@vanilla-extract/dynamic": "^2.1.2",
-    "@zumer/snapdom": "^3.0.0",
-    "babel-loader": "^10.1.1",
-    "clsx": "^2.1.1",
-    "cmdk-base": "^1.0.0",
-    "codemirror": "^5.65.10",
-    "command-line-args": "^6.0.2",
-    "command-line-usage": "^7.0.4",
-    "css-loader": "^7.1.5",
-    "dedent": "^1.5.1",
-    "find-up": "^8.0.0",
-    "history": "^5.3.0",
-    "html-webpack-plugin": "^5.5.0",
-    "localforage": "^1.10.0",
-    "lucide-react": "^0.541.0",
-    "lz-string": "^1.5.0",
-    "memoize-one": "^6.0.0",
-    "mini-css-extract-plugin": "^2.7.2",
-    "parse-prop-types": "^0.3.0",
-    "portfinder": "^1.0.32",
-    "prettier": "^3.9.6",
-    "prop-types": "^15.8.1",
-    "react-docgen-typescript": "^2.2.2",
-    "react-error-boundary": "^4.0.13",
-    "scope-eval": "^1.0.0",
-    "sucrase": "^3.35.1",
-    "tinyglobby": "^0.2.12",
-    "typescript": "^5.0.0 || ^6.0.0",
-    "use-debounce": "^10.0.0",
-    "webpack": "^5.75.0",
-    "webpack-dev-server": "^5.0.2",
-    "webpack-merge": "^6.0.1"
-  },
   "devDependencies": {
     "@actions/core": "^1.10.0",
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
-    "@capsizecss/metrics": "^3.5.0",
-    "@capsizecss/vanilla-extract": "^2.0.4",
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.28.1",
     "@octokit/rest": "^19.0.5",
     "@testing-library/cypress": "^10.1.0",
-    "@types/codemirror": "^5.60.5",
-    "@types/command-line-args": "^5.2.3",
-    "@types/command-line-usage": "^5.0.4",
     "@types/node": "^20.19.30",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@vanilla-extract/css": "^1.9.2",
-    "@vanilla-extract/css-utils": "^0.1.3",
-    "@vanilla-extract/rollup-plugin": "^1.5.1",
-    "@vanilla-extract/sprinkles": "^1.5.1",
-    "@vanilla-extract/webpack-plugin": "^2.3.27",
     "@vitejs/plugin-react": "^6.1.1",
+    "babel-loader": "^10.1.1",
     "concurrently": "^9.1.2",
     "cypress": "^15.5.0",
+    "dedent": "^1.5.1",
     "eslint": "^9.23.0",
     "eslint-config-seek": "^15.0.6",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
+    "prettier": "^3.9.6",
+    "prop-types": "^15.8.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "serve": "^14.2.5",
     "start-server-and-test": "^2.0.11",
     "surge": "^0.24.6",
-    "tsdown": "^0.23.0",
+    "typescript": "^5.0.0 || ^6.0.0",
     "vitest": "^5.0.0"
-  },
-  "peerDependencies": {
-    "react": "^18 || ^19",
-    "react-dom": "^18 || ^19"
   },
   "engines": {
     "node": ">=18.12.0"
   },
-  "packageManager": "pnpm@11.15.1",
-  "publishConfig": {
-    "bin": {
-      "playroom": "./dist/cli.mjs"
-    }
-  }
+  "packageManager": "pnpm@11.15.1"
 }

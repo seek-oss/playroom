@@ -18,12 +18,12 @@
     "customConditions": ["@playroom/dev"]
   },
   "include": [
-    "src",
-    "lib",
-    "utils",
-    "bin",
-    "tsdown.config.mts",
+    "packages/playroom/src",
+    "packages/playroom/lib",
+    "packages/playroom/utils",
+    "packages/playroom/bin",
+    "packages/playroom/tsdown.config.mts",
     "vitest.config.mts"
   ],
-  "exclude": ["cypress", "node_modules"]
+  "exclude": ["cypress", "**/dist", "**/node_modules"]
 }
