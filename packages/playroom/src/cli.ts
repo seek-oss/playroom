@@ -7,7 +7,7 @@ import commandLineUsage from 'command-line-usage';
 import { findUp } from 'find-up';
 
 import type { PlayroomConfig } from './index.ts';
-import playroomFactory from './lib/index.mts';
+import playroomFactory from './lib/index.ts';
 
 const showUsage = () => {
   console.log(

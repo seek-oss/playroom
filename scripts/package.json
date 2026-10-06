@@ -1,6 +1,7 @@
 {
   "name": "@playroom/scripts",
   "private": true,
+  "type": "module",
   "scripts": {
     "post-commit-status": "node postCommitStatus.js"
   },
