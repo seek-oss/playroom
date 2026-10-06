@@ -17,13 +17,6 @@
     "target": "es2022",
     "customConditions": ["@playroom/dev"]
   },
-  "include": [
-    "packages/playroom/src",
-    "packages/playroom/lib",
-    "packages/playroom/utils",
-    "packages/playroom/bin",
-    "packages/playroom/tsdown.config.mts",
-    "vitest.config.mts"
-  ],
-  "exclude": ["cypress", "**/dist", "**/node_modules"]
+  "include": ["packages", "cypress", "fixtures", "vitest.config.mts"],
+  "exclude": ["**/dist", "**/node_modules"]
 }
