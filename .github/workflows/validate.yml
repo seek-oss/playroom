@@ -35,7 +35,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pnpm install
-          pnpm exec cypress install
+          pnpm --filter @playroom/cypress exec cypress install
 
       - name: Lint
         run: pnpm lint
