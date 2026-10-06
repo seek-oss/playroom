@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   components: './components.jsx',
   frameComponent: './FrameComponent',
   scope: './useScope',

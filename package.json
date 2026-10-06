@@ -1,6 +1,7 @@
 {
   "name": "@playroom/monorepo",
   "private": true,
+  "type": "module",
   "scripts": {
     "cypress": "start-server-and-test build-and-serve:all '9000|9001|9002' 'pnpm --filter @playroom/cypress test'",
     "cypress:dev": "start-server-and-test start:all '9000|9001|9002' 'pnpm --filter @playroom/cypress open'",

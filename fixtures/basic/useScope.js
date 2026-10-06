@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { BasicContext } from './context';
+import { BasicContext } from './context.js';
 
 export default () => ({
   hello: () => 'HELLO',

@@ -45,7 +45,7 @@ export default defineConfig([
   },
   {
     files: [
-      'packages/playroom/src/cli.mts',
+      'packages/playroom/src/cli.ts',
       'packages/playroom/src/lib/**/*.{ts,mts}',
     ],
     rules: {

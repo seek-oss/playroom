@@ -7,6 +7,7 @@ export default defineConfig([
     format: ['cjs', 'esm'],
     dts: true,
     outDir: 'dist',
+    fixedExtension: true,
     exports: true,
     deps: {
       // Doesn't affect the bundle but suppresses a warning we don't care about
@@ -26,6 +27,7 @@ export default defineConfig([
     format: ['esm'],
     dts: false,
     outDir: 'dist/app',
+    fixedExtension: true,
     platform: 'browser',
     plugins: [
       vanillaExtractPlugin({
@@ -48,10 +50,11 @@ export default defineConfig([
     },
   },
   {
-    entry: ['src/cli.mts'],
+    entry: ['src/cli.ts'],
     format: ['esm'],
     dts: false,
     outDir: 'dist',
+    fixedExtension: true,
     platform: 'node',
   },
 ]);

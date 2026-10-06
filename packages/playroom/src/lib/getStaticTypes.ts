@@ -24,7 +24,7 @@ const parsePropType = (propType: {
  * Modified from https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore?tab=readme-ov-file#_keyby.
  * Only supports arrays and expects a `key` to be provided.
  */
-const keyBy = <T,>(array: T[] = [], key: keyof T) =>
+const keyBy = <T>(array: T[] = [], key: keyof T) =>
   array.reduce<Record<string, T>>(
     (previousValue, currentValue) => ({
       ...previousValue,

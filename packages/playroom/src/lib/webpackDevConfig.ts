@@ -5,7 +5,7 @@ import { VanillaExtractPlugin } from '@vanilla-extract/webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import type { Configuration } from 'webpack';
 
-import { playroomPath } from './playroomPath.mts';
+import { playroomPath } from './playroomPath.ts';
 
 const require = createRequire(import.meta.url);
 const srcPath = path.resolve(playroomPath, 'src');
