@@ -7,7 +7,7 @@ import getStaticTypes from './getStaticTypes.mts';
 describe('getStaticTypes', () => {
   it('should get static types from typescript components', async () => {
     const result = await getStaticTypes({
-      cwd: resolve(__dirname, '../../../fixtures/typescript'),
+      cwd: resolve(__dirname, '../../../../fixtures/typescript'),
     });
 
     expect(result).toMatchInlineSnapshot(`

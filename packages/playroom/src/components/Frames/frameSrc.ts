@@ -1,7 +1,7 @@
 import frameConfig from '__PLAYROOM_ALIAS__FRAME_COMPONENT__';
 
-import type { FrameSettingsValues } from '../../../utils';
 import playroomConfig from '../../config';
+import type { FrameSettingsValues } from '../../index';
 
 interface FrameParams {
   code: string;

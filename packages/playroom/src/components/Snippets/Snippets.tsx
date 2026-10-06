@@ -12,9 +12,9 @@ import {
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
-import type { Snippet } from '../../../utils';
 import snippets from '../../configModules/snippets';
 import { StoreContext } from '../../contexts/StoreContext';
+import type { Snippet } from '../../index';
 import { isValidLocation } from '../../utils/cursor';
 import { formatAndInsert, formatForInsertion } from '../../utils/formatting';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';

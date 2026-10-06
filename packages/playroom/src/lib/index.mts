@@ -1,4 +1,4 @@
-import type { PlayroomConfig } from '../utils/index.ts';
+import type { PlayroomConfig } from '../index.ts';
 
 import provideDefaultConfig from './provideDefaultConfig.mts';
 
