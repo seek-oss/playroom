@@ -11,7 +11,7 @@ import { __private_create_hints } from './componentsToHints.ts';
 
 // @ts-expect-error
 import * as PropTypeComponents from '../../../../fixtures/themed/components.jsx';
-import * as TypeScriptComponents from '../../../../fixtures/typescript/components.jsx';
+import * as TypeScriptComponents from '../../../../fixtures/typescript/components.ts';
 
 describe('componentsToHints', () => {
   it('should support javascript components with proptypes', () => {

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import type { FrameSettingsValues } from '../../utils';
 import Frame from '../components/Frame/Frame';
 import { InspectOverlay } from '../components/Frame/InspectOverlay';
 import {
@@ -9,6 +8,7 @@ import {
   ScreenshotMessageReceiver,
 } from '../components/Frame/frameMessenger';
 import playroomConfig from '../config';
+import type { FrameSettingsValues } from '../index';
 import { renderElement } from '../render';
 import { UrlParams } from '../utils/params';
 

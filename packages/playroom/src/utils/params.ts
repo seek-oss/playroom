@@ -3,9 +3,9 @@ import { createBrowserHistory } from 'history';
 import lzString from 'lz-string';
 import { useState, useEffect, type ReactNode } from 'react';
 
-import { decompressParams } from '../../utils';
 import playroomConfig from '../config';
 import themes from '../configModules/themes';
+import { decompressParams } from '../index';
 
 import { compileJsx } from './compileJsx';
 

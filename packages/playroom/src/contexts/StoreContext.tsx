@@ -10,17 +10,17 @@ import {
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
-import {
-  type CompressParamsOptions,
-  type FrameSettingsValues,
-  compressParams,
-} from '../../utils';
 import playroomConfig from '../config';
 import {
   themeNames as availableThemes,
   themesEnabled,
 } from '../configModules/themes';
 import availableWidths, { type Widths } from '../configModules/widths';
+import {
+  type CompressParamsOptions,
+  type FrameSettingsValues,
+  compressParams,
+} from '../index';
 import { fallbackUuid } from '../utils/fallbackUuid';
 import {
   getDataParam,
