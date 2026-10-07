@@ -2,7 +2,7 @@ import { createRequire } from 'node:module';
 
 import type { Configuration } from 'webpack';
 
-import type { PlayroomConfig } from '../utils/index.ts';
+import type { PlayroomConfig } from '../index.ts';
 
 const require = createRequire(import.meta.url);
 

@@ -16,9 +16,9 @@ import {
   useState,
 } from 'react';
 
-import { createUrl, decompressParams } from '../../../utils';
 import playroomConfig from '../../config';
 import { StoreContext } from '../../contexts/StoreContext';
+import { createUrl, decompressParams } from '../../index';
 import { compileJsx } from '../../utils/compileJsx';
 import { formatAsRelative } from '../../utils/formatAsRelative';
 import { useCopy } from '../../utils/useCopy';

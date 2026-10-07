@@ -3,15 +3,15 @@
   "version": "1.4.0",
   "description": "Design with code, powered by your own component library",
   "bin": {
-    "playroom": "./bin/cli.mts"
+    "playroom": "./src/cli.mts"
   },
-  "main": "./dist/utils/index.cjs",
-  "module": "./dist/utils/index.mjs",
-  "types": "./dist/utils/index.d.cts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
   "exports": {
     ".": {
-      "import": "./dist/utils/index.mjs",
-      "require": "./dist/utils/index.cjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     },
     "./package.json": "./package.json"
   },
@@ -45,11 +45,11 @@
       "import": "./dist/app/defaultModules/useScope.mjs"
     },
     "#webpack/devConfig": {
-      "@playroom/dev": "./lib/webpackDevConfig.mts",
-      "import": "./lib/webpackDevConfig.stub.mts"
+      "@playroom/dev": "./src/lib/webpackDevConfig.mts",
+      "import": "./src/lib/webpackDevConfig.stub.mts"
     },
     "#static/*": {
-      "@playroom/dev": "./static/*",
+      "@playroom/dev": "./src/static/*",
       "import": "./dist/static/*"
     }
   },

@@ -1,5 +1,6 @@
-import faviconInvertedPath from '../../static/favicon-inverted.png';
-import faviconPath from '../../static/favicon.png';
+import faviconInvertedPath from '#static/favicon-inverted.png';
+import faviconPath from '#static/favicon.png';
+
 import Preview from '../components/Preview/Preview';
 import { renderElement } from '../render';
 import { UrlParams } from '../utils/params';

@@ -6,8 +6,8 @@ import commandLineArgs from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
 import { findUp } from 'find-up';
 
-import playroomFactory from '../lib/index.mts';
-import type { PlayroomConfig } from '../utils/index.ts';
+import type { PlayroomConfig } from './index.ts';
+import playroomFactory from './lib/index.mts';
 
 const showUsage = () => {
   console.log(

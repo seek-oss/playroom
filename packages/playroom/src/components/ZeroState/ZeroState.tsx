@@ -2,8 +2,8 @@ import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import { FolderOpen, BetweenHorizontalStart } from 'lucide-react';
 import { useContext, useMemo } from 'react';
 
-import { decompressParams } from '../../../utils';
 import { StoreContext } from '../../contexts/StoreContext';
+import { decompressParams } from '../../index';
 import { isValidLocation } from '../../utils/cursor';
 import { formatAsRelative } from '../../utils/formatAsRelative';
 import { formatForInsertion } from '../../utils/formatting';

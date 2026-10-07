@@ -1,7 +1,7 @@
 // Use a default import for better compatibility with ESM consumers
 import lzString from 'lz-string';
 
-import type { Widths } from '../src/configModules/widths';
+import type { Widths } from './configModules/widths';
 
 export type EditorPosition = 'left' | 'bottom';
 

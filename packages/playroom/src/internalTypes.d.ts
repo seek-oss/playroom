@@ -1,4 +1,4 @@
-import type { PlayroomConfig } from '../utils';
+import type { PlayroomConfig } from '.';
 
 type InternalPlayroomConfig = PlayroomConfig &
   Required<
