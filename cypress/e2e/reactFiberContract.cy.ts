@@ -24,7 +24,7 @@ describe('React Fiber Contract', () => {
           fiberKey,
           'Expected __reactFiber$ property on DOM element rendered by a custom component. ' +
             "Playroom's Inspect Element feature depends on this React internal to walk the fiber tree. " +
-            'If this fails after a React upgrade, update getFiberKey() in src/components/Frame/InspectOverlay.tsx.',
+            'If this fails after a React upgrade, update getFiberKey() in packages/playroom/src/components/Frame/InspectOverlay.tsx.',
         ).to.not.equal(undefined);
       });
   });
@@ -41,7 +41,7 @@ describe('React Fiber Contract', () => {
           fiberKey,
           'Expected __reactFiber$ property on a standard <div> element. ' +
             "Playroom's Inspect Element feature depends on this React internal to walk the fiber tree. " +
-            'If this fails after a React upgrade, update getFiberKey() in src/components/Frame/InspectOverlay.tsx.',
+            'If this fails after a React upgrade, update getFiberKey() in packages/playroom/src/components/Frame/InspectOverlay.tsx.',
         ).to.not.equal(undefined);
       });
   });

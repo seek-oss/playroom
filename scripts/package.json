@@ -1,0 +1,11 @@
+{
+  "name": "@playroom/scripts",
+  "private": true,
+  "scripts": {
+    "post-commit-status": "node postCommitStatus.js"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@octokit/rest": "^19.0.5"
+  }
+}

@@ -1,5 +1,8 @@
 packages:
   - packages/*
+  - fixtures/*
+  - cypress
+  - scripts
 
 allowBuilds:
   '@parcel/watcher': true

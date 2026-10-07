@@ -1,5 +1,7 @@
-// eslint-disable-next-line spaced-comment
+/* eslint-disable spaced-comment */
 /// <reference types="cypress" />
+/// <reference types="@testing-library/cypress" />
+/* eslint-enable spaced-comment */
 import dedent from 'dedent';
 
 import type { Direction } from '../../packages/playroom/src/components/CodeEditor/keymaps/types';

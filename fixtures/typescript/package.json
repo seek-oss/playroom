@@ -1,0 +1,22 @@
+{
+  "name": "@playroom/typescript-fixture",
+  "private": true,
+  "scripts": {
+    "start": "NODE_OPTIONS='--conditions=@playroom/dev' playroom start",
+    "build": "playroom build",
+    "serve": "PORT=9002 serve --config ../serve.json --no-request-logging dist"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "babel-loader": "^10.1.1",
+    "playroom": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "serve": "^14.2.5"
+  }
+}
