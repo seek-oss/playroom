@@ -32,7 +32,10 @@ export default defineConfig([
     },
   },
   {
-    files: ['bin/**/*.mts', 'lib/**/*.{ts,mts}'],
+    files: [
+      'packages/playroom/bin/**/*.mts',
+      'packages/playroom/lib/**/*.{ts,mts}',
+    ],
     rules: {
       'no-console': 0,
       'no-process-exit': 0,

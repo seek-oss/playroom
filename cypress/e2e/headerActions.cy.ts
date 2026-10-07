@@ -1,4 +1,4 @@
-import type { Widths } from '../../src/configModules/widths';
+import type { Widths } from '../../packages/playroom/src/configModules/widths';
 import {
   assertFramesMatch,
   assertPreviewContains,

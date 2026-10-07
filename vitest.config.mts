@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      __PLAYROOM_ALIAS__COMPONENTS__: './cypress/projects/basic/components.jsx',
+      __PLAYROOM_ALIAS__COMPONENTS__: './fixtures/basic/components.jsx',
     },
   },
   define: {

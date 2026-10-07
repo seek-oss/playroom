@@ -2,11 +2,11 @@
 /// <reference types="cypress" />
 import dedent from 'dedent';
 
-import type { Direction } from '../../src/components/CodeEditor/keymaps/types';
-import { snippetPreviewDebounce } from '../../src/components/Snippets/snippetsPreviewDebounce';
-import type { Widths } from '../../src/configModules/widths';
-import { isMac } from '../../src/utils/formatting';
-import { createUrl, decompressParams } from '../../utils';
+import type { Direction } from '../../packages/playroom/src/components/CodeEditor/keymaps/types';
+import { snippetPreviewDebounce } from '../../packages/playroom/src/components/Snippets/snippetsPreviewDebounce';
+import type { Widths } from '../../packages/playroom/src/configModules/widths';
+import { isMac } from '../../packages/playroom/src/utils/formatting';
+import { createUrl, decompressParams } from '../../packages/playroom/utils';
 
 const CYPRESS_DEFAULT_WAIT_TIME = 500;
 
