@@ -50,3 +50,11 @@ jobs:
         run: |
           pnpm cypress:verify
           pnpm cypress
+
+      - name: Upload Cypress screenshots
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cypress-screenshots-${{ matrix.os }}
+          path: cypress/screenshots
+          if-no-files-found: ignore
