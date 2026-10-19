@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import getStaticTypes from './getStaticTypes.mts';
+import getStaticTypes from './getStaticTypes.ts';
 
 describe('getStaticTypes', () => {
   it('should get static types from typescript components', async () => {

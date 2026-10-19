@@ -2,8 +2,9 @@
   "name": "playroom",
   "version": "1.4.0",
   "description": "Design with code, powered by your own component library",
+  "type": "module",
   "bin": {
-    "playroom": "./src/cli.mts"
+    "playroom": "./src/cli.ts"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -45,8 +46,8 @@
       "import": "./dist/app/defaultModules/useScope.mjs"
     },
     "#webpack/devConfig": {
-      "@playroom/dev": "./src/lib/webpackDevConfig.mts",
-      "import": "./src/lib/webpackDevConfig.stub.mts"
+      "@playroom/dev": "./src/lib/webpackDevConfig.ts",
+      "import": "./src/lib/webpackDevConfig.stub.ts"
     },
     "#static/*": {
       "@playroom/dev": "./src/static/*",

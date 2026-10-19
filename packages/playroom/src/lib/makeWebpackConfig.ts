@@ -11,10 +11,10 @@ import { merge, mergeWithRules } from 'webpack-merge';
 // Only used for playroom development. Resolves to a stub during packaging.
 import webpackDevConfig from '#webpack/devConfig';
 
-import getStaticTypes from './getStaticTypes.mts';
-import makeDefaultWebpackConfig from './makeDefaultWebpackConfig.mts';
-import { playroomPath } from './playroomPath.mts';
-import type { ResolvedPlayroomConfig } from './provideDefaultConfig.mts';
+import getStaticTypes from './getStaticTypes.ts';
+import makeDefaultWebpackConfig from './makeDefaultWebpackConfig.ts';
+import { playroomPath } from './playroomPath.ts';
+import type { ResolvedPlayroomConfig } from './provideDefaultConfig.ts';
 
 const require = createRequire(import.meta.url);
 const includePaths = [path.resolve(playroomPath, 'dist')];

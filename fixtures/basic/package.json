@@ -1,6 +1,7 @@
 {
   "name": "@playroom/basic-fixture",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "NODE_OPTIONS='--conditions=@playroom/dev' playroom start",
     "build": "playroom build",

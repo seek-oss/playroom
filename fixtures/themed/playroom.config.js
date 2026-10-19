@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   components: './components.jsx',
   snippets: './snippets',
   themes: './themes',

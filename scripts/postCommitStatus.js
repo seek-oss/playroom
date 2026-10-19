@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-const core = require('@actions/core');
+import core from '@actions/core';
+import { Octokit } from '@octokit/rest';
 
 const writeSummary = async ({ title, link }) => {
   core.summary.addHeading(title, 3);
@@ -20,7 +21,6 @@ const writeSummary = async ({ title, link }) => {
       );
     }
 
-    const { Octokit } = require('@octokit/rest');
     const octokit = new Octokit({
       auth: GITHUB_TOKEN,
     });

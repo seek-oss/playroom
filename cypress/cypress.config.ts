@@ -8,6 +8,6 @@ export default defineConfig({
   videosFolder: 'videos',
   e2e: {
     specPattern: 'e2e/**/*.cy.ts',
-    supportFile: 'support/e2e.js',
+    supportFile: 'support/e2e.ts',
   },
 });

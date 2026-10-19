@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 
-import { BasicContext } from './context';
+import { BasicContext } from './context.js';
 
 export default ({ children, frameSettings }) => {
   const darkMode = useMemo(

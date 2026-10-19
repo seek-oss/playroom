@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 
-import makeWebpackConfig from './makeWebpackConfig.mts';
-import type { ResolvedPlayroomConfig } from './provideDefaultConfig.mts';
+import makeWebpackConfig from './makeWebpackConfig.ts';
+import type { ResolvedPlayroomConfig } from './provideDefaultConfig.ts';
 
 const noop = () => {};
 
