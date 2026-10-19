@@ -4,6 +4,8 @@
 /* eslint-enable spaced-comment */
 import dedent from 'dedent';
 
+import basicConfig from '../../fixtures/basic/playroom.config.js';
+import themedConfig from '../../fixtures/themed/playroom.config.js';
 import type { Direction } from '../../packages/playroom/src/components/CodeEditor/keymaps/types';
 import { snippetPreviewDebounce } from '../../packages/playroom/src/components/Snippets/snippetsPreviewDebounce';
 import type { Widths } from '../../packages/playroom/src/configModules/widths';
@@ -29,6 +31,7 @@ export const openMainMenu = () => {
 };
 export const closeMainMenu = () => {
   cy.findByRole('button', { name: 'Main menu' }).click();
+  cy.findByRole('menu', { name: 'Main menu' }).should('not.exist');
 };
 
 export const getCodeEditor = () => cy.get('.CodeMirror-code');
@@ -388,6 +391,7 @@ type LoadPlayroomOptions = {
 
 const _loadPlayroom = (
   baseUrl: string,
+  storageKey: string,
   initialCode?: string,
   options?: LoadPlayroomOptions,
 ) => {
@@ -400,24 +404,39 @@ const _loadPlayroom = (
         })
       : baseUrl;
 
-  return cy.visit(visitUrl).then((window) => {
-    if (!initialCode) {
-      clearCode();
-    }
-
-    const { storageKey } = window.__playroomConfig__;
-    indexedDB.deleteDatabase(storageKey);
-  });
+  return cy
+    .visit(visitUrl, {
+      onBeforeLoad: ($window) => {
+        $window.indexedDB.deleteDatabase(storageKey);
+      },
+    })
+    .then(() => {
+      if (!initialCode) {
+        clearCode();
+      }
+    });
 };
 export const loadPlayroom = (
   initialCode?: string,
   options?: LoadPlayroomOptions,
-) => _loadPlayroom('http://localhost:9000', initialCode, options);
+) =>
+  _loadPlayroom(
+    `http://localhost:${basicConfig.port}`,
+    basicConfig.storageKey,
+    initialCode,
+    options,
+  );
 
 export const loadThemedPlayroom = (
   initialCode?: string,
   options?: LoadPlayroomOptions,
-) => _loadPlayroom('http://localhost:9001', initialCode, options);
+) =>
+  _loadPlayroom(
+    `http://localhost:${themedConfig.port}`,
+    themedConfig.storageKey,
+    initialCode,
+    options,
+  );
 
 export const loadPlayroomWithAppearance = (
   appearance: 'light' | 'dark',
