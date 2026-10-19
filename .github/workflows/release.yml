@@ -40,12 +40,11 @@ jobs:
         run: npm install -g npm@latest
 
       - name: Create Release Pull Request or Publish to npm
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
-          version: pnpm run version
-          publish: pnpm release
-        env:
-          GITHUB_TOKEN: ${{ secrets.SEEK_OSS_CI_GITHUB_TOKEN }}
+          version-script: pnpm run version
+          publish-script: pnpm release
+          github-token: ${{ secrets.SEEK_OSS_CI_GITHUB_TOKEN }}
 
   snapshot:
     name: Publish snapshot version
@@ -80,7 +79,7 @@ jobs:
         run: npm install -g npm@latest
 
       - name: Publish
-        uses: seek-oss/changesets-snapshot@v0
+        uses: seek-oss/changesets-snapshot@v1
         with:
           pre-publish: pnpm package
         env:
