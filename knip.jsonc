@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+  "workspaces": {
+    "packages/playroom": {
+      "ignoreUnresolved": ["^__PLAYROOM_ALIAS__"],
+    },
+    "fixtures/*": {
+      "entry": ["*.{js,jsx,ts,tsx}"],
+    },
+    "cypress": {
+      "entry": ["e2e/**/*.ts", "support/**/*.ts"],
+    },
+    "scripts": {
+      "entry": ["*.js"],
+    },
+  },
+}
