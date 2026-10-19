@@ -10,7 +10,6 @@
     "@testing-library/cypress": "^10.1.0",
     "@types/node": "^20.19.30",
     "cypress": "^15.5.0",
-    "dedent": "^1.5.1",
-    "playroom": "workspace:*"
+    "dedent": "^1.5.1"
   }
 }
