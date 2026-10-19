@@ -179,11 +179,9 @@ export const segmentedIconButton = style([
   },
 ]);
 
-export const copyLinkSuccess = style([
-  {
-    color: colorPaletteVars.foreground.positive,
-  },
-]);
+export const copyLinkSuccess = style({
+  color: colorPaletteVars.foreground.positive,
+});
 
 export const separator = style([
   sprinkles({

@@ -454,9 +454,7 @@ export const Header = () => {
                     onClick={() => onCopyClick(window.location.href)}
                   >
                     {copying ? (
-                      <span className={styles.copyLinkSuccess}>
-                        <Check size={14} />
-                      </span>
+                      <Check className={styles.copyLinkSuccess} size={14} />
                     ) : (
                       <Link size={14} />
                     )}
