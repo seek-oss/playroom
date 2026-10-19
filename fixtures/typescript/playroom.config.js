@@ -1,7 +1,3 @@
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-
 export default {
   components: './components.ts',
   snippets: './snippets.ts',
@@ -17,16 +13,16 @@ export default {
           exclude: /node_modules/,
           use: [
             {
-              loader: require.resolve('babel-loader'),
+              loader: import.meta.resolve('babel-loader'),
               options: {
                 babelrc: false,
                 presets: [
-                  require.resolve('@babel/preset-env'),
+                  import.meta.resolve('@babel/preset-env'),
                   [
-                    require.resolve('@babel/preset-react'),
+                    import.meta.resolve('@babel/preset-react'),
                     { runtime: 'automatic' },
                   ],
-                  require.resolve('@babel/preset-typescript'),
+                  import.meta.resolve('@babel/preset-typescript'),
                 ],
               },
             },
