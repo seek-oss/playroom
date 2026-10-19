@@ -4,6 +4,13 @@ import eslintConfigSeek from 'eslint-config-seek/vitest';
 export default defineConfig([
   ...eslintConfigSeek,
   {
+    settings: {
+      react: {
+        version: '19',
+      },
+    },
+  },
+  {
     rules: {
       curly: 'error',
       'import-x/order': [
