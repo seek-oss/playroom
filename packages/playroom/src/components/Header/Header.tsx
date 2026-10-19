@@ -450,13 +450,14 @@ export const Header = () => {
                   <button
                     type="button"
                     aria-label="Copy link"
-                    className={clsx(
-                      styles.segmentedIconButton,
-                      copying && styles.copyLinkSuccess,
-                    )}
+                    className={styles.segmentedIconButton}
                     onClick={() => onCopyClick(window.location.href)}
                   >
-                    {copying ? <Check size={14} /> : <Link size={14} />}
+                    {copying ? (
+                      <Check className={styles.copyLinkSuccess} size={14} />
+                    ) : (
+                      <Link size={14} />
+                    )}
                   </button>
                 }
               />
