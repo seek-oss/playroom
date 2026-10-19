@@ -5,7 +5,7 @@ import { findUp } from 'find-up';
 import { glob } from 'tinyglobby';
 import ts from 'typescript';
 
-import type { PlayroomConfig } from '../utils/index.ts';
+import type { PlayroomConfig } from '../index.ts';
 
 const stringRegex = /^"(.*)"$/;
 const parsePropType = (propType: {

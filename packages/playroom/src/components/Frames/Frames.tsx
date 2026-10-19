@@ -18,12 +18,12 @@ import {
   useState,
 } from 'react';
 
-import type { FrameSettingsValues } from '../../../utils';
 import playroomConfig from '../../config';
 import { themeNames as availableThemes } from '../../configModules/themes';
 import availableWidths, { type Widths } from '../../configModules/widths';
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
+import type { FrameSettingsValues } from '../../index';
 import { compileJsxForInspect } from '../../utils/compileJsx';
 import usePreviewUrl from '../../utils/usePreviewUrl';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';

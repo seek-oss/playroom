@@ -34,7 +34,6 @@ import {
   useState,
 } from 'react';
 
-import { compressParams } from '../../../utils';
 import {
   themeNames as availableThemes,
   themeNames,
@@ -42,6 +41,7 @@ import {
 } from '../../configModules/themes';
 import availableWidths from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
+import { compressParams } from '../../index';
 import { createUrlForData, resolveDataFromUrl } from '../../utils/params';
 import { useCopy } from '../../utils/useCopy';
 import usePreviewUrl from '../../utils/usePreviewUrl';

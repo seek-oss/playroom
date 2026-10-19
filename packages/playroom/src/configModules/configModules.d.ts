@@ -1,5 +1,5 @@
 declare module '__PLAYROOM_ALIAS__SNIPPETS__' {
-  import type { Snippet } from '../utils/index';
+  import type { Snippet } from '../index';
   const snippets: Snippet[];
   export default snippets;
 }

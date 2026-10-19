@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import type { FrameSettingsValues } from '../../utils/index.ts';
+import type { FrameSettingsValues } from '../index';
 
 export default ({
   children,

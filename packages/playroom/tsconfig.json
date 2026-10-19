@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src", "lib", "utils", "bin", "tsdown.config.mts"]
+  "include": ["src", "tsdown.config.mts"]
 }

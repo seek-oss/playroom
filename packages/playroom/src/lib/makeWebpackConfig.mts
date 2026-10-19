@@ -13,18 +13,11 @@ import webpackDevConfig from '#webpack/devConfig';
 
 import getStaticTypes from './getStaticTypes.mts';
 import makeDefaultWebpackConfig from './makeDefaultWebpackConfig.mts';
+import { playroomPath } from './playroomPath.mts';
 import type { ResolvedPlayroomConfig } from './provideDefaultConfig.mts';
 
 const require = createRequire(import.meta.url);
-const playroomPath = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '..',
-);
-const includePaths = [
-  path.resolve(playroomPath, 'lib'),
-  path.resolve(playroomPath, 'dist'),
-  path.resolve(playroomPath, 'utils'),
-];
+const includePaths = [path.resolve(playroomPath, 'dist')];
 
 const resolvePlayroomModule = (specifier: string) =>
   fileURLToPath(import.meta.resolve(specifier));

@@ -7,8 +7,8 @@ import {
 } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import type { FrameSettingsValues } from '../../../utils';
 import FrameComponent from '../../configModules/frameComponent';
+import type { FrameSettingsValues } from '../../index';
 import RenderCode from '../RenderCode/RenderCode';
 
 type RenderCodeProps = ComponentProps<typeof RenderCode>;

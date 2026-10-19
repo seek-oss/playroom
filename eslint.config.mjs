@@ -28,6 +28,11 @@ export default defineConfig([
           ],
           pathGroups: [
             {
+              // Resolution depends on whether `dist` has been built, so pin the group
+              pattern: '#*/**',
+              group: 'internal',
+            },
+            {
               pattern: '*.css',
               group: 'index',
               position: 'after',
@@ -40,8 +45,8 @@ export default defineConfig([
   },
   {
     files: [
-      'packages/playroom/bin/**/*.mts',
-      'packages/playroom/lib/**/*.{ts,mts}',
+      'packages/playroom/src/cli.mts',
+      'packages/playroom/src/lib/**/*.{ts,mts}',
     ],
     rules: {
       'no-console': 0,

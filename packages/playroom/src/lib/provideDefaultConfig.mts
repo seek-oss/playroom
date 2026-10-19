@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 
 import { findUpSync } from 'find-up';
 
-import type { PlayroomConfig } from '../utils/index.ts';
+import type { PlayroomConfig } from '../index.ts';
 
 export type ResolvedPlayroomConfig = PlayroomConfig &
   Required<

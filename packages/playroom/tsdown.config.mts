@@ -3,10 +3,10 @@ import { defineConfig } from 'tsdown';
 
 export default defineConfig([
   {
-    entry: ['utils/index.ts'],
+    entry: ['src/index.ts'],
     format: ['cjs', 'esm'],
     dts: true,
-    outDir: 'dist/utils',
+    outDir: 'dist',
     exports: true,
     deps: {
       // Doesn't affect the bundle but suppresses a warning we don't care about
@@ -32,7 +32,7 @@ export default defineConfig([
         identifiers: process.env.PLAYROOM_DEV === 'true' ? 'debug' : 'short',
       }),
     ],
-    copy: [{ from: 'static', to: 'dist' }],
+    copy: [{ from: 'src/static', to: 'dist' }],
     deps: {
       // Doesn't affect the bundle but suppresses a warning we don't care about
       neverBundle: [
@@ -48,7 +48,7 @@ export default defineConfig([
     },
   },
   {
-    entry: ['bin/cli.mts'],
+    entry: ['src/cli.mts'],
     format: ['esm'],
     dts: false,
     outDir: 'dist',

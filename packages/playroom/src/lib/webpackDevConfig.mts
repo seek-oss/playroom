@@ -1,18 +1,14 @@
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import { VanillaExtractPlugin } from '@vanilla-extract/webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import type { Configuration } from 'webpack';
 
+import { playroomPath } from './playroomPath.mts';
+
 const require = createRequire(import.meta.url);
-const playroomPath = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '..',
-);
 const srcPath = path.resolve(playroomPath, 'src');
-const utilsPath = path.resolve(playroomPath, 'utils');
 
 const webpackDevConfig: Configuration = {
   resolve: {
@@ -22,7 +18,7 @@ const webpackDevConfig: Configuration = {
     rules: [
       {
         test: /\.tsx?$/,
-        include: [srcPath, utilsPath],
+        include: [srcPath],
         use: [
           {
             loader: require.resolve('babel-loader'),
