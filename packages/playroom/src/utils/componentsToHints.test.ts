@@ -10,8 +10,8 @@ Todo - revisit componentsToHints to optimise
 import { __private_create_hints } from './componentsToHints.ts';
 
 // @ts-expect-error
-import * as PropTypeComponents from '../../cypress/projects/themed/components.jsx';
-import * as TypeScriptComponents from '../../cypress/projects/typescript/components.jsx';
+import * as PropTypeComponents from '../../../../fixtures/themed/components.jsx';
+import * as TypeScriptComponents from '../../../../fixtures/typescript/components.jsx';
 
 describe('componentsToHints', () => {
   it('should support javascript components with proptypes', () => {

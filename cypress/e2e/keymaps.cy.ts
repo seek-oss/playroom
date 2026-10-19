@@ -1,6 +1,6 @@
 import dedent from 'dedent';
 
-import { isMac } from '../../src/utils/formatting';
+import { isMac } from '../../packages/playroom/src/utils/formatting';
 import {
   typeCode,
   assertCodePaneContains,

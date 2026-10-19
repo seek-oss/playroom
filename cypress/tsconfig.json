@@ -6,8 +6,8 @@
   },
   "include": [
     "**/*", // override the include from the root tsconfig
-    "../src/internalTypes.d.ts", // contains definitions for global variables
-    "../src/configModules/configModules.d.ts"
+    "../packages/playroom/src/internalTypes.d.ts", // contains definitions for global variables
+    "../packages/playroom/src/configModules/configModules.d.ts"
   ],
   "exclude": [] // override the exclude from the root tsconfig
 }
