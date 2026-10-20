@@ -9,6 +9,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import FrameComponent from '../../configModules/frameComponent';
 import type { FrameSettingsValues } from '../../index';
+import { normalizeErrorMessage } from '../../utils/normalizeErrorMessage';
 import RenderCode from '../RenderCode/RenderCode';
 
 type RenderCodeProps = ComponentProps<typeof RenderCode>;
@@ -52,7 +53,7 @@ export default function Frame({
         }}
         resetKeys={[code]}
         onError={(e) => {
-          setError(e.message);
+          setError(normalizeErrorMessage(e));
         }}
         onReset={() => {
           setError('');

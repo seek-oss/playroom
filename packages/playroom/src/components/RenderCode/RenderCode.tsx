@@ -4,6 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import scopeEval from 'scope-eval';
 
 import buildScope from '../../configModules/useScope';
+import { normalizeErrorMessage } from '../../utils/normalizeErrorMessage';
 
 interface Props {
   code: string;
@@ -43,7 +44,7 @@ export default function RenderCode({ code, inspectMode, onError }: Props) {
       )}
       resetKeys={[code]}
       onError={(e) => {
-        onError(e.message);
+        onError(normalizeErrorMessage(e));
       }}
       onReset={() => {
         onError('');

@@ -50,7 +50,7 @@
   "devDependencies": {
     "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^3.0.3",
-    "@types/node": "^20.19.30",
+    "@types/node": "^24.19.2",
     "@vitejs/plugin-react": "^6.1.1",
     "eslint": "^9.23.0",
     "eslint-config-seek": "^15.0.6",
