@@ -1,5 +1,16 @@
 # playroom
 
+## 1.4.1
+
+### Patch Changes
+
+- [#515](https://github.com/seek-oss/playroom/pull/515) [`6d37ccf`](https://github.com/seek-oss/playroom/commit/6d37ccf20737888aef847d2d0334037279432091) Thanks [@askoufis](https://github.com/askoufis)! - Fix centering of copy link success icon
+
+- [#520](https://github.com/seek-oss/playroom/pull/520) [`fd65d0f`](https://github.com/seek-oss/playroom/commit/fd65d0f3bdb101808b9a43663679812be4c568a5) Thanks [@askoufis](https://github.com/askoufis)! - Update dependencies:
+
+  - `lucide-react`: `^0.541.0` to `^1.59.0`
+  - `react-error-boundary`: `^4.0.13` to `^6.1.6`
+
 ## 1.4.0
 
 ### Minor Changes
