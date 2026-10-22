@@ -14,6 +14,34 @@ import * as PropTypeComponents from '../../../../fixtures/themed/components.jsx'
 import * as TypeScriptComponents from '../../../../fixtures/typescript/components.ts';
 
 describe('componentsToHints', () => {
+  it('keeps valid component hints when another export has invalid prop types', () => {
+    const result = __private_create_hints({
+      Invalid: { propTypes: null },
+      Foo: PropTypeComponents.Foo,
+    });
+
+    expect(Object.keys(result)).toEqual(['Foo']);
+    expect(result.Foo.attrs.color).toEqual(['red', 'blue']);
+  });
+
+  it('skips factory proxies that do not allow prop type introspection', () => {
+    const factory = new Proxy(() => null, {
+      get(target, property, receiver) {
+        if (property === 'propTypes') {
+          throw new TypeError('This export cannot be introspected');
+        }
+        return Reflect.get(target, property, receiver);
+      },
+    });
+    const result = __private_create_hints({
+      Factory: factory,
+      Foo: PropTypeComponents.Foo,
+    });
+
+    expect(Object.keys(result)).toEqual(['Foo']);
+    expect(result.Foo.attrs.color).toEqual(['red', 'blue']);
+  });
+
   it('should support javascript components with proptypes', () => {
     const result = __private_create_hints({
       Bar: PropTypeComponents.Bar,
