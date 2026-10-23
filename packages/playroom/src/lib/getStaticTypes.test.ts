@@ -1,0 +1,32 @@
+import { resolve } from 'node:path';
+
+import { describe, expect, it } from 'vitest';
+
+import getStaticTypes from './getStaticTypes.ts';
+
+describe('getStaticTypes', () => {
+  it('should get static types from typescript components', async () => {
+    const result = await getStaticTypes({
+      cwd: resolve(__dirname, '../../../../fixtures/typescript'),
+    });
+
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "Bar": {
+          "color": [
+            "red",
+            "blue",
+            "black",
+          ],
+        },
+        "Foo": {
+          "color": [
+            "red",
+            "blue",
+            "black",
+          ],
+        },
+      }
+    `);
+  });
+});

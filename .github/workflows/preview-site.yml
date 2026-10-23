@@ -27,6 +27,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm i
 
+      - name: Package Playroom
+        run: pnpm package
+
       - name: Build
         run: pnpm build:themed
 

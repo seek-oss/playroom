@@ -56,7 +56,7 @@ describe('Editor', () => {
   it('formats css in a style block', () => {
     loadPlayroom();
     typeCode(
-      '<style jsx>{{}`html {{} border: 1px solid red; {}}{rightarrow}{}}'
+      '<style jsx>{{}`html {{} border: 1px solid red; {}}{rightarrow}{}}',
     );
     assertCodePaneLineCount(1);
     formatCode({ source: 'keyboard' });
@@ -372,7 +372,7 @@ describe('Editor', () => {
       moveBy(6);
       typeCode('{del}');
       assertFirstFrameContains(
-        `Initial code\nBar\nBar\nBar\nBar\nFoo\nRed Foo\nBar\nFoo\nRed Foo\nBlue Bar\naslkjdajsdlasdj\nBar\nBar\nBar\nBar\nFoo\nRed Foo\nBar\nFoo\nRed Foo\nBlue Bar\naslkjdajsdlasdj\ncursor position`
+        `Initial code\nBar\nBar\nBar\nBar\nFoo\nRed Foo\nBar\nFoo\nRed Foo\nBlue Bar\naslkjdajsdlasdj\nBar\nBar\nBar\nBar\nFoo\nRed Foo\nBar\nFoo\nRed Foo\nBlue Bar\naslkjdajsdlasdj\ncursor position`,
       );
     });
   });

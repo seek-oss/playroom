@@ -4,6 +4,7 @@ import {
   assertStoredPlayrooms,
   assertTitle,
   changeTitle,
+  cmdPlus,
   getCodeEditor,
   loadPlayroom,
   openMainMenu,
@@ -24,7 +25,7 @@ describe('Open', () => {
     // New playroom
     openMainMenu();
     cy.findByRole('link', { name: 'New Playroom' }).then((link) =>
-      cy.visit(link.prop('href'))
+      cy.visit(link.prop('href')),
     );
 
     // Create second design
@@ -35,6 +36,13 @@ describe('Open', () => {
 
     // Open first design via menu
     openStoredPlayroomByName('First design', { source: 'menu' });
+    assertTitle('First design');
+    assertCodePaneContains('First design');
+    assertFirstFrameContains('First design');
+
+    // Undo should not restore the previously opened playroom
+    getCodeEditor().click();
+    typeCode(cmdPlus('z'));
     assertTitle('First design');
     assertCodePaneContains('First design');
     assertFirstFrameContains('First design');

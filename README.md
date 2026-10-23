@@ -1,6 +1,6 @@
 [![npm](https://img.shields.io/npm/v/playroom.svg?style=for-the-badge)](https://www.npmjs.com/package/playroom) [![Build Status](https://img.shields.io/github/actions/workflow/status/seek-oss/playroom/validate.yml?branch=master&style=for-the-badge)](https://github.com/seek-oss/playroom/actions?query=workflow%3AValidate+branch%3Amaster)
 
-<img src="images/logo.png" alt="Playroom" title="Playroom" height="80" />
+<img src="packages/playroom/images/logo.png" alt="Playroom" title="Playroom" height="80" />
 
 <br/>
 
@@ -81,6 +81,7 @@ module.exports = {
   defaultVisibleThemes: [
     // subset of themes to display on first load
   ],
+  defaultEditorPosition: 'left', // default is 'bottom'
 };
 ```
 
@@ -95,6 +96,8 @@ export { Button } from '../Button'; // Re-exporting a named export
 ```
 
 The `iframeSandbox` option can be used to set the [`sandbox` attribute](https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/) on Playroom's iframe. A minimum of `allow-scripts` is required for Playroom to work.
+
+The `defaultEditorPosition` option sets where the code editor sits on first load, matching the "Editor Position" menu: `'left'` or `'bottom'` (default). Once a user picks a position from the menu, their own preference is remembered and takes precedence over this option.
 
 Now that your project is configured, you can start a local development server:
 
@@ -299,6 +302,15 @@ If you are interested in integrating Playroom into Storybook, check out [storybo
 ## Browser Support
 
 Playroom is built to work on the latest stable versions of all major browsers. Some features may not work as expected in older browsers.
+
+## Contributing
+
+This repository is a pnpm workspace. The public package lives in `packages/playroom`, and private test apps live in `fixtures`.
+
+Start a dev server with `pnpm start` (or any of the other `start:`-prefixed scripts).
+Changes made to source code will be reflected in the local app.
+
+Run unit tests with `pnpm test` and cypress tests with either `cypress` (headless) or `cypress:dev` (headful, useful for debugging).
 
 ## License
 

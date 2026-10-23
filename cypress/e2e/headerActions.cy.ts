@@ -1,4 +1,4 @@
-import type { Widths } from '../../src/configModules/widths';
+import type { Widths } from '../../packages/playroom/src/configModules/widths';
 import {
   assertFramesMatch,
   assertPreviewContains,
@@ -37,7 +37,7 @@ describe('Header actions', () => {
     const themes: string[] = ['themeOne', 'themeTwo'];
 
     const allFrames = widths.flatMap((width) =>
-      themes.map<[string, Widths[number]]>((theme) => [theme, width])
+      themes.map<[string, Widths[number]]>((theme) => [theme, width]),
     );
 
     loadThemedPlayroom();

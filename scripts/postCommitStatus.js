@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-const core = require('@actions/core');
+import core from '@actions/core';
+import { Octokit } from '@octokit/rest';
 
 const writeSummary = async ({ title, link }) => {
   core.summary.addHeading(title, 3);
@@ -16,11 +17,10 @@ const writeSummary = async ({ title, link }) => {
 
     if (!GITHUB_TOKEN || !GITHUB_SHA) {
       throw new Error(
-        'GITHUB_TOKEN and GITHUB_SHA environment variables must be present'
+        'GITHUB_TOKEN and GITHUB_SHA environment variables must be present',
       );
     }
 
-    const { Octokit } = require('@octokit/rest');
     const octokit = new Octokit({
       auth: GITHUB_TOKEN,
     });

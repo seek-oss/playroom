@@ -1,8 +1,10 @@
-import type { Widths } from '../../src/configModules/widths';
+import type { Widths } from '../../packages/playroom/src/configModules/widths';
 import {
   assertCodePaneContains,
   assertColourMode,
   assertFirstFrameContains,
+  assertStoredPlayrooms,
+  getFrames,
   assertFramesMatch,
   assertTitle,
   changeTitle,
@@ -30,15 +32,19 @@ describe('Main Menu', () => {
       <div>Third line</div>
     `);
     assertCodePaneContains(
-      '<div>First line</div>\n<div>Second line</div>\n<div>Third line</div>'
+      '<div>First line</div>\n<div>Second line</div>\n<div>Third line</div>',
     );
     changeTitle('Initial Title');
+    assertStoredPlayrooms(1);
     openMainMenu();
     cy.findByRole('link', { name: 'New Playroom' }).then((link) => {
       cy.visit(link.prop('href')).then(() => {
         assertTitle('');
         assertCodePaneContains('');
-        assertFirstFrameContains('');
+        cy.findByRole('heading', { name: 'Recent Playrooms' }).should(
+          'be.visible',
+        );
+        getFrames().should('not.exist');
       });
     });
   });
@@ -51,9 +57,7 @@ describe('Main Menu', () => {
   });
 
   it('Duplicate playroom', () => {
-    cy.visit(
-      'http://localhost:9000/#?code=N4Igxg9gJgpiBcIA8ALAjAPgCowM4BcACAYWhiQHp0MQAaEfFGAWzwQG0BdegdwEsojXB24M%2B%2BADZxEOAoSzipIAL5A'
-    );
+    loadPlayroom('<h1>Test Code</h1>', { title: 'Test Title' });
     assertCodePaneContains('<h1>Test Code</h1>');
     openMainMenu();
     cy.findByRole('link', { name: 'Duplicate' }).then((link) => {
@@ -104,7 +108,7 @@ describe('Main Menu', () => {
       const themes: string[] = ['themeOne', 'themeTwo'];
 
       const allFrames = widths.flatMap((width) =>
-        themes.map<[string, Widths[number]]>((theme) => [theme, width])
+        themes.map<[string, Widths[number]]>((theme) => [theme, width]),
       );
 
       loadThemedPlayroom();
