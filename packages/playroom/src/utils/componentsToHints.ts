@@ -5,8 +5,7 @@ import ppt from 'parse-prop-types';
 const parsePropTypes = typeof ppt === 'function' ? ppt : ppt.default;
 
 import configComponents from '../configModules/components';
-
-const staticTypes = __PLAYROOM_GLOBAL__STATIC_TYPES__;
+import staticTypes from '../staticTypes';
 
 type Hints = Record<
   string,
