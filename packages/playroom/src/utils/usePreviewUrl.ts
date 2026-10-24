@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import playroomConfig from '../config';
-import { themesEnabled } from '../configModules/themes';
+import { themesEnabled } from '../configModules/themeNames';
 import { StoreContext } from '../contexts/StoreContext';
 import { createPreviewUrl } from '../index';
 

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { ChevronDown } from 'lucide-react';
 import { Fragment, useContext } from 'react';
 
-import { themeNames } from '../../configModules/themes';
+import { themeNames } from '../../configModules/themeNames';
 import { StoreContext } from '../../contexts/StoreContext';
 import { Text } from '../Text/Text';
 

@@ -1,4 +1,3 @@
-import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import {
   BetweenHorizontalStart,
   Ellipsis,
@@ -11,6 +10,7 @@ import {
   type ButtonHTMLAttributes,
 } from 'react';
 
+import snippets from '../../configModules/snippets';
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
 import { isValidLocation } from '../../utils/cursor';

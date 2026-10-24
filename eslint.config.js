@@ -53,6 +53,44 @@ export default defineConfig([
       'no-process-exit': 0,
     },
   },
+  {
+    // Keeps the editor reading data rather than user modules. The remaining
+    // editor -> user code edges are `configModules/components` (hints) and
+    // `__PLAYROOM_ALIAS__FRAME_COMPONENT__` (`frameSrc`).
+    files: ['packages/playroom/src/**/*.{ts,tsx}'],
+    ignores: [
+      'packages/playroom/src/configModules/**',
+      'packages/playroom/src/entries/frame.tsx',
+      'packages/playroom/src/components/Frame/**',
+      'packages/playroom/src/components/RenderCode/**',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            '__PLAYROOM_ALIAS__THEMES__',
+            '__PLAYROOM_ALIAS__USE_SCOPE__',
+            {
+              name: '__PLAYROOM_ALIAS__SNIPPETS__',
+              message: 'Import from `configModules/snippets` instead.',
+            },
+          ],
+          patterns: [
+            {
+              group: ['**/configModules/themes'],
+              message:
+                'Only frame code may import themes. Use `configModules/themeNames` instead.',
+            },
+            {
+              group: ['**/configModules/useScope'],
+              message: 'Only frame code may import the user scope.',
+            },
+          ],
+        },
+      ],
+    },
+  },
   /** Should feed back upstream to eslint-config-seek */
   {
     files: ['cypress/**/*.cy.{js,ts}'],
