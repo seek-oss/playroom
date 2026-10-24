@@ -1,11 +1,7 @@
-// @ts-expect-error
-import ppt from 'parse-prop-types';
-
-// interop with esm build and cjs in jest
-const parsePropTypes = typeof ppt === 'function' ? ppt : ppt.default;
-
 import configComponents from '../configModules/components';
 import staticTypes from '../staticTypes';
+
+import { getPropTypesHints, warnAboutPropTypesHints } from './propTypesHints';
 
 type Hints = Record<
   string,
@@ -19,8 +15,9 @@ export const __private_create_hints = (
   types: typeof staticTypes = {},
 ) => {
   const componentNames = Object.keys(components).sort();
+  const componentsWithPropTypesHints: string[] = [];
 
-  return componentNames.reduce((componentAcc, componentName) => {
+  const hints = componentNames.reduce((componentAcc, componentName) => {
     const staticTypesForComponent = types[componentName];
     if (
       staticTypesForComponent &&
@@ -34,31 +31,22 @@ export const __private_create_hints = (
       };
     }
 
-    const { children, ...filteredPropTypes } = parsePropTypes(
-      components[componentName],
-    );
-    const propNames = Object.keys(filteredPropTypes);
+    const propTypesHints = getPropTypesHints(components[componentName]);
+    if (Object.keys(propTypesHints).length > 0) {
+      componentsWithPropTypesHints.push(componentName);
+    }
 
     return {
       ...componentAcc,
       [componentName]: {
-        attrs: propNames.reduce(
-          (propAcc, propName) => {
-            const propType = filteredPropTypes[propName].type;
-
-            return {
-              ...propAcc,
-              [propName]:
-                propType.name === 'oneOf'
-                  ? propType.value.filter((x: any) => typeof x === 'string')
-                  : null,
-            };
-          },
-          {} as Hints[string]['attrs'],
-        ),
+        attrs: propTypesHints,
       },
     };
   }, {} as Hints);
+
+  warnAboutPropTypesHints(componentsWithPropTypesHints);
+
+  return hints;
 };
 
 export const hints = __private_create_hints(configComponents, staticTypes);
