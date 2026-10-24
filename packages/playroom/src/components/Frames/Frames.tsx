@@ -19,7 +19,10 @@ import {
 } from 'react';
 
 import playroomConfig from '../../config';
-import { themeNames as availableThemes } from '../../configModules/themes';
+import {
+  noThemeName,
+  themeNames as availableThemes,
+} from '../../configModules/themeNames';
 import availableWidths, { type Widths } from '../../configModules/widths';
 import { useEditor } from '../../contexts/EditorContext';
 import { StoreContext } from '../../contexts/StoreContext';
@@ -76,7 +79,7 @@ const Frame = ({
 }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [frameActive, setFrameActive] = useState(false);
-  const noTheme = frame.theme === '__PLAYROOM__NO_THEME__';
+  const noTheme = frame.theme === noThemeName;
   const previewUrl = usePreviewUrl(frame.theme);
 
   const setIframeRef = useCallback(

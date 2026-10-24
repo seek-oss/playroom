@@ -4,7 +4,6 @@ import lzString from 'lz-string';
 import { useState, useEffect, type ReactNode } from 'react';
 
 import playroomConfig from '../config';
-import themes from '../configModules/themes';
 import { decompressParams } from '../index';
 
 import { compileJsx } from './compileJsx';
@@ -69,7 +68,6 @@ export const UrlParams = ({
 }: {
   children: (params: {
     themeName: string;
-    theme: any;
     code: string;
     title: string;
   }) => ReactNode;
@@ -97,14 +95,5 @@ export const UrlParams = ({
     };
   });
 
-  const resolvedThemeName =
-    themeName === '__PLAYROOM__NO_THEME__' ? null : themeName;
-  const resolvedTheme = resolvedThemeName ? themes[resolvedThemeName] : null;
-
-  return children({
-    themeName,
-    code,
-    theme: resolvedTheme,
-    title,
-  });
+  return children({ themeName, code, title });
 };
