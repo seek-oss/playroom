@@ -1,5 +1,5 @@
 // Import as a side-effect here so parse-prop-types would patch "prop-types" before components import.
-import 'parse-prop-types';
+import '../utils/propTypesHints';
 
 import * as sourceComponents from '__PLAYROOM_ALIAS__COMPONENTS__';
 

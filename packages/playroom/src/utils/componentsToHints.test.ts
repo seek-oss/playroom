@@ -1,4 +1,12 @@
-import { describe, expect, it } from 'vitest';
+import {
+  type MockInstance,
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 /*
 componentsToHints uses parsePropTypes,
 which has side effects that break tests if they are not imported first
@@ -14,6 +22,16 @@ import * as PropTypeComponents from '../../../../fixtures/themed/components.jsx'
 import * as TypeScriptComponents from '../../../../fixtures/typescript/components.ts';
 
 describe('componentsToHints', () => {
+  let warn: MockInstance<typeof console.warn>;
+
+  beforeEach(() => {
+    warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should support javascript components with proptypes', () => {
     const result = __private_create_hints({
       Bar: PropTypeComponents.Bar,
@@ -76,5 +94,38 @@ describe('componentsToHints', () => {
         },
       }
     `);
+  });
+
+  it('should prefer static types over propTypes without warning', () => {
+    const result = __private_create_hints(
+      { Foo: PropTypeComponents.Foo },
+      { Foo: { color: ['green'] } },
+    );
+
+    expect(result).toEqual({ Foo: { attrs: { color: ['green'] } } });
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('should warn once when falling back to propTypes', () => {
+    __private_create_hints({
+      Bar: PropTypeComponents.Bar,
+      Foo: PropTypeComponents.Foo,
+      Baz: TypeScriptComponents.Foo,
+    });
+
+    expect(warn).toHaveBeenCalledOnce();
+    expect(warn.mock.calls[0][0]).toContain(
+      'derived from runtime `propTypes`: Bar, Foo.',
+    );
+  });
+
+  it('should not warn for components without hints', () => {
+    const result = __private_create_hints({
+      Bar: TypeScriptComponents.Bar,
+      Foo: TypeScriptComponents.Foo,
+    });
+
+    expect(result).toEqual({ Bar: { attrs: {} }, Foo: { attrs: {} } });
+    expect(warn).not.toHaveBeenCalled();
   });
 });
