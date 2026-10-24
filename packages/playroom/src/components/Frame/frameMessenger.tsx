@@ -1,14 +1,12 @@
 import { snapdom } from '@zumer/snapdom';
-import { type ComponentProps, useEffect, useRef, useState } from 'react';
-
-import { FrameError } from './FrameError';
+import { useEffect } from 'react';
 
 /**
  * ---------------
  *  Error Message
  * ---------------
  */
-const PlayroomErrorSource = 'Playroom Frame Error';
+export const PlayroomErrorSource = 'Playroom Frame Error';
 
 export const ErrorMessageSender = ({
   message,
@@ -26,39 +24,6 @@ export const ErrorMessageSender = ({
   }, [message, delayVisibility]);
 
   return null;
-};
-
-interface ReceiveErrorMessageProps {
-  size?: ComponentProps<typeof FrameError>['size'];
-}
-
-export const ErrorMessageReceiver = ({ size }: ReceiveErrorMessageProps) => {
-  const shouldDelay = useRef(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    const errorMessageHandler = (event: MessageEvent) => {
-      const { source, message, delayVisibility } = event.data;
-      if (source === PlayroomErrorSource) {
-        setError(message);
-        shouldDelay.current = delayVisibility;
-      }
-    };
-
-    window.addEventListener('message', errorMessageHandler, false);
-
-    return () => {
-      window.removeEventListener('message', errorMessageHandler, false);
-    };
-  }, []);
-
-  return (
-    <FrameError
-      message={error}
-      size={size}
-      delayVisibility={shouldDelay.current}
-    />
-  );
 };
 
 /**
