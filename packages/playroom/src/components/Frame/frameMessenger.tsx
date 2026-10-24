@@ -1,4 +1,3 @@
-import { snapdom } from '@zumer/snapdom';
 import { useEffect } from 'react';
 
 /**
@@ -22,62 +21,6 @@ export const ErrorMessageSender = ({
       delayVisibility,
     });
   }, [message, delayVisibility]);
-
-  return null;
-};
-
-/**
- * --------------------
- *  Screenshot Message
- * --------------------
- */
-const playroomScreenshotSource = 'Playroom Frame Screenshot';
-
-const renderDocumentToCanvas = async (doc: Document) => {
-  const result = await snapdom(doc.documentElement, {
-    embedFonts: true,
-    useProxy:
-      process.env.NODE_ENV === 'development'
-        ? 'https://proxy.corsfix.com/?'
-        : undefined,
-    backgroundColor: '#fff',
-    fallbackURL: ({ width, height }) =>
-      `https://placehold.co/${width}${
-        height ? `x${height}` : ''
-      }/eee/aaa?text=CORS%20blocked%20image`,
-  });
-
-  return result;
-};
-export const ScreenshotMessageReceiver = () => {
-  useEffect(() => {
-    const screenshotMessageHandler = async (event: MessageEvent) => {
-      const { source, action, fileName } = event.data;
-
-      if (source === playroomScreenshotSource) {
-        switch (action) {
-          case 'copy': {
-            const image = await renderDocumentToCanvas(document);
-            const blob = await image.toBlob({ type: 'png' });
-            const clipboardItem = new ClipboardItem({ [blob.type]: blob });
-            await window.parent.navigator.clipboard.write([clipboardItem]);
-            return;
-          }
-          case 'download': {
-            const image = await renderDocumentToCanvas(document);
-            image.download({ format: 'png', filename: fileName });
-            return;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('message', screenshotMessageHandler, false);
-
-    return () => {
-      window.removeEventListener('message', screenshotMessageHandler, false);
-    };
-  }, []);
 
   return null;
 };

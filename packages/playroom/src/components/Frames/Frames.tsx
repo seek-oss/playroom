@@ -1,9 +1,6 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import clsx from 'clsx';
 import {
-  // Camera,
-  // ClipboardCopy,
-  // Download,
   PictureInPicture2,
   Settings2,
   SquareDashedMousePointerIcon,
@@ -32,7 +29,6 @@ import { ErrorMessageReceiver } from '../Frame/ErrorMessageReceiver';
 import {
   InspectMessageReceiver,
   inspectMessageSender,
-  // screenshotMessageSender,
 } from '../Frame/frameMessenger';
 import { Menu, MenuCheckboxItem } from '../Menu/Menu';
 import { ScrollContainer } from '../ScrollContainer/ScrollContainer';
@@ -55,7 +51,6 @@ export const popOutWindowName = 'standalone_playroom_frame';
 
 const Frame = ({
   frame,
-  // title,
   code,
   scrollingPanelRef,
   frameId,
@@ -65,7 +60,6 @@ const Frame = ({
   registerIframeRef,
 }: {
   frame: { theme: string; width: Widths[number]; widthName: string };
-  title?: string;
   code: string;
   scrollingPanelRef: RefObject<HTMLDivElement | null>;
   frameId: string;
@@ -86,27 +80,6 @@ const Frame = ({
     },
     [registerIframeRef, frameId],
   );
-
-  // const downloadHandler = () => {
-  //   if (iframeRef.current?.contentWindow) {
-  //     screenshotMessageSender({
-  //       messageWindow: iframeRef.current.contentWindow,
-  //       action: 'download',
-  //       fileName: `${title || 'Untitled Playroom'} (${
-  //         noTheme ? frame.widthName : `${frame.theme} - ${frame.widthName}`
-  //       })`,
-  //     });
-  //   }
-  // };
-
-  // const copyHandler = () => {
-  //   if (iframeRef.current?.contentWindow) {
-  //     screenshotMessageSender({
-  //       messageWindow: iframeRef.current.contentWindow,
-  //       action: 'copy',
-  //     });
-  //   }
-  // };
 
   return (
     <div
@@ -223,26 +196,6 @@ const Frame = ({
                 ))}
               </Menu>
             )}
-
-            {/* <Menu
-              align="end"
-              onOpenChange={setFrameActive}
-              width="content"
-              trigger={
-                <FrameActionButton
-                  tone="accent"
-                  icon={<Camera />}
-                  label="Screenshot"
-                />
-              }
-            >
-              <MenuItem icon={Download} onClick={downloadHandler}>
-                Download
-              </MenuItem>
-              <MenuItem icon={ClipboardCopy} onClick={copyHandler}>
-                Copy
-              </MenuItem>
-            </Menu> */}
           </div>
         </SharedTooltipContext>
       </div>
@@ -271,7 +224,7 @@ interface FramesProps {
 
 export default function Frames({ code }: FramesProps) {
   const [
-    { selectedWidths, selectedThemes, title, frameSettings, inspectMode },
+    { selectedWidths, selectedThemes, frameSettings, inspectMode },
     dispatch,
   ] = useContext(StoreContext);
   const { scrollToLine, highlightLine, fadeHighlight } = useEditor();
@@ -390,7 +343,6 @@ export default function Frames({ code }: FramesProps) {
                 key={frameId}
                 frame={frame}
                 code={renderCode.current}
-                title={title}
                 scrollingPanelRef={scrollingPanelRef}
                 frameId={frameId}
                 frameSettings={frameSettings[frameId]}
