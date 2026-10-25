@@ -28,8 +28,8 @@ import { compileJsxForInspect } from '../../utils/compileJsx';
 import usePreviewUrl from '../../utils/usePreviewUrl';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { primaryMod } from '../CodeEditor/editorCommands';
+import { ErrorMessageReceiver } from '../Frame/ErrorMessageReceiver';
 import {
-  ErrorMessageReceiver,
   InspectMessageReceiver,
   inspectMessageSender,
   // screenshotMessageSender,
