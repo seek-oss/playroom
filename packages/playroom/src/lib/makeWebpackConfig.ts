@@ -11,6 +11,7 @@ import { merge, mergeWithRules } from 'webpack-merge';
 // Only used for playroom development. Resolves to a stub during packaging.
 import webpackDevConfig from '#webpack/devConfig';
 
+import { toClientConfig } from './clientConfig.ts';
 import getStaticTypes from './getStaticTypes.ts';
 import makeDefaultWebpackConfig from './makeDefaultWebpackConfig.ts';
 import { playroomPath } from './playroomPath.ts';
@@ -125,7 +126,9 @@ export default async (
     },
     plugins: [
       new webpack.DefinePlugin({
-        __PLAYROOM_GLOBAL__CONFIG__: JSON.stringify(playroomConfig),
+        __PLAYROOM_GLOBAL__CONFIG__: JSON.stringify(
+          toClientConfig(playroomConfig),
+        ),
         __PLAYROOM_GLOBAL__STATIC_TYPES__: JSON.stringify(staticTypes),
       }),
       new HtmlWebpackPlugin({
