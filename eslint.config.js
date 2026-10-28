@@ -1,6 +1,45 @@
 import { defineConfig } from 'eslint/config';
 import eslintConfigSeek from 'eslint-config-seek/vitest';
 
+const editorUserCodeRestrictions = {
+  paths: [
+    '__PLAYROOM_ALIAS__THEMES__',
+    '__PLAYROOM_ALIAS__USE_SCOPE__',
+    {
+      name: '__PLAYROOM_ALIAS__SNIPPETS__',
+      message: 'Import from `configModules/snippets` instead.',
+    },
+  ],
+  patterns: [
+    {
+      group: ['**/configModules/themes'],
+      message:
+        'Only frame code may import themes. Use `configModules/themeNames` instead.',
+    },
+    {
+      group: ['**/configModules/useScope'],
+      message: 'Only frame code may import the user scope.',
+    },
+  ],
+};
+
+const frameComponentRestrictions = {
+  paths: [
+    {
+      name: '__PLAYROOM_ALIAS__FRAME_COMPONENT__',
+      message:
+        'Only `components/Frames/frameSrc.ts` may read the frame component from the editor. Frame code should import `configModules/frameComponent`.',
+    },
+  ],
+  patterns: [
+    {
+      group: ['**/configModules/frameComponent'],
+      message:
+        'The frame component is user code for frames only. Use `components/Frames/frameSrc` to build frame URLs.',
+    },
+  ],
+};
+
 export default defineConfig([
   ...eslintConfigSeek,
   {
@@ -57,6 +96,8 @@ export default defineConfig([
     // Keeps the editor reading data rather than user modules. The remaining
     // editor -> user code edges are `configModules/components` (hints) and
     // `__PLAYROOM_ALIAS__FRAME_COMPONENT__` (`frameSrc`).
+    // Flat config replaces rather than merges `no-restricted-imports`, so all
+    // editor restrictions must live in this one rule.
     files: ['packages/playroom/src/**/*.{ts,tsx}'],
     ignores: [
       'packages/playroom/src/configModules/**',
@@ -69,26 +110,21 @@ export default defineConfig([
         'error',
         {
           paths: [
-            '__PLAYROOM_ALIAS__THEMES__',
-            '__PLAYROOM_ALIAS__USE_SCOPE__',
-            {
-              name: '__PLAYROOM_ALIAS__SNIPPETS__',
-              message: 'Import from `configModules/snippets` instead.',
-            },
+            ...editorUserCodeRestrictions.paths,
+            ...frameComponentRestrictions.paths,
           ],
           patterns: [
-            {
-              group: ['**/configModules/themes'],
-              message:
-                'Only frame code may import themes. Use `configModules/themeNames` instead.',
-            },
-            {
-              group: ['**/configModules/useScope'],
-              message: 'Only frame code may import the user scope.',
-            },
+            ...editorUserCodeRestrictions.patterns,
+            ...frameComponentRestrictions.patterns,
           ],
         },
       ],
+    },
+  },
+  {
+    files: ['packages/playroom/src/components/Frames/frameSrc.ts'],
+    rules: {
+      'no-restricted-imports': ['error', editorUserCodeRestrictions],
     },
   },
   /** Should feed back upstream to eslint-config-seek */
