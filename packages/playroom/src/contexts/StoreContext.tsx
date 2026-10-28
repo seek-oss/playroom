@@ -14,7 +14,7 @@ import playroomConfig from '../config';
 import {
   themeNames as availableThemes,
   themesEnabled,
-} from '../configModules/themes';
+} from '../configModules/themeNames';
 import availableWidths, { type Widths } from '../configModules/widths';
 import {
   type CompressParamsOptions,

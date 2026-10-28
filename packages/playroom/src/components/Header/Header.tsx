@@ -38,7 +38,7 @@ import {
   themeNames as availableThemes,
   themeNames,
   themesEnabled,
-} from '../../configModules/themes';
+} from '../../configModules/themeNames';
 import availableWidths from '../../configModules/widths';
 import { StoreContext } from '../../contexts/StoreContext';
 import { compressParams } from '../../index';

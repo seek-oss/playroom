@@ -1,7 +1,7 @@
-import snippets from '__PLAYROOM_ALIAS__SNIPPETS__';
 import { FolderOpen, BetweenHorizontalStart } from 'lucide-react';
 import { useContext, useMemo } from 'react';
 
+import snippets from '../../configModules/snippets';
 import { StoreContext } from '../../contexts/StoreContext';
 import { decompressParams } from '../../index';
 import { isValidLocation } from '../../utils/cursor';

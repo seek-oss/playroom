@@ -8,6 +8,8 @@ import {
   ScreenshotMessageReceiver,
 } from '../components/Frame/frameMessenger';
 import playroomConfig from '../config';
+import { noThemeName } from '../configModules/themeNames';
+import themes from '../configModules/themes';
 import type { FrameSettingsValues } from '../index';
 import { renderElement } from '../render';
 import { UrlParams } from '../utils/params';
@@ -62,8 +64,14 @@ const FrameContent = ({
 
 renderElement(
   <UrlParams>
-    {({ code, themeName, theme }) => (
-      <FrameContent code={code} themeName={themeName} theme={theme} />
+    {({ code, themeName }) => (
+      <FrameContent
+        code={code}
+        themeName={themeName}
+        theme={
+          themeName && themeName !== noThemeName ? themes[themeName] : null
+        }
+      />
     )}
   </UrlParams>,
 );
