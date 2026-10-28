@@ -261,6 +261,11 @@ This allows users to quickly compare how components behave under different confi
 
 If a `tsconfig.json` file is present in your project, static prop types are parsed using [react-docgen-typescript](https://github.com/styleguidist/react-docgen-typescript) to provide better autocompletion in the Playroom editor.
 
+> [!WARNING]
+> Hints derived from runtime React `propTypes` are deprecated and will be removed in the next major version.
+> Playroom logs a warning in the editor console listing any components whose hints still come from `propTypes`.
+> Migrate these components to TypeScript to keep receiving hints.
+
 > [!NOTE]
 > By default, all `.ts` and `.tsx` files in the current working directory are included, excluding `node_modules`.
 
