@@ -5,7 +5,6 @@ import { InspectOverlay } from '../components/Frame/InspectOverlay';
 import {
   ErrorMessageSender,
   InspectMessageReceiver,
-  ScreenshotMessageReceiver,
 } from '../components/Frame/frameMessenger';
 import playroomConfig from '../config';
 import type { FrameSettingsValues } from '../index';
@@ -46,7 +45,6 @@ const FrameContent = ({
         onEnable={() => setInspectMode(true)}
         onDisable={() => setInspectMode(false)}
       />
-      <ScreenshotMessageReceiver />
       <Frame
         code={code}
         inspectMode={inspectMode}

@@ -7,7 +7,7 @@ import { useDocumentTitle } from '../../utils/useDocumentTitle';
 import { useEditorUrl } from '../../utils/useEditorUrl';
 import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
-import { ErrorMessageReceiver } from '../Frame/frameMessenger';
+import { ErrorMessageReceiver } from '../Frame/ErrorMessageReceiver';
 import { popOutWindowName } from '../Frames/Frames';
 import frameSrc from '../Frames/frameSrc';
 import { logoSize } from '../Header/Header';
