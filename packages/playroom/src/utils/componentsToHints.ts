@@ -35,9 +35,15 @@ export const __private_create_hints = (
       };
     }
 
-    const { children, ...filteredPropTypes } = parsePropTypes(
-      components[componentName],
-    );
+    let parsedPropTypes;
+    try {
+      parsedPropTypes = parsePropTypes(components[componentName]);
+    } catch {
+      // Component modules may also export factories or other values whose
+      // metadata cannot be inspected. Keep hints for the remaining exports.
+      return componentAcc;
+    }
+    const { children, ...filteredPropTypes } = parsedPropTypes;
     const propNames = Object.keys(filteredPropTypes);
 
     return {
