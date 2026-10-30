@@ -1,5 +1,25 @@
 # playroom
 
+## 1.4.1
+
+### Patch Changes
+
+- [#515](https://github.com/seek-oss/playroom/pull/515) [`6d37ccf`](https://github.com/seek-oss/playroom/commit/6d37ccf20737888aef847d2d0334037279432091) Thanks [@askoufis](https://github.com/askoufis)! - Fix centering of copy link success icon
+
+- [#520](https://github.com/seek-oss/playroom/pull/520) [`fd65d0f`](https://github.com/seek-oss/playroom/commit/fd65d0f3bdb101808b9a43663679812be4c568a5) Thanks [@askoufis](https://github.com/askoufis)! - Update dependencies:
+
+  - `lucide-react`: `^0.541.0` to `^1.59.0`
+  - `react-error-boundary`: `^4.0.13` to `^6.1.6`
+
+- [#522](https://github.com/seek-oss/playroom/pull/522) [`5ffc276`](https://github.com/seek-oss/playroom/commit/5ffc2765a1960977e3cb26119d483b0b50a54d84) Thanks [@askoufis](https://github.com/askoufis)! - Stop applying Playroom's own global styles inside frames
+
+  Frames previously loaded Playroom's global theme variables, which were applied to `:root` alongside components styles.
+  Frames now only load the styles for the inspect overlay, which are scoped to the overlay itself.
+
+- [#523](https://github.com/seek-oss/playroom/pull/523) [`696d5b5`](https://github.com/seek-oss/playroom/commit/696d5b544875512fe16e4b7d4743c75e347e2b8b) Thanks [@askoufis](https://github.com/askoufis)! - Remove unused code and the `@zumer/snapdom` dependency
+
+- [#521](https://github.com/seek-oss/playroom/pull/521) [`4bc3224`](https://github.com/seek-oss/playroom/commit/4bc32249e210d09c2fade5f9f756ae5ed64c5478) Thanks [@KSHITIZ6341](https://github.com/KSHITIZ6341)! - Keep editor hints available when a component module also exports values whose prop types cannot be inspected.
+
 ## 1.4.0
 
 ### Minor Changes
